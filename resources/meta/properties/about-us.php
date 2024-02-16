@@ -1,3 +1,0 @@
-		<meta name="description" content="Explore the best IT Company in Ahmedabad, specializing in web design, SEO, social media marketing and graphic design services in affordable price.">
-		<meta name="keywords" content="Website Design Company in Ahmedabad | Web Design Company in Ahmedabad | web Design Ahmedabad | Website Designer in Ahmedabad | website developer in ahmedabad | Web Developer in Ahmedabad | Website Maker in Ahmedabad | web design and development company in ahmedabad | best website design company in ahmedabad | website company in ahmedabad" />
-		<meta property="og:description" content="Explore the best IT Company in Ahmedabad, specializing in web design, SEO, social media marketing and graphic design services in affordable price." />

@@ -1,4 +1,0 @@
-<meta name="description" content="For any query, inquiry and demo contact our Indore office on phone, email or in person. Our executive will answer you withing 24 Working hours. Our office is located on Vijay Nagar Indore.">
-<meta name="keywords" content="Insight Wave Solutions Indore Contact details">
-<meta property="og:title" content="Insight Wave Solutions Indore Contact details" />
-<meta property="og:description" content="For any query, inquiry and demo contact our Indore office on phone, email or in person. Our executive will answer you withing 24 Working hours. Our office is located on Naranpura the heart of Indore." />
