@@ -1,0 +1,40 @@
+{
+  "fields": {
+    "post": "Yayınla",
+    "attachments": "Ekler",
+    "targetType": "Hedef",
+    "teams": "Takımlar",
+    "users": "Kullanıcılar",
+    "portals": "Portaller",
+    "type": "Tip",
+    "related": "İlgili",
+    "createdByGender": "Cinsiyete Göre Oluşturuldu",
+    "data": "Veri",
+    "number": "Numara"
+  },
+  "filters": {
+    "all": "Hepsi",
+    "posts": "Yazılar",
+    "updates": "Güncellemeler"
+  },
+  "messages": {
+    "writeMessage": "Mesajınızı buraya yazınız"
+  },
+  "options": {
+    "targetType": {
+      "self": "kendime",
+      "users": "Belirli kullanıcılara",
+      "teams": "Belirli takımlara",
+      "all": "Tüm dahili kullanıcılara",
+      "portals": "Portal kullanıcılarına"
+    },
+    "type": {
+      "Post": "İleti"
+    }
+  },
+  "links": {
+    "related": "İlgili",
+    "portals": "Portaller",
+    "attachments": "Ekler"
+  }
+}
