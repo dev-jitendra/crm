@@ -1,2 +1,0 @@
-01. Analysis all GUI options & interface
-02. Change Company Details and mails
