@@ -58,6 +58,7 @@ if (filter_has_var(INPUT_GET, 'entryPoint')) {
 
     exit;
 }
+@router->
 
 $app->run(
     PortalClient::class,
