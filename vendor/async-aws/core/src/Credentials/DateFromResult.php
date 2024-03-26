@@ -4,9 +4,7 @@ namespace AsyncAws\Core\Credentials;
 
 use AsyncAws\Core\Result;
 
-/**
- * @internal
- */
+
 trait DateFromResult
 {
     private function getDateFromResult(Result $result): ?\DateTimeImmutable

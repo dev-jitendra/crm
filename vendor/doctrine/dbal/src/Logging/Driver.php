@@ -12,7 +12,7 @@ final class Driver extends AbstractDriverMiddleware
 {
     private LoggerInterface $logger;
 
-    /** @internal This driver can be only instantiated by its middleware. */
+    
     public function __construct(DriverInterface $driver, LoggerInterface $logger)
     {
         parent::__construct($driver);
@@ -20,9 +20,7 @@ final class Driver extends AbstractDriverMiddleware
         $this->logger = $logger;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function connect(array $params)
     {
         $this->logger->info('Connecting with parameters {params}', ['params' => $this->maskPassword($params)]);
@@ -33,11 +31,7 @@ final class Driver extends AbstractDriverMiddleware
         );
     }
 
-    /**
-     * @param array<string,mixed> $params Connection parameters
-     *
-     * @return array<string,mixed>
-     */
+    
     private function maskPassword(array $params): array
     {
         if (isset($params['password'])) {

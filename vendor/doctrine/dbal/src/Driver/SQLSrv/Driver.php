@@ -9,16 +9,10 @@ use Doctrine\DBAL\Driver\SQLSrv\Exception\Error;
 use function sqlsrv_configure;
 use function sqlsrv_connect;
 
-/**
- * Driver for ext/sqlsrv.
- */
+
 final class Driver extends AbstractSQLServerDriver
 {
-    /**
-     * {@inheritdoc}
-     *
-     * @return Connection
-     */
+    
     public function connect(array $params)
     {
         $serverName = '';

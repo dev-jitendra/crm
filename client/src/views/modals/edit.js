@@ -1,39 +1,11 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/modals/edit */
+
+
 
 import ModalView from 'views/modal';
 import Backbone from 'backbone';
 
-/**
- * A quick edit modal.
- */
+
 class EditModalView extends ModalView {
 
     template = 'modals/edit'
@@ -48,7 +20,7 @@ class EditModalView extends ModalView {
     bottomDisabled = false
 
     shortcutKeys = {
-        /** @this EditModalView */
+        
         'Control+Enter': function (e) {
             if (this.saveDisabled) {
                 return;
@@ -63,7 +35,7 @@ class EditModalView extends ModalView {
 
             this.actionSave();
         },
-        /** @this EditModalView */
+        
         'Control+KeyS': function (e) {
             if (this.saveDisabled) {
                 return;
@@ -78,7 +50,7 @@ class EditModalView extends ModalView {
 
             this.actionSaveAndContinueEditing();
         },
-        /** @this EditModalView */
+        
         'Escape': function (e) {
             if (this.saveDisabled) {
                 return;
@@ -102,7 +74,7 @@ class EditModalView extends ModalView {
 
             this.actionClose();
         },
-        /** @this EditModalView */
+        
         'Control+Backslash': function (e) {
             this.getRecordView().handleShortcutKeyControlBackslash(e);
         },
@@ -185,10 +157,7 @@ class EditModalView extends ModalView {
         });
     }
 
-    /**
-     * @param {module:model} model
-     * @param {function} [callback]
-     */
+    
     createRecordView(model, callback) {
         const viewName =
             this.editView ||
@@ -229,9 +198,7 @@ class EditModalView extends ModalView {
 
     handleRecordViewOptions(options) {}
 
-    /**
-     * @return {module:views/record/edit}
-     */
+    
     getRecordView() {
         return this.getView('edit');
     }
@@ -244,10 +211,7 @@ class EditModalView extends ModalView {
         this.close();
     }
 
-    /**
-     * @protected
-     * @return {string}
-     */
+    
     composeHeaderHtml() {
         let html;
 
@@ -337,7 +301,7 @@ class EditModalView extends ModalView {
         this.actionSave({bypassClose: true});
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionFullForm() {
         let url;
         const router = this.getRouter();

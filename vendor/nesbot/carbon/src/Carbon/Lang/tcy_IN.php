@@ -1,18 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - IndLinux.org, Samsung Electronics Co., Ltd.    alexey.merzlyakov@samsung.com
- */
+
+
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [
         'L' => 'D/M/YY',
@@ -25,15 +15,15 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'day_of_first_week_of_year' => 1,
     'meridiem' => ['ಕಾಂಡೆ', 'ಬಯ್ಯ'],
 
-    'year' => ':count ನೀರ್', // less reliable
-    'y' => ':count ನೀರ್', // less reliable
-    'a_year' => ':count ನೀರ್', // less reliable
+    'year' => ':count ನೀರ್', 
+    'y' => ':count ನೀರ್', 
+    'a_year' => ':count ನೀರ್', 
 
-    'month' => ':count ಮೀನ್', // less reliable
-    'm' => ':count ಮೀನ್', // less reliable
-    'a_month' => ':count ಮೀನ್', // less reliable
+    'month' => ':count ಮೀನ್', 
+    'm' => ':count ಮೀನ್', 
+    'a_month' => ':count ಮೀನ್', 
 
-    'day' => ':count ಸುಗ್ಗಿ', // less reliable
-    'd' => ':count ಸುಗ್ಗಿ', // less reliable
-    'a_day' => ':count ಸುಗ್ಗಿ', // less reliable
+    'day' => ':count ಸುಗ್ಗಿ', 
+    'd' => ':count ಸುಗ್ಗಿ', 
+    'a_day' => ':count ಸುಗ್ಗಿ', 
 ]);

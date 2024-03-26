@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpClient\Response;
 
@@ -24,11 +17,7 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-/**
- * @author Nicolas Grekas <p@tchwork.com>
- *
- * @internal
- */
+
 class TraceableResponse implements ResponseInterface, StreamableInterface
 {
     private $client;
@@ -44,9 +33,7 @@ class TraceableResponse implements ResponseInterface, StreamableInterface
         $this->event = $event;
     }
 
-    /**
-     * @return array
-     */
+    
     public function __sleep()
     {
         throw new \BadMethodCallException('Cannot serialize '.__CLASS__);
@@ -140,20 +127,11 @@ class TraceableResponse implements ResponseInterface, StreamableInterface
         return $this->response->getInfo($type);
     }
 
-    /**
-     * Casts the response to a PHP stream resource.
-     *
-     * @return resource
-     *
-     * @throws TransportExceptionInterface   When a network error occurs
-     * @throws RedirectionExceptionInterface On a 3xx when $throw is true and the "max_redirects" option has been reached
-     * @throws ClientExceptionInterface      On a 4xx when $throw is true
-     * @throws ServerExceptionInterface      On a 5xx when $throw is true
-     */
+    
     public function toStream(bool $throw = true)
     {
         if ($throw) {
-            // Ensure headers arrived
+            
             $this->response->getHeaders(true);
         }
 
@@ -164,9 +142,7 @@ class TraceableResponse implements ResponseInterface, StreamableInterface
         return StreamWrapper::createResource($this->response, $this->client);
     }
 
-    /**
-     * @internal
-     */
+    
     public static function stream(HttpClientInterface $client, iterable $responses, ?float $timeout): \Generator
     {
         $wrappedResponses = [];

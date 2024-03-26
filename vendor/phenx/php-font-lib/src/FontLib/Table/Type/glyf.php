@@ -1,10 +1,5 @@
 <?php
-/**
- * @package php-font-lib
- * @link    https://github.com/PhenX/php-font-lib
- * @author  Fabien Ménager <fabien.menager@gmail.com>
- * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
- */
+
 
 namespace FontLib\Table\Type;
 
@@ -12,19 +7,14 @@ use FontLib\Table\Table;
 use FontLib\Glyph\Outline;
 use FontLib\Glyph\OutlineSimple;
 
-/**
- * `glyf` font table.
- *
- * @package php-font-lib
- * @property Outline[] $data
- */
+
 class glyf extends Table {
   protected function _parse() {
     $font   = $this->getFont();
     $offset = $font->pos();
 
     $loca      = $font->getData("loca");
-    $real_loca = array_slice($loca, 0, -1); // Not the last dummy loca entry
+    $real_loca = array_slice($loca, 0, -1); 
 
     $data = array();
 
@@ -146,7 +136,7 @@ class glyf extends Table {
       $length += $data[$gid]->encode();
     }
 
-    $loca[]                             = $length; // dummy loca
+    $loca[]                             = $length; 
     $font->getTableObject("loca")->data = $loca;
 
     return $length;

@@ -2,22 +2,16 @@
 
 namespace libphonenumber;
 
-/**
- * Phone Number Description
- */
+
 class PhoneNumberDesc
 {
     protected $hasNationalNumberPattern = false;
     protected $nationalNumberPattern = '';
     protected $hasExampleNumber = false;
     protected $exampleNumber = '';
-    /**
-     * @var array
-     */
+    
     protected $possibleLength;
-    /**
-     * @var array
-     */
+    
     protected $possibleLengthLocalOnly;
 
     public function __construct()
@@ -25,9 +19,7 @@ class PhoneNumberDesc
         $this->clear();
     }
 
-    /**
-     * @return PhoneNumberDesc
-     */
+    
     public function clear()
     {
         $this->clearNationalNumberPattern();
@@ -38,17 +30,13 @@ class PhoneNumberDesc
         return $this;
     }
 
-    /**
-     * @return array
-     */
+    
     public function getPossibleLength()
     {
         return $this->possibleLength;
     }
 
-    /**
-     * @param array $possibleLength
-     */
+    
     public function setPossibleLength($possibleLength)
     {
         $this->possibleLength = $possibleLength;
@@ -66,17 +54,13 @@ class PhoneNumberDesc
         $this->possibleLength = array();
     }
 
-    /**
-     * @return array
-     */
+    
     public function getPossibleLengthLocalOnly()
     {
         return $this->possibleLengthLocalOnly;
     }
 
-    /**
-     * @param array $possibleLengthLocalOnly
-     */
+    
     public function setPossibleLengthLocalOnly($possibleLengthLocalOnly)
     {
         $this->possibleLengthLocalOnly = $possibleLengthLocalOnly;
@@ -94,26 +78,19 @@ class PhoneNumberDesc
         $this->possibleLengthLocalOnly = array();
     }
 
-    /**
-     * @return boolean
-     */
+    
     public function hasNationalNumberPattern()
     {
         return $this->hasNationalNumberPattern;
     }
 
-    /**
-     * @return string
-     */
+    
     public function getNationalNumberPattern()
     {
         return $this->nationalNumberPattern;
     }
 
-    /**
-     * @param string $value
-     * @return PhoneNumberDesc
-     */
+    
     public function setNationalNumberPattern($value)
     {
         $this->hasNationalNumberPattern = true;
@@ -122,9 +99,7 @@ class PhoneNumberDesc
         return $this;
     }
 
-    /**
-     * @return PhoneNumberDesc
-     */
+    
     public function clearNationalNumberPattern()
     {
         $this->hasNationalNumberPattern = false;
@@ -132,26 +107,19 @@ class PhoneNumberDesc
         return $this;
     }
 
-    /**
-     * @return string
-     */
+    
     public function hasExampleNumber()
     {
         return $this->hasExampleNumber;
     }
 
-    /**
-     * @return string
-     */
+    
     public function getExampleNumber()
     {
         return $this->exampleNumber;
     }
 
-    /**
-     * @param string $value
-     * @return PhoneNumberDesc
-     */
+    
     public function setExampleNumber($value)
     {
         $this->hasExampleNumber = true;
@@ -160,9 +128,7 @@ class PhoneNumberDesc
         return $this;
     }
 
-    /**
-     * @return PhoneNumberDesc
-     */
+    
     public function clearExampleNumber()
     {
         $this->hasExampleNumber = false;
@@ -171,10 +137,7 @@ class PhoneNumberDesc
         return $this;
     }
 
-    /**
-     * @param PhoneNumberDesc $other
-     * @return PhoneNumberDesc
-     */
+    
     public function mergeFrom(PhoneNumberDesc $other)
     {
         if ($other->hasNationalNumberPattern()) {
@@ -189,19 +152,14 @@ class PhoneNumberDesc
         return $this;
     }
 
-    /**
-     * @param PhoneNumberDesc $other
-     * @return boolean
-     */
+    
     public function exactlySameAs(PhoneNumberDesc $other)
     {
         return $this->nationalNumberPattern === $other->nationalNumberPattern &&
         $this->exampleNumber === $other->exampleNumber;
     }
 
-    /**
-     * @return array
-     */
+    
     public function toArray()
     {
         $data = array();
@@ -218,10 +176,7 @@ class PhoneNumberDesc
         return $data;
     }
 
-    /**
-     * @param array $input
-     * @return PhoneNumberDesc
-     */
+    
     public function fromArray(array $input)
     {
         if (isset($input['NationalNumberPattern']) && $input['NationalNumberPattern'] != '') {

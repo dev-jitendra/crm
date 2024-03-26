@@ -1,13 +1,6 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Carbon;
 
@@ -17,7 +10,7 @@ use Symfony\Component\Translation\Formatter\MessageFormatterInterface;
 
 class TranslatorImmutable extends Translator
 {
-    /** @var bool */
+    
     private $constructed = false;
 
     public function __construct($locale, MessageFormatterInterface $formatter = null, $cacheDir = null, $debug = false)
@@ -26,9 +19,7 @@ class TranslatorImmutable extends Translator
         $this->constructed = true;
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
+    
     public function setDirectories(array $directories)
     {
         $this->disallowMutation(__METHOD__);
@@ -43,9 +34,7 @@ class TranslatorImmutable extends Translator
         return parent::setLocale($locale);
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
+    
     public function setMessages($locale, $messages)
     {
         $this->disallowMutation(__METHOD__);
@@ -53,9 +42,7 @@ class TranslatorImmutable extends Translator
         return parent::setMessages($locale, $messages);
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
+    
     public function setTranslations($messages)
     {
         $this->disallowMutation(__METHOD__);
@@ -63,9 +50,7 @@ class TranslatorImmutable extends Translator
         return parent::setTranslations($messages);
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
+    
     public function setConfigCacheFactory(ConfigCacheFactoryInterface $configCacheFactory)
     {
         $this->disallowMutation(__METHOD__);
@@ -80,9 +65,7 @@ class TranslatorImmutable extends Translator
         return parent::resetMessages($locale);
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
+    
     public function setFallbackLocales(array $locales)
     {
         $this->disallowMutation(__METHOD__);

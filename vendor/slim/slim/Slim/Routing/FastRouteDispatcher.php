@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -14,17 +10,10 @@ use FastRoute\Dispatcher\GroupCountBased;
 
 class FastRouteDispatcher extends GroupCountBased
 {
-    /**
-     * @var string[][]
-     */
+    
     private array $allowedMethods = [];
 
-    /**
-     * @param string $httpMethod
-     * @param string $uri
-     *
-     * @return array{int, string|null, array<string, string>}
-     */
+    
     public function dispatch($httpMethod, $uri): array
     {
         $routingResults = $this->routingResults($httpMethod, $uri);
@@ -32,7 +21,7 @@ class FastRouteDispatcher extends GroupCountBased
             return $routingResults;
         }
 
-        // For HEAD requests, attempt fallback to GET
+        
         if ($httpMethod === 'HEAD') {
             $routingResults = $this->routingResults('GET', $uri);
             if ($routingResults[0] === self::FOUND) {
@@ -40,7 +29,7 @@ class FastRouteDispatcher extends GroupCountBased
             }
         }
 
-        // If nothing else matches, try fallback routes
+        
         $routingResults = $this->routingResults('*', $uri);
         if ($routingResults[0] === self::FOUND) {
             return $routingResults;
@@ -53,25 +42,20 @@ class FastRouteDispatcher extends GroupCountBased
         return [self::NOT_FOUND, null, []];
     }
 
-    /**
-     * @param string $httpMethod
-     * @param string $uri
-     *
-     * @return array{int, string|null, array<string, string>}
-     */
+    
     private function routingResults(string $httpMethod, string $uri): array
     {
         if (isset($this->staticRouteMap[$httpMethod][$uri])) {
-            /** @var string $routeIdentifier */
+            
             $routeIdentifier = $this->staticRouteMap[$httpMethod][$uri];
             return [self::FOUND, $routeIdentifier, []];
         }
 
         if (isset($this->variableRouteData[$httpMethod])) {
-            /** @var array{0: int, 1?: string, 2?: array<string, string>} $result */
+            
             $result = $this->dispatchVariableRoute($this->variableRouteData[$httpMethod], $uri);
             if ($result[0] === self::FOUND) {
-                /** @var array{int, string, array<string, string>} $result */
+                
                 return [self::FOUND, $result[1], $result[2]];
             }
         }
@@ -79,11 +63,7 @@ class FastRouteDispatcher extends GroupCountBased
         return [self::NOT_FOUND, null, []];
     }
 
-    /**
-     * @param string $uri
-     *
-     * @return string[]
-     */
+    
     public function getAllowedMethods(string $uri): array
     {
         if (isset($this->allowedMethods[$uri])) {

@@ -8,14 +8,10 @@ use AsyncAws\S3\Enum\RequestCharged;
 
 class DeleteObjectOutput extends Result
 {
-    /**
-     * Specifies whether the versioned object that was permanently deleted was (true) or was not (false) a delete marker.
-     */
+    
     private $deleteMarker;
 
-    /**
-     * Returns the version ID of the delete marker created as a result of the DELETE operation.
-     */
+    
     private $versionId;
 
     private $requestCharged;
@@ -27,9 +23,7 @@ class DeleteObjectOutput extends Result
         return $this->deleteMarker;
     }
 
-    /**
-     * @return RequestCharged::*|null
-     */
+    
     public function getRequestCharged(): ?string
     {
         $this->initialize();

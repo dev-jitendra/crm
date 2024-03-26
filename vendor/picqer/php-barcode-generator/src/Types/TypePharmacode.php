@@ -5,10 +5,7 @@ namespace Picqer\Barcode\Types;
 use Picqer\Barcode\Barcode;
 use Picqer\Barcode\Helpers\BinarySequenceConverter;
 
-/*
- * Pharmacode
- * Contains digits (0 to 9)
- */
+
 
 class TypePharmacode implements TypeInterface
 {

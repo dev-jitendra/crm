@@ -17,9 +17,7 @@ use function sprintf;
 use const STDERR;
 use const STDOUT;
 
-/**
- * @psalm-type ArgumentObject = object{command:string, class:null|string, message:null|string}
- */
+
 class FactoryCreatorCommand
 {
     public const COMMAND_DUMP  = 'dump';
@@ -45,18 +43,13 @@ EOH;
 
     private ConsoleHelper $helper;
 
-    /**
-     * @param string $scriptName
-     */
+    
     public function __construct(private $scriptName = self::DEFAULT_SCRIPT_NAME, ?ConsoleHelper $helper = null)
     {
         $this->helper = $helper ?: new ConsoleHelper();
     }
 
-    /**
-     * @param array $args Argument list, minus script name
-     * @return int Exit status
-     */
+    
     public function __invoke(array $args)
     {
         $arguments = $this->parseArgs($args);
@@ -71,7 +64,7 @@ EOH;
                 $this->help(STDERR);
                 return 1;
             case self::COMMAND_DUMP:
-                // fall-through
+                
             default:
                 break;
         }
@@ -94,9 +87,7 @@ EOH;
         return 0;
     }
 
-    /**
-     * @return ArgumentObject
-     */
+    
     private function parseArgs(array $args)
     {
         if (! $args) {
@@ -121,10 +112,7 @@ EOH;
         return $this->createArguments(self::COMMAND_DUMP, $class);
     }
 
-    /**
-     * @param resource $resource Defaults to STDOUT
-     * @return void
-     */
+    
     private function help($resource = STDOUT)
     {
         $this->helper->writeLine(sprintf(
@@ -133,12 +121,7 @@ EOH;
         ), true, $resource);
     }
 
-    /**
-     * @param string $command
-     * @param string|null $class Name of class to reflect.
-     * @param string|null $error Error message, if any.
-     * @return ArgumentObject
-     */
+    
     private function createArguments($command, $class = null, $error = null)
     {
         return (object) [

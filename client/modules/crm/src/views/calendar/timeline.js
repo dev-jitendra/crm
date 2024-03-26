@@ -1,32 +1,6 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module modules/crm/views/calendar/timeline */
+
+
 
 import View from 'view';
 import {DataSet} from 'vis-data';
@@ -52,25 +26,25 @@ class TimelineView extends View {
     calendarTypeList = ['single', 'shared']
     zoomPercentage = 1
 
-    /** @type {Timeline} */
+    
     timeline
 
     events = {
-        /** @this TimelineView */
+        
         'click button[data-action="today"]': function () {
             this.actionToday();
         },
-        /** @this TimelineView */
+        
         'click [data-action="mode"]': function (e) {
             let mode = $(e.currentTarget).data('mode');
 
             this.selectMode(mode)
         },
-        /** @this TimelineView */
+        
         'click [data-action="refresh"]': function () {
             this.actionRefresh();
         },
-        /** @this TimelineView */
+        
         'click [data-action="toggleScopeFilter"]': function (e) {
             let $target = $(e.currentTarget);
             let filterName = $target.data('name');
@@ -87,7 +61,7 @@ class TimelineView extends View {
 
             this.toggleScopeFilter(filterName);
         },
-        /** @this TimelineView */
+        
         'click [data-action="toggleCalendarType"]': function (e) {
             let $target = $(e.currentTarget);
             let calendarType = $target.data('name');
@@ -115,11 +89,11 @@ class TimelineView extends View {
 
             this.selectCalendarType(calendarType);
         },
-        /** @this TimelineView */
+        
         'click button[data-action="addUser"]': function () {
             this.actionAddUser();
         },
-        /** @this TimelineView */
+        
         'click button[data-action="showSharedCalendarOptions"]': function () {
             this.actionShowSharedCalendarOptions();
         },
@@ -222,9 +196,7 @@ class TimelineView extends View {
         }
     }
 
-    /**
-     * @return {module:modules/crm/views/calendar/mode-buttons}
-     */
+    
     getModeButtonsView() {
         return this.getView('modeButtons');
     }
@@ -327,10 +299,7 @@ class TimelineView extends View {
         return title;
     }
 
-    /**
-     * @param {Object.<string, *>} o
-     * @return {Object}
-     */
+    
     convertEvent(o) {
         let userId = o.userId || this.userList[0].id || this.getUser().id;
 
@@ -429,18 +398,12 @@ class TimelineView extends View {
         return event;
     }
 
-    /**
-     * @param {string} scope
-     * @return {string[]}
-     */
+    
     getEventTypeCompletedStatusList(scope) {
         return this.getMetadata().get(['scopes', scope, 'completedStatusList']) || [];
     }
 
-    /**
-     * @param {string} scope
-     * @return {string[]}
-     */
+    
     getEventTypeCanceledStatusList(scope) {
         return this.getMetadata().get(['scopes', scope, 'canceledStatusList']) || [];
     }
@@ -544,7 +507,7 @@ class TimelineView extends View {
                 start: this.start.toDate(),
                 end: this.end.toDate(),
                 rollingMode: {
-                    follow: false, // fixes slow render
+                    follow: false, 
                 },
                 xss: {
                     filterOptions: {
@@ -610,7 +573,7 @@ class TimelineView extends View {
                 }
             });
 
-            // noinspection SpellCheckingInspection
+            
             this.timeline.on('rangechanged', e => {
                 e.skipClick = true;
 
@@ -920,7 +883,7 @@ class TimelineView extends View {
             t = Date.now();
         }
 
-        // noinspection HtmlRequiredAltAttribute,RequiredAttributes
+        
         return $('<img>')
             .addClass('avatar avatar-link')
             .attr('width', '14')
@@ -1088,14 +1051,14 @@ class TimelineView extends View {
         this.triggerView();
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionZoomOut() {
         this.timeline.zoomOut(this.zoomPercentage);
 
         this.triggerView();
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionZoomIn() {
         this.timeline.zoomIn(this.zoomPercentage);
     }

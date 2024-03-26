@@ -21,16 +21,10 @@ use function preg_match;
 use function stripos;
 use function version_compare;
 
-/**
- * Abstract base implementation of the {@see Driver} interface for MySQL based drivers.
- */
+
 abstract class AbstractMySQLDriver implements VersionAwarePlatformDriver
 {
-    /**
-     * {@inheritdoc}
-     *
-     * @throws Exception
-     */
+    
     public function createDatabasePlatformForVersion($version)
     {
         $mariadb = stripos($version, 'mariadb') !== false;
@@ -51,7 +45,7 @@ abstract class AbstractMySQLDriver implements VersionAwarePlatformDriver
 
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5060',
+            'https:
             'MySQL 5.6 support is deprecated and will be removed in DBAL 4.'
                 . ' Consider upgrading to MySQL 5.7 or later.',
         );
@@ -59,14 +53,7 @@ abstract class AbstractMySQLDriver implements VersionAwarePlatformDriver
         return $this->getDatabasePlatform();
     }
 
-    /**
-     * Get a normalized 'version number' from the server string
-     * returned by Oracle MySQL servers.
-     *
-     * @param string $versionString Version string returned by the driver, i.e. '5.7.10'
-     *
-     * @throws Exception
-     */
+    
     private function getOracleMysqlVersionNumber(string $versionString): string
     {
         if (
@@ -93,14 +80,7 @@ abstract class AbstractMySQLDriver implements VersionAwarePlatformDriver
         return $majorVersion . '.' . $minorVersion . '.' . $patchVersion;
     }
 
-    /**
-     * Detect MariaDB server version, including hack for some mariadb distributions
-     * that starts with the prefix '5.5.5-'
-     *
-     * @param string $versionString Version string as returned by mariadb server, i.e. '5.5.5-Mariadb-10.0.8-xenial'
-     *
-     * @throws Exception
-     */
+    
     private function getMariaDbMysqlVersionNumber(string $versionString): string
     {
         if (
@@ -119,28 +99,18 @@ abstract class AbstractMySQLDriver implements VersionAwarePlatformDriver
         return $versionParts['major'] . '.' . $versionParts['minor'] . '.' . $versionParts['patch'];
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return AbstractMySQLPlatform
-     */
+    
     public function getDatabasePlatform()
     {
         return new MySQLPlatform();
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated Use {@link AbstractMySQLPlatform::createSchemaManager()} instead.
-     *
-     * @return MySQLSchemaManager
-     */
+    
     public function getSchemaManager(Connection $conn, AbstractPlatform $platform)
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5458',
+            'https:
             'AbstractMySQLDriver::getSchemaManager() is deprecated.'
                 . ' Use MySQLPlatform::createSchemaManager() instead.',
         );

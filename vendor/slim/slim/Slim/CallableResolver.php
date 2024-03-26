@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -37,9 +33,7 @@ final class CallableResolver implements AdvancedCallableResolverInterface
         $this->container = $container;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function resolve($toResolve): callable
     {
         $toResolve = $this->prepareToResolve($toResolve);
@@ -55,27 +49,19 @@ final class CallableResolver implements AdvancedCallableResolverInterface
         return $this->bindToContainer($callable);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function resolveRoute($toResolve): callable
     {
         return $this->resolveByPredicate($toResolve, [$this, 'isRoute'], 'handle');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function resolveMiddleware($toResolve): callable
     {
         return $this->resolveByPredicate($toResolve, [$this, 'isMiddleware'], 'process');
     }
 
-    /**
-     * @param string|callable $toResolve
-     *
-     * @throws RuntimeException
-     */
+    
     private function resolveByPredicate($toResolve, callable $predicate, string $defaultMethod): callable
     {
         $toResolve = $this->prepareToResolve($toResolve);
@@ -97,34 +83,26 @@ final class CallableResolver implements AdvancedCallableResolverInterface
         return $this->bindToContainer($callable);
     }
 
-    /**
-     * @param mixed $toResolve
-     */
+    
     private function isRoute($toResolve): bool
     {
         return $toResolve instanceof RequestHandlerInterface;
     }
 
-    /**
-     * @param mixed $toResolve
-     */
+    
     private function isMiddleware($toResolve): bool
     {
         return $toResolve instanceof MiddlewareInterface;
     }
 
-    /**
-     * @throws RuntimeException
-     *
-     * @return array{object, string|null} [Instance, Method Name]
-     */
+    
     private function resolveSlimNotation(string $toResolve): array
     {
         preg_match(CallableResolver::$callablePattern, $toResolve, $matches);
         [$class, $method] = $matches ? [$matches[1], $matches[2]] : [$toResolve, null];
 
-        /** @var string $class */
-        /** @var string|null $method */
+        
+        
         if ($this->container && $this->container->has($class)) {
             $instance = $this->container->get($class);
             if (!is_object($instance)) {
@@ -142,12 +120,7 @@ final class CallableResolver implements AdvancedCallableResolverInterface
         return [$instance, $method];
     }
 
-    /**
-     * @param mixed $resolved
-     * @param mixed $toResolve
-     *
-     * @throws RuntimeException
-     */
+    
     private function assertCallable($resolved, $toResolve): callable
     {
         if (!is_callable($resolved)) {
@@ -167,16 +140,13 @@ final class CallableResolver implements AdvancedCallableResolverInterface
             $callable = $callable[0];
         }
         if ($this->container && $callable instanceof Closure) {
-            /** @var Closure $callable */
+            
             $callable = $callable->bindTo($this->container);
         }
         return $callable;
     }
 
-    /**
-     * @param string|callable $toResolve
-     * @return string|callable
-     */
+    
     private function prepareToResolve($toResolve)
     {
         if (!is_array($toResolve)) {

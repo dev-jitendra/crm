@@ -1,24 +1,7 @@
 <?php
-/**
- * Smarty plugin
- *
- * @package Smarty
- * @subpackage Debug
- */
 
-/**
- * Smarty debug_print_var modifier plugin
- *
- * Type:     modifier<br>
- * Name:     debug_print_var<br>
- * Purpose:  formats variable contents for display in the console
- *
- * @author Monte Ohrt <monte at ohrt dot com>
- * @param array|object $var     variable to be formatted
- * @param integer      $depth   maximum recursion depth if $var is an array
- * @param integer      $length  maximum string length if $var is a string
- * @return string
- */
+
+
 function smarty_modifier_debug_print_var ($var, $depth = 0, $length = 40)
 {
     $_replace = array("\n" => '<i>\n</i>',

@@ -9,16 +9,16 @@ use function array_values;
 use function count;
 use function reset;
 
-/** @internal The class is internal to the caching layer implementation. */
+
 final class ArrayResult implements Result
 {
-    /** @var list<array<string, mixed>> */
+    
     private array $data;
 
     private int $columnCount = 0;
     private int $num         = 0;
 
-    /** @param list<array<string, mixed>> $data */
+    
     public function __construct(array $data)
     {
         $this->data = $data;
@@ -29,9 +29,7 @@ final class ArrayResult implements Result
         $this->columnCount = count($data[0]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function fetchNumeric()
     {
         $row = $this->fetch();
@@ -43,17 +41,13 @@ final class ArrayResult implements Result
         return array_values($row);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function fetchAssociative()
     {
         return $this->fetch();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function fetchOne()
     {
         $row = $this->fetch();
@@ -65,25 +59,19 @@ final class ArrayResult implements Result
         return reset($row);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function fetchAllNumeric(): array
     {
         return FetchUtils::fetchAllNumeric($this);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function fetchAllAssociative(): array
     {
         return FetchUtils::fetchAllAssociative($this);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function fetchFirstColumn(): array
     {
         return FetchUtils::fetchFirstColumn($this);
@@ -104,7 +92,7 @@ final class ArrayResult implements Result
         $this->data = [];
     }
 
-    /** @return array<string, mixed>|false */
+    
     private function fetch()
     {
         if (! isset($this->data[$this->num])) {

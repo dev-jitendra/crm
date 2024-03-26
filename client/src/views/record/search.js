@@ -1,66 +1,30 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/record/search */
+
+
 
 import View from 'view';
 import StoredTextSearch from 'helpers/misc/stored-text-search';
 
-/**
- * @typedef {Object} module:views/record/search~boolFilterDefs
- * @property {boolean} [inPortalDisabled]
- * @property {boolean} [isPortalOnly]
- * @property {boolean} [aux]
- * @property {module:utils~AccessDefs[]} [accessDataList]
- */
 
-/**
- * A search panel view.
- */
+
+
 class SearchView extends View {
 
     template = 'record/search'
 
     scope = ''
     entityType = ''
-    /** @type {module:search-manager} */
+    
     searchManager
     fieldFilterList = null
-    /** @type {Object.<string, string>|null}*/
+    
     fieldFilterTranslations = null
 
     textFilter = ''
-    /**
-     * @type {string|null}
-     */
+    
     primary = null
     presetFilterList = null
-    /** @type {{string: module:search-manager~advancedFilter}} */
+    
     advanced
     bool = null
 
@@ -106,10 +70,10 @@ class SearchView extends View {
         this.entityType = this.collection.entityType;
         this.scope = this.options.scope || this.entityType;
 
-        /** @type {module:search-manager} */
+        
         this.searchManager = this.options.searchManager;
 
-        /** @private */
+        
         this.storedTextSearchHelper = new StoredTextSearch(this.scope, this.getHelper().storage);
 
         this.textSearchStoringDisabled = this.getPreferences().get('textSearchStoringDisabled');
@@ -130,7 +94,7 @@ class SearchView extends View {
 
         this.boolFilterList = Espo.Utils
             .clone(this.getMetadata().get(['clientDefs', this.scope, 'boolFilterList']) || [])
-            .filter(/** module:views/record/search~boolFilterDefs|string */item => {
+            .filter(item => {
                 if (typeof item === 'string') {
                     return true;
                 }
@@ -351,7 +315,7 @@ class SearchView extends View {
     }
 
     events = {
-        /** @this SearchView */
+        
         'keydown input[data-name="textFilter"]': function (e) {
             const key = Espo.Utils.getKeyFromKeyEvent(e);
 
@@ -361,23 +325,23 @@ class SearchView extends View {
                 this.hideApplyFiltersButton();
             }
         },
-        /** @this SearchView */
+        
         'focus input[data-name="textFilter"]': function (e) {
             e.currentTarget.select();
         },
-        /** @this SearchView */
+        
         'click .advanced-filters-apply-container a[data-action="applyFilters"]': function () {
             this.search();
             this.hideApplyFiltersButton();
 
             this.$el.find('button.search').focus();
         },
-        /** @this SearchView */
+        
         'click button[data-action="search"]': function () {
             this.search();
             this.hideApplyFiltersButton();
         },
-        /** @this SearchView */
+        
         'click a[data-action="addFilter"]': function (e) {
             const $target = $(e.currentTarget);
             const name = $target.data('name');
@@ -386,7 +350,7 @@ class SearchView extends View {
 
             this.addFilter(name);
         },
-        /** @this SearchView */
+        
         'click .advanced-filters a.remove-filter': function (e) {
             const $target = $(e.currentTarget);
 
@@ -394,15 +358,15 @@ class SearchView extends View {
 
             this.removeFilter(name);
         },
-        /** @this SearchView */
+        
         'click button[data-action="reset"]': function () {
             this.resetFilters();
         },
-        /** @this SearchView */
+        
         'click button[data-action="refresh"]': function () {
             this.refresh();
         },
-        /** @this SearchView */
+        
         'click a[data-action="selectPreset"]': function (e) {
             const $target = $(e.currentTarget);
 
@@ -410,7 +374,7 @@ class SearchView extends View {
 
             this.selectPreset(presetName);
         },
-        /** @this SearchView */
+        
         'click .dropdown-menu a[data-action="savePreset"]': function () {
             this.createView('savePreset', 'views/modals/save-filters', {}, view => {
                 view.render();
@@ -428,7 +392,7 @@ class SearchView extends View {
                 });
             });
         },
-        /** @this SearchView */
+        
         'click .dropdown-menu a[data-action="removePreset"]': function () {
             const id = this.presetName;
 
@@ -436,14 +400,14 @@ class SearchView extends View {
                 this.removePreset(id);
             });
         },
-        /** @this SearchView */
+        
         'change .search-row ul.filter-menu input[data-role="boolFilterCheckbox"]': function (e) {
             e.stopPropagation();
 
             this.search();
             this.manageLabels();
         },
-        /** @this SearchView */
+        
         'click [data-action="switchViewMode"]': function (e) {
             const mode = $(e.currentTarget).data('name');
 
@@ -453,11 +417,11 @@ class SearchView extends View {
 
             this.setViewMode(mode, false, true);
         },
-        /** @this SearchView */
+        
         'keyup input.field-filter-quick-search-input': function (e) {
             this.processFieldFilterQuickSearch(e.currentTarget.value);
         },
-        /** @this SearchView */
+        
         'keydown input.field-filter-quick-search-input': function (e) {
             if (e.code === 'Enter') {
                 this.addFirstFieldFilter();
@@ -562,7 +526,7 @@ class SearchView extends View {
         this.createFilters(() => {
             this.reRender()
                 .then(() => {
-                    // noinspection JSUnresolvedReference
+                    
                     this.$el.find('.filters-button')
                         .get(0)
                         .focus({preventScroll: true});
@@ -690,13 +654,13 @@ class SearchView extends View {
         this.$resetButton = this.$el.find('[data-action="reset"]');
         this.$applyFiltersContainer = this.$el.find('.advanced-filters-apply-container');
         this.$applyFilters = this.$applyFiltersContainer.find('[data-action="applyFilters"]');
-        /** @type {JQuery} */
+        
         this.$filterList = this.$el.find('ul.filter-list');
-        /** @type {JQuery} */
+        
         this.$fieldQuickSearch = this.$filterList.find('input.field-filter-quick-search-input');
-        /** @type {JQuery} */
+        
         this.$addFilterButton = this.$el.find('button.add-filter-button');
-        /** @type {JQuery} */
+        
         this.$textFilter = this.$el.find('input.text-filter');
 
         this.updateAddFilterButton();
@@ -717,7 +681,7 @@ class SearchView extends View {
         let preventCloseOnBlur = false;
 
 
-        // noinspection JSUnusedGlobalSymbols
+        
         const options = {
             minChars: 0,
             noCache: true,
@@ -824,10 +788,7 @@ class SearchView extends View {
         this.$filtersLabel.html(this.currentFilterLabelList.join(' &middot; '));
     }
 
-    /**
-     * @private
-     * @return {boolean}
-     */
+    
     toShowResetButton() {
         if (this.textFilter) {
             return true;
@@ -1078,17 +1039,9 @@ class SearchView extends View {
         this.bool = searchData.bool;
     }
 
-    /**
-     * @callback SearchView~createFilterCallback
-     * @param {module:views/search/filter} view
-     */
+    
 
-    /**
-     * @param {string} name
-     * @param {Object.<string, *>} params
-     * @param {SearchView~createFilterCallback} callback
-     * @param {boolean} [noRender]
-     */
+    
     createFilter(name, params, callback, noRender) {
         params = params || {};
 
@@ -1155,7 +1108,7 @@ class SearchView extends View {
         });
 
         for (const field in this.advanced) {
-            const view = /** @type {module:views/fields/base} */
+            const view = 
                 this.getView('filter-' + field).getView('field');
 
             this.advanced[field] = view.fetchSearch();
@@ -1259,15 +1212,12 @@ class SearchView extends View {
         this.selectPreset(preset.name);
     }
 
-    /**
-     * @private
-     * @param {string} text
-     */
+    
     processFieldFilterQuickSearch(text) {
         text = text.trim();
         text = text.toLowerCase();
 
-        /** @type {JQuery} */
+        
         const $li = this.$filterList.find('li.filter-item');
 
         if (text === '') {
@@ -1320,7 +1270,7 @@ class SearchView extends View {
     }
 
     closeAddFieldDropdown() {
-        // noinspection JSUnresolvedReference
+        
         this.$addFilterButton.parent()
             .find('[data-toggle="dropdown"]')
             .dropdown('toggle');

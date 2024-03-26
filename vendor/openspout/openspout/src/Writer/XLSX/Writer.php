@@ -20,7 +20,7 @@ use OpenSpout\Writer\XLSX\Manager\WorksheetManager;
 
 final class Writer extends AbstractWriterMultiSheets
 {
-    /** @var string Content-Type value for the header */
+    
     protected static string $headerContentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
     private readonly Options $options;

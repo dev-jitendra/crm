@@ -14,11 +14,7 @@ use function sprintf;
 
 final class Driver extends AbstractSQLServerDriver
 {
-    /**
-     * {@inheritdoc}
-     *
-     * @return Connection
-     */
+    
     public function connect(array $params)
     {
         $driverOptions = $dsnOptions = [];
@@ -51,14 +47,7 @@ final class Driver extends AbstractSQLServerDriver
         return new Connection(new PDOConnection($pdo));
     }
 
-    /**
-     * Constructs the Sqlsrv PDO DSN.
-     *
-     * @param mixed[]  $params
-     * @param string[] $connectionOptions
-     *
-     * @throws Exception
-     */
+    
     private function constructDsn(array $params, array $connectionOptions): string
     {
         $dsn = 'sqlsrv:server=';
@@ -84,11 +73,7 @@ final class Driver extends AbstractSQLServerDriver
         return $dsn . $this->getConnectionOptionsDsn($connectionOptions);
     }
 
-    /**
-     * Converts a connection options array to the DSN
-     *
-     * @param string[] $connectionOptions
-     */
+    
     private function getConnectionOptionsDsn(array $connectionOptions): string
     {
         $connectionOptionsDsn = '';

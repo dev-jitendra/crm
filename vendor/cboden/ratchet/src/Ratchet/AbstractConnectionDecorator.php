@@ -1,24 +1,16 @@
 <?php
 namespace Ratchet;
 
-/**
- * Wraps ConnectionInterface objects via the decorator pattern but allows
- * parameters to bubble through with magic methods
- * @todo It sure would be nice if I could make most of this a trait...
- */
+
 abstract class AbstractConnectionDecorator implements ConnectionInterface {
-    /**
-     * @var ConnectionInterface
-     */
+    
     protected $wrappedConn;
 
     public function __construct(ConnectionInterface $conn) {
         $this->wrappedConn = $conn;
     }
 
-    /**
-     * @return ConnectionInterface
-     */
+    
     protected function getConnection() {
         return $this->wrappedConn;
     }

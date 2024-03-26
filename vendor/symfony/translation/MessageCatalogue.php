@@ -1,22 +1,13 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation;
 
 use Symfony\Component\Config\Resource\ResourceInterface;
 use Symfony\Component\Translation\Exception\LogicException;
 
-/**
- * @author Fabien Potencier <fabien@symfony.com>
- */
+
 class MessageCatalogue implements MessageCatalogueInterface, MetadataAwareInterface, CatalogueMetadataAwareInterface
 {
     private array $messages = [];
@@ -27,9 +18,7 @@ class MessageCatalogue implements MessageCatalogueInterface, MetadataAwareInterf
     private ?MessageCatalogueInterface $fallbackCatalogue = null;
     private ?self $parent = null;
 
-    /**
-     * @param array $messages An array of messages classified by domain
-     */
+    
     public function __construct(string $locale, array $messages = [])
     {
         $this->locale = $locale;
@@ -58,7 +47,7 @@ class MessageCatalogue implements MessageCatalogueInterface, MetadataAwareInterf
     public function all(string $domain = null): array
     {
         if (null !== $domain) {
-            // skip messages merge if intl-icu requested explicitly
+            
             if (str_ends_with($domain, self::INTL_DOMAIN_SUFFIX)) {
                 return $this->messages[$domain] ?? [];
             }
@@ -171,7 +160,7 @@ class MessageCatalogue implements MessageCatalogueInterface, MetadataAwareInterf
 
     public function addFallbackCatalogue(MessageCatalogueInterface $catalogue)
     {
-        // detect circular references
+        
         $c = $catalogue;
         while ($c = $c->getFallbackCatalogue()) {
             if ($c->getLocale() === $this->getLocale()) {
@@ -283,11 +272,7 @@ class MessageCatalogue implements MessageCatalogueInterface, MetadataAwareInterf
         }
     }
 
-    /**
-     * Adds current values with the new values.
-     *
-     * @param array $values Values to add
-     */
+    
     private function addMetadata(array $values)
     {
         foreach ($values as $domain => $keys) {

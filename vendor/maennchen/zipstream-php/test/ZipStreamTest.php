@@ -12,9 +12,7 @@ use ZipStream\Option\File as FileOptions;
 use ZipStream\Option\Method;
 use ZipStream\ZipStream;
 
-/**
- * Test Class for the Main ZipStream CLass
- */
+
 class ZipStreamTest extends TestCase
 {
     const OSX_ARCHIVE_UTILITY =
@@ -23,18 +21,18 @@ class ZipStreamTest extends TestCase
     public function testFileNotFoundException(): void
     {
         $this->expectException(\ZipStream\Exception\FileNotFoundException::class);
-        // Get ZipStream Object
+        
         $zip = new ZipStream();
 
-        // Trigger error by adding a file which doesn't exist
+        
         $zip->addFileFromPath('foobar.php', '/foo/bar/foobar.php');
     }
 
     public function testFileNotReadableException(): void
     {
-        // create new virtual filesystem
+        
         $root = vfsStream::setup('vfs');
-        // create a virtual file with no permissions
+        
         $file = vfsStream::newFile('foo.txt', 0000)->at($root)->setContent('bar');
         $zip = new ZipStream();
         $this->expectException(\ZipStream\Exception\FileNotReadableException::class);
@@ -43,17 +41,17 @@ class ZipStreamTest extends TestCase
 
     public function testDostime(): void
     {
-        // Allows testing of protected method
+        
         $class = new \ReflectionClass(File::class);
         $method = $class->getMethod('dostime');
         $method->setAccessible(true);
 
         $this->assertSame($method->invoke(null, 1416246368), 1165069764);
 
-        // January 1 1980 - DOS Epoch.
+        
         $this->assertSame($method->invoke(null, 315532800), 2162688);
 
-        // January 1 1970 -> January 1 1980 due to minimum DOS Epoch.  @todo Throw Exception?
+        
         $this->assertSame($method->invoke(null, 0), 2162688);
     }
 
@@ -81,9 +79,7 @@ class ZipStreamTest extends TestCase
         $this->assertStringEqualsFile($tmpDir . '/test/sample.txt', 'More Simple Sample Data');
     }
 
-    /**
-     * @return array
-     */
+    
     protected function getTmpFileStream(): array
     {
         $tmp = tempnam(sys_get_temp_dir(), 'zipstreamtest');
@@ -92,10 +88,7 @@ class ZipStreamTest extends TestCase
         return array($tmp, $stream);
     }
 
-    /**
-     * @param string $tmp
-     * @return string
-     */
+    
     protected function validateAndExtractZip($tmp): string
     {
         $tmpDir = $this->getTmpDir();
@@ -127,10 +120,7 @@ class ZipStreamTest extends TestCase
         return $tmp;
     }
 
-    /**
-     * @param string $path
-     * @return string[]
-     */
+    
     protected function getRecursiveFileList(string $path): array
     {
         $data = array();
@@ -411,21 +401,21 @@ class ZipStreamTest extends TestCase
 
         $zip = new ZipStream(null, $options);
 
-        // In this test we can't use temporary stream to feed data
-        // because zlib.deflate filter gives empty string before PHP 7
-        // it works fine with file stream
+        
+        
+        
         $streamExample = fopen(__FILE__, 'rb');
         $zip->addFileFromStream('sample.txt', $streamExample);
-//        fclose($streamExample);
+
 
         $fileOptions = new FileOptions();
         $fileOptions->setMethod(Method::STORE());
 
-        $streamExample2 = fopen('php://temp', 'wb+');
+        $streamExample2 = fopen('php:
         fwrite($streamExample2, 'More Simple Sample Data');
-        rewind($streamExample2); // move the pointer back to the beginning of file.
+        rewind($streamExample2); 
         $zip->addFileFromStream('test/sample.txt', $streamExample2, $fileOptions);
-//        fclose($streamExample2);
+
 
         $zip->finish();
         fclose($stream);
@@ -451,17 +441,17 @@ class ZipStreamTest extends TestCase
         $fileOptions = new FileOptions();
         $fileOptions->setMethod(Method::STORE());
 
-        $streamExample = fopen('php://temp', 'wb+');
+        $streamExample = fopen('php:
         fwrite($streamExample, 'Sample String Data');
-        rewind($streamExample); // move the pointer back to the beginning of file.
+        rewind($streamExample); 
         $zip->addFileFromStream('sample.txt', $streamExample, $fileOptions);
-//        fclose($streamExample);
 
-        $streamExample2 = fopen('php://temp', 'bw+');
+
+        $streamExample2 = fopen('php:
         fwrite($streamExample2, 'More Simple Sample Data');
-        rewind($streamExample2); // move the pointer back to the beginning of file.
+        rewind($streamExample2); 
         $zip->addFileFromStream('test/sample.txt', $streamExample2);
-//        fclose($streamExample2);
+
 
         $zip->finish();
         fclose($stream);
@@ -515,7 +505,7 @@ class ZipStreamTest extends TestCase
 
         $body = 'Sample String Data';
         $fileSize = strlen($body);
-        // Add fake padding
+        
         $fakePadding = "\0\0\0\0\0\0";
         $response = new Response(200, [], $body . $fakePadding);
 
@@ -560,7 +550,7 @@ class ZipStreamTest extends TestCase
 
     public function testCreateArchiveWithOutputBufferingOffAndFlushOptionSet(): void
     {
-        // WORKAROUND (1/2): remove phpunit's output buffer in order to run test without any buffering
+        
         ob_end_flush();
         $this->assertEquals(0, ob_get_level());
 
@@ -580,7 +570,7 @@ class ZipStreamTest extends TestCase
         $tmpDir = $this->validateAndExtractZip($tmp);
         $this->assertStringEqualsFile($tmpDir . '/sample.txt', 'Sample String Data');
 
-        // WORKAROUND (2/2): add back output buffering so that PHPUnit doesn't complain that it is missing
+        
         ob_start();
     }
 }

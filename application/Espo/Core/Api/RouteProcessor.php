@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Api;
 
@@ -45,12 +19,7 @@ use Throwable;
 use LogicException;
 use Exception;
 
-/**
- * Processes routes. Handles authentication. Obtains a controller name, action, body from a request.
- * Then processes a controller action or an action.
- *
- * @internal
- */
+
 class RouteProcessor
 {
     public function __construct(
@@ -94,9 +63,7 @@ class RouteProcessor
         }
     }
 
-    /**
-     * @throws BadRequest
-     */
+    
     private function processInternal(
         ProcessData $processData,
         Psr7Request $psrRequest,
@@ -131,9 +98,7 @@ class RouteProcessor
         return $response;
     }
 
-    /**
-     * @throws BadRequest
-     */
+    
     private function processAfterAuth(
         ProcessData $processData,
         Psr7Request $request,
@@ -149,9 +114,7 @@ class RouteProcessor
         return $this->processControllerAction($processData, $request, $responseWrapped);
     }
 
-    /**
-     * @param class-string<Action> $actionClassName
-     */
+    
     private function processAction(
         string $actionClassName,
         ProcessData $processData,
@@ -159,7 +122,7 @@ class RouteProcessor
         ResponseWrapper $responseWrapped
     ): Psr7Response {
 
-        /** @var Action $action */
+        
         $action = $this->injectableFactory->create($actionClassName);
 
         $handler = new ActionHandler(
@@ -176,7 +139,7 @@ class RouteProcessor
 
         $response = $dispatcher->handle($request);
 
-        // Apply headers added by the authentication.
+        
         foreach ($responseWrapped->getHeaderNames() as $name) {
             $response = $response->withHeader($name, $responseWrapped->getHeaderAsArray($name));
         }
@@ -184,9 +147,7 @@ class RouteProcessor
         return $response;
     }
 
-    /**
-     * @throws BadRequest
-     */
+    
     private function processControllerAction(
         ProcessData $processData,
         Psr7Request $request,

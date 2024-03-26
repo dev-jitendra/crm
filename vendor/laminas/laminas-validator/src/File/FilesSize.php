@@ -18,41 +18,25 @@ use function is_readable;
 use function is_scalar;
 use function is_string;
 
-/**
- * Validator for the size of all files which will be validated in sum
- */
+
 class FilesSize extends Size
 {
-    /**
-     * @const string Error constants
-     */
+    
     public const TOO_BIG      = 'fileFilesSizeTooBig';
     public const TOO_SMALL    = 'fileFilesSizeTooSmall';
     public const NOT_READABLE = 'fileFilesSizeNotReadable';
 
-    /** @var array Error message templates */
+    
     protected $messageTemplates = [
         self::TOO_BIG      => "All files in sum should have a maximum size of '%max%' but '%size%' were detected",
         self::TOO_SMALL    => "All files in sum should have a minimum size of '%min%' but '%size%' were detected",
         self::NOT_READABLE => 'One or more files can not be read',
     ];
 
-    /**
-     * Internal file array
-     *
-     * @var array
-     */
+    
     protected $files;
 
-    /**
-     * Sets validator options
-     *
-     * Min limits the used disk space for all files, when used with max=null it is the maximum file size
-     * It also accepts an array with the keys 'min' and 'max'
-     *
-     * @param  int|array|Traversable $options Options for this validator
-     * @throws InvalidArgumentException
-     */
+    
     public function __construct($options = null)
     {
         $this->files = [];
@@ -78,14 +62,7 @@ class FilesSize extends Size
         parent::__construct($options);
     }
 
-    /**
-     * Returns true if and only if the disk usage of all files is at least min and
-     * not bigger than max (when max is not null).
-     *
-     * @param  string|array $value Real file to check for size
-     * @param  array        $file  File data from \Laminas\File\Transfer\Transfer
-     * @return bool
-     */
+    
     public function isValid($value, $file = null)
     {
         if (is_string($value)) {
@@ -108,7 +85,7 @@ class FilesSize extends Size
                 $files = $files['tmp_name'];
             }
 
-            // Is file readable ?
+            
             if (empty($files) || false === is_readable($files)) {
                 $this->throwError($file, self::NOT_READABLE);
                 continue;
@@ -117,11 +94,11 @@ class FilesSize extends Size
             if (! isset($this->files[$files])) {
                 $this->files[$files] = $files;
             } else {
-                // file already counted... do not count twice
+                
                 continue;
             }
 
-            // limited to 2GB files
+            
             ErrorHandler::start();
             $size += filesize($files);
             ErrorHandler::stop();
@@ -139,7 +116,7 @@ class FilesSize extends Size
             }
         }
 
-        // Check that aggregate files are >= minimum size
+        
         if (($min !== null) && ($size < $min)) {
             if ($this->getByteString()) {
                 $this->options['min'] = $this->toByteString($min);
@@ -159,13 +136,7 @@ class FilesSize extends Size
         return true;
     }
 
-    /**
-     * Throws an error of the given type
-     *
-     * @param  string $file
-     * @param  string $errorType
-     * @return false
-     */
+    
     protected function throwError($file, $errorType)
     {
         if ($file !== null) {

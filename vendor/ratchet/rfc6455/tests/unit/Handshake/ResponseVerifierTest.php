@@ -5,13 +5,9 @@ namespace Ratchet\RFC6455\Test\Unit\Handshake;
 use Ratchet\RFC6455\Handshake\ResponseVerifier;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers Ratchet\RFC6455\Handshake\ResponseVerifier
- */
+
 class ResponseVerifierTest extends TestCase {
-    /**
-     * @var ResponseVerifier
-     */
+    
     protected $_v;
 
     public function setUp() {
@@ -30,9 +26,7 @@ class ResponseVerifierTest extends TestCase {
         ];
     }
 
-    /**
-     * @dataProvider subProtocolsProvider
-     */
+    
     public function testVerifySubProtocol($expected, $request, $response) {
         $this->assertEquals($expected, $this->_v->verifySubProtocol($request, $response));
     }

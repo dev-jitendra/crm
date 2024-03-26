@@ -28,14 +28,7 @@ class FillPattern
         0x12 => Fill::FILL_PATTERN_GRAY0625,
     ];
 
-    /**
-     * Get fill pattern from index
-     * OpenOffice documentation: 2.5.12.
-     *
-     * @param int $index
-     *
-     * @return string
-     */
+    
     public static function lookup($index)
     {
         if (isset(self::$map[$index])) {

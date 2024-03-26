@@ -1,30 +1,4 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 import View from 'view';
 
@@ -35,21 +9,21 @@ class Step2ImportView extends View {
     allowedFieldList = ['createdAt', 'createdBy']
 
     events = {
-        /** @this Step2ImportView */
+        
         'click button[data-action="back"]': function () {
             this.back();
         },
-        /** @this Step2ImportView */
+        
         'click button[data-action="next"]': function () {
             this.next();
         },
-        /** @this Step2ImportView */
+        
         'click a[data-action="addField"]': function (e) {
             const field = $(e.currentTarget).data('name');
 
             this.addField(field);
         },
-        /** @this Step2ImportView */
+        
         'click a[data-action="removeField"]': function (e) {
             const field = $(e.currentTarget).data('name');
 
@@ -197,7 +171,7 @@ class Step2ImportView extends View {
                     .addClass('form-checkbox')
                     .attr('id', 'update-by-' + i.toString());
 
-                /** @type {HTMLInputElement} */
+                
                 const checkboxElement = $checkbox.get(0);
 
                 if (!this.formData.updateBy) {
@@ -225,9 +199,7 @@ class Step2ImportView extends View {
         });
     }
 
-    /**
-     * @return {string[]}
-     */
+    
     getDefaultFieldList() {
         if (this.formData.defaultFieldList) {
             return this.formData.defaultFieldList;
@@ -259,7 +231,7 @@ class Step2ImportView extends View {
                 continue;
             }
 
-            const d = /** @type {Object.<string, *>} */defs[field];
+            const d = defs[field];
 
             if (!~this.allowedFieldList.indexOf(field) && (d.disabled || d.importDisabled)) {
                 continue;
@@ -289,7 +261,7 @@ class Step2ImportView extends View {
                 continue;
             }
 
-            const d = /** @type {Object.<string, *>} */fields[field];
+            const d = fields[field];
 
             if (
                 !~this.allowedFieldList.indexOf(field) &&
@@ -511,10 +483,7 @@ class Step2ImportView extends View {
         this.$el.find('button[data-action="back"]').removeClass('disabled').removeAttr('disabled');
     }
 
-    /**
-     * @param {string} field
-     * @return {module:views/fields/base}
-     */
+    
     getFieldView(field) {
         return this.getView(field);
     }
@@ -574,11 +543,9 @@ class Step2ImportView extends View {
         return true;
     }
 
-    /**
-     * @return {import('./index').default}
-     */
+    
     getParentIndexView() {
-        // noinspection JSValidateTypes
+        
         return this.getParentView();
     }
 

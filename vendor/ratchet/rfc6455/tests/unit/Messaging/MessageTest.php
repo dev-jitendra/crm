@@ -6,11 +6,9 @@ use Ratchet\RFC6455\Messaging\Frame;
 use Ratchet\RFC6455\Messaging\Message;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers Ratchet\RFC6455\Messaging\Message
- */
+
 class MessageTest extends TestCase {
-    /** @var Message */
+    
     protected $message;
 
     public function setUp() {

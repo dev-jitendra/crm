@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Modules\Crm\Tools\Activities;
 
@@ -78,7 +52,7 @@ class Service
     private const UPCOMING_ACTIVITIES_FUTURE_DAYS = 1;
     private const UPCOMING_ACTIVITIES_TASK_FUTURE_DAYS = 7;
 
-    /** @var array<string, array<string, string>> */
+    
     private array $attributeMap = [
         Email::ENTITY_TYPE => [
             'dateSent' => 'dateStart',
@@ -137,9 +111,7 @@ class Service
             $this->metadata->get(['scopes', $scope, 'type']) === Company::TEMPLATE_TYPE;
     }
 
-    /**
-     * @param string[] $statusList
-     */
+    
     protected function getActivitiesUserMeetingQuery(User $entity, array $statusList = []): Select
     {
         $builder = $this->selectBuilderFactory
@@ -198,9 +170,7 @@ class Service
         return $builder->build();
     }
 
-    /**
-     * @param string[] $statusList
-     */
+    
     protected function getActivitiesUserCallQuery(User $entity, array $statusList = []): Select
     {
         $seed = $this->entityManager->getNewEntity(Call::ENTITY_TYPE);
@@ -267,10 +237,7 @@ class Service
         return $builder->build();
     }
 
-    /**
-     * @param string[] $statusList
-     * @return Select|Select[]
-     */
+    
     protected function getActivitiesUserEmailQuery(User $entity, array $statusList = [])
     {
         if ($entity->isPortal() && $entity->get('contactId')) {
@@ -322,10 +289,7 @@ class Service
         return $builder->build();
     }
 
-    /**
-     * @param string[] $statusList
-     * @return Select|Select[]
-     */
+    
     protected function getActivitiesMeetingOrCallQuery(
         Entity $entity,
         array $statusList,
@@ -461,28 +425,19 @@ class Service
         return $queryList;
     }
 
-    /**
-     * @param string[] $statusList
-     * @return Select|Select[]
-     */
+    
     protected function getActivitiesMeetingQuery(Entity $entity, array $statusList = [])
     {
         return $this->getActivitiesMeetingOrCallQuery($entity, $statusList, Meeting::ENTITY_TYPE);
     }
 
-    /**
-     * @param string[] $statusList
-     * @return Select|Select[]
-     */
+    
     protected function getActivitiesCallQuery(Entity $entity, array $statusList = [])
     {
         return $this->getActivitiesMeetingOrCallQuery($entity, $statusList, Call::ENTITY_TYPE);
     }
 
-    /**
-     * @param string[] $statusList
-     * @return Select|Select[]
-     */
+    
     protected function getActivitiesEmailQuery(Entity $entity, array $statusList = [])
     {
         if ($entity instanceof User) {
@@ -621,14 +576,11 @@ class Service
         return $queryList;
     }
 
-    /**
-     * @param array<string,Select|array<string, mixed>> $parts
-     * @return RecordCollection<Entity>
-     */
+    
     protected function getResultFromQueryParts(array $parts, string $scope, FetchParams $params): RecordCollection
     {
         if ($parts === []) {
-            /** @var RecordCollection<Entity> */
+            
             return new RecordCollection(new EntityCollection(), 0);
         }
 
@@ -665,7 +617,7 @@ class Service
         $offset = $params->getOffset() ?? 0;
 
         if (!$onlyScope && $scope === User::ENTITY_TYPE) {
-            // optimizing sub-queries
+            
 
             $newQueryList = [];
 
@@ -679,7 +631,7 @@ class Service
                     $subBuilder->limit(0, $offset + $maxSize + 1);
                 }
 
-                // Order by `dateStart`.
+                
                 $subBuilder->order(
                     Order
                         ::create(
@@ -765,9 +717,7 @@ class Service
         return RecordCollection::create($collection, $totalCount);
     }
 
-    /**
-     * @throws Forbidden
-     */
+    
     protected function accessCheck(Entity $entity): void
     {
         if ($entity instanceof User) {
@@ -783,12 +733,7 @@ class Service
         }
     }
 
-    /**
-     * @return RecordCollection<Entity>
-     * @throws Forbidden
-     * @throws NotFound
-     * @throws Error
-     */
+    
     public function findActivitiesEntityType(
         string $scope,
         string $id,
@@ -884,7 +829,7 @@ class Service
             $query = $unionBuilder->build();
         }
 
-        /** @var UnionBuilder|SelectBuilder $builder */
+        
         $builder = $this->entityManager
             ->getQueryBuilder()
             ->clone($query);
@@ -930,12 +875,7 @@ class Service
         return new RecordCollection($collection, $total);
     }
 
-    /**
-     * @return RecordCollection<Entity>
-     * @throws NotFound
-     * @throws Error
-     * @throws Forbidden
-     */
+    
     public function getActivities(string $scope, string $id, FetchParams $params): RecordCollection
     {
         $entity = $this->entityManager->getEntityById($scope, $id);
@@ -958,7 +898,7 @@ class Service
 
         $parts = [];
 
-        /** @var string[] $entityTypeList */
+        
         $entityTypeList = $this->config->get('activitiesEntityList') ??
             [Meeting::ENTITY_TYPE, Call::ENTITY_TYPE];
 
@@ -984,12 +924,7 @@ class Service
         return $this->getResultFromQueryParts($parts, $scope, $params);
     }
 
-    /**
-     * @return RecordCollection<Entity>
-     * @throws NotFound
-     * @throws Error
-     * @throws Forbidden
-     */
+    
     public function getHistory(string $scope, string $id, FetchParams $params): RecordCollection
     {
         $entity = $this->entityManager->getEntityById($scope, $id);
@@ -1012,7 +947,7 @@ class Service
 
         $parts = [];
 
-        /** @var string[] $entityTypeList */
+        
         $entityTypeList = $this->config->get('historyEntityList') ??
             [
                 Meeting::ENTITY_TYPE,
@@ -1042,16 +977,13 @@ class Service
         return $this->getResultFromQueryParts($parts, $scope, $params);
     }
 
-    /**
-     * @param string[] $statusList
-     * @return Select|Select[]
-     */
+    
     protected function getActivitiesQuery(Entity $entity, string $scope, array $statusList = [])
     {
         $serviceName = 'Activities' . $entity->getEntityType();
 
         if ($this->serviceFactory->checkExists($serviceName)) {
-            // For bc.
+            
             $service = $this->serviceFactory->create($serviceName);
 
             $methodName = 'getActivities' . $scope . 'Query';
@@ -1076,9 +1008,7 @@ class Service
         return $this->getActivitiesBaseQuery($entity, $scope, $statusList);
     }
 
-    /**
-     * @param string[] $statusList
-     */
+    
     protected function getActivitiesBaseQuery(Entity $entity, string $scope, array $statusList = []): Select
     {
         $seed = $this->entityManager->getNewEntity($scope);
@@ -1149,16 +1079,7 @@ class Service
         $this->entityManager->getQueryExecutor()->execute($deleteQuery);
     }
 
-    /**
-     * @param array{
-     *   offset?: ?int,
-     *   maxSize?: ?int,
-     * } $params
-     * @param ?string[] $entityTypeList
-     * @return RecordCollection<Entity>
-     * @throws Forbidden
-     * @throws NotFound
-     */
+    
     public function getUpcomingActivities(
         string $userId,
         array $params = [],
@@ -1166,7 +1087,7 @@ class Service
         ?int $futureDays = null
     ): RecordCollection {
 
-        /** @var ?User $user */
+        
         $user = $this->entityManager->getEntityById(User::ENTITY_TYPE, $userId);
 
         if (!$user) {
@@ -1254,15 +1175,15 @@ class Service
         $collection = new EntityCollection();
 
         foreach ($rows as $row) {
-            /** @var string $itemEntityType */
+            
             $itemEntityType = $row['entityType'];
-            /** @var string $itemId */
+            
             $itemId = $row['id'];
 
             $entity = $this->entityManager->getEntityById($itemEntityType, $itemId);
 
             if (!$entity) {
-                // @todo Revise.
+                
                 $entity = $this->entityManager->getNewEntity($itemEntityType);
 
                 $entity->set('id', $itemId);
@@ -1271,13 +1192,11 @@ class Service
             $collection->append($entity);;
         }
 
-        /** @var RecordCollection<Entity> */
+        
         return RecordCollection::create($collection, $totalCount);
     }
 
-    /**
-     * @param array<string, mixed> $params
-     */
+    
     protected function getUpcomingActivitiesEntityTypeQuery(
         string $entityType,
         array $params,

@@ -1,18 +1,9 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 return [
-    /*
-     * ISO 639-2
-     */
+    
     'ab' => [
         'isoName' => 'Abkhazian',
         'nativeName' => 'аҧсуа бызшәа, аҧсшәа',
@@ -749,9 +740,7 @@ return [
         'isoName' => 'Zulu',
         'nativeName' => 'isiZulu',
     ],
-    /*
-     * Add ISO 639-3 languages available in Carbon
-     */
+    
     'agq' => [
         'isoName' => 'Aghem',
         'nativeName' => 'Aghem',

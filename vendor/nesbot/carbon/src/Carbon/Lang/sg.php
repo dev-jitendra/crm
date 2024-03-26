@@ -1,13 +1,6 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 return array_replace_recursive(require __DIR__.'/en.php', [
     'meridiem' => ['ND', 'LK'],
@@ -26,25 +19,25 @@ return array_replace_recursive(require __DIR__.'/en.php', [
         'LLLL' => 'dddd D MMMM YYYY HH:mm',
     ],
 
-    'year' => ':count dā', // less reliable
-    'y' => ':count dā', // less reliable
-    'a_year' => ':count dā', // less reliable
+    'year' => ':count dā', 
+    'y' => ':count dā', 
+    'a_year' => ':count dā', 
 
-    'week' => ':count bïkua-okü', // less reliable
-    'w' => ':count bïkua-okü', // less reliable
-    'a_week' => ':count bïkua-okü', // less reliable
+    'week' => ':count bïkua-okü', 
+    'w' => ':count bïkua-okü', 
+    'a_week' => ':count bïkua-okü', 
 
-    'day' => ':count ziggawâ', // less reliable
-    'd' => ':count ziggawâ', // less reliable
-    'a_day' => ':count ziggawâ', // less reliable
+    'day' => ':count ziggawâ', 
+    'd' => ':count ziggawâ', 
+    'a_day' => ':count ziggawâ', 
 
-    'hour' => ':count yângâködörö', // less reliable
-    'h' => ':count yângâködörö', // less reliable
-    'a_hour' => ':count yângâködörö', // less reliable
+    'hour' => ':count yângâködörö', 
+    'h' => ':count yângâködörö', 
+    'a_hour' => ':count yângâködörö', 
 
-    'second' => ':count bïkua-ôko', // less reliable
-    's' => ':count bïkua-ôko', // less reliable
-    'a_second' => ':count bïkua-ôko', // less reliable
+    'second' => ':count bïkua-ôko', 
+    's' => ':count bïkua-ôko', 
+    'a_second' => ':count bïkua-ôko', 
 
     'month' => ':count Nze tî ngu',
     'm' => ':count Nze tî ngu',

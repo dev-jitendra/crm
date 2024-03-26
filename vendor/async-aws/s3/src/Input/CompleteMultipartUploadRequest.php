@@ -11,64 +11,25 @@ use AsyncAws\S3\ValueObject\CompletedMultipartUpload;
 
 final class CompleteMultipartUploadRequest extends Input
 {
-    /**
-     * Name of the bucket to which the multipart upload was initiated.
-     *
-     * @required
-     *
-     * @var string|null
-     */
+    
     private $bucket;
 
-    /**
-     * Object key for which the multipart upload was initiated.
-     *
-     * @required
-     *
-     * @var string|null
-     */
+    
     private $key;
 
-    /**
-     * The container for the multipart upload request information.
-     *
-     * @var CompletedMultipartUpload|null
-     */
+    
     private $multipartUpload;
 
-    /**
-     * ID for the initiated multipart upload.
-     *
-     * @required
-     *
-     * @var string|null
-     */
+    
     private $uploadId;
 
-    /**
-     * @var null|RequestPayer::*
-     */
+    
     private $requestPayer;
 
-    /**
-     * The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail
-     * with an HTTP `403 (Access Denied)` error.
-     *
-     * @var string|null
-     */
+    
     private $expectedBucketOwner;
 
-    /**
-     * @param array{
-     *   Bucket?: string,
-     *   Key?: string,
-     *   MultipartUpload?: CompletedMultipartUpload|array,
-     *   UploadId?: string,
-     *   RequestPayer?: RequestPayer::*,
-     *   ExpectedBucketOwner?: string,
-     *   @region?: string,
-     * } $input
-     */
+    
     public function __construct(array $input = [])
     {
         $this->bucket = $input['Bucket'] ?? null;
@@ -105,9 +66,7 @@ final class CompleteMultipartUploadRequest extends Input
         return $this->multipartUpload;
     }
 
-    /**
-     * @return RequestPayer::*|null
-     */
+    
     public function getRequestPayer(): ?string
     {
         return $this->requestPayer;
@@ -118,12 +77,10 @@ final class CompleteMultipartUploadRequest extends Input
         return $this->uploadId;
     }
 
-    /**
-     * @internal
-     */
+    
     public function request(): Request
     {
-        // Prepare headers
+        
         $headers = ['content-type' => 'application/xml'];
         if (null !== $this->requestPayer) {
             if (!RequestPayer::exists($this->requestPayer)) {
@@ -135,14 +92,14 @@ final class CompleteMultipartUploadRequest extends Input
             $headers['x-amz-expected-bucket-owner'] = $this->expectedBucketOwner;
         }
 
-        // Prepare query
+        
         $query = [];
         if (null === $v = $this->uploadId) {
             throw new InvalidArgument(sprintf('Missing parameter "UploadId" for "%s". The value cannot be null.', __CLASS__));
         }
         $query['uploadId'] = $v;
 
-        // Prepare URI
+        
         $uri = [];
         if (null === $v = $this->bucket) {
             throw new InvalidArgument(sprintf('Missing parameter "Bucket" for "%s". The value cannot be null.', __CLASS__));
@@ -154,14 +111,14 @@ final class CompleteMultipartUploadRequest extends Input
         $uri['Key'] = $v;
         $uriString = '/' . rawurlencode($uri['Bucket']) . '/' . str_replace('%2F', '/', rawurlencode($uri['Key']));
 
-        // Prepare Body
+        
 
         $document = new \DOMDocument('1.0', 'UTF-8');
         $document->formatOutput = false;
         $this->requestBody($document, $document);
         $body = $document->hasChildNodes() ? $document->saveXML() : '';
 
-        // Return the Request
+        
         return new Request('POST', $uriString, $query, $headers, StreamFactory::create($body));
     }
 
@@ -193,9 +150,7 @@ final class CompleteMultipartUploadRequest extends Input
         return $this;
     }
 
-    /**
-     * @param RequestPayer::*|null $value
-     */
+    
     public function setRequestPayer(?string $value): self
     {
         $this->requestPayer = $value;
@@ -214,7 +169,7 @@ final class CompleteMultipartUploadRequest extends Input
     {
         if (null !== $v = $this->multipartUpload) {
             $node->appendChild($child = $document->createElement('CompleteMultipartUpload'));
-            $child->setAttribute('xmlns', 'http://s3.amazonaws.com/doc/2006-03-01/');
+            $child->setAttribute('xmlns', 'http:
             $v->requestBody($child, $document);
         }
     }

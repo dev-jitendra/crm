@@ -6,21 +6,10 @@ namespace OpenSpout\Writer\Common\Manager\Style;
 
 use OpenSpout\Common\Entity\Style\Style;
 
-/**
- * @internal
- */
+
 final class StyleMerger
 {
-    /**
-     * Merges the current style with the given style, using the given style as a base. This means that:
-     *   - if current style and base style both have property A set, use current style property's value
-     *   - if current style has property A set but base style does not, use current style property's value
-     *   - if base style has property A set but current style does not, use base style property's value.
-     *
-     * @NOTE: This function returns a new style.
-     *
-     * @return Style New style corresponding to the merge of the 2 styles
-     */
+    
     public function merge(Style $style, Style $baseStyle): Style
     {
         $mergedStyle = clone $style;
@@ -32,9 +21,7 @@ final class StyleMerger
         return $mergedStyle;
     }
 
-    /**
-     * @param Style $styleToUpdate (passed as reference)
-     */
+    
     private function mergeFontStyles(Style $styleToUpdate, Style $style, Style $baseStyle): void
     {
         if (!$style->hasSetFontBold() && $baseStyle->isFontBold()) {
@@ -51,9 +38,7 @@ final class StyleMerger
         }
     }
 
-    /**
-     * @param Style $styleToUpdate Style to update (passed as reference)
-     */
+    
     private function mergeOtherFontProperties(Style $styleToUpdate, Style $style, Style $baseStyle): void
     {
         if (!$style->hasSetFontSize() && Style::DEFAULT_FONT_SIZE !== $baseStyle->getFontSize()) {
@@ -67,9 +52,7 @@ final class StyleMerger
         }
     }
 
-    /**
-     * @param Style $styleToUpdate Style to update (passed as reference)
-     */
+    
     private function mergeCellProperties(Style $styleToUpdate, Style $style, Style $baseStyle): void
     {
         if (!$style->hasSetWrapText() && $baseStyle->hasSetWrapText()) {

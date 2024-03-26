@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim-Psr7/blob/master/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -30,24 +26,17 @@ class Headers implements HeadersInterface
 {
     protected array $globals;
 
-    /**
-     * @var Header[]
-     */
+    
     protected array $headers;
 
-    /**
-     * @param array      $headers
-     * @param array|null $globals
-     */
+    
     final public function __construct(array $headers = [], ?array $globals = null)
     {
         $this->globals = $globals ?? $_SERVER;
         $this->setHeaders($headers);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function addHeader($name, $value): HeadersInterface
     {
         [$values, $originalName, $normalizedName] = $this->prepareHeader($name, $value);
@@ -62,9 +51,7 @@ class Headers implements HeadersInterface
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function removeHeader(string $name): HeadersInterface
     {
         $name = $this->normalizeHeaderName($name);
@@ -72,9 +59,7 @@ class Headers implements HeadersInterface
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getHeader(string $name, $default = []): array
     {
         $name = $this->normalizeHeaderName($name);
@@ -92,14 +77,12 @@ class Headers implements HeadersInterface
         return $this->trimHeaderValue($default);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function setHeader($name, $value): HeadersInterface
     {
         [$values, $originalName, $normalizedName] = $this->prepareHeader($name, $value);
 
-        // Ensure we preserve original case if the header already exists in the stack
+        
         if (isset($this->headers[$normalizedName])) {
             $existingHeader = $this->headers[$normalizedName];
             $originalName = $existingHeader->getOriginalName();
@@ -110,9 +93,7 @@ class Headers implements HeadersInterface
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function setHeaders(array $headers): HeadersInterface
     {
         $this->headers = [];
@@ -124,18 +105,14 @@ class Headers implements HeadersInterface
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function hasHeader(string $name): bool
     {
         $name = $this->normalizeHeaderName($name);
         return isset($this->headers[$name]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getHeaders(bool $originalCase = false): array
     {
         $headers = [];
@@ -148,11 +125,7 @@ class Headers implements HeadersInterface
         return $headers;
     }
 
-    /**
-     * @param string $name
-     * @param bool   $preserveCase
-     * @return string
-     */
+    
     protected function normalizeHeaderName(string $name, bool $preserveCase = false): string
     {
         $name = strtr($name, '_', '-');
@@ -168,12 +141,7 @@ class Headers implements HeadersInterface
         return $name;
     }
 
-    /**
-     * Parse incoming headers and determine Authorization header from original headers
-     *
-     * @param array $headers
-     * @return array
-     */
+    
     protected function parseAuthorizationHeader(array $headers): array
     {
         $hasAuthorizationHeader = false;
@@ -198,11 +166,7 @@ class Headers implements HeadersInterface
         return $headers;
     }
 
-    /**
-     * @param array|string $value
-     *
-     * @return array
-     */
+    
     protected function trimHeaderValue($value): array
     {
         $items = is_array($value) ? $value : [$value];
@@ -213,14 +177,7 @@ class Headers implements HeadersInterface
         return $result;
     }
 
-    /**
-     * @param string       $name
-     * @param array|string $value
-     *
-     * @throws InvalidArgumentException
-     *
-     * @return array
-     */
+    
     protected function prepareHeader($name, $value): array
     {
         $this->validateHeader($name, $value);
@@ -230,40 +187,14 @@ class Headers implements HeadersInterface
         return [$values, $originalName, $normalizedName];
     }
 
-    /**
-     * Make sure the header complies with RFC 7230.
-     *
-     * Header names must be a non-empty string consisting of token characters.
-     *
-     * Header values must be strings consisting of visible characters with all optional
-     * leading and trailing whitespace stripped. This method will always strip such
-     * optional whitespace. Note that the method does not allow folding whitespace within
-     * the values as this was deprecated for almost all instances by the RFC.
-     *
-     * header-field = field-name ":" OWS field-value OWS
-     * field-name   = 1*( "!" / "#" / "$" / "%" / "&" / "'" / "*" / "+" / "-" / "." / "^"
-     *              / "_" / "`" / "|" / "~" / %x30-39 / ( %x41-5A / %x61-7A ) )
-     * OWS          = *( SP / HTAB )
-     * field-value  = *( ( %x21-7E / %x80-FF ) [ 1*( SP / HTAB ) ( %x21-7E / %x80-FF ) ] )
-     *
-     * @see https://tools.ietf.org/html/rfc7230#section-3.2.4
-     *
-     * @param string        $name
-     * @param array|string  $value
-     *
-     * @throws InvalidArgumentException;
-     */
+    
     protected function validateHeader($name, $value): void
     {
         $this->validateHeaderName($name);
         $this->validateHeaderValue($value);
     }
 
-    /**
-     * @param mixed $name
-     *
-     * @throws InvalidArgumentException
-     */
+    
     protected function validateHeaderName($name): void
     {
         if (!is_string($name) || preg_match("@^[!#$%&'*+.^_`|~0-9A-Za-z-]+$@D", $name) !== 1) {
@@ -271,11 +202,7 @@ class Headers implements HeadersInterface
         }
     }
 
-    /**
-     * @param mixed $value
-     *
-     * @throws InvalidArgumentException
-     */
+    
     protected function validateHeaderValue($value): void
     {
         $items = is_array($value) ? $value : [$value];
@@ -298,9 +225,7 @@ class Headers implements HeadersInterface
         }
     }
 
-    /**
-     * @return static
-     */
+    
     public static function createFromGlobals()
     {
         $headers = null;

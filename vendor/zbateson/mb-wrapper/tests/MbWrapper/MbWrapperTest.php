@@ -3,12 +3,7 @@ namespace ZBateson\MbWrapper;
 
 use PHPUnit\Framework\TestCase;
 
-/**
- * Description of MbWrapperTest
- *
- * @group MbWrapper
- * @author Zaahid Bateson
- */
+
 class MbWrapperTest extends TestCase
 {
     public function testMbCharsetConversion()
@@ -153,8 +148,8 @@ class MbWrapperTest extends TestCase
         $first = reset($arr);
         $test = $converter->convert($str, 'UTF-8', $first);
 
-        // seems to fail only on CP1258, returns incorrect number of characters with iconv_substr
-        // $arr = array_diff($arr);
+        
+        
 
         foreach ($arr as $dest) {
             $testConv = $converter->convert($test, $first, $dest);

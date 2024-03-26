@@ -1,13 +1,6 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Monolog package.
- *
- * (c) Jordi Boggiano <j.boggiano@seld.be>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Monolog\Formatter;
 
@@ -16,39 +9,24 @@ use Gelf\Message;
 use Monolog\Utils;
 use Monolog\LogRecord;
 
-/**
- * Serializes a log message to GELF
- * @see http://docs.graylog.org/en/latest/pages/gelf.html
- *
- * @author Matt Lehner <mlehner@gmail.com>
- */
+
 class GelfMessageFormatter extends NormalizerFormatter
 {
     protected const DEFAULT_MAX_LENGTH = 32766;
 
-    /**
-     * @var string the name of the system for the Gelf log message
-     */
+    
     protected string $systemName;
 
-    /**
-     * @var string a prefix for 'extra' fields from the Monolog record (optional)
-     */
+    
     protected string $extraPrefix;
 
-    /**
-     * @var string a prefix for 'context' fields from the Monolog record (optional)
-     */
+    
     protected string $contextPrefix;
 
-    /**
-     * @var int max length per field
-     */
+    
     protected int $maxLength;
 
-    /**
-     * Translates Monolog log levels to Graylog2 log priorities.
-     */
+    
     private function getGraylog2Priority(Level $level): int
     {
         return match ($level) {
@@ -63,9 +41,7 @@ class GelfMessageFormatter extends NormalizerFormatter
         };
     }
 
-    /**
-     * @throws \RuntimeException
-     */
+    
     public function __construct(?string $systemName = null, ?string $extraPrefix = null, string $contextPrefix = 'ctxt_', ?int $maxLength = null)
     {
         if (!class_exists(Message::class)) {
@@ -81,18 +57,16 @@ class GelfMessageFormatter extends NormalizerFormatter
         $this->maxLength = null === $maxLength ? self::DEFAULT_MAX_LENGTH : $maxLength;
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function format(LogRecord $record): Message
     {
         $context = $extra = [];
         if (isset($record->context)) {
-            /** @var mixed[] $context */
+            
             $context = parent::normalize($record->context);
         }
         if (isset($record->extra)) {
-            /** @var mixed[] $extra */
+            
             $extra = parent::normalize($record->extra);
         }
 
@@ -103,7 +77,7 @@ class GelfMessageFormatter extends NormalizerFormatter
             ->setHost($this->systemName)
             ->setLevel($this->getGraylog2Priority($record->level));
 
-        // message length + system name length + 200 for padding / metadata
+        
         $len = 200 + strlen($record->message) + strlen($this->systemName);
 
         if ($len > $this->maxLength) {

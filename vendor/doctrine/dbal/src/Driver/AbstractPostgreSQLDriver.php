@@ -18,14 +18,10 @@ use function assert;
 use function preg_match;
 use function version_compare;
 
-/**
- * Abstract base implementation of the {@see Driver} interface for PostgreSQL based drivers.
- */
+
 abstract class AbstractPostgreSQLDriver implements VersionAwarePlatformDriver
 {
-    /**
-     * {@inheritdoc}
-     */
+    
     public function createDatabasePlatformForVersion($version)
     {
         if (preg_match('/^(?P<major>\d+)(?:\.(?P<minor>\d+)(?:\.(?P<patch>\d+))?)?/', $version, $versionParts) === 0) {
@@ -46,7 +42,7 @@ abstract class AbstractPostgreSQLDriver implements VersionAwarePlatformDriver
 
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5060',
+            'https:
             'PostgreSQL 9 support is deprecated and will be removed in DBAL 4.'
                 . ' Consider upgrading to Postgres 10 or later.',
         );
@@ -54,24 +50,18 @@ abstract class AbstractPostgreSQLDriver implements VersionAwarePlatformDriver
         return new PostgreSQL94Platform();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getDatabasePlatform()
     {
         return new PostgreSQL94Platform();
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated Use {@link PostgreSQLPlatform::createSchemaManager()} instead.
-     */
+    
     public function getSchemaManager(Connection $conn, AbstractPlatform $platform)
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5458',
+            'https:
             'AbstractPostgreSQLDriver::getSchemaManager() is deprecated.'
                 . ' Use PostgreSQLPlatform::createSchemaManager() instead.',
         );

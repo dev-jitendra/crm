@@ -7,26 +7,20 @@ use AsyncAws\S3\Enum\IntelligentTieringAccessTier;
 use AsyncAws\S3\Enum\StorageClass;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-/**
- * Object is archived and inaccessible until restored.
- */
+
 final class InvalidObjectStateException extends ClientException
 {
     private $storageClass;
 
     private $accessTier;
 
-    /**
-     * @return IntelligentTieringAccessTier::*|null
-     */
+    
     public function getAccessTier(): ?string
     {
         return $this->accessTier;
     }
 
-    /**
-     * @return StorageClass::*|null
-     */
+    
     public function getStorageClass(): ?string
     {
         return $this->storageClass;

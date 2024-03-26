@@ -1,46 +1,18 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module module:views/detail */
+
+
 
 import MainView from 'views/main';
 
-/**
- * A detail view.
- */
+
 class DetailView extends MainView {
 
-    /** @inheritDoc */
+    
     template = 'detail'
-    /** @inheritDoc */
+    
     name = 'Detail'
 
-    /** @inheritDoc */
+    
     optionsToPass = [
         'attributes',
         'returnUrl',
@@ -48,52 +20,28 @@ class DetailView extends MainView {
         'rootUrl',
     ]
 
-    /**
-     * A header view name.
-     *
-     * @type {string}
-     */
+    
     headerView = 'views/header'
 
-    /**
-     * A record view name.
-     *
-     * @type {string}
-     */
+    
     recordView = 'views/record/detail'
 
-    /**
-     * A root breadcrumb item not to be a link.
-     *
-     * @type {boolean}
-     */
+    
     rootLinkDisabled = false
 
-    /**
-     * A root URL.
-     *
-     * @type {string}
-     */
+    
     rootUrl = ''
 
-    /**
-     * Is return.
-     *
-     * @protected
-     */
+    
     isReturn = false
 
-    /** @inheritDoc */
+    
     shortcutKeys = {}
 
-    /**
-     * An entity type.
-     *
-     * @type {string}
-     */
+    
     entityType
 
-    /** @inheritDoc */
+    
     setup() {
         super.setup();
 
@@ -112,7 +60,7 @@ class DetailView extends MainView {
         this.initRedirect();
     }
 
-    /** @inheritDoc */
+    
     setupFinal() {
         super.setupFinal();
 
@@ -121,7 +69,7 @@ class DetailView extends MainView {
         );
     }
 
-    /** @private */
+    
     initRedirect() {
         if (!this.options.params.isAfterCreate) {
             return;
@@ -147,9 +95,7 @@ class DetailView extends MainView {
         this.listenToOnce(this.model, 'fetch-forbidden', () => redirect())
     }
 
-    /**
-     * Set up a page title.
-     */
+    
     setupPageTitle() {
         this.listenTo(this.model, 'after:save', () => {
             this.updatePageTitle();
@@ -162,9 +108,7 @@ class DetailView extends MainView {
         });
     }
 
-    /**
-     * Set up a header.
-     */
+    
     setupHeader() {
         this.createView('header', this.headerView, {
             model: this.model,
@@ -182,9 +126,7 @@ class DetailView extends MainView {
         });
     }
 
-    /**
-     * Set up a record.
-     */
+    
     setupRecord() {
         const o = {
             model: this.model,
@@ -211,17 +153,13 @@ class DetailView extends MainView {
         });
     }
 
-    /**
-     * Get a record view name.
-     *
-     * @returns {string}
-     */
+    
     getRecordViewName() {
         return this.getMetadata()
             .get('clientDefs.' + this.scope + '.recordViews.detail') || this.recordView;
     }
 
-    /** @private */
+    
     initFollowButtons() {
         if (!this.getMetadata().get(['scopes', this.scope, 'stream'])) {
             return;
@@ -234,7 +172,7 @@ class DetailView extends MainView {
         });
     }
 
-    /** @private */
+    
     addFollowButtons() {
         const isFollowed = this.model.get('isFollowed');
 
@@ -259,7 +197,7 @@ class DetailView extends MainView {
         }, true);
     }
 
-    /** @private */
+    
     controlFollowButtons() {
         const isFollowed = this.model.get('isFollowed');
 
@@ -277,10 +215,8 @@ class DetailView extends MainView {
         }
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * Action 'follow'.
-     */
+    
+    
     actionFollow() {
         this.disableMenuItem('follow');
 
@@ -298,10 +234,8 @@ class DetailView extends MainView {
             });
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * Action 'unfollow'.
-     */
+    
+    
     actionUnfollow() {
         this.disableMenuItem('unfollow');
 
@@ -319,9 +253,7 @@ class DetailView extends MainView {
             });
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     getHeader() {
         const name = this.model.get('name') || this.model.id;
 
@@ -360,9 +292,7 @@ class DetailView extends MainView {
         ]);
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     updatePageTitle() {
         if (this.model.has('name')) {
             this.setPageTitle(this.model.get('name') || this.model.id);
@@ -373,18 +303,12 @@ class DetailView extends MainView {
         super.updatePageTitle();
     }
 
-    /**
-     * @return {module:views/record/detail}
-     */
+    
     getRecordView() {
         return this.getView('record');
     }
 
-    /**
-     * Update a relationship panel (fetch data).
-     *
-     * @param {string} name A relationship name.
-     */
+    
     updateRelationshipPanel(name) {
         const bottom = this.getView('record').getView('bottom');
 
@@ -397,43 +321,22 @@ class DetailView extends MainView {
         }
     }
 
-    /**
-     * @deprecated Use metadata clientDefs > {EntityType} > relationshipPanels > {link} > createAttributeMap.
-     * @type {Object}
-     */
+    
     relatedAttributeMap = {}
 
-    /**
-     * @deprecated Use clientDefs > {EntityType} > relationshipPanels > {link} > createHandler.
-     * @type {Object}
-     */
+    
     relatedAttributeFunctions = {}
 
-    /**
-     * @deprecated Use clientDefs > {EntityType} > relationshipPanels > {link} > selectHandler.
-     * @type {Object}
-     */
+    
     selectRelatedFilters = {}
 
-    /**
-     * @deprecated Use clientDefs > {EntityType} > relationshipPanels > {link} > selectHandler or
-     *  clientDefs > {EntityType} > relationshipPanels > {link} > selectPrimaryFilter.
-     * @type {Object}
-     */
+    
     selectPrimaryFilterNames = {}
 
-    /**
-     * @deprecated Use clientDefs > {EntityType} > relationshipPanels > {link} > selectHandler or
-     *  clientDefs > {EntityType} > relationshipPanels > {link} > selectBoolFilterList.
-     * @type {Object}
-     */
+    
     selectBoolFilterLists = []
 
-    /**
-     * Action 'createRelated'.
-     *
-     * @param {Object} data
-     */
+    
     actionCreateRelated(data) {
         data = data || {};
 
@@ -508,12 +411,8 @@ class DetailView extends MainView {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * Action 'selectRelated'.
-     *
-     * @param {Object.<string, *>} data
-     */
+    
+    
     actionSelectRelated(data) {
         const link = data.link;
 
@@ -524,7 +423,7 @@ class DetailView extends MainView {
         const scope = data.foreignEntityType || this.model.defs['links'][link].entity;
         const massRelateEnabled = data.massSelect;
 
-        /** @var {Object.<string, *>} */
+        
         const panelDefs = this.getMetadata().get(['clientDefs', this.scope, 'relationshipPanels', link]) || {};
 
         let advanced = {};
@@ -548,7 +447,7 @@ class DetailView extends MainView {
         const foreignLink = this.model.getLinkParam(link, 'foreign');
 
         if (foreignLink && scope) {
-            // Select only records not related with any.
+            
             const foreignLinkType = this.getMetadata()
                 .get(['entityDefs', scope, 'links', foreignLink, 'type']);
             const foreignLinkFieldType = this.getMetadata()
@@ -613,7 +512,7 @@ class DetailView extends MainView {
 
             Espo.loader.requirePromise(handler)
                 .then(Handler => new Handler(this.getHelper()))
-                .then(/** module:handlers/select-related */handler => {
+                .then(handler => {
                     handler.getFilters(this.model)
                         .then(filters => resolve(filters));
                 });
@@ -691,10 +590,8 @@ class DetailView extends MainView {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * Action 'duplicate'.
-     */
+    
+    
     actionDuplicate() {
         Espo.Ui.notify(' ... ');
 

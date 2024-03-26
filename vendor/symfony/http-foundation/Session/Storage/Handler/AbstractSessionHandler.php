@@ -1,25 +1,12 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpFoundation\Session\Storage\Handler;
 
 use Symfony\Component\HttpFoundation\Session\SessionUtils;
 
-/**
- * This abstract session handler provides a generic implementation
- * of the PHP 7.0 SessionUpdateTimestampHandlerInterface,
- * enabling strict and lazy session handling.
- *
- * @author Nicolas Grekas <p@tchwork.com>
- */
+
 abstract class AbstractSessionHandler implements \SessionHandlerInterface, \SessionUpdateTimestampHandlerInterface
 {
     private string $sessionName;
@@ -74,7 +61,7 @@ abstract class AbstractSessionHandler implements \SessionHandlerInterface, \Sess
 
     public function write(string $sessionId, string $data): bool
     {
-        // see https://github.com/igbinary/igbinary/issues/146
+        
         $this->igbinaryEmptyData ??= \function_exists('igbinary_serialize') ? igbinary_serialize([]) : '';
         if ('' === $data || $this->igbinaryEmptyData === $data) {
             return $this->destroy($sessionId);
@@ -92,13 +79,7 @@ abstract class AbstractSessionHandler implements \SessionHandlerInterface, \Sess
             }
             $cookie = SessionUtils::popSessionCookie($this->sessionName, $sessionId);
 
-            /*
-             * We send an invalidation Set-Cookie header (zero lifetime)
-             * when either the session was started or a cookie with
-             * the session name was sent by the client (in which case
-             * we know it's invalid as a valid session cookie would've
-             * started the session).
-             */
+            
             if (null === $cookie || isset($_COOKIE[$this->sessionName])) {
                 $params = session_get_cookie_params();
                 unset($params['lifetime']);

@@ -7,20 +7,10 @@ use React\Dns\Model\Record;
 use React\Dns\Query\Query;
 use InvalidArgumentException;
 
-/**
- * DNS protocol parser
- *
- * Obsolete and uncommon types and classes are not implemented.
- */
+
 final class Parser
 {
-    /**
-     * Parses the given raw binary message into a Message object
-     *
-     * @param string $data
-     * @throws InvalidArgumentException
-     * @return Message
-     */
+    
     public function parseMessage($data)
     {
         $message = $this->parse($data, 0);
@@ -31,11 +21,7 @@ final class Parser
         return $message;
     }
 
-    /**
-     * @param string $data
-     * @param int    $consumed
-     * @return ?Message
-     */
+    
     private function parse($data, $consumed)
     {
         if (!isset($data[12 - 1])) {
@@ -55,7 +41,7 @@ final class Parser
         $message->qr = (($fields >> 15) & 1) === 1;
         $consumed += 12;
 
-        // parse all questions
+        
         for ($i = $qdCount; $i > 0; --$i) {
             list($question, $consumed) = $this->parseQuestion($data, $consumed);
             if ($question === null) {
@@ -65,7 +51,7 @@ final class Parser
             }
         }
 
-        // parse all answer records
+        
         for ($i = $anCount; $i > 0; --$i) {
             list($record, $consumed) = $this->parseRecord($data, $consumed);
             if ($record === null) {
@@ -75,7 +61,7 @@ final class Parser
             }
         }
 
-        // parse all authority records
+        
         for ($i = $nsCount; $i > 0; --$i) {
             list($record, $consumed) = $this->parseRecord($data, $consumed);
             if ($record === null) {
@@ -85,7 +71,7 @@ final class Parser
             }
         }
 
-        // parse all additional records
+        
         for ($i = $arCount; $i > 0; --$i) {
             list($record, $consumed) = $this->parseRecord($data, $consumed);
             if ($record === null) {
@@ -98,11 +84,7 @@ final class Parser
         return $message;
     }
 
-    /**
-     * @param string $data
-     * @param int $consumed
-     * @return array
-     */
+    
     private function parseQuestion($data, $consumed)
     {
         list($labels, $consumed) = $this->readLabels($data, $consumed);
@@ -124,11 +106,7 @@ final class Parser
         );
     }
 
-    /**
-     * @param string $data
-     * @param int $consumed
-     * @return array An array with a parsed Record on success or array with null if data is invalid/incomplete
-     */
+    
     private function parseRecord($data, $consumed)
     {
         list($name, $consumed) = $this->readDomain($data, $consumed);
@@ -143,7 +121,7 @@ final class Parser
         list($ttl) = array_values(unpack('N', substr($data, $consumed, 4)));
         $consumed += 4;
 
-        // TTL is a UINT32 that must not have most significant bit set for BC reasons
+        
         if ($ttl < 0 || $ttl >= 1 << 31) {
             $ttl = 0;
         }
@@ -262,12 +240,12 @@ final class Parser
                 }
             }
         } else {
-            // unknown types simply parse rdata as an opaque binary string
+            
             $rdata = substr($data, $consumed, $rdLength);
             $consumed += $rdLength;
         }
 
-        // ensure parsing record data consumes expact number of bytes indicated in record length
+        
         if ($consumed !== $expected || $rdata === null) {
             return array(null, null);
         }
@@ -286,7 +264,7 @@ final class Parser
             return array(null, null);
         }
 
-        // use escaped notation for each label part, then join using dots
+        
         return array(
             \implode(
                 '.',
@@ -301,12 +279,7 @@ final class Parser
         );
     }
 
-    /**
-     * @param string $data
-     * @param int    $consumed
-     * @param int    $compressionDepth maximum depth for compressed labels to avoid unreasonable recursion
-     * @return array
-     */
+    
     private function readLabels($data, $consumed, $compressionDepth = 127)
     {
         $labels = array();
@@ -318,13 +291,13 @@ final class Parser
 
             $length = \ord($data[$consumed]);
 
-            // end of labels reached
+            
             if ($length === 0) {
                 $consumed += 1;
                 break;
             }
 
-            // first two bits set? this is a compressed label (14 bit pointer offset)
+            
             if (($length & 0xc0) === 0xc0 && isset($data[$consumed + 1]) && $compressionDepth) {
                 $offset = ($length & ~0xc0) << 8 | \ord($data[$consumed + 1]);
                 if ($offset >= $consumed) {
@@ -342,7 +315,7 @@ final class Parser
                 break;
             }
 
-            // length MUST be 0-63 (6 bits only) and data has to be large enough
+            
             if ($length & 0xc0 || !isset($data[$consumed + $length - 1])) {
                 return array(null, null);
             }

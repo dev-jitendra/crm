@@ -1,13 +1,6 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Carbon\Traits;
 
@@ -15,55 +8,27 @@ use Carbon\CarbonInterface;
 use DateTimeInterface;
 use Throwable;
 
-/**
- * Trait Options.
- *
- * Embed base methods to change settings of Carbon classes.
- *
- * Depends on the following methods:
- *
- * @method \Carbon\Carbon|\Carbon\CarbonImmutable shiftTimezone($timezone) Set the timezone
- */
+
 trait Options
 {
     use Localization;
 
-    /**
-     * Customizable PHP_INT_SIZE override.
-     *
-     * @var int
-     */
+    
     public static $PHPIntSize = PHP_INT_SIZE;
 
-    /**
-     * First day of week.
-     *
-     * @var int|string
-     */
+    
     protected static $weekStartsAt = CarbonInterface::MONDAY;
 
-    /**
-     * Last day of week.
-     *
-     * @var int|string
-     */
+    
     protected static $weekEndsAt = CarbonInterface::SUNDAY;
 
-    /**
-     * Days of weekend.
-     *
-     * @var array
-     */
+    
     protected static $weekendDays = [
         CarbonInterface::SATURDAY,
         CarbonInterface::SUNDAY,
     ];
 
-    /**
-     * Format regex patterns.
-     *
-     * @var array<string, string>
-     */
+    
     protected static $regexFormats = [
         'd' => '(3[01]|[12][0-9]|0[1-9])',
         'D' => '(Sun|Mon|Tue|Wed|Thu|Fri|Sat)',
@@ -103,16 +68,12 @@ trait Options
         'Z' => '(-?[1-5]?[0-9]{1,4})',
         'U' => '([0-9]*)',
 
-        // The formats below are combinations of the above formats.
-        'c' => '(([1-9]?[0-9]{4})-(1[012]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])[+-](1[012]|0[0-9]):([0134][05]))', // Y-m-dTH:i:sP
-        'r' => '(([a-zA-Z]{3}), ([123][0-9]|0[1-9]) ([a-zA-Z]{3}) ([1-9]?[0-9]{4}) (2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9]) [+-](1[012]|0[0-9])([0134][05]))', // D, d M Y H:i:s O
+        
+        'c' => '(([1-9]?[0-9]{4})-(1[012]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])[+-](1[012]|0[0-9]):([0134][05]))', 
+        'r' => '(([a-zA-Z]{3}), ([123][0-9]|0[1-9]) ([a-zA-Z]{3}) ([1-9]?[0-9]{4}) (2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9]) [+-](1[012]|0[0-9])([0134][05]))', 
     ];
 
-    /**
-     * Format modifiers (such as available in createFromFormat) regex patterns.
-     *
-     * @var array
-     */
+    
     protected static $regexFormatModifiers = [
         '*' => '.+',
         ' ' => '[   ]',
@@ -123,247 +84,100 @@ trait Options
         '+' => '',
     ];
 
-    /**
-     * Indicates if months should be calculated with overflow.
-     * Global setting.
-     *
-     * @var bool
-     */
+    
     protected static $monthsOverflow = true;
 
-    /**
-     * Indicates if years should be calculated with overflow.
-     * Global setting.
-     *
-     * @var bool
-     */
+    
     protected static $yearsOverflow = true;
 
-    /**
-     * Indicates if the strict mode is in use.
-     * Global setting.
-     *
-     * @var bool
-     */
+    
     protected static $strictModeEnabled = true;
 
-    /**
-     * Function to call instead of format.
-     *
-     * @var string|callable|null
-     */
+    
     protected static $formatFunction;
 
-    /**
-     * Function to call instead of createFromFormat.
-     *
-     * @var string|callable|null
-     */
+    
     protected static $createFromFormatFunction;
 
-    /**
-     * Function to call instead of parse.
-     *
-     * @var string|callable|null
-     */
+    
     protected static $parseFunction;
 
-    /**
-     * Indicates if months should be calculated with overflow.
-     * Specific setting.
-     *
-     * @var bool|null
-     */
+    
     protected $localMonthsOverflow;
 
-    /**
-     * Indicates if years should be calculated with overflow.
-     * Specific setting.
-     *
-     * @var bool|null
-     */
+    
     protected $localYearsOverflow;
 
-    /**
-     * Indicates if the strict mode is in use.
-     * Specific setting.
-     *
-     * @var bool|null
-     */
+    
     protected $localStrictModeEnabled;
 
-    /**
-     * Options for diffForHumans and forHumans methods.
-     *
-     * @var bool|null
-     */
+    
     protected $localHumanDiffOptions;
 
-    /**
-     * Format to use on string cast.
-     *
-     * @var string|null
-     */
+    
     protected $localToStringFormat;
 
-    /**
-     * Format to use on JSON serialization.
-     *
-     * @var string|null
-     */
+    
     protected $localSerializer;
 
-    /**
-     * Instance-specific macros.
-     *
-     * @var array|null
-     */
+    
     protected $localMacros;
 
-    /**
-     * Instance-specific generic macros.
-     *
-     * @var array|null
-     */
+    
     protected $localGenericMacros;
 
-    /**
-     * Function to call instead of format.
-     *
-     * @var string|callable|null
-     */
+    
     protected $localFormatFunction;
 
-    /**
-     * @deprecated To avoid conflict between different third-party libraries, static setters should not be used.
-     *             You should rather use the ->settings() method.
-     * @see settings
-     *
-     * Enable the strict mode (or disable with passing false).
-     *
-     * @param bool $strictModeEnabled
-     */
+    
     public static function useStrictMode($strictModeEnabled = true)
     {
         static::$strictModeEnabled = $strictModeEnabled;
     }
 
-    /**
-     * Returns true if the strict mode is globally in use, false else.
-     * (It can be overridden in specific instances.)
-     *
-     * @return bool
-     */
+    
     public static function isStrictModeEnabled()
     {
         return static::$strictModeEnabled;
     }
 
-    /**
-     * @deprecated To avoid conflict between different third-party libraries, static setters should not be used.
-     *             You should rather use the ->settings() method.
-     *             Or you can use method variants: addMonthsWithOverflow/addMonthsNoOverflow, same variants
-     *             are available for quarters, years, decade, centuries, millennia (singular and plural forms).
-     * @see settings
-     *
-     * Indicates if months should be calculated with overflow.
-     *
-     * @param bool $monthsOverflow
-     *
-     * @return void
-     */
+    
     public static function useMonthsOverflow($monthsOverflow = true)
     {
         static::$monthsOverflow = $monthsOverflow;
     }
 
-    /**
-     * @deprecated To avoid conflict between different third-party libraries, static setters should not be used.
-     *             You should rather use the ->settings() method.
-     *             Or you can use method variants: addMonthsWithOverflow/addMonthsNoOverflow, same variants
-     *             are available for quarters, years, decade, centuries, millennia (singular and plural forms).
-     * @see settings
-     *
-     * Reset the month overflow behavior.
-     *
-     * @return void
-     */
+    
     public static function resetMonthsOverflow()
     {
         static::$monthsOverflow = true;
     }
 
-    /**
-     * Get the month overflow global behavior (can be overridden in specific instances).
-     *
-     * @return bool
-     */
+    
     public static function shouldOverflowMonths()
     {
         return static::$monthsOverflow;
     }
 
-    /**
-     * @deprecated To avoid conflict between different third-party libraries, static setters should not be used.
-     *             You should rather use the ->settings() method.
-     *             Or you can use method variants: addYearsWithOverflow/addYearsNoOverflow, same variants
-     *             are available for quarters, years, decade, centuries, millennia (singular and plural forms).
-     * @see settings
-     *
-     * Indicates if years should be calculated with overflow.
-     *
-     * @param bool $yearsOverflow
-     *
-     * @return void
-     */
+    
     public static function useYearsOverflow($yearsOverflow = true)
     {
         static::$yearsOverflow = $yearsOverflow;
     }
 
-    /**
-     * @deprecated To avoid conflict between different third-party libraries, static setters should not be used.
-     *             You should rather use the ->settings() method.
-     *             Or you can use method variants: addYearsWithOverflow/addYearsNoOverflow, same variants
-     *             are available for quarters, years, decade, centuries, millennia (singular and plural forms).
-     * @see settings
-     *
-     * Reset the month overflow behavior.
-     *
-     * @return void
-     */
+    
     public static function resetYearsOverflow()
     {
         static::$yearsOverflow = true;
     }
 
-    /**
-     * Get the month overflow global behavior (can be overridden in specific instances).
-     *
-     * @return bool
-     */
+    
     public static function shouldOverflowYears()
     {
         return static::$yearsOverflow;
     }
 
-    /**
-     * Set specific options.
-     *  - strictMode: true|false|null
-     *  - monthOverflow: true|false|null
-     *  - yearOverflow: true|false|null
-     *  - humanDiffOptions: int|null
-     *  - toStringFormat: string|Closure|null
-     *  - toJsonFormat: string|Closure|null
-     *  - locale: string|null
-     *  - timezone: \DateTimeZone|string|int|null
-     *  - macros: array|null
-     *  - genericMacros: array|null
-     *
-     * @param array $settings
-     *
-     * @return $this|static
-     */
+    
     public function settings(array $settings)
     {
         $this->localStrictModeEnabled = $settings['strictMode'] ?? null;
@@ -397,11 +211,7 @@ trait Options
         return $this;
     }
 
-    /**
-     * Returns current local settings.
-     *
-     * @return array
-     */
+    
     public function getSettings()
     {
         $settings = [];
@@ -430,11 +240,7 @@ trait Options
         return $settings;
     }
 
-    /**
-     * Show truthy properties on var_dump().
-     *
-     * @return array
-     */
+    
     public function __debugInfo()
     {
         $infos = array_filter(get_object_vars($this), function ($var) {
@@ -464,7 +270,7 @@ trait Options
                     $infos['timezone'] = $this->tzName;
                 }
             } catch (Throwable $exception) {
-                // noop
+                
             }
         }
     }

@@ -1,18 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - bug-glibc-locales@gnu.org
- */
+
+
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [
         'L' => 'OY[年]MMMMOD[日]',
@@ -26,25 +16,25 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'alt_numbers' => ['〇', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '廿', '廿一', '廿二', '廿三', '廿四', '廿五', '廿六', '廿七', '廿八', '廿九', '卅', '卅一'],
     'meridiem' => ['朝', '暮'],
 
-    'year' => ':count 夏', // less reliable
-    'y' => ':count 夏', // less reliable
-    'a_year' => ':count 夏', // less reliable
+    'year' => ':count 夏', 
+    'y' => ':count 夏', 
+    'a_year' => ':count 夏', 
 
-    'month' => ':count 月', // less reliable
-    'm' => ':count 月', // less reliable
-    'a_month' => ':count 月', // less reliable
+    'month' => ':count 月', 
+    'm' => ':count 月', 
+    'a_month' => ':count 月', 
 
-    'hour' => ':count 氧', // less reliable
-    'h' => ':count 氧', // less reliable
-    'a_hour' => ':count 氧', // less reliable
+    'hour' => ':count 氧', 
+    'h' => ':count 氧', 
+    'a_hour' => ':count 氧', 
 
-    'minute' => ':count 點', // less reliable
-    'min' => ':count 點', // less reliable
-    'a_minute' => ':count 點', // less reliable
+    'minute' => ':count 點', 
+    'min' => ':count 點', 
+    'a_minute' => ':count 點', 
 
-    'second' => ':count 楚', // less reliable
-    's' => ':count 楚', // less reliable
-    'a_second' => ':count 楚', // less reliable
+    'second' => ':count 楚', 
+    's' => ':count 楚', 
+    'a_second' => ':count 楚', 
 
     'week' => ':count 星期',
     'w' => ':count 星期',

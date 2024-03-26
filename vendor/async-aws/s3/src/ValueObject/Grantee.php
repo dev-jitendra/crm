@@ -5,45 +5,25 @@ namespace AsyncAws\S3\ValueObject;
 use AsyncAws\Core\Exception\InvalidArgument;
 use AsyncAws\S3\Enum\Type;
 
-/**
- * The person being granted permissions.
- */
+
 final class Grantee
 {
-    /**
-     * Screen name of the grantee.
-     */
+    
     private $displayName;
 
-    /**
-     * Email address of the grantee.
-     */
+    
     private $emailAddress;
 
-    /**
-     * The canonical user ID of the grantee.
-     */
+    
     private $id;
 
-    /**
-     * Type of grantee.
-     */
+    
     private $type;
 
-    /**
-     * URI of the grantee group.
-     */
+    
     private $uri;
 
-    /**
-     * @param array{
-     *   DisplayName?: null|string,
-     *   EmailAddress?: null|string,
-     *   ID?: null|string,
-     *   Type: Type::*,
-     *   URI?: null|string,
-     * } $input
-     */
+    
     public function __construct(array $input)
     {
         $this->displayName = $input['DisplayName'] ?? null;
@@ -73,9 +53,7 @@ final class Grantee
         return $this->id;
     }
 
-    /**
-     * @return Type::*
-     */
+    
     public function getType(): string
     {
         return $this->type;
@@ -86,9 +64,7 @@ final class Grantee
         return $this->uri;
     }
 
-    /**
-     * @internal
-     */
+    
     public function requestBody(\DomElement $node, \DomDocument $document): void
     {
         if (null !== $v = $this->displayName) {

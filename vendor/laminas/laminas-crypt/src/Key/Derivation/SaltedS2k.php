@@ -41,12 +41,10 @@ use const MHASH_TIGER160;
 use const MHASH_WHIRLPOOL;
 use const STR_PAD_RIGHT;
 
-/**
- * Salted S2K key generation (OpenPGP document, RFC 2440)
- */
+
 class SaltedS2k
 {
-    /** @var array<string, string> */
+    
     protected static $supportedMhashAlgos = [
         'adler32'    => MHASH_ADLER32,
         'md2'        => MHASH_MD2,
@@ -60,20 +58,20 @@ class SaltedS2k
         'ripemd128'  => MHASH_RIPEMD128,
         'ripemd256'  => MHASH_RIPEMD256,
         'ripemd320'  => MHASH_RIPEMD320,
-        'haval128,3' => MHASH_HAVAL128, // @deprecated use haval128 instead
+        'haval128,3' => MHASH_HAVAL128, 
         'haval128'   => MHASH_HAVAL128,
-        'haval160,3' => MHASH_HAVAL160, // @deprecated use haval160 instead
+        'haval160,3' => MHASH_HAVAL160, 
         'haval160'   => MHASH_HAVAL160,
-        'haval192,3' => MHASH_HAVAL192, // @deprecated use haval192 instead
+        'haval192,3' => MHASH_HAVAL192, 
         'haval192'   => MHASH_HAVAL192,
-        'haval224,3' => MHASH_HAVAL224, // @deprecated use haval224 instead
+        'haval224,3' => MHASH_HAVAL224, 
         'haval224'   => MHASH_HAVAL224,
-        'haval256,3' => MHASH_HAVAL256, // @deprecated use haval256 instead
+        'haval256,3' => MHASH_HAVAL256, 
         'haval256'   => MHASH_HAVAL256,
         'tiger'      => MHASH_TIGER,
-        'tiger128,3' => MHASH_TIGER128, // @deprecated use tiger128 instead
+        'tiger128,3' => MHASH_TIGER128, 
         'tiger128'   => MHASH_TIGER128,
-        'tiger160,3' => MHASH_TIGER160, // @deprecated use tiger160 instead
+        'tiger160,3' => MHASH_TIGER160, 
         'tiger160'   => MHASH_TIGER160,
         'whirpool'   => MHASH_WHIRLPOOL,
         'snefru256'  => MHASH_SNEFRU256,
@@ -82,16 +80,7 @@ class SaltedS2k
         'crc32b'     => MHASH_CRC32B,
     ];
 
-    /**
-     * Generate the new key
-     *
-     * @param  string  $hash       The hash algorithm to be used by HMAC
-     * @param  string  $password   The source password/key
-     * @param  int $bytes      The output size in bytes
-     * @param  string  $salt       The salt of the algorithm
-     * @throws Exception\InvalidArgumentException
-     * @return string
-     */
+    
     public static function calc($hash, $password, $salt, $bytes)
     {
         if (! in_array($hash, array_keys(static::$supportedMhashAlgos))) {

@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\MassUpdate;
 
@@ -70,11 +44,7 @@ class Processor
         private LinkMultipleLoader $linkMultipleLoader
     ) {}
 
-    /**
-     * @throws BadRequest
-     * @throws Forbidden
-     * @throws Error
-     */
+    
     public function process(Params $params, Data $data): Result
     {
         $entityType = $params->getEntityType();
@@ -122,9 +92,7 @@ class Processor
         return new Result($count, $ids);
     }
 
-    /**
-     * @param Service<Entity> $service
-     */
+    
     private function filterData(Data $data, Service $service): Data
     {
         $filteredData = $data;
@@ -150,10 +118,7 @@ class Processor
         return $filteredData;
     }
 
-    /**
-     * @param string[] $fieldToCopyList
-     * @param Service<Entity> $service
-     */
+    
     private function processEntity(Entity $entity, Data $data, int $i, array $fieldToCopyList, Service $service): bool
     {
         if (!$this->acl->check($entity, Table::ACTION_EDIT)) {
@@ -162,7 +127,7 @@ class Processor
 
         $values = $this->prepareItemValueMap($entity, $data, $i, $fieldToCopyList);
 
-        // Needed for link check.
+        
         $this->linkMultipleLoader->process(
             $entity,
             LoaderParams::create()
@@ -200,9 +165,7 @@ class Processor
         return true;
     }
 
-    /**
-     * @param string[] $copyFieldList
-     */
+    
     private function prepareItemValueMap(Entity $entity, Data $data, int $i, array $copyFieldList): stdClass
     {
         $dataModified = $this->copy($entity->getEntityType(), $data, $i, $copyFieldList);
@@ -210,9 +173,7 @@ class Processor
         return $this->valueMapPreparator->prepare($entity, $dataModified);
     }
 
-    /**
-     * @param string[] $copyFieldList
-     */
+    
     private function copy(string $entityType, Data $data, int $i, array $copyFieldList): Data
     {
         if (!count($copyFieldList)) {
@@ -258,7 +219,7 @@ class Processor
             return $data->with($attribute, null);
         }
 
-        /** @var AttachmentRepository $attachmentRepository */
+        
         $attachmentRepository = $this->entityManager->getRepository(Attachment::ENTITY_TYPE);
 
         $copiedAttachment = $attachmentRepository->getCopiedAttachment($attachment);
@@ -280,7 +241,7 @@ class Processor
             return $data;
         }
 
-        /** @var AttachmentRepository $attachmentRepository */
+        
         $attachmentRepository = $this->entityManager->getRepository(Attachment::ENTITY_TYPE);
 
         $copiedIds = [];
@@ -300,9 +261,7 @@ class Processor
         return $data->with($attribute, $copiedIds);
     }
 
-    /**
-     * @return string[]
-     */
+    
     private function detectFieldToCopyList(string $entityType, Data $data): array
     {
         $resultFieldList = [];

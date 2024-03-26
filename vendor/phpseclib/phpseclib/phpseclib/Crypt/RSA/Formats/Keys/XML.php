@@ -1,22 +1,6 @@
 <?php
 
-/**
- * XML Formatted RSA Key Handler
- *
- * More info:
- *
- * http://www.w3.org/TR/xmldsig-core/#sec-RSAKeyValue
- * http://www.w3.org/TR/xkms2/#XKMS_2_0_Paragraph_269
- * http://en.wikipedia.org/wiki/XML_Signature
- * http://en.wikipedia.org/wiki/XKMS
- *
- * PHP version 5
- *
- * @author    Jim Wigginton <terrafrost@php.net>
- * @copyright 2015 Jim Wigginton
- * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
- * @link      http://phpseclib.sourceforge.net
- */
+
 
 namespace phpseclib3\Crypt\RSA\Formats\Keys;
 
@@ -25,20 +9,10 @@ use phpseclib3\Exception\BadConfigurationException;
 use phpseclib3\Exception\UnsupportedFormatException;
 use phpseclib3\Math\BigInteger;
 
-/**
- * XML Formatted RSA Key Handler
- *
- * @author  Jim Wigginton <terrafrost@php.net>
- */
+
 abstract class XML
 {
-    /**
-     * Break a public or private key down into its constituent components
-     *
-     * @param string $key
-     * @param string $password optional
-     * @return array
-     */
+    
     public static function load($key, $password = '')
     {
         if (!Strings::is_stringable($key)) {
@@ -69,8 +43,8 @@ abstract class XML
         $xpath = new \DOMXPath($dom);
         $keys = ['modulus', 'exponent', 'p', 'q', 'dp', 'dq', 'inverseq', 'd'];
         foreach ($keys as $key) {
-            // $dom->getElementsByTagName($key) is case-sensitive
-            $temp = $xpath->query("//*[translate(local-name(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='$key']");
+            
+            $temp = $xpath->query("
             if (!$temp->length) {
                 continue;
             }
@@ -120,18 +94,7 @@ abstract class XML
         throw new \UnexpectedValueException('Modulus / exponent not present');
     }
 
-    /**
-     * Convert a private key to the appropriate format.
-     *
-     * @param \phpseclib3\Math\BigInteger $n
-     * @param \phpseclib3\Math\BigInteger $e
-     * @param \phpseclib3\Math\BigInteger $d
-     * @param array $primes
-     * @param array $exponents
-     * @param array $coefficients
-     * @param string $password optional
-     * @return string
-     */
+    
     public static function savePrivateKey(BigInteger $n, BigInteger $e, BigInteger $d, array $primes, array $exponents, array $coefficients, $password = '')
     {
         if (count($primes) != 2) {
@@ -154,13 +117,7 @@ abstract class XML
                '</RSAKeyPair>';
     }
 
-    /**
-     * Convert a public key to the appropriate format
-     *
-     * @param \phpseclib3\Math\BigInteger $n
-     * @param \phpseclib3\Math\BigInteger $e
-     * @return string
-     */
+    
     public static function savePublicKey(BigInteger $n, BigInteger $e)
     {
         return "<RSAKeyValue>\r\n" .

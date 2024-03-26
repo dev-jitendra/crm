@@ -1,10 +1,8 @@
 <?php
-/**
- * Fetch the entities.json file and convert to PHP datastructure.
- */
 
-// The URL to the official entities JSON file.
-$ENTITIES_URL = 'http://www.w3.org/TR/2012/CR-html5-20121217/entities.json';
+
+
+$ENTITIES_URL = 'http:
 
 $payload = file_get_contents($ENTITIES_URL);
 $json = json_decode($payload);
@@ -17,10 +15,10 @@ foreach ($json as $name => $obj) {
 
 echo '<?php
 namespace Masterminds\\HTML5;
-/** Entity lookup tables. This class is automatically generated. */
+
 class Entities {
   public static $byName = ';
 var_export($table);
 echo ';
 }' . PHP_EOL;
-//print serialize($table);
+

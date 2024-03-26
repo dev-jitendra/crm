@@ -1,38 +1,7 @@
 <?php
-/**
- * Smarty plugin
- *
- * @package Smarty
- * @subpackage PluginsFunction
- */
 
-/**
- * Smarty {html_options} function plugin
- *
- * Type:     function<br>
- * Name:     html_options<br>
- * Purpose:  Prints the list of <option> tags generated from
- *           the passed parameters<br>
- * Params:
- * <pre>
- * - name       (optional) - string default "select"
- * - values     (required) - if no options supplied) - array
- * - options    (required) - if no values supplied) - associative array
- * - selected   (optional) - string default not set
- * - output     (required) - if not options supplied) - array
- * - id         (optional) - string default not set
- * - class      (optional) - string default not set
- * </pre>
- *
- * @link http://www.smarty.net/manual/en/language.function.html.options.php {html_image}
- *      (Smarty online manual)
- * @author Monte Ohrt <monte at ohrt dot com>
- * @author Ralf Strehle (minor optimization) <ralf dot strehle at yahoo dot de>
- * @param array                    $params   parameters
- * @param Smarty_Internal_Template $template template object
- * @return string
- * @uses smarty_function_escape_special_chars()
- */
+
+
 function smarty_function_html_options($params, $template)
 {
     require_once(SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php');
@@ -106,7 +75,7 @@ function smarty_function_html_options($params, $template)
 
                     break;
                 }
-                // omit break; to fall through!
+                
 
             default:
                 if (!is_array($_val)) {
@@ -119,7 +88,7 @@ function smarty_function_html_options($params, $template)
     }
 
     if (!isset($options) && !isset($values)) {
-        /* raise error here? */
+        
 
         return '';
     }

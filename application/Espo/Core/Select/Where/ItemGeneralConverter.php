@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Select\Where;
 
@@ -51,9 +25,7 @@ use Espo\ORM\Query\SelectBuilder as QueryBuilder;
 use Exception;
 use RuntimeException;
 
-/**
- * Converts a where item to a where clause (for ORM).
- */
+
 class ItemGeneralConverter implements ItemConverter
 {
     public function __construct(
@@ -68,9 +40,7 @@ class ItemGeneralConverter implements ItemConverter
         private Metadata $metadata
     ) {}
 
-    /**
-     * @throws Error
-     */
+    
     public function convert(QueryBuilder $queryBuilder, Item $item): WhereClauseItem
     {
         $type = $item->getType();
@@ -120,7 +90,7 @@ class ItemGeneralConverter implements ItemConverter
         }
 
         switch ($type) {
-            // @todo Revise. Maybe to use regular like, in, etc. types?
+            
             case 'columnLike':
             case 'columnIn':
             case 'columnNotIn':
@@ -350,11 +320,7 @@ class ItemGeneralConverter implements ItemConverter
         return $converter->convert($queryBuilder, $item);
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     * @throws Error
-     */
+    
     private function groupProcessAndOr(QueryBuilder $queryBuilder, string $type, $value): array
     {
         if (!is_array($value)) {
@@ -380,11 +346,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     * @throws Error
-     */
+    
     private function groupProcessSubQuery(string $type, $value): array
     {
         if (!is_array($value)) {
@@ -418,11 +380,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     * @throws Error
-     */
+    
     private function groupProcessColumn(
         QueryBuilder $queryBuilder,
         string $type,
@@ -489,11 +447,7 @@ class ItemGeneralConverter implements ItemConverter
         throw new Error("Bad where item 'column'.");
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     * @throws Error
-     */
+    
     private function groupProcessArray(
         QueryBuilder $queryBuilder,
         string $type,
@@ -645,11 +599,7 @@ class ItemGeneralConverter implements ItemConverter
         throw new Error("Bad where item 'array'.");
     }
 
-    /**
-     * A complex expression w/o a value.
-     *
-     * @return array<string|int, mixed>
-     */
+    
     private function processExpression(string $attribute): array
     {
         $key = $attribute;
@@ -663,10 +613,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     */
+    
     private function processLike(string $attribute, $value): array
     {
         return [
@@ -674,10 +621,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     */
+    
     private function processNotLike(string $attribute, $value): array
     {
         return [
@@ -685,10 +629,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     */
+    
     private function processEquals(string $attribute, $value): array
     {
         return [
@@ -696,19 +637,13 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     */
+    
     private function processOn(string $attribute, $value): array
     {
         return $this->processEquals($attribute, $value);
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     */
+    
     private function processNotEquals(string $attribute, $value): array
     {
         return [
@@ -716,19 +651,13 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     */
+    
     private function processNotOn(string $attribute, $value): array
     {
         return $this->processNotEquals($attribute, $value);
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     */
+    
     private function processStartsWith(string $attribute, $value): array
     {
         return [
@@ -736,10 +665,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     */
+    
     private function processEndsWith(string $attribute, $value): array
     {
         return [
@@ -747,10 +673,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     */
+    
     private function processContains(string $attribute, $value): array
     {
         return [
@@ -758,10 +681,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     */
+    
     private function processNotContains(string $attribute, $value): array
     {
         return [
@@ -769,10 +689,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     */
+    
     private function processGreaterThan(string $attribute, $value): array
     {
         return [
@@ -780,19 +697,13 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     */
+    
     private function processAfter(string $attribute, $value): array
     {
         return $this->processGreaterThan($attribute, $value);
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     */
+    
     private function processLessThan(string $attribute, $value): array
     {
         return [
@@ -800,19 +711,13 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     */
+    
     private function processBefore(string $attribute, $value): array
     {
         return $this->processLessThan($attribute, $value);
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     */
+    
     private function processGreaterThanOrEquals(string $attribute, $value): array
     {
         return [
@@ -820,10 +725,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     */
+    
     private function processLessThanOrEquals(string $attribute, $value): array
     {
         return [
@@ -831,11 +733,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     * @throws Error
-     */
+    
     private function processIn(string $attribute, $value): array
     {
         if (!is_array($value)) {
@@ -847,11 +745,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     * @throws Error
-     */
+    
     private function processNotIn(string $attribute, $value): array
     {
         if (!is_array($value)) {
@@ -863,11 +757,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     * @throws Error
-     */
+    
     private function processBetween(string $attribute, $value): array
     {
         if (!is_array($value) || count($value) < 2) {
@@ -882,9 +772,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @return array<string, mixed>
-     */
+    
     private function processAny(): array
     {
         return [
@@ -892,9 +780,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @return array<string, mixed>
-     */
+    
     private function processNone(): array
     {
         return [
@@ -902,9 +788,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @return array<string|int, mixed>
-     */
+    
     private function processIsNull(string $attribute): array
     {
         return [
@@ -912,9 +796,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @return array<string|int, mixed>
-     */
+    
     private function processIsNotNull(string $attribute): array
     {
         return [
@@ -922,17 +804,13 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @return array<string|int, mixed>
-     */
+    
     private function processEver(string $attribute): array
     {
         return $this->processIsNotNull($attribute);
     }
 
-    /**
-     * @return array<string|int, mixed>
-     */
+    
     private function processIsTrue(string $attribute): array
     {
         return [
@@ -940,9 +818,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @return array<string|int, mixed>
-     */
+    
     private function processIsFalse(string $attribute): array
     {
         return [
@@ -950,9 +826,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @return array<string|int, mixed>
-     */
+    
     private function processToday(string $attribute): array
     {
         $today = DateTime::createNow()
@@ -963,9 +837,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @return array<string|int, mixed>
-     */
+    
     private function processPast(string $attribute): array
     {
         $today = DateTime::createNow()
@@ -976,9 +848,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @return array<string|int, mixed>
-     */
+    
     private function processFuture(string $attribute): array
     {
         $today = DateTime::createNow()
@@ -989,9 +859,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @return array<string|int, mixed>
-     */
+    
     private function processLastSevenDays(string $attribute): array
     {
         $today = DateTime::createNow()
@@ -1007,10 +875,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     */
+    
     private function processLastXDays(string $attribute, $value): array
     {
         $today = DateTime::createNow()
@@ -1028,10 +893,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     */
+    
     private function processNextXDays(string $attribute, $value): array
     {
         $today = DateTime::createNow()
@@ -1049,10 +911,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     */
+    
     private function processOlderThanXDays(string $attribute, $value): array
     {
         $number = intval($value);
@@ -1066,10 +925,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     */
+    
     private function processAfterXDays(string $attribute, $value): array
     {
         $number = intval($value);
@@ -1083,9 +939,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @return array<string|int, mixed>
-     */
+    
     private function processCurrentMonth(string $attribute): array
     {
         $from = DateTime::createNow()
@@ -1102,9 +956,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @return array<string|int, mixed>
-     */
+    
     private function processLastMonth( string $attribute): array
     {
         $from = DateTime::createNow()
@@ -1121,9 +973,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @return array<string|int, mixed>
-     */
+    
     private function processNextMonth(string $attribute): array
     {
         $from = DateTime::createNow()
@@ -1140,9 +990,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @return array<string|int, mixed>
-     */
+    
     private function processCurrentQuarter(string $attribute): array
     {
         $now = DateTime::createNow()
@@ -1164,9 +1012,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @return array<string|int, mixed>
-     */
+    
     private function processLastQuarter(string $attribute): array
     {
         $now = DateTime::createNow()
@@ -1195,9 +1041,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @return array<string|int, mixed>
-     */
+    
     private function processCurrentYear(string $attribute): array
     {
         $from = DateTime::createNow()
@@ -1214,9 +1058,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @return array<string|int, mixed>
-     */
+    
     private function processLastYear(string $attribute): array
     {
         $from = DateTime::createNow()
@@ -1233,9 +1075,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @return array<string|int, mixed>
-     */
+    
     private function processCurrentFiscalYear(string $attribute): array
     {
         $fiscalYearShift = $this->config->get('fiscalYearShift', 0);
@@ -1261,9 +1101,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @return array<string|int, mixed>
-     */
+    
     private function processLastFiscalYear(string $attribute): array
     {
         $fiscalYearShift = $this->config->get('fiscalYearShift', 0);
@@ -1290,9 +1128,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @return array<string|int, mixed>
-     */
+    
     private function processCurrentFiscalQuarter(string $attribute): array
     {
         $fiscalYearShift = $this->config->get('fiscalYearShift', 0);
@@ -1317,9 +1153,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @return array<string|int, mixed>
-     */
+    
     private function processLastFiscalQuarter(string $attribute): array
     {
         $fiscalYearShift = $this->config->get('fiscalYearShift', 0);
@@ -1345,9 +1179,7 @@ class ItemGeneralConverter implements ItemConverter
         ];
     }
 
-    /**
-     * @return array<string|int, mixed>
-     */
+    
     private function processIsNotLinked(string $attribute): array
     {
         $link = $attribute;
@@ -1362,9 +1194,9 @@ class ItemGeneralConverter implements ItemConverter
             $nearKey = $defs->getMidKey();
             $middleEntityType = ucfirst($defs->getRelationshipName());
 
-            // The foreign table is not joined as it would perform much slower.
-            // Trade off is that if a foreign record is deleted but the middle table
-            // is not yet deleted, it will give a non-actual result.
+            
+            
+            
             $subQuery = QueryBuilder::create()
                 ->select('id')
                 ->from($this->entityType)
@@ -1397,9 +1229,7 @@ class ItemGeneralConverter implements ItemConverter
         throw new RuntimeException("Bad where item. Not supported relation type.");
     }
 
-    /**
-     * @return array<string|int, mixed>
-     */
+    
     private function processIsLinked(string $attribute): array
     {
         $link = $attribute;
@@ -1414,9 +1244,9 @@ class ItemGeneralConverter implements ItemConverter
             $nearKey = $defs->getMidKey();
             $middleEntityType = ucfirst($defs->getRelationshipName());
 
-            // The foreign table is not joined as it would perform much slower.
-            // Trade off is that if a foreign record is deleted but the middle table
-            // is not yet deleted, it will give a non-actual result.
+            
+            
+            
             $subQuery = QueryBuilder::create()
                 ->select('id')
                 ->from($this->entityType)
@@ -1449,11 +1279,7 @@ class ItemGeneralConverter implements ItemConverter
         throw new RuntimeException("Bad where item. Not supported relation type.");
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     * @throws Error
-     */
+    
     private function processLinkedWith(string $attribute, $value): array
     {
         $link = $attribute;
@@ -1470,7 +1296,7 @@ class ItemGeneralConverter implements ItemConverter
             throw new Error("Bad where item. Empty value.");
         }
 
-        // @todo Add check for foreign record existence.
+        
 
         $relationType = $defs->getType();
 
@@ -1478,10 +1304,10 @@ class ItemGeneralConverter implements ItemConverter
             $key = $defs->getForeignMidKey();
             $nearKey = $defs->getMidKey();
 
-            // IN-sub-query performs faster than EXISTS on MariaDB when multiple IDs.
-            // Left-join performs faster than inner-join.
-            // Not joining a foreign table as it affects performance in MySQL.
-            // MariaDB and PostgreSQL perform fast, MySQL – slow.
+            
+            
+            
+            
             return Cond::in(
                 Cond::column('id'),
                 QueryBuilder::create()
@@ -1525,11 +1351,7 @@ class ItemGeneralConverter implements ItemConverter
         throw new Error("Bad where item. Not supported relation type.");
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     * @throws Error
-     */
+    
     private function processNotLinkedWith(string $attribute, $value): array
     {
         $link = $attribute;
@@ -1551,7 +1373,7 @@ class ItemGeneralConverter implements ItemConverter
         if ($relationType == Entity::MANY_MANY) {
             $key = $defs->getForeignMidKey();
 
-            // MariaDB and MySQL perform slow, PostgreSQL – fast.
+            
             return Cond::not(
                 Cond::exists(
                     QueryBuilder::create()
@@ -1598,11 +1420,7 @@ class ItemGeneralConverter implements ItemConverter
         throw new Error("Bad where item. Not supported relation type.");
     }
 
-    /**
-     * @param mixed $value
-     * @return array<string|int, mixed>
-     * @throws Error
-     */
+    
     private function processLinkedWithAll(string $attribute, $value): array
     {
         $link = $attribute;
@@ -1629,7 +1447,7 @@ class ItemGeneralConverter implements ItemConverter
             $whereList = [];
 
             foreach ($value as $targetId) {
-                // Only-middle join performs slower on MariaDB.
+                
                 $sq = QueryBuilder::create()
                     ->from($this->entityType)
                     ->select('id')

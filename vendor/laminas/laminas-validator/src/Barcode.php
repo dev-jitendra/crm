@@ -22,7 +22,7 @@ class Barcode extends AbstractValidator
     public const INVALID_CHARS  = 'barcodeInvalidChars';
     public const INVALID_LENGTH = 'barcodeInvalidLength';
 
-    /** @var array<string, string> */
+    
     protected $messageTemplates = [
         self::FAILED         => 'The input failed checksum validation',
         self::INVALID_CHARS  => 'The input contains invalid characters',
@@ -30,28 +30,20 @@ class Barcode extends AbstractValidator
         self::INVALID        => 'Invalid type given. String expected',
     ];
 
-    /**
-     * Additional variables available for validation failure messages
-     *
-     * @var array<string, array<string, string>>
-     */
+    
     protected $messageVariables = [
         'length' => ['options' => 'length'],
     ];
 
-    /** @var array<string, mixed> */
+    
     protected $options = [
-        'adapter'     => null, // Barcode adapter Laminas\Validator\Barcode\AbstractAdapter
-        'options'     => null, // Options for this adapter
+        'adapter'     => null, 
+        'options'     => null, 
         'length'      => null,
         'useChecksum' => null,
     ];
 
-    /**
-     * Constructor for barcodes
-     *
-     * @param array|string $options Options to use
-     */
+    
     public function __construct($options = null)
     {
         if ($options === null) {
@@ -73,11 +65,7 @@ class Barcode extends AbstractValidator
         parent::__construct($options);
     }
 
-    /**
-     * Returns the set adapter
-     *
-     * @return Barcode\AbstractAdapter
-     */
+    
     public function getAdapter()
     {
         if (! $this->options['adapter'] instanceof Barcode\AdapterInterface) {
@@ -87,14 +75,7 @@ class Barcode extends AbstractValidator
         return $this->options['adapter'];
     }
 
-    /**
-     * Sets a new barcode adapter
-     *
-     * @param  string|Barcode\AbstractAdapter $adapter Barcode adapter to use
-     * @param  array  $options Options for this adapter
-     * @return $this
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public function setAdapter($adapter, $options = null)
     {
         if (is_string($adapter)) {
@@ -122,35 +103,19 @@ class Barcode extends AbstractValidator
         return $this;
     }
 
-    /**
-     * Returns the checksum option
-     *
-     * @return string
-     */
+    
     public function getChecksum()
     {
         return $this->getAdapter()->getChecksum();
     }
 
-    /**
-     * Sets if checksum should be validated, if no value is given the actual setting is returned
-     *
-     * @param null|bool $checksum
-     * @return Barcode\AbstractAdapter|bool
-     */
+    
     public function useChecksum($checksum = null)
     {
         return $this->getAdapter()->useChecksum($checksum);
     }
 
-    /**
-     * Defined by Laminas\Validator\ValidatorInterface
-     *
-     * Returns true if and only if $value contains a valid barcode
-     *
-     * @param  string $value
-     * @return bool
-     */
+    
     public function isValid($value)
     {
         if (! is_string($value)) {

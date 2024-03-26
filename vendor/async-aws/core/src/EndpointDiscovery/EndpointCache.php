@@ -4,26 +4,16 @@ namespace AsyncAws\Core\EndpointDiscovery;
 
 use AsyncAws\Core\Exception\LogicException;
 
-/**
- * @author Jérémy Derussé <jeremy@derusse.com>
- *
- * @internal
- */
+
 class EndpointCache
 {
-    /**
-     * @var array<string, array<string, int>>
-     */
+    
     private $endpoints = [];
 
-    /**
-     * @var array<string, array<string, int>>
-     */
+    
     private $expired = [];
 
-    /**
-     * @param EndpointInterface[] $endpoints
-     */
+    
     public function addEndpoints(?string $region, array $endpoints): void
     {
         $now = time();
@@ -64,7 +54,7 @@ class EndpointCache
 
         foreach ($this->endpoints[$region] ?? [] as $endpoint => $expiresAt) {
             if ($expiresAt < $now) {
-                $this->expired[$region] = \array_slice($this->expired[$region] ?? [], -100); // keep only the last 100 items
+                $this->expired[$region] = \array_slice($this->expired[$region] ?? [], -100); 
                 unset($this->endpoints[$region][$endpoint]);
                 $this->expired[$region][$endpoint] = $expiresAt;
 
@@ -93,17 +83,17 @@ class EndpointCache
     {
         $parsed = parse_url($address);
 
-        // parse_url() will correctly parse full URIs with schemes
+        
         if (isset($parsed['host'])) {
             return rtrim(sprintf(
-                '%s://%s/%s',
+                '%s:
                 $parsed['scheme'] ?? 'https',
                 $parsed['host'],
                 ltrim($parsed['path'] ?? '/', '/')
             ), '/');
         }
 
-        // parse_url() will put host & path in 'path' if scheme is not provided
+        
         if (isset($parsed['path'])) {
             $split = explode('/', $parsed['path'], 2);
             $parsed['host'] = $split[0];
@@ -114,7 +104,7 @@ class EndpointCache
             }
 
             return rtrim(sprintf(
-                '%s://%s/%s',
+                '%s:
                 $parsed['scheme'] ?? 'https',
                 $parsed['host'],
                 ltrim($parsed['path'], '/')

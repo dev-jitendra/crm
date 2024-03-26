@@ -13,77 +13,43 @@ use AsyncAws\S3\ValueObject\Initiator;
 use AsyncAws\S3\ValueObject\MultipartUpload;
 use AsyncAws\S3\ValueObject\Owner;
 
-/**
- * @implements \IteratorAggregate<MultipartUpload|CommonPrefix>
- */
+
 class ListMultipartUploadsOutput extends Result implements \IteratorAggregate
 {
-    /**
-     * The name of the bucket to which the multipart upload was initiated.
-     */
+    
     private $bucket;
 
-    /**
-     * The key at or after which the listing began.
-     */
+    
     private $keyMarker;
 
-    /**
-     * Upload ID after which listing began.
-     */
+    
     private $uploadIdMarker;
 
-    /**
-     * When a list is truncated, this element specifies the value that should be used for the key-marker request parameter
-     * in a subsequent request.
-     */
+    
     private $nextKeyMarker;
 
-    /**
-     * When a prefix is provided in the request, this field contains the specified prefix. The result contains only keys
-     * starting with the specified prefix.
-     */
+    
     private $prefix;
 
-    /**
-     * Contains the delimiter you specified in the request. If you don't specify a delimiter in your request, this element
-     * is absent from the response.
-     */
+    
     private $delimiter;
 
-    /**
-     * When a list is truncated, this element specifies the value that should be used for the `upload-id-marker` request
-     * parameter in a subsequent request.
-     */
+    
     private $nextUploadIdMarker;
 
-    /**
-     * Maximum number of multipart uploads that could have been included in the response.
-     */
+    
     private $maxUploads;
 
-    /**
-     * Indicates whether the returned list of multipart uploads is truncated. A value of true indicates that the list was
-     * truncated. The list can be truncated if the number of multipart uploads exceeds the limit allowed or specified by max
-     * uploads.
-     */
+    
     private $isTruncated;
 
-    /**
-     * Container for elements related to a particular multipart upload. A response can contain zero or more `Upload`
-     * elements.
-     */
+    
     private $uploads = [];
 
-    /**
-     * If you specify a delimiter in the request, then the result returns each distinct key prefix containing the delimiter
-     * in a `CommonPrefixes` element. The distinct key prefixes are returned in the `Prefix` child element.
-     */
+    
     private $commonPrefixes = [];
 
-    /**
-     * Encoding type used by Amazon S3 to encode object keys in the response.
-     */
+    
     private $encodingType;
 
     public function getBucket(): ?string
@@ -93,11 +59,7 @@ class ListMultipartUploadsOutput extends Result implements \IteratorAggregate
         return $this->bucket;
     }
 
-    /**
-     * @param bool $currentPageOnly When true, iterates over items of the current page. Otherwise also fetch items in the next pages.
-     *
-     * @return iterable<CommonPrefix>
-     */
+    
     public function getCommonPrefixes(bool $currentPageOnly = false): iterable
     {
         if ($currentPageOnly) {
@@ -145,9 +107,7 @@ class ListMultipartUploadsOutput extends Result implements \IteratorAggregate
         return $this->delimiter;
     }
 
-    /**
-     * @return EncodingType::*|null
-     */
+    
     public function getEncodingType(): ?string
     {
         $this->initialize();
@@ -162,11 +122,7 @@ class ListMultipartUploadsOutput extends Result implements \IteratorAggregate
         return $this->isTruncated;
     }
 
-    /**
-     * Iterates over Uploads then CommonPrefixes.
-     *
-     * @return \Traversable<MultipartUpload|CommonPrefix>
-     */
+    
     public function getIterator(): \Traversable
     {
         $client = $this->awsClient;
@@ -243,11 +199,7 @@ class ListMultipartUploadsOutput extends Result implements \IteratorAggregate
         return $this->uploadIdMarker;
     }
 
-    /**
-     * @param bool $currentPageOnly When true, iterates over items of the current page. Otherwise also fetch items in the next pages.
-     *
-     * @return iterable<MultipartUpload>
-     */
+    
     public function getUploads(bool $currentPageOnly = false): iterable
     {
         if ($currentPageOnly) {
@@ -305,9 +257,7 @@ class ListMultipartUploadsOutput extends Result implements \IteratorAggregate
         $this->encodingType = ($v = $data->EncodingType) ? (string) $v : null;
     }
 
-    /**
-     * @return CommonPrefix[]
-     */
+    
     private function populateResultCommonPrefixList(\SimpleXMLElement $xml): array
     {
         $items = [];
@@ -320,9 +270,7 @@ class ListMultipartUploadsOutput extends Result implements \IteratorAggregate
         return $items;
     }
 
-    /**
-     * @return MultipartUpload[]
-     */
+    
     private function populateResultMultipartUploadList(\SimpleXMLElement $xml): array
     {
         $items = [];

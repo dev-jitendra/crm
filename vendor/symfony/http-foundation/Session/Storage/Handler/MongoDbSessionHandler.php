@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpFoundation\Session\Storage\Handler;
 
@@ -16,50 +9,14 @@ use MongoDB\BSON\UTCDateTime;
 use MongoDB\Client;
 use MongoDB\Collection;
 
-/**
- * Session handler using the mongodb/mongodb package and MongoDB driver extension.
- *
- * @author Markus Bachmann <markus.bachmann@bachi.biz>
- *
- * @see https://packagist.org/packages/mongodb/mongodb
- * @see https://php.net/mongodb
- */
+
 class MongoDbSessionHandler extends AbstractSessionHandler
 {
     private $mongo;
     private $collection;
     private array $options;
 
-    /**
-     * Constructor.
-     *
-     * List of available options:
-     *  * database: The name of the database [required]
-     *  * collection: The name of the collection [required]
-     *  * id_field: The field name for storing the session id [default: _id]
-     *  * data_field: The field name for storing the session data [default: data]
-     *  * time_field: The field name for storing the timestamp [default: time]
-     *  * expiry_field: The field name for storing the expiry-timestamp [default: expires_at].
-     *
-     * It is strongly recommended to put an index on the `expiry_field` for
-     * garbage-collection. Alternatively it's possible to automatically expire
-     * the sessions in the database as described below:
-     *
-     * A TTL collections can be used on MongoDB 2.2+ to cleanup expired sessions
-     * automatically. Such an index can for example look like this:
-     *
-     *     db.<session-collection>.createIndex(
-     *         { "<expiry-field>": 1 },
-     *         { "expireAfterSeconds": 0 }
-     *     )
-     *
-     * More details on: https://docs.mongodb.org/manual/tutorial/expire-data/
-     *
-     * If you use such an index, you can drop `gc_probability` to 0 since
-     * no garbage-collection is required.
-     *
-     * @throws \InvalidArgumentException When "database" or "collection" not provided
-     */
+    
     public function __construct(Client $mongo, array $options)
     {
         if (!isset($options['database']) || !isset($options['collection'])) {
@@ -81,9 +38,7 @@ class MongoDbSessionHandler extends AbstractSessionHandler
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function doDestroy(string $sessionId): bool
     {
         $this->getCollection()->deleteOne([
@@ -100,9 +55,7 @@ class MongoDbSessionHandler extends AbstractSessionHandler
         ])->getDeletedCount();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function doWrite(string $sessionId, string $data): bool
     {
         $expiry = new UTCDateTime((time() + (int) \ini_get('session.gc_maxlifetime')) * 1000);
@@ -137,9 +90,7 @@ class MongoDbSessionHandler extends AbstractSessionHandler
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function doRead(string $sessionId): string
     {
         $dbData = $this->getCollection()->findOne([

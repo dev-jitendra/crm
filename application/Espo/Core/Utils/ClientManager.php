@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Utils;
 
@@ -38,9 +12,7 @@ use Espo\Core\Utils\File\Manager as FileManager;
 use Slim\Psr7\Response as Psr7Response;
 use Slim\ResponseEmitter;
 
-/**
- * Renders the main HTML page.
- */
+
 class ClientManager
 {
     private string $mainHtmlFilePath = 'html/main.html';
@@ -76,9 +48,7 @@ class ClientManager
         return $this->basePath;
     }
 
-    /**
-     * @todo Move to a separate class.
-     */
+    
     public function writeHeaders(Response $response): void
     {
         if ($this->config->get('clientSecurityHeadersDisabled')) {
@@ -126,14 +96,12 @@ class ClientManager
 
         $siteUrl = $this->config->get('siteUrl') ?? '';
 
-        if (str_starts_with($siteUrl, 'https://')) {
+        if (str_starts_with($siteUrl, 'https:
             $response->setHeader('Strict-Transport-Security', 'max-age=10368000');
         }
     }
 
-    /**
-     * @param array<string, mixed> $vars
-     */
+    
     public function display(?string $runScript = null, ?string $htmlFilePath = null, array $vars = []): void
     {
         $body = $this->render($runScript, $htmlFilePath, $vars);
@@ -146,9 +114,7 @@ class ClientManager
         (new ResponseEmitter())->emit($response->toPsr7());
     }
 
-    /**
-     * @param array<string, mixed> $vars
-     */
+    
     public function render(?string $runScript = null, ?string $htmlFilePath = null, array $vars = []): string
     {
         $runScript ??= $this->runScript;
@@ -238,9 +204,7 @@ class ClientManager
         return $html;
     }
 
-    /**
-     * @return string[]
-     */
+    
     private function getJsFileList(): array
     {
         if ($this->isDeveloperMode()) {
@@ -253,9 +217,7 @@ class ClientManager
         return $this->metadata->get(['app', 'client', 'scriptList']) ?? [];
     }
 
-    /**
-     * @return string[]
-     */
+    
     private function getDeveloperModeBundleLibFileList(): array
     {
         return $this->devModeJsFileListProvider->get();
@@ -309,16 +271,7 @@ class ClientManager
         return $this->getTabHtml() . "<link rel=\"stylesheet\" href=\"$src\">";
     }
 
-    /**
-     * @param array{
-     *     href: string,
-     *     noTimestamp?: bool,
-     *     as?: string,
-     *     rel?: string,
-     *     type?: string,
-     *     crossorigin?: bool,
-     * } $item
-     */
+    
     private function getLinkItemHtml(array $item, int $appTimestamp): string
     {
         $href = $this->basePath . $item['href'];
@@ -345,9 +298,7 @@ class ClientManager
         return "\n        ";
     }
 
-    /**
-     * @return string[]
-     */
+    
     private function getTranspiledModuleList(): array
     {
         $modules = array_values(array_filter(
@@ -361,9 +312,7 @@ class ClientManager
         );
     }
 
-    /**
-     * @return string[]
-     */
+    
     private function getBundledModuleList(): array
     {
         $modules = array_values(array_filter(
@@ -377,9 +326,7 @@ class ClientManager
         );
     }
 
-    /**
-     * @since 8.0.0
-     */
+    
     public function setApiUrl(string $apiUrl): void
     {
         $this->apiUrl = $apiUrl;

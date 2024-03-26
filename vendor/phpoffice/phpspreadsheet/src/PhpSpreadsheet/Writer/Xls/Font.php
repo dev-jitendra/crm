@@ -6,50 +6,32 @@ use PhpOffice\PhpSpreadsheet\Shared\StringHelper;
 
 class Font
 {
-    /**
-     * Color index.
-     *
-     * @var int
-     */
+    
     private $colorIndex;
 
-    /**
-     * Font.
-     *
-     * @var \PhpOffice\PhpSpreadsheet\Style\Font
-     */
+    
     private $font;
 
-    /**
-     * Constructor.
-     */
+    
     public function __construct(\PhpOffice\PhpSpreadsheet\Style\Font $font)
     {
         $this->colorIndex = 0x7FFF;
         $this->font = $font;
     }
 
-    /**
-     * Set the color index.
-     *
-     * @param int $colorIndex
-     */
+    
     public function setColorIndex($colorIndex): void
     {
         $this->colorIndex = $colorIndex;
     }
 
-    /**
-     * Get font record data.
-     *
-     * @return string
-     */
+    
     public function writeFont()
     {
         $font_outline = 0;
         $font_shadow = 0;
 
-        $icv = $this->colorIndex; // Index to color palette
+        $icv = $this->colorIndex; 
         if ($this->font->getSuperscript()) {
             $sss = 1;
         } elseif ($this->font->getSubscript()) {
@@ -57,12 +39,12 @@ class Font
         } else {
             $sss = 0;
         }
-        $bFamily = 0; // Font family
-        $bCharSet = \PhpOffice\PhpSpreadsheet\Shared\Font::getCharsetFromFontName($this->font->getName()); // Character set
+        $bFamily = 0; 
+        $bCharSet = \PhpOffice\PhpSpreadsheet\Shared\Font::getCharsetFromFontName($this->font->getName()); 
 
-        $record = 0x31; // Record identifier
-        $reserved = 0x00; // Reserved
-        $grbit = 0x00; // Font attributes
+        $record = 0x31; 
+        $reserved = 0x00; 
+        $grbit = 0x00; 
         if ($this->font->getItalic()) {
             $grbit |= 0x02;
         }
@@ -78,14 +60,14 @@ class Font
 
         $data = pack(
             'vvvvvCCCC',
-            // Fontsize (in twips)
+            
             $this->font->getSize() * 20,
             $grbit,
-            // Colour
+            
             $icv,
-            // Font weight
+            
             self::mapBold($this->font->getBold()),
-            // Superscript/Subscript
+            
             $sss,
             self::mapUnderline($this->font->getUnderline()),
             $bFamily,
@@ -100,27 +82,17 @@ class Font
         return $header . $data;
     }
 
-    /**
-     * Map to BIFF5-BIFF8 codes for bold.
-     *
-     * @param bool $bold
-     *
-     * @return int
-     */
+    
     private static function mapBold($bold)
     {
         if ($bold) {
-            return 0x2BC; //  700 = Bold font weight
+            return 0x2BC; 
         }
 
-        return 0x190; //  400 = Normal font weight
+        return 0x190; 
     }
 
-    /**
-     * Map of BIFF2-BIFF8 codes for underline styles.
-     *
-     * @var array of int
-     */
+    
     private static $mapUnderline = [
         \PhpOffice\PhpSpreadsheet\Style\Font::UNDERLINE_NONE => 0x00,
         \PhpOffice\PhpSpreadsheet\Style\Font::UNDERLINE_SINGLE => 0x01,
@@ -129,13 +101,7 @@ class Font
         \PhpOffice\PhpSpreadsheet\Style\Font::UNDERLINE_DOUBLEACCOUNTING => 0x22,
     ];
 
-    /**
-     * Map underline.
-     *
-     * @param string $underline
-     *
-     * @return int
-     */
+    
     private static function mapUnderline($underline)
     {
         if (isset(self::$mapUnderline[$underline])) {

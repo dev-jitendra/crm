@@ -18,19 +18,19 @@ class Pool implements ArrayAccess
     protected $timeout = 300;
     protected $sleepTime = 50000;
 
-    /** @var \Spatie\Async\Process\Runnable[] */
+    
     protected $queue = [];
 
-    /** @var \Spatie\Async\Process\Runnable[] */
+    
     protected $inProgress = [];
 
-    /** @var \Spatie\Async\Process\Runnable[] */
+    
     protected $finished = [];
 
-    /** @var \Spatie\Async\Process\Runnable[] */
+    
     protected $failed = [];
 
-    /** @var \Spatie\Async\Process\Runnable[] */
+    
     protected $timeouts = [];
 
     protected $results = [];
@@ -50,9 +50,7 @@ class Pool implements ArrayAccess
         $this->status = new PoolStatus($this);
     }
 
-    /**
-     * @return static
-     */
+    
     public static function create()
     {
         return new static();
@@ -124,12 +122,7 @@ class Pool implements ArrayAccess
         $this->putInProgress($process);
     }
 
-    /**
-     * @param \Spatie\Async\Process\Runnable|callable $process
-     * @param int|null $outputLength
-     *
-     * @return \Spatie\Async\Process\Runnable
-     */
+    
     public function add($process, ?int $outputLength = null): Runnable
     {
         if (! is_callable($process) && ! $process instanceof Runnable) {
@@ -149,10 +142,7 @@ class Pool implements ArrayAccess
         return $process;
     }
 
-    /**
-     * @param callable|null $intermediateCallback Will be called every loop we wait for processes to finish. Return `false` to stop execution of the queue.
-     * @return array
-     */
+    
     public function wait(?callable $intermediateCallback = null): array
     {
         while ($this->inProgress) {
@@ -240,14 +230,14 @@ class Pool implements ArrayAccess
 
     public function offsetExists($offset): bool
     {
-        // TODO
+        
 
         return false;
     }
 
     public function offsetGet($offset): Runnable
     {
-        // TODO
+        
     }
 
     public function offsetSet($offset, $value): void
@@ -257,44 +247,34 @@ class Pool implements ArrayAccess
 
     public function offsetUnset($offset): void
     {
-        // TODO
+        
     }
 
-    /**
-     * @return \Spatie\Async\Process\Runnable[]
-     */
+    
     public function getQueue(): array
     {
         return $this->queue;
     }
 
-    /**
-     * @return \Spatie\Async\Process\Runnable[]
-     */
+    
     public function getInProgress(): array
     {
         return $this->inProgress;
     }
 
-    /**
-     * @return \Spatie\Async\Process\Runnable[]
-     */
+    
     public function getFinished(): array
     {
         return $this->finished;
     }
 
-    /**
-     * @return \Spatie\Async\Process\Runnable[]
-     */
+    
     public function getFailed(): array
     {
         return $this->failed;
     }
 
-    /**
-     * @return \Spatie\Async\Process\Runnable[]
-     */
+    
     public function getTimeouts(): array
     {
         return $this->timeouts;
@@ -310,14 +290,7 @@ class Pool implements ArrayAccess
         pcntl_async_signals(true);
 
         pcntl_signal(SIGCHLD, function ($signo, $status) {
-            /**
-             * PHP 8.1.22 and 8.2.9 changed SIGCHLD handling:
-             * https://github.com/php/php-src/pull/11509
-             * This changes pcntl_waitpid() at the same time, so it requires special handling.
-             *
-             * It was reverted already and probably won't work in any other PHP version.
-             * https://github.com/php/php-src/pull/11863
-             */
+            
             if (phpversion() === '8.1.22' || phpversion() === '8.2.9') {
                 $this->handleFinishedProcess($status['pid'], $status['status']);
 

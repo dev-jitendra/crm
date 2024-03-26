@@ -7,14 +7,10 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class DocProps extends WriterPart
 {
-    /**
-     * Write docProps/app.xml to XML format.
-     *
-     * @return string XML Output
-     */
+    
     public function writeDocPropsApp(Spreadsheet $spreadsheet)
     {
-        // Create XML writer
+        
         $objWriter = null;
         if ($this->getParentWriter()->getUseDiskCaching()) {
             $objWriter = new XMLWriter(XMLWriter::STORAGE_DISK, $this->getParentWriter()->getDiskCachingDirectory());
@@ -22,37 +18,37 @@ class DocProps extends WriterPart
             $objWriter = new XMLWriter(XMLWriter::STORAGE_MEMORY);
         }
 
-        // XML header
+        
         $objWriter->startDocument('1.0', 'UTF-8', 'yes');
 
-        // Properties
+        
         $objWriter->startElement('Properties');
-        $objWriter->writeAttribute('xmlns', 'http://schemas.openxmlformats.org/officeDocument/2006/extended-properties');
-        $objWriter->writeAttribute('xmlns:vt', 'http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes');
+        $objWriter->writeAttribute('xmlns', 'http:
+        $objWriter->writeAttribute('xmlns:vt', 'http:
 
-        // Application
+        
         $objWriter->writeElement('Application', 'Microsoft Excel');
 
-        // DocSecurity
+        
         $objWriter->writeElement('DocSecurity', '0');
 
-        // ScaleCrop
+        
         $objWriter->writeElement('ScaleCrop', 'false');
 
-        // HeadingPairs
+        
         $objWriter->startElement('HeadingPairs');
 
-        // Vector
+        
         $objWriter->startElement('vt:vector');
         $objWriter->writeAttribute('size', '2');
         $objWriter->writeAttribute('baseType', 'variant');
 
-        // Variant
+        
         $objWriter->startElement('vt:variant');
         $objWriter->writeElement('vt:lpstr', 'Worksheets');
         $objWriter->endElement();
 
-        // Variant
+        
         $objWriter->startElement('vt:variant');
         $objWriter->writeElement('vt:i4', $spreadsheet->getSheetCount());
         $objWriter->endElement();
@@ -61,10 +57,10 @@ class DocProps extends WriterPart
 
         $objWriter->endElement();
 
-        // TitlesOfParts
+        
         $objWriter->startElement('TitlesOfParts');
 
-        // Vector
+        
         $objWriter->startElement('vt:vector');
         $objWriter->writeAttribute('size', $spreadsheet->getSheetCount());
         $objWriter->writeAttribute('baseType', 'lpstr');
@@ -78,38 +74,34 @@ class DocProps extends WriterPart
 
         $objWriter->endElement();
 
-        // Company
+        
         $objWriter->writeElement('Company', $spreadsheet->getProperties()->getCompany());
 
-        // Company
+        
         $objWriter->writeElement('Manager', $spreadsheet->getProperties()->getManager());
 
-        // LinksUpToDate
+        
         $objWriter->writeElement('LinksUpToDate', 'false');
 
-        // SharedDoc
+        
         $objWriter->writeElement('SharedDoc', 'false');
 
-        // HyperlinksChanged
+        
         $objWriter->writeElement('HyperlinksChanged', 'false');
 
-        // AppVersion
+        
         $objWriter->writeElement('AppVersion', '12.0000');
 
         $objWriter->endElement();
 
-        // Return
+        
         return $objWriter->getData();
     }
 
-    /**
-     * Write docProps/core.xml to XML format.
-     *
-     * @return string XML Output
-     */
+    
     public function writeDocPropsCore(Spreadsheet $spreadsheet)
     {
-        // Create XML writer
+        
         $objWriter = null;
         if ($this->getParentWriter()->getUseDiskCaching()) {
             $objWriter = new XMLWriter(XMLWriter::STORAGE_DISK, $this->getParentWriter()->getDiskCachingDirectory());
@@ -117,61 +109,57 @@ class DocProps extends WriterPart
             $objWriter = new XMLWriter(XMLWriter::STORAGE_MEMORY);
         }
 
-        // XML header
+        
         $objWriter->startDocument('1.0', 'UTF-8', 'yes');
 
-        // cp:coreProperties
+        
         $objWriter->startElement('cp:coreProperties');
-        $objWriter->writeAttribute('xmlns:cp', 'http://schemas.openxmlformats.org/package/2006/metadata/core-properties');
-        $objWriter->writeAttribute('xmlns:dc', 'http://purl.org/dc/elements/1.1/');
-        $objWriter->writeAttribute('xmlns:dcterms', 'http://purl.org/dc/terms/');
-        $objWriter->writeAttribute('xmlns:dcmitype', 'http://purl.org/dc/dcmitype/');
-        $objWriter->writeAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+        $objWriter->writeAttribute('xmlns:cp', 'http:
+        $objWriter->writeAttribute('xmlns:dc', 'http:
+        $objWriter->writeAttribute('xmlns:dcterms', 'http:
+        $objWriter->writeAttribute('xmlns:dcmitype', 'http:
+        $objWriter->writeAttribute('xmlns:xsi', 'http:
 
-        // dc:creator
+        
         $objWriter->writeElement('dc:creator', $spreadsheet->getProperties()->getCreator());
 
-        // cp:lastModifiedBy
+        
         $objWriter->writeElement('cp:lastModifiedBy', $spreadsheet->getProperties()->getLastModifiedBy());
 
-        // dcterms:created
+        
         $objWriter->startElement('dcterms:created');
         $objWriter->writeAttribute('xsi:type', 'dcterms:W3CDTF');
         $objWriter->writeRawData(date(DATE_W3C, $spreadsheet->getProperties()->getCreated()));
         $objWriter->endElement();
 
-        // dcterms:modified
+        
         $objWriter->startElement('dcterms:modified');
         $objWriter->writeAttribute('xsi:type', 'dcterms:W3CDTF');
         $objWriter->writeRawData(date(DATE_W3C, $spreadsheet->getProperties()->getModified()));
         $objWriter->endElement();
 
-        // dc:title
+        
         $objWriter->writeElement('dc:title', $spreadsheet->getProperties()->getTitle());
 
-        // dc:description
+        
         $objWriter->writeElement('dc:description', $spreadsheet->getProperties()->getDescription());
 
-        // dc:subject
+        
         $objWriter->writeElement('dc:subject', $spreadsheet->getProperties()->getSubject());
 
-        // cp:keywords
+        
         $objWriter->writeElement('cp:keywords', $spreadsheet->getProperties()->getKeywords());
 
-        // cp:category
+        
         $objWriter->writeElement('cp:category', $spreadsheet->getProperties()->getCategory());
 
         $objWriter->endElement();
 
-        // Return
+        
         return $objWriter->getData();
     }
 
-    /**
-     * Write docProps/custom.xml to XML format.
-     *
-     * @return string XML Output
-     */
+    
     public function writeDocPropsCustom(Spreadsheet $spreadsheet)
     {
         $customPropertyList = $spreadsheet->getProperties()->getCustomProperties();
@@ -179,7 +167,7 @@ class DocProps extends WriterPart
             return;
         }
 
-        // Create XML writer
+        
         $objWriter = null;
         if ($this->getParentWriter()->getUseDiskCaching()) {
             $objWriter = new XMLWriter(XMLWriter::STORAGE_DISK, $this->getParentWriter()->getDiskCachingDirectory());
@@ -187,13 +175,13 @@ class DocProps extends WriterPart
             $objWriter = new XMLWriter(XMLWriter::STORAGE_MEMORY);
         }
 
-        // XML header
+        
         $objWriter->startDocument('1.0', 'UTF-8', 'yes');
 
-        // cp:coreProperties
+        
         $objWriter->startElement('Properties');
-        $objWriter->writeAttribute('xmlns', 'http://schemas.openxmlformats.org/officeDocument/2006/custom-properties');
-        $objWriter->writeAttribute('xmlns:vt', 'http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes');
+        $objWriter->writeAttribute('xmlns', 'http:
+        $objWriter->writeAttribute('xmlns:vt', 'http:
 
         foreach ($customPropertyList as $key => $customProperty) {
             $propertyValue = $spreadsheet->getProperties()->getCustomPropertyValue($customProperty);

@@ -10,82 +10,31 @@ use AsyncAws\S3\Enum\EncodingType;
 
 final class ListMultipartUploadsRequest extends Input
 {
-    /**
-     * The name of the bucket to which the multipart upload was initiated.
-     *
-     * @required
-     *
-     * @var string|null
-     */
+    
     private $bucket;
 
-    /**
-     * Character you use to group keys.
-     *
-     * @var string|null
-     */
+    
     private $delimiter;
 
-    /**
-     * @var null|EncodingType::*
-     */
+    
     private $encodingType;
 
-    /**
-     * Together with upload-id-marker, this parameter specifies the multipart upload after which listing should begin.
-     *
-     * @var string|null
-     */
+    
     private $keyMarker;
 
-    /**
-     * Sets the maximum number of multipart uploads, from 1 to 1,000, to return in the response body. 1,000 is the maximum
-     * number of uploads that can be returned in a response.
-     *
-     * @var int|null
-     */
+    
     private $maxUploads;
 
-    /**
-     * Lists in-progress uploads only for those keys that begin with the specified prefix. You can use prefixes to separate
-     * a bucket into different grouping of keys. (You can think of using prefix to make groups in the same way you'd use a
-     * folder in a file system.).
-     *
-     * @var string|null
-     */
+    
     private $prefix;
 
-    /**
-     * Together with key-marker, specifies the multipart upload after which listing should begin. If key-marker is not
-     * specified, the upload-id-marker parameter is ignored. Otherwise, any multipart uploads for a key equal to the
-     * key-marker might be included in the list only if they have an upload ID lexicographically greater than the specified
-     * `upload-id-marker`.
-     *
-     * @var string|null
-     */
+    
     private $uploadIdMarker;
 
-    /**
-     * The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail
-     * with an HTTP `403 (Access Denied)` error.
-     *
-     * @var string|null
-     */
+    
     private $expectedBucketOwner;
 
-    /**
-     * @param array{
-     *   Bucket?: string,
-     *   Delimiter?: string,
-     *   EncodingType?: EncodingType::*,
-     *   KeyMarker?: string,
-     *   MaxUploads?: int,
-     *   Prefix?: string,
-     *   UploadIdMarker?: string,
-     *   ExpectedBucketOwner?: string,
-     *   @region?: string,
-     * } $input
-     */
+    
     public function __construct(array $input = [])
     {
         $this->bucket = $input['Bucket'] ?? null;
@@ -114,9 +63,7 @@ final class ListMultipartUploadsRequest extends Input
         return $this->delimiter;
     }
 
-    /**
-     * @return EncodingType::*|null
-     */
+    
     public function getEncodingType(): ?string
     {
         return $this->encodingType;
@@ -147,18 +94,16 @@ final class ListMultipartUploadsRequest extends Input
         return $this->uploadIdMarker;
     }
 
-    /**
-     * @internal
-     */
+    
     public function request(): Request
     {
-        // Prepare headers
+        
         $headers = ['content-type' => 'application/xml'];
         if (null !== $this->expectedBucketOwner) {
             $headers['x-amz-expected-bucket-owner'] = $this->expectedBucketOwner;
         }
 
-        // Prepare query
+        
         $query = [];
         if (null !== $this->delimiter) {
             $query['delimiter'] = $this->delimiter;
@@ -182,7 +127,7 @@ final class ListMultipartUploadsRequest extends Input
             $query['upload-id-marker'] = $this->uploadIdMarker;
         }
 
-        // Prepare URI
+        
         $uri = [];
         if (null === $v = $this->bucket) {
             throw new InvalidArgument(sprintf('Missing parameter "Bucket" for "%s". The value cannot be null.', __CLASS__));
@@ -190,10 +135,10 @@ final class ListMultipartUploadsRequest extends Input
         $uri['Bucket'] = $v;
         $uriString = '/' . rawurlencode($uri['Bucket']) . '?uploads';
 
-        // Prepare Body
+        
         $body = '';
 
-        // Return the Request
+        
         return new Request('GET', $uriString, $query, $headers, StreamFactory::create($body));
     }
 
@@ -211,9 +156,7 @@ final class ListMultipartUploadsRequest extends Input
         return $this;
     }
 
-    /**
-     * @param EncodingType::*|null $value
-     */
+    
     public function setEncodingType(?string $value): self
     {
         $this->encodingType = $value;

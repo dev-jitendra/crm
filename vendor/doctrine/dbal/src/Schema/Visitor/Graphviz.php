@@ -11,18 +11,12 @@ use function file_put_contents;
 use function in_array;
 use function strtolower;
 
-/**
- * Create a Graphviz output of a Schema.
- *
- * @deprecated
- */
+
 class Graphviz extends AbstractVisitor
 {
     private string $output = '';
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function acceptForeignKey(Table $localTable, ForeignKeyConstraint $fkConstraint)
     {
         $this->output .= $this->createNodeRelation(
@@ -36,9 +30,7 @@ class Graphviz extends AbstractVisitor
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function acceptSchema(Schema $schema)
     {
         $this->output  = 'digraph "' . $schema->getName() . '" {' . "\n";
@@ -49,9 +41,7 @@ class Graphviz extends AbstractVisitor
         $this->output .= 'sep = .2;' . "\n";
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function acceptTable(Table $table)
     {
         $this->output .= $this->createNode(
@@ -65,14 +55,14 @@ class Graphviz extends AbstractVisitor
 
     private function createTableLabel(Table $table): string
     {
-        // Start the table
+        
         $label = '<<TABLE CELLSPACING="0" BORDER="1" ALIGN="LEFT">';
 
-        // The title
+        
         $label .= '<TR><TD BORDER="1" COLSPAN="3" ALIGN="CENTER" BGCOLOR="#fcaf3e">'
             . '<FONT COLOR="#2e3436" FACE="Helvetica" POINT-SIZE="12">' . $table->getName() . '</FONT></TD></TR>';
 
-        // The attributes block
+        
         foreach ($table->getColumns() as $column) {
             $columnLabel = $column->getName();
 
@@ -96,16 +86,13 @@ class Graphviz extends AbstractVisitor
             $label .= '</TD></TR>';
         }
 
-        // End the table
+        
         $label .= '</TABLE>>';
 
         return $label;
     }
 
-    /**
-     * @param string   $name
-     * @param string[] $options
-     */
+    
     private function createNode($name, $options): string
     {
         $node = $name . ' [';
@@ -118,11 +105,7 @@ class Graphviz extends AbstractVisitor
         return $node;
     }
 
-    /**
-     * @param string   $node1
-     * @param string   $node2
-     * @param string[] $options
-     */
+    
     private function createNodeRelation($node1, $node2, $options): string
     {
         $relation = $node1 . ' -> ' . $node2 . ' [';
@@ -135,28 +118,13 @@ class Graphviz extends AbstractVisitor
         return $relation;
     }
 
-    /**
-     * Get Graphviz Output
-     *
-     * @return string
-     */
+    
     public function getOutput()
     {
         return $this->output . '}';
     }
 
-    /**
-     * Writes dot language output to a file. This should usually be a *.dot file.
-     *
-     * You have to convert the output into a viewable format. For example use "neato" on linux systems
-     * and execute:
-     *
-     *  neato -Tpng -o er.png er.dot
-     *
-     * @param string $filename
-     *
-     * @return void
-     */
+    
     public function write($filename)
     {
         file_put_contents($filename, $this->getOutput());

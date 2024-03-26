@@ -1,9 +1,5 @@
 var _previousDefineAmd = define.amd; define.amd = false;
-/*!
- * Datepicker for Bootstrap v1.9.0 (https://github.com/uxsolutions/bootstrap-datepicker)
- *
- * Licensed under the Apache License v2.0 (http://www.apache.org/licenses/LICENSE-2.0)
- */
+
 
 (function(factory){
     if (typeof define === 'function' && define.amd) {
@@ -47,11 +43,11 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				return this.slice(i)[0];
 			},
 			contains: function(d){
-				// Array.indexOf is not cross-browser;
-				// $.inArray doesn't work with Dates
+				
+				
 				var val = d && d.valueOf();
 				for (var i=0, l=this.length; i < l; i++)
-          // Use date arithmetic to allow dates with different times to match
+          
           if (0 <= this[i].valueOf() - val && this[i].valueOf() - val < 1000*60*60*24)
 						return i;
 				return -1;
@@ -86,7 +82,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 	})();
 
 
-	// Picker object
+	
 
 	var Datepicker = function(element, options){
 		$.data(element, 'datepicker', this);
@@ -110,7 +106,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 
 		this.picker = $(DPGlobal.template);
 
-		// Checking templates and inserting
+		
 		if (this._check_template(this.o.templates.leftArrow)) {
 			this.picker.find('.prev').html(this.o.templates.leftArrow);
 		}
@@ -184,15 +180,15 @@ var _previousDefineAmd = define.amd; define.amd = false;
 
 		_check_template: function(tmp){
 			try {
-				// If empty
+				
 				if (tmp === undefined || tmp === "") {
 					return false;
 				}
-				// If no html, everything ok
+				
 				if ((tmp.match(/[<>]/g) || []).length <= 0) {
 					return true;
 				}
-				// Checking if html is fine
+				
 				var jDom = $(tmp);
 				return jDom.length > 0;
 			}
@@ -202,13 +198,13 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		},
 
 		_process_options: function(opts){
-			// Store raw options for reference
+			
 			this._o = $.extend({}, this._o, opts);
-			// Processed options
+			
 			var o = this.o = $.extend({}, this._o);
 
-			// Check if "de-DE" style date is available, if not language should
-			// fallback to 2 letter code eg "de"
+			
+			
 			var lang = o.language;
 			if (!dates[lang]){
 				lang = lang.split('-')[0];
@@ -217,15 +213,15 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 			o.language = lang;
 
-			// Retrieve view index from any aliases
+			
 			o.startView = this._resolveViewName(o.startView);
 			o.minViewMode = this._resolveViewName(o.minViewMode);
 			o.maxViewMode = this._resolveViewName(o.maxViewMode);
 
-			// Check view is between min and max
+			
 			o.startView = Math.max(this.o.minViewMode, Math.min(this.o.maxViewMode, o.startView));
 
-			// true, false, or Number > 0
+			
 			if (o.multidate !== true){
 				o.multidate = Number(o.multidate) || false;
 				if (o.multidate !== false)
@@ -278,7 +274,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			});
 			o.orientation = {x: 'auto', y: 'auto'};
 			if (!_plc || _plc === 'auto')
-				; // no action
+				; 
 			else if (plc.length === 1){
 				switch (plc[0]){
 					case 'top':
@@ -353,15 +349,15 @@ var _previousDefineAmd = define.amd; define.amd = false;
                 events.focus = $.proxy(this.show, this);
             }
 
-            if (this.isInput) { // single input
+            if (this.isInput) { 
                 this._events = [
                     [this.element, events]
                 ];
             }
-            // component: input + button
+            
             else if (this.component && this.inputField.length) {
                 this._events = [
-                    // For components that are not readonly, allow keyboard nav
+                    
                     [this.inputField, events],
                     [this.component, {
                         click: $.proxy(this.show, this)
@@ -377,13 +373,13 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				];
 			}
 			this._events.push(
-				// Component: listen for blur on element descendants
+				
 				[this.element, '*', {
 					blur: $.proxy(function(e){
 						this._focused_from = e.target;
 					}, this)
 				}],
-				// Input: listen for blur on element
+				
 				[this.element, {
 					blur: $.proxy(function(e){
 						this._focused_from = e.target;
@@ -392,7 +388,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			);
 
 			if (this.o.immediateUpdates) {
-				// Trigger input updates immediately on changed year/month
+				
 				this._events.push([this.element, {
 					'changeYear changeMonth': $.proxy(function(e){
 						this.update(e.date);
@@ -415,7 +411,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				}],
 				[$(document), {
 					'mousedown touchstart': $.proxy(function(e){
-						// Clicked outside the datepicker, hide it
+						
 						if (!(
 							this.element.is(e.target) ||
 							this.element.find(e.target).length ||
@@ -690,30 +686,30 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				if (this.o.orientation.x === 'right')
 					left -= calendarWidth - width;
 			}
-			// auto x orientation is best-placement: if it crosses a window
-			// edge, fudge it sideways
+			
+			
 			else {
 				if (offset.left < 0) {
-					// component is outside the window on the left side. Move it into visible range
+					
 					this.picker.addClass('datepicker-orient-left');
 					left -= offset.left - visualPadding;
 				} else if (left + calendarWidth > windowWidth) {
-					// the calendar passes the widow right edge. Align it to component right side
+					
 					this.picker.addClass('datepicker-orient-right');
 					left += width - calendarWidth;
 				} else {
 					if (this.o.rtl) {
-						// Default to right
+						
 						this.picker.addClass('datepicker-orient-right');
 					} else {
-						// Default to left
+						
 						this.picker.addClass('datepicker-orient-left');
 					}
 				}
 			}
 
-			// auto y orientation is best-situation: top or bottom, no fudging,
-			// decision based on which shows more of the calendar
+			
+			
 			var yorient = this.o.orientation.y,
 				top_overflow;
 			if (yorient === 'auto'){
@@ -793,12 +789,12 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 
 			if (fromArgs){
-				// setting date by clicking
+				
 				this.setValue();
 				this.element.change();
 			}
 			else if (this.dates.length){
-				// setting date by typing
+				
 				if (String(oldDates) !== String(this.dates) && fromArgs) {
 					this._trigger('changeDate');
 					this.element.change();
@@ -864,7 +860,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 			if (this.focusDate && date.valueOf() === this.focusDate.valueOf())
 				cls.push('focused');
-			// Compare internal UTC date with UTC today, not local today
+			
 			if (this.o.todayHighlight && isUTCEquals(date, today)) {
 				cls.push('today');
 			}
@@ -1001,16 +997,16 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				if (weekDay === this.o.weekStart){
 					html.push('<tr>');
 					if (this.o.calendarWeeks){
-						// ISO 8601: First week contains first thursday.
-						// ISO also states week starts on Monday, but we can be more abstract here.
+						
+						
 						var
-							// Start of current week: based on weekstart/current date
+							
 							ws = new Date(+prevMonth + (this.o.weekStart - weekDay - 7) % 7 * 864e5),
-							// Thursday of this week
+							
 							th = new Date(Number(ws) + (7 + 4 - ws.getUTCDay()) % 7 * 864e5),
-							// First Thursday of year, year from thursday
+							
 							yth = new Date(Number(yth = UTCDate(th.getUTCFullYear(), 0, 1)) + (7 + 4 - yth.getUTCDay()) % 7 * 864e5),
-							// Calendar week: ms between thursdays, div ms per day, div 7 days
+							
 							calWeek = (th - yth) / 864e5 / 7 + 1;
 						html.push('<td class="cw">'+ calWeek +'</td>');
 					}
@@ -1038,8 +1034,8 @@ var _previousDefineAmd = define.amd; define.amd = false;
 						content = before.content;
 				}
 
-				//Check if uniqueSort exists (supported by jquery >=1.12 and >=2.2)
-				//Fallback to unique function for older jquery versions
+				
+				
 				if ($.isFunction($.uniqueSort)) {
 					clsName = $.uniqueSort(clsName);
 				} else {
@@ -1097,7 +1093,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				});
 			}
 
-			// Generating decade/years picker
+			
 			this._fill_yearsView(
 				'.datepicker-years',
 				'year',
@@ -1108,7 +1104,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				this.o.beforeShowYear
 			);
 
-			// Generating century/decades picker
+			
 			this._fill_yearsView(
 				'.datepicker-decades',
 				'decade',
@@ -1119,7 +1115,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				this.o.beforeShowDecade
 			);
 
-			// Generating millennium/centuries picker
+			
 			this._fill_yearsView(
 				'.datepicker-centuries',
 				'century',
@@ -1148,13 +1144,13 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			switch (this.viewMode){
 				case 4:
 					factor *= 10;
-					/* falls through */
+					
 				case 3:
 					factor *= 10;
-					/* falls through */
+					
 				case 2:
 					factor *= 10;
-					/* falls through */
+					
 				case 1:
 					prevIsDisabled = Math.floor(year / factor) * factor <= startYear;
 					nextIsDisabled = Math.floor(year / factor) * factor + factor > endYear;
@@ -1176,24 +1172,24 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			var target, dir, day, year, month;
 			target = $(e.target);
 
-			// Clicked on the switch
+			
 			if (target.hasClass('datepicker-switch') && this.viewMode !== this.o.maxViewMode){
 				this.setViewMode(this.viewMode + 1);
 			}
 
-			// Clicked on today button
+			
 			if (target.hasClass('today') && !target.hasClass('day')){
 				this.setViewMode(0);
 				this._setDate(UTCToday(), this.o.todayBtn === 'linked' ? null : 'view');
 			}
 
-			// Clicked on clear button
+			
 			if (target.hasClass('clear')){
 				this.clearDates();
 			}
 
 			if (!target.hasClass('disabled')){
-				// Clicked on a month, year, decade, century
+				
 				if (target.hasClass('month')
 						|| target.hasClass('year')
 						|| target.hasClass('decade')
@@ -1245,7 +1241,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			this._setDate(date);
 		},
 
-		// Clicked on prev or next
+		
 		navArrowsClick: function(e){
 			var $target = $(e.currentTarget);
 			var dir = $target.hasClass('prev') ? -1 : 1;
@@ -1321,35 +1317,35 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			dir = dir > 0 ? 1 : -1;
 			if (mag === 1){
 				test = dir === -1
-					// If going back one month, make sure month is not current month
-					// (eg, Mar 31 -> Feb 31 == Feb 28, not Mar 02)
+					
+					
 					? function(){
 						return new_date.getUTCMonth() === month;
 					}
-					// If going forward one month, make sure month is as expected
-					// (eg, Jan 31 -> Feb 31 == Feb 28, not Mar 02)
+					
+					
 					: function(){
 						return new_date.getUTCMonth() !== new_month;
 					};
 				new_month = month + dir;
 				new_date.setUTCMonth(new_month);
-				// Dec -> Jan (12) or Jan -> Dec (-1) -- limit expected date to 0-11
+				
 				new_month = (new_month + 12) % 12;
 			}
 			else {
-				// For magnitudes >1, move one month at a time...
+				
 				for (var i=0; i < mag; i++)
-					// ...which might decrease the day (eg, Jan 31 to Feb 28, etc)...
+					
 					new_date = this.moveMonth(new_date, dir);
-				// ...then reset the day, keeping it in the new month
+				
 				new_month = new_date.getUTCMonth();
 				new_date.setUTCDate(day);
 				test = function(){
 					return new_month !== new_date.getUTCMonth();
 				};
 			}
-			// Common date-resetting loop -- if date is beyond end of month, make it
-			// end of month
+			
+			
 			while (test()){
 				new_date.setUTCDate(--day);
 				new_date.setUTCMonth(new_month);
@@ -1394,7 +1390,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 
 		keydown: function(e){
 			if (!this.picker.is(':visible')){
-				if (e.keyCode === 40 || e.keyCode === 27) { // allow down to re-show picker
+				if (e.keyCode === 40 || e.keyCode === 27) { 
 					this.show();
 					e.stopPropagation();
         }
@@ -1404,7 +1400,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				dir, newViewDate,
 				focusDate = this.focusDate || this.viewDate;
 			switch (e.keyCode){
-				case 27: // escape
+				case 27: 
 					if (this.focusDate){
 						this.focusDate = null;
 						this.viewDate = this.dates.get(-1) || this.viewDate;
@@ -1415,10 +1411,10 @@ var _previousDefineAmd = define.amd; define.amd = false;
 					e.preventDefault();
 					e.stopPropagation();
 					break;
-				case 37: // left
-				case 38: // up
-				case 39: // right
-				case 40: // down
+				case 37: 
+				case 38: 
+				case 39: 
+				case 40: 
 					if (!this.o.keyboardNavigation || this.o.daysOfWeekDisabled.length === 7)
 						break;
 					dir = e.keyCode === 37 || e.keyCode === 38 ? -1 : 1;
@@ -1456,7 +1452,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 						e.preventDefault();
 					}
 					break;
-				case 13: // enter
+				case 13: 
 					if (!this.o.forceParse)
 						break;
 					focusDate = this.focusDate || this.dates.get(-1) || this.viewDate;
@@ -1475,7 +1471,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 							this.hide();
 					}
 					break;
-				case 9: // tab
+				case 9: 
 					this.focusDate = null;
 					this.viewDate = this.dates.get(-1) || this.viewDate;
 					this.fill();
@@ -1543,9 +1539,9 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			});
 		},
 		dateUpdated: function(e){
-			// `this.updating` is a workaround for preventing infinite recursion
-			// between `changeDate` triggering and `setUTCDate` calling.  Until
-			// there is a better mechanism.
+			
+			
+			
 			if (this.updating)
 				return;
 			this.updating = true;
@@ -1571,12 +1567,12 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			});
 
 			if (new_date < this.dates[j]){
-				// Date being moved earlier/left
+				
 				while (j >= 0 && new_date < this.dates[j]){
 					this.pickers[j--].setUTCDate(new_date);
 				}
 			} else if (new_date > this.dates[k]){
-				// Date being moved later/right
+				
 				while (k < l && new_date > this.dates[k]){
 					this.pickers[k++].setUTCDate(new_date);
 				}
@@ -1594,7 +1590,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 	};
 
 	function opts_from_el(el, prefix){
-		// Derive options from element data-attrs
+		
 		var data = $(el).data(),
 			out = {}, inkey,
 			replace = new RegExp('^' + prefix.toLowerCase() + '([A-Z])');
@@ -1611,10 +1607,10 @@ var _previousDefineAmd = define.amd; define.amd = false;
 	}
 
 	function opts_from_locale(lang){
-		// Derive options from locale plugins
+		
 		var out = {};
-		// Check if "de-DE" style date is available, if not language should
-		// fallback to 2 letter code eg "de"
+		
+		
 		if (!dates[lang]){
 			lang = lang.split('-')[0];
 			if (!dates[lang])
@@ -1639,10 +1635,10 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				options = typeof option === 'object' && option;
 			if (!data){
 				var elopts = opts_from_el(this, 'date'),
-					// Preliminary otions
+					
 					xopts = $.extend({}, defaults, elopts, options),
 					locopts = opts_from_locale(xopts.language),
-					// Options priority: js args, data-attrs, locales, defaults
+					
 					opts = $.extend({}, defaults, locopts, elopts, options);
 				if ($this.hasClass('input-daterange') || opts.inputs){
 					$.extend(opts, {
@@ -1775,8 +1771,8 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		parseFormat: function(format){
 			if (typeof format.toValue === 'function' && typeof format.toDisplay === 'function')
                 return format;
-            // IE treats \0 as a string end in inputs (truncating the value),
-			// so it's a bad format delimiter, anyway
+            
+			
 			var separators = format.replace(this.validParts, '\0').split('\0'),
 				parts = format.match(this.validParts);
 			if (!separators || !separators.length || !parts || parts.length === 0){
@@ -1826,10 +1822,10 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				if (threshold === true)
 					threshold = 10;
 
-				// if year is 2 digits or less, than the user most likely is trying to get a recent century
+				
 				if (year < 100){
 					year += 2000;
-					// if the new year is more than threshold years in advance, use last century
+					
 					if (year > ((new Date()).getFullYear()+threshold)){
 						year -= 100;
 					}
@@ -1865,13 +1861,13 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			setters_map['dd'] = setters_map['d'];
 			date = UTCToday();
 			var fparts = format.parts.slice();
-			// Remove noop parts
+			
 			if (parts.length !== fparts.length){
 				fparts = $(fparts).filter(function(i,p){
 					return $.inArray(p, setters_order) !== -1;
 				}).toArray();
 			}
-			// Process remainder
+			
 			function match_part(){
 				var m = this.slice(0, parts[i].length),
 					p = parts[i].slice(0, m.length);
@@ -1998,16 +1994,14 @@ var _previousDefineAmd = define.amd; define.amd = false;
 	$.fn.datepicker.DPGlobal = DPGlobal;
 
 
-	/* DATEPICKER NO CONFLICT
-	* =================== */
+	
 
 	$.fn.datepicker.noConflict = function(){
 		$.fn.datepicker = old;
 		return this;
 	};
 
-	/* DATEPICKER VERSION
-	 * =================== */
+	
 	$.fn.datepicker.version = '1.9.0';
 
 	$.fn.datepicker.deprecated = function(msg){
@@ -2018,8 +2012,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 	};
 
 
-	/* DATEPICKER DATA-API
-	* ================== */
+	
 
 	$(document).on(
 		'focus.datepicker.data-api click.datepicker.data-api',
@@ -2029,7 +2022,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			if ($this.data('datepicker'))
 				return;
 			e.preventDefault();
-			// component click requires us to explicitly show it
+			
 			datepickerPlugin.call($this, 'show');
 		}
 	);

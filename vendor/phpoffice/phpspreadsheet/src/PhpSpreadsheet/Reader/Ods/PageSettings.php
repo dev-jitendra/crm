@@ -65,7 +65,7 @@ class PageSettings
                 'printOrder' => $stylePrintOrder,
                 'horizontalCentered' => $centered === 'horizontal' || $centered === 'both',
                 'verticalCentered' => $centered === 'vertical' || $centered === 'both',
-                // margin size is already stored in inches, so no UOM conversion is required
+                
                 'marginLeft' => (float) $marginLeft ?? 0.7,
                 'marginRight' => (float) $marginRight ?? 0.7,
                 'marginTop' => (float) $marginTop ?? 0.3,

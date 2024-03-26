@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Routing\Loader;
 
@@ -21,12 +14,7 @@ use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Parser as YamlParser;
 use Symfony\Component\Yaml\Yaml;
 
-/**
- * YamlFileLoader loads Yaml routing files.
- *
- * @author Fabien Potencier <fabien@symfony.com>
- * @author Tobias Schultze <http://tobion.de>
- */
+
 class YamlFileLoader extends FileLoader
 {
     use HostTrait;
@@ -38,9 +26,7 @@ class YamlFileLoader extends FileLoader
     ];
     private $yamlParser;
 
-    /**
-     * @throws \InvalidArgumentException When a route can't be parsed because YAML is invalid
-     */
+    
     public function load(mixed $file, string $type = null): RouteCollection
     {
         $path = $this->locator->locate($file);
@@ -64,12 +50,12 @@ class YamlFileLoader extends FileLoader
         $collection = new RouteCollection();
         $collection->addResource(new FileResource($path));
 
-        // empty file
+        
         if (null === $parsedConfig) {
             return $collection;
         }
 
-        // not an array
+        
         if (!\is_array($parsedConfig)) {
             throw new \InvalidArgumentException(sprintf('The file "%s" must contain a YAML array.', $path));
         }
@@ -105,17 +91,13 @@ class YamlFileLoader extends FileLoader
         return $collection;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function supports(mixed $resource, string $type = null): bool
     {
         return \is_string($resource) && \in_array(pathinfo($resource, \PATHINFO_EXTENSION), ['yml', 'yaml'], true) && (!$type || 'yaml' === $type);
     }
 
-    /**
-     * Parses a route and adds it to the RouteCollection.
-     */
+    
     protected function parseRoute(RouteCollection $collection, string $name, array $config, string $path)
     {
         if (isset($config['alias'])) {
@@ -171,9 +153,7 @@ class YamlFileLoader extends FileLoader
         }
     }
 
-    /**
-     * Parses an import and adds the routes in the resource to the RouteCollection.
-     */
+    
     protected function parseImport(RouteCollection $collection, array $config, string $path, string $file)
     {
         $type = $config['type'] ?? null;
@@ -207,7 +187,7 @@ class YamlFileLoader extends FileLoader
 
         $this->setCurrentDir(\dirname($path));
 
-        /** @var RouteCollection[] $imported */
+        
         $imported = $this->import($config['resource'], $type, false, $file, $exclude) ?: [];
 
         if (!\is_array($imported)) {
@@ -240,10 +220,7 @@ class YamlFileLoader extends FileLoader
         }
     }
 
-    /**
-     * @throws \InvalidArgumentException If one of the provided config keys is not supported,
-     *                                   something is missing or the combination is nonsense
-     */
+    
     protected function validate(mixed $config, string $name, string $path)
     {
         if (!\is_array($config)) {
@@ -274,10 +251,7 @@ class YamlFileLoader extends FileLoader
         }
     }
 
-    /**
-     * @throws \InvalidArgumentException If one of the provided config keys is not supported,
-     *                                   something is missing or the combination is nonsense
-     */
+    
     private function validateAlias(array $config, string $name, string $path): void
     {
         foreach ($config as $key => $value) {

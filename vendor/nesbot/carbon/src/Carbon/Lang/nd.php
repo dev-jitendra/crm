@@ -1,13 +1,6 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 return array_replace_recursive(require __DIR__.'/en.php', [
     'weekdays' => ['Sonto', 'Mvulo', 'Sibili', 'Sithathu', 'Sine', 'Sihlanu', 'Mgqibelo'],
@@ -24,9 +17,9 @@ return array_replace_recursive(require __DIR__.'/en.php', [
         'LLLL' => 'dddd, D MMMM YYYY HH:mm',
     ],
 
-    'year' => 'okweminyaka engu-:count', // less reliable
-    'y' => 'okweminyaka engu-:count', // less reliable
-    'a_year' => 'okweminyaka engu-:count', // less reliable
+    'year' => 'okweminyaka engu-:count', 
+    'y' => 'okweminyaka engu-:count', 
+    'a_year' => 'okweminyaka engu-:count', 
 
     'month' => 'inyanga ezingu-:count',
     'm' => 'inyanga ezingu-:count',

@@ -12,9 +12,7 @@ function getFunctionCode($func) {
 
 class MustacheSpecTest extends TestCase
 {
-    /**
-     * @dataProvider jsonSpecProvider
-     */
+    
     public function testSpecs($spec)
     {
         global $tmpdir;

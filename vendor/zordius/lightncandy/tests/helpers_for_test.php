@@ -1,13 +1,13 @@
 <?php
 
-// Class for customized Runtime
+
 class MyLCRunClass extends \LightnCandy\Runtime {
     public static function raw($cx, $v, $ex = 0) {
         return '[[DEBUG:raw()=>' . var_export($v, true) . ']]';
     }
 }
 
-// Classes for inputs or helpers
+
 class myClass {
     function test() {
         return 'testMethod OK!';
@@ -68,7 +68,7 @@ class twoDimensionIterator implements Iterator {
     }
 }
 
-// Custom helpers
+
 function helper1($arg) {
     $arg = is_array($arg) ? 'Array' : $arg;
     return "-$arg-";
@@ -103,7 +103,7 @@ function test_join ($input) {
    return join('.', $input);
 }
 
-// Custom helpers for handlebars (should be used in hbhelpers)
+
 function myif ($conditional, $options) {
     if ($conditional) {
         return $options['fn']();

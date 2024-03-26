@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Job;
 
@@ -38,9 +12,7 @@ use Espo\Entities\Job as JobEntity;
 use RuntimeException;
 use Throwable;
 
-/**
- * Handles processing jobs.
- */
+
 class JobManager
 {
     private bool $useProcessPool = false;
@@ -65,10 +37,7 @@ class JobManager
         }
     }
 
-    /**
-     * Process jobs. Jobs will be created according scheduling. Then pending jobs will be processed.
-     * This method supposed to be called on every Cron run or loop iteration of the Daemon.
-     */
+    
     public function process(): void
     {
         if (!$this->checkLastRunTime()) {
@@ -85,9 +54,7 @@ class JobManager
         $this->processMainQueue();
     }
 
-    /**
-     * Process pending jobs from a specific queue. Jobs within a queue are processed one by one.
-     */
+    
     public function processQueue(string $queue, int $limit): void
     {
         $params = Params
@@ -100,9 +67,7 @@ class JobManager
         $this->queueProcessor->process($params);
     }
 
-    /**
-     * Process pending jobs from a specific group. Jobs within a group are processed one by one.
-     */
+    
     public function processGroup(string $group, int $limit): void
     {
         $params = Params
@@ -127,27 +92,19 @@ class JobManager
         $this->queueProcessor->process($params);
     }
 
-    /**
-     * Run a specific job by ID. A job status should be set to 'Ready'.
-     */
+    
     public function runJobById(string $id): void
     {
         $this->jobRunner->runById($id);
     }
 
-    /**
-     * Run a specific job.
-     *
-     * @throws Throwable
-     */
+    
     public function runJob(JobEntity $job): void
     {
         $this->jobRunner->runThrowingException($job);
     }
 
-    /**
-     * @todo Move to a separate class.
-     */
+    
     private function getLastRunTime(): int
     {
         if ($this->fileManager->isFile($this->lastRunTimeFile)) {
@@ -166,9 +123,7 @@ class JobManager
         return time() - $this->configDataProvider->getCronMinInterval() - 1;
     }
 
-    /**
-     * @todo Move to a separate class.
-     */
+    
     private function updateLastRunTime(): void
     {
         $data = ['time' => time()];

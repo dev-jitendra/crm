@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\Export;
 
@@ -56,9 +30,9 @@ class Export
 {
     private const DEFAULT_FORMAT = 'csv';
 
-    /** @var ?Params */
+    
     private ?Params $params = null;
-    /** @var ?Collection<Entity> */
+    
     private ?Collection $collection = null;
 
     public function __construct(
@@ -84,9 +58,7 @@ class Export
         return $this;
     }
 
-    /**
-     * @param Collection<Entity> $collection
-     */
+    
     public function setCollection(Collection $collection): self
     {
         $this->collection = $collection;
@@ -94,9 +66,7 @@ class Export
         return $this;
     }
 
-    /**
-     * Run export.
-     */
+    
     public function run(): Result
     {
         if (!$this->params) {
@@ -142,7 +112,7 @@ class Export
 
         $mimeType = $this->metadata->get(['app', 'export', 'formatDefs', $format, 'mimeType']);
 
-        /** @var Attachment $attachment */
+        
         $attachment = $this->entityManager->getRepositoryByClass(Attachment::class)->getNew();
 
         $attachment
@@ -268,7 +238,7 @@ class Export
             return false;
         }
 
-        // Revise.
+        
         if ($this->getAttributeParam($entity, $attribute, 'isLinkStub')) {
             return false;
         }
@@ -276,9 +246,7 @@ class Export
         return true;
     }
 
-    /**
-     * @return Collection<Entity>
-     */
+    
     private function getCollection(Params $params): Collection
     {
         if ($this->collection) {
@@ -304,7 +272,7 @@ class Export
 
         $query = $builder->build();
 
-        /** @var Collection<Entity> */
+        
         return $this->entityManager
             ->getRDBRepository($entityType)
             ->clone($query)
@@ -312,9 +280,7 @@ class Export
             ->find();
     }
 
-    /**
-     * @return string[]
-     */
+    
     private function getAttributeList(Params $params): array
     {
         $list = [];
@@ -369,10 +335,7 @@ class Export
         return $list;
     }
 
-    /**
-     * @return string[]
-     * @throws RuntimeException
-     */
+    
     private function getAttributeListFromFieldList(Params $params): array
     {
         $entityType = $params->getEntityType();
@@ -395,9 +358,7 @@ class Export
         return $attributeList;
     }
 
-    /**
-     * @return ?string[]
-     */
+    
     private function getFieldList(Params $params): ?array
     {
         $entityDefs = $this->entityManager

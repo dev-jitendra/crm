@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpClient;
 
@@ -21,9 +14,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Contracts\HttpClient\ResponseStreamInterface;
 use Symfony\Contracts\Service\ResetInterface;
 
-/**
- * @author Jérémy Romey <jeremy@free-agent.fr>
- */
+
 final class TraceableHttpClient implements HttpClientInterface, ResetInterface, LoggerAwareInterface
 {
     private $client;
@@ -36,9 +27,7 @@ final class TraceableHttpClient implements HttpClientInterface, ResetInterface, 
         $this->stopwatch = $stopwatch;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function request(string $method, string $url, array $options = []): ResponseInterface
     {
         $content = null;
@@ -68,9 +57,7 @@ final class TraceableHttpClient implements HttpClientInterface, ResetInterface, 
         return new TraceableResponse($this->client, $this->client->request($method, $url, $options), $content, null === $this->stopwatch ? null : $this->stopwatch->start("$method $url", 'http_client'));
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function stream($responses, float $timeout = null): ResponseStreamInterface
     {
         if ($responses instanceof TraceableResponse) {
@@ -96,9 +83,7 @@ final class TraceableHttpClient implements HttpClientInterface, ResetInterface, 
         $this->tracedRequests = [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function setLogger(LoggerInterface $logger): void
     {
         if ($this->client instanceof LoggerAwareInterface) {

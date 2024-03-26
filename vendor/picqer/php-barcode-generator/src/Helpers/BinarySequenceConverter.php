@@ -5,9 +5,7 @@ namespace Picqer\Barcode\Helpers;
 use Picqer\Barcode\Barcode;
 use Picqer\Barcode\BarcodeBar;
 
-/**
- * Convert binary barcode sequence string to Barcode representation.
- */
+
 class BinarySequenceConverter
 {
     public static function convert(string $code, string $sequence): Barcode

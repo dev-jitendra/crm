@@ -11,23 +11,15 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-/**
- * Provides Credentials from Configuration data.
- *
- * @author Jérémy Derussé <jeremy@derusse.com>
- */
+
 final class ConfigurationProvider implements CredentialProvider
 {
     use DateFromResult;
 
-    /**
-     * @var LoggerInterface
-     */
+    
     private $logger;
 
-    /**
-     * @var HttpClientInterface|null
-     */
+    
     private $httpClient;
 
     public function __construct(?HttpClientInterface $httpClient = null, ?LoggerInterface $logger = null)
@@ -59,7 +51,7 @@ final class ConfigurationProvider implements CredentialProvider
             return $this->getCredentialsFromRole($credentials, $region, $roleArn, $roleSessionName);
         }
 
-        /** @psalm-suppress PossiblyNullArgument */
+        
         return $credentials;
     }
 

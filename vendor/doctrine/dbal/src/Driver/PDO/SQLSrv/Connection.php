@@ -26,9 +26,7 @@ final class Connection extends AbstractConnectionMiddleware
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function lastInsertId($name = null)
     {
         if ($name === null) {
@@ -37,7 +35,7 @@ final class Connection extends AbstractConnectionMiddleware
 
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/issues/4687',
+            'https:
             'The usage of Connection::lastInsertId() with a sequence name is deprecated.',
         );
 
@@ -55,12 +53,12 @@ final class Connection extends AbstractConnectionMiddleware
         return $this->connection->getNativeConnection();
     }
 
-    /** @deprecated Call {@see getNativeConnection()} instead. */
+    
     public function getWrappedConnection(): PDO
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5037',
+            'https:
             '%s is deprecated, call getNativeConnection() instead.',
             __METHOD__,
         );

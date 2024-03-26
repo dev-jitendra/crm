@@ -22,35 +22,25 @@ use function var_export;
 
 class ContentDisposition implements UnstructuredInterface
 {
-    /**
-     * 78 chars (RFC 2822) - (semicolon + space (Header::FOLDING))
-     *
-     * @var int
-     */
+    
     public const MAX_PARAMETER_LENGTH = 76;
 
-    /** @var string */
+    
     protected $disposition = 'inline';
 
-    /**
-     * Header encoding
-     *
-     * @var string
-     */
+    
     protected $encoding = 'ASCII';
 
-    /** @var array */
+    
     protected $parameters = [];
 
-    /**
-     * @inheritDoc
-     */
+    
     public static function fromString($headerLine)
     {
         [$name, $value] = GenericHeader::splitHeaderLine($headerLine);
         $value          = HeaderWrap::mimeDecodeValue($value);
 
-        // check to ensure proper header type for this factory
+        
         if (! in_array(strtolower($name), ['contentdisposition', 'content_disposition', 'content-disposition'])) {
             throw new Exception\InvalidArgumentException('Invalid header line for Content-Disposition string');
         }
@@ -73,8 +63,8 @@ class ContentDisposition implements UnstructuredInterface
 
                 if (strpos($name, '*')) {
                     [$name, $count] = explode('*', $name);
-                    // allow optional count:
-                    // Content-Disposition: attachment; filename*=UTF-8''%64%61%61%6D%69%2D%6D%C3%B5%72%76%2E%6A%70%67
+                    
+                    
                     if ($count === "") {
                         $count = 0;
                     }
@@ -116,17 +106,13 @@ class ContentDisposition implements UnstructuredInterface
         return $header;
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function getFieldName()
     {
         return 'Content-Disposition';
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function getFieldValue($format = HeaderInterface::FORMAT_RAW)
     {
         $result = $this->disposition;
@@ -158,7 +144,7 @@ class ContentDisposition implements UnstructuredInterface
                     $result .= ';' . Headers::FOLDING . $line;
                 }
             } else {
-                // Use 'continuation' per RFC 2231
+                
                 if ($valueIsEncoded) {
                     $value = HeaderWrap::mimeDecodeValue($value);
                 }
@@ -194,10 +180,7 @@ class ContentDisposition implements UnstructuredInterface
         return $result;
     }
 
-    /**
-     * @param string $value
-     * @return string
-     */
+    
     protected function getEncodedValue($value)
     {
         $configuredEncoding = $this->encoding;
@@ -207,61 +190,39 @@ class ContentDisposition implements UnstructuredInterface
         return $value;
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function setEncoding($encoding)
     {
         $this->encoding = $encoding;
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function getEncoding()
     {
         return $this->encoding;
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function toString()
     {
         return 'Content-Disposition: ' . $this->getFieldValue(HeaderInterface::FORMAT_ENCODED);
     }
 
-    /**
-     * Set the content disposition
-     * Expected values include 'inline', 'attachment'
-     *
-     * @param string $disposition
-     * @return ContentDisposition
-     */
+    
     public function setDisposition($disposition)
     {
         $this->disposition = strtolower($disposition);
         return $this;
     }
 
-    /**
-     * Retrieve the content disposition
-     *
-     * @return string
-     */
+    
     public function getDisposition()
     {
         return $this->disposition;
     }
 
-    /**
-     * Add a parameter pair
-     *
-     * @param string $name
-     * @param string $value
-     * @return ContentDisposition
-     */
+    
     public function setParameter($name, $value)
     {
         $name = strtolower($name);
@@ -271,8 +232,8 @@ class ContentDisposition implements UnstructuredInterface
                 'Invalid content-disposition parameter name detected'
             );
         }
-        // '5' here is for the quotes & equal sign in `name="value"`,
-        // and the space & semicolon for line folding
+        
+        
         if ((strlen($name) + 5) >= self::MAX_PARAMETER_LENGTH) {
             throw new Exception\InvalidArgumentException(
                 'Invalid content-disposition parameter name detected (too long)'
@@ -283,22 +244,13 @@ class ContentDisposition implements UnstructuredInterface
         return $this;
     }
 
-    /**
-     * Get all parameters
-     *
-     * @return array
-     */
+    
     public function getParameters()
     {
         return $this->parameters;
     }
 
-    /**
-     * Get a parameter by name
-     *
-     * @param string $name
-     * @return null|string
-     */
+    
     public function getParameter($name)
     {
         $name = strtolower($name);
@@ -308,12 +260,7 @@ class ContentDisposition implements UnstructuredInterface
         return null;
     }
 
-    /**
-     * Remove a named parameter
-     *
-     * @param string $name
-     * @return bool
-     */
+    
     public function removeParameter($name)
     {
         $name = strtolower($name);

@@ -1,9 +1,5 @@
 var _previousDefineAmd = define.amd; define.amd = false;
-/*!
- * jquery-timepicker v1.11.15 - A jQuery timepicker plugin inspired by Google Calendar. It supports both mouse and keyboard navigation.
- * Copyright (c) 2015 Jon Thornton - http://jonthornton.github.com/jquery-timepicker/
- * License: MIT
- */
+
 
 (function(factory) {
   if (
@@ -13,13 +9,13 @@ var _previousDefineAmd = define.amd; define.amd = false;
     module &&
     module.exports === exports
   ) {
-    // Browserify. Attach to jQuery module.
+    
     factory(require("jquery"));
   } else if (typeof define === "function" && define.amd) {
-    // AMD. Register as an anonymous module.
+    
     define(["jquery"], factory);
   } else {
-    // Browser globals
+    
     factory(jQuery);
   }
 })(function($) {
@@ -52,21 +48,21 @@ var _previousDefineAmd = define.amd; define.amd = false;
       if (seconds === null) {
         return null;
       } else if (typeof settings.step !== "number") {
-        // TODO: nearest fit irregular steps
+        
         return seconds;
       } else {
-        var offset = seconds % (settings.step * 60); // step is in minutes
+        var offset = seconds % (settings.step * 60); 
 
         var start = settings.minTime || 0;
 
-        // adjust offset by start mod step so that the offset is aligned not to 00:00 but to the start
+        
         offset -= start % (settings.step * 60);
 
         if (offset >= settings.step * 30) {
-          // if offset is larger than a half step, round up
+          
           seconds += settings.step * 60 - offset;
         } else {
-          // round down
+          
           seconds -= offset;
         }
 
@@ -92,7 +88,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
       return this.each(function() {
         var self = $(this);
 
-        // pick up settings from data attributes
+        
         var attributeOptions = [];
         for (var key in _DEFAULTS) {
           if (self.data(key)) {
@@ -147,18 +143,18 @@ var _previousDefineAmd = define.amd; define.amd = false;
       }
 
       if (_hideKeyboard(self)) {
-        // block the keyboard on mobile devices
+        
         self.blur();
       }
 
       var list = self.data("timepicker-list");
 
-      // check if input is readonly
+      
       if (self.prop("readonly")) {
         return;
       }
 
-      // check if list needs to be rendered
+      
       if (
         !list ||
         list.length === 0 ||
@@ -175,22 +171,22 @@ var _previousDefineAmd = define.amd; define.amd = false;
       self.data("ui-timepicker-value", self.val());
       _setSelected(self, list);
 
-      // make sure other pickers are hidden
+      
       methods.hide();
 
-      // position the dropdown relative to the input
+      
       list.show();
       var listOffset = {};
 
       if (settings.orientation.match(/r/)) {
-        // right-align the dropdown
+        
         listOffset.left =
           self.offset().left +
           self.outerWidth() -
           list.outerWidth() +
           parseInt(list.css("marginLeft").replace("px", ""), 10);
       } else {
-        // left-align the dropdown
+        
         listOffset.left =
           self.offset().left +
           parseInt(list.css("marginLeft").replace("px", ""), 10);
@@ -211,14 +207,14 @@ var _previousDefineAmd = define.amd; define.amd = false;
       }
 
       if (verticalOrientation == "t") {
-        // position the dropdown on top
+        
         list.addClass("ui-timepicker-positioned-top");
         listOffset.top =
           self.offset().top -
           list.outerHeight() +
           parseInt(list.css("marginTop").replace("px", ""), 10);
       } else {
-        // put it under the input
+        
         list.removeClass("ui-timepicker-positioned-top");
         listOffset.top =
           self.offset().top +
@@ -228,7 +224,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 
       list.offset(listOffset);
 
-      // position scrolling
+      
       var selected = list.find(".ui-timepicker-selected");
 
       if (!selected.length) {
@@ -240,7 +236,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
         }
       }
 
-      // if not found or disabled, intelligently find first selectable element
+      
       if (!selected.length || selected.hasClass("ui-timepicker-disabled")) {
         selected = list.find("li:not(.ui-timepicker-disabled):first");
       }
@@ -253,7 +249,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
         list.scrollTop(0);
       }
 
-      // prevent scroll propagation
+      
       if (settings.stopScrollPropagation) {
         $(
           document
@@ -264,7 +260,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
         });
       }
 
-      // attach close handlers
+      
       $(document).on(
         "touchstart.ui-timepicker mousedown.ui-timepicker",
         _closeHandler
@@ -361,7 +357,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
         relative_date = new Date();
       }
 
-      // construct a Date from relative date, and offset's time
+      
       var time = new Date(relative_date);
       time.setHours(offset / 3600);
       time.setMinutes((offset % 3600) / 60);
@@ -404,7 +400,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
     remove: function() {
       var self = this;
 
-      // check if this element is a timepicker
+      
       if (!self.hasClass("ui-timepicker-input")) {
         return;
       }
@@ -415,7 +411,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
       self.removeData("timepicker-settings");
       self.off(".timepicker");
 
-      // timepicker-list won't be present unless the user has interacted with this timepicker
+      
       if (self.data("timepicker-list")) {
         self.data("timepicker-list").remove();
       }
@@ -430,7 +426,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
     }
   };
 
-  // private methods
+  
 
   function _isVisible(elem) {
     var el = elem[0];
@@ -483,7 +479,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
     }
 
     if (settings.disableTimeRanges.length > 0) {
-      // convert string times to integers
+      
       for (var i in settings.disableTimeRanges) {
         settings.disableTimeRanges[i] = [
           _time2int(settings.disableTimeRanges[i][0]),
@@ -491,7 +487,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
         ];
       }
 
-      // sort by starting time
+      
       settings.disableTimeRanges = settings.disableTimeRanges.sort(function(
         a,
         b
@@ -499,7 +495,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
         return a[0] - b[0];
       });
 
-      // merge any overlapping ranges
+      
       for (var i = settings.disableTimeRanges.length - 1; i > 0; i--) {
         if (
           settings.disableTimeRanges[i][0] <=
@@ -597,7 +593,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
       settings.maxTime !== null ? settings.maxTime : start + _ONE_DAY - 1;
 
     if (end < start) {
-      // make sure the end time is greater than start time, otherwise there will be no list to show
+      
       end += _ONE_DAY;
     }
 
@@ -606,7 +602,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
       $.type(settings.timeFormat) === "string" &&
       settings.show2400
     ) {
-      // show a 24:00 option when using military time
+      
       end = _ONE_DAY;
     }
 
@@ -705,9 +701,9 @@ var _previousDefineAmd = define.amd; define.amd = false;
       _setSelected(self, list);
 
       list.on("mousedown click", "li", function(e) {
-        // hack: temporarily disable the focus handler
-        // to deal with the fact that IE fires 'focus'
-        // events asynchronously
+        
+        
+        
         self.off("focus.timepicker");
         self.on("focus.timepicker-ie-hack", function() {
           self.off("focus.timepicker-ie-hack");
@@ -718,7 +714,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
           self[0].focus();
         }
 
-        // make sure only the clicked row is selected
+        
         list.find("li").removeClass("ui-timepicker-selected");
         $(this).addClass("ui-timepicker-selected");
 
@@ -769,10 +765,10 @@ var _previousDefineAmd = define.amd; define.amd = false;
     }
   }
 
-  // event handler to decide whether to close timepicker
+  
   function _closeHandler(e) {
     if (e.target == window) {
-      // mobile Chrome fires focus events against window for some reason
+      
       return;
     }
 
@@ -782,7 +778,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
       target.closest(".ui-timepicker-input").length ||
       target.closest(".ui-timepicker-wrapper").length
     ) {
-      // active timepicker was focused. ignore
+      
       return;
     }
 
@@ -808,7 +804,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
     var out = false;
     var value = settings.roundingFunction(value, settings);
 
-    // loop through the menu items
+    
     list.find("li").each(function(i, obj) {
       var jObj = $(obj);
       if (typeof jObj.data("time") != "number") {
@@ -877,7 +873,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
     }
 
     var rangeError = false;
-    // check that the time in within bounds
+    
     if (
       settings.minTime !== null &&
       settings.maxTime !== null &&
@@ -886,7 +882,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
       rangeError = true;
     }
 
-    // check that time isn't within disabled time ranges
+    
     $.each(settings.disableTimeRanges, function() {
       if (seconds >= this[0] && seconds < this[1]) {
         rangeError = true;
@@ -920,7 +916,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
     if (self.is("input")) {
       return self.val();
     } else {
-      // use the element's data attributes to store values
+      
       return self.data("ui-timepicker-value");
     }
   }
@@ -957,13 +953,11 @@ var _previousDefineAmd = define.amd; define.amd = false;
     }
   }
 
-  /*
-	*  Filter freeform input
-	*/
+  
   function _disableTextInputHandler(e) {
     switch (e.keyCode) {
-      case 13: // return
-      case 9: //tab
+      case 13: 
+      case 9: 
         return;
 
       default:
@@ -971,16 +965,14 @@ var _previousDefineAmd = define.amd; define.amd = false;
     }
   }
 
-  /*
-	*  Keyboard navigation via arrow keys
-	*/
+  
   function _keydownhandler(e) {
     var self = $(this);
     var list = self.data("timepicker-list");
 
     if (!list || !_isVisible(list)) {
       if (e.keyCode == 40) {
-        // show the list!
+        
         methods.show.call(self.get(0));
         list = self.data("timepicker-list");
         if (!_hideKeyboard(self)) {
@@ -992,7 +984,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
     }
 
     switch (e.keyCode) {
-      case 13: // return
+      case 13: 
         if (_selectValue(self)) {
           _formatValue.call(self.get(0), { type: "change" });
           methods.hide.apply(this);
@@ -1001,7 +993,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
         e.preventDefault();
         return false;
 
-      case 38: // up
+      case 38: 
         var selected = list.find(".ui-timepicker-selected");
 
         if (!selected.length) {
@@ -1023,7 +1015,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 
         return false;
 
-      case 40: // down
+      case 40: 
         selected = list.find(".ui-timepicker-selected");
 
         if (selected.length === 0) {
@@ -1049,12 +1041,12 @@ var _previousDefineAmd = define.amd; define.amd = false;
 
         return false;
 
-      case 27: // escape
+      case 27: 
         list.find("li").removeClass("ui-timepicker-selected");
         methods.hide();
         break;
 
-      case 9: //tab
+      case 9: 
         methods.hide();
         break;
 
@@ -1063,9 +1055,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
     }
   }
 
-  /*
-	*	Time typeahead
-	*/
+  
   function _keyuphandler(e) {
     var self = $(this);
     var list = self.data("timepicker-list");
@@ -1087,7 +1077,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
     }
 
     switch (e.keyCode) {
-      case 96: // numpad numerals
+      case 96: 
       case 97:
       case 98:
       case 99:
@@ -1097,7 +1087,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
       case 103:
       case 104:
       case 105:
-      case 48: // numerals
+      case 48: 
       case 49:
       case 50:
       case 51:
@@ -1107,12 +1097,12 @@ var _previousDefineAmd = define.amd; define.amd = false;
       case 55:
       case 56:
       case 57:
-      case 65: // a
-      case 77: // m
-      case 80: // p
-      case 186: // colon
-      case 8: // backspace
-      case 46: // delete
+      case 65: 
+      case 77: 
+      case 80: 
+      case 186: 
+      case 8: 
+      case 46: 
         if (settings.typeaheadHighlight) {
           _setSelected(self, list);
         } else {
@@ -1134,7 +1124,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
     }
 
     if (cursor.length) {
-      // selected value found
+      
       timeValue = cursor.data("time");
     }
 
@@ -1157,13 +1147,13 @@ var _previousDefineAmd = define.amd; define.amd = false;
       mins;
 
     if (minutes < 60) {
-      // Only show (x mins) under 1 hour
+      
       duration = [minutes, _lang.mins];
     } else {
       hours = Math.floor(minutes / 60);
       mins = minutes % 60;
 
-      // Show decimal notation (eg: 1.5 hrs) for 30 minute steps
+      
       if (step == 30 && mins == 30) {
         hours += _lang.decimal + 5;
       }
@@ -1171,8 +1161,8 @@ var _previousDefineAmd = define.amd; define.amd = false;
       duration.push(hours);
       duration.push(hours == 1 ? _lang.hr : _lang.hrs);
 
-      // Show remainder minutes notation (eg: 1 hr 15 mins) for non-30 minute steps
-      // and only if there are remainder minutes to show
+      
+      
       if (step != 30 && mins) {
         duration.push(mins);
         duration.push(_lang.mins);
@@ -1252,7 +1242,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
           break;
 
         case "\\":
-          // escape character; add the next character and skip ahead
+          
           i++;
           output += settings.timeFormat.charAt(i);
           break;
@@ -1280,7 +1270,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 
     timeString = timeString.toLowerCase().replace(/[\s\.]/g, "");
 
-    // if the last character is an "a" or "p", add the "m"
+    
     if (timeString.slice(-1) == "a" || timeString.slice(-1) == "p") {
       timeString += "m";
     }
@@ -1296,7 +1286,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
       _lang.PM.replace(".", "") +
       ")?";
 
-    // try to parse time input
+    
     var pattern = new RegExp(
       "^" +
         ampmRegex +
@@ -1337,7 +1327,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 
     var timeInt = hours * 3600 + minutes * 60 + seconds;
 
-    // if no am/pm provided, intelligently guess based on the scrollDefault
+    
     if (
       hour < 12 &&
       !ampm &&
@@ -1366,11 +1356,11 @@ var _previousDefineAmd = define.amd; define.amd = false;
     return seconds % _ONE_DAY;
   }
 
-  // Plugin entry
+  
   $.fn.timepicker = function(method) {
     if (!this.length) return this;
     if (methods[method]) {
-      // check if this element is a timepicker
+      
       if (!this.hasClass("ui-timepicker-input")) {
         return this;
       }

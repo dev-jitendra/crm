@@ -97,7 +97,7 @@ class NamedExpressions
             $newRange = '';
             if (empty($worksheet)) {
                 if (($offset === 0) || ($address[$offset - 1] !== ':')) {
-                    // We need a worksheet
+                    
                     $worksheet = $definedName->getWorksheet()->getTitle();
                 }
             } else {

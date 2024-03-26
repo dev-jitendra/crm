@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim-Psr7/blob/master/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -26,14 +22,10 @@ use function set_error_handler;
 
 class StreamFactory implements StreamFactoryInterface
 {
-    /**
-     * {@inheritdoc}
-     *
-     * @throws RuntimeException
-     */
+    
     public function createStream(string $content = ''): StreamInterface
     {
-        $resource = fopen('php://temp', 'rw+');
+        $resource = fopen('php:
 
         if (!is_resource($resource)) {
             throw new RuntimeException('StreamFactory::createStream() could not open temporary file stream.');
@@ -45,9 +37,7 @@ class StreamFactory implements StreamFactoryInterface
         return $this->createStreamFromResource($resource);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function createStreamFromFile(
         string $filename,
         string $mode = 'r',
@@ -79,9 +69,7 @@ class StreamFactory implements StreamFactoryInterface
         return new Stream($resource, $cache);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function createStreamFromResource($resource, StreamInterface $cache = null): StreamInterface
     {
         if (!is_resource($resource)) {

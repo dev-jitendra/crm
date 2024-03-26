@@ -2,27 +2,16 @@
 
 namespace AsyncAws\S3\ValueObject;
 
-/**
- * Container for the bucket owner's display name and ID.
- */
+
 final class Owner
 {
-    /**
-     * Container for the display name of the owner.
-     */
+    
     private $displayName;
 
-    /**
-     * Container for the ID of the owner.
-     */
+    
     private $id;
 
-    /**
-     * @param array{
-     *   DisplayName?: null|string,
-     *   ID?: null|string,
-     * } $input
-     */
+    
     public function __construct(array $input)
     {
         $this->displayName = $input['DisplayName'] ?? null;
@@ -44,9 +33,7 @@ final class Owner
         return $this->id;
     }
 
-    /**
-     * @internal
-     */
+    
     public function requestBody(\DomElement $node, \DomDocument $document): void
     {
         if (null !== $v = $this->displayName) {

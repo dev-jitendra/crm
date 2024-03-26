@@ -8,16 +8,10 @@ use function sprintf;
 
 class MountManager implements FilesystemOperator
 {
-    /**
-     * @var array<string, FilesystemOperator>
-     */
+    
     private $filesystems = [];
 
-    /**
-     * MountManager constructor.
-     *
-     * @param array<string,FilesystemOperator> $filesystems
-     */
+    
     public function __construct(array $filesystems = [])
     {
         $this->mountFilesystems($filesystems);
@@ -25,7 +19,7 @@ class MountManager implements FilesystemOperator
 
     public function fileExists(string $location): bool
     {
-        /** @var FilesystemOperator $filesystem */
+        
         [$filesystem, $path] = $this->determineFilesystemAndPath($location);
 
         try {
@@ -37,7 +31,7 @@ class MountManager implements FilesystemOperator
 
     public function read(string $location): string
     {
-        /** @var FilesystemOperator $filesystem */
+        
         [$filesystem, $path] = $this->determineFilesystemAndPath($location);
 
         try {
@@ -49,7 +43,7 @@ class MountManager implements FilesystemOperator
 
     public function readStream(string $location)
     {
-        /** @var FilesystemOperator $filesystem */
+        
         [$filesystem, $path] = $this->determineFilesystemAndPath($location);
 
         try {
@@ -61,7 +55,7 @@ class MountManager implements FilesystemOperator
 
     public function listContents(string $location, bool $deep = self::LIST_SHALLOW): DirectoryListing
     {
-        /** @var FilesystemOperator $filesystem */
+        
         [$filesystem, $path, $mountIdentifier] = $this->determineFilesystemAndPath($location);
 
         return
@@ -69,14 +63,14 @@ class MountManager implements FilesystemOperator
                 ->listContents($path, $deep)
                 ->map(
                     function (StorageAttributes $attributes) use ($mountIdentifier) {
-                        return $attributes->withPath(sprintf('%s://%s', $mountIdentifier, $attributes->path()));
+                        return $attributes->withPath(sprintf('%s:
                     }
                 );
     }
 
     public function lastModified(string $location): int
     {
-        /** @var FilesystemOperator $filesystem */
+        
         [$filesystem, $path] = $this->determineFilesystemAndPath($location);
 
         try {
@@ -88,7 +82,7 @@ class MountManager implements FilesystemOperator
 
     public function fileSize(string $location): int
     {
-        /** @var FilesystemOperator $filesystem */
+        
         [$filesystem, $path] = $this->determineFilesystemAndPath($location);
 
         try {
@@ -100,7 +94,7 @@ class MountManager implements FilesystemOperator
 
     public function mimeType(string $location): string
     {
-        /** @var FilesystemOperator $filesystem */
+        
         [$filesystem, $path] = $this->determineFilesystemAndPath($location);
 
         try {
@@ -112,7 +106,7 @@ class MountManager implements FilesystemOperator
 
     public function visibility(string $location): string
     {
-        /** @var FilesystemOperator $filesystem */
+        
         [$filesystem, $path] = $this->determineFilesystemAndPath($location);
 
         try {
@@ -124,7 +118,7 @@ class MountManager implements FilesystemOperator
 
     public function write(string $location, string $contents, array $config = []): void
     {
-        /** @var FilesystemOperator $filesystem */
+        
         [$filesystem, $path] = $this->determineFilesystemAndPath($location);
 
         try {
@@ -136,21 +130,21 @@ class MountManager implements FilesystemOperator
 
     public function writeStream(string $location, $contents, array $config = []): void
     {
-        /** @var FilesystemOperator $filesystem */
+        
         [$filesystem, $path] = $this->determineFilesystemAndPath($location);
         $filesystem->writeStream($path, $contents, $config);
     }
 
     public function setVisibility(string $path, string $visibility): void
     {
-        /** @var FilesystemOperator $filesystem */
+        
         [$filesystem, $path] = $this->determineFilesystemAndPath($path);
         $filesystem->setVisibility($path, $visibility);
     }
 
     public function delete(string $location): void
     {
-        /** @var FilesystemOperator $filesystem */
+        
         [$filesystem, $path] = $this->determineFilesystemAndPath($location);
 
         try {
@@ -162,7 +156,7 @@ class MountManager implements FilesystemOperator
 
     public function deleteDirectory(string $location): void
     {
-        /** @var FilesystemOperator $filesystem */
+        
         [$filesystem, $path] = $this->determineFilesystemAndPath($location);
 
         try {
@@ -174,7 +168,7 @@ class MountManager implements FilesystemOperator
 
     public function createDirectory(string $location, array $config = []): void
     {
-        /** @var FilesystemOperator $filesystem */
+        
         [$filesystem, $path] = $this->determineFilesystemAndPath($location);
 
         try {
@@ -186,8 +180,8 @@ class MountManager implements FilesystemOperator
 
     public function move(string $source, string $destination, array $config = []): void
     {
-        /** @var FilesystemOperator $sourceFilesystem */
-        /* @var FilesystemOperator $destinationFilesystem */
+        
+        
         [$sourceFilesystem, $sourcePath] = $this->determineFilesystemAndPath($source);
         [$destinationFilesystem, $destinationPath] = $this->determineFilesystemAndPath($destination);
 
@@ -202,8 +196,8 @@ class MountManager implements FilesystemOperator
 
     public function copy(string $source, string $destination, array $config = []): void
     {
-        /** @var FilesystemOperator $sourceFilesystem */
-        /* @var FilesystemOperator $destinationFilesystem */
+        
+        
         [$sourceFilesystem, $sourcePath] = $this->determineFilesystemAndPath($source);
         [$destinationFilesystem, $destinationPath] = $this->determineFilesystemAndPath($destination);
 
@@ -228,16 +222,13 @@ class MountManager implements FilesystemOperator
     {
         foreach ($filesystems as $key => $filesystem) {
             $this->guardAgainstInvalidMount($key, $filesystem);
-            /* @var string $key */
-            /* @var FilesystemOperator $filesystem */
+            
+            
             $this->mountFilesystem($key, $filesystem);
         }
     }
 
-    /**
-     * @param mixed $key
-     * @param mixed $filesystem
-     */
+    
     private function guardAgainstInvalidMount($key, $filesystem): void
     {
         if ( ! is_string($key)) {
@@ -254,20 +245,16 @@ class MountManager implements FilesystemOperator
         $this->filesystems[$key] = $filesystem;
     }
 
-    /**
-     * @param string $path
-     *
-     * @return array{0:FilesystemOperator, 1:string}
-     */
+    
     private function determineFilesystemAndPath(string $path): array
     {
-        if (strpos($path, '://') < 1) {
+        if (strpos($path, ':
             throw UnableToResolveFilesystemMount::becauseTheSeparatorIsMissing($path);
         }
 
-        /** @var string $mountIdentifier */
-        /** @var string $mountPath */
-        [$mountIdentifier, $mountPath] = explode('://', $path, 2);
+        
+        
+        [$mountIdentifier, $mountPath] = explode(':
 
         if ( ! array_key_exists($mountIdentifier, $this->filesystems)) {
             throw UnableToResolveFilesystemMount::becauseTheMountWasNotRegistered($mountIdentifier);

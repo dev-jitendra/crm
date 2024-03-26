@@ -36,9 +36,7 @@ use function trim;
 
 class AsyncAwsS3Adapter implements FilesystemAdapter
 {
-    /**
-     * @var string[]
-     */
+    
     public const AVAILABLE_OPTIONS = [
         'ACL',
         'CacheControl',
@@ -63,9 +61,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
         'WebsiteRedirectLocation',
     ];
 
-    /**
-     * @var string[]
-     */
+    
     protected const EXTRA_METADATA_FIELDS = [
         'Metadata',
         'StorageClass',
@@ -73,34 +69,22 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
         'VersionId',
     ];
 
-    /**
-     * @var S3Client
-     */
+    
     private $client;
 
-    /**
-     * @var PathPrefixer
-     */
+    
     private $prefixer;
 
-    /**
-     * @var string
-     */
+    
     private $bucket;
 
-    /**
-     * @var VisibilityConverter
-     */
+    
     private $visibility;
 
-    /**
-     * @var MimeTypeDetector
-     */
+    
     private $mimeTypeDetector;
 
-    /**
-     * @param S3Client|SimpleS3Client $client Uploading of files larger than 5GB is only supported with SimpleS3Client
-     */
+    
     public function __construct(
         S3Client $client,
         string $bucket,
@@ -172,7 +156,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
         $objects = [];
         $params = ['Bucket' => $this->bucket, 'Prefix' => $prefix];
         $result = $this->client->listObjectsV2($params);
-        /** @var AwsObject $item */
+        
         foreach ($result->getContents() as $item) {
             $key = $item->getKey();
             if (null !== $key) {
@@ -300,7 +284,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
     public function copy(string $source, string $destination, Config $config): void
     {
         try {
-            /** @var string $visibility */
+            
             $visibility = $this->visibility($source)->visibility();
         } catch (Throwable $exception) {
             throw UnableToCopyFile::fromLocationTo($source, $destination, $exception);
@@ -320,9 +304,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
         }
     }
 
-    /**
-     * @param string|resource $body
-     */
+    
     private function upload(string $path, $body, Config $config): void
     {
         $key = $this->prefixer->prefixPath($path);
@@ -335,7 +317,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
         }
 
         if ($this->client instanceof SimpleS3Client) {
-            // Supports upload of files larger than 5GB
+            
             $this->client->upload($this->bucket, $key, $body, array_merge($options, ['ACL' => $acl]));
         } else {
             $this->client->putObject(array_merge($options, [
@@ -389,9 +371,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
         return $attributes;
     }
 
-    /**
-     * @param HeadObjectOutput|AwsObject|CommonPrefix $item
-     */
+    
     private function mapS3ObjectMetadata($item, string $path = null): StorageAttributes
     {
         if (null === $path) {
@@ -418,7 +398,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
             $dateTime = $item->getLastModified();
             $fileSize = $item->getSize();
         } elseif ($item instanceof CommonPrefix) {
-            // No data available
+            
         } elseif ($item instanceof HeadObjectOutput) {
             $mimeType = $item->getContentType();
             $fileSize = $item->getContentLength();
@@ -435,9 +415,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
         return new FileAttributes($path, $fileSize !== null ? (int) $fileSize : null, null, $lastModified, $mimeType, $metadata);
     }
 
-    /**
-     * @param HeadObjectOutput $metadata
-     */
+    
     private function extractExtraMetadata($metadata): array
     {
         $extracted = [];

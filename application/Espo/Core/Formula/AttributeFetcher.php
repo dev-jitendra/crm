@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Formula;
 
@@ -37,12 +11,10 @@ use Espo\ORM\EntityManager;
 use Espo\Repositories\EmailAddress as EmailAddressRepository;
 use Espo\Repositories\PhoneNumber as PhoneNumberRepository;
 
-/**
- * Fetches attributes from an entity.
- */
+
 class AttributeFetcher
 {
-    /** @var array<string, mixed> */
+    
     private $relatedEntitiesCacheMap = [];
 
     public function __construct(private EntityManager $entityManager) {}
@@ -99,7 +71,7 @@ class AttributeFetcher
     private function load(CoreEntity $entity, string $attribute): void
     {
         if ($entity->getAttributeParam($attribute, 'isParentName')) {
-            /** @var ?string $relationName */
+            
             $relationName = $entity->getAttributeParam($attribute, 'relation');
 
             if ($relationName) {
@@ -110,7 +82,7 @@ class AttributeFetcher
         }
 
         if ($entity->getAttributeParam($attribute, 'isLinkMultipleIdList')) {
-            /** @var ?string $relationName */
+            
             $relationName = $entity->getAttributeParam($attribute, 'relation');
 
             if ($relationName) {
@@ -121,14 +93,14 @@ class AttributeFetcher
         }
 
         if ($entity->getAttributeParam($attribute, 'isEmailAddressData')) {
-            /** @var ?string $fieldName */
+            
             $fieldName = $entity->getAttributeParam($attribute, 'field');
 
             if (!$fieldName) {
                 return;
             }
 
-            /** @var EmailAddressRepository $emailAddressRepository */
+            
             $emailAddressRepository = $this->entityManager->getRepository(EmailAddress::ENTITY_TYPE);
 
             $data = $emailAddressRepository->getEmailAddressData($entity);
@@ -140,14 +112,14 @@ class AttributeFetcher
         }
 
         if ($entity->getAttributeParam($attribute, 'isPhoneNumberData')) {
-            /** @var ?string $fieldName */
+            
             $fieldName = $entity->getAttributeParam($attribute, 'field');
 
             if (!$fieldName) {
                 return;
             }
 
-            /** @var PhoneNumberRepository $phoneNumberRepository */
+            
             $phoneNumberRepository = $this->entityManager->getRepository(PhoneNumber::ENTITY_TYPE);
 
             $data = $phoneNumberRepository->getPhoneNumberData($entity);

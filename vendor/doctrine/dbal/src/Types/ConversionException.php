@@ -17,21 +17,10 @@ use function strlen;
 use function substr;
 use function var_export;
 
-/**
- * Conversion Exception is thrown when the database to PHP conversion fails.
- *
- * @psalm-immutable
- */
+
 class ConversionException extends Exception
 {
-    /**
-     * Thrown when a Database to Doctrine Type Conversion fails.
-     *
-     * @param mixed  $value
-     * @param string $toType
-     *
-     * @return ConversionException
-     */
+    
     public static function conversionFailed($value, $toType, ?Throwable $previous = null)
     {
         $value = strlen($value) > 32 ? substr($value, 0, 20) . '...' : $value;
@@ -39,16 +28,7 @@ class ConversionException extends Exception
         return new self('Could not convert database value "' . $value . '" to Doctrine Type ' . $toType, 0, $previous);
     }
 
-    /**
-     * Thrown when a Database to Doctrine Type Conversion fails and we can make a statement
-     * about the expected format.
-     *
-     * @param mixed  $value
-     * @param string $toType
-     * @param string $expectedFormat
-     *
-     * @return ConversionException
-     */
+    
     public static function conversionFailedFormat($value, $toType, $expectedFormat, ?Throwable $previous = null)
     {
         $value = strlen($value) > 32 ? substr($value, 0, 20) . '...' : $value;
@@ -61,15 +41,7 @@ class ConversionException extends Exception
         );
     }
 
-    /**
-     * Thrown when the PHP value passed to the converter was not of the expected type.
-     *
-     * @param mixed    $value
-     * @param string   $toType
-     * @param string[] $possibleTypes
-     *
-     * @return ConversionException
-     */
+    
     public static function conversionFailedInvalidType(
         $value,
         $toType,
@@ -93,14 +65,8 @@ class ConversionException extends Exception
         ), 0, $previous);
     }
 
-    /**
-     * @param mixed  $value
-     * @param string $format
-     * @param string $error
-     *
-     * @return ConversionException
-     */
-    public static function conversionFailedSerialization($value, $format, $error /*, ?Throwable $previous = null */)
+    
+    public static function conversionFailedSerialization($value, $format, $error )
     {
         $actualType = is_object($value) ? get_class($value) : gettype($value);
 

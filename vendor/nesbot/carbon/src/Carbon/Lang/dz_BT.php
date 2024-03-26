@@ -1,18 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Sherubtse College    bug-glibc@gnu.org
- */
+
+
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [
         'L' => 'པསྱི་ལོYYཟལMMཚེསDD',
@@ -25,19 +15,19 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'day_of_first_week_of_year' => 1,
     'meridiem' => ['ངས་ཆ', 'ཕྱི་ཆ'],
 
-    'year' => ':count ཆརཔ', // less reliable
-    'y' => ':count ཆརཔ', // less reliable
-    'a_year' => ':count ཆརཔ', // less reliable
+    'year' => ':count ཆརཔ', 
+    'y' => ':count ཆརཔ', 
+    'a_year' => ':count ཆརཔ', 
 
-    'month' => ':count ཟླ་བ', // less reliable
-    'm' => ':count ཟླ་བ', // less reliable
-    'a_month' => ':count ཟླ་བ', // less reliable
+    'month' => ':count ཟླ་བ', 
+    'm' => ':count ཟླ་བ', 
+    'a_month' => ':count ཟླ་བ', 
 
-    'day' => ':count ཉི', // less reliable
-    'd' => ':count ཉི', // less reliable
-    'a_day' => ':count ཉི', // less reliable
+    'day' => ':count ཉི', 
+    'd' => ':count ཉི', 
+    'a_day' => ':count ཉི', 
 
-    'second' => ':count ཆ', // less reliable
-    's' => ':count ཆ', // less reliable
-    'a_second' => ':count ཆ', // less reliable
+    'second' => ':count ཆ', 
+    's' => ':count ཆ', 
+    'a_second' => ':count ཆ', 
 ]);

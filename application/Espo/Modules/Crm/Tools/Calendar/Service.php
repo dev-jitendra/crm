@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Modules\Crm\Tools\Calendar;
 
@@ -62,7 +36,7 @@ use RuntimeException;
 class Service
 {
     private const BUSY_RANGES_MAX_RANGE_DAYS = 20;
-    /** @var array<string, string[]> */
+    
     private array $entityTypeCanceledStatusListCacheMap = [];
 
     public function __construct(
@@ -76,13 +50,7 @@ class Service
         private ServiceFactory $serviceFactory
     ) {}
 
-    /**
-     * Fetch events and ranges.
-     *
-     * @return (Event|NonWorkingRange|WorkingRange)[]
-     * @throws NotFound
-     * @throws Forbidden
-     */
+    
     public function fetch(string $userId, FetchParams $fetchParams): array
     {
         $from = $fetchParams->getFrom()->toString();
@@ -90,7 +58,7 @@ class Service
         $scopeList = $fetchParams->getScopeList();
         $skipAcl = $fetchParams->skipAcl();
 
-        /** @var ?User $user */
+        
         $user = $this->entityManager->getEntityById(User::ENTITY_TYPE, $userId);
 
         if (!$user) {
@@ -168,9 +136,7 @@ class Service
         return array_merge($eventList, $workingRangeItemList);
     }
 
-    /**
-     * @throws Forbidden
-     */
+    
     private function accessCheck(Entity $entity): void
     {
         if ($entity instanceof User) {
@@ -195,7 +161,7 @@ class Service
     ): Select {
 
         if ($this->serviceFactory->checkExists($scope)) {
-            // For backward compatibility.
+            
             $service = $this->serviceFactory->create($scope);
 
             if (method_exists($service, 'getCalenderQuery')) {
@@ -520,10 +486,7 @@ class Service
         return $queryBuilder->build();
     }
 
-    /**
-     * @param string[] $userIdList
-     * @return array<string,Item[]>
-     */
+    
     public function fetchTimelineForUsers(array $userIdList, FetchParams $fetchParams): array
     {
         $scopeList = $fetchParams->getScopeList();
@@ -568,12 +531,7 @@ class Service
         return $resultData;
     }
 
-    /**
-     * @param string[] $teamIdList
-     * @return Item[]
-     * @throws Forbidden
-     * @throws NotFound
-     */
+    
     public function fetchForTeams(array $teamIdList, FetchParams $fetchParams): array
     {
         if ($this->acl->getPermissionLevel('userPermission') === Table::LEVEL_NO) {
@@ -610,7 +568,7 @@ class Service
             $userNames[$user->getId()] = $user->getName();
         }
 
-        /** @var Event[] $eventList */
+        
         $eventList = [];
 
         foreach ($userIdList as $userId) {
@@ -656,11 +614,7 @@ class Service
         );
     }
 
-    /**
-     * @param string[] $teamIdList
-     * @param FetchParams $fetchParams
-     * @return NonWorkingRange[]
-     */
+    
     private function fetchWorkingRangeListForTeams(array $teamIdList, FetchParams $fetchParams): array
     {
         $teamList = iterator_to_array(
@@ -699,16 +653,11 @@ class Service
             return [];
         }
 
-        /** @var NonWorkingRange[] */
+        
         return $this->getWorkingRangeList($workingCalendar, $fetchParams);
     }
 
-    /**
-     * Fetch for users.
-     *
-     * @param string[] $userIdList
-     * @return Item[]
-     */
+    
     public function fetchForUsers(array $userIdList, FetchParams $fetchParams): array
     {
         $itemList = [];
@@ -737,12 +686,7 @@ class Service
         return $itemList;
     }
 
-    /**
-     * @param Event[] $ignoreEventList
-     * @return BusyRange[]
-     * @throws NotFound
-     * @throws Forbidden
-     */
+    
     public function fetchBusyRanges(string $userId, FetchParams $fetchParams, array $ignoreEventList = []): array
     {
         $rangeList = [];
@@ -849,9 +793,7 @@ class Service
         );
     }
 
-    /**
-     * @return string[]
-     */
+    
     private function getEntityTypeCanceledStatusList(string $entityType): array
     {
         $this->entityTypeCanceledStatusListCacheMap[$entityType] ??=
@@ -860,9 +802,7 @@ class Service
         return $this->entityTypeCanceledStatusListCacheMap[$entityType];
     }
 
-    /**
-     * @return array<int, WorkingRange|NonWorkingRange>
-     */
+    
     private function getWorkingRangeList(WorkingCalendar $calendar, FetchParams $fetchParams): array
     {
         $from = $fetchParams->getFrom();
@@ -897,12 +837,7 @@ class Service
         return $list;
     }
 
-    /**
-     * @param string[] $userIdList
-     * @return array<string, (BusyRange|NonWorkingRange)[]>
-     * @throws Forbidden
-     * @throws Error
-     */
+    
     public function fetchBusyRangesForUsers(
         array $userIdList,
         DateTimeField $from,
@@ -964,7 +899,7 @@ class Service
 
             $workingCalendar = $this->workingCalendarFactory->createForUser($user);
 
-            /** @var NonWorkingRange[] $workingRangeItemList */
+            
             $workingRangeItemList = $workingCalendar->isAvailable() ?
                 $this->getWorkingRangeList(
                     $workingCalendar,

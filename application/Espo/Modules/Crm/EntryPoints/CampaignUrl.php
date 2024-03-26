@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Modules\Crm\EntryPoints;
 
@@ -60,10 +34,7 @@ class CampaignUrl implements EntryPoint
         private ActionRenderer $actionRenderer
     ) {}
 
-    /**
-     * @throws BadRequest
-     * @throws NotFoundSilent
-     */
+    
     public function run(Request $request, Response $response): void
     {
         $queueItemId = $request->getQueryParam('queueItemId') ?? null;
@@ -76,7 +47,7 @@ class CampaignUrl implements EntryPoint
             throw new BadRequest();
         }
 
-        /** @var ?CampaignTrackingUrl $trackingUrl */
+        
         $trackingUrl = $this->entityManager->getEntityById(CampaignTrackingUrl::ENTITY_TYPE, $trackingUrlId);
 
         if (!$trackingUrl) {
@@ -94,7 +65,7 @@ class CampaignUrl implements EntryPoint
                 throw new BadRequest();
             }
 
-            /** @var ?EmailQueueItem $queueItem */
+            
             $queueItem = $this->entityManager->getEntityById(EmailQueueItem::ENTITY_TYPE, $queueItemId);
 
             if (!$queueItem) {
@@ -148,9 +119,7 @@ class CampaignUrl implements EntryPoint
         }
     }
 
-    /**
-     * @throws NotFoundSilent
-     */
+    
     private function processWithHash(CampaignTrackingUrl $trackingUrl, string $emailAddress, string $hash): void
     {
         $hashActual = $this->hasher->hash($emailAddress);
@@ -177,9 +146,7 @@ class CampaignUrl implements EntryPoint
         }
     }
 
-    /**
-     * @throws NotFoundSilent
-     */
+    
     private function processWithUniqueId(CampaignTrackingUrl $trackingUrl, string $uid, string $hash): void
     {
         $hashActual = $this->hasher->hash($uid);
@@ -208,7 +175,7 @@ class CampaignUrl implements EntryPoint
 
     private function getEmailAddressRepository(): EmailAddressRepository
     {
-        /** @var EmailAddressRepository */
+        
         return $this->entityManager->getRepository(EmailAddress::ENTITY_TYPE);
     }
 }

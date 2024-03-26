@@ -6,45 +6,31 @@ use Doctrine\Deprecations\Deprecation;
 
 use function microtime;
 
-/**
- * Includes executed SQLs in a Debug Stack.
- *
- * @deprecated
- */
+
 class DebugStack implements SQLLogger
 {
-    /**
-     * Executed SQL queries.
-     *
-     * @var array<int, array<string, mixed>>
-     */
+    
     public $queries = [];
 
-    /**
-     * If Debug Stack is enabled (log queries) or not.
-     *
-     * @var bool
-     */
+    
     public $enabled = true;
 
-    /** @var float|null */
+    
     public $start = null;
 
-    /** @var int */
+    
     public $currentQuery = 0;
 
     public function __construct()
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/4967',
+            'https:
             'DebugStack is deprecated.',
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function startQuery($sql, ?array $params = null, ?array $types = null)
     {
         if (! $this->enabled) {
@@ -61,9 +47,7 @@ class DebugStack implements SQLLogger
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function stopQuery()
     {
         if (! $this->enabled) {

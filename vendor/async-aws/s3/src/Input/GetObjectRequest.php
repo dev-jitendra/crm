@@ -10,184 +10,67 @@ use AsyncAws\S3\Enum\RequestPayer;
 
 final class GetObjectRequest extends Input
 {
-    /**
-     * The bucket name containing the object.
-     *
-     * @required
-     *
-     * @var string|null
-     */
+    
     private $bucket;
 
-    /**
-     * Return the object only if its entity tag (ETag) is the same as the one specified, otherwise return a 412
-     * (precondition failed).
-     *
-     * @var string|null
-     */
+    
     private $ifMatch;
 
-    /**
-     * Return the object only if it has been modified since the specified time, otherwise return a 304 (not modified).
-     *
-     * @var \DateTimeImmutable|null
-     */
+    
     private $ifModifiedSince;
 
-    /**
-     * Return the object only if its entity tag (ETag) is different from the one specified, otherwise return a 304 (not
-     * modified).
-     *
-     * @var string|null
-     */
+    
     private $ifNoneMatch;
 
-    /**
-     * Return the object only if it has not been modified since the specified time, otherwise return a 412 (precondition
-     * failed).
-     *
-     * @var \DateTimeImmutable|null
-     */
+    
     private $ifUnmodifiedSince;
 
-    /**
-     * Key of the object to get.
-     *
-     * @required
-     *
-     * @var string|null
-     */
+    
     private $key;
 
-    /**
-     * Downloads the specified range bytes of an object. For more information about the HTTP Range header, see
-     * https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35.
-     *
-     * @see https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35
-     *
-     * @var string|null
-     */
+    
     private $range;
 
-    /**
-     * Sets the `Cache-Control` header of the response.
-     *
-     * @var string|null
-     */
+    
     private $responseCacheControl;
 
-    /**
-     * Sets the `Content-Disposition` header of the response.
-     *
-     * @var string|null
-     */
+    
     private $responseContentDisposition;
 
-    /**
-     * Sets the `Content-Encoding` header of the response.
-     *
-     * @var string|null
-     */
+    
     private $responseContentEncoding;
 
-    /**
-     * Sets the `Content-Language` header of the response.
-     *
-     * @var string|null
-     */
+    
     private $responseContentLanguage;
 
-    /**
-     * Sets the `Content-Type` header of the response.
-     *
-     * @var string|null
-     */
+    
     private $responseContentType;
 
-    /**
-     * Sets the `Expires` header of the response.
-     *
-     * @var \DateTimeImmutable|null
-     */
+    
     private $responseExpires;
 
-    /**
-     * VersionId used to reference a specific version of the object.
-     *
-     * @var string|null
-     */
+    
     private $versionId;
 
-    /**
-     * Specifies the algorithm to use to when encrypting the object (for example, AES256).
-     *
-     * @var string|null
-     */
+    
     private $sseCustomerAlgorithm;
 
-    /**
-     * Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store
-     * the object and then it is discarded; Amazon S3 does not store the encryption key. The key must be appropriate for use
-     * with the algorithm specified in the `x-amz-server-side-encryption-customer-algorithm` header.
-     *
-     * @var string|null
-     */
+    
     private $sseCustomerKey;
 
-    /**
-     * Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a
-     * message integrity check to ensure that the encryption key was transmitted without error.
-     *
-     * @var string|null
-     */
+    
     private $sseCustomerKeyMd5;
 
-    /**
-     * @var null|RequestPayer::*
-     */
+    
     private $requestPayer;
 
-    /**
-     * Part number of the object being read. This is a positive integer between 1 and 10,000. Effectively performs a
-     * 'ranged' GET request for the part specified. Useful for downloading just a part of an object.
-     *
-     * @var int|null
-     */
+    
     private $partNumber;
 
-    /**
-     * The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail
-     * with an HTTP `403 (Access Denied)` error.
-     *
-     * @var string|null
-     */
+    
     private $expectedBucketOwner;
 
-    /**
-     * @param array{
-     *   Bucket?: string,
-     *   IfMatch?: string,
-     *   IfModifiedSince?: \DateTimeImmutable|string,
-     *   IfNoneMatch?: string,
-     *   IfUnmodifiedSince?: \DateTimeImmutable|string,
-     *   Key?: string,
-     *   Range?: string,
-     *   ResponseCacheControl?: string,
-     *   ResponseContentDisposition?: string,
-     *   ResponseContentEncoding?: string,
-     *   ResponseContentLanguage?: string,
-     *   ResponseContentType?: string,
-     *   ResponseExpires?: \DateTimeImmutable|string,
-     *   VersionId?: string,
-     *   SSECustomerAlgorithm?: string,
-     *   SSECustomerKey?: string,
-     *   SSECustomerKeyMD5?: string,
-     *   RequestPayer?: RequestPayer::*,
-     *   PartNumber?: int,
-     *   ExpectedBucketOwner?: string,
-     *   @region?: string,
-     * } $input
-     */
+    
     public function __construct(array $input = [])
     {
         $this->bucket = $input['Bucket'] ?? null;
@@ -263,9 +146,7 @@ final class GetObjectRequest extends Input
         return $this->range;
     }
 
-    /**
-     * @return RequestPayer::*|null
-     */
+    
     public function getRequestPayer(): ?string
     {
         return $this->requestPayer;
@@ -321,12 +202,10 @@ final class GetObjectRequest extends Input
         return $this->versionId;
     }
 
-    /**
-     * @internal
-     */
+    
     public function request(): Request
     {
-        // Prepare headers
+        
         $headers = ['content-type' => 'application/xml'];
         if (null !== $this->ifMatch) {
             $headers['If-Match'] = $this->ifMatch;
@@ -362,7 +241,7 @@ final class GetObjectRequest extends Input
             $headers['x-amz-expected-bucket-owner'] = $this->expectedBucketOwner;
         }
 
-        // Prepare query
+        
         $query = [];
         if (null !== $this->responseCacheControl) {
             $query['response-cache-control'] = $this->responseCacheControl;
@@ -389,7 +268,7 @@ final class GetObjectRequest extends Input
             $query['partNumber'] = (string) $this->partNumber;
         }
 
-        // Prepare URI
+        
         $uri = [];
         if (null === $v = $this->bucket) {
             throw new InvalidArgument(sprintf('Missing parameter "Bucket" for "%s". The value cannot be null.', __CLASS__));
@@ -401,10 +280,10 @@ final class GetObjectRequest extends Input
         $uri['Key'] = $v;
         $uriString = '/' . rawurlencode($uri['Bucket']) . '/' . str_replace('%2F', '/', rawurlencode($uri['Key']));
 
-        // Prepare Body
+        
         $body = '';
 
-        // Return the Request
+        
         return new Request('GET', $uriString, $query, $headers, StreamFactory::create($body));
     }
 
@@ -471,9 +350,7 @@ final class GetObjectRequest extends Input
         return $this;
     }
 
-    /**
-     * @param RequestPayer::*|null $value
-     */
+    
     public function setRequestPayer(?string $value): self
     {
         $this->requestPayer = $value;

@@ -1,18 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Akademe ya Luganda Kizito Birabwa kompyuta@kizito.uklinux.net
- */
+
+
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [
         'L' => 'DD/MM/YY',
@@ -25,9 +15,9 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'first_day_of_week' => 1,
     'day_of_first_week_of_year' => 1,
 
-    'month' => ':count njuba', // less reliable
-    'm' => ':count njuba', // less reliable
-    'a_month' => ':count njuba', // less reliable
+    'month' => ':count njuba', 
+    'm' => ':count njuba', 
+    'a_month' => ':count njuba', 
 
     'year' => ':count mwaaka',
     'y' => ':count mwaaka',

@@ -20,22 +20,7 @@ use function sprintf;
 use const STDERR;
 use const STDOUT;
 
-/**
- * @psalm-type HelpObject = object{
- *     command: string
- * }
- * @psalm-type ErrorObject = object{
- *     command: string,
- *     message: string
- * }
- * @psalm-type ArgumentObject = object{
- *     command: string,
- *     configFile: string,
- *     config: array<array-key, mixed>,
- *     class: string,
- *     ignoreUnresolved: bool
- * }
- */
+
 class ConfigDumperCommand
 {
     public const COMMAND_DUMP  = 'dump';
@@ -68,18 +53,13 @@ EOH;
 
     private ConsoleHelper $helper;
 
-    /**
-     * @param string $scriptName
-     */
+    
     public function __construct(private $scriptName = self::DEFAULT_SCRIPT_NAME, ?ConsoleHelper $helper = null)
     {
         $this->helper = $helper ?: new ConsoleHelper();
     }
 
-    /**
-     * @param array $args Argument list, minus script name
-     * @return int Exit status
-     */
+    
     public function __invoke(array $args)
     {
         $arguments = $this->parseArgs($args);
@@ -93,7 +73,7 @@ EOH;
                 $this->help(STDERR);
                 return 1;
             case self::COMMAND_DUMP:
-                // fall-through
+                
             default:
                 break;
         }
@@ -124,9 +104,7 @@ EOH;
         return 0;
     }
 
-    /**
-     * @return object
-     */
+    
     private function parseArgs(array $args)
     {
         if (! $args) {
@@ -163,7 +141,7 @@ EOH;
 
                 break;
             case false:
-                // fall-through
+                
             default:
                 if (! is_writable(dirname($configFile))) {
                     return $this->createErrorArgument(sprintf(
@@ -188,10 +166,7 @@ EOH;
         return $this->createArguments(self::COMMAND_DUMP, $configFile, $config, $class, $ignoreUnresolved);
     }
 
-    /**
-     * @param resource $resource Defaults to STDOUT
-     * @return void
-     */
+    
     private function help($resource = STDOUT)
     {
         $this->helper->writeLine(sprintf(
@@ -200,15 +175,7 @@ EOH;
         ), true, $resource);
     }
 
-    /**
-     * @param string $command
-     * @param string $configFile File from which config originates, and to
-     *     which it will be written.
-     * @param array $config Parsed configuration.
-     * @param string $class Name of class to reflect.
-     * @param bool $ignoreUnresolved If to ignore classes with unresolved direct dependencies.
-     * @return ArgumentObject
-     */
+    
     private function createArguments($command, $configFile, $config, $class, $ignoreUnresolved)
     {
         return (object) [
@@ -220,10 +187,7 @@ EOH;
         ];
     }
 
-    /**
-     * @param string $message
-     * @return ErrorObject
-     */
+    
     private function createErrorArgument($message)
     {
         return (object) [
@@ -232,9 +196,7 @@ EOH;
         ];
     }
 
-    /**
-     * @return HelpObject
-     */
+    
     private function createHelpArgument()
     {
         return (object) [

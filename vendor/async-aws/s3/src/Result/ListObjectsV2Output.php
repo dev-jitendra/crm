@@ -12,83 +12,46 @@ use AsyncAws\S3\ValueObject\AwsObject;
 use AsyncAws\S3\ValueObject\CommonPrefix;
 use AsyncAws\S3\ValueObject\Owner;
 
-/**
- * @implements \IteratorAggregate<AwsObject|CommonPrefix>
- */
+
 class ListObjectsV2Output extends Result implements \IteratorAggregate
 {
-    /**
-     * Set to false if all of the results were returned. Set to true if more keys are available to return. If the number of
-     * results exceeds that specified by MaxKeys, all of the results might not be returned.
-     */
+    
     private $isTruncated;
 
-    /**
-     * Metadata about each object returned.
-     */
+    
     private $contents = [];
 
-    /**
-     * The bucket name.
-     */
+    
     private $name;
 
-    /**
-     * Keys that begin with the indicated prefix.
-     */
+    
     private $prefix;
 
-    /**
-     * Causes keys that contain the same string between the prefix and the first occurrence of the delimiter to be rolled up
-     * into a single result element in the CommonPrefixes collection. These rolled-up keys are not returned elsewhere in the
-     * response. Each rolled-up result counts as only one return against the `MaxKeys` value.
-     */
+    
     private $delimiter;
 
-    /**
-     * Sets the maximum number of keys returned in the response. By default the API returns up to 1,000 key names. The
-     * response might contain fewer keys but will never contain more.
-     */
+    
     private $maxKeys;
 
-    /**
-     * All of the keys rolled up into a common prefix count as a single return when calculating the number of returns.
-     */
+    
     private $commonPrefixes = [];
 
-    /**
-     * Encoding type used by Amazon S3 to encode object key names in the XML response.
-     */
+    
     private $encodingType;
 
-    /**
-     * KeyCount is the number of keys returned with this request. KeyCount will always be less than equals to MaxKeys field.
-     * Say you ask for 50 keys, your result will include less than equals 50 keys.
-     */
+    
     private $keyCount;
 
-    /**
-     * If ContinuationToken was sent with the request, it is included in the response.
-     */
+    
     private $continuationToken;
 
-    /**
-     * `NextContinuationToken` is sent when `isTruncated` is true, which means there are more keys in the bucket that can be
-     * listed. The next list requests to Amazon S3 can be continued with this `NextContinuationToken`.
-     * `NextContinuationToken` is obfuscated and is not a real key.
-     */
+    
     private $nextContinuationToken;
 
-    /**
-     * If StartAfter was sent with the request, it is included in the response.
-     */
+    
     private $startAfter;
 
-    /**
-     * @param bool $currentPageOnly When true, iterates over items of the current page. Otherwise also fetch items in the next pages.
-     *
-     * @return iterable<CommonPrefix>
-     */
+    
     public function getCommonPrefixes(bool $currentPageOnly = false): iterable
     {
         if ($currentPageOnly) {
@@ -127,11 +90,7 @@ class ListObjectsV2Output extends Result implements \IteratorAggregate
         }
     }
 
-    /**
-     * @param bool $currentPageOnly When true, iterates over items of the current page. Otherwise also fetch items in the next pages.
-     *
-     * @return iterable<AwsObject>
-     */
+    
     public function getContents(bool $currentPageOnly = false): iterable
     {
         if ($currentPageOnly) {
@@ -184,9 +143,7 @@ class ListObjectsV2Output extends Result implements \IteratorAggregate
         return $this->delimiter;
     }
 
-    /**
-     * @return EncodingType::*|null
-     */
+    
     public function getEncodingType(): ?string
     {
         $this->initialize();
@@ -201,11 +158,7 @@ class ListObjectsV2Output extends Result implements \IteratorAggregate
         return $this->isTruncated;
     }
 
-    /**
-     * Iterates over Contents then CommonPrefixes.
-     *
-     * @return \Traversable<AwsObject|CommonPrefix>
-     */
+    
     public function getIterator(): \Traversable
     {
         $client = $this->awsClient;
@@ -297,9 +250,7 @@ class ListObjectsV2Output extends Result implements \IteratorAggregate
         $this->startAfter = ($v = $data->StartAfter) ? (string) $v : null;
     }
 
-    /**
-     * @return CommonPrefix[]
-     */
+    
     private function populateResultCommonPrefixList(\SimpleXMLElement $xml): array
     {
         $items = [];
@@ -312,9 +263,7 @@ class ListObjectsV2Output extends Result implements \IteratorAggregate
         return $items;
     }
 
-    /**
-     * @return AwsObject[]
-     */
+    
     private function populateResultObjectList(\SimpleXMLElement $xml): array
     {
         $items = [];

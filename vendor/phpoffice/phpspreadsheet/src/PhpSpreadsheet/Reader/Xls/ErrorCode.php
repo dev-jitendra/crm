@@ -14,13 +14,7 @@ class ErrorCode
         0x2A => '#N/A',
     ];
 
-    /**
-     * Map error code, e.g. '#N/A'.
-     *
-     * @param int $code
-     *
-     * @return bool|string
-     */
+    
     public static function lookup($code)
     {
         if (isset(self::$map[$code])) {

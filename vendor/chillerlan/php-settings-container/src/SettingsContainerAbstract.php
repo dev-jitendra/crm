@@ -1,12 +1,5 @@
 <?php
-/**
- * Class SettingsContainerAbstract
- *
- * @created      28.08.2018
- * @author       Smiley <smiley@chillerlan.net>
- * @copyright    2018 Smiley
- * @license      MIT
- */
+
 
 namespace chillerlan\Settings;
 
@@ -17,9 +10,7 @@ use const JSON_THROW_ON_ERROR;
 
 abstract class SettingsContainerAbstract implements SettingsContainerInterface{
 
-	/**
-	 * SettingsContainerAbstract constructor.
-	 */
+	
 	public function __construct(iterable $properties = null){
 
 		if(!empty($properties)){
@@ -29,10 +20,7 @@ abstract class SettingsContainerAbstract implements SettingsContainerInterface{
 		$this->construct();
 	}
 
-	/**
-	 * calls a method with trait name as replacement constructor for each used trait
-	 * (remember pre-php5 classname constructors? yeah, basically this.)
-	 */
+	
 	protected function construct():void{
 		$traits = (new ReflectionClass($this))->getTraits();
 
@@ -46,9 +34,7 @@ abstract class SettingsContainerAbstract implements SettingsContainerInterface{
 
 	}
 
-	/**
-	 * @inheritdoc
-	 */
+	
 	public function __get(string $property){
 
 		if(!property_exists($this, $property) || $this->isPrivate($property)){
@@ -64,9 +50,7 @@ abstract class SettingsContainerAbstract implements SettingsContainerInterface{
 		return $this->{$property};
 	}
 
-	/**
-	 * @inheritdoc
-	 */
+	
 	public function __set(string $property, $value):void{
 
 		if(!property_exists($this, $property) || $this->isPrivate($property)){
@@ -84,23 +68,17 @@ abstract class SettingsContainerAbstract implements SettingsContainerInterface{
 		$this->{$property} = $value;
 	}
 
-	/**
-	 * @inheritdoc
-	 */
+	
 	public function __isset(string $property):bool{
 		return isset($this->{$property}) && !$this->isPrivate($property);
 	}
 
-	/**
-	 * @internal Checks if a property is private
-	 */
+	
 	protected function isPrivate(string $property):bool{
 		return (new ReflectionProperty($this, $property))->isPrivate();
 	}
 
-	/**
-	 * @inheritdoc
-	 */
+	
 	public function __unset(string $property):void{
 
 		if($this->__isset($property)){
@@ -109,23 +87,17 @@ abstract class SettingsContainerAbstract implements SettingsContainerInterface{
 
 	}
 
-	/**
-	 * @inheritdoc
-	 */
+	
 	public function __toString():string{
 		return $this->toJSON();
 	}
 
-	/**
-	 * @inheritdoc
-	 */
+	
 	public function toArray():array{
 		return get_object_vars($this);
 	}
 
-	/**
-	 * @inheritdoc
-	 */
+	
 	public function fromIterable(iterable $properties):SettingsContainerInterface{
 
 		foreach($properties as $key => $value){
@@ -135,25 +107,19 @@ abstract class SettingsContainerAbstract implements SettingsContainerInterface{
 		return $this;
 	}
 
-	/**
-	 * @inheritdoc
-	 */
+	
 	public function toJSON(int $jsonOptions = null):string{
 		return json_encode($this, $jsonOptions ?? 0);
 	}
 
-	/**
-	 * @inheritdoc
-	 */
+	
 	public function fromJSON(string $json):SettingsContainerInterface{
 		$data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
 
 		return $this->fromIterable($data);
 	}
 
-	/**
-	 * @inheritdoc
-	 */
+	
 	#[\ReturnTypeWillChange]
 	public function jsonSerialize():array{
 		return $this->toArray();

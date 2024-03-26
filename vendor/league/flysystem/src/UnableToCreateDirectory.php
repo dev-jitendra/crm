@@ -9,9 +9,7 @@ use Throwable;
 
 final class UnableToCreateDirectory extends RuntimeException implements FilesystemOperationFailed
 {
-    /**
-     * @var string
-     */
+    
     private $location;
 
     public static function atLocation(string $dirname, string $errorMessage = ''): UnableToCreateDirectory

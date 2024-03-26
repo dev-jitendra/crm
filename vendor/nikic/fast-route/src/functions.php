@@ -3,12 +3,7 @@
 namespace FastRoute;
 
 if (!function_exists('FastRoute\simpleDispatcher')) {
-    /**
-     * @param callable $routeDefinitionCallback
-     * @param array $options
-     *
-     * @return Dispatcher
-     */
+    
     function simpleDispatcher(callable $routeDefinitionCallback, array $options = [])
     {
         $options += [
@@ -18,7 +13,7 @@ if (!function_exists('FastRoute\simpleDispatcher')) {
             'routeCollector' => 'FastRoute\\RouteCollector',
         ];
 
-        /** @var RouteCollector $routeCollector */
+        
         $routeCollector = new $options['routeCollector'](
             new $options['routeParser'], new $options['dataGenerator']
         );
@@ -27,12 +22,7 @@ if (!function_exists('FastRoute\simpleDispatcher')) {
         return new $options['dispatcher']($routeCollector->getData());
     }
 
-    /**
-     * @param callable $routeDefinitionCallback
-     * @param array $options
-     *
-     * @return Dispatcher
-     */
+    
     function cachedDispatcher(callable $routeDefinitionCallback, array $options = [])
     {
         $options += [
@@ -60,7 +50,7 @@ if (!function_exists('FastRoute\simpleDispatcher')) {
         );
         $routeDefinitionCallback($routeCollector);
 
-        /** @var RouteCollector $routeCollector */
+        
         $dispatchData = $routeCollector->getData();
         if (!$options['cacheDisabled']) {
             file_put_contents(

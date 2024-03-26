@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Controllers;
 
@@ -50,13 +24,7 @@ class Layout
         private InjectableFactory $injectableFactory
     ) {}
 
-    /**
-     * @return mixed
-     * @throws Forbidden
-     * @throws NotFound
-     * @throws Error
-     * @throws BadRequest
-     */
+    
     public function getActionRead(Request $request)
     {
         $params = $request->getRouteParams();
@@ -71,13 +39,7 @@ class Layout
         return $this->service->getForFrontend($scope, $name);
     }
 
-    /**
-     * @return mixed
-     * @throws Forbidden
-     * @throws BadRequest
-     * @throws NotFound
-     * @throws Error
-     */
+    
     public function putActionUpdate(Request $request)
     {
         $params = $request->getRouteParams();
@@ -103,13 +65,7 @@ class Layout
         return $this->service->update($scope, $name, $setId, $data);
     }
 
-    /**
-     * @return array<int, mixed>|stdClass|null
-     * @throws Forbidden
-     * @throws BadRequest
-     * @throws NotFound
-     * @throws Error
-     */
+    
     public function postActionResetToDefault(Request $request)
     {
         $data = $request->getParsedBody();
@@ -125,13 +81,7 @@ class Layout
         return $this->service->resetToDefault($data->scope, $data->name, $data->setId ?? null);
     }
 
-    /**
-     * @return array<int, mixed>|stdClass|null
-     * @throws BadRequest
-     * @throws Forbidden
-     * @throws NotFound
-     * @throws Error
-     */
+    
     public function getActionGetOriginal(Request $request)
     {
         if (!$this->user->isAdmin()) {
@@ -149,11 +99,7 @@ class Layout
         return $this->service->getOriginal($scope, $name, $setId);
     }
 
-    /**
-     * @throws Forbidden
-     * @throws BadRequest
-     * @throws Conflict
-     */
+    
     public function postActionCreate(Request $request): bool
     {
         if (!$this->user->isAdmin()) {
@@ -189,10 +135,7 @@ class Layout
         return true;
     }
 
-    /**
-     * @throws Forbidden
-     * @throws BadRequest
-     */
+    
     public function postActionDelete(Request $request): bool
     {
         if (!$this->user->isAdmin()) {

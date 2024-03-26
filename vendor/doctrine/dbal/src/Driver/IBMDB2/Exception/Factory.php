@@ -8,20 +8,10 @@ use Doctrine\DBAL\Driver\AbstractException;
 
 use function preg_match;
 
-/**
- * @internal
- *
- * @psalm-immutable
- */
+
 final class Factory
 {
-    /**
-     * @param callable(int): T $constructor
-     *
-     * @return T
-     *
-     * @template T of AbstractException
-     */
+    
     public static function create(string $message, callable $constructor): AbstractException
     {
         $code = 0;

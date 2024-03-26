@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\EntryPoints;
 
@@ -45,7 +19,7 @@ class Avatar extends Image
 {
     protected string $systemColor = '#a4b5bd';
 
-    /** @var array<int, string|array{int, int, int}> */
+    
     protected $colorList = [
         [111, 168, 214],
         [237, 197, 85],
@@ -58,9 +32,7 @@ class Avatar extends Image
         '#E8AF64',
     ];
 
-    /**
-     * @return string|array{int, int, int}
-     */
+    
     private function getColor(string $hash)
     {
         $length = strlen($hash);
@@ -84,13 +56,7 @@ class Avatar extends Image
         return $colorList[$index];
     }
 
-    /**
-     * @throws BadRequest
-     * @throws Error
-     * @throws NotFoundSilent
-     * @throws ForbiddenSilent
-     * @throws NotFound
-     */
+    
     public function run(Request $request, Response $response): void
     {
         $userId = $request->getQueryParam('id');
@@ -100,7 +66,7 @@ class Avatar extends Image
             throw new BadRequest();
         }
 
-        /** @var ?User $user */
+        
         $user = $this->entityManager->getEntityById(User::ENTITY_TYPE, $userId);
 
         if (!$user) {
@@ -148,9 +114,7 @@ class Avatar extends Image
         $response->writeBody($imgContent);
     }
 
-    /**
-     * @throws Error
-     */
+    
     private function renderBlank(Response $response): void
     {
         ob_start();

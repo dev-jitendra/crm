@@ -17,9 +17,7 @@ class SheetViewOptions extends BaseParserClass
         $this->worksheetXml = $worksheetXml;
     }
 
-    /**
-     * @param bool $readDataOnly
-     */
+    
     public function load($readDataOnly = false): void
     {
         if ($this->worksheetXml === null) {

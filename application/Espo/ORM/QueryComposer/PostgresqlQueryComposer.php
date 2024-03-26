@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\ORM\QueryComposer;
 
@@ -48,7 +22,7 @@ class PostgresqlQueryComposer extends BaseQueryComposer
     protected bool $indexHints = false;
     protected int $aliasMaxLength = 128;
 
-    /** @var array<string, string> */
+    
     protected array $comparisonOperatorMap = [
         '!=s' => 'NOT IN',
         '=s' => 'IN',
@@ -69,7 +43,7 @@ class PostgresqlQueryComposer extends BaseQueryComposer
         '=all' => '= ALL',
     ];
 
-    /** @var array<string, string> */
+    
     protected array $comparisonFunctionOperatorMap = [
         'LIKE' => 'ILIKE',
         'NOT_LIKE' => 'NOT ILIKE',
@@ -93,11 +67,7 @@ class PostgresqlQueryComposer extends BaseQueryComposer
         return implode('.', $list);
     }
 
-    /**
-     * @todo Make protected.
-     *
-     * @param mixed $value
-     */
+    
     public function quote($value): string
     {
         if (is_null($value)) {
@@ -119,10 +89,7 @@ class PostgresqlQueryComposer extends BaseQueryComposer
         return $this->pdo->quote($value);
     }
 
-    /**
-     * @param string[] $argumentPartList
-     * @param array<string, mixed> $params
-     */
+    
     protected function getFunctionPart(
         string $function,
         string $part,
@@ -176,7 +143,7 @@ class PostgresqlQueryComposer extends BaseQueryComposer
         }
 
         if ($function === 'BINARY') {
-            // Not supported.
+            
             return $argumentPartList[0] ?? '0';
         }
 
@@ -281,7 +248,7 @@ class PostgresqlQueryComposer extends BaseQueryComposer
             case 'WEEK_NUMBER_0':
             case 'WEEK_NUMBER':
             case 'WEEK_NUMBER_1':
-                // Monday week-start not implemented.
+                
                 return "TO_CHAR($part, 'IW')::INTEGER";
 
             case 'HOUR_NUMBER':
@@ -473,9 +440,7 @@ class PostgresqlQueryComposer extends BaseQueryComposer
         return $sql;
     }
 
-    /**
-     * @return string[]
-     */
+    
     private function getEntityUniqueColumns(string $entityType): array
     {
         $indexes = $this->metadata
@@ -492,10 +457,7 @@ class PostgresqlQueryComposer extends BaseQueryComposer
         return ['id'];
     }
 
-    /**
-     * @param array<string, mixed> $values
-     * @param array<string, mixed> $params
-     */
+    
     protected function getSetPart(Entity $entity, array $values, array $params): string
     {
         if (!count($values)) {
@@ -523,7 +485,7 @@ class PostgresqlQueryComposer extends BaseQueryComposer
             else {
                 $column = $this->toDb($this->sanitize($attribute));
 
-                $left = $this->quoteColumn("{$column}"); // Diff.
+                $left = $this->quoteColumn("{$column}"); 
             }
 
             $right = $isNotValue ?

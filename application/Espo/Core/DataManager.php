@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core;
 
@@ -48,9 +22,7 @@ use Espo\Core\Utils\Config\MissingDefaultParamsSaver as ConfigMissingDefaultPara
 
 use Throwable;
 
-/**
- * Clears cache, rebuilds the application.
- */
+
 class DataManager
 {
     private string $cachePath = 'data/cache';
@@ -72,12 +44,7 @@ class DataManager
         private InjectableFactory $injectableFactory
     ) {}
 
-    /**
-     * Rebuild the system with metadata, database and cache clearing.
-     *
-     * @param ?string[] $entityTypeList
-     * @throws Error
-     */
+    
     public function rebuild(?array $entityTypeList = null): void
     {
         $this->clearCache();
@@ -91,11 +58,7 @@ class DataManager
         $this->enableHooks();
     }
 
-    /**
-     * Clear cache.
-     *
-     * @throws Error
-     */
+    
     public function clearCache(): void
     {
         $this->module->clearCache();
@@ -109,13 +72,7 @@ class DataManager
         $this->updateCacheTimestamp();
     }
 
-    /**
-     * Rebuild database.
-     *
-     * @param ?string[] $entityTypeList
-     * @param RebuildMode::* $mode
-     * @throws Error
-     */
+    
     public function rebuildDatabase(?array $entityTypeList = null, string $mode = RebuildMode::SOFT): void
     {
         $schemaManager = $this->schemaManager;
@@ -158,9 +115,7 @@ class DataManager
         $this->configWriter->save();
     }
 
-    /**
-     * Rebuild metadata.
-     */
+    
     public function rebuildMetadata(): void
     {
         $this->metadata->init(true);
@@ -170,18 +125,14 @@ class DataManager
         $this->updateCacheTimestamp();
     }
 
-    /**
-     * Update cache timestamp.
-     */
+    
     public function updateCacheTimestamp(): void
     {
         $this->configWriter->updateCacheTimestamp();
         $this->configWriter->save();
     }
 
-    /**
-     * Update app timestamp.
-     */
+    
     public function updateAppTimestamp(): void
     {
         $this->configWriter->set('appTimestamp', time());
@@ -240,9 +191,7 @@ class DataManager
         $this->hookManager->enable();
     }
 
-    /**
-     * @throws Error
-     */
+    
     private function checkModules(): void
     {
         $moduleNameList = $this->module->getList();

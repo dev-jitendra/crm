@@ -1,26 +1,10 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Polyfill\Intl\Normalizer;
 
-/**
- * Normalizer is a PHP fallback implementation of the Normalizer class provided by the intl extension.
- *
- * It has been validated with Unicode 6.3 Normalization Conformance Test.
- * See http://www.unicode.org/reports/tr15/ for detailed info about Unicode normalizations.
- *
- * @author Nicolas Grekas <p@tchwork.com>
- *
- * @internal
- */
+
 class Normalizer
 {
     public const FORM_D = \Normalizer::FORM_D;
@@ -47,7 +31,7 @@ class Normalizer
         if (!isset($s[strspn($s, self::$ASCII)])) {
             return true;
         }
-        if (self::NFC == $form && preg_match('//u', $s) && !preg_match('/[^\x00-\x{2FF}]/u', $s)) {
+        if (self::NFC == $form && preg_match('
             return true;
         }
 
@@ -56,7 +40,7 @@ class Normalizer
 
     public static function normalize(string $s, int $form = self::FORM_C)
     {
-        if (!preg_match('//u', $s)) {
+        if (!preg_match('
             return false;
         }
 
@@ -90,7 +74,7 @@ class Normalizer
             self::$cC = self::getData('combiningClass');
         }
 
-        if (null !== $mbEncoding = (2 /* MB_OVERLOAD_STRING */ & (int) \ini_get('mbstring.func_overload')) ? mb_internal_encoding() : null) {
+        if (null !== $mbEncoding = (2  & (int) \ini_get('mbstring.func_overload')) ? mb_internal_encoding() : null) {
             mb_internal_encoding('8bit');
         }
 
@@ -127,7 +111,7 @@ class Normalizer
 
         while ($i < $len) {
             if ($s[$i] < "\x80") {
-                // ASCII chars
+                
 
                 if ($tail) {
                     $lastUchr .= $tail;
@@ -152,7 +136,7 @@ class Normalizer
             if ($lastUchr < "\xE1\x84\x80" || "\xE1\x84\x92" < $lastUchr
                 || $uchr < "\xE1\x85\xA1" || "\xE1\x85\xB5" < $uchr
                 || $lastUcls) {
-                // Table lookup and combining chars composition
+                
 
                 $ucls = $combClass[$uchr] ?? 0;
 
@@ -170,7 +154,7 @@ class Normalizer
                     $lastUchr = $uchr;
                 }
             } else {
-                // Hangul chars
+                
 
                 $L = \ord($lastUchr[2]) - 0x80;
                 $V = \ord($uchr[2]) - 0xA1;
@@ -212,7 +196,7 @@ class Normalizer
 
         while ($i < $len) {
             if ($s[$i] < "\x80") {
-                // ASCII chars
+                
 
                 if ($c) {
                     ksort($c);
@@ -231,7 +215,7 @@ class Normalizer
             $i += $ulen;
 
             if ($uchr < "\xEA\xB0\x80" || "\xED\x9E\xA3" < $uchr) {
-                // Table lookup
+                
 
                 if ($uchr !== $j = $compatMap[$uchr] ?? ($decompMap[$uchr] ?? $uchr)) {
                     $uchr = $j;
@@ -240,7 +224,7 @@ class Normalizer
                     $ulen = $uchr[0] < "\x80" ? 1 : $ulenMask[$uchr[0] & "\xF0"];
 
                     if ($ulen != $j) {
-                        // Put trailing chars in $s
+                        
 
                         $j -= $ulen;
                         $i -= $j;
@@ -259,7 +243,7 @@ class Normalizer
                     }
                 }
                 if (isset($combClass[$uchr])) {
-                    // Combining chars, for sorting
+                    
 
                     if (!isset($c[$combClass[$uchr]])) {
                         $c[$combClass[$uchr]] = '';
@@ -268,7 +252,7 @@ class Normalizer
                     continue;
                 }
             } else {
-                // Hangul chars
+                
 
                 $uchr = unpack('C*', $uchr);
                 $j = (($uchr[1] - 224) << 12) + (($uchr[2] - 128) << 6) + $uchr[3] - 0xAC80;

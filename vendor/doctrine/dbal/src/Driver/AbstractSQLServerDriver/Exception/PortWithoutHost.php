@@ -6,11 +6,7 @@ namespace Doctrine\DBAL\Driver\AbstractSQLServerDriver\Exception;
 
 use Doctrine\DBAL\Driver\AbstractException;
 
-/**
- * @internal
- *
- * @psalm-immutable
- */
+
 final class PortWithoutHost extends AbstractException
 {
     public static function new(): self

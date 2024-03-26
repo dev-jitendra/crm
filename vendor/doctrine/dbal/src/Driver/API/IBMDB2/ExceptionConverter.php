@@ -18,11 +18,7 @@ use Doctrine\DBAL\Exception\TableNotFoundException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\DBAL\Query;
 
-/**
- * @internal
- *
- * @link https://www.ibm.com/docs/en/db2/11.5?topic=messages-sql
- */
+
 final class ExceptionConverter implements ExceptionConverterInterface
 {
     public function convert(Exception $exception, ?Query $query): DriverException

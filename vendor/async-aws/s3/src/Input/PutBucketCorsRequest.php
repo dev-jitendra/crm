@@ -10,53 +10,19 @@ use AsyncAws\S3\ValueObject\CORSConfiguration;
 
 final class PutBucketCorsRequest extends Input
 {
-    /**
-     * Specifies the bucket impacted by the `cors`configuration.
-     *
-     * @required
-     *
-     * @var string|null
-     */
+    
     private $bucket;
 
-    /**
-     * Describes the cross-origin access configuration for objects in an Amazon S3 bucket. For more information, see
-     * Enabling Cross-Origin Resource Sharing in the *Amazon Simple Storage Service Developer Guide*.
-     *
-     * @see https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html
-     * @required
-     *
-     * @var CORSConfiguration|null
-     */
+    
     private $corsConfiguration;
 
-    /**
-     * The base64-encoded 128-bit MD5 digest of the data. This header must be used as a message integrity check to verify
-     * that the request body was not corrupted in transit. For more information, go to RFC 1864.
-     *
-     * @see http://www.ietf.org/rfc/rfc1864.txt
-     *
-     * @var string|null
-     */
+    
     private $contentMd5;
 
-    /**
-     * The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail
-     * with an HTTP `403 (Access Denied)` error.
-     *
-     * @var string|null
-     */
+    
     private $expectedBucketOwner;
 
-    /**
-     * @param array{
-     *   Bucket?: string,
-     *   CORSConfiguration?: CORSConfiguration|array,
-     *   ContentMD5?: string,
-     *   ExpectedBucketOwner?: string,
-     *   @region?: string,
-     * } $input
-     */
+    
     public function __construct(array $input = [])
     {
         $this->bucket = $input['Bucket'] ?? null;
@@ -91,12 +57,10 @@ final class PutBucketCorsRequest extends Input
         return $this->expectedBucketOwner;
     }
 
-    /**
-     * @internal
-     */
+    
     public function request(): Request
     {
-        // Prepare headers
+        
         $headers = ['content-type' => 'application/xml'];
         if (null !== $this->contentMd5) {
             $headers['Content-MD5'] = $this->contentMd5;
@@ -105,10 +69,10 @@ final class PutBucketCorsRequest extends Input
             $headers['x-amz-expected-bucket-owner'] = $this->expectedBucketOwner;
         }
 
-        // Prepare query
+        
         $query = [];
 
-        // Prepare URI
+        
         $uri = [];
         if (null === $v = $this->bucket) {
             throw new InvalidArgument(sprintf('Missing parameter "Bucket" for "%s". The value cannot be null.', __CLASS__));
@@ -116,14 +80,14 @@ final class PutBucketCorsRequest extends Input
         $uri['Bucket'] = $v;
         $uriString = '/' . rawurlencode($uri['Bucket']) . '?cors';
 
-        // Prepare Body
+        
 
         $document = new \DOMDocument('1.0', 'UTF-8');
         $document->formatOutput = false;
         $this->requestBody($document, $document);
         $body = $document->hasChildNodes() ? $document->saveXML() : '';
 
-        // Return the Request
+        
         return new Request('PUT', $uriString, $query, $headers, StreamFactory::create($body));
     }
 
@@ -162,7 +126,7 @@ final class PutBucketCorsRequest extends Input
         }
 
         $node->appendChild($child = $document->createElement('CORSConfiguration'));
-        $child->setAttribute('xmlns', 'http://s3.amazonaws.com/doc/2006-03-01/');
+        $child->setAttribute('xmlns', 'http:
         $v->requestBody($child, $document);
     }
 }

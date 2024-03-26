@@ -22,11 +22,7 @@ class LU
         $this->buildPivot();
     }
 
-    /**
-     * Get lower triangular factor.
-     *
-     * @return Matrix Lower triangular factor
-     */
+    
     public function getL(): Matrix
     {
         $lower = [];
@@ -47,11 +43,7 @@ class LU
         return new Matrix($lower);
     }
 
-    /**
-     * Get upper triangular factor.
-     *
-     * @return Matrix Upper triangular factor
-     */
+    
     public function getU(): Matrix
     {
         $upper = [];
@@ -70,11 +62,7 @@ class LU
         return new Matrix($upper);
     }
 
-    /**
-     * Return pivot permutation vector.
-     *
-     * @return Matrix Pivot matrix
-     */
+    
     public function getP(): Matrix
     {
         $pMatrix = [];
@@ -89,21 +77,13 @@ class LU
         return new Matrix($pMatrix);
     }
 
-    /**
-     * Return pivot permutation vector.
-     *
-     * @return array Pivot vector
-     */
+    
     public function getPivot(): array
     {
         return $this->pivot;
     }
 
-    /**
-     *    Is the matrix nonsingular?
-     *
-     * @return bool true if U, and hence A, is nonsingular
-     */
+    
     public function isNonsingular(): bool
     {
         for ($diagonal = 0; $diagonal < $this->columns; ++$diagonal) {
@@ -152,7 +132,7 @@ class LU
     {
         for ($row = 0; $row < $this->rows; ++$row) {
             $luRow = $this->luMatrix[$row];
-            // Most of the time is spent in the following dot product.
+            
             $kmax = min($row, $column);
             $sValue = 0.0;
             for ($kValue = 0; $kValue < $kmax; ++$kValue) {
@@ -207,15 +187,7 @@ class LU
         return $X;
     }
 
-    /**
-     * Solve A*X = B.
-     *
-     * @param Matrix $B a Matrix with as many rows as A and any number of columns
-     *
-     * @throws Exception
-     *
-     * @return Matrix X so that L*U*X = B(piv,:)
-     */
+    
     public function solve(Matrix $B): Matrix
     {
         if ($B->rows !== $this->rows) {
@@ -230,11 +202,11 @@ class LU
             throw new Exception('Can only perform operation on singular matrix');
         }
 
-        // Copy right hand side with pivoting
+        
         $nx = $B->columns;
         $X = $this->pivotB($B);
 
-        // Solve L*Y = B(piv,:)
+        
         for ($k = 0; $k < $this->columns; ++$k) {
             for ($i = $k + 1; $i < $this->columns; ++$i) {
                 for ($j = 0; $j < $nx; ++$j) {
@@ -243,7 +215,7 @@ class LU
             }
         }
 
-        // Solve U*X = Y;
+        
         for ($k = $this->columns - 1; $k >= 0; --$k) {
             for ($j = 0; $j < $nx; ++$j) {
                 $X[$k][$j] /= $this->luMatrix[$k][$k];

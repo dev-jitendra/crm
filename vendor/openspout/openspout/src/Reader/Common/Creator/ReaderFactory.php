@@ -11,19 +11,10 @@ use OpenSpout\Reader\ODS\Reader as ODSReader;
 use OpenSpout\Reader\ReaderInterface;
 use OpenSpout\Reader\XLSX\Reader as XLSXReader;
 
-/**
- * This factory is used to create readers, based on the type of the file to be read.
- * It supports CSV, XLSX and ODS formats.
- */
+
 final class ReaderFactory
 {
-    /**
-     * Creates a reader by file extension.
-     *
-     * @param string $path The path to the spreadsheet file. Supported extensions are .csv,.ods and .xlsx
-     *
-     * @throws \OpenSpout\Common\Exception\UnsupportedTypeException
-     */
+    
     public static function createFromFile(string $path): ReaderInterface
     {
         $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
@@ -36,14 +27,7 @@ final class ReaderFactory
         };
     }
 
-    /**
-     * Creates a reader by mime type.
-     *
-     * @param string $path the path to the spreadsheet file
-     *
-     * @throws \OpenSpout\Common\Exception\UnsupportedTypeException
-     * @throws \OpenSpout\Common\Exception\IOException
-     */
+    
     public static function createFromFileByMimeType(string $path): ReaderInterface
     {
         if (!file_exists($path)) {

@@ -4,19 +4,7 @@ namespace GuzzleHttp\Psr7;
 
 final class Query
 {
-    /**
-     * Parse a query string into an associative array.
-     *
-     * If multiple values are found for the same key, the value of that key
-     * value pair will become an array. This function does not parse nested
-     * PHP style arrays into an associative array (e.g., `foo[a]=1&foo[b]=2`
-     * will be parsed into `['foo[a]' => '1', 'foo[b]' => '2'])`.
-     *
-     * @param string   $str         Query string to parse
-     * @param int|bool $urlEncoding How the query string is encoded
-     *
-     * @return array
-     */
+    
     public static function parse($str, $urlEncoding = true)
     {
         $result = [];
@@ -56,20 +44,7 @@ final class Query
         return $result;
     }
 
-    /**
-     * Build a query string from an array of key value pairs.
-     *
-     * This function can use the return value of `parse()` to build a query
-     * string. This function does not modify the provided keys when an array is
-     * encountered (like `http_build_query()` would).
-     *
-     * @param array     $params   Query string parameters.
-     * @param int|false $encoding Set to false to not encode, PHP_QUERY_RFC3986
-     *                            to encode using RFC3986, or PHP_QUERY_RFC1738
-     *                            to encode using RFC1738.
-     *
-     * @return string
-     */
+    
     public static function build(array $params, $encoding = PHP_QUERY_RFC3986)
     {
         if (!$params) {

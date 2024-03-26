@@ -12,20 +12,10 @@ use function get_debug_type;
 use function is_array;
 use function sprintf;
 
-/**
- * Provide a guard method for array or Traversable data
- */
+
 trait ArrayOrTraversableGuardTrait
 {
-    /**
-     * Verifies that the data is an array or Traversable
-     *
-     * @param mixed  $data           the data to verify
-     * @param string $dataName       the data name
-     * @param string $exceptionClass FQCN for the exception
-     * @return void
-     * @throws Exception
-     */
+    
     protected function guardForArrayOrTraversable(
         mixed $data,
         $dataName = 'Argument',

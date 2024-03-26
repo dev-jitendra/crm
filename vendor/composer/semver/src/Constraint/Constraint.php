@@ -1,22 +1,13 @@
 <?php
 
-/*
- * This file is part of composer/semver.
- *
- * (c) Composer <https://github.com/composer>
- *
- * For the full copyright and license information, please view
- * the LICENSE file that was distributed with this source code.
- */
+
 
 namespace Composer\Semver\Constraint;
 
-/**
- * Defines a constraint.
- */
+
 class Constraint implements ConstraintInterface
 {
-    /* operator integer values */
+    
     const OP_EQ = 0;
     const OP_LT = 1;
     const OP_LE = 2;
@@ -24,12 +15,7 @@ class Constraint implements ConstraintInterface
     const OP_GE = 4;
     const OP_NE = 5;
 
-    /**
-     * Operator to integer translation table.
-     *
-     * @var array
-     * @phpstan-var array<string, self::OP_*>
-     */
+    
     private static $transOpStr = array(
         '=' => self::OP_EQ,
         '==' => self::OP_EQ,
@@ -41,12 +27,7 @@ class Constraint implements ConstraintInterface
         '!=' => self::OP_NE,
     );
 
-    /**
-     * Integer to operator translation table.
-     *
-     * @var array
-     * @phpstan-var array<self::OP_*, string>
-     */
+    
     private static $transOpInt = array(
         self::OP_EQ => '==',
         self::OP_LT => '<',
@@ -56,32 +37,22 @@ class Constraint implements ConstraintInterface
         self::OP_NE => '!=',
     );
 
-    /**
-     * @var int
-     * @phpstan-var self::OP_*
-     */
+    
     protected $operator;
 
-    /** @var string */
+    
     protected $version;
 
-    /** @var string|null */
+    
     protected $prettyString;
 
-    /** @var Bound */
+    
     protected $lowerBound;
 
-    /** @var Bound */
+    
     protected $upperBound;
 
-    /**
-     * Sets operator and version to compare with.
-     *
-     * @param string $operator
-     * @param string $version
-     *
-     * @throws \InvalidArgumentException if invalid operator is given.
-     */
+    
     public function __construct($operator, $version)
     {
         if (!isset(self::$transOpStr[$operator])) {
@@ -106,32 +77,24 @@ class Constraint implements ConstraintInterface
         return self::$transOpInt[$this->operator];
     }
 
-    /**
-     * @param ConstraintInterface $provider
-     *
-     * @return bool
-     */
+    
     public function matches(ConstraintInterface $provider)
     {
         if ($provider instanceof self) {
             return $this->matchSpecific($provider);
         }
 
-        // turn matching around to find a match
+        
         return $provider->matches($this);
     }
 
-    /**
-     * @param string|null $prettyString
-     */
+    
     public function setPrettyString($prettyString)
     {
         $this->prettyString = $prettyString;
     }
 
-    /**
-     * @return string
-     */
+    
     public function getPrettyString()
     {
         if ($this->prettyString) {
@@ -141,37 +104,19 @@ class Constraint implements ConstraintInterface
         return $this->__toString();
     }
 
-    /**
-     * Get all supported comparison operators.
-     *
-     * @return array
-     */
+    
     public static function getSupportedOperators()
     {
         return array_keys(self::$transOpStr);
     }
 
-    /**
-     * @param  string $operator
-     * @return int
-     *
-     * @phpstan-return self::OP_*
-     */
+    
     public static function getOperatorConstant($operator)
     {
         return self::$transOpStr[$operator];
     }
 
-    /**
-     * @param string $a
-     * @param string $b
-     * @param string $operator
-     * @param bool   $compareBranches
-     *
-     * @throws \InvalidArgumentException if invalid operator is given.
-     *
-     * @return bool
-     */
+    
     public function versionCompare($a, $b, $operator, $compareBranches = false)
     {
         if (!isset(self::$transOpStr[$operator])) {
@@ -193,7 +138,7 @@ class Constraint implements ConstraintInterface
             return $operator === '==' && $a === $b;
         }
 
-        // when branches are not comparable, we make sure dev branches never match anything
+        
         if (!$compareBranches && ($aIsBranch || $bIsBranch)) {
             return false;
         }
@@ -277,12 +222,7 @@ class Constraint implements ConstraintInterface
         return sprintf('!$b && %s', $codeComparison);
     }
 
-    /**
-     * @param Constraint $provider
-     * @param bool       $compareBranches
-     *
-     * @return bool
-     */
+    
     public function matchSpecific(Constraint $provider, $compareBranches = false)
     {
         $noEqualOp = str_replace('=', '', self::$transOpInt[$this->operator]);
@@ -293,8 +233,8 @@ class Constraint implements ConstraintInterface
         $isProviderEqualOp = self::OP_EQ === $provider->operator;
         $isProviderNonEqualOp = self::OP_NE === $provider->operator;
 
-        // '!=' operator is match when other operator is not '==' operator or version is not match
-        // these kinds of comparisons always have a solution
+        
+        
         if ($isNonEqualOp || $isProviderNonEqualOp) {
             if ($isNonEqualOp && !$isProviderNonEqualOp && !$isProviderEqualOp && 'dev-' === substr($provider->version, 0, 4)) {
                 return false;
@@ -310,8 +250,8 @@ class Constraint implements ConstraintInterface
             return $this->versionCompare($provider->version, $this->version, '!=', $compareBranches);
         }
 
-        // an example for the condition is <= 2.0 & < 1.0
-        // these kinds of comparisons always have a solution
+        
+        
         if ($this->operator !== self::OP_EQ && $noEqualOp === $providerNoEqualOp) {
             if ('dev-' === substr($this->version, 0, 4) || 'dev-' === substr($provider->version, 0, 4)) {
                 return false;
@@ -324,8 +264,8 @@ class Constraint implements ConstraintInterface
         $operator = $isEqualOp ? $provider->operator : $this->operator;
 
         if ($this->versionCompare($version1, $version2, self::$transOpInt[$operator], $compareBranches)) {
-            // special case, e.g. require >= 1.0 and provide < 1.0
-            // 1.0 >= 1.0 but 1.0 is outside of the provided interval
+            
+            
 
             return !(self::$transOpInt[$provider->operator] === $providerNoEqualOp
                 && self::$transOpInt[$this->operator] !== $noEqualOp
@@ -335,17 +275,13 @@ class Constraint implements ConstraintInterface
         return false;
     }
 
-    /**
-     * @return string
-     */
+    
     public function __toString()
     {
         return self::$transOpInt[$this->operator] . ' ' . $this->version;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getLowerBound()
     {
         $this->extractBounds();
@@ -353,9 +289,7 @@ class Constraint implements ConstraintInterface
         return $this->lowerBound;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getUpperBound()
     {
         $this->extractBounds();
@@ -369,7 +303,7 @@ class Constraint implements ConstraintInterface
             return;
         }
 
-        // Branches
+        
         if (strpos($this->version, 'dev-') === 0) {
             $this->lowerBound = Bound::zero();
             $this->upperBound = Bound::positiveInfinity();

@@ -1,13 +1,6 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 return array_replace_recursive(require __DIR__.'/en.php', [
     'meridiem' => ['idiɓa', 'ebyámu'],
@@ -26,31 +19,31 @@ return array_replace_recursive(require __DIR__.'/en.php', [
         'LLLL' => 'dddd D MMMM YYYY HH:mm',
     ],
 
-    'year' => ':count ma mbu', // less reliable
-    'y' => ':count ma mbu', // less reliable
-    'a_year' => ':count ma mbu', // less reliable
+    'year' => ':count ma mbu', 
+    'y' => ':count ma mbu', 
+    'a_year' => ':count ma mbu', 
 
-    'month' => ':count myo̱di', // less reliable
-    'm' => ':count myo̱di', // less reliable
-    'a_month' => ':count myo̱di', // less reliable
+    'month' => ':count myo̱di', 
+    'm' => ':count myo̱di', 
+    'a_month' => ':count myo̱di', 
 
-    'week' => ':count woki', // less reliable
-    'w' => ':count woki', // less reliable
-    'a_week' => ':count woki', // less reliable
+    'week' => ':count woki', 
+    'w' => ':count woki', 
+    'a_week' => ':count woki', 
 
-    'day' => ':count buńa', // less reliable
-    'd' => ':count buńa', // less reliable
-    'a_day' => ':count buńa', // less reliable
+    'day' => ':count buńa', 
+    'd' => ':count buńa', 
+    'a_day' => ':count buńa', 
 
-    'hour' => ':count ma awa', // less reliable
-    'h' => ':count ma awa', // less reliable
-    'a_hour' => ':count ma awa', // less reliable
+    'hour' => ':count ma awa', 
+    'h' => ':count ma awa', 
+    'a_hour' => ':count ma awa', 
 
-    'minute' => ':count minuti', // less reliable
-    'min' => ':count minuti', // less reliable
-    'a_minute' => ':count minuti', // less reliable
+    'minute' => ':count minuti', 
+    'min' => ':count minuti', 
+    'a_minute' => ':count minuti', 
 
-    'second' => ':count maba', // less reliable
-    's' => ':count maba', // less reliable
-    'a_second' => ':count maba', // less reliable
+    'second' => ':count maba', 
+    's' => ':count maba', 
+    'a_second' => ':count maba', 
 ]);

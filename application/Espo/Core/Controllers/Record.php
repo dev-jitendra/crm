@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Controllers;
 
@@ -42,15 +16,7 @@ use stdClass;
 
 class Record extends RecordBase
 {
-    /**
-     * List related records.
-     *
-     * @throws BadRequest
-     * @throws NotFound
-     * @throws Forbidden
-     * @throws Error
-     * @noinspection PhpUnused
-     */
+    
     public function getActionListLinked(Request $request): stdClass
     {
         $id = $request->getRouteParam('id');
@@ -74,14 +40,7 @@ class Record extends RecordBase
         ];
     }
 
-    /**
-     * Relate records.
-     *
-     * @throws BadRequest
-     * @throws Forbidden
-     * @throws NotFound
-     * @throws Error
-     */
+    
     public function postActionCreateLink(Request $request): bool
     {
         $id = $request->getRouteParam('id');
@@ -122,13 +81,7 @@ class Record extends RecordBase
         return $result;
     }
 
-    /**
-     * Un-relate records.
-     *
-     * @throws BadRequest
-     * @throws Forbidden
-     * @throws NotFound
-     */
+    
     public function deleteActionRemoveLink(Request $request): bool
     {
         $id = $request->getRouteParam('id');
@@ -163,14 +116,7 @@ class Record extends RecordBase
         return $result;
     }
 
-    /**
-     * Follow a record.
-     *
-     * @throws BadRequest
-     * @throws NotFoundSilent
-     * @throws Forbidden
-     * @noinspection PhpUnused
-     */
+    
     public function putActionFollow(Request $request): bool
     {
         $id = $request->getRouteParam('id');
@@ -184,13 +130,7 @@ class Record extends RecordBase
         return true;
     }
 
-    /**
-     * Unfollow a record.
-     *
-     * @throws NotFoundSilent
-     * @throws BadRequest
-     * @noinspection PhpUnused
-     */
+    
     public function deleteActionUnfollow(Request $request): bool
     {
         $id = $request->getRouteParam('id');
@@ -204,9 +144,7 @@ class Record extends RecordBase
         return true;
     }
 
-    /**
-     * @throws BadRequest
-     */
+    
     private function fetchMassLinkSearchParamsFromRequest(Request $request): SearchParams
     {
         $data = $request->getParsedBody();

@@ -24,52 +24,31 @@ use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpClient\RetryableHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-/**
- * Base class all API clients are inheriting.
- *
- * @author Tobias Nyholm <tobias.nyholm@gmail.com>
- * @author Jérémy Derussé <jeremy@derusse.com>
- */
+
 abstract class AbstractApi
 {
-    /**
-     * @var HttpClientInterface
-     */
+    
     private $httpClient;
 
-    /**
-     * @var Configuration
-     */
+    
     private $configuration;
 
-    /**
-     * @var CredentialProvider
-     */
+    
     private $credentialProvider;
 
-    /**
-     * @var array<string, Signer>
-     */
+    
     private $signers;
 
-    /**
-     * @var LoggerInterface
-     */
+    
     private $logger;
 
-    /**
-     * @var AwsErrorFactoryInterface
-     */
+    
     private $awsErrorFactory;
 
-    /**
-     * @var EndpointCache
-     */
+    
     private $endpointCache;
 
-    /**
-     * @param Configuration|array<Configuration::OPTION_*, string|null> $configuration
-     */
+    
     public function __construct($configuration = [], ?CredentialProvider $credentialProvider = null, ?HttpClientInterface $httpClient = null, ?LoggerInterface $logger = null)
     {
         if (\is_array($configuration)) {
@@ -84,7 +63,7 @@ abstract class AbstractApi
         if (!isset($httpClient)) {
             $httpClient = HttpClient::create();
             if (class_exists(RetryableHttpClient::class)) {
-                /** @psalm-suppress MissingDependency */
+                
                 $httpClient = new RetryableHttpClient(
                     $httpClient,
                     new AwsRetryStrategy(AwsRetryStrategy::DEFAULT_RETRY_STATUS_CODES, 1000, 2.0, 0, 0.1, $this->awsErrorFactory),
@@ -115,25 +94,19 @@ abstract class AbstractApi
         return $request->getEndpoint();
     }
 
-    /**
-     * @deprecated
-     */
+    
     protected function getServiceCode(): string
     {
         throw new LogicException(sprintf('The method "%s" should not be called. The Client "%s" must implement the "%s" method.', __FUNCTION__, \get_class($this), 'getEndpointMetadata'));
     }
 
-    /**
-     * @deprecated
-     */
+    
     protected function getSignatureVersion(): string
     {
         throw new LogicException(sprintf('The method "%s" should not be called. The Client "%s" must implement the "%s" method.', __FUNCTION__, \get_class($this), 'getEndpointMetadata'));
     }
 
-    /**
-     * @deprecated
-     */
+    
     protected function getSignatureScopeName(): string
     {
         throw new LogicException(sprintf('The method "%s" should not be called. The Client "%s" must implement the "%s" method.', __FUNCTION__, \get_class($this), 'getEndpointMetadata'));
@@ -152,8 +125,8 @@ abstract class AbstractApi
             $request->setHeader('content-length', (string) $length);
         }
 
-        // Some servers (like testing Docker Images) does not support `Transfer-Encoding: chunked` requests.
-        // The body is converted into string to prevent curl using `Transfer-Encoding: chunked` unless it really has to.
+        
+        
         if (($requestBody = $request->getBody()) instanceof StringStream) {
             $requestBody = $requestBody->stringify();
         }
@@ -178,9 +151,7 @@ abstract class AbstractApi
         return new Response($response, $this->httpClient, $this->logger, $this->awsErrorFactory, $this->endpointCache, $request, $debug, $context ? $context->getExceptionMapping() : []);
     }
 
-    /**
-     * @return array<string, callable(string, string): Signer>
-     */
+    
     protected function getSignerFactories(): array
     {
         return [
@@ -195,25 +166,15 @@ abstract class AbstractApi
         return new ChainAwsErrorFactory();
     }
 
-    /**
-     * Returns the AWS endpoint metadata for the given region.
-     * When user did not provide a region, the client have to either return a global endpoint or fallback to
-     * the Configuration::DEFAULT_REGION constant.
-     *
-     * This implementation is a BC layer for client that does not require core:^1.2.
-     *
-     * @param ?string $region region provided by the user (without fallback to a default region)
-     *
-     * @return array{endpoint: string, signRegion: string, signService: string, signVersions: string[]}
-     */
+    
     protected function getEndpointMetadata(?string $region): array
     {
-        /** @psalm-suppress TooManyArguments */
+        
         trigger_deprecation('async-aws/core', '1.2', 'Extending "%s"" without overriding "%s" is deprecated. This method will be abstract in version 2.0.', __CLASS__, __FUNCTION__);
 
-        /** @var string $endpoint */
+        
         $endpoint = $this->configuration->get('endpoint');
-        /** @var string $region */
+        
         $region = $region ?? $this->configuration->get('region');
 
         return [
@@ -227,18 +188,12 @@ abstract class AbstractApi
         ];
     }
 
-    /**
-     * Build the endpoint full uri.
-     *
-     * @param string                $uri    or path
-     * @param array<string, string> $query  parameters that should go in the query string
-     * @param ?string               $region region provided by the user in the `@region` parameter of the Input
-     */
+    
     protected function getEndpoint(string $uri, array $query, ?string $region): string
     {
         $region = $region ?? ($this->configuration->isDefault('region') ? null : $this->configuration->get('region'));
         if (!$this->configuration->isDefault('endpoint')) {
-            /** @var string $endpoint */
+            
             $endpoint = $this->configuration->get('endpoint');
         } else {
             $metadata = $this->getEndpointMetadata($region);
@@ -246,12 +201,12 @@ abstract class AbstractApi
         }
 
         if (false !== strpos($endpoint, '%region%') || false !== strpos($endpoint, '%service%')) {
-            /** @psalm-suppress TooManyArguments */
+            
             trigger_deprecation('async-aws/core', '1.2', 'providing an endpoint with placeholder is deprecated and will be ignored in version 2.0. Provide full endpoint instead.');
 
             $endpoint = strtr($endpoint, [
                 '%region%' => $region ?? $this->configuration->get('region'),
-                '%service%' => $this->getServiceCode(), // if people provides a custom endpoint 'http://%service%.localhost/
+                '%service%' => $this->getServiceCode(), 
             ]);
         }
 
@@ -263,19 +218,13 @@ abstract class AbstractApi
         return $endpoint . (false === strpos($endpoint, '?') ? '?' : '&') . http_build_query($query, '', '&', \PHP_QUERY_RFC3986);
     }
 
-    /**
-     * @return EndpointInterface[]
-     */
+    
     protected function discoverEndpoints(?string $region): array
     {
         throw new LogicException(sprintf('The Client "%s" must implement the "%s" method.', \get_class($this), 'discoverEndpoints'));
     }
 
-    /**
-     * @param array<string, string> $query
-     *
-     * @return string
-     */
+    
     private function getDiscoveredEndpoint(string $uri, array $query, ?string $region, bool $usesEndpointDiscovery, bool $requiresEndpointDiscovery)
     {
         if (!$this->configuration->isDefault('endpoint')) {
@@ -287,21 +236,21 @@ abstract class AbstractApi
             return $this->getEndpoint($uri, $query, $region);
         }
 
-        // 1. use an active endpoints
+        
         if (null === $endpoint = $this->endpointCache->getActiveEndpoint($region)) {
             $previous = null;
 
             try {
-                // 2. call API to fetch new endpoints
+                
                 $endpoints = $this->discoverEndpoints($region);
                 $this->endpointCache->addEndpoints($region, $endpoints);
 
-                // 3. use active endpoints that has just been injected
+                
                 $endpoint = $this->endpointCache->getActiveEndpoint($region);
             } catch (\Exception $previous) {
             }
 
-            // 4. if endpoint is still null, fallback to expired endpoint
+            
             if (null === $endpoint && null === $endpoint = $this->endpointCache->getExpiredEndpoint($region)) {
                 if ($requiresEndpointDiscovery) {
                     throw new RuntimeException(sprintf('The Client "%s" failed to fetch the endpoint.', \get_class($this)), 0, $previous);
@@ -319,12 +268,10 @@ abstract class AbstractApi
         return $endpoint . (false === strpos($endpoint, '?') ? '?' : '&') . http_build_query($query);
     }
 
-    /**
-     * @param ?string $region region provided by the user in the `@region` parameter of the Input
-     */
+    
     private function getSigner(?string $region): Signer
     {
-        /** @var string $region */
+        
         $region = $region ?? ($this->configuration->isDefault('region') ? null : $this->configuration->get('region'));
         if (!isset($this->signers[$region])) {
             $factories = $this->getSignerFactories();
@@ -332,7 +279,7 @@ abstract class AbstractApi
             if ($this->configuration->isDefault('endpoint') || $this->configuration->isDefault('region')) {
                 $metadata = $this->getEndpointMetadata($region);
             } else {
-                // Allow non-aws region with custom endpoint
+                
                 $metadata = $this->getEndpointMetadata(Configuration::DEFAULT_REGION);
                 $metadata['signRegion'] = $region;
             }
@@ -352,7 +299,7 @@ abstract class AbstractApi
             $this->signers[$region] = $factory($metadata['signService'], $metadata['signRegion']);
         }
 
-        /** @psalm-suppress PossiblyNullArrayOffset */
+        
         return $this->signers[$region];
     }
 }

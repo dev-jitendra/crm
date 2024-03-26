@@ -9,20 +9,10 @@ use Laminas\Stdlib\Exception\InvalidArgumentException;
 
 use function sprintf;
 
-/**
- * Provide a guard method against null data
- */
+
 trait NullGuardTrait
 {
-    /**
-     * Verify that the data is not null
-     *
-     * @param mixed  $data           the data to verify
-     * @param string $dataName       the data name
-     * @param string $exceptionClass FQCN for the exception
-     * @return void
-     * @throws Exception
-     */
+    
     protected function guardAgainstNull(
         mixed $data,
         $dataName = 'Argument',

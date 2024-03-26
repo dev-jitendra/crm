@@ -1,40 +1,12 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/modals/detail */
+
+
 
 import ModalView from 'views/modal';
 import ActionItemSetup from 'helpers/action-item-setup';
 import Backbone from 'backbone';
 
-/**
- * A quick view modal.
- */
+
 class DetailModalView extends ModalView {
 
     template = 'modals/detail'
@@ -54,7 +26,7 @@ class DetailModalView extends ModalView {
     duplicateAction = false
 
     shortcutKeys = {
-        /** @this DetailModalView */
+        
         'Control+Space': function (e) {
             if (this.editDisabled) {
                 return;
@@ -79,15 +51,15 @@ class DetailModalView extends ModalView {
                         .focus();
                 });
         },
-        /** @this DetailModalView */
+        
         'Control+Backslash': function (e) {
             this.getRecordView().handleShortcutKeyControlBackslash(e);
         },
-        /** @this DetailModalView */
+        
         'Control+ArrowLeft': function (e) {
             this.handleShortcutKeyControlArrowLeft(e);
         },
-        /** @this DetailModalView */
+        
         'Control+ArrowRight': function (e) {
             this.handleShortcutKeyControlArrowRight(e);
         },
@@ -224,7 +196,7 @@ class DetailModalView extends ModalView {
         }
     }
 
-    /** @private */
+    
     setupActionItems() {
         const actionItemSetup = new ActionItemSetup(
             this.getMetadata(),
@@ -244,14 +216,10 @@ class DetailModalView extends ModalView {
         );
     }
 
-    /**
-     * @protected
-     */
+    
     setupAfterModelCreated() {}
 
-    /**
-     * @protected
-     */
+    
     setupRecordButtons() {
         if (!this.removeDisabled) {
             this.addRemoveButton();
@@ -299,9 +267,7 @@ class DetailModalView extends ModalView {
         this.removeButton('remove');
     }
 
-    /**
-     * @internal Used. Do not remove.
-     */
+    
     getScope() {
         return this.scope;
     }
@@ -403,9 +369,7 @@ class DetailModalView extends ModalView {
         this.createView('record', viewName, options, callback);
     }
 
-    /**
-     * @return {module:views/record/detail}
-     */
+    
     getRecordView() {
         return this.getView('record');
     }
@@ -556,9 +520,7 @@ class DetailModalView extends ModalView {
             });
     }
 
-    /**
-     * @return {Promise}
-     */
+    
     actionEdit() {
         if (this.options.quickEditDisabled) {
             const options = {
@@ -692,10 +654,7 @@ class DetailModalView extends ModalView {
             });
     }
 
-    /**
-     * @protected
-     * @param {JQueryKeyEventObject} e
-     */
+    
     handleShortcutKeyControlArrowLeft(e) {
         if (!this.model.collection) {
             return;
@@ -715,10 +674,7 @@ class DetailModalView extends ModalView {
         this.actionPrevious();
     }
 
-    /**
-     * @protected
-     * @param {JQueryKeyEventObject} e
-     */
+    
     handleShortcutKeyControlArrowRight(e) {
         if (!this.model.collection) {
             return;

@@ -9,37 +9,22 @@ use AsyncAws\S3\Enum\ServerSideEncryption;
 
 class UploadPartOutput extends Result
 {
-    /**
-     * The server-side encryption algorithm used when storing this object in Amazon S3 (for example, AES256, aws:kms).
-     */
+    
     private $serverSideEncryption;
 
-    /**
-     * Entity tag for the uploaded object.
-     */
+    
     private $etag;
 
-    /**
-     * If server-side encryption with a customer-provided encryption key was requested, the response will include this
-     * header confirming the encryption algorithm used.
-     */
+    
     private $sseCustomerAlgorithm;
 
-    /**
-     * If server-side encryption with a customer-provided encryption key was requested, the response will include this
-     * header to provide round-trip message integrity verification of the customer-provided encryption key.
-     */
+    
     private $sseCustomerKeyMd5;
 
-    /**
-     * If present, specifies the ID of the AWS Key Management Service (AWS KMS) symmetric customer managed customer master
-     * key (CMK) was used for the object.
-     */
+    
     private $sseKmsKeyId;
 
-    /**
-     * Indicates whether the multipart upload uses an S3 Bucket Key for server-side encryption with AWS KMS (SSE-KMS).
-     */
+    
     private $bucketKeyEnabled;
 
     private $requestCharged;
@@ -58,9 +43,7 @@ class UploadPartOutput extends Result
         return $this->etag;
     }
 
-    /**
-     * @return RequestCharged::*|null
-     */
+    
     public function getRequestCharged(): ?string
     {
         $this->initialize();
@@ -68,9 +51,7 @@ class UploadPartOutput extends Result
         return $this->requestCharged;
     }
 
-    /**
-     * @return ServerSideEncryption::*|null
-     */
+    
     public function getServerSideEncryption(): ?string
     {
         $this->initialize();

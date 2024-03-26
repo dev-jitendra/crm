@@ -7,40 +7,27 @@ namespace Cron;
 use DateTimeInterface;
 use DateTimeZone;
 
-/**
- * Hours field.  Allows: * , / -.
- */
+
 class HoursField extends AbstractField
 {
-    /**
-     * {@inheritdoc}
-     */
+    
     protected $rangeStart = 0;
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected $rangeEnd = 23;
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function isSatisfiedBy(DateTimeInterface $date, $value): bool
     {
         return $this->isSatisfied((int) $date->format('H'), $value);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @param \DateTime|\DateTimeImmutable &$date
-     * @param string|null                  $parts
-     */
+    
     public function increment(DateTimeInterface &$date, $invert = false, $parts = null): FieldInterface
     {
-        // Change timezone to UTC temporarily. This will
-        // allow us to go back or forwards and hour even
-        // if DST will be changed between the hours.
+        
+        
+        
         if (null === $parts || '*' === $parts) {
             $timezone = $date->getTimezone();
             $date = $date->setTimezone(new DateTimeZone('UTC'));

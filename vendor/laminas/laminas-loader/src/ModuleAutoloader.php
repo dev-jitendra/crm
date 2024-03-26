@@ -2,7 +2,7 @@
 
 namespace Laminas\Loader;
 
-// Grab SplAutoloader interface
+
 require_once __DIR__ . '/SplAutoloader.php';
 
 use GlobIterator;
@@ -35,31 +35,22 @@ use const DIRECTORY_SEPARATOR;
 
 class ModuleAutoloader implements SplAutoloader
 {
-    /** @var array An array of module paths to scan */
+    
     protected $paths = [];
 
-    /** @var array An array of modulename => path */
+    
     protected $explicitPaths = [];
 
-    /** @var array An array of namespaceName => namespacePath */
+    
     protected $namespacedPaths = [];
 
-    /** @var string Will contain the absolute phar:// path to the executable when packaged as phar file */
-    protected $pharBasePath = "";
-
-    /** @var array An array of supported phar extensions (filled on constructor) */
+    
     protected $pharExtensions = [];
 
-    /** @var array An array of module classes to their containing files */
+    
     protected $moduleClassMap = [];
 
-    /**
-     * Constructor
-     *
-     * Allow configuration of the autoloader via the constructor.
-     *
-     * @param  null|array|Traversable $options
-     */
+    
     public function __construct($options = null)
     {
         if (extension_loaded('phar')) {
@@ -70,7 +61,7 @@ class ModuleAutoloader implements SplAutoloader
                 'tar',
             ];
 
-            // ext/zlib enabled -> phar can read gzip & zip compressed files
+            
             if (extension_loaded('zlib')) {
                 $this->pharExtensions[] = 'phar.gz';
                 $this->pharExtensions[] = 'phar.tar.gz';
@@ -80,7 +71,7 @@ class ModuleAutoloader implements SplAutoloader
                 $this->pharExtensions[] = 'zip';
             }
 
-            // ext/bzip2 enabled -> phar can read bz2 compressed files
+            
             if (extension_loaded('bzip2')) {
                 $this->pharExtensions[] = 'phar.bz2';
                 $this->pharExtensions[] = 'phar.tar.bz2';
@@ -93,37 +84,20 @@ class ModuleAutoloader implements SplAutoloader
         }
     }
 
-    /**
-     * Configure the autoloader
-     *
-     * In most cases, $options should be either an associative array or
-     * Traversable object.
-     *
-     * @param  array|Traversable $options
-     * @return ModuleAutoloader
-     */
+    
     public function setOptions($options)
     {
         $this->registerPaths($options);
         return $this;
     }
 
-    /**
-     * Retrieves the class map for all loaded modules.
-     *
-     * @return array
-     */
+    
     public function getModuleClassMap()
     {
         return $this->moduleClassMap;
     }
 
-    /**
-     * Sets the class map used to speed up the module autoloading.
-     *
-     * @param  array $classmap
-     * @return ModuleAutoloader
-     */
+    
     public function setModuleClassMap(array $classmap)
     {
         $this->moduleClassMap = $classmap;
@@ -131,17 +105,10 @@ class ModuleAutoloader implements SplAutoloader
         return $this;
     }
 
-    /**
-     * Autoload a class
-     *
-     * @param   string $class
-     * @return  mixed
-     *          False [if unable to load $class]
-     *          get_class($class) [if $class is successfully loaded]
-     */
+    
     public function autoload($class)
     {
-        // Limit scope of this autoloader
+        
         if (substr($class, -7) !== '\Module') {
             return false;
         }
@@ -212,7 +179,7 @@ class ModuleAutoloader implements SplAutoloader
                 return $classLoaded;
             }
 
-            // No directory with Module.php, searching for phars
+            
             if ($pharSuffixPattern) {
                 foreach (new GlobIterator($path . '.*') as $entry) {
                     if ($entry->isDir()) {
@@ -234,26 +201,18 @@ class ModuleAutoloader implements SplAutoloader
         return false;
     }
 
-    /**
-     * loadModuleFromDir
-     *
-     * @param  string $dirPath
-     * @param  string $class
-     * @return  mixed
-     *          False [if unable to load $class]
-     *          get_class($class) [if $class is successfully loaded]
-     */
+    
     protected function loadModuleFromDir($dirPath, $class)
     {
         $modulePath = $dirPath . '/Module.php';
-        if (substr($modulePath, 0, 7) === 'phar://') {
+        if (substr($modulePath, 0, 7) === 'phar:
             $file = new PharFileInfo($modulePath);
         } else {
             $file = new SplFileInfo($modulePath);
         }
 
         if ($file->isReadable() && $file->isFile()) {
-            // Found directory with Module.php in it
+            
             $absModulePath = $this->pharBasePath ? (string) $file : $file->getRealPath();
             require_once $absModulePath;
             if (class_exists($class)) {
@@ -264,15 +223,7 @@ class ModuleAutoloader implements SplAutoloader
         return false;
     }
 
-    /**
-     * loadModuleFromPhar
-     *
-     * @param  string $pharPath
-     * @param  string $class
-     * @return  mixed
-     *          False [if unable to load $class]
-     *          get_class($class) [if $class is successfully loaded]
-     */
+    
     protected function loadModuleFromPhar($pharPath, $class)
     {
         $pharPath = static::normalizePath($pharPath, false);
@@ -283,9 +234,9 @@ class ModuleAutoloader implements SplAutoloader
 
         $fileRealPath = $file->getRealPath();
 
-        // Phase 0: Check for executable phar with Module class in stub
+        
         if (strpos($fileRealPath, '.phar') !== false) {
-            // First see if the stub makes the Module class available
+            
             require_once $fileRealPath;
             if (class_exists($class)) {
                 $this->moduleClassMap[$class] = $fileRealPath;
@@ -293,8 +244,8 @@ class ModuleAutoloader implements SplAutoloader
             }
         }
 
-        // Phase 1: Not executable phar, no stub, or stub did not provide Module class; try Module.php directly
-        $moduleClassFile = 'phar://' . $fileRealPath . '/Module.php';
+        
+        $moduleClassFile = 'phar:
         $moduleFile      = new SplFileInfo($moduleClassFile);
         if ($moduleFile->isReadable() && $moduleFile->isFile()) {
             require_once $moduleClassFile;
@@ -304,11 +255,11 @@ class ModuleAutoloader implements SplAutoloader
             }
         }
 
-        // Phase 2: Check for nested module directory within archive
-        // Checks for /path/to/MyModule.tar/MyModule/Module.php
-        // (shell-integrated zip/tar utilities wrap directories like this)
+        
+        
+        
         $pharBaseName    = $this->pharFileToModuleName($fileRealPath);
-        $moduleClassFile = 'phar://' . $fileRealPath . '/' . $pharBaseName . '/Module.php';
+        $moduleClassFile = 'phar:
         $moduleFile      = new SplFileInfo($moduleClassFile);
         if ($moduleFile->isReadable() && $moduleFile->isFile()) {
             require_once $moduleClassFile;
@@ -321,33 +272,19 @@ class ModuleAutoloader implements SplAutoloader
         return false;
     }
 
-    /**
-     * Register the autoloader with spl_autoload registry
-     *
-     * @return void
-     */
+    
     public function register()
     {
         spl_autoload_register([$this, 'autoload']);
     }
 
-    /**
-     * Unregister the autoloader with spl_autoload registry
-     *
-     * @return void
-     */
+    
     public function unregister()
     {
         spl_autoload_unregister([$this, 'autoload']);
     }
 
-    /**
-     * registerPaths
-     *
-     * @param  array|Traversable $paths
-     * @throws InvalidArgumentException
-     * @return ModuleAutoloader
-     */
+    
     public function registerPaths($paths)
     {
         if (! is_array($paths) && ! $paths instanceof Traversable) {
@@ -370,14 +307,7 @@ class ModuleAutoloader implements SplAutoloader
         return $this;
     }
 
-    /**
-     * registerPath
-     *
-     * @param  string $path
-     * @param  bool|string $moduleName
-     * @throws InvalidArgumentException
-     * @return ModuleAutoloader
-     */
+    
     public function registerPath($path, $moduleName = false)
     {
         if (! is_string($path)) {
@@ -399,24 +329,13 @@ class ModuleAutoloader implements SplAutoloader
         return $this;
     }
 
-    /**
-     * getPaths
-     *
-     * This is primarily for unit testing, but could have other uses.
-     *
-     * @return array
-     */
+    
     public function getPaths()
     {
         return $this->paths;
     }
 
-    /**
-     * Returns the base module name from the path to a phar
-     *
-     * @param  string $pharPath
-     * @return string
-     */
+    
     protected function pharFileToModuleName($pharPath)
     {
         do {
@@ -426,13 +345,7 @@ class ModuleAutoloader implements SplAutoloader
         return $pathinfo['filename'];
     }
 
-    /**
-     * Normalize a path for insertion in the stack
-     *
-     * @param  string $path
-     * @param  bool   $trailingSlash Whether trailing slash should be included
-     * @return string
-     */
+    
     public static function normalizePath($path, $trailingSlash = true)
     {
         $path = rtrim($path, '/');

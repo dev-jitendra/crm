@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\ExternalAccount\OAuth2;
 
@@ -60,54 +34,34 @@ class Client
     const GRANT_TYPE_PASSWORD = 'password';
     const GRANT_TYPE_CLIENT_CREDENTIALS = 'client_credentials';
 
-    /**
-     * @var ?string
-     */
+    
     protected $clientId = null;
 
-    /**
-     * @var ?string
-     */
+    
     protected $clientSecret = null;
 
-    /**
-     * @var ?string
-     */
+    
     protected $accessToken = null;
 
-    /**
-     * @var ?string
-     */
+    
     protected $expiresAt = null;
 
-    /**
-     * @var int
-     */
+    
     protected $authType = self::AUTH_TYPE_URI;
 
-    /**
-     * @var string
-     */
+    
     protected $tokenType = self::TOKEN_TYPE_URI;
 
-    /**
-     * @var ?string
-     */
+    
     protected $accessTokenSecret = null;
 
-    /**
-     * @var string
-     */
+    
     protected $accessTokenParamName = 'access_token';
 
-    /**
-     * @var ?string
-     */
+    
     protected $certificateFile = null;
 
-    /**
-     * @var array<string, mixed>
-     */
+    
     protected $curlOptions = [];
 
     public function __construct()
@@ -117,110 +71,67 @@ class Client
         }
     }
 
-    /**
-     * @param string $clientId
-     * @return void
-     */
+    
     public function setClientId($clientId)
     {
         $this->clientId = $clientId;
     }
 
-    /**
-     * @param ?string $clientSecret
-     * @return void
-     */
+    
     public function setClientSecret($clientSecret)
     {
         $this->clientSecret = $clientSecret;
     }
 
-    /**
-     * @param ?string $accessToken
-     * @return void
-     */
+    
     public function setAccessToken($accessToken)
     {
         $this->accessToken = $accessToken;
     }
 
-    /**
-     * @param int $authType
-     * @return void
-     */
+    
     public function setAuthType($authType)
     {
         $this->authType = $authType;
     }
 
-    /**
-     * @param string $certificateFile
-     * @return void
-     */
+    
     public function setCertificateFile($certificateFile)
     {
         $this->certificateFile = $certificateFile;
     }
 
-    /**
-     * @param string $option
-     * @param mixed $value
-     * @return void
-     */
+    
     public function setCurlOption($option, $value)
     {
         $this->curlOptions[$option] = $value;
     }
 
-    /**
-     * @param array<string, mixed> $options
-     * @return void
-     */
+    
     public function setCurlOptions($options)
     {
         $this->curlOptions = array_merge($this->curlOptions, $options);
     }
 
-    /**
-     * @param string $tokenType
-     * @return void
-     */
+    
     public function setTokenType($tokenType)
     {
         $this->tokenType = $tokenType;
     }
 
-    /**
-     * @param ?string $value
-     * @return void
-     */
+    
     public function setExpiresAt($value)
     {
         $this->expiresAt = $value;
     }
 
-    /**
-     * @param ?string $accessTokenSecret
-     * @return void
-     */
+    
     public function setAccessTokenSecret($accessTokenSecret)
     {
         $this->accessTokenSecret = $accessTokenSecret;
     }
 
-    /**
-     * @param string $url
-     * @param array<string, mixed>|string|null $params
-     * @param string $httpMethod
-     * @param array<string, string> $httpHeaders
-     * @return array{
-     *   result: array<string, mixed>|string,
-     *   code: int,
-     *   contentType: string|false,
-     *   header: string,
-     * }
-     * @throws Exception
-     */
+    
     public function request($url, $params = null, $httpMethod = self::HTTP_METHOD_GET, array $httpHeaders = [])
     {
         if ($this->accessToken) {
@@ -252,19 +163,7 @@ class Client
         return $this->execute($url, $params, $httpMethod, $httpHeaders);
     }
 
-    /**
-     * @param string $url
-     * @param array<string, mixed>|string|null $params
-     * @param string $httpMethod
-     * @param array<string, string> $httpHeaders
-     * @return array{
-     *   result: array<string, mixed>|string,
-     *   code: int,
-     *   contentType: string|false,
-     *   header: string,
-     * }
-     * @throws Exception
-     */
+    
     private function execute($url, $params, $httpMethod, array $httpHeaders = [])
     {
         $curlOptions = [
@@ -342,7 +241,7 @@ class Client
             curl_setopt_array($ch, $this->curlOptions);
         }
 
-        /** @var string|false $response */
+        
         $response = curl_exec($ch);
 
         if ($response === false) {
@@ -364,7 +263,7 @@ class Client
 
         curl_close($ch);
 
-        /** @var array<string, mixed>|string $result */
+        
         $result = ($resultArray !== null) ?
             $resultArray :
             $responseBody;
@@ -377,21 +276,7 @@ class Client
         ];
     }
 
-    /**
-     * @param string $url
-     * @param string $grantType
-     * @param array{
-     *   client_id?: string,
-     *   client_secret?: string,
-     * } $params
-     * @return array{
-     *   result: array<string, mixed>|string,
-     *   code: int,
-     *   contentType: string|false,
-     *   header: string,
-     * }
-     * @throws Exception
-     */
+    
     public function getAccessToken($url, $grantType, array $params)
     {
         $params['grant_type'] = $grantType;

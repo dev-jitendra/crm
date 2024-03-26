@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpClient\Internal;
 
@@ -21,11 +14,7 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-/**
- * @author Nicolas Grekas <p@tchwork.com>
- *
- * @internal
- */
+
 final class HttplugWaitLoop
 {
     private $client;
@@ -64,7 +53,7 @@ final class HttplugWaitLoop
                     }
 
                     if ($chunk->isFirst()) {
-                        // Deactivate throwing on 3/4/5xx
+                        
                         $response->getStatusCode();
                     }
 

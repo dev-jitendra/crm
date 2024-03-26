@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Console\Commands;
 
@@ -50,9 +24,7 @@ class Upgrade implements Command
 {
     private ?UpgradeManager $upgradeManager = null;
 
-    /**
-     * @var string[]
-     */
+    
     private $upgradeStepList = [
         'copyBefore',
         'rebuild',
@@ -66,9 +38,7 @@ class Upgrade implements Command
         'rebuild',
     ];
 
-    /**
-     * @var array<string, string>
-     */
+    
     private $upgradeStepLabels = [
         'init' => 'Initialization',
         'copyBefore' => 'Copying before upgrade files',
@@ -193,18 +163,7 @@ class Upgrade implements Command
         }
     }
 
-    /**
-     * Normalize params. Permitted options and flags and $arguments:
-     * -y - without confirmation
-     * -s - single process
-     * --file="EspoCRM-upgrade.zip"
-     * --step="beforeUpgradeScript"
-     *
-     * @param array<string, string> $options
-     * @param string[] $flagList
-     * @param string[] $argumentList
-     * @return \stdClass
-     */
+    
     private function normalizeParams(array $options, array $flagList, array $argumentList): object
     {
         $params = (object) [
@@ -285,7 +244,7 @@ class Upgrade implements Command
     private function upload(string $filePath): string
     {
         try {
-            /** @var string $fileData */
+            
             $fileData = file_get_contents($filePath);
             $fileData = 'data:application/zip;base64,' . base64_encode($fileData);
 
@@ -298,9 +257,7 @@ class Upgrade implements Command
         return $upgradeId;
     }
 
-    /**
-     * @throws Error
-     */
+    
     private function runUpgradeProcess(string $upgradeId, ?stdClass $params = null): void
     {
         $params = $params ?? (object) [];
@@ -321,10 +278,7 @@ class Upgrade implements Command
         $this->runStepsInSingleProcess($upgradeId, $stepList);
     }
 
-    /**
-     * @param string[] $stepList
-     * @throws Error
-     */
+    
     private function runStepsInSingleProcess(string $upgradeId, array $stepList): void
     {
         $this->log->debug('Installation process ['.$upgradeId.']: Single process mode.');
@@ -348,10 +302,7 @@ class Upgrade implements Command
         }
     }
 
-    /**
-     * @param string[] $stepList
-     * @throws Error
-     */
+    
     private function runSteps(string $upgradeId, array $stepList): void
     {
         $phpExecutablePath = $this->getPhpExecutablePath();
@@ -362,7 +313,7 @@ class Upgrade implements Command
             $command = $phpExecutablePath . " command.php upgrade-step --step=" . ucfirst($stepName) .
                 " --id=" . $upgradeId;
 
-            /** @var string $shellResult */
+            
             $shellResult = shell_exec($command);
 
             if ($shellResult !== 'true') {
@@ -385,10 +336,10 @@ class Upgrade implements Command
 
     private function confirm(): bool
     {
-        /** @var resource $fh */
-        $fh = fopen('php://stdin', 'r');
+        
+        $fh = fopen('php:
 
-        $inputLine = trim(fgets($fh)); /** @phpstan-ignore-line */
+        $inputLine = trim(fgets($fh)); 
 
         fclose($fh);
 
@@ -425,7 +376,7 @@ class Upgrade implements Command
 
     private function getVersionInfo(?string $toVersion = null): ?stdClass
     {
-        $url = 'https://s.espocrm.com/upgrade/next/';
+        $url = 'https:
         $url = $this->config->get('upgradeNextVersionUrl', $url);
         $url .= '?fromVersion=' . $this->config->get('version');
 
@@ -444,9 +395,9 @@ class Upgrade implements Command
         curl_close($ch);
 
         try {
-            $data = json_decode($result); /** @phpstan-ignore-line */
+            $data = json_decode($result); 
         }
-        catch (Exception $e) { /** @phpstan-ignore-line */
+        catch (Exception $e) { 
             echo "Could not parse info about next version.\n";
 
             return null;
@@ -494,7 +445,7 @@ class Upgrade implements Command
             return null;
         }
 
-        /** @var string */
+        
         return realpath($localFilePath);
     }
 

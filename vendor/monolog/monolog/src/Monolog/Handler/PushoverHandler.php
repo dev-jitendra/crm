@@ -1,13 +1,6 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Monolog package.
- *
- * (c) Jordi Boggiano <j.boggiano@seld.be>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Monolog\Handler;
 
@@ -17,17 +10,12 @@ use Monolog\Utils;
 use Psr\Log\LogLevel;
 use Monolog\LogRecord;
 
-/**
- * Sends notifications through the pushover api to mobile phones
- *
- * @author Sebastian Göttschkes <sebastian.goettschkes@googlemail.com>
- * @see    https://www.pushover.net/api
- */
+
 class PushoverHandler extends SocketHandler
 {
     private string $token;
 
-    /** @var array<int|string> */
+    
     private array $users;
 
     private string $title;
@@ -44,11 +32,7 @@ class PushoverHandler extends SocketHandler
 
     private bool $useFormattedMessage = false;
 
-    /**
-     * All parameters that can be sent to Pushover
-     * @see https://pushover.net/api
-     * @var array<string, bool>
-     */
+    
     private array $parameterNames = [
         'token' => true,
         'user' => true,
@@ -65,38 +49,14 @@ class PushoverHandler extends SocketHandler
         'callback' => true,
     ];
 
-    /**
-     * Sounds the api supports by default
-     * @see https://pushover.net/api#sounds
-     * @var string[]
-     */
+    
     private array $sounds = [
         'pushover', 'bike', 'bugle', 'cashregister', 'classical', 'cosmic', 'falling', 'gamelan', 'incoming',
         'intermission', 'magic', 'mechanical', 'pianobar', 'siren', 'spacealarm', 'tugboat', 'alien', 'climb',
         'persistent', 'echo', 'updown', 'none',
     ];
 
-    /**
-     * @param string       $token  Pushover api token
-     * @param string|array $users  Pushover user id or array of ids the message will be sent to
-     * @param string|null  $title  Title sent to the Pushover API
-     * @param bool         $useSSL Whether to connect via SSL. Required when pushing messages to users that are not
-     *                             the pushover.net app owner. OpenSSL is required for this option.
-     * @param int          $retry  The retry parameter specifies how often (in seconds) the Pushover servers will
-     *                             send the same notification to the user.
-     * @param int          $expire The expire parameter specifies how many seconds your notification will continue
-     *                             to be retried for (every retry seconds).
-     *
-     * @param int|string|Level|LogLevel::* $highPriorityLevel The minimum logging level at which this handler will start
-     *                                                                  sending "high priority" requests to the Pushover API
-     * @param int|string|Level|LogLevel::* $emergencyLevel    The minimum logging level at which this handler will start
-     *                                                                  sending "emergency" requests to the Pushover API
-     *
-     *
-     * @phpstan-param string|array<int|string>    $users
-     * @phpstan-param value-of<Level::VALUES>|value-of<Level::NAMES>|Level|LogLevel::* $highPriorityLevel
-     * @phpstan-param value-of<Level::VALUES>|value-of<Level::NAMES>|Level|LogLevel::* $emergencyLevel
-     */
+    
     public function __construct(
         string $token,
         $users,
@@ -114,7 +74,7 @@ class PushoverHandler extends SocketHandler
         ?float $connectionTimeout = null,
         ?int $chunkSize = null
     ) {
-        $connectionString = $useSSL ? 'ssl://api.pushover.net:443' : 'api.pushover.net:80';
+        $connectionString = $useSSL ? 'ssl:
         parent::__construct(
             $connectionString,
             $level,
@@ -144,7 +104,7 @@ class PushoverHandler extends SocketHandler
 
     private function buildContent(LogRecord $record): string
     {
-        // Pushover has a limit of 512 characters on title and message combined.
+        
         $maxMessageLength = 512 - strlen($this->title);
 
         $message = ($this->useFormattedMessage) ? $record->formatted : $record->message;
@@ -168,14 +128,14 @@ class PushoverHandler extends SocketHandler
             $dataArray['priority'] = 1;
         }
 
-        // First determine the available parameters
+        
         $context = array_intersect_key($record->context, $this->parameterNames);
         $extra = array_intersect_key($record->extra, $this->parameterNames);
 
-        // Least important info should be merged with subsequent info
+        
         $dataArray = array_merge($extra, $context, $dataArray);
 
-        // Only pass sounds that are supported by the API
+        
         if (isset($dataArray['sound']) && !in_array($dataArray['sound'], $this->sounds, true)) {
             unset($dataArray['sound']);
         }
@@ -206,12 +166,7 @@ class PushoverHandler extends SocketHandler
         $this->user = null;
     }
 
-    /**
-     * @param int|string|Level|LogLevel::* $level
-     * @return $this
-     *
-     * @phpstan-param value-of<Level::VALUES>|value-of<Level::NAMES>|Level|LogLevel::* $level
-     */
+    
     public function setHighPriorityLevel(int|string|Level $level): self
     {
         $this->highPriorityLevel = Logger::toMonologLevel($level);
@@ -219,12 +174,7 @@ class PushoverHandler extends SocketHandler
         return $this;
     }
 
-    /**
-     * @param int|string|Level|LogLevel::* $level
-     * @return $this
-     *
-     * @phpstan-param value-of<Level::VALUES>|value-of<Level::NAMES>|Level|LogLevel::* $level
-     */
+    
     public function setEmergencyLevel(int|string|Level $level): self
     {
         $this->emergencyLevel = Logger::toMonologLevel($level);
@@ -232,11 +182,7 @@ class PushoverHandler extends SocketHandler
         return $this;
     }
 
-    /**
-     * Use the formatted message?
-     *
-     * @return $this
-     */
+    
     public function useFormattedMessage(bool $useFormattedMessage): self
     {
         $this->useFormattedMessage = $useFormattedMessage;

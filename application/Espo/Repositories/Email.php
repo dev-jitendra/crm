@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Repositories;
 
@@ -47,9 +21,7 @@ use Espo\Repositories\EmailAddress as EmailAddressRepository;
 use Espo\Entities\EmailAddress;
 use stdClass;
 
-/**
- * @extends Database<EmailEntity>
- */
+
 class Email extends Database implements
 
     Di\EmailFilterManagerAware
@@ -139,7 +111,7 @@ class Email extends Database implements
     public function loadToField(EmailEntity $entity): void
     {
         $entity->loadLinkMultipleField('toEmailAddresses');
-        /** @var ?stdClass $names */
+        
         $names = $entity->get('toEmailAddressesNames');
 
         if ($names === null) {
@@ -158,7 +130,7 @@ class Email extends Database implements
     public function loadCcField(EmailEntity $entity): void
     {
         $entity->loadLinkMultipleField('ccEmailAddresses');
-        /** @var ?stdClass $names */
+        
         $names = $entity->get('ccEmailAddressesNames');
 
         if ($names === null) {
@@ -177,7 +149,7 @@ class Email extends Database implements
     public function loadBccField(EmailEntity $entity): void
     {
         $entity->loadLinkMultipleField('bccEmailAddresses');
-        /** @var ?stdClass $names */
+        
         $names = $entity->get('bccEmailAddressesNames');
 
         if ($names === null) {
@@ -210,9 +182,7 @@ class Email extends Database implements
         }
     }
 
-    /**
-     * @param string[] $fieldList
-     */
+    
     public function loadNameHash(EmailEntity $entity, array $fieldList = ['from', 'to', 'cc', 'bcc', 'replyTo']): void
     {
         $addressList = [];
@@ -297,9 +267,7 @@ class Email extends Database implements
         $entity->set('idHash', $idHash);
     }
 
-    /**
-     * @param EmailEntity $entity
-     */
+    
     protected function beforeSave(Entity $entity, array $options = [])
     {
         if ($entity->isNew() && !$entity->getMessageId()) {
@@ -475,9 +443,7 @@ class Email extends Database implements
         }
     }
 
-    /**
-     * @param EmailEntity $entity
-     */
+    
     protected function afterSave(Entity $entity, array $options = [])
     {
         parent::afterSave($entity, $options);
@@ -488,7 +454,7 @@ class Email extends Database implements
                 $entity->getParentId() &&
                 $entity->isAttributeChanged('parentId')
             ) {
-                /** @var Collection<EmailEntity> $replyList */
+                
                 $replyList = $this
                     ->getRelation($entity, 'replies')
                     ->find();
@@ -544,7 +510,7 @@ class Email extends Database implements
 
     private function getEmailAddressRepository(): EmailAddressRepository
     {
-        /** @var EmailAddressRepository */
+        
         return $this->entityManager->getRepository(EmailAddress::ENTITY_TYPE);
     }
 }

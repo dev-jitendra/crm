@@ -8,20 +8,16 @@ use FastRoute\Route;
 
 abstract class RegexBasedAbstract implements DataGenerator
 {
-    /** @var mixed[][] */
+    
     protected $staticRoutes = [];
 
-    /** @var Route[][] */
+    
     protected $methodToRegexToRoutesMap = [];
 
-    /**
-     * @return int
-     */
+    
     abstract protected function getApproxChunkSize();
 
-    /**
-     * @return mixed[]
-     */
+    
     abstract protected function processChunk($regexToRoutesMap);
 
     public function addRoute($httpMethod, $routeData, $handler)
@@ -33,9 +29,7 @@ abstract class RegexBasedAbstract implements DataGenerator
         }
     }
 
-    /**
-     * @return mixed[]
-     */
+    
     public function getData()
     {
         if (empty($this->methodToRegexToRoutesMap)) {
@@ -45,9 +39,7 @@ abstract class RegexBasedAbstract implements DataGenerator
         return [$this->staticRoutes, $this->generateVariableRouteData()];
     }
 
-    /**
-     * @return mixed[]
-     */
+    
     private function generateVariableRouteData()
     {
         $data = [];
@@ -59,20 +51,14 @@ abstract class RegexBasedAbstract implements DataGenerator
         return $data;
     }
 
-    /**
-     * @param int
-     * @return int
-     */
+    
     private function computeChunkSize($count)
     {
         $numParts = max(1, round($count / $this->getApproxChunkSize()));
         return (int) ceil($count / $numParts);
     }
 
-    /**
-     * @param mixed[]
-     * @return bool
-     */
+    
     private function isStaticRoute($routeData)
     {
         return count($routeData) === 1 && is_string($routeData[0]);
@@ -119,10 +105,7 @@ abstract class RegexBasedAbstract implements DataGenerator
         );
     }
 
-    /**
-     * @param mixed[]
-     * @return mixed[]
-     */
+    
     private function buildRegexForRoute($routeData)
     {
         $regex = '';
@@ -155,18 +138,15 @@ abstract class RegexBasedAbstract implements DataGenerator
         return [$regex, $variables];
     }
 
-    /**
-     * @param string
-     * @return bool
-     */
+    
     private function regexHasCapturingGroups($regex)
     {
         if (false === strpos($regex, '(')) {
-            // Needs to have at least a ( to contain a capturing group
+            
             return false;
         }
 
-        // Semi-accurate detection for capturing groups
+        
         return (bool) preg_match(
             '~
                 (?:

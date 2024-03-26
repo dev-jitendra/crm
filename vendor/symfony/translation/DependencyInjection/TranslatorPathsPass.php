@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation\DependencyInjection;
 
@@ -18,26 +11,18 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver\TraceableValueResolver;
 
-/**
- * @author Yonel Ceruto <yonelceruto@gmail.com>
- */
+
 class TranslatorPathsPass extends AbstractRecursivePass
 {
     private int $level = 0;
 
-    /**
-     * @var array<string, bool>
-     */
+    
     private array $paths = [];
 
-    /**
-     * @var array<int, Definition>
-     */
+    
     private array $definitions = [];
 
-    /**
-     * @var array<string, array<string, bool>>
-     */
+    
     private array $controllers = [];
 
     public function process(ContainerBuilder $container)

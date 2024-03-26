@@ -4,30 +4,22 @@ namespace Doctrine\DBAL\Platforms\Keywords;
 
 use Doctrine\Deprecations\Deprecation;
 
-/**
- * Oracle Keywordlist.
- */
+
 class OracleKeywords extends KeywordList
 {
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated
-     */
+    
     public function getName()
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5433',
+            'https:
             'OracleKeywords::getName() is deprecated.',
         );
 
         return 'Oracle';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function getKeywords()
     {
         return [

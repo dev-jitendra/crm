@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Select\Applier;
 
@@ -60,9 +34,7 @@ class Factory
     public const BOOL_FILTER_LIST = 'boolFilterList';
     public const ADDITIONAL = 'additional';
 
-    /**
-     * @var array<string, class-string<object>>
-     */
+    
     private array $defaultClassNameMap = [
         self::TEXT_FILTER => TextFilterApplier::class,
         self::ACCESS_CONTROL_FILTER => AccessControlFilterApplier::class,
@@ -84,7 +56,7 @@ class Factory
     {
         $className = $this->getDefaultClassName($type);
 
-        // SelectManager is used for backward compatibility.
+        
         $selectManager = $this->selectManagerFactory->create($entityType, $user);
 
         $bindingData = new BindingData();
@@ -104,61 +76,59 @@ class Factory
 
     public function createWhere(string $entityType, User $user): WhereApplier
     {
-        /** @var WhereApplier */
+        
         return $this->create($entityType, $user, self::WHERE);
     }
 
     public function createSelect(string $entityType, User $user): SelectApplier
     {
-        /** @var SelectApplier */
+        
         return $this->create($entityType, $user, self::SELECT);
     }
 
     public function createOrder(string $entityType, User $user): OrderApplier
     {
-        /** @var OrderApplier */
+        
         return $this->create($entityType, $user, self::ORDER);
     }
 
     public function createLimit(string $entityType, User $user): LimitApplier
     {
-        /** @var LimitApplier */
+        
         return $this->create($entityType, $user, self::LIMIT);
     }
 
     public function createAccessControlFilter(string $entityType, User $user): AccessControlFilterApplier
     {
-        /** @var AccessControlFilterApplier */
+        
         return $this->create($entityType, $user, self::ACCESS_CONTROL_FILTER);
     }
 
     public function createTextFilter(string $entityType, User $user): TextFilterApplier
     {
-        /** @var TextFilterApplier */
+        
         return $this->create($entityType, $user, self::TEXT_FILTER);
     }
 
     public function createPrimaryFilter(string $entityType, User $user): PrimaryFilterApplier
     {
-        /** @var PrimaryFilterApplier */
+        
         return $this->create($entityType, $user, self::PRIMARY_FILTER);
     }
 
     public function createBoolFilterList(string $entityType, User $user): BoolFilterListApplier
     {
-        /** @var BoolFilterListApplier */
+        
         return $this->create($entityType, $user, self::BOOL_FILTER_LIST);
     }
 
     public function createAdditional(string $entityType, User $user): AdditionalApplier
     {
-        /** @var AdditionalApplier */
+        
         return $this->create($entityType, $user, self::ADDITIONAL);
     }
 
-    /**
-     * @return class-string<object>
-     */
+    
     private function getDefaultClassName(string $type): string
     {
         if (array_key_exists($type, $this->defaultClassNameMap)) {

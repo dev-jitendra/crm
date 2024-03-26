@@ -10,9 +10,7 @@ use GuzzleHttp\Psr7\Query;
 class Router implements HttpServerInterface {
     use CloseResponseTrait;
 
-    /**
-     * @var \Symfony\Component\Routing\Matcher\UrlMatcherInterface
-     */
+    
     protected $_matcher;
 
     private $_noopController;
@@ -22,10 +20,7 @@ class Router implements HttpServerInterface {
         $this->_noopController = new NoOpHttpServerController;
     }
 
-    /**
-     * {@inheritdoc}
-     * @throws \UnexpectedValueException If a controller is not \Ratchet\Http\HttpServerInterface
-     */
+    
     public function onOpen(ConnectionInterface $conn, RequestInterface $request = null) {
         if (null === $request) {
             throw new \UnexpectedValueException('$request can not be null');
@@ -69,25 +64,19 @@ class Router implements HttpServerInterface {
         $conn->controller->onOpen($conn, $request);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function onMessage(ConnectionInterface $from, $msg) {
         $from->controller->onMessage($from, $msg);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function onClose(ConnectionInterface $conn) {
         if (isset($conn->controller)) {
             $conn->controller->onClose($conn);
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function onError(ConnectionInterface $conn, \Exception $e) {
         if (isset($conn->controller)) {
             $conn->controller->onError($conn, $e);

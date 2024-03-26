@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Services;
 
@@ -45,16 +19,14 @@ use Espo\ORM\Entity;
 
 use stdClass;
 
-/**
- * @extends Record<\Espo\Entities\Note>
- */
+
 class Note extends Record
 {
     protected function afterCreateEntity(Entity $entity, $data)
     {
         parent::afterCreateEntity($entity, $data);
 
-        /** @var NoteEntity $entity */
+        
 
         $this->processFollowAfterCreate($entity);
     }
@@ -95,11 +67,7 @@ class Note extends Record
         $this->getStreamService()->followEntity($parent, $this->user->getId());
     }
 
-    /**
-     * @param NoteEntity $entity
-     * @param stdClass $data
-     * @throws Forbidden
-     */
+    
     protected function beforeCreateEntity(Entity $entity, $data)
     {
         $parentType = $data->parentType ?? null;
@@ -187,11 +155,7 @@ class Note extends Record
         unset($data->isGlobal);
     }
 
-    /**
-     * @param NoteEntity $entity
-     * @param stdClass $data
-     * @throws Forbidden
-     */
+    
     protected function beforeUpdateEntity(Entity $entity, $data)
     {
         parent::beforeUpdateEntity($entity, $data);
@@ -223,13 +187,10 @@ class Note extends Record
         $entity->set('post', $post);
     }
 
-    /**
-     * @throws BadRequest
-     * @throws Forbidden
-     */
+    
     protected function processAssignmentCheck(Entity $entity): void
     {
-        /** @var NoteEntity $entity */
+        
 
         if (!$entity->isNew()) {
             return;
@@ -243,18 +204,18 @@ class Note extends Record
 
         $userTeamIdList = $this->user->getTeamIdList();
 
-        /** @var string[] $userIdList */
+        
         $userIdList = $entity->getLinkMultipleIdList('users');
-        /** @var string[] $portalIdList */
+        
         $portalIdList = $entity->getLinkMultipleIdList('portals');
-        /** @var string[] $teamIdList */
+        
         $teamIdList = $entity->getLinkMultipleIdList('teams');
 
-        /** @var iterable<UserEntity> $targetUserList */
+        
         $targetUserList = [];
 
         if ($targetType === NoteEntity::TARGET_USERS) {
-            /** @var iterable<UserEntity> $targetUserList */
+            
             $targetUserList = $this->entityManager
                 ->getRDBRepository(UserEntity::ENTITY_TYPE)
                 ->select(['id', 'type'])
@@ -392,10 +353,7 @@ class Note extends Record
         parent::unlink($id, $link, $foreignId);
     }
 
-    /**
-     * @param NoteEntity $entity
-     * @return void
-     */
+    
     public function loadAdditionalFields(Entity $entity)
     {
         parent::loadAdditionalFields($entity);
@@ -405,7 +363,7 @@ class Note extends Record
 
     private function getUserRepository(): UserRepository
     {
-        /** @var UserRepository */
+        
         return $this->entityManager->getRepository(UserEntity::ENTITY_TYPE);
     }
 }

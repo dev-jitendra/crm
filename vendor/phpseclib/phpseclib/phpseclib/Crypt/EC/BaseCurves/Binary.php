@@ -1,23 +1,6 @@
 <?php
 
-/**
- * Curves over y^2 + x*y = x^3 + a*x^2 + b
- *
- * These are curves used in SEC 2 over prime fields: http://www.secg.org/SEC2-Ver-1.0.pdf
- * The curve is a weierstrass curve with a[3] and a[2] set to 0.
- *
- * Uses Jacobian Coordinates for speed if able:
- *
- * https://en.wikipedia.org/wiki/Jacobian_curve
- * https://en.wikibooks.org/wiki/Cryptography/Prime_Curve/Jacobian_Coordinates
- *
- * PHP version 5 and 7
- *
- * @author    Jim Wigginton <terrafrost@php.net>
- * @copyright 2017 Jim Wigginton
- * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
- * @link      http://pear.php.net/package/Math_BigInteger
- */
+
 
 namespace phpseclib3\Crypt\EC\BaseCurves;
 
@@ -25,65 +8,31 @@ use phpseclib3\Math\BigInteger;
 use phpseclib3\Math\BinaryField;
 use phpseclib3\Math\BinaryField\Integer as BinaryInteger;
 
-/**
- * Curves over y^2 + x*y = x^3 + a*x^2 + b
- *
- * @author  Jim Wigginton <terrafrost@php.net>
- */
+
 class Binary extends Base
 {
-    /**
-     * Binary Field Integer factory
-     *
-     * @var \phpseclib3\Math\BinaryField
-     */
+    
     protected $factory;
 
-    /**
-     * Cofficient for x^1
-     *
-     * @var object
-     */
+    
     protected $a;
 
-    /**
-     * Cofficient for x^0
-     *
-     * @var object
-     */
+    
     protected $b;
 
-    /**
-     * Base Point
-     *
-     * @var object
-     */
+    
     protected $p;
 
-    /**
-     * The number one over the specified finite field
-     *
-     * @var object
-     */
+    
     protected $one;
 
-    /**
-     * The modulo
-     *
-     * @var BigInteger
-     */
+    
     protected $modulo;
 
-    /**
-     * The Order
-     *
-     * @var BigInteger
-     */
+    
     protected $order;
 
-    /**
-     * Sets the modulo
-     */
+    
     public function setModulo(...$modulo)
     {
         $this->modulo = $modulo;
@@ -92,12 +41,7 @@ class Binary extends Base
         $this->one = $this->factory->newInteger("\1");
     }
 
-    /**
-     * Set coefficients a and b
-     *
-     * @param string $a
-     * @param string $b
-     */
+    
     public function setCoefficients($a, $b)
     {
         if (!isset($this->factory)) {
@@ -107,12 +51,7 @@ class Binary extends Base
         $this->b = $this->factory->newInteger(pack('H*', $b));
     }
 
-    /**
-     * Set x and y coordinates for the base point
-     *
-     * @param string|BinaryInteger $x
-     * @param string|BinaryInteger $y
-     */
+    
     public function setBasePoint($x, $y)
     {
         switch (true) {
@@ -130,29 +69,17 @@ class Binary extends Base
         ];
     }
 
-    /**
-     * Retrieve the base point as an array
-     *
-     * @return array
-     */
+    
     public function getBasePoint()
     {
         if (!isset($this->factory)) {
             throw new \RuntimeException('setModulo needs to be called before this method');
         }
-        /*
-        if (!isset($this->p)) {
-            throw new \RuntimeException('setBasePoint needs to be called before this method');
-        }
-        */
+        
         return $this->p;
     }
 
-    /**
-     * Adds two points on the curve
-     *
-     * @return FiniteField[]
-     */
+    
     public function addPoint(array $p, array $q)
     {
         if (!isset($this->factory)) {
@@ -177,7 +104,7 @@ class Binary extends Base
             return !$p[1]->equals($q[1]) ? [] : $this->doublePoint($p);
         }
 
-        // formulas from http://hyperelliptic.org/EFD/g12o/auto-shortw-jacobian.html
+        
 
         list($x1, $y1, $z1) = $p;
         list($x2, $y2, $z2) = $q;
@@ -221,11 +148,7 @@ class Binary extends Base
         return [$x3, $y3, $z3];
     }
 
-    /**
-     * Doubles a point on a curve
-     *
-     * @return FiniteField[]
-     */
+    
     public function doublePoint(array $p)
     {
         if (!isset($this->factory)) {
@@ -240,7 +163,7 @@ class Binary extends Base
             throw new \RuntimeException('Affine coordinates need to be manually converted to "Jacobi" coordinates or vice versa');
         }
 
-        // formulas from http://hyperelliptic.org/EFD/g12o/auto-shortw-jacobian.html
+        
 
         list($x1, $y1, $z1) = $p;
 
@@ -268,28 +191,13 @@ class Binary extends Base
         return [$x3, $y3, $z3];
     }
 
-    /**
-     * Returns the X coordinate and the derived Y coordinate
-     *
-     * Not supported because it is covered by patents.
-     * Quoting https://www.openssl.org/docs/man1.1.0/apps/ecparam.html ,
-     *
-     * "Due to patent issues the compressed option is disabled by default for binary curves
-     *  and can be enabled by defining the preprocessor macro OPENSSL_EC_BIN_PT_COMP at
-     *  compile time."
-     *
-     * @return array
-     */
+    
     public function derivePoint($m)
     {
         throw new \RuntimeException('Point compression on binary finite field elliptic curves is not supported');
     }
 
-    /**
-     * Tests whether or not the x / y values satisfy the equation
-     *
-     * @return boolean
-     */
+    
     public function verifyPoint(array $p)
     {
         list($x, $y) = $p;
@@ -302,45 +210,25 @@ class Binary extends Base
         return $lhs->equals($rhs);
     }
 
-    /**
-     * Returns the modulo
-     *
-     * @return \phpseclib3\Math\BigInteger
-     */
+    
     public function getModulo()
     {
         return $this->modulo;
     }
 
-    /**
-     * Returns the a coefficient
-     *
-     * @return \phpseclib3\Math\PrimeField\Integer
-     */
+    
     public function getA()
     {
         return $this->a;
     }
 
-    /**
-     * Returns the a coefficient
-     *
-     * @return \phpseclib3\Math\PrimeField\Integer
-     */
+    
     public function getB()
     {
         return $this->b;
     }
 
-    /**
-     * Returns the affine point
-     *
-     * A Jacobian Coordinate is of the form (x, y, z).
-     * To convert a Jacobian Coordinate to an Affine Point
-     * you do (x / z^2, y / z^3)
-     *
-     * @return \phpseclib3\Math\PrimeField\Integer[]
-     */
+    
     public function convertToAffine(array $p)
     {
         if (!isset($p[2])) {
@@ -355,11 +243,7 @@ class Binary extends Base
         ];
     }
 
-    /**
-     * Converts an affine point to a jacobian coordinate
-     *
-     * @return \phpseclib3\Math\PrimeField\Integer[]
-     */
+    
     public function convertToInternal(array $p)
     {
         if (isset($p[2])) {

@@ -10,9 +10,7 @@ $tmpdir = sys_get_temp_dir();
 
 class regressionTest extends TestCase
 {
-    /**
-     * @dataProvider issueProvider
-     */
+    
     public function testIssues($issue)
     {
         global $tmpdir;
@@ -468,8 +466,8 @@ class regressionTest extends TestCase
                     'flags' => LightnCandy::FLAG_HANDLEBARSJS,
                     'helpers' => array('myif', 'mywith'),
                 ),
-                // PENDING ISSUE, check for https://github.com/wycats/handlebars.js/issues/1135
-                // 'expected' => '#--john-##==john=###~~john~#--john-##==john=###~~john~#--john-##==john=###~~john~',
+                
+                
                 'expected' => '#-john--##=john==###~~john~#-john--##=john==###~~john~#-john--##=john==###~~john~',
             ),
 
@@ -1999,7 +1997,7 @@ VAREND
 </ul>
 VAREND
                 ,
-                'data' => array('name' => 'John', 'value' => 10000, 'url' => 'http://yahoo.com', 'text' => 'You&Me!'),
+                'data' => array('name' => 'John', 'value' => 10000, 'url' => 'http:
                 'options' => array(
                     'flags' => LightnCandy::FLAG_ERROR_LOG | LightnCandy::FLAG_HANDLEBARSJS,
                     'helpers' => array(
@@ -2028,8 +2026,8 @@ VAREND
  <li>8. &#x3D;10000&#x3D;</li>
  <li>9. &lt;a href&#x3D;&quot;John&quot;&gt;click here&lt;/a&gt;</li>
  <li>10. &lt;a href&#x3D;&quot;10000&quot;&gt;click here&lt;/a&gt;</li>
- <li>11. &lt;a href&#x3D;&quot;http://yahoo.com&quot;&gt;You&amp;Me!&lt;/a&gt;</li>
- <li>12. <a href="http://yahoo.com">You&Me!</a></li>
+ <li>11. &lt;a href&#x3D;&quot;http:
+ <li>12. <a href="http:
 </ul>
 VAREND
             ),

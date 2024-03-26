@@ -13,11 +13,7 @@ use SplObjectStorage;
 use function assert;
 use function strlen;
 
-/**
- * Gathers SQL statements that allow to completely drop the current schema.
- *
- * @deprecated Use {@link DropSchemaObjectsSQLBuilder} instead.
- */
+
 class DropSchemaSqlCollector extends AbstractVisitor
 {
     private SplObjectStorage $constraints;
@@ -29,7 +25,7 @@ class DropSchemaSqlCollector extends AbstractVisitor
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5416',
+            'https:
             'DropSchemaSqlCollector is deprecated. Use DropSchemaObjectsSQLBuilder instead.',
         );
 
@@ -37,17 +33,13 @@ class DropSchemaSqlCollector extends AbstractVisitor
         $this->initializeQueries();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function acceptTable(Table $table)
     {
         $this->tables->attach($table);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function acceptForeignKey(Table $localTable, ForeignKeyConstraint $fkConstraint)
     {
         if (strlen($fkConstraint->getName()) === 0) {
@@ -57,21 +49,19 @@ class DropSchemaSqlCollector extends AbstractVisitor
         $this->constraints->attach($fkConstraint, $localTable);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function acceptSequence(Sequence $sequence)
     {
         $this->sequences->attach($sequence);
     }
 
-    /** @return void */
+    
     public function clearQueries()
     {
         $this->initializeQueries();
     }
 
-    /** @return string[] */
+    
     public function getQueries()
     {
         $sql = [];

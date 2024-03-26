@@ -4,55 +4,28 @@ declare(strict_types=1);
 
 namespace Cron;
 
-/**
- * Abstract CRON expression field.
- */
+
 abstract class AbstractField implements FieldInterface
 {
-    /**
-     * Full range of values that are allowed for this field type.
-     *
-     * @var array
-     */
+    
     protected $fullRange = [];
 
-    /**
-     * Literal values we need to convert to integers.
-     *
-     * @var array
-     */
+    
     protected $literals = [];
 
-    /**
-     * Start value of the full range.
-     *
-     * @var int
-     */
+    
     protected $rangeStart;
 
-    /**
-     * End value of the full range.
-     *
-     * @var int
-     */
+    
     protected $rangeEnd;
 
-    /**
-     * Constructor
-     */
+    
     public function __construct()
     {
         $this->fullRange = range($this->rangeStart, $this->rangeEnd);
     }
 
-    /**
-     * Check to see if a field is satisfied by a value.
-     *
-     * @param string $dateValue Date value to check
-     * @param string $value Value to test
-     *
-     * @return bool
-     */
+    
     public function isSatisfied(int $dateValue, string $value): bool
     {
         if ($this->isIncrementsOfRanges($value)) {
@@ -66,38 +39,19 @@ abstract class AbstractField implements FieldInterface
         return '*' === $value || $dateValue === (int) $value;
     }
 
-    /**
-     * Check if a value is a range.
-     *
-     * @param string $value Value to test
-     *
-     * @return bool
-     */
+    
     public function isRange(string $value): bool
     {
         return false !== strpos($value, '-');
     }
 
-    /**
-     * Check if a value is an increments of ranges.
-     *
-     * @param string $value Value to test
-     *
-     * @return bool
-     */
+    
     public function isIncrementsOfRanges(string $value): bool
     {
         return false !== strpos($value, '/');
     }
 
-    /**
-     * Test if a value is within a range.
-     *
-     * @param int $dateValue Set date value
-     * @param string $value Value to test
-     *
-     * @return bool
-     */
+    
     public function isInRange(int $dateValue, $value): bool
     {
         $parts = array_map(function ($value) {
@@ -111,31 +65,24 @@ abstract class AbstractField implements FieldInterface
         return $dateValue >= $parts[0] && $dateValue <= $parts[1];
     }
 
-    /**
-     * Test if a value is within an increments of ranges (offset[-to]/step size).
-     *
-     * @param string $dateValue Set date value
-     * @param string $value Value to test
-     *
-     * @return bool
-     */
+    
     public function isInIncrementsOfRanges(int $dateValue, string $value): bool
     {
         $chunks = array_map('trim', explode('/', $value, 2));
         $range = $chunks[0];
         $step = $chunks[1] ?? 0;
 
-        // No step or 0 steps aren't cool
+        
         if (null === $step || '0' === $step || 0 === $step) {
             return false;
         }
 
-        // Expand the * to a full range
+        
         if ('*' === $range) {
             $range = $this->rangeStart . '-' . $this->rangeEnd;
         }
 
-        // Generate the requested small range
+        
         $rangeChunks = explode('-', $range, 2);
         $rangeStart = $rangeChunks[0];
         $rangeEnd = $rangeChunks[1] ?? $rangeStart;
@@ -148,7 +95,7 @@ abstract class AbstractField implements FieldInterface
             throw new \OutOfRangeException('Invalid range end requested');
         }
 
-        // Steps larger than the range need to wrap around and be handled slightly differently than smaller steps
+        
         if ($step >= $this->rangeEnd) {
             $thisRange = [$this->fullRange[$step % \count($this->fullRange)]];
         } else {
@@ -158,14 +105,7 @@ abstract class AbstractField implements FieldInterface
         return \in_array($dateValue, $thisRange, true);
     }
 
-    /**
-     * Returns a range of values for the given cron expression.
-     *
-     * @param string $expression The expression to evaluate
-     * @param int $max Maximum offset for range
-     *
-     * @return array
-     */
+    
     public function getRangeForExpression(string $expression, int $max): array
     {
         $values = [];
@@ -212,13 +152,7 @@ abstract class AbstractField implements FieldInterface
         return $values;
     }
 
-    /**
-     * Convert literal.
-     *
-     * @param string $value
-     *
-     * @return string
-     */
+    
     protected function convertLiterals(string $value): string
     {
         if (\count($this->literals)) {
@@ -231,18 +165,12 @@ abstract class AbstractField implements FieldInterface
         return $value;
     }
 
-    /**
-     * Checks to see if a value is valid for the field.
-     *
-     * @param string $value
-     *
-     * @return bool
-     */
+    
     public function validate(string $value): bool
     {
         $value = $this->convertLiterals($value);
 
-        // All fields allow * as a valid value
+        
         if ('*' === $value) {
             return true;
         }
@@ -250,7 +178,7 @@ abstract class AbstractField implements FieldInterface
         if (false !== strpos($value, '/')) {
             [$range, $step] = explode('/', $value);
 
-            // Don't allow numeric ranges
+            
             if (is_numeric($range)) {
                 return false;
             }
@@ -258,7 +186,7 @@ abstract class AbstractField implements FieldInterface
             return $this->validate($range) && filter_var($step, FILTER_VALIDATE_INT);
         }
 
-        // Validate each chunk of a list individually
+        
         if (false !== strpos($value, ',')) {
             foreach (explode(',', $value) as $listItem) {
                 if (!$this->validate($listItem)) {
@@ -293,7 +221,7 @@ abstract class AbstractField implements FieldInterface
             return false;
         }
 
-        // We should have a numeric by now, so coerce this into an integer
+        
         $value = (int) $value;
 
         return \in_array($value, $this->fullRange, true);

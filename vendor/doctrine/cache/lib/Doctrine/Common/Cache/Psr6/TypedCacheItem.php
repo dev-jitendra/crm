@@ -17,9 +17,7 @@ final class TypedCacheItem implements CacheItemInterface
 {
     private ?float $expiry = null;
 
-    /**
-     * @internal
-     */
+    
     public function __construct(
         private string $key,
         private mixed $value,
@@ -49,9 +47,7 @@ final class TypedCacheItem implements CacheItemInterface
         return $this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function expiresAt($expiration): static
     {
         if ($expiration === null) {
@@ -68,9 +64,7 @@ final class TypedCacheItem implements CacheItemInterface
         return $this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function expiresAfter($time): static
     {
         if ($time === null) {
@@ -89,9 +83,7 @@ final class TypedCacheItem implements CacheItemInterface
         return $this;
     }
 
-    /**
-     * @internal
-     */
+    
     public function getExpiry(): ?float
     {
         return $this->expiry;

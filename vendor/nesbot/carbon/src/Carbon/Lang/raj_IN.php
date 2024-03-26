@@ -1,18 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - meghrajsuthar03@gmail.com
- */
+
+
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [
         'L' => 'D/M/YY',
@@ -25,23 +15,23 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'day_of_first_week_of_year' => 1,
     'meridiem' => ['पूर्वाह्न', 'अपराह्न'],
 
-    'year' => ':count आंहू', // less reliable
-    'y' => ':count आंहू', // less reliable
-    'a_year' => ':count आंहू', // less reliable
+    'year' => ':count आंहू', 
+    'y' => ':count आंहू', 
+    'a_year' => ':count आंहू', 
 
-    'month' => ':count सूरज', // less reliable
-    'm' => ':count सूरज', // less reliable
-    'a_month' => ':count सूरज', // less reliable
+    'month' => ':count सूरज', 
+    'm' => ':count सूरज', 
+    'a_month' => ':count सूरज', 
 
-    'week' => ':count निवाज', // less reliable
-    'w' => ':count निवाज', // less reliable
-    'a_week' => ':count निवाज', // less reliable
+    'week' => ':count निवाज', 
+    'w' => ':count निवाज', 
+    'a_week' => ':count निवाज', 
 
-    'day' => ':count अेक', // less reliable
-    'd' => ':count अेक', // less reliable
-    'a_day' => ':count अेक', // less reliable
+    'day' => ':count अेक', 
+    'd' => ':count अेक', 
+    'a_day' => ':count अेक', 
 
-    'hour' => ':count दुनियांण', // less reliable
-    'h' => ':count दुनियांण', // less reliable
-    'a_hour' => ':count दुनियांण', // less reliable
+    'hour' => ':count दुनियांण', 
+    'h' => ':count दुनियांण', 
+    'a_hour' => ':count दुनियांण', 
 ]);

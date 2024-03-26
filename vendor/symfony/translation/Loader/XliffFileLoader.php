@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation\Loader;
 
@@ -21,11 +14,7 @@ use Symfony\Component\Translation\Exception\RuntimeException;
 use Symfony\Component\Translation\MessageCatalogue;
 use Symfony\Component\Translation\Util\XliffUtils;
 
-/**
- * XliffFileLoader loads translations from XLIFF files.
- *
- * @author Fabien Potencier <fabien@symfony.com>
- */
+
 class XliffFileLoader implements LoaderInterface
 {
     public function load(mixed $resource, string $locale, string $domain = 'messages'): MessageCatalogue
@@ -85,9 +74,7 @@ class XliffFileLoader implements LoaderInterface
         }
     }
 
-    /**
-     * Extract messages and metadata from DOMDocument into a MessageCatalogue.
-     */
+    
     private function extractXliff1(\DOMDocument $dom, MessageCatalogue $catalogue, string $domain)
     {
         $xml = simplexml_import_dom($dom);
@@ -96,16 +83,16 @@ class XliffFileLoader implements LoaderInterface
         $namespace = 'urn:oasis:names:tc:xliff:document:1.2';
         $xml->registerXPathNamespace('xliff', $namespace);
 
-        foreach ($xml->xpath('//xliff:file') as $file) {
+        foreach ($xml->xpath('
             $fileAttributes = $file->attributes();
 
             $file->registerXPathNamespace('xliff', $namespace);
 
-            foreach ($file->xpath('.//xliff:prop') as $prop) {
+            foreach ($file->xpath('.
                 $catalogue->setCatalogueMetadata($prop->attributes()['prop-type'], (string) $prop, $domain);
             }
 
-            foreach ($file->xpath('.//xliff:trans-unit') as $translation) {
+            foreach ($file->xpath('.
                 $attributes = $translation->attributes();
 
                 if (!(isset($attributes['resname']) || isset($translation->source))) {
@@ -113,8 +100,8 @@ class XliffFileLoader implements LoaderInterface
                 }
 
                 $source = isset($attributes['resname']) && $attributes['resname'] ? $attributes['resname'] : $translation->source;
-                // If the xlf file has another encoding specified, try to convert it because
-                // simple_xml will always return utf-8 encoded values
+                
+                
                 $target = $this->utf8ToCharset((string) ($translation->target ?? $translation->source), $encoding);
 
                 $catalogue->set((string) $source, $target, $domain);
@@ -152,13 +139,13 @@ class XliffFileLoader implements LoaderInterface
 
         $xml->registerXPathNamespace('xliff', 'urn:oasis:names:tc:xliff:document:2.0');
 
-        foreach ($xml->xpath('//xliff:unit') as $unit) {
+        foreach ($xml->xpath('
             foreach ($unit->segment as $segment) {
                 $attributes = $unit->attributes();
                 $source = $attributes['name'] ?? $segment->source;
 
-                // If the xlf file has another encoding specified, try to convert it because
-                // simple_xml will always return utf-8 encoded values
+                
+                
                 $target = $this->utf8ToCharset((string) ($segment->target ?? $segment->source), $encoding);
 
                 $catalogue->set((string) $source, $target, $domain);
@@ -188,9 +175,7 @@ class XliffFileLoader implements LoaderInterface
         }
     }
 
-    /**
-     * Convert a UTF8 string to the specified encoding.
-     */
+    
     private function utf8ToCharset(string $content, string $encoding = null): string
     {
         if ('UTF-8' !== $encoding && !empty($encoding)) {
@@ -208,7 +193,7 @@ class XliffFileLoader implements LoaderInterface
             return $notes;
         }
 
-        /** @var \SimpleXMLElement $xmlNote */
+        
         foreach ($noteElement as $xmlNote) {
             $noteAttributes = $xmlNote->attributes();
             $note = ['content' => $this->utf8ToCharset((string) $xmlNote, $encoding)];

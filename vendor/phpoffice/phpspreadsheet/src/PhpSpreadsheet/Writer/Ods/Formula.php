@@ -9,9 +9,7 @@ class Formula
 {
     private $definedNames = [];
 
-    /**
-     * @param DefinedName[] $definedNames
-     */
+    
     public function __construct(array $definedNames)
     {
         foreach ($definedNames as $definedName) {
@@ -74,9 +72,9 @@ class Formula
         $columns = $splitRanges[6];
         $rows = $splitRanges[7];
 
-        // Replace any commas in the formula with semi-colons for Ods
-        // If by chance there are commas in worksheet names, then they will be "fixed" again in the loop
-        //    because we've already extracted worksheet names with our preg_match_all()
+        
+        
+        
         $formula = str_replace(',', ';', $formula);
         while ($splitCount > 0) {
             --$splitCount;
@@ -89,7 +87,7 @@ class Formula
             $newRange = '';
             if (empty($worksheet)) {
                 if (($offset === 0) || ($formula[$offset - 1] !== ':')) {
-                    // We need a worksheet
+                    
                     $worksheet = $worksheetName;
                 }
             } else {
@@ -108,7 +106,7 @@ class Formula
             if (!empty($row)) {
                 $newRange .= $row;
             }
-            // close the wrapping [] unless this is the first part of a range
+            
             $newRange .= substr($formula, $offset + $length, 1) !== ':' ? ']' : '';
 
             $formula = substr($formula, 0, $offset) . $newRange . substr($formula, $offset + $length);

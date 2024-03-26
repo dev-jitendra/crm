@@ -16,12 +16,7 @@ use SimpleXMLElement;
 
 class Chart
 {
-    /**
-     * @param string $name
-     * @param string $format
-     *
-     * @return null|bool|float|int|string
-     */
+    
     private static function getAttribute(SimpleXMLElement $component, $name, $format)
     {
         $attributes = $component->attributes();
@@ -49,11 +44,7 @@ class Chart
         }
     }
 
-    /**
-     * @param string $chartName
-     *
-     * @return \PhpOffice\PhpSpreadsheet\Chart\Chart
-     */
+    
     public static function readChart(SimpleXMLElement $chartElements, $chartName)
     {
         $namespacesChartMeta = $chartElements->getNamespaces(true);
@@ -526,9 +517,7 @@ class Chart
         return $plotAttributes;
     }
 
-    /**
-     * @param mixed $plotAttributes
-     */
+    
     private static function setChartAttributes(Layout $plotArea, $plotAttributes): void
     {
         foreach ($plotAttributes as $plotAttributeKey => $plotAttributeValue) {

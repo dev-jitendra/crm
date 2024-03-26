@@ -17,26 +17,17 @@ use function openssl_sign;
 use function openssl_verify;
 use function trim;
 
-/**
- * Implementation of the RSA public key encryption algorithm.
- */
+
 class Rsa
 {
     public const MODE_AUTO   = 1;
     public const MODE_BASE64 = 2;
     public const MODE_RAW    = 3;
 
-    /** @var RsaOptions */
+    
     protected $options;
 
-    /**
-     * RSA instance factory
-     *
-     * @param  array|Traversable $options
-     * @return Rsa
-     * @throws Rsa\Exception\RuntimeException
-     * @throws Rsa\Exception\InvalidArgumentException
-     */
+    
     public static function factory($options)
     {
         if (! extension_loaded('openssl')) {
@@ -93,9 +84,7 @@ class Rsa
         return new Rsa($options);
     }
 
-    /**
-     * @throws Rsa\Exception\RuntimeException
-     */
+    
     public function __construct(?RsaOptions $options = null)
     {
         if (! extension_loaded('openssl')) {
@@ -111,32 +100,20 @@ class Rsa
         }
     }
 
-    /**
-     * Set options
-     *
-     * @return Rsa Provides a fluent interface
-     */
+    
     public function setOptions(RsaOptions $options)
     {
         $this->options = $options;
         return $this;
     }
 
-    /**
-     * Get options
-     *
-     * @return RsaOptions
-     */
+    
     public function getOptions()
     {
         return $this->options;
     }
 
-    /**
-     * Return last openssl error(s)
-     *
-     * @return string
-     */
+    
     public function getOpensslErrorString()
     {
         $message = '';
@@ -146,13 +123,7 @@ class Rsa
         return trim($message);
     }
 
-    /**
-     * Sign with private key
-     *
-     * @param  string     $data
-     * @return string
-     * @throws Rsa\Exception\RuntimeException
-     */
+    
     public function sign($data, ?Rsa\PrivateKey $privateKey = null)
     {
         $signature = '';
@@ -179,24 +150,7 @@ class Rsa
         return base64_encode($signature);
     }
 
-    /**
-     * Verify signature with public key
-     *
-     * $signature can be encoded in base64 or not. $mode sets how the input must be processed:
-     *  - MODE_AUTO: Check if the $signature is encoded in base64. Not recommended for performance.
-     *  - MODE_BASE64: Decode $signature using base64 algorithm.
-     *  - MODE_RAW: $signature is not encoded.
-     *
-     * @see Rsa::MODE_AUTO
-     * @see Rsa::MODE_BASE64
-     * @see Rsa::MODE_RAW
-     *
-     * @param  string $data
-     * @param  string $signature
-     * @param  int                $mode Input encoding
-     * @return bool
-     * @throws Rsa\Exception\RuntimeException
-     */
+    
     public function verify(
         $data,
         $signature,
@@ -209,7 +163,7 @@ class Rsa
 
         switch ($mode) {
             case self::MODE_AUTO:
-                // check if data is encoded in Base64
+                
                 $output = base64_decode($signature, true);
                 if ((false !== $output) && ($signature === base64_encode($output))) {
                     $signature = $output;
@@ -238,13 +192,7 @@ class Rsa
         return $result === 1;
     }
 
-    /**
-     * Encrypt with private/public key
-     *
-     * @param  string          $data
-     * @return string
-     * @throws Rsa\Exception\InvalidArgumentException
-     */
+    
     public function encrypt($data, ?Rsa\AbstractKey $key = null)
     {
         if (null === $key) {
@@ -269,23 +217,7 @@ class Rsa
         return base64_encode($encrypted);
     }
 
-    /**
-     * Decrypt with private/public key
-     *
-     * $data can be encoded in base64 or not. $mode sets how the input must be processed:
-     *  - MODE_AUTO: Check if the $signature is encoded in base64. Not recommended for performance.
-     *  - MODE_BASE64: Decode $data using base64 algorithm.
-     *  - MODE_RAW: $data is not encoded.
-     *
-     * @see Rsa::MODE_AUTO
-     * @see Rsa::MODE_BASE64
-     * @see Rsa::MODE_RAW
-     *
-     * @param  string          $data
-     * @param  int             $mode Input encoding
-     * @return string
-     * @throws Rsa\Exception\InvalidArgumentException
-     */
+    
     public function decrypt(
         $data,
         ?Rsa\AbstractKey $key = null,
@@ -301,7 +233,7 @@ class Rsa
 
         switch ($mode) {
             case self::MODE_AUTO:
-                // check if data is encoded in Base64
+                
                 $output = base64_decode($data, true);
                 if ((false !== $output) && ($data === base64_encode($output))) {
                     $data = $output;
@@ -323,15 +255,7 @@ class Rsa
         }
     }
 
-    /**
-     * Generate new private/public key pair
-     *
-     * @see RsaOptions::generateKeys()
-     *
-     * @param  array $opensslConfig
-     * @return Rsa Provides a fluent interface
-     * @throws Rsa\Exception\RuntimeException
-     */
+    
     public function generateKeys(array $opensslConfig = [])
     {
         $this->options->generateKeys($opensslConfig);

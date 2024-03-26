@@ -9,6 +9,6 @@ use mysqli;
 
 interface Initializer
 {
-    /** @throws Exception */
+    
     public function initialize(mysqli $connection): void;
 }

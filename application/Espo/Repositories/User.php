@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Repositories;
 
@@ -35,18 +9,12 @@ use Espo\Repositories\UserData as UserDataRepository;
 use Espo\Entities\UserData;
 use Espo\Entities\User as UserEntity;
 
-/**
- * @extends Database<UserEntity>
- */
+
 class User extends Database
 {
     private const AUTHENTICATION_METHOD_HMAC = 'Hmac';
 
-    /**
-     * @param UserEntity $entity
-     * @param array<string, mixed> $options
-     * @return void
-     */
+    
     protected function beforeSave(Entity $entity, array $options = [])
     {
         if ($entity->has('type') && !$entity->getType()) {
@@ -86,10 +54,7 @@ class User extends Database
         }
     }
 
-    /**
-     * @param array<string, mixed> $options
-     * @return void
-     */
+    
     protected function afterSave(Entity $entity, array $options = [])
     {
         if ($this->entityManager->getLocker()->isLocked()) {
@@ -99,10 +64,7 @@ class User extends Database
         parent::afterSave($entity, $options);
     }
 
-    /**
-     * @param array<string, mixed> $options
-     * @return void
-     */
+    
     protected function afterRemove(Entity $entity, array $options = [])
     {
         parent::afterRemove($entity, $options);
@@ -114,9 +76,7 @@ class User extends Database
         }
     }
 
-    /**
-     * @param string[] $teamIds
-     */
+    
     public function checkBelongsToAnyOfTeams(string $userId, array $teamIds): bool
     {
         if ($teamIds === []) {
@@ -135,7 +95,7 @@ class User extends Database
 
     private function getUserDataRepository(): UserDataRepository
     {
-        /** @var UserDataRepository */
+        
         return $this->entityManager->getRepository(UserData::ENTITY_TYPE);
     }
 }

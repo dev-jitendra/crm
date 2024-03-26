@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Routing;
 
@@ -29,64 +22,39 @@ use Symfony\Component\Routing\Matcher\Dumper\MatcherDumperInterface;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 
-/**
- * The Router class is an example of the integration of all pieces of the
- * routing system for easier use.
- *
- * @author Fabien Potencier <fabien@symfony.com>
- */
+
 class Router implements RouterInterface, RequestMatcherInterface
 {
-    /**
-     * @var UrlMatcherInterface|null
-     */
+    
     protected $matcher;
 
-    /**
-     * @var UrlGeneratorInterface|null
-     */
+    
     protected $generator;
 
-    /**
-     * @var RequestContext
-     */
+    
     protected $context;
 
-    /**
-     * @var LoaderInterface
-     */
+    
     protected $loader;
 
-    /**
-     * @var RouteCollection|null
-     */
+    
     protected $collection;
 
-    /**
-     * @var mixed
-     */
+    
     protected $resource;
 
-    /**
-     * @var array
-     */
+    
     protected $options = [];
 
-    /**
-     * @var LoggerInterface|null
-     */
+    
     protected $logger;
 
-    /**
-     * @var string|null
-     */
+    
     protected $defaultLocale;
 
     private $configCacheFactory;
 
-    /**
-     * @var ExpressionFunctionProviderInterface[]
-     */
+    
     private array $expressionLanguageProviders = [];
 
     private static ?array $cache = [];
@@ -101,23 +69,7 @@ class Router implements RouterInterface, RequestMatcherInterface
         $this->defaultLocale = $defaultLocale;
     }
 
-    /**
-     * Sets options.
-     *
-     * Available options:
-     *
-     *   * cache_dir:              The cache directory (or null to disable caching)
-     *   * debug:                  Whether to enable debugging or not (false by default)
-     *   * generator_class:        The name of a UrlGeneratorInterface implementation
-     *   * generator_dumper_class: The name of a GeneratorDumperInterface implementation
-     *   * matcher_class:          The name of a UrlMatcherInterface implementation
-     *   * matcher_dumper_class:   The name of a MatcherDumperInterface implementation
-     *   * resource_type:          Type hint for the main resource (optional)
-     *   * strict_requirements:    Configure strict requirement checking for generators
-     *                             implementing ConfigurableRequirementsInterface (default is true)
-     *
-     * @throws \InvalidArgumentException When unsupported option is provided
-     */
+    
     public function setOptions(array $options)
     {
         $this->options = [
@@ -131,7 +83,7 @@ class Router implements RouterInterface, RequestMatcherInterface
             'strict_requirements' => true,
         ];
 
-        // check option names and live merge, if errors are encountered Exception will be thrown
+        
         $invalid = [];
         foreach ($options as $key => $value) {
             if (\array_key_exists($key, $this->options)) {
@@ -146,11 +98,7 @@ class Router implements RouterInterface, RequestMatcherInterface
         }
     }
 
-    /**
-     * Sets an option.
-     *
-     * @throws \InvalidArgumentException
-     */
+    
     public function setOption(string $key, mixed $value)
     {
         if (!\array_key_exists($key, $this->options)) {
@@ -160,11 +108,7 @@ class Router implements RouterInterface, RequestMatcherInterface
         $this->options[$key] = $value;
     }
 
-    /**
-     * Gets an option value.
-     *
-     * @throws \InvalidArgumentException
-     */
+    
     public function getOption(string $key): mixed
     {
         if (!\array_key_exists($key, $this->options)) {
@@ -174,9 +118,7 @@ class Router implements RouterInterface, RequestMatcherInterface
         return $this->options[$key];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getRouteCollection()
     {
         if (null === $this->collection) {
@@ -186,9 +128,7 @@ class Router implements RouterInterface, RequestMatcherInterface
         return $this->collection;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function setContext(RequestContext $context)
     {
         $this->context = $context;
@@ -201,55 +141,43 @@ class Router implements RouterInterface, RequestMatcherInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getContext(): RequestContext
     {
         return $this->context;
     }
 
-    /**
-     * Sets the ConfigCache factory to use.
-     */
+    
     public function setConfigCacheFactory(ConfigCacheFactoryInterface $configCacheFactory)
     {
         $this->configCacheFactory = $configCacheFactory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
     {
         return $this->getGenerator()->generate($name, $parameters, $referenceType);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function match(string $pathinfo): array
     {
         return $this->getMatcher()->match($pathinfo);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function matchRequest(Request $request): array
     {
         $matcher = $this->getMatcher();
         if (!$matcher instanceof RequestMatcherInterface) {
-            // fallback to the default UrlMatcherInterface
+            
             return $matcher->match($request->getPathInfo());
         }
 
         return $matcher->matchRequest($request);
     }
 
-    /**
-     * Gets the UrlMatcher or RequestMatcher instance associated with this Router.
-     */
+    
     public function getMatcher(): UrlMatcherInterface|RequestMatcherInterface
     {
         if (null !== $this->matcher) {
@@ -288,9 +216,7 @@ class Router implements RouterInterface, RequestMatcherInterface
         return $this->matcher = new $this->options['matcher_class'](self::getCompiledRoutes($cache->getPath()), $this->context);
     }
 
-    /**
-     * Gets the UrlGenerator instance associated with this Router.
-     */
+    
     public function getGenerator(): UrlGeneratorInterface
     {
         if (null !== $this->generator) {
@@ -339,10 +265,7 @@ class Router implements RouterInterface, RequestMatcherInterface
         return new $this->options['matcher_dumper_class']($this->getRouteCollection());
     }
 
-    /**
-     * Provides the ConfigCache factory implementation, falling back to a
-     * default implementation if necessary.
-     */
+    
     private function getConfigCacheFactory(): ConfigCacheFactoryInterface
     {
         return $this->configCacheFactory ??= new ConfigCacheFactory($this->options['debug']);

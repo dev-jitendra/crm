@@ -1,39 +1,11 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/fields/file */
+
+
 
 import LinkFieldView from 'views/fields/link';
 import FileUpload from 'helpers/file-upload';
 
-/**
- * A file field.
- */
+
 class FileFieldView extends LinkFieldView {
 
     type = 'file'
@@ -53,7 +25,7 @@ class FileFieldView extends LinkFieldView {
     ROW_HEIGHT = 37
 
     events = {
-        /** @this FileFieldView */
+        
         'click a.remove-attachment': function (e) {
             let $div = $(e.currentTarget).parent();
 
@@ -65,7 +37,7 @@ class FileFieldView extends LinkFieldView {
 
             setTimeout(() => this.focusOnUploadButton(), 10);
         },
-        /** @this FileFieldView */
+        
         'change input.file': function (e) {
             let $file = $(e.currentTarget);
             let files = e.currentTarget.files;
@@ -80,7 +52,7 @@ class FileFieldView extends LinkFieldView {
 
             $file.replaceWith($file.clone(true));
         },
-        /** @this FileFieldView */
+        
         'click a[data-action="showImagePreview"]': function (e) {
             e.preventDefault();
 
@@ -94,13 +66,13 @@ class FileFieldView extends LinkFieldView {
                 view.render();
             });
         },
-        /** @this FileFieldView */
+        
         'click a.action[data-action="insertFromSource"]': function (e) {
             let name = $(e.currentTarget).data('name');
 
             this.insertFromSource(name);
         },
-        /** @this FileFieldView */
+        
         'keydown label.attach-file-label': function (e) {
             let key = Espo.Utils.getKeyFromKeyEvent(e);
 
@@ -319,9 +291,7 @@ class FileFieldView extends LinkFieldView {
         this.$el.find('img.image-preview').css('maxWidth', width + 'px');
     }
 
-    /**
-     * @return {string}
-     */
+    
     getDetailPreview(name, type, id) {
         if (!~this.previewTypeList.indexOf(type)) {
             return name;

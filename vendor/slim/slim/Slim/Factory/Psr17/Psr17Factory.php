@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -29,9 +25,7 @@ abstract class Psr17Factory implements Psr17FactoryInterface
 
     protected static string $serverRequestCreatorMethod;
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public static function getResponseFactory(): ResponseFactoryInterface
     {
         if (
@@ -44,9 +38,7 @@ abstract class Psr17Factory implements Psr17FactoryInterface
         return $responseFactory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public static function getStreamFactory(): StreamFactoryInterface
     {
         if (
@@ -59,9 +51,7 @@ abstract class Psr17Factory implements Psr17FactoryInterface
         return $streamFactory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public static function getServerRequestCreator(): ServerRequestCreatorInterface
     {
         if (!static::isServerRequestCreatorAvailable()) {
@@ -71,25 +61,19 @@ abstract class Psr17Factory implements Psr17FactoryInterface
         return new ServerRequestCreator(static::$serverRequestCreatorClass, static::$serverRequestCreatorMethod);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public static function isResponseFactoryAvailable(): bool
     {
         return static::$responseFactoryClass && class_exists(static::$responseFactoryClass);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public static function isStreamFactoryAvailable(): bool
     {
         return static::$streamFactoryClass && class_exists(static::$streamFactoryClass);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public static function isServerRequestCreatorAvailable(): bool
     {
         return (

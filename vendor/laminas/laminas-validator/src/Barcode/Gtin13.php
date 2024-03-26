@@ -4,9 +4,7 @@ namespace Laminas\Validator\Barcode;
 
 class Gtin13 extends AbstractAdapter
 {
-    /**
-     * Constructor for this barcode adapter
-     */
+    
     public function __construct()
     {
         $this->setLength(13);

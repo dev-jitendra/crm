@@ -1,22 +1,10 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Process;
 
-/**
- * An executable finder specifically designed for the PHP executable.
- *
- * @author Fabien Potencier <fabien@symfony.com>
- * @author Johannes M. Schmitt <schmittjoh@gmail.com>
- */
+
 class PhpExecutableFinder
 {
     private $executableFinder;
@@ -26,9 +14,7 @@ class PhpExecutableFinder
         $this->executableFinder = new ExecutableFinder();
     }
 
-    /**
-     * Finds The PHP executable.
-     */
+    
     public function find(bool $includeArgs = true): string|false
     {
         if ($php = getenv('PHP_BINARY')) {
@@ -53,7 +39,7 @@ class PhpExecutableFinder
         $args = $this->findArguments();
         $args = $includeArgs && $args ? ' '.implode(' ', $args) : '';
 
-        // PHP_BINARY return the current sapi executable
+        
         if (\PHP_BINARY && \in_array(\PHP_SAPI, ['cgi-fcgi', 'cli', 'cli-server', 'phpdbg'], true)) {
             return \PHP_BINARY.$args;
         }
@@ -84,9 +70,7 @@ class PhpExecutableFinder
         return $this->executableFinder->find('php', false, $dirs);
     }
 
-    /**
-     * Finds the PHP executable arguments.
-     */
+    
     public function findArguments(): array
     {
         $arguments = [];

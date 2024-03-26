@@ -1,18 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - International Components for Unicode    akhilesh.k@samsung.com
- */
+
+
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [
         'L' => 'dddd DD MMM YYYY',
@@ -24,21 +14,21 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'weekdays_min' => ['Sāp', 'Mōn', 'Tūs', 'Pul', 'Tuʻa', 'Fal', 'Tok'],
     'meridiem' => ['hengihengi', 'efiafi'],
 
-    'year' => ':count fitu', // less reliable
-    'y' => ':count fitu', // less reliable
-    'a_year' => ':count fitu', // less reliable
+    'year' => ':count fitu', 
+    'y' => ':count fitu', 
+    'a_year' => ':count fitu', 
 
-    'month' => ':count mahina', // less reliable
-    'm' => ':count mahina', // less reliable
-    'a_month' => ':count mahina', // less reliable
+    'month' => ':count mahina', 
+    'm' => ':count mahina', 
+    'a_month' => ':count mahina', 
 
-    'week' => ':count Sapate', // less reliable
-    'w' => ':count Sapate', // less reliable
-    'a_week' => ':count Sapate', // less reliable
+    'week' => ':count Sapate', 
+    'w' => ':count Sapate', 
+    'a_week' => ':count Sapate', 
 
-    'day' => ':count ʻaho', // less reliable
-    'd' => ':count ʻaho', // less reliable
-    'a_day' => ':count ʻaho', // less reliable
+    'day' => ':count ʻaho', 
+    'd' => ':count ʻaho', 
+    'a_day' => ':count ʻaho', 
 
     'hour' => ':count houa',
     'h' => ':count houa',

@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Utils\Database\Schema;
 
@@ -43,10 +17,7 @@ use Espo\Core\Utils\Database\Dbal\Types\MediumtextType;
 
 class DiffModifier
 {
-    /**
-     * @param RebuildMode::* $mode
-     * @throws DbalException
-     */
+    
     public function modify(
         SchemaDiff $diff,
         Schema $schema,
@@ -68,21 +39,15 @@ class DiffModifier
         return $reRun;
     }
 
-    /**
-     * @throws DbalException
-     */
+    
     private function amendTableDiff(TableDiff $tableDiff, bool $secondRun, bool $isHard): bool
     {
         $reRun = false;
 
-        /**
-         * @todo Leave only for MariaDB?
-         * MariaDB supports RENAME INDEX as of v10.5.
-         * Find out how long does it take to rename fo different databases.
-         */
+        
 
         if (!$isHard) {
-            // Prevent index renaming as an operation may take a lot of time.
+            
             $tableDiff->renamedIndexes = [];
         }
 
@@ -91,11 +56,11 @@ class DiffModifier
         }
 
         if (!$isHard) {
-            // Prevent column removal to prevent data loss.
+            
             $tableDiff->removedColumns = [];
         }
 
-        // Prevent column renaming as a not desired behavior.
+        
         foreach ($tableDiff->renamedColumns as $renamedColumn) {
             $addedName = strtolower($renamedColumn->getName());
             $tableDiff->addedColumns[$addedName] = $renamedColumn;
@@ -104,23 +69,23 @@ class DiffModifier
         $tableDiff->renamedColumns = [];
 
         foreach ($tableDiff->addedColumns as $column) {
-            // Suppress autoincrement as need having a unique index first.
+            
             $reRun = $this->amendAddedColumnAutoincrement($column) || $reRun;
         }
 
         foreach ($tableDiff->changedColumns as $name => $columnDiff) {
             if (!$isHard) {
-                // Prevent decreasing length for string columns to prevent data loss.
+                
                 $this->amendColumnDiffLength($tableDiff, $columnDiff, $name);
-                // Prevent longtext => mediumtext to prevent data loss.
+                
                 $this->amendColumnDiffTextType($tableDiff, $columnDiff, $name);
-                // Prevent changing collation.
+                
                 $this->amendColumnDiffCollation($tableDiff, $columnDiff, $name);
-                // Prevent changing charset.
+                
                 $this->amendColumnDiffCharset($tableDiff, $columnDiff, $name);
             }
 
-            // Prevent setting autoincrement in first run.
+            
             if (!$secondRun) {
                 $reRun = $this->amendColumnDiffAutoincrement($tableDiff, $columnDiff, $name) || $reRun;
             }
@@ -154,9 +119,7 @@ class DiffModifier
         self::unsetChangedColumnProperty($tableDiff, $columnDiff, $name, 'length');
     }
 
-    /**
-     * @throws DbalException
-     */
+    
     private function amendColumnDiffTextType(TableDiff $tableDiff, ColumnDiff $columnDiff, string $name): void
     {
         $fromColumn = $columnDiff->fromColumn;
@@ -331,10 +294,7 @@ class DiffModifier
         $columnDiff->changedProperties = array_diff($columnDiff->changedProperties, [$property]);
     }
 
-    /**
-     * DBAL does not handle autoincrement columns that are not primary keys,
-     * making them dropped.
-     */
+    
     private function handleRemovedSequences(SchemaDiff $diff, Schema $schema): SchemaDiff
     {
         $droppedSequences = $diff->getDroppedSequences();

@@ -1,30 +1,4 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 import ListView from 'views/list';
 
@@ -39,17 +13,17 @@ class EmailListView extends ListView {
     keepCurrentRootUrl = true
     stickableTop = null
 
-    /** @const */
+    
     FOLDER_ALL = 'all'
-    /** @const */
+    
     FOLDER_INBOX = 'inbox'
-    /** @const */
+    
     FOLDER_IMPORTANT = 'important'
-    /** @const */
+    
     FOLDER_SENT = 'sent'
-    /** @const */
+    
     FOLDER_DRAFTS = 'drafts'
-    /** @const */
+    
     FOLDER_TRASH = 'trash'
 
     noDropFolderIdList = [
@@ -57,7 +31,7 @@ class EmailListView extends ListView {
         'drafts',
     ]
 
-    /** @inheritDoc */
+    
     createListRecordView(fetch) {
         return super.createListRecordView(fetch)
             .then(view => {
@@ -66,11 +40,9 @@ class EmailListView extends ListView {
             });
     }
 
-    /**
-     * @private
-     */
+    
     initDroppable() {
-        // noinspection JSUnresolvedReference
+        
         this.$el.find('.folders-container .folder-list > .droppable')
             .droppable({
                 accept: '.list-row',
@@ -123,10 +95,7 @@ class EmailListView extends ListView {
             });
     }
 
-    /**
-     * @private
-     * @param {?Number} fromIndex
-     */
+    
     initDraggable(fromIndex) {
         fromIndex = fromIndex || 0;
 
@@ -143,7 +112,7 @@ class EmailListView extends ListView {
         this.collection.models.slice(fromIndex).forEach(m => {
             const $row = $container.find(`.list-row[data-id="${m.id}"]`).first();
 
-            // noinspection JSUnresolvedReference
+            
             $row.draggable({
                 cancel: 'input,textarea,button,select,option,.dropdown-menu',
                 helper: () => {
@@ -288,9 +257,9 @@ class EmailListView extends ListView {
         return data;
     }
 
-    /** @inheritDoc */
+    
     createSearchView() {
-        /** @type {Promise<module:view>} */
+        
         const promise = super.createSearchView();
 
         promise.then(view => {
@@ -300,7 +269,7 @@ class EmailListView extends ListView {
                 setTimeout(() => {
                     $(window).trigger('scroll')
 
-                    // If search fields are not yet rendered, the value may be wrong.
+                    
                     this.stickableTop = null;
                 }, 100);
             });
@@ -352,16 +321,14 @@ class EmailListView extends ListView {
             !recordView.allResultIsChecked;
     }
 
-    /** @inheritDoc */
+    
     setupReuse(params) {
         this.applyRoutingParams(params);
         this.initDroppable();
         this.initStickableFolders();
     }
 
-    /**
-     * @param {Object.<string,*>} [data]
-     */
+    
     actionComposeEmail(data) {
         data = data || {};
 
@@ -491,10 +458,7 @@ class EmailListView extends ListView {
         };
     }
 
-    /**
-     * @protected
-     * @return {module:views/email-folder/list-side}
-     */
+    
     getFoldersView() {
         return this.getView('folders')
     }
@@ -561,17 +525,12 @@ class EmailListView extends ListView {
             recordView.actionMoveToFolder({id: id, folderId: folderId});
     }
 
-    /**
-     * @protected
-     * @return {module:views/email/record/list}
-     */
+    
     getEmailRecordView() {
-        return /** @type {module:views/email/record/list} */this.getRecordView();
+        return this.getRecordView();
     }
 
-    /**
-     * @private
-     */
+    
     initStickableFolders() {
         const $window = $(window);
         const $list = this.$el.find('.list-container');
@@ -586,8 +545,8 @@ class EmailListView extends ListView {
 
         const bottomSpaceHeight = parseInt(window.getComputedStyle($('#content').get(0)).paddingBottom, 10);
 
-        const getOffsetTop = (/** JQuery */$element) => {
-            let element = /** @type {HTMLElement} */$element.get(0);
+        const getOffsetTop = ($element) => {
+            let element = $element.get(0);
 
             let value = 0;
 
@@ -648,10 +607,7 @@ class EmailListView extends ListView {
         $window.on('scroll.email-folders', () => control());
     }
 
-    /**
-     * @protected
-     * @param {JQueryKeyEventObject} e
-     */
+    
     handleShortcutKeyCtrlSpace(e) {
         if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') {
             return;

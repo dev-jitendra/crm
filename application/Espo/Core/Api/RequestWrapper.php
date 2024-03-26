@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Api;
 
@@ -38,30 +12,19 @@ use Psr\Http\Message\UriInterface;
 
 use stdClass;
 
-/**
- * Adapter for PSR-7 request interface.
- */
+
 class RequestWrapper implements ApiRequest
 {
     private ?stdClass $parsedBody = null;
 
-    /**
-     * @param array<string, string> $routeParams
-     */
+    
     public function __construct(
         private Psr7Request $psr7Request,
         private string $basePath = '',
         private array $routeParams = []
     ) {}
 
-    /**
-     * Get a route or query parameter. Route params have a higher priority.
-     *
-     * @todo Don't support NULL $name.
-     * @deprecated As of v6.0. Use getQueryParam & getRouteParam. Left for backward compatibility.
-     *
-     * @return mixed
-     */
+    
     public function get(?string $name = null)
     {
         if (is_null($name)) {
@@ -88,9 +51,7 @@ class RequestWrapper implements ApiRequest
         return $this->routeParams[$name] ?? null;
     }
 
-    /**
-     * @return array<string, string>
-     */
+    
     public function getRouteParams(): array
     {
         return $this->routeParams;
@@ -131,9 +92,7 @@ class RequestWrapper implements ApiRequest
         return $this->psr7Request->hasHeader($name);
     }
 
-    /**
-     * @return string[]
-     */
+    
     public function getHeaderAsArray(string $name): array
     {
         if (!$this->psr7Request->hasHeader($name)) {
@@ -171,9 +130,7 @@ class RequestWrapper implements ApiRequest
         return $contents;
     }
 
-    /**
-     * @throws BadRequest
-     */
+    
     public function getParsedBody(): stdClass
     {
         if ($this->parsedBody === null) {
@@ -187,9 +144,7 @@ class RequestWrapper implements ApiRequest
         return Util::cloneObject($this->parsedBody);
     }
 
-    /**
-     * @throws BadRequest
-     */
+    
     private function initParsedBody(): void
     {
         $contents = $this->getBodyContents();
@@ -243,9 +198,7 @@ class RequestWrapper implements ApiRequest
         return $params[$name] ?? null;
     }
 
-    /**
-     * @return mixed
-     */
+    
     public function getServerParam(string $name)
     {
         $params = $this->psr7Request->getServerParams();

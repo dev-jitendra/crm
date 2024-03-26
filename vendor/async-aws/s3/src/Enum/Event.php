@@ -2,9 +2,7 @@
 
 namespace AsyncAws\S3\Enum;
 
-/**
- * The bucket event for which to send notifications.
- */
+
 final class Event
 {
     public const S3_OBJECT_CREATED_ALL = 's3:ObjectCreated:*';

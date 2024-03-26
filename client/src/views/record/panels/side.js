@@ -1,121 +1,44 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/record/panels/side */
+
+
 
 import View from 'view';
 
-/**
- * @typedef {Object} module:views/record/panels/side~defs
- * @property [buttonList]
- * @property [actionList]
- * @property [fieldList]
- * @property [tabNumber] For internal purposes.
- */
 
-/**
- * A side panel.
- */
+
+
 class SidePanelView extends View {
 
     template = 'record/panels/side'
 
-    /**
-     * A field defs.
-     *
-     * @typedef module:views/record/panels/side~field
-     *
-     * @property {string} name
-     * @property {string} [labelText] A translated label text.
-     * @property {string} [view] A view name.
-     * @property {boolean} [isAdditional]
-     * @property {boolean} [readOnly]
-     * @property {Object.<string,*>} [options] Options.
-     * @property {string} [viewKey] Not to be set. For internal purposes.
-     */
+    
 
-    /**
-     * A field list.
-     *
-     * @protected
-     * @type {module:views/record/panels/side~field[]}
-     */
+    
     fieldList = null
 
-    /**
-     * A mode.
-     *
-     * @protected
-     * @type {'list'|'detail'|'edit'}
-     */
+    
     mode = 'detail'
 
-    /**
-     * @protected
-     * @type {module:views/record/panels-container~action[]}
-     */
+    
     actionList
 
-    /**
-     * @protected
-     * @type {Array<module:views/record/panels-container~action|false>}
-     */
+    
     buttonList
 
-    /**
-     * Read-only.
-     *
-     * @protected
-     */
+    
     readOnly = false
 
-    /**
-     * Disable inline edit.
-     *
-     * @protected
-     */
+    
     inlineEditDisabled = false
 
-    /**
-     * Disable.
-     *
-     * @protected
-     */
+    
     disabled = false
 
-    /**
-     * @protected
-     * @type {module:views/record/panels/side~defs}
-     */
+    
     defs
 
     events = {
-        /** @this SidePanelView */
+        
         'click .action': function (e) {
             Espo.Utils.handleAction(this, e.originalEvent, e.currentTarget, {
                 actionItems: [...this.buttonList, ...this.actionList],
@@ -202,24 +125,10 @@ class SidePanelView extends View {
         }
     }
 
-    /**
-     * Set up fields.
-     *
-     * @protected
-     */
+    
     setupFields() {}
 
-    /**
-     * Create a field view.
-     *
-     * @protected
-     * @param {string} field A field name.
-     * @param {string|null} [viewName] A view name/path.
-     * @param {Object<string,*>} [params] Field params.
-     * @param {'detail'|'edit'|'list'|null} [mode='edit'] A mode.
-     * @param {boolean} [readOnly] Read-only.
-     * @param {Object<string,*>} [options] View options.
-     */
+    
     createField(field, viewName, params, mode, readOnly, options) {
         const type = this.model.getFieldType(field) || 'base';
 
@@ -302,9 +211,7 @@ class SidePanelView extends View {
         this.createView(viewKey, viewName, o);
     }
 
-    /**
-     * @private
-     */
+    
     createFields() {
         this.getFieldList().forEach(item => {
             let view = null;
@@ -333,20 +240,13 @@ class SidePanelView extends View {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * @deprecated Use `getFieldViews`.
-     * @todo Remove in v9.0.
-     */
+    
+    
     getFields() {
         return this.getFieldViews();
     }
 
-    /**
-     * Get field views.
-     *
-     * @return {Object.<string, module:views/fields/base>}
-     */
+    
     getFieldViews() {
         const fields = {};
 
@@ -359,11 +259,7 @@ class SidePanelView extends View {
         return fields;
     }
 
-    /**
-     * Get a field list.
-     *
-     * @return {module:views/record/panels/side~field[]}
-     */
+    
     getFieldList() {
         return this.fieldList.map(item => {
             if (typeof item !== 'object') {
@@ -376,33 +272,23 @@ class SidePanelView extends View {
         });
     }
 
-    /**
-     * @return {module:views/record/panels-container~action[]}
-     */
+    
     getActionList() {
         return this.actionList || [];
     }
 
-    /**
-     * @return {module:views/record/panels-container~button[]}
-     */
+    
     getButtonList() {
         return this.buttonList || [];
     }
 
-    /**
-     * A `refresh` action.
-     */
+    
     actionRefresh() {
         this.model.fetch();
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * Is tab-hidden.
-     *
-     * @return {boolean}
-     */
+    
+    
     isTabHidden() {
         if (this.defs.tabNumber === -1 || typeof this.defs.tabNumber === 'undefined') {
             return false;
@@ -414,7 +300,7 @@ class SidePanelView extends View {
             return this.defs.tabNumber > 0;
         }
 
-        // noinspection JSUnresolvedReference
+        
         if (parentView && parentView.hasTabs) {
             return parentView.currentTab !== defs.tabNumber;
         }

@@ -1,27 +1,10 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Milos Sakovic
- * - Paul
- * - Pete Scopes (pdscopes)
- */
+
+
 return [
-    /*
-     * {1}, {0} and ]1,Inf[ are not needed as it's the default for English pluralization.
-     * But as some languages are using en.php as a fallback, it's better to specify it
-     * explicitly so those languages also fallback to English pluralization when a unit
-     * is missing.
-     */
+    
     'year' => '{1}:count year|{0}:count years|]1,Inf[:count years',
     'a_year' => '{1}a year|{0}:count years|]1,Inf[:count years',
     'y' => '{1}:countyr|{0}:countyrs|]1,Inf[:countyrs',

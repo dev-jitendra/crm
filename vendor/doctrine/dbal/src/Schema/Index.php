@@ -15,44 +15,22 @@ use function strtolower;
 
 class Index extends AbstractAsset implements Constraint
 {
-    /**
-     * Asset identifier instances of the column names the index is associated with.
-     * array($columnName => Identifier)
-     *
-     * @var Identifier[]
-     */
+    
     protected $_columns = [];
 
-    /** @var bool */
+    
     protected $_isUnique = false;
 
-    /** @var bool */
+    
     protected $_isPrimary = false;
 
-    /**
-     * Platform specific flags for indexes.
-     * array($flagName => true)
-     *
-     * @var true[]
-     */
+    
     protected $_flags = [];
 
-    /**
-     * Platform specific options
-     *
-     * @todo $_flags should eventually be refactored into options
-     * @var mixed[]
-     */
+    
     private array $options;
 
-    /**
-     * @param string   $name
-     * @param string[] $columns
-     * @param bool     $isUnique
-     * @param bool     $isPrimary
-     * @param string[] $flags
-     * @param mixed[]  $options
-     */
+    
     public function __construct(
         $name,
         array $columns,
@@ -77,23 +55,19 @@ class Index extends AbstractAsset implements Constraint
         }
     }
 
-    /** @throws InvalidArgumentException */
+    
     protected function _addColumn(string $column): void
     {
         $this->_columns[$column] = new Identifier($column);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getColumns()
     {
         return array_keys($this->_columns);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getQuotedColumns(AbstractPlatform $platform)
     {
         $subParts = $platform->supportsColumnLengthIndexes() && $this->hasOption('lengths')
@@ -116,40 +90,31 @@ class Index extends AbstractAsset implements Constraint
         return $columns;
     }
 
-    /** @return string[] */
+    
     public function getUnquotedColumns()
     {
         return array_map([$this, 'trimQuotes'], $this->getColumns());
     }
 
-    /**
-     * Is the index neither unique nor primary key?
-     *
-     * @return bool
-     */
+    
     public function isSimpleIndex()
     {
         return ! $this->_isPrimary && ! $this->_isUnique;
     }
 
-    /** @return bool */
+    
     public function isUnique()
     {
         return $this->_isUnique;
     }
 
-    /** @return bool */
+    
     public function isPrimary()
     {
         return $this->_isPrimary;
     }
 
-    /**
-     * @param string $name
-     * @param int    $pos
-     *
-     * @return bool
-     */
+    
     public function hasColumnAtPosition($name, $pos = 0)
     {
         $name         = $this->trimQuotes(strtolower($name));
@@ -158,13 +123,7 @@ class Index extends AbstractAsset implements Constraint
         return array_search($name, $indexColumns, true) === $pos;
     }
 
-    /**
-     * Checks if this index exactly spans the given column names in the correct order.
-     *
-     * @param string[] $columnNames
-     *
-     * @return bool
-     */
+    
     public function spansColumns(array $columnNames)
     {
         $columns         = $this->getColumns();
@@ -185,30 +144,22 @@ class Index extends AbstractAsset implements Constraint
         return $sameColumns;
     }
 
-    /**
-     * Keeping misspelled function name for backwards compatibility
-     *
-     * @deprecated Use {@see isFulfilledBy()} instead.
-     *
-     * @return bool
-     */
+    
     public function isFullfilledBy(Index $other)
     {
         return $this->isFulfilledBy($other);
     }
 
-    /**
-     * Checks if the other index already fulfills all the indexing and constraint needs of the current one.
-     */
+    
     public function isFulfilledBy(Index $other): bool
     {
-        // allow the other index to be equally large only. It being larger is an option
-        // but it creates a problem with scenarios of the kind PRIMARY KEY(foo,bar) UNIQUE(foo)
+        
+        
         if (count($other->getColumns()) !== count($this->getColumns())) {
             return false;
         }
 
-        // Check if columns are the same, and even in the same order
+        
         $sameColumns = $this->spansColumns($other->getColumns());
 
         if ($sameColumns) {
@@ -221,10 +172,10 @@ class Index extends AbstractAsset implements Constraint
             }
 
             if (! $this->isUnique() && ! $this->isPrimary()) {
-                // this is a special case: If the current key is neither primary or unique, any unique or
-                // primary key will always have the same effect for the index and there cannot be any constraint
-                // overlaps. This means a primary or unique index can always fulfill the requirements of just an
-                // index that has no constraints.
+                
+                
+                
+                
                 return true;
             }
 
@@ -238,11 +189,7 @@ class Index extends AbstractAsset implements Constraint
         return false;
     }
 
-    /**
-     * Detects if the other index is a non-unique, non primary index that can be overwritten by this one.
-     *
-     * @return bool
-     */
+    
     public function overrules(Index $other)
     {
         if ($other->isPrimary()) {
@@ -258,25 +205,13 @@ class Index extends AbstractAsset implements Constraint
             && $this->samePartialIndex($other);
     }
 
-    /**
-     * Returns platform specific flags for indexes.
-     *
-     * @return string[]
-     */
+    
     public function getFlags()
     {
         return array_keys($this->_flags);
     }
 
-    /**
-     * Adds Flag for an index that translates to platform specific handling.
-     *
-     * @param string $flag
-     *
-     * @return Index
-     *
-     * @example $index->addFlag('CLUSTERED')
-     */
+    
     public function addFlag($flag)
     {
         $this->_flags[strtolower($flag)] = true;
@@ -284,59 +219,37 @@ class Index extends AbstractAsset implements Constraint
         return $this;
     }
 
-    /**
-     * Does this index have a specific flag?
-     *
-     * @param string $flag
-     *
-     * @return bool
-     */
+    
     public function hasFlag($flag)
     {
         return isset($this->_flags[strtolower($flag)]);
     }
 
-    /**
-     * Removes a flag.
-     *
-     * @param string $flag
-     *
-     * @return void
-     */
+    
     public function removeFlag($flag)
     {
         unset($this->_flags[strtolower($flag)]);
     }
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
+    
     public function hasOption($name)
     {
         return isset($this->options[strtolower($name)]);
     }
 
-    /**
-     * @param string $name
-     *
-     * @return mixed
-     */
+    
     public function getOption($name)
     {
         return $this->options[strtolower($name)];
     }
 
-    /** @return mixed[] */
+    
     public function getOptions()
     {
         return $this->options;
     }
 
-    /**
-     * Return whether the two indexes have the same partial index
-     */
+    
     private function samePartialIndex(Index $other): bool
     {
         if (
@@ -350,9 +263,7 @@ class Index extends AbstractAsset implements Constraint
         return ! $this->hasOption('where') && ! $other->hasOption('where');
     }
 
-    /**
-     * Returns whether the index has the same column lengths as the other
-     */
+    
     private function hasSameColumnLengths(self $other): bool
     {
         $filter = static function (?int $length): bool {

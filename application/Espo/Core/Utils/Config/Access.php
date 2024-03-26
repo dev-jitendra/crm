@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Utils\Config;
 
@@ -36,17 +10,17 @@ use Espo\Entities\Settings;
 
 class Access
 {
-    /** Logged-in users can read. Admin can write. */
+    
     public const LEVEL_DEFAULT = 'default';
-    /** No one can read/write. */
+    
     public const LEVEL_SYSTEM = 'system';
-    /** No one can read, admin can write. */
+    
     public const LEVEL_INTERNAL = 'internal';
-    /** Only super-admin can read/write. */
+    
     public const LEVEL_SUPER_ADMIN = 'superAdmin';
-    /** Only admin can read/write. */
+    
     public const LEVEL_ADMIN = 'admin';
-    /** Even not logged-in can read. Admin can write. */
+    
     public const LEVEL_GLOBAL = 'global';
 
     public function __construct(
@@ -55,11 +29,7 @@ class Access
         private FieldUtil $fieldUtil
     ) {}
 
-    /**
-     * Get read-only parameters.
-     *
-     * @return string[]
-     */
+    
     public function getReadOnlyParamList(): array
     {
         $itemList = [];
@@ -87,9 +57,7 @@ class Access
         return array_values(array_unique($itemList));
     }
 
-    /**
-     * @return string[]
-     */
+    
     public function getAdminParamList(): array
     {
         $itemList = $this->config->get('adminItems') ?? [];
@@ -114,17 +82,13 @@ class Access
         );
     }
 
-    /**
-     * @return string[]
-     */
+    
     public function getInternalParamList(): array
     {
         return $this->getParamListByLevel(self::LEVEL_INTERNAL);
     }
 
-    /**
-     * @return string[]
-     */
+    
     public function getSystemParamList(): array
     {
         $itemList = $this->config->get('systemItems') ?? [];
@@ -149,9 +113,7 @@ class Access
         );
     }
 
-    /**
-     * @return string[]
-     */
+    
     public function getGlobalParamList(): array
     {
         $itemList = $this->config->get('globalItems', []);
@@ -176,9 +138,7 @@ class Access
         );
     }
 
-    /**
-     * @return string[]
-     */
+    
     public function getSuperAdminParamList(): array
     {
         return array_values(
@@ -189,10 +149,7 @@ class Access
         );
     }
 
-    /**
-     * @param self::LEVEL_* $level
-     * @return string[]
-     */
+    
     private function getParamListByLevel(string $level): array
     {
         $itemList = [];

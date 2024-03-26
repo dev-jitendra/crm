@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation\Loader;
 
@@ -16,11 +9,7 @@ use Symfony\Component\Translation\Exception\InvalidResourceException;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 use Symfony\Component\Translation\MessageCatalogue;
 
-/**
- * IcuResFileLoader loads translations from a resource bundle.
- *
- * @author stealth35
- */
+
 class IcuResFileLoader implements LoaderInterface
 {
     public function load(mixed $resource, string $locale, string $domain = 'messages'): MessageCatalogue
@@ -56,20 +45,7 @@ class IcuResFileLoader implements LoaderInterface
         return $catalogue;
     }
 
-    /**
-     * Flattens an ResourceBundle.
-     *
-     * The scheme used is:
-     *   key { key2 { key3 { "value" } } }
-     * Becomes:
-     *   'key.key2.key3' => 'value'
-     *
-     * This function takes an array by reference and will modify it
-     *
-     * @param \ResourceBundle $rb       The ResourceBundle that will be flattened
-     * @param array           $messages Used internally for recursive calls
-     * @param string|null     $path     Current path being parsed, used internally for recursive calls
-     */
+    
     protected function flatten(\ResourceBundle $rb, array &$messages = [], string $path = null): array
     {
         foreach ($rb as $key => $value) {

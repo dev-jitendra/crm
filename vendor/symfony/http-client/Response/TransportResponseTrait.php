@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpClient\Response;
 
@@ -18,13 +11,7 @@ use Symfony\Component\HttpClient\Chunk\LastChunk;
 use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\HttpClient\Internal\ClientState;
 
-/**
- * Implements common logic for transport-level response classes.
- *
- * @author Nicolas Grekas <p@tchwork.com>
- *
- * @internal
- */
+
 trait TransportResponseTrait
 {
     private $headers = [];
@@ -35,7 +22,7 @@ trait TransportResponseTrait
         'canceled' => false,
     ];
 
-    /** @var object|resource */
+    
     private $handle;
     private $id;
     private $timeout = 0;
@@ -44,9 +31,7 @@ trait TransportResponseTrait
     private $canary;
     private $logger;
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getStatusCode(): int
     {
         if ($this->initializer) {
@@ -56,9 +41,7 @@ trait TransportResponseTrait
         return $this->info['http_code'];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getHeaders(bool $throw = true): array
     {
         if ($this->initializer) {
@@ -72,9 +55,7 @@ trait TransportResponseTrait
         return $this->headers;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function cancel(): void
     {
         $this->info['canceled'] = true;
@@ -82,28 +63,20 @@ trait TransportResponseTrait
         $this->close();
     }
 
-    /**
-     * Closes the response and all its network handles.
-     */
+    
     protected function close(): void
     {
         $this->canary->cancel();
         $this->inflate = null;
     }
 
-    /**
-     * Adds pending responses to the activity list.
-     */
+    
     abstract protected static function schedule(self $response, array &$runningResponses): void;
 
-    /**
-     * Performs all pending non-blocking operations.
-     */
+    
     abstract protected static function perform(ClientState $multi, array &$responses): void;
 
-    /**
-     * Waits for network activity.
-     */
+    
     abstract protected static function select(ClientState $multi, float $timeout): int;
 
     private static function addResponseHeaders(array $responseHeaders, array &$info, array &$headers, string &$debug = ''): void
@@ -130,9 +103,7 @@ trait TransportResponseTrait
         }
     }
 
-    /**
-     * Ensures the request is always sent and that the response code was checked.
-     */
+    
     private function doDestruct()
     {
         $this->shouldBuffer = true;
@@ -143,11 +114,7 @@ trait TransportResponseTrait
         }
     }
 
-    /**
-     * Implements an event loop based on a buffer activity queue.
-     *
-     * @internal
-     */
+    
     public static function stream(iterable $responses, float $timeout = null): \Generator
     {
         $runningResponses = [];
@@ -164,7 +131,7 @@ trait TransportResponseTrait
             $timeoutMax = 0;
             $timeoutMin = $timeout ?? \INF;
 
-            /** @var ClientState $multi */
+            
             foreach ($runningResponses as $i => [$multi]) {
                 $responses = &$runningResponses[$i][1];
                 self::perform($multi, $responses);
@@ -175,7 +142,7 @@ trait TransportResponseTrait
                     $chunk = false;
 
                     if (isset($multi->handlesActivity[$j])) {
-                        // no-op
+                        
                     } elseif (!isset($multi->openHandles[$j])) {
                         unset($responses[$j]);
                         continue;
@@ -218,7 +185,7 @@ trait TransportResponseTrait
                                 $chunk = new ErrorChunk($response->offset, $e);
                             } else {
                                 if (0 === $response->offset && null === $response->content) {
-                                    $response->content = fopen('php://memory', 'w+');
+                                    $response->content = fopen('php:
                                 }
 
                                 $chunk = new LastChunk($response->offset);
@@ -248,7 +215,7 @@ trait TransportResponseTrait
                             }
 
                             if (true === $response->shouldBuffer) {
-                                $response->content = fopen('php://temp', 'w+');
+                                $response->content = fopen('php:
                             } elseif (\is_resource($response->shouldBuffer)) {
                                 $response->content = $response->shouldBuffer;
                             }
@@ -257,7 +224,7 @@ trait TransportResponseTrait
                             yield $response => $chunk;
 
                             if ($response->initializer && null === $response->info['error']) {
-                                // Ensure the HTTP status code is always checked
+                                
                                 $response->getHeaders(true);
                             }
 
@@ -270,7 +237,7 @@ trait TransportResponseTrait
                     unset($multi->handlesActivity[$j]);
 
                     if ($chunk instanceof ErrorChunk && !$chunk->didThrow()) {
-                        // Ensure transport exceptions are always thrown
+                        
                         $chunk->getContent();
                     }
                 }
@@ -279,7 +246,7 @@ trait TransportResponseTrait
                     unset($runningResponses[$i]);
                 }
 
-                // Prevent memory leaks
+                
                 $multi->handlesActivity = $multi->handlesActivity ?: [];
                 $multi->openHandles = $multi->openHandles ?: [];
             }

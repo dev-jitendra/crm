@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Upgrades\Actions\Extension;
 
@@ -37,15 +11,10 @@ use Throwable;
 
 class Install extends \Espo\Core\Upgrades\Actions\Base\Install
 {
-    /**
-     * @var ?\Espo\Entities\Extension
-     */
+    
     protected $extensionEntity = null;
 
-    /**
-     * @return void
-     * @throws Error
-     */
+    
     protected function beforeRunAction()
     {
         $this->findExtension();
@@ -58,10 +27,7 @@ class Install extends \Espo\Core\Upgrades\Actions\Base\Install
         }
     }
 
-    /**
-     * @return void
-     * @throws Error
-     */
+    
     protected function afterRunAction()
     {
         if (!$this->isNew()) {
@@ -71,19 +37,14 @@ class Install extends \Espo\Core\Upgrades\Actions\Base\Install
         $this->storeExtension();
     }
 
-    /**
-     * Copy Existing files to backup directory.
-     *
-     * @return bool
-     * @throws Error
-     */
+    
     protected function backupExistingFiles()
     {
         parent::backupExistingFiles();
 
         $backupPath = $this->getPath('backupPath');
 
-        /** copy scripts files */
+        
         $packagePath = $this->getPackagePath();
 
         $source = Util::concatPath($packagePath, self::SCRIPTS);
@@ -92,9 +53,7 @@ class Install extends \Espo\Core\Upgrades\Actions\Base\Install
         return $this->copy($source, $destination, true);
     }
 
-    /**
-     * @return bool
-     */
+    
     protected function isNew()
     {
         $extensionEntity = $this->getExtensionEntity();
@@ -106,12 +65,7 @@ class Install extends \Espo\Core\Upgrades\Actions\Base\Install
         return isset($id) ? false : true;
     }
 
-    /**
-     * Get extension ID. It's an ID of existing entity (if available) or Installation ID.
-     *
-     * @return string
-     * @throws Error
-     */
+    
     protected function getExtensionId()
     {
         $extensionEntity = $this->getExtensionEntity();
@@ -127,22 +81,13 @@ class Install extends \Espo\Core\Upgrades\Actions\Base\Install
         return $extensionEntityId;
     }
 
-    /**
-     * Get entity of this extension.
-     *
-     * @return \Espo\Entities\Extension|null
-     */
+    
     protected function getExtensionEntity()
     {
         return $this->extensionEntity;
     }
 
-    /**
-     * Find Extension entity.
-     *
-     * @return ?\Espo\Entities\Extension
-     * @throws Error
-     */
+    
     protected function findExtension()
     {
         $manifest = $this->getManifest();
@@ -158,12 +103,7 @@ class Install extends \Espo\Core\Upgrades\Actions\Base\Install
         return $this->extensionEntity;
     }
 
-    /**
-     * Create a record of Extension Entity.
-     *
-     * @return void
-     * @throws Error
-     */
+    
     protected function storeExtension()
     {
         $entityManager = $this->getEntityManager();
@@ -206,12 +146,7 @@ class Install extends \Espo\Core\Upgrades\Actions\Base\Install
         }
     }
 
-    /**
-     * Compare version between installed and a new extensions.
-     *
-     * @return void
-     * @throws Error
-     */
+    
     protected function compareVersion()
     {
         $manifest = $this->getManifest();
@@ -225,12 +160,7 @@ class Install extends \Espo\Core\Upgrades\Actions\Base\Install
         }
     }
 
-    /**
-     * If extension already installed, uninstall an old version.
-     *
-     * @return void
-     * @throws Error
-     */
+    
     protected function uninstallExtension()
     {
         $extensionEntity = $this->getExtensionEntity();
@@ -247,12 +177,7 @@ class Install extends \Espo\Core\Upgrades\Actions\Base\Install
         ]);
     }
 
-    /**
-     * Delete extension package.
-     *
-     * @return void
-     * @throws Error
-     */
+    
     protected function deleteExtension()
     {
         $extensionEntity = $this->getExtensionEntity();
@@ -267,11 +192,7 @@ class Install extends \Espo\Core\Upgrades\Actions\Base\Install
         ]);
     }
 
-    /**
-     * @param array<string, string[]|string> $dependencyList
-     * @return bool
-     * @throws Error
-     */
+    
     protected function checkDependencies($dependencyList)
     {
         return $this->getHelper()->checkDependencies($dependencyList);

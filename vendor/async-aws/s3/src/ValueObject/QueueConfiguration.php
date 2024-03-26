@@ -5,35 +5,20 @@ namespace AsyncAws\S3\ValueObject;
 use AsyncAws\Core\Exception\InvalidArgument;
 use AsyncAws\S3\Enum\Event;
 
-/**
- * Specifies the configuration for publishing messages to an Amazon Simple Queue Service (Amazon SQS) queue when Amazon
- * S3 detects specified events.
- */
+
 final class QueueConfiguration
 {
     private $id;
 
-    /**
-     * The Amazon Resource Name (ARN) of the Amazon SQS queue to which Amazon S3 publishes a message when it detects events
-     * of the specified type.
-     */
+    
     private $queueArn;
 
-    /**
-     * A collection of bucket events for which to send notifications.
-     */
+    
     private $events;
 
     private $filter;
 
-    /**
-     * @param array{
-     *   Id?: null|string,
-     *   QueueArn: string,
-     *   Events: list<Event::*>,
-     *   Filter?: null|NotificationConfigurationFilter|array,
-     * } $input
-     */
+    
     public function __construct(array $input)
     {
         $this->id = $input['Id'] ?? null;
@@ -47,9 +32,7 @@ final class QueueConfiguration
         return $input instanceof self ? $input : new self($input);
     }
 
-    /**
-     * @return list<Event::*>
-     */
+    
     public function getEvents(): array
     {
         return $this->events ?? [];
@@ -70,9 +53,7 @@ final class QueueConfiguration
         return $this->queueArn;
     }
 
-    /**
-     * @internal
-     */
+    
     public function requestBody(\DomElement $node, \DomDocument $document): void
     {
         if (null !== $v = $this->id) {

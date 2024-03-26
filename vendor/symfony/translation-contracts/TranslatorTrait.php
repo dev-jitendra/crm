@@ -1,48 +1,29 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Contracts\Translation;
 
 use Symfony\Component\Translation\Exception\InvalidArgumentException;
 
-/**
- * A trait to help implement TranslatorInterface and LocaleAwareInterface.
- *
- * @author Fabien Potencier <fabien@symfony.com>
- */
+
 trait TranslatorTrait
 {
     private $locale;
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function setLocale(string $locale)
     {
         $this->locale = $locale;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
+    
     public function getLocale()
     {
         return $this->locale ?: (class_exists(\Locale::class) ? \Locale::getDefault() : 'en');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function trans(?string $id, array $parameters = [], string $domain = null, string $locale = null): string
     {
         if (null === $id || '' === $id) {
@@ -85,7 +66,7 @@ EOF;
         foreach ($parts as $part) {
             $part = trim(str_replace('||', '|', $part));
 
-            // try to match an explicit rule, then fallback to the standard ones
+            
             if (preg_match($intervalRegexp, $part, $matches)) {
                 if ($matches[2]) {
                     foreach (explode(',', $matches[3]) as $n) {
@@ -113,8 +94,8 @@ EOF;
         $position = $this->getPluralizationRule($number, $locale);
 
         if (!isset($standardRules[$position])) {
-            // when there's exactly one rule given, and that rule is a standard
-            // rule, use this rule
+            
+            
             if (1 === \count($parts) && isset($standardRules[0])) {
                 return strtr($standardRules[0], $parameters);
             }
@@ -131,13 +112,7 @@ EOF;
         return strtr($standardRules[$position], $parameters);
     }
 
-    /**
-     * Returns the plural position to use for the given locale and number.
-     *
-     * The plural rules are derived from code of the Zend Framework (2010-09-25),
-     * which is subject to the new BSD license (http://framework.zend.com/license/new-bsd).
-     * Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
-     */
+    
     private function getPluralizationRule(float $number, string $locale): int
     {
         $number = abs($number);

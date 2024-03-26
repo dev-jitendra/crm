@@ -1,39 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Philippe Vaucher
- * - Tsutomu Kuroda
- * - tjku
- * - valdas406
- * - Justas Palumickas
- * - Max Melentiev
- * - Andrius Janauskas
- * - Juanito Fatas
- * - Akira Matsuda
- * - Christopher Dell
- * - Enrique Vidal
- * - Simone Carletti
- * - Aaron Patterson
- * - Nicolás Hock Isaza
- * - Laurynas Butkus
- * - Sven Fuchs
- * - Dominykas Tijūnaitis
- * - Justinas Bolys
- * - Ričardas
- * - Kirill Chalkin
- * - Rolandas
- * - Justinas (Gamesh)
- */
+
+
 return [
     'year' => ':count metai|:count metai|:count metų',
     'y' => ':count m.',

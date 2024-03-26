@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\Pdf;
 
@@ -66,19 +40,7 @@ class Service
         $this->builder = $builder;
     }
 
-    /**
-     * Generate a PDF.
-     *
-     * @param string $entityType An entity type.
-     * @param string $id A record ID.
-     * @param string $templateId A template ID.
-     * @param ?Params $params Params. If null, a params with the apply-acl will be used.
-     * @params ?Data $data Data.
-     *
-     * @throws Error
-     * @throws NotFound
-     * @throws Forbidden
-     */
+    
     public function generate(
         string $entityType,
         string $id,
@@ -97,7 +59,7 @@ class Service
             throw new NotFound("Record not found.");
         }
 
-        /** @var ?TemplateEntity $template */
+        
         $template = $this->entityManager->getEntityById(TemplateEntity::ENTITY_TYPE, $templateId);
 
         if (!$template) {
@@ -117,7 +79,7 @@ class Service
         $service->loadAdditionalFields($entity);
 
         if (method_exists($service, 'loadAdditionalFieldsForPdf')) {
-            // For bc.
+            
             $service->loadAdditionalFieldsForPdf($entity);
         }
 

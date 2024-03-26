@@ -15,11 +15,7 @@ use AsyncAws\Core\Stream\ReadOnceResultStream;
 use AsyncAws\Core\Stream\RequestStream;
 use AsyncAws\Core\Stream\RewindableStream;
 
-/**
- * Version4 of signer dedicated for service S3.
- *
- * @author Jérémy Derussé <jeremy@derusse.com>
- */
+
 class SignerV4ForS3 extends SignerV4
 {
     private const ALGORITHM_CHUNK = 'AWS4-HMAC-SHA256-PAYLOAD';
@@ -40,11 +36,7 @@ class SignerV4ForS3 extends SignerV4
 
     private $sendChunkedBody;
 
-    /**
-     * @param array{
-     *   sendChunkedBody?: bool,
-     * } $s3SignerOptions
-     */
+    
     public function __construct(string $scopeName, string $region, array $s3SignerOptions = [])
     {
         parent::__construct($scopeName, $region);
@@ -81,9 +73,7 @@ class SignerV4ForS3 extends SignerV4
         return parent::buildBodyDigest($request, $isPresign);
     }
 
-    /**
-     * Amazon S3 does not double-encode the path component in the canonical request.
-     */
+    
     protected function buildCanonicalPath(Request $request): string
     {
         return '/' . ltrim($request->getUri(), '/');
@@ -99,14 +89,14 @@ class SignerV4ForS3 extends SignerV4
             $contentLength = $body->length();
         }
 
-        // If content length is unknown, use the rewindable stream to read it once locally in order to get the length
+        
         if (null === $contentLength) {
             $request->setBody($body = RewindableStream::create($body));
             $body->read();
             $contentLength = $body->length();
         }
 
-        // no need to stream small body. It's simple to convert it to string directly
+        
         if ($contentLength < self::CHUNK_SIZE || !$this->sendChunkedBody) {
             if ($body instanceof ReadOnceResultStream) {
                 $request->setBody(RewindableStream::create($body));
@@ -115,12 +105,12 @@ class SignerV4ForS3 extends SignerV4
             return;
         }
 
-        // Convert the body into a chunked stream
+        
         $request->setHeader('content-encoding', 'aws-chunked');
         $request->setHeader('x-amz-decoded-content-length', (string) $contentLength);
         $request->setHeader('x-amz-content-sha256', 'STREAMING-' . self::ALGORITHM_CHUNK);
 
-        // Compute size of content + metadata used sign each Chunk
+        
         $chunkCount = (int) ceil($contentLength / self::CHUNK_SIZE);
         $fullChunkCount = $chunkCount * self::CHUNK_SIZE === $contentLength ? $chunkCount : ($chunkCount - 1);
         $metaLength = \strlen(";chunk-signature=\r\n\r\n") + 64;

@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Utils;
 
@@ -37,7 +11,7 @@ use Exception;
 
 class Autoload
 {
-    /** @var ?array<string, mixed> */
+    
     private $data = null;
 
     private string $cacheKey = 'autoload';
@@ -52,9 +26,7 @@ class Autoload
         private PathProvider $pathProvider
     ) {}
 
-    /**
-     * @return array<string, mixed>
-     */
+    
     private function getData(): array
     {
         if (!isset($this->data)) {
@@ -71,7 +43,7 @@ class Autoload
         $useCache = $this->config->get('useCache');
 
         if ($useCache && $this->dataCache->has($this->cacheKey)) {
-            /** @var ?array<string, mixed> $data */
+            
             $data = $this->dataCache->get($this->cacheKey);
 
             $this->data = $data;
@@ -86,9 +58,7 @@ class Autoload
         }
     }
 
-    /**
-     * @return array<string, mixed>
-     */
+    
     private function loadData(): array
     {
         $corePath = $this->pathProvider->getCore() . $this->autoloadFileName;
@@ -112,10 +82,7 @@ class Autoload
         );
     }
 
-    /**
-     * @return array<string, mixed>
-     * @throws \JsonException
-     */
+    
     private function loadDataFromFile(string $filePath): array
     {
         if (!$this->fileManager->isFile($filePath)) {
@@ -129,10 +96,7 @@ class Autoload
         return $this->normalizeData($arrayContent);
     }
 
-    /**
-     * @param array<string, mixed> $data
-     * @return array<string, mixed>
-     */
+    
     private function normalizeData(array $data): array
     {
         $normalizedData = [];
@@ -163,7 +127,7 @@ class Autoload
         try {
             $data = $this->getData();
         }
-        catch (Exception $e) {} // bad permissions
+        catch (Exception $e) {} 
 
         if (empty($data)) {
             return;

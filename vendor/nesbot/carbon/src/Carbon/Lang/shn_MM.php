@@ -1,18 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - ubuntu Myanmar LoCo Team https://ubuntu-mm.net Bone Pyae Sone bone.burma@mail.com
- */
+
+
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [
         'L' => 'OY MMM OD dddd',
@@ -25,25 +15,25 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'alt_numbers' => ['႐႐', '႐႑', '႐႒', '႐႓', '႐႔', '႐႕', '႐႖', '႐႗', '႐႘', '႐႙', '႑႐', '႑႑', '႑႒', '႑႓', '႑႔', '႑႕', '႑႖', '႑႗', '႑႘', '႑႙', '႒႐', '႒႑', '႒႒', '႒႓', '႒႔', '႒႕', '႒႖', '႒႗', '႒႘', '႒႙', '႓႐', '႓႑', '႓႒', '႓႓', '႓႔', '႓႕', '႓႖', '႓႗', '႓႘', '႓႙', '႔႐', '႔႑', '႔႒', '႔႓', '႔႔', '႔႕', '႔႖', '႔႗', '႔႘', '႔႙', '႕႐', '႕႑', '႕႒', '႕႓', '႕႔', '႕႕', '႕႖', '႕႗', '႕႘', '႕႙', '႖႐', '႖႑', '႖႒', '႖႓', '႖႔', '႖႕', '႖႖', '႖႗', '႖႘', '႖႙', '႗႐', '႗႑', '႗႒', '႗႓', '႗႔', '႗႕', '႗႖', '႗႗', '႗႘', '႗႙', '႘႐', '႘႑', '႘႒', '႘႓', '႘႔', '႘႕', '႘႖', '႘႗', '႘႘', '႘႙', '႙႐', '႙႑', '႙႒', '႙႓', '႙႔', '႙႕', '႙႖', '႙႗', '႙႘', '႙႙'],
     'meridiem' => ['ၵၢင်ၼႂ်', 'တၢမ်းၶမ်ႈ'],
 
-    'month' => ':count လိူၼ်', // less reliable
-    'm' => ':count လိူၼ်', // less reliable
-    'a_month' => ':count လိူၼ်', // less reliable
+    'month' => ':count လိူၼ်', 
+    'm' => ':count လိူၼ်', 
+    'a_month' => ':count လိူၼ်', 
 
-    'week' => ':count ဝၼ်း', // less reliable
-    'w' => ':count ဝၼ်း', // less reliable
-    'a_week' => ':count ဝၼ်း', // less reliable
+    'week' => ':count ဝၼ်း', 
+    'w' => ':count ဝၼ်း', 
+    'a_week' => ':count ဝၼ်း', 
 
-    'hour' => ':count ຕີ', // less reliable
-    'h' => ':count ຕີ', // less reliable
-    'a_hour' => ':count ຕີ', // less reliable
+    'hour' => ':count ຕີ', 
+    'h' => ':count ຕີ', 
+    'a_hour' => ':count ຕີ', 
 
-    'minute' => ':count ເດັກ', // less reliable
-    'min' => ':count ເດັກ', // less reliable
-    'a_minute' => ':count ເດັກ', // less reliable
+    'minute' => ':count ເດັກ', 
+    'min' => ':count ເດັກ', 
+    'a_minute' => ':count ເດັກ', 
 
-    'second' => ':count ဢိုၼ်ႇ', // less reliable
-    's' => ':count ဢိုၼ်ႇ', // less reliable
-    'a_second' => ':count ဢိုၼ်ႇ', // less reliable
+    'second' => ':count ဢိုၼ်ႇ', 
+    's' => ':count ဢိုၼ်ႇ', 
+    'a_second' => ':count ဢိုၼ်ႇ', 
 
     'year' => ':count ပီ',
     'y' => ':count ပီ',

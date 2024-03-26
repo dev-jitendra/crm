@@ -1,30 +1,4 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 import VarcharFieldView from 'views/fields/varchar';
 
@@ -39,11 +13,11 @@ class EmailFieldView extends VarcharFieldView {
     validations = ['required', 'emailData']
 
     events = {
-        /** @this EmailFieldView */
+        
         'click [data-action="mailTo"]': function (e) {
             this.mailTo($(e.currentTarget).data('email-address'));
         },
-        /** @this EmailFieldView */
+        
         'click [data-action="switchEmailProperty"]': function (e) {
             let $target = $(e.currentTarget);
             let $block = $(e.currentTarget).closest('div.email-address-block');
@@ -68,7 +42,7 @@ class EmailFieldView extends VarcharFieldView {
 
             this.trigger('change');
         },
-        /** @this EmailFieldView */
+        
         'click [data-action="removeEmailAddress"]': function (e) {
             let $block = $(e.currentTarget).closest('div.email-address-block');
 
@@ -80,7 +54,7 @@ class EmailFieldView extends VarcharFieldView {
                 $last[0].focus({preventScroll: true});
             }
         },
-        /** @this EmailFieldView */
+        
         'change input.email-address': function (e) {
             let $input = $(e.currentTarget);
             let $block = $input.closest('div.email-address-block');
@@ -100,19 +74,19 @@ class EmailFieldView extends VarcharFieldView {
 
             this.manageAddButton();
         },
-        /** @this EmailFieldView */
+        
         'keypress input.email-address': function () {
             this.manageAddButton();
         },
-        /** @this EmailFieldView */
+        
         'paste input.email-address': function () {
             setTimeout(() => this.manageAddButton(), 10);
         },
-        /** @this EmailFieldView */
+        
         'click [data-action="addEmailAddress"]': function () {
             this.addEmailAddress();
         },
-        /** @this EmailFieldView */
+        
         'keydown input.email-address': function (e) {
             let key = Espo.Utils.getKeyFromKeyEvent(e);
 
@@ -295,8 +269,8 @@ class EmailFieldView extends VarcharFieldView {
         $item.focus();
 
         if (cursorAtEnd && $item[0]) {
-            // Not supported for email inputs.
-            // $item[0].setSelectionRange($item[0].value.length, $item[0].value.length);
+            
+            
         }
     }
 

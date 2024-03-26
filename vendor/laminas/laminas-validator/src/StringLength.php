@@ -19,36 +19,32 @@ class StringLength extends AbstractValidator
     public const TOO_SHORT = 'stringLengthTooShort';
     public const TOO_LONG  = 'stringLengthTooLong';
 
-    /** @var array<string, string> */
+    
     protected $messageTemplates = [
         self::INVALID   => 'Invalid type given. String expected',
         self::TOO_SHORT => 'The input is less than %min% characters long',
         self::TOO_LONG  => 'The input is more than %max% characters long',
     ];
 
-    /** @var array<string, array<string, string>> */
+    
     protected $messageVariables = [
         'min'    => ['options' => 'min'],
         'max'    => ['options' => 'max'],
         'length' => ['options' => 'length'],
     ];
 
-    /** @var array<string, mixed> */
+    
     protected $options = [
-        'min'      => 0, // Minimum length
-        'max'      => null, // Maximum length, null if there is no length limitation
-        'encoding' => 'UTF-8', // Encoding to use
-        'length'   => 0, // Actual length
+        'min'      => 0, 
+        'max'      => null, 
+        'encoding' => 'UTF-8', 
+        'length'   => 0, 
     ];
 
-    /** @var null|StringWrapperInterface */
+    
     protected $stringWrapper;
 
-    /**
-     * Sets validator options
-     *
-     * @param int|array|Traversable $options
-     */
+    
     public function __construct($options = [])
     {
         if (! is_array($options)) {
@@ -68,23 +64,13 @@ class StringLength extends AbstractValidator
         parent::__construct($options);
     }
 
-    /**
-     * Returns the min option
-     *
-     * @return int
-     */
+    
     public function getMin()
     {
         return $this->options['min'];
     }
 
-    /**
-     * Sets the min option
-     *
-     * @param  int $min
-     * @throws Exception\InvalidArgumentException
-     * @return $this Provides a fluent interface
-     */
+    
     public function setMin($min)
     {
         if (null !== $this->getMax() && $min > $this->getMax()) {
@@ -97,23 +83,13 @@ class StringLength extends AbstractValidator
         return $this;
     }
 
-    /**
-     * Returns the max option
-     *
-     * @return int|null
-     */
+    
     public function getMax()
     {
         return $this->options['max'];
     }
 
-    /**
-     * Sets the max option
-     *
-     * @param  int|null $max
-     * @throws Exception\InvalidArgumentException
-     * @return $this Provides a fluent interface
-     */
+    
     public function setMax($max)
     {
         if (null === $max) {
@@ -129,11 +105,7 @@ class StringLength extends AbstractValidator
         return $this;
     }
 
-    /**
-     * Get the string wrapper to detect the string length
-     *
-     * @return StringWrapper
-     */
+    
     public function getStringWrapper()
     {
         if (! $this->stringWrapper) {
@@ -142,34 +114,20 @@ class StringLength extends AbstractValidator
         return $this->stringWrapper;
     }
 
-    /**
-     * Set the string wrapper to detect the string length
-     *
-     * @return void
-     */
+    
     public function setStringWrapper(StringWrapper $stringWrapper)
     {
         $stringWrapper->setEncoding($this->getEncoding());
         $this->stringWrapper = $stringWrapper;
     }
 
-    /**
-     * Returns the actual encoding
-     *
-     * @return string
-     */
+    
     public function getEncoding()
     {
         return $this->options['encoding'];
     }
 
-    /**
-     * Sets a new encoding to use
-     *
-     * @param string $encoding
-     * @return $this
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public function setEncoding($encoding)
     {
         $this->stringWrapper       = StringUtils::getWrapper($encoding);
@@ -177,35 +135,20 @@ class StringLength extends AbstractValidator
         return $this;
     }
 
-    /**
-     * Returns the length option
-     *
-     * @return int
-     */
+    
     private function getLength()
     {
         return $this->options['length'];
     }
 
-    /**
-     * Sets the length option
-     *
-     * @param  int $length
-     * @return $this Provides a fluent interface
-     */
+    
     private function setLength($length)
     {
         $this->options['length'] = (int) $length;
         return $this;
     }
 
-    /**
-     * Returns true if and only if the string length of $value is at least the min option and
-     * no greater than the max option (when the max option is not null).
-     *
-     * @param  string $value
-     * @return bool
-     */
+    
     public function isValid($value)
     {
         if (! is_string($value)) {

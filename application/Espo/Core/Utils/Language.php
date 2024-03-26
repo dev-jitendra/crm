@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Utils;
 
@@ -38,11 +12,11 @@ use RuntimeException;
 
 class Language
 {
-    /** @var array<string, array<string, mixed>> */
+    
     private $data = [];
-    /** @var array<string, array<string, mixed>> */
+    
     private $deletedData = [];
-    /** @var array<string, array<string, mixed>> */
+    
     private $changedData = [];
 
     private string $currentLanguage;
@@ -84,9 +58,7 @@ class Language
         return $language;
     }
 
-    /**
-     * @deprecated As of v7.4. Not to be used.
-     */
+    
     public function setLanguage(string $language): void
     {
         $this->currentLanguage = $language;
@@ -97,14 +69,7 @@ class Language
         return 'languages/' . ($language ?? $this->currentLanguage);
     }
 
-    /**
-     * Translate a label.
-     *
-     * @param string $label
-     * @param string $category
-     * @param string $scope
-     * @return string
-     */
+    
     public function translateLabel(string $label, string $category = 'labels', string $scope = 'Global'): string
     {
         $translated = $this->translate($label, $category, $scope);
@@ -116,18 +81,7 @@ class Language
         return $translated;
     }
 
-    /**
-     * Translate label or labels.
-     *
-     * @param string|string[] $label A name of label.
-     * @param string $category A category.
-     * @param string $scope A scope.
-     * @param string[]|null $requiredOptions A list of required options.
-     *  Ex., $requiredOptions = ['en_US', 'de_DE']
-     *  "language" option has only ['en_US' => 'English (United States)']
-     *  Result will be ['en_US' => 'English (United States)', 'de_DE' => 'de_DE'].
-     * @return string|string[]|array<string, string>
-     */
+    
     public function translate(
         $label,
         string $category = 'labels',
@@ -141,7 +95,7 @@ class Language
                 $translated[$subLabel] = $this->translate($subLabel, $category, $scope, $requiredOptions);
             }
 
-            /** @var string[]|array<string, string> */
+            
             return $translated;
         }
 
@@ -168,10 +122,7 @@ class Language
         return $translated;
     }
 
-    /**
-     * @param int|string $value
-     * @return string
-     */
+    
     public function translateOption($value, string $field, string $scope = 'Global')
     {
         $options = $this->get($scope . '.options.' . $field);
@@ -191,12 +142,7 @@ class Language
         return (string) $value;
     }
 
-    /**
-     *
-     * @param string|string[]|null $key
-     * @param mixed $returns
-     * @return mixed
-     */
+    
     public function get($key = null, $returns = null)
     {
         $data = $this->getData();
@@ -208,17 +154,13 @@ class Language
         return Util::getValueByKey($data, $key, $returns);
     }
 
-    /**
-     * @return array<string, array<string, mixed>>
-     */
+    
     public function getAll(): array
     {
         return $this->get();
     }
 
-    /**
-     * Save changes.
-     */
+    
     public function save(): bool
     {
         $path = str_replace('{language}', $this->currentLanguage, $this->customPath);
@@ -250,9 +192,7 @@ class Language
         return (bool) $result;
     }
 
-    /**
-     * Clear unsaved changes.
-     */
+    
     public function clearChanges(): void
     {
         $this->changedData = [];
@@ -261,9 +201,7 @@ class Language
         $this->init(true);
     }
 
-    /**
-     * @return ?array<string, mixed>
-     */
+    
     private function getData(): ?array
     {
         $currentLanguage = $this->currentLanguage;
@@ -275,12 +213,7 @@ class Language
         return $this->data[$currentLanguage] ?? null;
     }
 
-    /**
-     * Set/change a label.
-     *
-     * @param string|array<string, string> $name
-     * @param mixed $value
-     */
+    
     public function set(string $scope, string $category, $name, $value): void
     {
         if (is_array($name)) {
@@ -304,13 +237,7 @@ class Language
         $this->undelete($scope, $category, $name);
     }
 
-    /**
-     * Remove a label.
-     *
-     * @param string $scope
-     * @param string $category
-     * @param string|string[] $name
-     */
+    
     public function delete(string $scope, string $category, $name): void
     {
         if (is_array($name)) {
@@ -354,17 +281,13 @@ class Language
         $this->data[$this->currentLanguage] = $this->getLanguageData($this->currentLanguage, $reload);
     }
 
-    /**
-     * @return array<string, mixed>
-     */
+    
     private function getDefaultLanguageData(bool $reload = false): array
     {
         return $this->getLanguageData($this->defaultLanguage, $reload);
     }
 
-    /**
-     * @return array<string, mixed>
-     */
+    
     private function getLanguageData(string $language, bool $reload = false): array
     {
         if (!$reload && isset($this->data[$language])) {
@@ -383,7 +306,7 @@ class Language
             $data = $this->resourceReader->readAsArray($path, $readerParams);
 
             if ($language != $this->defaultLanguage) {
-                /** @var array<string, array<string, mixed>> $data */
+                
                 $data = Util::merge($this->getDefaultLanguageData($reload), $data);
             }
 
@@ -395,7 +318,7 @@ class Language
         }
 
         if ($this->useCache) {
-            /** @var array<string, mixed> $cachedData */
+            
             $cachedData = $this->dataCache->get($cacheKey);
 
             $this->data[$language] = $cachedData;

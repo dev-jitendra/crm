@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 use Espo\Core\Utils\Client\LoaderParamsProvider;
 use Espo\Core\Utils\Json;
@@ -54,7 +28,7 @@ if (!Utils::checkActionExists($action)) {
 }
 
 
-// temp save all settings
+
 $ignoredFields = [
     'installProcess',
     'dbName',
@@ -73,7 +47,7 @@ if (!empty($allPostData)) {
     }
 }
 
-// get user selected language
+
 $userLang = (!empty($_SESSION['install']['user-lang']))? $_SESSION['install']['user-lang'] : 'en_US';
 
 require_once 'install/core/Language.php';
@@ -83,7 +57,7 @@ $language = new Language();
 $langs = $language->get($userLang);
 
 $sanitizedLangs = Util::sanitizeHtml($langs);
-//END: get user selected language
+
 
 $config = include('install/core/config.php');
 
@@ -125,13 +99,13 @@ require_once 'install/core/Utils.php';
 $smarty = new Smarty();
 $installer = new Installer();
 
-// check if app was installed
+
 if ($installer->isInstalled() && !isset($_SESSION['install']['installProcess'])) {
     if (isset($_SESSION['install']['redirected']) && $_SESSION['install']['redirected']) {
         die('The installation is disabled. It can be enabled in config files.');
     }
 
-    $url = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+    $url = "http:
     $url = preg_replace('/install\/?/', '', $url, 1);
     $url = strtok($url, '#');
     $url = strtok($url, '?');
@@ -152,7 +126,7 @@ $smarty->assign("version", $installer->getVersion());
 $smarty->assign("langs", $sanitizedLangs);
 $smarty->assign("langsJs", json_encode($langs));
 
-// include actions and set tpl name
+
 switch ($action) {
     case 'main':
         $smarty->assign("languageList", $installer->getLanguageList());
@@ -211,7 +185,7 @@ $smarty->assign('logoSrc', $installer->getLogoSrc($theme));
 $loaderParamsProvider = $installer->getInjectableFactory()->create(LoaderParamsProvider::class);
 
 if (!empty($actionFile) && file_exists('install/core/tpl/' . $tplName)) {
-    /* check if EspoCRM is built */
+    
     $isBuilt = file_exists('client/lib/espo.js');
 
     $smarty->assign('isBuilt', $isBuilt);

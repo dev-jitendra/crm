@@ -10,11 +10,7 @@ use AsyncAws\Core\Stream\ReadOnceResultStream;
 use AsyncAws\Core\Stream\RewindableStream;
 use AsyncAws\Core\Stream\StringStream;
 
-/**
- * Version4 of signer.
- *
- * @author Jérémy Derussé <jeremy@derusse.com>
- */
+
 class SignerV4 implements Signer
 {
     private const ALGORITHM_REQUEST = 'AWS4-HMAC-SHA256';
@@ -44,14 +40,10 @@ class SignerV4 implements Signer
         'aws-sdk-retry' => true,
     ];
 
-    /**
-     * @var string
-     */
+    
     private $scopeName;
 
-    /**
-     * @var string
-     */
+    
     private $region;
 
     public function __construct(string $scopeName, string $region)
@@ -64,7 +56,7 @@ class SignerV4 implements Signer
     {
         $now = $context->getCurrentDate() ?? new \DateTimeImmutable();
 
-        // Signer date have to be UTC https://docs.aws.amazon.com/general/latest/gr/sigv4-date-handling.html
+        
         $now = $now->setTimezone(new \DateTimeZone('UTC'));
         $expires = $context->getExpirationDate() ?? $now->add(new \DateInterval('PT1H'));
 
@@ -75,7 +67,7 @@ class SignerV4 implements Signer
     {
         $now = $context->getCurrentDate() ?? new \DateTimeImmutable();
 
-        // Signer date have to be UTC https://docs.aws.amazon.com/general/latest/gr/sigv4-date-handling.html
+        
         $now = $now->setTimezone(new \DateTimeZone('UTC'));
 
         $this->handleSignature($request, $credentials, $now, $now, false);
@@ -84,7 +76,7 @@ class SignerV4 implements Signer
     protected function buildBodyDigest(Request $request, bool $isPresign): string
     {
         if ($request->hasHeader('x-amz-content-sha256')) {
-            /** @var string $hash */
+            
             $hash = $request->getHeader('x-amz-content-sha256');
         } else {
             $body = $request->getBody();
@@ -130,7 +122,7 @@ class SignerV4 implements Signer
             $this->buildSigningKey($credentials, $credentialScope)
         );
         if ($isPresign) {
-            // Should be called before `buildBodyDigest` because this method may alter the body
+            
             $this->convertBodyToQuery($request);
         } else {
             $this->convertBodyToStream($context);
@@ -139,7 +131,7 @@ class SignerV4 implements Signer
         $bodyDigest = $this->buildBodyDigest($request, $isPresign);
 
         if ($isPresign) {
-            // Should be called after `buildBodyDigest` because this method may remove the header `x-amz-content-sha256`
+            
             $this->convertHeaderToQuery($request);
         }
 
@@ -225,9 +217,7 @@ class SignerV4 implements Signer
         }
     }
 
-    /**
-     * @return string[]
-     */
+    
     private function buildCredentialString(Request $request, Credentials $credentials, \DateTimeImmutable $now, bool $isPresign): array
     {
         $credentialScope = [$now->format('Ymd'), $this->region, $this->scopeName, 'aws4_request'];
@@ -272,12 +262,10 @@ class SignerV4 implements Signer
         $request->setBody(StringStream::create(''));
     }
 
-    /**
-     * @return array<string, string>
-     */
+    
     private function buildCanonicalHeaders(Request $request, bool $isPresign): array
     {
-        // Case-insensitively aggregate all of the headers.
+        
         $canonicalHeaders = [];
         foreach ($request->getHeaders() as $key => $value) {
             $key = strtolower($key);
@@ -296,9 +284,7 @@ class SignerV4 implements Signer
         return $canonicalHeaders;
     }
 
-    /**
-     * @param array<string, string> $canonicalHeaders
-     */
+    
     private function buildCanonicalRequest(Request $request, array $canonicalHeaders, string $bodyDigest): string
     {
         return implode("\n", [
@@ -306,7 +292,7 @@ class SignerV4 implements Signer
             $this->buildCanonicalPath($request),
             $this->buildCanonicalQuery($request),
             implode("\n", array_values($canonicalHeaders)),
-            '', // empty line after headers
+            '', 
             implode(';', array_keys($canonicalHeaders)),
             $bodyDigest,
         ]);
@@ -349,9 +335,7 @@ class SignerV4 implements Signer
         ]);
     }
 
-    /**
-     * @param string[] $credentialScope
-     */
+    
     private function buildSigningKey(Credentials $credentials, array $credentialScope): string
     {
         $signingKey = 'AWS4' . $credentials->getSecretKey();

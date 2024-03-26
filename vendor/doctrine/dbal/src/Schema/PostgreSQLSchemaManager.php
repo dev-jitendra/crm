@@ -30,42 +30,30 @@ use function trim;
 
 use const CASE_LOWER;
 
-/**
- * PostgreSQL Schema Manager.
- *
- * @extends AbstractSchemaManager<PostgreSQLPlatform>
- */
+
 class PostgreSQLSchemaManager extends AbstractSchemaManager
 {
-    /** @var string[]|null */
+    
     private ?array $existingSchemaPaths = null;
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listTableNames()
     {
         return $this->doListTableNames();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listTables()
     {
         return $this->doListTables();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @deprecated Use {@see introspectTable()} instead.
-     */
+    
     public function listTableDetails($name)
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5595',
+            'https:
             '%s is deprecated. Use introspectTable() instead.',
             __METHOD__,
         );
@@ -73,44 +61,30 @@ class PostgreSQLSchemaManager extends AbstractSchemaManager
         return $this->doListTableDetails($name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listTableColumns($table, $database = null)
     {
         return $this->doListTableColumns($table, $database);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listTableIndexes($table)
     {
         return $this->doListTableIndexes($table);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listTableForeignKeys($table, $database = null)
     {
         return $this->doListTableForeignKeys($table, $database);
     }
 
-    /**
-     * Gets all the existing schema names.
-     *
-     * @deprecated Use {@see listSchemaNames()} instead.
-     *
-     * @return string[]
-     *
-     * @throws Exception
-     */
+    
     public function getSchemaNames()
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/issues/4503',
+            'https:
             'PostgreSQLSchemaManager::getSchemaNames() is deprecated,'
                 . ' use PostgreSQLSchemaManager::listSchemaNames() instead.',
         );
@@ -118,9 +92,7 @@ class PostgreSQLSchemaManager extends AbstractSchemaManager
         return $this->listNamespaceNames();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listSchemaNames(): array
     {
         return $this->_conn->fetchFirstColumn(
@@ -133,16 +105,12 @@ SQL,
         );
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @deprecated
-     */
+    
     public function getSchemaSearchPaths()
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/4821',
+            'https:
             'PostgreSQLSchemaManager::getSchemaSearchPaths() is deprecated.',
         );
 
@@ -160,17 +128,7 @@ SQL,
         return array_map('trim', $schema);
     }
 
-    /**
-     * Gets names of all existing schemas in the current users search path.
-     *
-     * This is a PostgreSQL only function.
-     *
-     * @internal The method should be only used from within the PostgreSQLSchemaManager class hierarchy.
-     *
-     * @return string[]
-     *
-     * @throws Exception
-     */
+    
     public function getExistingSchemaSearchPaths()
     {
         if ($this->existingSchemaPaths === null) {
@@ -182,13 +140,7 @@ SQL,
         return $this->existingSchemaPaths;
     }
 
-    /**
-     * Returns the name of the current schema.
-     *
-     * @return string|null
-     *
-     * @throws Exception
-     */
+    
     protected function getCurrentSchema()
     {
         $schemas = $this->getExistingSchemaSearchPaths();
@@ -196,17 +148,7 @@ SQL,
         return array_shift($schemas);
     }
 
-    /**
-     * Sets or resets the order of the existing schemas in the current search path of the user.
-     *
-     * This is a PostgreSQL only function.
-     *
-     * @internal The method should be only used from within the PostgreSQLSchemaManager class hierarchy.
-     *
-     * @return void
-     *
-     * @throws Exception
-     */
+    
     public function determineExistingSchemaSearchPaths()
     {
         $names = $this->listSchemaNames();
@@ -217,9 +159,7 @@ SQL,
         });
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableTableForeignKeyDefinition($tableForeignKey)
     {
         $onUpdate = null;
@@ -248,8 +188,8 @@ SQL,
         $result = preg_match('/FOREIGN KEY \((.+)\) REFERENCES (.+)\((.+)\)/', $tableForeignKey['condef'], $values);
         assert($result === 1);
 
-        // PostgreSQL returns identifiers that are keywords with quotes, we need them later, don't get
-        // the idea to trim them here.
+        
+        
         $localColumns   = array_map('trim', explode(',', $values[1]));
         $foreignColumns = array_map('trim', explode(',', $values[3]));
         $foreignTable   = $values[2];
@@ -263,17 +203,13 @@ SQL,
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableViewDefinition($view)
     {
         return new View($view['schemaname'] . '.' . $view['viewname'], $view['definition']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableTableDefinition($table)
     {
         $currentSchema = $this->getCurrentSchema();
@@ -285,11 +221,7 @@ SQL,
         return $table['schema_name'] . '.' . $table['table_name'];
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @link http://ezcomponents.org/docs/api/trunk/DatabaseSchema/ezcDbSchemaPgsqlReader.html
-     */
+    
     protected function _getPortableTableIndexesList($tableIndexes, $tableName = null)
     {
         $buffer = [];
@@ -303,7 +235,7 @@ SQL,
 
             $indexColumns = $this->_conn->fetchAllAssociative($columnNameSql);
 
-            // required for getting the order of the columns right.
+            
             foreach ($colNumbers as $colNum) {
                 foreach ($indexColumns as $colRow) {
                     if ($colNum !== $colRow['attnum']) {
@@ -324,24 +256,18 @@ SQL,
         return parent::_getPortableTableIndexesList($buffer, $tableName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableDatabaseDefinition($database)
     {
         return $database['datname'];
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated Use {@see listSchemaNames()} instead.
-     */
+    
     protected function getPortableNamespaceDefinition(array $namespace)
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/issues/4503',
+            'https:
             'PostgreSQLSchemaManager::getPortableNamespaceDefinition() is deprecated,'
                 . ' use PostgreSQLSchemaManager::listSchemaNames() instead.',
         );
@@ -349,9 +275,7 @@ SQL,
         return $namespace['nspname'];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableSequenceDefinition($sequence)
     {
         if ($sequence['schemaname'] !== 'public') {
@@ -363,15 +287,13 @@ SQL,
         return new Sequence($sequenceName, (int) $sequence['increment_by'], (int) $sequence['min_value']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableTableColumnDefinition($tableColumn)
     {
         $tableColumn = array_change_key_case($tableColumn, CASE_LOWER);
 
         if (strtolower($tableColumn['type']) === 'varchar' || strtolower($tableColumn['type']) === 'bpchar') {
-            // get length from varchar definition
+            
             $length                = preg_replace('~.*\(([0-9]*)\).*~', '$1', $tableColumn['complete_type']);
             $tableColumn['length'] = $length;
         }
@@ -507,7 +429,7 @@ SQL,
                 $length = null;
                 break;
 
-            // PostgreSQL 9.4+ only
+            
             case 'jsonb':
                 $jsonb = true;
                 break;
@@ -547,7 +469,7 @@ SQL,
             if (! $column->getType() instanceof JsonType) {
                 Deprecation::trigger(
                     'doctrine/dbal',
-                    'https://github.com/doctrine/dbal/pull/5049',
+                    'https:
                     <<<'DEPRECATION'
                     %s not extending %s while being named %s is deprecated,
                     and will lead to jsonb never to being used in 4.0.,
@@ -564,13 +486,7 @@ SQL,
         return $column;
     }
 
-    /**
-     * PostgreSQL 9.4 puts parentheses around negative numeric default values that need to be stripped eventually.
-     *
-     * @param mixed $defaultValue
-     *
-     * @return mixed
-     */
+    
     private function fixVersion94NegativeNumericDefaultValue($defaultValue)
     {
         if ($defaultValue !== null && strpos($defaultValue, '(') === 0) {
@@ -580,9 +496,7 @@ SQL,
         return $defaultValue;
     }
 
-    /**
-     * Parses a default value expression as given by PostgreSQL
-     */
+    
     private function parseDefaultExpression(?string $default): ?string
     {
         if ($default === null) {
@@ -725,9 +639,7 @@ SQL;
         return $this->_conn->executeQuery($sql);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     protected function fetchTableOptionsByTable(string $databaseName, ?string $tableName = null): array
     {
         $sql = <<<'SQL'
@@ -745,11 +657,7 @@ SQL;
         return $this->_conn->fetchAllAssociativeIndexed($sql);
     }
 
-    /**
-     * @param string|null $tableName
-     *
-     * @return list<string>
-     */
+    
     private function buildQueryConditions($tableName): array
     {
         $conditions = [];

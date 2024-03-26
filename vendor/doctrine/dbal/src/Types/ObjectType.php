@@ -12,32 +12,22 @@ use function set_error_handler;
 use function stream_get_contents;
 use function unserialize;
 
-/**
- * Type that maps a PHP object to a clob SQL type.
- *
- * @deprecated Use {@link JsonType} instead.
- */
+
 class ObjectType extends Type
 {
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {
         return $platform->getClobTypeDeclarationSQL($column);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         return serialize($value);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         if ($value === null) {
@@ -57,24 +47,18 @@ class ObjectType extends Type
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getName()
     {
         return Types::OBJECT;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated
-     */
+    
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5509',
+            'https:
             '%s is deprecated.',
             __METHOD__,
         );

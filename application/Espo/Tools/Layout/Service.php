@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\Layout;
 
@@ -59,11 +33,7 @@ class Service
         private User $user
     ) {}
 
-    /**
-     * @return array<int, mixed>|stdClass|null
-     * @throws NotFound
-     * @throws Error
-     */
+    
     public function getOriginal(string $scope, string $name, ?string $setId = null): mixed
     {
         $result = null;
@@ -72,7 +42,7 @@ class Service
             $layout = $this->getRecordFromSet($scope, $name, $setId, true);
 
             if ($layout && $layout->getData() !== null) {
-                /** @var string $data */
+                
                 $data = $layout->getData();
 
                 $result = Json::decode($data);
@@ -92,11 +62,7 @@ class Service
         return $result;
     }
 
-    /**
-     * @throws Forbidden
-     * @throws NotFound
-     * @throws Error
-     */
+    
     public function getForFrontend(string $scope, string $name): mixed
     {
         try {
@@ -144,7 +110,7 @@ class Service
                 $link = $item;
 
                 if (is_object($item)) {
-                    /** @var stdClass $item */
+                    
                     $link = $item->name ?? null;
                 }
 
@@ -168,9 +134,7 @@ class Service
         return $data;
     }
 
-    /**
-     * @throws NotFound
-     */
+    
     private function getRecordFromSet(
         string $scope,
         string $name,
@@ -205,10 +169,7 @@ class Service
             ->findOne();
     }
 
-    /**
-     * @throws NotFound
-     * @throws Error
-     */
+    
     public function update(string $scope, string $name, ?string $setId, mixed $data): mixed
     {
         if ($setId) {
@@ -242,11 +203,7 @@ class Service
         return $layoutManager->get($scope, $name);
     }
 
-    /**
-     * @return array<int, mixed>|stdClass|null
-     * @throws NotFound
-     * @throws Error
-     */
+    
     public function resetToDefault(string $scope, string $name, ?string $setId = null): mixed
     {
         $this->dataManager->updateCacheTimestamp();
@@ -271,10 +228,7 @@ class Service
         return $this->getOriginal($scope, $name);
     }
 
-    /**
-     * @throws Error
-     * @throws NotFound
-     */
+    
     private function getOriginalBottomPanelsDetail(string $scope): stdClass
     {
         $relationships = $this->getOriginal($scope, 'relationships') ?? [];
@@ -296,7 +250,7 @@ class Service
                 continue;
             }
 
-            /** @var stdClass $item */
+            
 
             $item = clone $item;
             $item->index = 5 + 0.001 * $i;
@@ -311,10 +265,7 @@ class Service
         return $result;
     }
 
-    /**
-     * @throws NotFound
-     * @throws Error
-     */
+    
     private function getForFrontendBottomPanelsDetail(string $scope): stdClass
     {
         return $this->getOriginalBottomPanelsDetail($scope);

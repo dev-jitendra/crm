@@ -1,47 +1,21 @@
 <?php
 
-/**
- * PHP Montgomery Modular Exponentiation Engine with interleaved multiplication
- *
- * PHP version 5 and 7
- *
- * @author    Jim Wigginton <terrafrost@php.net>
- * @copyright 2017 Jim Wigginton
- * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
- * @link      http://pear.php.net/package/Math_BigInteger
- */
+
 
 namespace phpseclib3\Math\BigInteger\Engines\PHP\Reductions;
 
 use phpseclib3\Math\BigInteger\Engines\PHP;
 
-/**
- * PHP Montgomery Modular Exponentiation Engine with interleaved multiplication
- *
- * @author  Jim Wigginton <terrafrost@php.net>
- */
+
 abstract class MontgomeryMult extends Montgomery
 {
-    /**
-     * Montgomery Multiply
-     *
-     * Interleaves the montgomery reduction and long multiplication algorithms together as described in
-     * {@link http://www.cacr.math.uwaterloo.ca/hac/about/chap14.pdf#page=13 HAC 14.36}
-     *
-     * @see self::_prepMontgomery()
-     * @see self::_montgomery()
-     * @param array $x
-     * @param array $y
-     * @param array $m
-     * @param class-string<PHP> $class
-     * @return array
-     */
+    
     public static function multiplyReduce(array $x, array $y, array $m, $class)
     {
-        // the following code, although not callable, can be run independently of the above code
-        // although the above code performed better in my benchmarks the following could might
-        // perform better under different circumstances. in lieu of deleting it it's just been
-        // made uncallable
+        
+        
+        
+        
 
         static $cache = [
             self::VARIABLE => [],

@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\Pdf\Dompdf;
 
@@ -71,7 +45,7 @@ class HtmlComposer
             $titleHtml = "<title>" . htmlspecialchars($title) . "</title>";
         }
 
-        /** @noinspection HtmlRequiredTitleElement */
+        
         return "
             <head>
                 {$titleHtml}
@@ -169,7 +143,7 @@ class HtmlComposer
 
     private function replaceTags(string $html): string
     {
-        /** @noinspection HtmlUnknownAttribute */
+        
         $html = str_replace('<br pagebreak="true">', '<div style="page-break-after: always;"></div>', $html);
         $html = preg_replace('/src="@([A-Za-z0-9+\/]*={0,2})"/', 'src="data:image/jpeg;base64,$1"', $html);
         $html = str_replace('?entryPoint=attachment&amp;', '?entryPoint=attachment&', $html ?? '');
@@ -214,11 +188,7 @@ class HtmlComposer
         return $this->replaceTags($html);
     }
 
-    /**
-     *
-     * @param array<string, mixed> $data
-     * @return string
-     */
+    
     private function composeBarcode(array $data): string
     {
         $value = $data['value'] ?? null;
@@ -229,7 +199,7 @@ class HtmlComposer
 
         $codeType = $data['type'] ?? 'CODE128';
 
-        /** @noinspection SpellCheckingInspection */
+        
         $typeMap = [
             "CODE128" => 'C128',
             "CODE128A" => 'C128A',
@@ -248,11 +218,11 @@ class HtmlComposer
 
         $type = $typeMap[$codeType] ?? null;
 
-        /** @noinspection SpellCheckingInspection */
+        
         if ($codeType === 'QRcode') {
             $width = $data['width'] ?? 40;
             $height = $data['height'] ?? 40;
-            //$color = $data['color'] ?? '#000';
+            
 
             $options = new QROptions();
 
@@ -263,7 +233,7 @@ class HtmlComposer
 
             $css = "width: {$width}mm; height: {$height}mm;";
 
-            /** @noinspection HtmlRequiredAltAttribute */
+            
             return "<img src=\"$code\" style=\"$css\">";
         }
 
@@ -283,7 +253,7 @@ class HtmlComposer
 
         $css = "width: {$width}mm; height: {$height}mm;";
 
-        /** @noinspection HtmlRequiredAltAttribute */
+        
         return "<img src=\"data:image/svg+xml;base64,$encoded\" style=\"$css\">";
     }
 

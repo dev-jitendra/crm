@@ -1,18 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - belkacem77@gmail.com
- */
+
+
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [
         'L' => 'DD/MM/YYYY',
@@ -34,9 +24,9 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'm' => ':count n wayyuren',
     'a_month' => ':count n wayyuren',
 
-    'week' => ':count n ledwaṛ', // less reliable
-    'w' => ':count n ledwaṛ', // less reliable
-    'a_week' => ':count n ledwaṛ', // less reliable
+    'week' => ':count n ledwaṛ', 
+    'w' => ':count n ledwaṛ', 
+    'a_week' => ':count n ledwaṛ', 
 
     'day' => ':count n wussan',
     'd' => ':count n wussan',
@@ -50,7 +40,7 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'min' => ':count n tedqiqin',
     'a_minute' => ':count n tedqiqin',
 
-    'second' => ':count tasdidt', // less reliable
-    's' => ':count tasdidt', // less reliable
-    'a_second' => ':count tasdidt', // less reliable
+    'second' => ':count tasdidt', 
+    's' => ':count tasdidt', 
+    'a_second' => ':count tasdidt', 
 ]);

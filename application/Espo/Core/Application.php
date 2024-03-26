@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core;
 
@@ -40,9 +14,7 @@ use Espo\Core\Utils\Config;
 use Espo\Core\Utils\Metadata;
 use Espo\Core\Utils\ClientManager;
 
-/**
- * A central access point of the application.
- */
+
 class Application
 {
     protected Container $container;
@@ -58,18 +30,13 @@ class Application
 
     protected function initContainer(): void
     {
-        /** @var Container $container */
+        
         $container = (new ContainerBuilder())->build();
 
         $this->container = $container;
     }
 
-    /**
-     * Run an application runner.
-     *
-     * @param class-string<Runner|RunnerParameterized> $className A runner class name.
-     * @param ?RunnerParams $params Runner parameters.
-     */
+    
     public function run(string $className, ?RunnerParams $params = null): void
     {
         $runnerRunner = $this->getInjectableFactory()->create(RunnerRunner::class);
@@ -82,17 +49,13 @@ class Application
         }
     }
 
-    /**
-     * Whether the application is installed.
-     */
+    
     public function isInstalled(): bool
     {
         return $this->getConfig()->get('isInstalled');
     }
 
-    /**
-     * Get the service container.
-     */
+    
     public function getContainer(): Container
     {
         return $this->container;
@@ -130,9 +93,7 @@ class Application
         $autoload->register();
     }
 
-    /**
-     * Initialize services that has the 'preload' parameter.
-     */
+    
     protected function initPreloads(): void
     {
         foreach ($this->getMetadata()->get(['app', 'containerServices']) ?? [] as $name => $defs) {
@@ -142,17 +103,13 @@ class Application
         }
     }
 
-    /**
-     * Set a base path of an index file related to the application directory. Used for a portal.
-     */
+    
     public function setClientBasePath(string $basePath): void
     {
         $this->getClientManager()->setBasePath($basePath);
     }
 
-    /**
-     * Set up the system user. The system user is used when no user is logged in.
-     */
+    
     public function setupSystemUser(): void
     {
         $this->getApplicationUser()->setupSystemUser();

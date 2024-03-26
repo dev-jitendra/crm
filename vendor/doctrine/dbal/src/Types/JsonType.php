@@ -14,22 +14,16 @@ use function stream_get_contents;
 use const JSON_PRESERVE_ZERO_FRACTION;
 use const JSON_THROW_ON_ERROR;
 
-/**
- * Type generating json objects values
- */
+
 class JsonType extends Type
 {
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {
         return $platform->getJsonTypeDeclarationSQL($column);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         if ($value === null) {
@@ -43,9 +37,7 @@ class JsonType extends Type
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         if ($value === null || $value === '') {
@@ -63,24 +55,18 @@ class JsonType extends Type
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getName()
     {
         return Types::JSON;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated
-     */
+    
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5509',
+            'https:
             '%s is deprecated.',
             __METHOD__,
         );

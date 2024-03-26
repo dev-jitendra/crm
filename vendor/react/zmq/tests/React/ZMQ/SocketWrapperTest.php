@@ -7,9 +7,7 @@ use ZMQ;
 
 class SocketWrapperTest extends TestCase
 {
-    /**
-     * @test
-     */
+    
     public function itShouldWrapARealZMQSocket()
     {
         $loop = $this->getMockBuilder('React\EventLoop\LoopInterface')->getMock();
@@ -21,16 +19,14 @@ class SocketWrapperTest extends TestCase
         $socket
             ->expects($this->once())
             ->method('connect')
-            ->with('tcp://127.0.0.1:5555');
+            ->with('tcp:
 
         $wrapped = new SocketWrapper($socket, $loop);
 
-        $wrapped->connect('tcp://127.0.0.1:5555');
+        $wrapped->connect('tcp:
     }
 
-    /**
-     * @test
-     */
+    
     public function subscribeShouldSetSocketOption()
     {
         $loop = $this->getMockBuilder('React\EventLoop\LoopInterface')->getMock();
@@ -49,9 +45,7 @@ class SocketWrapperTest extends TestCase
         $wrapped->subscribe('foo');
     }
 
-    /**
-     * @test
-     */
+    
     public function unsubscribeShouldSetSocketOption()
     {
         $loop = $this->getMockBuilder('React\EventLoop\LoopInterface')->getMock();
@@ -70,9 +64,7 @@ class SocketWrapperTest extends TestCase
         $wrapped->unsubscribe('foo');
     }
 
-    /**
-     * @test
-     */
+    
     public function sendShouldBufferMessages()
     {
         $loop = $this->getMockBuilder('React\EventLoop\LoopInterface')->getMock();
@@ -97,9 +89,7 @@ class SocketWrapperTest extends TestCase
         $wrapped->send('foobar');
     }
 
-    /**
-     * @test
-     */
+    
     public function closeShouldStopListening()
     {
         $loop = $this->getMockBuilder('React\EventLoop\LoopInterface')->getMock();
@@ -130,9 +120,7 @@ class SocketWrapperTest extends TestCase
     }
 
 
-    /**
-     * @test
-     */
+    
     public function closeShouldStopHandleEventLoop()
     {
 

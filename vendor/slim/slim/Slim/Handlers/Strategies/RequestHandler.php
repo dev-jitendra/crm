@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -14,9 +10,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Interfaces\RequestHandlerInvocationStrategyInterface;
 
-/**
- * PSR-15 RequestHandler invocation strategy
- */
+
 class RequestHandler implements RequestHandlerInvocationStrategyInterface
 {
     protected bool $appendRouteArgumentsToRequestAttributes;
@@ -26,11 +20,7 @@ class RequestHandler implements RequestHandlerInvocationStrategyInterface
         $this->appendRouteArgumentsToRequestAttributes = $appendRouteArgumentsToRequestAttributes;
     }
 
-    /**
-     * Invoke a route callable that implements RequestHandlerInterface
-     *
-     * @param array<string, string>  $routeArguments
-     */
+    
     public function __invoke(
         callable $callable,
         ServerRequestInterface $request,

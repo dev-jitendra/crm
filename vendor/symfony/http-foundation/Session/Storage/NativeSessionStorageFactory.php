@@ -1,25 +1,16 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpFoundation\Session\Storage;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Storage\Proxy\AbstractProxy;
 
-// Help opcache.preload discover always-needed symbols
+
 class_exists(NativeSessionStorage::class);
 
-/**
- * @author Jérémy Derussé <jeremy@derusse.com>
- */
+
 class NativeSessionStorageFactory implements SessionStorageFactoryInterface
 {
     private array $options;
@@ -27,9 +18,7 @@ class NativeSessionStorageFactory implements SessionStorageFactoryInterface
     private $metaBag;
     private bool $secure;
 
-    /**
-     * @see NativeSessionStorage constructor.
-     */
+    
     public function __construct(array $options = [], AbstractProxy|\SessionHandlerInterface $handler = null, MetadataBag $metaBag = null, bool $secure = false)
     {
         $this->options = $options;

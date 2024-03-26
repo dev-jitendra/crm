@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Controllers;
 
@@ -46,11 +20,7 @@ use stdClass;
 
 class LeadCapture extends Record
 {
-    /**
-     * @throws BadRequest
-     * @throws NotFound
-     * @throws Error
-     */
+    
     public function postActionLeadCapture(Request $request, Response $response): bool
     {
         $data = $request->getParsedBody();
@@ -69,10 +39,7 @@ class LeadCapture extends Record
         return true;
     }
 
-    /**
-     * @throws BadRequest
-     * @throws NotFound
-     */
+    
     public function optionsActionLeadCapture(Request $request, Response $response): bool
     {
         $apiKey = $request->getRouteParam('apiKey');
@@ -94,11 +61,7 @@ class LeadCapture extends Record
         return true;
     }
 
-    /**
-     * @throws BadRequest
-     * @throws NotFound
-     * @throws ForbiddenSilent
-     */
+    
     public function postActionGenerateNewApiKey(Request $request): stdClass
     {
         $data = $request->getParsedBody();
@@ -112,10 +75,7 @@ class LeadCapture extends Record
             ->getValueMap();
     }
 
-    /**
-     * @return stdClass[]
-     * @throws Forbidden
-     */
+    
     public function getActionSmtpAccountDataList(): array
     {
         if (!$this->user->isAdmin()) {

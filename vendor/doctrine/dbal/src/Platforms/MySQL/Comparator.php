@@ -10,19 +10,13 @@ use Doctrine\DBAL\Schema\TableDiff;
 use function array_diff_assoc;
 use function array_intersect_key;
 
-/**
- * Compares schemas in the context of MySQL platform.
- *
- * In MySQL, unless specified explicitly, the column's character set and collation are inherited from its containing
- * table. So during comparison, an omitted value and the value that matches the default value of table in the
- * desired schema must be considered equal.
- */
+
 class Comparator extends BaseComparator
 {
-    /** @var CollationMetadataProvider */
+    
     private $collationMetadataProvider;
 
-    /** @internal The comparator can be only instantiated by a schema manager. */
+    
     public function __construct(AbstractMySQLPlatform $platform, CollationMetadataProvider $collationMetadataProvider)
     {
         parent::__construct($platform);
@@ -38,9 +32,7 @@ class Comparator extends BaseComparator
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function diffTable(Table $fromTable, Table $toTable)
     {
         return parent::diffTable(
@@ -74,11 +66,7 @@ class Comparator extends BaseComparator
         return $table;
     }
 
-    /**
-     * @param array<string,string> $options
-     *
-     * @return array<string,string>
-     */
+    
     private function normalizeOptions(array $options): array
     {
         if (isset($options['collation']) && ! isset($options['charset'])) {

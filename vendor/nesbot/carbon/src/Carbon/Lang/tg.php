@@ -1,18 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Orif N. Jr
- */
+
+
 return [
     'year' => '{1}як сол|:count сол',
     'month' => '{1}як моҳ|:count моҳ',
@@ -46,7 +36,7 @@ return [
         'sameElse' => 'L',
     ],
     'ordinal' => function ($number) {
-        if ($number === 0) { // special case for zero
+        if ($number === 0) { 
             return "$number-ıncı";
         }
 

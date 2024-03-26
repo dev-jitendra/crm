@@ -1,18 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Rwanda Steve Murphy murf@e-tools.com
- */
+
+
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [
         'L' => 'DD.MM.YYYY',
@@ -25,9 +15,9 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'first_day_of_week' => 1,
     'day_of_first_week_of_year' => 1,
 
-    'second' => ':count vuna', // less reliable
-    's' => ':count vuna', // less reliable
-    'a_second' => ':count vuna', // less reliable
+    'second' => ':count vuna', 
+    's' => ':count vuna', 
+    'a_second' => ':count vuna', 
 
     'year' => 'aka :count',
     'y' => 'aka :count',

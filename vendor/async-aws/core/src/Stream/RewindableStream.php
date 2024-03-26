@@ -2,27 +2,13 @@
 
 namespace AsyncAws\Core\Stream;
 
-/**
- * Provides a Stream that can be read several time.
- *
- * This is for internal use only. One cannot iterate only over a few items of the stream.
- * If iterating over a stream, the full stream must be consumed before calling methods:
- * - stringify
- * - length
- * - hash
- *
- * @author Jérémy Derussé <jeremy@derusse.com>
- */
+
 final class RewindableStream implements RequestStream
 {
-    /**
-     * @var RequestStream
-     */
+    
     private $content;
 
-    /**
-     * @var RequestStream|null
-     */
+    
     private $fallback;
 
     private function __construct(RequestStream $content)
@@ -65,7 +51,7 @@ final class RewindableStream implements RequestStream
             return;
         }
 
-        $resource = fopen('php://temp', 'r+b');
+        $resource = fopen('php:
         $this->fallback = ResourceStream::create($resource);
 
         foreach ($this->content as $chunk) {
@@ -90,7 +76,7 @@ final class RewindableStream implements RequestStream
 
     public function read(): void
     {
-        // Use getIterator() to read stream content to $this->fallback
+        
         foreach ($this as $chunk) {
         }
     }

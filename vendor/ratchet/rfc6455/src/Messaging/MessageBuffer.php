@@ -4,79 +4,49 @@ namespace Ratchet\RFC6455\Messaging;
 use Ratchet\RFC6455\Handshake\PermessageDeflateOptions;
 
 class MessageBuffer {
-    /**
-     * @var \Ratchet\RFC6455\Messaging\CloseFrameChecker
-     */
+    
     private $closeFrameChecker;
 
-    /**
-     * @var callable
-     */
+    
     private $exceptionFactory;
 
-    /**
-     * @var \Ratchet\RFC6455\Messaging\Message
-     */
+    
     private $messageBuffer;
 
-    /**
-     * @var \Ratchet\RFC6455\Messaging\Frame
-     */
+    
     private $frameBuffer;
 
-    /**
-     * @var callable
-     */
+    
     private $onMessage;
 
-    /**
-     * @var callable
-     */
+    
     private $onControl;
 
-    /**
-     * @var bool
-     */
+    
     private $checkForMask;
 
-    /**
-     * @var callable
-     */
+    
     private $sender;
 
-    /**
-     * @var string
-     */
+    
     private $leftovers;
 
-    /**
-     * @var int
-     */
+    
     private $streamingMessageOpCode = -1;
 
-    /**
-     * @var PermessageDeflateOptions
-     */
+    
     private $permessageDeflateOptions;
 
-    /**
-     * @var bool
-     */
+    
     private $deflateEnabled = false;
 
-    /**
-     * @var int
-     */
+    
     private $maxMessagePayloadSize;
 
-    /**
-     * @var int
-     */
+    
     private $maxFramePayloadSize;
 
-    /**
-     * @var bool
-     */
+    
     private $compressedMessage;
 
     function __construct(
@@ -85,8 +55,8 @@ class MessageBuffer {
         callable $onControl = null,
         $expectMask = true,
         $exceptionFactory = null,
-        $maxMessagePayloadSize = null, // null for default - zero for no limit
-        $maxFramePayloadSize = null,   // null for default - zero for no limit
+        $maxMessagePayloadSize = null, 
+        $maxFramePayloadSize = null,   
         callable $sender = null,
         PermessageDeflateOptions $permessageDeflateOptions = null
     ) {
@@ -123,7 +93,7 @@ class MessageBuffer {
             $maxFramePayloadSize = (int)($memory_limit_bytes / 4);
         }
 
-        if (!is_int($maxFramePayloadSize) || $maxFramePayloadSize > 0x7FFFFFFFFFFFFFFF || $maxFramePayloadSize < 0) { // this should be interesting on non-64 bit systems
+        if (!is_int($maxFramePayloadSize) || $maxFramePayloadSize > 0x7FFFFFFFFFFFFFFF || $maxFramePayloadSize < 0) { 
             throw new \InvalidArgumentException($maxFramePayloadSize . ' is not a valid maxFramePayloadSize');
         }
         $this->maxFramePayloadSize = $maxFramePayloadSize;
@@ -151,7 +121,7 @@ class MessageBuffer {
             $isMasked       = ($data[$frameStart + 1] & "\x80") === "\x80";
             $headerSize     += $isMasked ? 4 : 0;
             if ($payload_length > 125 && ($dataLen - $frameStart < $headerSize + 125)) {
-                // no point of checking - this frame is going to be bigger than the buffer is right now
+                
                 break;
             }
             if ($payload_length > 125) {
@@ -166,7 +136,7 @@ class MessageBuffer {
             $closeFrame = null;
 
             if ($payload_length < 0) {
-                // this can happen when unpacking in php
+                
                 $closeFrame = $this->newCloseFrame(Frame::CLOSE_PROTOCOL, 'Invalid frame length');
             }
 
@@ -198,10 +168,7 @@ class MessageBuffer {
         $this->leftovers = substr($data, $frameStart);
     }
 
-    /**
-     * @param string $data
-     * @return null
-     */
+    
     private function processData($data) {
         $this->messageBuffer ?: $this->messageBuffer = $this->newMessage();
         $this->frameBuffer   ?: $this->frameBuffer   = $this->newFrame();
@@ -257,11 +224,7 @@ class MessageBuffer {
         }
     }
 
-    /**
-     * Check a frame to be added to the current message buffer
-     * @param \Ratchet\RFC6455\Messaging\FrameInterface|FrameInterface $frame
-     * @return \Ratchet\RFC6455\Messaging\FrameInterface|FrameInterface
-     */
+    
     public function frameCheck(FrameInterface $frame) {
         if ((false !== $frame->getRsv1() && !$this->deflateEnabled) ||
             false !== $frame->getRsv2() ||
@@ -332,11 +295,7 @@ class MessageBuffer {
         return $frame;
     }
 
-    /**
-     * Determine if a message is valid
-     * @param \Ratchet\RFC6455\Messaging\MessageInterface
-     * @return bool|int true if valid - false if incomplete - int of recommended close code
-     */
+    
     public function checkMessage(MessageInterface $message) {
         if (!$message->isBinary()) {
             if (!$this->checkUtf8($message->getPayload())) {
@@ -352,22 +311,15 @@ class MessageBuffer {
             return mb_check_encoding($string, 'UTF-8');
         }
 
-        return preg_match('//u', $string);
+        return preg_match('
     }
 
-    /**
-     * @return \Ratchet\RFC6455\Messaging\MessageInterface
-     */
+    
     public function newMessage() {
         return new Message;
     }
 
-    /**
-     * @param string|null $payload
-     * @param bool|null   $final
-     * @param int|null    $opcode
-     * @return \Ratchet\RFC6455\Messaging\FrameInterface
-     */
+    
     public function newFrame($payload = null, $final = null, $opcode = null) {
         return new Frame($payload, $final, $opcode, $this->exceptionFactory);
     }
@@ -409,7 +361,7 @@ class MessageBuffer {
         $this->sendFrame($frame);
 
         if ($final) {
-            // reset deflator if client doesn't remember contexts
+            
             if ($this->getDeflateNoContextTakeover()) {
                 $this->deflator = null;
             }
@@ -457,7 +409,7 @@ class MessageBuffer {
             $terminator = "\x00\x00\xff\xff";
         }
 
-        gc_collect_cycles(); // memory runs away if we don't collect ??
+        gc_collect_cycles(); 
 
         return new Frame(
             inflate_add($this->inflator, $frame->getPayload() . $terminator),
@@ -471,7 +423,7 @@ class MessageBuffer {
     private function deflateFrame(Frame $frame)
     {
         if ($frame->getRsv1()) {
-            return $frame; // frame is already deflated
+            return $frame; 
         }
 
         if ($this->deflator === null) {
@@ -490,30 +442,30 @@ class MessageBuffer {
             );
         }
 
-        // there is an issue in the zlib extension for php where
-        // deflate_add does not check avail_out to see if the buffer filled
-        // this only seems to be an issue for payloads between 16 and 64 bytes
-        // This if statement is a hack fix to break the output up allowing us
-        // to call deflate_add twice which should clear the buffer issue
-//        if ($frame->getPayloadLength() >= 16 && $frame->getPayloadLength() <= 64) {
-//            // try processing in 8 byte chunks
-//            // https://bugs.php.net/bug.php?id=73373
-//            $payload = "";
-//            $orig = $frame->getPayload();
-//            $partSize = 8;
-//            while (strlen($orig) > 0) {
-//                $part = substr($orig, 0, $partSize);
-//                $orig = substr($orig, strlen($part));
-//                $flags = strlen($orig) > 0 ? ZLIB_PARTIAL_FLUSH : ZLIB_SYNC_FLUSH;
-//                $payload .= deflate_add($this->deflator, $part, $flags);
-//            }
-//        } else {
+        
+        
+        
+        
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
         $payload = deflate_add(
             $this->deflator,
             $frame->getPayload(),
             ZLIB_SYNC_FLUSH
         );
-//        }
+
 
         $deflatedFrame = new Frame(
             substr($payload, 0, $frame->isFinal() ? -4 : strlen($payload)),
@@ -528,13 +480,7 @@ class MessageBuffer {
         return $deflatedFrame;
     }
 
-    /**
-     * This is a separate function for testing purposes
-     * $memory_limit is only used for testing
-     *
-     * @param null|string $memory_limit
-     * @return int
-     */
+    
     private static function getMemoryLimit($memory_limit = null) {
         $memory_limit = $memory_limit === null ? \trim(\ini_get('memory_limit')) : $memory_limit;
         $memory_limit_bytes = 0;

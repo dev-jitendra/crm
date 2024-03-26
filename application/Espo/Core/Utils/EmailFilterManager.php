@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Utils;
 
@@ -39,12 +13,10 @@ use Espo\ORM\Query\Part\Order;
 use LogicException;
 use stdClass;
 
-/**
- * Looks for any matching Email Filter for a given email and user.
- */
+
 class EmailFilterManager
 {
-    /** @var array<string, EmailFilter[]> */
+    
     private array $data = [];
     private bool $useCache;
 
@@ -66,9 +38,7 @@ class EmailFilterManager
         return $this->filtersMatcher->findMatch($email, $filters);
     }
 
-    /**
-     * @return EmailFilter[]
-     */
+    
     private function get(string $userId): array
     {
         if (array_key_exists($userId, $this->data)) {
@@ -97,9 +67,7 @@ class EmailFilterManager
         return self::CACHE_KEY . '/' . $userId;
     }
 
-    /**
-     * @return EmailFilter[]
-     */
+    
     private function fetch(string $userId): array
     {
         $collection = $this->entityManager
@@ -123,15 +91,13 @@ class EmailFilterManager
         return iterator_to_array($collection);
     }
 
-    /**
-     * @return EmailFilter[]
-     */
+    
     private function loadFromCache(string $cacheKey): array
     {
-        /** @var stdClass[] $dataList */
+        
         $dataList = $this->dataCache->get($cacheKey);
 
-        /** @var EmailFilter[] $list */
+        
         $list = [];
 
         foreach ($dataList as $item) {

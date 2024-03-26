@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Field;
 
@@ -37,11 +11,7 @@ use DateInterval;
 use DateTimeZone;
 use RuntimeException;
 
-/**
- * A date-time value object. Immutable.
- *
- * @immutable
- */
+
 class DateTime implements DateTimeable
 {
     private string $value;
@@ -76,102 +46,76 @@ class DateTime implements DateTimeable
         }
     }
 
-    /**
-     * Get a string value in `Y-m-d H:i:s` format.
-     */
+    
     public function toString(): string
     {
         return $this->value;
     }
 
-    /**
-     * Get DateTimeImmutable.
-     */
+    
     public function toDateTime(): DateTimeImmutable
     {
         return $this->dateTime;
     }
 
-    /**
-     * Get a timestamp.
-     */
+    
     public function toTimestamp(): int
     {
         return $this->dateTime->getTimestamp();
     }
 
-    /**
-     * Get a year.
-     */
+    
     public function getYear(): int
     {
         return (int) $this->dateTime->format('Y');
     }
 
-    /**
-     * Get a month.
-     */
+    
     public function getMonth(): int
     {
         return (int) $this->dateTime->format('n');
     }
 
-    /**
-     * Get a day (of month).
-     */
+    
     public function getDay(): int
     {
         return (int) $this->dateTime->format('j');
     }
 
-    /**
-     * Get a day of week. 0 (for Sunday) through 6 (for Saturday).
-     */
+    
     public function getDayOfWeek(): int
     {
         return (int) $this->dateTime->format('w');
     }
 
-    /**
-     * Get a hour.
-     */
+    
     public function getHour(): int
     {
         return (int) $this->dateTime->format('G');
     }
 
-    /**
-     * Get a minute.
-     */
+    
     public function getMinute(): int
     {
         return (int) $this->dateTime->format('i');
     }
 
-    /**
-     * Get a second.
-     */
+    
     public function getSecond(): int
     {
         return (int) $this->dateTime->format('s');
     }
 
-    /**
-     * Get a timezone.
-     */
+    
     public function getTimezone(): DateTimeZone
     {
         return $this->dateTime->getTimezone();
     }
 
-    /**
-     * Clones and modifies.
-     */
+    
     public function modify(string $modifier): self
     {
-        /**
-         * @var DateTimeImmutable|false $dateTime
-         */
+        
         $dateTime = $this->dateTime->modify($modifier);
 
         if (!$dateTime) {
@@ -181,9 +125,7 @@ class DateTime implements DateTimeable
         return self::fromDateTime($dateTime);
     }
 
-    /**
-     * Clones and adds an interval.
-     */
+    
     public function add(DateInterval $interval): self
     {
         $dateTime = $this->dateTime->add($interval);
@@ -191,9 +133,7 @@ class DateTime implements DateTimeable
         return self::fromDateTime($dateTime);
     }
 
-    /**
-     * Clones and subtracts an interval.
-     */
+    
     public function subtract(DateInterval $interval): self
     {
         $dateTime = $this->dateTime->sub($interval);
@@ -201,9 +141,7 @@ class DateTime implements DateTimeable
         return self::fromDateTime($dateTime);
     }
 
-    /**
-     * Add days.
-     */
+    
     public function addDays(int $days): self
     {
         $modifier = ($days >= 0 ? '+' : '-') . abs($days) . ' days';
@@ -211,9 +149,7 @@ class DateTime implements DateTimeable
         return $this->modify($modifier);
     }
 
-    /**
-     * Add months.
-     */
+    
     public function addMonths(int $months): self
     {
         $modifier = ($months >= 0 ? '+' : '-') . abs($months) . ' months';
@@ -221,9 +157,7 @@ class DateTime implements DateTimeable
         return $this->modify($modifier);
     }
 
-    /**
-     * Add years.
-     */
+    
     public function addYears(int $years): self
     {
         $modifier = ($years >= 0 ? '+' : '-') . abs($years) . ' years';
@@ -231,9 +165,7 @@ class DateTime implements DateTimeable
         return $this->modify($modifier);
     }
 
-    /**
-     * Add hours.
-     */
+    
     public function addHours(int $hours): self
     {
         $modifier = ($hours >= 0 ? '+' : '-') . abs($hours) . ' hours';
@@ -241,9 +173,7 @@ class DateTime implements DateTimeable
         return $this->modify($modifier);
     }
 
-    /**
-     * Add minutes.
-     */
+    
     public function addMinutes(int $minutes): self
     {
         $modifier = ($minutes >= 0 ? '+' : '-') . abs($minutes) . ' minutes';
@@ -251,9 +181,7 @@ class DateTime implements DateTimeable
         return $this->modify($modifier);
     }
 
-    /**
-     * Add seconds.
-     */
+    
     public function addSeconds(int $seconds): self
     {
         $modifier = ($seconds >= 0 ? '+' : '-') . abs($seconds) . ' seconds';
@@ -261,17 +189,13 @@ class DateTime implements DateTimeable
         return $this->modify($modifier);
     }
 
-    /**
-     * A difference between another object (date or date-time) and self.
-     */
+    
     public function diff(DateTimeable $other): DateInterval
     {
         return $this->toDateTime()->diff($other->toDateTime());
     }
 
-    /**
-     * Clones and apply a timezone.
-     */
+    
     public function withTimezone(DateTimeZone $timezone): self
     {
         $dateTime = $this->dateTime->setTimezone($timezone);
@@ -279,9 +203,7 @@ class DateTime implements DateTimeable
         return self::fromDateTime($dateTime);
     }
 
-    /**
-     * Clones and sets time. Null preserves a current value.
-     */
+    
     public function withTime(?int $hour, ?int $minute, ?int $second = 0): self
     {
         $dateTime = $this->dateTime->setTime(
@@ -293,49 +215,37 @@ class DateTime implements DateTimeable
         return self::fromDateTime($dateTime);
     }
 
-    /**
-     * Whether greater than a given value.
-     */
+    
     public function isGreaterThan(DateTimeable $other): bool
     {
         return $this->toDateTime() > $other->toDateTime();
     }
 
-    /**
-     * Whether less than a given value.
-     */
+    
     public function isLessThan(DateTimeable $other): bool
     {
         return $this->toDateTime() < $other->toDateTime();
     }
 
-    /**
-     * Whether equals to a given value.
-     */
+    
     public function isEqualTo(DateTimeable $other): bool
     {
         return $this->toDateTime() == $other->toDateTime();
     }
 
-    /**
-     * Create a current time.
-     */
+    
     public static function createNow(): self
     {
         return self::fromDateTime(new DateTimeImmutable());
     }
 
-    /**
-     * Create from a string with a date-time in `Y-m-d H:i:s` format.
-     */
+    
     public static function fromString(string $value): self
     {
         return new self($value);
     }
 
-    /**
-     * Create from a timestamp.
-     */
+    
     public static function fromTimestamp(int $timestamp): self
     {
         $dateTime = (new DateTimeImmutable)->setTimestamp($timestamp);
@@ -343,12 +253,10 @@ class DateTime implements DateTimeable
         return self::fromDateTime($dateTime);
     }
 
-    /**
-     * Create from a DateTimeInterface.
-     */
+    
     public static function fromDateTime(DateTimeInterface $dateTime): self
     {
-        /** @var DateTimeImmutable $value */
+        
         $value = DateTimeImmutable::createFromFormat(
             self::SYSTEM_FORMAT,
             $dateTime->format(self::SYSTEM_FORMAT),
@@ -366,28 +274,19 @@ class DateTime implements DateTimeable
         return $obj;
     }
 
-    /**
-     * @deprecated As of v8.1. Use `toString` instead.
-     * @todo Remove in v10.0.
-     */
+    
     public function getString(): string
     {
         return $this->toString();
     }
 
-    /**
-     * @deprecated As of v8.1. Use `toDateTime` instead.
-     * @todo Remove in v10.0.
-     */
+    
     public function getDateTime(): DateTimeImmutable
     {
         return $this->toDateTime();
     }
 
-    /**
-     * @deprecated As of v8.1. Use `getTimestamp` instead.
-     * @todo Remove in v10.0.
-     */
+    
     public function getTimestamp(): int
     {
         return $this->toTimestamp();

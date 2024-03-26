@@ -1,23 +1,12 @@
 <?php
-/**
- * @package php-font-lib
- * @link    https://github.com/PhenX/php-font-lib
- * @author  Fabien Ménager <fabien.menager@gmail.com>
- * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
- */
+
 
 namespace FontLib\EOT;
 
 use Exception;
 use FontLib\Font;
 
-/**
- * TrueType font file header.
- *
- * @package php-font-lib
- *
- * @property File $font
- */
+
 class Header extends \FontLib\Header {
   protected $def = array(
     "format"        => self::uint32,
@@ -71,7 +60,7 @@ class Header extends \FontLib\Header {
         throw new Exception("Unknown EOT version " . $this->data["Version"]);
 
       case 0x00010000:
-        // Nothing to do more
+        
         break;
 
       case 0x00020001:
@@ -108,6 +97,6 @@ class Header extends \FontLib\Header {
   }
 
   public function encode() {
-    //return $this->font->pack($this->def, $this->data);
+    
   }
 }

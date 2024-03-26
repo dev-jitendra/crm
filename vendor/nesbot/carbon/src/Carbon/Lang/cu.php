@@ -1,13 +1,6 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 return array_replace_recursive(require __DIR__.'/en.php', [
     'months' => ['M01', 'M02', 'M03', 'M04', 'M05', 'M06', 'M07', 'M08', 'M09', 'M10', 'M11', 'M12'],
@@ -42,9 +35,9 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'h' => ':count година',
     'a_hour' => ':count година',
 
-    'minute' => ':count малъ', // less reliable
-    'min' => ':count малъ', // less reliable
-    'a_minute' => ':count малъ', // less reliable
+    'minute' => ':count малъ', 
+    'min' => ':count малъ', 
+    'a_minute' => ':count малъ', 
 
     'second' => ':count въторъ',
     's' => ':count въторъ',

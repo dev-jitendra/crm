@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -110,9 +106,7 @@ class AppFactory
         );
     }
 
-    /**
-     * @throws RuntimeException
-     */
+    
     public static function determineResponseFactory(): ResponseFactoryInterface
     {
         if (static::$responseFactory) {
@@ -124,7 +118,7 @@ class AppFactory
 
         $psr17FactoryProvider = static::$psr17FactoryProvider ?? new Psr17FactoryProvider();
 
-        /** @var Psr17Factory $psr17factory */
+        
         foreach ($psr17FactoryProvider->getFactories() as $psr17factory) {
             if ($psr17factory::isResponseFactoryAvailable()) {
                 $responseFactory = $psr17factory::getResponseFactory();
@@ -141,7 +135,7 @@ class AppFactory
         throw new RuntimeException(
             "Could not detect any PSR-17 ResponseFactory implementations. " .
             "Please install a supported implementation in order to use `AppFactory::create()`. " .
-            "See https://github.com/slimphp/Slim/blob/4.x/README.md for a list of supported implementations."
+            "See https:
         );
     }
 

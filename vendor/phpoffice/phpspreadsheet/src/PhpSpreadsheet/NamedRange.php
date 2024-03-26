@@ -7,9 +7,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class NamedRange extends DefinedName
 {
-    /**
-     * Create a new Named Range.
-     */
+    
     public function __construct(
         string $name,
         ?Worksheet $worksheet = null,
@@ -23,17 +21,13 @@ class NamedRange extends DefinedName
         parent::__construct($name, $worksheet, $range, $localOnly, $scope);
     }
 
-    /**
-     * Get the range value.
-     */
+    
     public function getRange(): string
     {
         return $this->value;
     }
 
-    /**
-     * Set the range value.
-     */
+    
     public function setRange(string $range): self
     {
         if (!empty($range)) {

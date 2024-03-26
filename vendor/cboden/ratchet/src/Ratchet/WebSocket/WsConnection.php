@@ -4,14 +4,9 @@ use Ratchet\AbstractConnectionDecorator;
 use Ratchet\RFC6455\Messaging\DataInterface;
 use Ratchet\RFC6455\Messaging\Frame;
 
-/**
- * {@inheritdoc}
- * @property \StdClass $WebSocket
- */
+
 class WsConnection extends AbstractConnectionDecorator {
-    /**
-     * {@inheritdoc}
-     */
+    
     public function send($msg) {
         if (!$this->WebSocket->closing) {
             if (!($msg instanceof DataInterface)) {
@@ -24,9 +19,7 @@ class WsConnection extends AbstractConnectionDecorator {
         return $this;
     }
 
-    /**
-     * @param int|\Ratchet\RFC6455\Messaging\DataInterface
-     */
+    
     public function close($code = 1000) {
         if ($this->WebSocket->closing) {
             return;

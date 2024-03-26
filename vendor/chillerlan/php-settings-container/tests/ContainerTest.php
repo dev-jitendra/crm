@@ -1,12 +1,5 @@
 <?php
-/**
- * Class ContainerTraitTest
- *
- * @created      28.08.2018
- * @author       Smiley <smiley@chillerlan.net>
- * @copyright    2018 Smiley
- * @license      MIT
- */
+
 
 namespace chillerlan\SettingsTest;
 
@@ -41,17 +34,17 @@ class ContainerTest extends TestCase{
 		$this::assertNull($container->test4);
 		$this::assertNull($container->foo);
 
-		// isset test
+		
 		$this::assertTrue(isset($container->test1));
 		$this::assertFalse(isset($container->test2));
 		$this::assertFalse(isset($container->test3));
 		$this::assertFalse(isset($container->test4));
 		$this::assertFalse(isset($container->foo));
 
-		// custom getter
+		
 		$container->test6 = 'foo';
 		$this::assertSame(sha1('foo'), $container->test6);
-		// nullable/isset test
+		
 		$container->test6 = null;
 		$this::assertFalse(isset($container->test6));
 		$this::assertSame('null', $container->test6);
@@ -67,11 +60,11 @@ class ContainerTest extends TestCase{
 		$this::assertSame(false, $container->test2);
 		$this::assertNull($container->test3);
 
-		// unset
+		
 		unset($container->test1);
 		$this::assertFalse(isset($container->test1));
 
-		// custom setter
+		
 		$container->test5 = 'bar';
 		$this::assertSame('bar_test5', $container->test5);
 	}

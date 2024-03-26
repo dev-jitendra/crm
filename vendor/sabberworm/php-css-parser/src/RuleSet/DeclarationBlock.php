@@ -18,35 +18,20 @@ use Sabberworm\CSS\Value\Size;
 use Sabberworm\CSS\Value\URL;
 use Sabberworm\CSS\Value\Value;
 
-/**
- * Declaration blocks are the parts of a CSS file which denote the rules belonging to a selector.
- *
- * Declaration blocks usually appear directly inside a `Document` or another `CSSList` (mostly a `MediaQuery`).
- */
+
 class DeclarationBlock extends RuleSet
 {
-    /**
-     * @var array<int, Selector|string>
-     */
+    
     private $aSelectors;
 
-    /**
-     * @param int $iLineNo
-     */
+    
     public function __construct($iLineNo = 0)
     {
         parent::__construct($iLineNo);
         $this->aSelectors = [];
     }
 
-    /**
-     * @param CSSList|null $oList
-     *
-     * @return DeclarationBlock|false
-     *
-     * @throws UnexpectedTokenException
-     * @throws UnexpectedEOFException
-     */
+    
     public static function parse(ParserState $oParserState, $oList = null)
     {
         $aComments = [];
@@ -84,12 +69,7 @@ class DeclarationBlock extends RuleSet
         return $oResult;
     }
 
-    /**
-     * @param array<int, Selector|string>|string $mSelector
-     * @param CSSList|null $oList
-     *
-     * @throws UnexpectedTokenException
-     */
+    
     public function setSelectors($mSelector, $oList = null)
     {
         if (is_array($mSelector)) {
@@ -122,13 +102,7 @@ class DeclarationBlock extends RuleSet
         }
     }
 
-    /**
-     * Remove one of the selectors of the block.
-     *
-     * @param Selector|string $mSelector
-     *
-     * @return bool
-     */
+    
     public function removeSelector($mSelector)
     {
         if ($mSelector instanceof Selector) {
@@ -143,45 +117,28 @@ class DeclarationBlock extends RuleSet
         return false;
     }
 
-    /**
-     * @return array<int, Selector|string>
-     *
-     * @deprecated will be removed in version 9.0; use `getSelectors()` instead
-     */
+    
     public function getSelector()
     {
         return $this->getSelectors();
     }
 
-    /**
-     * @param Selector|string $mSelector
-     * @param CSSList|null $oList
-     *
-     * @return void
-     *
-     * @deprecated will be removed in version 9.0; use `setSelectors()` instead
-     */
+    
     public function setSelector($mSelector, $oList = null)
     {
         $this->setSelectors($mSelector, $oList);
     }
 
-    /**
-     * @return array<int, Selector|string>
-     */
+    
     public function getSelectors()
     {
         return $this->aSelectors;
     }
 
-    /**
-     * Splits shorthand declarations (e.g. `margin` or `font`) into their constituent parts.
-     *
-     * @return void
-     */
+    
     public function expandShorthands()
     {
-        // border must be expanded before dimensions
+        
         $this->expandBorderShorthand();
         $this->expandDimensionsShorthand();
         $this->expandFontShorthand();
@@ -189,30 +146,18 @@ class DeclarationBlock extends RuleSet
         $this->expandListStyleShorthand();
     }
 
-    /**
-     * Creates shorthand declarations (e.g. `margin` or `font`) whenever possible.
-     *
-     * @return void
-     */
+    
     public function createShorthands()
     {
         $this->createBackgroundShorthand();
         $this->createDimensionsShorthand();
-        // border must be shortened after dimensions
+        
         $this->createBorderShorthand();
         $this->createFontShorthand();
         $this->createListStyleShorthand();
     }
 
-    /**
-     * Splits shorthand border declarations (e.g. `border: 1px red;`).
-     *
-     * Additional splitting happens in expandDimensionsShorthand.
-     *
-     * Multiple borders are not yet supported as of 3.
-     *
-     * @return void
-     */
+    
     public function expandBorderShorthand()
     {
         $aBorderRules = [
@@ -266,14 +211,7 @@ class DeclarationBlock extends RuleSet
         }
     }
 
-    /**
-     * Splits shorthand dimensional declarations (e.g. `margin: 0px auto;`)
-     * into their constituent parts.
-     *
-     * Handles `margin`, `padding`, `border-color`, `border-style` and `border-width`.
-     *
-     * @return void
-     */
+    
     public function expandDimensionsShorthand()
     {
         $aExpansions = [
@@ -327,13 +265,7 @@ class DeclarationBlock extends RuleSet
         }
     }
 
-    /**
-     * Converts shorthand font declarations
-     * (e.g. `font: 300 italic 11px/14px verdana, helvetica, sans-serif;`)
-     * into their constituent parts.
-     *
-     * @return void
-     */
+    
     public function expandFontShorthand()
     {
         $aRules = $this->getRulesAssoc();
@@ -341,7 +273,7 @@ class DeclarationBlock extends RuleSet
             return;
         }
         $oRule = $aRules['font'];
-        // reset properties to 'normal' per http://www.w3.org/TR/21/fonts.html#font-shorthand
+        
         $aFontProperties = [
             'font-style' => 'normal',
             'font-variant' => 'normal',
@@ -395,15 +327,7 @@ class DeclarationBlock extends RuleSet
         $this->removeRule('font');
     }
 
-    /**
-     * Converts shorthand background declarations
-     * (e.g. `background: url("chess.png") gray 50% repeat fixed;`)
-     * into their constituent parts.
-     *
-     * @see http://www.w3.org/TR/21/colors.html#propdef-background
-     *
-     * @return void
-     */
+    
     public function expandBackgroundShorthand()
     {
         $aRules = $this->getRulesAssoc();
@@ -473,9 +397,7 @@ class DeclarationBlock extends RuleSet
         $this->removeRule('background');
     }
 
-    /**
-     * @return void
-     */
+    
     public function expandListStyleShorthand()
     {
         $aListProperties = [
@@ -553,12 +475,7 @@ class DeclarationBlock extends RuleSet
         $this->removeRule('list-style');
     }
 
-    /**
-     * @param array<array-key, string> $aProperties
-     * @param string $sShorthand
-     *
-     * @return void
-     */
+    
     public function createShorthandProperties(array $aProperties, $sShorthand)
     {
         $aRules = $this->getRulesAssoc();
@@ -591,9 +508,7 @@ class DeclarationBlock extends RuleSet
         }
     }
 
-    /**
-     * @return void
-     */
+    
     public function createBackgroundShorthand()
     {
         $aProperties = [
@@ -606,9 +521,7 @@ class DeclarationBlock extends RuleSet
         $this->createShorthandProperties($aProperties, 'background');
     }
 
-    /**
-     * @return void
-     */
+    
     public function createListStyleShorthand()
     {
         $aProperties = [
@@ -619,13 +532,7 @@ class DeclarationBlock extends RuleSet
         $this->createShorthandProperties($aProperties, 'list-style');
     }
 
-    /**
-     * Combines `border-color`, `border-style` and `border-width` into `border`.
-     *
-     * Should be run after `create_dimensions_shorthand`!
-     *
-     * @return void
-     */
+    
     public function createBorderShorthand()
     {
         $aProperties = [
@@ -636,13 +543,7 @@ class DeclarationBlock extends RuleSet
         $this->createShorthandProperties($aProperties, 'border');
     }
 
-    /**
-     * Looks for long format CSS dimensional properties
-     * (margin, padding, border-color, border-style and border-width)
-     * and converts them into shorthand CSS properties.
-     *
-     * @return void
-     */
+    
     public function createDimensionsShorthand()
     {
         $aPositions = ['top', 'right', 'bottom', 'left'];
@@ -663,7 +564,7 @@ class DeclarationBlock extends RuleSet
                     }
                 }
             }
-            // All four dimensions must be present
+            
             if (count($aFoldable) == 4) {
                 $aValues = [];
                 foreach ($aPositions as $sPosition) {
@@ -681,21 +582,21 @@ class DeclarationBlock extends RuleSet
                 if ((string)$aValues['left'][0] == (string)$aValues['right'][0]) {
                     if ((string)$aValues['top'][0] == (string)$aValues['bottom'][0]) {
                         if ((string)$aValues['top'][0] == (string)$aValues['left'][0]) {
-                            // All 4 sides are equal
+                            
                             $oNewRule->addValue($aValues['top']);
                         } else {
-                            // Top and bottom are equal, left and right are equal
+                            
                             $oNewRule->addValue($aValues['top']);
                             $oNewRule->addValue($aValues['left']);
                         }
                     } else {
-                        // Only left and right are equal
+                        
                         $oNewRule->addValue($aValues['top']);
                         $oNewRule->addValue($aValues['left']);
                         $oNewRule->addValue($aValues['bottom']);
                     }
                 } else {
-                    // No sides are equal
+                    
                     $oNewRule->addValue($aValues['top']);
                     $oNewRule->addValue($aValues['left']);
                     $oNewRule->addValue($aValues['bottom']);
@@ -709,14 +610,7 @@ class DeclarationBlock extends RuleSet
         }
     }
 
-    /**
-     * Looks for long format CSS font properties (e.g. `font-weight`) and
-     * tries to convert them into a shorthand CSS `font` property.
-     *
-     * At least `font-size` AND `font-family` must be present in order to create a shorthand declaration.
-     *
-     * @return void
-     */
+    
     public function createFontShorthand()
     {
         $aFontProperties = [
@@ -749,7 +643,7 @@ class DeclarationBlock extends RuleSet
                 }
             }
         }
-        // Get the font-size value
+        
         $oRule = $aRules['font-size'];
         $mRuleValue = $oRule->getValue();
         $aFSValues = [];
@@ -758,7 +652,7 @@ class DeclarationBlock extends RuleSet
         } else {
             $aFSValues = $mRuleValue->getListComponents();
         }
-        // But wait to know if we have line-height to add it
+        
         if (isset($aRules['line-height'])) {
             $oRule = $aRules['line-height'];
             $mRuleValue = $oRule->getValue();
@@ -795,25 +689,17 @@ class DeclarationBlock extends RuleSet
         }
     }
 
-    /**
-     * @return string
-     *
-     * @throws OutputException
-     */
+    
     public function __toString()
     {
         return $this->render(new OutputFormat());
     }
 
-    /**
-     * @return string
-     *
-     * @throws OutputException
-     */
+    
     public function render(OutputFormat $oOutputFormat)
     {
         if (count($this->aSelectors) === 0) {
-            // If all the selectors have been removed, this declaration block becomes invalid
+            
             throw new OutputException("Attempt to print declaration block with missing selector", $this->iLineNo);
         }
         $sResult = $oOutputFormat->sBeforeDeclarationBlock;

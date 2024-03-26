@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation\DataCollector;
 
@@ -18,11 +11,7 @@ use Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface;
 use Symfony\Component\Translation\DataCollectorTranslator;
 use Symfony\Component\VarDumper\Cloner\Data;
 
-/**
- * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
- *
- * @final
- */
+
 class TranslationDataCollector extends DataCollector implements LateDataCollectorInterface
 {
     private DataCollectorTranslator $translator;
@@ -78,9 +67,7 @@ class TranslationDataCollector extends DataCollector implements LateDataCollecto
         return !empty($this->data['locale']) ? $this->data['locale'] : null;
     }
 
-    /**
-     * @internal
-     */
+    
     public function getFallbackLocales()
     {
         return (isset($this->data['fallback_locales']) && \count($this->data['fallback_locales']) > 0) ? $this->data['fallback_locales'] : [];

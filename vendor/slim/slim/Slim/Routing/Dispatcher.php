@@ -37,7 +37,7 @@ class Dispatcher implements DispatcherInterface
 
         $cacheFile = $this->routeCollector->getCacheFile();
         if ($cacheFile) {
-            /** @var FastRouteDispatcher $dispatcher */
+            
             $dispatcher = \FastRoute\cachedDispatcher($routeDefinitionCallback, [
                 'dataGenerator' => GroupCountBased::class,
                 'dispatcher' => FastRouteDispatcher::class,
@@ -45,7 +45,7 @@ class Dispatcher implements DispatcherInterface
                 'cacheFile' => $cacheFile,
             ]);
         } else {
-            /** @var FastRouteDispatcher $dispatcher */
+            
             $dispatcher = \FastRoute\simpleDispatcher($routeDefinitionCallback, [
                 'dataGenerator' => GroupCountBased::class,
                 'dispatcher' => FastRouteDispatcher::class,
@@ -57,9 +57,7 @@ class Dispatcher implements DispatcherInterface
         return $this->dispatcher;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function dispatch(string $method, string $uri): RoutingResults
     {
         $dispatcher = $this->createDispatcher();
@@ -67,9 +65,7 @@ class Dispatcher implements DispatcherInterface
         return new RoutingResults($this, $method, $uri, $results[0], $results[1], $results[2]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getAllowedMethods(string $uri): array
     {
         $dispatcher = $this->createDispatcher();

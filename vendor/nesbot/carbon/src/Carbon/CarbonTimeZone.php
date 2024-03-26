@@ -1,13 +1,6 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Carbon;
 
@@ -55,13 +48,7 @@ class CarbonTimeZone extends DateTimeZone
         return @timezone_open($name = (string) static::getDateTimeZoneNameFromMixed($name));
     }
 
-    /**
-     * Cast the current instance into the given class.
-     *
-     * @param string $className The $className::instance() method will be called to cast the current object.
-     *
-     * @return DateTimeZone
-     */
+    
     public function cast(string $className)
     {
         if (!method_exists($className, 'instance')) {
@@ -75,16 +62,7 @@ class CarbonTimeZone extends DateTimeZone
         return $className::instance($this);
     }
 
-    /**
-     * Create a CarbonTimeZone from mixed input.
-     *
-     * @param DateTimeZone|string|int|null $object     original value to get CarbonTimeZone from it.
-     * @param DateTimeZone|string|int|null $objectDump dump of the object for error messages.
-     *
-     * @throws InvalidTimeZoneException
-     *
-     * @return false|static
-     */
+    
     public static function instance($object = null, $objectDump = null)
     {
         $tz = $object;
@@ -112,13 +90,7 @@ class CarbonTimeZone extends DateTimeZone
         return false;
     }
 
-    /**
-     * Returns abbreviated name of the current timezone according to DST setting.
-     *
-     * @param bool $dst
-     *
-     * @return string
-     */
+    
     public function getAbbreviatedName($dst = false)
     {
         $name = $this->getName();
@@ -134,27 +106,13 @@ class CarbonTimeZone extends DateTimeZone
         return 'unknown';
     }
 
-    /**
-     * @alias getAbbreviatedName
-     *
-     * Returns abbreviated name of the current timezone according to DST setting.
-     *
-     * @param bool $dst
-     *
-     * @return string
-     */
+    
     public function getAbbr($dst = false)
     {
         return $this->getAbbreviatedName($dst);
     }
 
-    /**
-     * Get the offset as string "sHH:MM" (such as "+00:00" or "-12:30").
-     *
-     * @param DateTimeInterface|null $date
-     *
-     * @return string
-     */
+    
     public function toOffsetName(DateTimeInterface $date = null)
     {
         return static::getOffsetNameFromMinuteOffset(
@@ -162,29 +120,13 @@ class CarbonTimeZone extends DateTimeZone
         );
     }
 
-    /**
-     * Returns a new CarbonTimeZone object using the offset string instead of region string.
-     *
-     * @param DateTimeInterface|null $date
-     *
-     * @return CarbonTimeZone
-     */
+    
     public function toOffsetTimeZone(DateTimeInterface $date = null)
     {
         return new static($this->toOffsetName($date));
     }
 
-    /**
-     * Returns the first region string (such as "America/Toronto") that matches the current timezone or
-     * false if no match is found.
-     *
-     * @see timezone_name_from_abbr native PHP function.
-     *
-     * @param DateTimeInterface|null $date
-     * @param int                    $isDst
-     *
-     * @return string|false
-     */
+    
     public function toRegionName(DateTimeInterface $date = null, $isDst = 1)
     {
         $name = $this->getName();
@@ -196,14 +138,14 @@ class CarbonTimeZone extends DateTimeZone
 
         $date = $date ?: Carbon::now($this);
 
-        // Integer construction no longer supported since PHP 8
-        // @codeCoverageIgnoreStart
+        
+        
         try {
             $offset = @$this->getOffset($date) ?: 0;
         } catch (Throwable $e) {
             $offset = 0;
         }
-        // @codeCoverageIgnoreEnd
+        
 
         $name = @timezone_name_from_abbr('', $offset, $isDst);
 
@@ -220,13 +162,7 @@ class CarbonTimeZone extends DateTimeZone
         return false;
     }
 
-    /**
-     * Returns a new CarbonTimeZone object using the region string instead of offset string.
-     *
-     * @param DateTimeInterface|null $date
-     *
-     * @return CarbonTimeZone|false
-     */
+    
     public function toRegionTimeZone(DateTimeInterface $date = null)
     {
         $tz = $this->toRegionName($date);
@@ -242,71 +178,37 @@ class CarbonTimeZone extends DateTimeZone
         return false;
     }
 
-    /**
-     * Cast to string (get timezone name).
-     *
-     * @return string
-     */
+    
     public function __toString()
     {
         return $this->getName();
     }
 
-    /**
-     * Return the type number:
-     *
-     * Type 1; A UTC offset, such as -0300
-     * Type 2; A timezone abbreviation, such as GMT
-     * Type 3: A timezone identifier, such as Europe/London
-     */
+    
     public function getType(): int
     {
         return preg_match('/"timezone_type";i:(\d)/', serialize($this), $match) ? (int) $match[1] : 3;
     }
 
-    /**
-     * Create a CarbonTimeZone from mixed input.
-     *
-     * @param DateTimeZone|string|int|null $object
-     *
-     * @return false|static
-     */
+    
     public static function create($object = null)
     {
         return static::instance($object);
     }
 
-    /**
-     * Create a CarbonTimeZone from int/float hour offset.
-     *
-     * @param float $hourOffset number of hour of the timezone shift (can be decimal).
-     *
-     * @return false|static
-     */
+    
     public static function createFromHourOffset(float $hourOffset)
     {
         return static::createFromMinuteOffset($hourOffset * Carbon::MINUTES_PER_HOUR);
     }
 
-    /**
-     * Create a CarbonTimeZone from int/float minute offset.
-     *
-     * @param float $minuteOffset number of total minutes of the timezone shift.
-     *
-     * @return false|static
-     */
+    
     public static function createFromMinuteOffset(float $minuteOffset)
     {
         return static::instance(static::getOffsetNameFromMinuteOffset($minuteOffset));
     }
 
-    /**
-     * Convert a total minutes offset into a standardized timezone offset string.
-     *
-     * @param float $minutes number of total minutes of the timezone shift.
-     *
-     * @return string
-     */
+    
     public static function getOffsetNameFromMinuteOffset(float $minutes): string
     {
         $minutes = round($minutes);

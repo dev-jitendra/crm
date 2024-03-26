@@ -12,14 +12,10 @@ use function rtrim;
 
 final class UnableToSetVisibility extends RuntimeException implements FilesystemOperationFailed
 {
-    /**
-     * @var string
-     */
+    
     private $location;
 
-    /**
-     * @var string
-     */
+    
     private $reason;
 
     public function reason(): string

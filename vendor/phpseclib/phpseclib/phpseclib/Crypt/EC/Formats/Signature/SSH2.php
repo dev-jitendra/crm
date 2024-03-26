@@ -1,36 +1,16 @@
 <?php
 
-/**
- * SSH2 Signature Handler
- *
- * PHP version 5
- *
- * Handles signatures in the format used by SSH2
- *
- * @author    Jim Wigginton <terrafrost@php.net>
- * @copyright 2016 Jim Wigginton
- * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
- * @link      http://phpseclib.sourceforge.net
- */
+
 
 namespace phpseclib3\Crypt\EC\Formats\Signature;
 
 use phpseclib3\Common\Functions\Strings;
 use phpseclib3\Math\BigInteger;
 
-/**
- * SSH2 Signature Handler
- *
- * @author  Jim Wigginton <terrafrost@php.net>
- */
+
 abstract class SSH2
 {
-    /**
-     * Loads a signature
-     *
-     * @param string $sig
-     * @return mixed
-     */
+    
     public static function load($sig)
     {
         if (!is_string($sig)) {
@@ -43,7 +23,7 @@ abstract class SSH2
         }
         list($type, $blob) = $result;
         switch ($type) {
-            // see https://tools.ietf.org/html/rfc5656#section-3.1.2
+            
             case 'ecdsa-sha2-nistp256':
             case 'ecdsa-sha2-nistp384':
             case 'ecdsa-sha2-nistp521':
@@ -63,14 +43,7 @@ abstract class SSH2
         ];
     }
 
-    /**
-     * Returns a signature in the appropriate format
-     *
-     * @param \phpseclib3\Math\BigInteger $r
-     * @param \phpseclib3\Math\BigInteger $s
-     * @param string $curve
-     * @return string
-     */
+    
     public static function save(BigInteger $r, BigInteger $s, $curve)
     {
         switch ($curve) {

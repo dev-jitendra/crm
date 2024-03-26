@@ -1,13 +1,6 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Monolog package.
- *
- * (c) Jordi Boggiano <j.boggiano@seld.be>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Monolog\Handler;
 
@@ -16,9 +9,7 @@ use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\LogmaticFormatter;
 use Monolog\LogRecord;
 
-/**
- * @author Julien Breux <julien.breux@gmail.com>
- */
+
 class LogmaticHandler extends SocketHandler
 {
     private string $logToken;
@@ -27,14 +18,7 @@ class LogmaticHandler extends SocketHandler
 
     private string $appName;
 
-    /**
-     * @param string $token    Log token supplied by Logmatic.
-     * @param string $hostname Host name supplied by Logmatic.
-     * @param string $appName  Application name supplied by Logmatic.
-     * @param bool   $useSSL   Whether or not SSL encryption should be used.
-     *
-     * @throws MissingExtensionException If SSL encryption is set to true and OpenSSL is missing
-     */
+    
     public function __construct(
         string $token,
         string $hostname = '',
@@ -52,7 +36,7 @@ class LogmaticHandler extends SocketHandler
             throw new MissingExtensionException('The OpenSSL PHP extension is required to use SSL encrypted connection for LogmaticHandler');
         }
 
-        $endpoint = $useSSL ? 'ssl://api.logmatic.io:10515' : 'api.logmatic.io:10514';
+        $endpoint = $useSSL ? 'ssl:
         $endpoint .= '/v1/';
 
         parent::__construct(
@@ -71,17 +55,13 @@ class LogmaticHandler extends SocketHandler
         $this->appName  = $appName;
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     protected function generateDataStream(LogRecord $record): string
     {
         return $this->logToken . ' ' . $record->formatted;
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     protected function getDefaultFormatter(): FormatterInterface
     {
         $formatter = new LogmaticFormatter();

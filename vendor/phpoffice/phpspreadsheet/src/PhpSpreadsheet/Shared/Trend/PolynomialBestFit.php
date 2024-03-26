@@ -6,38 +6,19 @@ use PhpOffice\PhpSpreadsheet\Shared\JAMA\Matrix;
 
 class PolynomialBestFit extends BestFit
 {
-    /**
-     * Algorithm type to use for best-fit
-     * (Name of this Trend class).
-     *
-     * @var string
-     */
+    
     protected $bestFitType = 'polynomial';
 
-    /**
-     * Polynomial order.
-     *
-     * @var int
-     */
+    
     protected $order = 0;
 
-    /**
-     * Return the order of this polynomial.
-     *
-     * @return int
-     */
+    
     public function getOrder()
     {
         return $this->order;
     }
 
-    /**
-     * Return the Y-Value for a specified value of X.
-     *
-     * @param float $xValue X-Value
-     *
-     * @return float Y-Value
-     */
+    
     public function getValueOfYForX($xValue)
     {
         $retVal = $this->getIntersect();
@@ -51,25 +32,13 @@ class PolynomialBestFit extends BestFit
         return $retVal;
     }
 
-    /**
-     * Return the X-Value for a specified value of Y.
-     *
-     * @param float $yValue Y-Value
-     *
-     * @return float X-Value
-     */
+    
     public function getValueOfXForY($yValue)
     {
         return ($yValue - $this->getIntersect()) / $this->getSlope();
     }
 
-    /**
-     * Return the Equation of the best-fit line.
-     *
-     * @param int $dp Number of places of decimal precision to display
-     *
-     * @return string
-     */
+    
     public function getEquation($dp = 0)
     {
         $slope = $this->getSlope($dp);
@@ -88,13 +57,7 @@ class PolynomialBestFit extends BestFit
         return $equation;
     }
 
-    /**
-     * Return the Slope of the line.
-     *
-     * @param int $dp Number of places of decimal precision to display
-     *
-     * @return string
-     */
+    
     public function getSlope($dp = 0)
     {
         if ($dp != 0) {
@@ -114,16 +77,10 @@ class PolynomialBestFit extends BestFit
         return array_merge([$this->getIntersect($dp)], $this->getSlope($dp));
     }
 
-    /**
-     * Execute the regression and calculate the goodness of fit for a set of X and Y data values.
-     *
-     * @param int $order Order of Polynomial for this regression
-     * @param float[] $yValues The set of Y-values for this regression
-     * @param float[] $xValues The set of X-values for this regression
-     */
+    
     private function polynomialRegression($order, $yValues, $xValues): void
     {
-        // calculate sums
+        
         $x_sum = array_sum($xValues);
         $y_sum = array_sum($yValues);
         $xx_sum = $xy_sum = $yy_sum = 0;
@@ -132,14 +89,7 @@ class PolynomialBestFit extends BestFit
             $xx_sum += $xValues[$i] * $xValues[$i];
             $yy_sum += $yValues[$i] * $yValues[$i];
         }
-        /*
-         *    This routine uses logic from the PHP port of polyfit version 0.1
-         *    written by Michael Bommarito and Paul Meagher
-         *
-         *    The function fits a polynomial function of order $order through
-         *    a series of x-y data points using least squares.
-         *
-         */
+        
         $A = [];
         $B = [];
         for ($i = 0; $i < $this->valueCount; ++$i) {
@@ -172,14 +122,7 @@ class PolynomialBestFit extends BestFit
         }
     }
 
-    /**
-     * Define the regression and calculate the goodness of fit for a set of X and Y data values.
-     *
-     * @param int $order Order of Polynomial for this regression
-     * @param float[] $yValues The set of Y-values for this regression
-     * @param float[] $xValues The set of X-values for this regression
-     * @param bool $const
-     */
+    
     public function __construct($order, $yValues, $xValues = [], $const = true)
     {
         parent::__construct($yValues, $xValues);

@@ -9,25 +9,13 @@ use React\EventLoop\TimerInterface;
 use React\Promise;
 use React\Promise\PromiseInterface;
 
-/**
- * @internal
- */
+
 final class HappyEyeBallsConnectionBuilder
 {
-    /**
-     * As long as we haven't connected yet keep popping an IP address of the connect queue until one of them
-     * succeeds or they all fail. We will wait 100ms between connection attempts as per RFC.
-     *
-     * @link https://tools.ietf.org/html/rfc8305#section-5
-     */
+    
     const CONNECTION_ATTEMPT_DELAY = 0.1;
 
-    /**
-     * Delay `A` lookup by 50ms sending out connection to IPv4 addresses when IPv6 records haven't
-     * resolved yet as per RFC.
-     *
-     * @link https://tools.ietf.org/html/rfc8305#section-3
-     */
+    
     const RESOLUTION_DELAY = 0.05;
 
     public $loop;
@@ -75,7 +63,7 @@ final class HappyEyeBallsConnectionBuilder
 
                     $that->mixIpsIntoConnectQueue($ips);
 
-                    // start next connection attempt if not already awaiting next
+                    
                     if ($that->nextAttemptTimer === null && $that->connectQueue) {
                         $that->check($resolve, $reject);
                     }
@@ -84,12 +72,12 @@ final class HappyEyeBallsConnectionBuilder
 
             $that->resolverPromises[Message::TYPE_AAAA] = $that->resolve(Message::TYPE_AAAA, $reject)->then($lookupResolve(Message::TYPE_AAAA));
             $that->resolverPromises[Message::TYPE_A] = $that->resolve(Message::TYPE_A, $reject)->then(function (array $ips) use ($that, &$timer) {
-                // happy path: IPv6 has resolved already (or could not resolve), continue with IPv4 addresses
+                
                 if ($that->resolved[Message::TYPE_AAAA] === true || !$ips) {
                     return $ips;
                 }
 
-                // Otherwise delay processing IPv4 lookup until short timer passes or IPv6 resolves in the meantime
+                
                 $deferred = new Promise\Deferred();
                 $timer = $that->loop->addTimer($that::RESOLUTION_DELAY, function () use ($deferred, $ips) {
                     $deferred->resolve($ips);
@@ -116,14 +104,7 @@ final class HappyEyeBallsConnectionBuilder
         });
     }
 
-    /**
-     * @internal
-     * @param int      $type   DNS query type
-     * @param callable $reject
-     * @return \React\Promise\PromiseInterface<string[]> Returns a promise that
-     *     always resolves with a list of IP addresses on success or an empty
-     *     list on error.
-     */
+    
     public function resolve($type, $reject)
     {
         $that = $this;
@@ -139,7 +120,7 @@ final class HappyEyeBallsConnectionBuilder
                 $that->lastErrorFamily = 6;
             }
 
-            // cancel next attempt timer when there are no more IPs to connect to anymore
+            
             if ($that->nextAttemptTimer !== null && !$that->connectQueue) {
                 $that->loop->cancelTimer($that->nextAttemptTimer);
                 $that->nextAttemptTimer = null;
@@ -153,19 +134,17 @@ final class HappyEyeBallsConnectionBuilder
                 ));
             }
 
-            // Exception already handled above, so don't throw an unhandled rejection here
+            
             return array();
         });
     }
 
-    /**
-     * @internal
-     */
+    
     public function check($resolve, $reject)
     {
         $ip = \array_shift($this->connectQueue);
 
-        // start connection attempt and remember array position to later unset again
+        
         $this->connectionPromises[] = $this->attemptConnection($ip);
         \end($this->connectionPromises);
         $index = \key($this->connectionPromises);
@@ -191,7 +170,7 @@ final class HappyEyeBallsConnectionBuilder
                 $that->lastErrorFamily = 6;
             }
 
-            // start next connection attempt immediately on error
+            
             if ($that->connectQueue) {
                 if ($that->nextAttemptTimer !== null) {
                     $that->loop->cancelTimer($that->nextAttemptTimer);
@@ -216,8 +195,8 @@ final class HappyEyeBallsConnectionBuilder
             }
         });
 
-        // Allow next connection attempt in 100ms: https://tools.ietf.org/html/rfc8305#section-5
-        // Only start timer when more IPs are queued or when DNS query is still pending (might add more IPs)
+        
+        
         if ($this->nextAttemptTimer === null && (\count($this->connectQueue) > 0 || $this->resolved[Message::TYPE_A] === false || $this->resolved[Message::TYPE_AAAA] === false)) {
             $this->nextAttemptTimer = $this->loop->addTimer(self::CONNECTION_ATTEMPT_DELAY, function () use ($that, $resolve, $reject) {
                 $that->nextAttemptTimer = null;
@@ -229,9 +208,7 @@ final class HappyEyeBallsConnectionBuilder
         }
     }
 
-    /**
-     * @internal
-     */
+    
     public function attemptConnection($ip)
     {
         $uri = Connector::uri($this->parts, $this->host, $ip);
@@ -239,12 +216,10 @@ final class HappyEyeBallsConnectionBuilder
         return $this->connector->connect($uri);
     }
 
-    /**
-     * @internal
-     */
+    
     public function cleanUp()
     {
-        // clear list of outstanding IPs to avoid creating new connections
+        
         $this->connectQueue = array();
 
         foreach ($this->connectionPromises as $connectionPromise) {
@@ -265,9 +240,7 @@ final class HappyEyeBallsConnectionBuilder
         }
     }
 
-    /**
-     * @internal
-     */
+    
     public function hasBeenResolved()
     {
         foreach ($this->resolved as $typeHasBeenResolved) {
@@ -279,15 +252,7 @@ final class HappyEyeBallsConnectionBuilder
         return true;
     }
 
-    /**
-     * Mixes an array of IP addresses into the connect queue in such a way they alternate when attempting to connect.
-     * The goal behind it is first attempt to connect to IPv6, then to IPv4, then to IPv6 again until one of those
-     * attempts succeeds.
-     *
-     * @link https://tools.ietf.org/html/rfc8305#section-4
-     *
-     * @internal
-     */
+    
     public function mixIpsIntoConnectQueue(array $ips)
     {
         \shuffle($ips);
@@ -304,10 +269,7 @@ final class HappyEyeBallsConnectionBuilder
         }
     }
 
-    /**
-     * @internal
-     * @return string
-     */
+    
     public function error()
     {
         if ($this->lastError4 === $this->lastError6) {

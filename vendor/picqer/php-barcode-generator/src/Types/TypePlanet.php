@@ -2,14 +2,7 @@
 
 namespace Picqer\Barcode\Types;
 
-/*
- * PLANET barcodes.
- * Used by U.S. Postal Service for automated mail sorting
- *
- * @param $code (string) zip code to represent. Must be a string containing a zip code of the form DDDDD or
- *     DDDDD-DDDD.
- * @param $planet (boolean) if true print the PLANET barcode, otherwise print POSTNET
- */
+
 
 class TypePlanet extends TypePostnet
 {

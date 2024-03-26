@@ -9,19 +9,17 @@ use ZMQContext;
 
 class IntegrationTest extends TestCase
 {
-    /**
-     * @test
-     */
+    
     public function pushPull()
     {
         $loop = new StreamSelectLoop();
         $context = new Context($loop);
 
         $pull = $context->getSocket(ZMQ::SOCKET_PULL);
-        $pull->bind('ipc://test.ipc');
+        $pull->bind('ipc:
 
         $push = $context->getSocket(ZMQ::SOCKET_PUSH);
-        $push->connect('ipc://test.ipc');
+        $push->connect('ipc:
 
         $messages = array();
 
@@ -44,9 +42,7 @@ class IntegrationTest extends TestCase
         $this->assertSame(array('foo', 'bar', 'baz'), $messages);
     }
 
-    /**
-     * @test
-     */
+    
     public function dealerRep()
     {
         $pids[] = $this->forkRepWorker();
@@ -56,7 +52,7 @@ class IntegrationTest extends TestCase
         $context = new Context($loop);
 
         $dealer = $context->getSocket(ZMQ::SOCKET_DEALER);
-        $dealer->bind('ipc://test2.ipc');
+        $dealer->bind('ipc:
 
         sleep(1);
 
@@ -95,7 +91,7 @@ class IntegrationTest extends TestCase
         $context = new ZMQContext();
 
         $rep = $context->getSocket(ZMQ::SOCKET_REP);
-        $rep->connect('ipc://test2.ipc');
+        $rep->connect('ipc:
 
         $message = $rep->recv();
 

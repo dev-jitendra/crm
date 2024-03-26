@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpClient;
 
@@ -21,15 +14,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Contracts\HttpClient\ResponseStreamInterface;
 
-/**
- * Adds caching on top of an HTTP client.
- *
- * The implementation buffers responses in memory and doesn't stream directly from the network.
- * You can disable/enable this layer by setting option "no_cache" under "extra" to true/false.
- * By default, caching is enabled unless the "buffer" option is set to false.
- *
- * @author Nicolas Grekas <p@tchwork.com>
- */
+
 class CachingHttpClient implements HttpClientInterface
 {
     use HttpClientTrait;
@@ -63,9 +48,7 @@ class CachingHttpClient implements HttpClientInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function request(string $method, string $url, array $options = []): ResponseInterface
     {
         [$url, $options] = $this->prepareRequest($method, $url, $options, $this->defaultOptions, true);
@@ -106,9 +89,7 @@ class CachingHttpClient implements HttpClientInterface
         return MockResponse::fromRequest($method, $url, $options, $response);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function stream($responses, float $timeout = null): ResponseStreamInterface
     {
         if ($responses instanceof ResponseInterface) {

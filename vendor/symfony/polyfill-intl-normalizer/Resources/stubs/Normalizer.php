@@ -2,9 +2,7 @@
 
 class Normalizer extends Symfony\Polyfill\Intl\Normalizer\Normalizer
 {
-    /**
-     * @deprecated since ICU 56 and removed in PHP 8
-     */
+    
     public const NONE = 2;
     public const FORM_D = 4;
     public const FORM_KD = 8;

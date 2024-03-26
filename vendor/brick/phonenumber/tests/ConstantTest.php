@@ -9,17 +9,10 @@ use Brick\PhoneNumber\PhoneNumberType;
 
 use PHPUnit\Framework\TestCase;
 
-/**
- * Tests that the constants are up-to-date with libphonenumber.
- */
+
 class ConstantTest extends TestCase
 {
-    /**
-     * Compares the constants of two classes.
-     *
-     * @param string $classExpected The name or the reference class.
-     * @param string $classActual   The name of the class to test against the reference class.
-     */
+    
     private static function assertConstantsEqual(string $classExpected, string $classActual) : void
     {
         $expected = new \ReflectionClass($classExpected);

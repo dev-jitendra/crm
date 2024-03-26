@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim-Psr7/blob/master/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -27,19 +23,14 @@ class RequestFactory implements RequestFactoryInterface
 
     protected UriFactoryInterface $uriFactory;
 
-    /**
-     * @param StreamFactoryInterface|null $streamFactory
-     * @param UriFactoryInterface|null    $uriFactory
-     */
+    
     public function __construct(?StreamFactoryInterface $streamFactory = null, ?UriFactoryInterface $uriFactory = null)
     {
         $this->streamFactory = $streamFactory ?? new StreamFactory();
         $this->uriFactory = $uriFactory ?? new UriFactory();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function createRequest(string $method, $uri): RequestInterface
     {
         if (is_string($uri)) {

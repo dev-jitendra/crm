@@ -12,9 +12,7 @@ use function is_readable;
 
 use const FILEINFO_MIME_TYPE;
 
-/**
- * Validator for the mime type of a file
- */
+
 class ExcludeMimeType extends MimeType
 {
     use FileInformationTrait;
@@ -23,29 +21,21 @@ class ExcludeMimeType extends MimeType
     public const NOT_DETECTED = 'fileExcludeMimeTypeNotDetected';
     public const NOT_READABLE = 'fileExcludeMimeTypeNotReadable';
 
-    /** @var array Error message templates */
+    
     protected $messageTemplates = [
         self::FALSE_TYPE   => "File has an incorrect mimetype of '%type%'",
         self::NOT_DETECTED => 'The mimetype could not be detected from the file',
         self::NOT_READABLE => 'File is not readable or does not exist',
     ];
 
-    /**
-     * Returns true if the mimetype of the file does not matche the given ones. Also parts
-     * of mimetypes can be checked. If you give for example "image" all image
-     * mime types will not be accepted like "image/gif", "image/jpeg" and so on.
-     *
-     * @param  string|array $value Real file to check for mimetype
-     * @param  array        $file  File data from \Laminas\File\Transfer\Transfer (optional)
-     * @return bool
-     */
+    
     public function isValid($value, $file = null)
     {
         $fileInfo = $this->getFileInfo($value, $file, true);
 
         $this->setValue($fileInfo['filename']);
 
-        // Is file readable ?
+        
         if (empty($fileInfo['file']) || false === is_readable($fileInfo['file'])) {
             $this->error(self::NOT_READABLE);
             return false;

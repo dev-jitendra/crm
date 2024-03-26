@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class StdTest extends TestCase
 {
-    /** @dataProvider provideTestParse */
+    
     public function testParse($routeString, $expectedRouteDatas)
     {
         $parser = new Std();
@@ -14,7 +14,7 @@ class StdTest extends TestCase
         $this->assertSame($expectedRouteDatas, $routeDatas);
     }
 
-    /** @dataProvider provideTestParseError */
+    
     public function testParseError($routeString, $expectedExceptionMessage)
     {
         $parser = new Std();

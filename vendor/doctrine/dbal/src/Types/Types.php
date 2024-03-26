@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Doctrine\DBAL\Types;
 
-/**
- * Default built-in types provided by Doctrine DBAL.
- */
+
 final class Types
 {
-    /** @deprecated Use {@link Types::JSON} instead. */
+    
     public const ARRAY = 'array';
 
     public const ASCII_STRING         = 'ascii_string';
@@ -30,7 +28,7 @@ final class Types
     public const INTEGER              = 'integer';
     public const JSON                 = 'json';
 
-    /** @deprecated Use {@link Types::JSON} instead. */
+    
     public const OBJECT = 'object';
 
     public const SIMPLE_ARRAY   = 'simple_array';
@@ -40,7 +38,7 @@ final class Types
     public const TIME_MUTABLE   = 'time';
     public const TIME_IMMUTABLE = 'time_immutable';
 
-    /** @codeCoverageIgnore */
+    
     private function __construct()
     {
     }

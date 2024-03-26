@@ -16,7 +16,7 @@ abstract class AbstractOptions
     public ?float $DEFAULT_COLUMN_WIDTH = null;
     public ?float $DEFAULT_ROW_HEIGHT = null;
 
-    /** @var ColumnWidth[] Array of min-max-width arrays */
+    
     private array $COLUMN_WIDTHS = [];
 
     public function __construct()
@@ -24,12 +24,10 @@ abstract class AbstractOptions
         $this->DEFAULT_ROW_STYLE = new Style();
     }
 
-    /**
-     * @param positive-int ...$columns One or more columns with this width
-     */
+    
     final public function setColumnWidth(float $width, int ...$columns): void
     {
-        // Gather sequences
+        
         $sequence = [];
         foreach ($columns as $column) {
             $sequenceLength = \count($sequence);
@@ -45,21 +43,13 @@ abstract class AbstractOptions
         $this->setColumnWidthForRange($width, $sequence[0], $sequence[\count($sequence) - 1]);
     }
 
-    /**
-     * @param float        $width The width to set
-     * @param positive-int $start First column index of the range
-     * @param positive-int $end   Last column index of the range
-     */
+    
     final public function setColumnWidthForRange(float $width, int $start, int $end): void
     {
         $this->COLUMN_WIDTHS[] = new ColumnWidth($start, $end, $width);
     }
 
-    /**
-     * @internal
-     *
-     * @return ColumnWidth[]
-     */
+    
     final public function getColumnWidths(): array
     {
         return $this->COLUMN_WIDTHS;

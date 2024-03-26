@@ -1,24 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Josh Soref
- * - Azri Jamil
- * - JD Isaacks
- * - Josh Soref
- * - Azri Jamil
- * - Hariadi Hinta
- * - Ashraf Kamarudin
- */
+
+
 return [
     'year' => ':count tahun',
     'a_year' => '{1}setahun|]1,Inf[:count tahun',

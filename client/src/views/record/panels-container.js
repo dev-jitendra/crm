@@ -1,140 +1,43 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/record/panels-container */
+
+
 
 import View from 'view';
 
-/**
- * A panel container view. For bottom and side views.
- */
+
 class PanelsContainerRecordView extends View {
 
-    /** @private */
+    
     panelSoftLockedTypeList = ['default', 'acl', 'delimiter', 'dynamicLogic']
 
-    /**
-     * A panel.
-     *
-     * @typedef {Object} module:views/record/panels-container~panel
-     *
-     * @property {string} name A name.
-     * @property {boolean} [hidden] Hidden.
-     * @property {string} [label] A label.
-     * @property {'default'|'success'|'danger'|'warning'} [style] A style.
-     * @property {string} [titleHtml] A title HTML.
-     * @property {boolean} [notRefreshable] Not refreshable.
-     * @property {boolean} [isForm] If for a form.
-     * @property {module:views/record/panels-container~button[]} [buttonList] Buttons.
-     * @property {module:views/record/panels-container~action[]} [actionList] Dropdown actions.
-     * @property {string} [view] A view name.
-     * @property {Object.<string, *>} [Options] A view options.
-     * @property {boolean} [sticked] To stick to an upper panel.
-     * @property {Number} [tabNumber] A tab number.
-     * @property {string} [aclScope] A scope to check access to.
-     * @property {Espo.Utils~AccessDefs[]} [accessDataList] Access control defs.
-     */
+    
 
-    /**
-     * A button. Handled by an `action{Action}` method or a click handler.
-     *
-     * @typedef {Object} module:views/record/panels-container~button
-     *
-     * @property {string} action An action.
-     * @property {boolean} [hidden] Hidden.
-     * @property {string} [label] A label. Translatable.
-     * @property {string} [html] A HTML.
-     * @property {string} [text] A text.
-     * @property {string} [title] A title (on hover). Translatable.
-     * @property {Object.<string, (string|number|boolean)>} [data] Data attributes.
-     * @property {function()} [onClick] A click event.
-     */
+    
 
-    /**
-     * An action. Handled by an `action{Action}` method or a click handler.
-     *
-     * @typedef {Object} module:views/record/panels-container~action
-     *
-     * @property {string} [action] An action.
-     * @property {string} [link] A link URL.
-     * @property {boolean} [hidden] Hidden.
-     * @property {string} [label] A label. Translatable.
-     * @property {string} [html] A HTML.
-     * @property {string} [text] A text.
-     * @property {Object.<string, (string|number|boolean)>} [data] Data attributes.
-     * @property {function()} [onClick] A click event.
-     */
+    
 
-    /**
-     * A panel list.
-     *
-     * @protected
-     * @type {module:views/record/panels-container~panel[]}
-     */
+    
     panelList = null
 
-    /** @private */
+    
     hasTabs = false
 
-    /**
-     * @private
-     * @type {Object.<string,*>[]|null}
-     */
+    
     tabDataList = null
 
-    /**
-     * @protected
-     */
+    
     currentTab = 0
 
-    /**
-     * @protected
-     * @type {string}
-     */
+    
     scope = ''
 
-    /**
-     * @protected
-     * @type {string}
-     */
+    
     entityType =  ''
 
-    /**
-     * @protected
-     * @type {string}
-     */
+    
     name =  ''
 
-    /**
-     * A mode.
-     *
-     * @type 'detail'|'edit'
-     */
+    
     mode = 'detail'
 
     data() {
@@ -177,28 +80,12 @@ class PanelsContainerRecordView extends View {
                 className: 'panel-action',
             });
 
-            // @todo Check data. Maybe pass cloned data with unset params.
+            
 
-            /*
-            let action = $target.data('action');
-            let data = $target.data();
-
-            if (action && panel) {
-                let method = 'action' + Espo.Utils.upperCaseFirst(action);
-                let d = _.clone(data);
-
-                delete d['action'];
-                delete d['panel'];
-
-                let view = this.getView(panel);
-
-                if (view && typeof view[method] == 'function') {
-                    view[method].call(view, d, e);
-                }
-            }*/
+            
         },
         'click .panels-show-more-delimiter [data-action="showMorePanels"]': 'actionShowMorePanels',
-        /** @this module:views/record/panels-container */
+        
         'click .tabs > button': function (e) {
             const tab = parseInt($(e.currentTarget).attr('data-tab'));
 
@@ -285,16 +172,12 @@ class PanelsContainerRecordView extends View {
         });
     }
 
-    /**
-     * Set read-only.
-     */
+    
     setReadOnly() {
         this.readOnly = true;
     }
 
-    /**
-     * Set not read-only.
-     */
+    
     setNotReadOnly(onlyNotSetAsReadOnly) {
         this.readOnly = false;
 
@@ -314,10 +197,7 @@ class PanelsContainerRecordView extends View {
         }
     }
 
-    /**
-     * @private
-     * @param {Object[]} actionList
-     */
+    
     applyAccessToActions(actionList) {
         if (!actionList) {
             return;
@@ -345,11 +225,7 @@ class PanelsContainerRecordView extends View {
         });
     }
 
-    /**
-     * Set up panel views.
-     *
-     * @protected
-     */
+    
     setupPanelViews() {
         this.panelList.forEach(p => {
             const name = p.name;
@@ -405,19 +281,10 @@ class PanelsContainerRecordView extends View {
         });
     }
 
-    /**
-     * Set up panels.
-     *
-     * @protected
-     */
+    
     setupPanels() {}
 
-    /**
-     * Get field views.
-     *
-     * @param {boolean} [withHidden] With hidden.
-     * @return {Object.<string, module:views/fields/base>}
-     */
+    
     getFieldViews(withHidden) {
         let fields = {};
 
@@ -432,20 +299,13 @@ class PanelsContainerRecordView extends View {
         return fields;
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * @deprecated Use `getFieldViews`.
-     * @todo Remove in v9.0.
-     */
+    
+    
     getFields() {
         return this.getFieldViews();
     }
 
-    /**
-     * Fetch.
-     *
-     * @return {Object.<string, *>}
-     */
+    
     fetch() {
         let data = {};
 
@@ -460,10 +320,7 @@ class PanelsContainerRecordView extends View {
         return data;
     }
 
-    /**
-     * @param {string} name
-     * @return {boolean}
-     */
+    
     hasPanel(name) {
         return !!this.panelList.find(item => item.name === name);
     }
@@ -656,10 +513,7 @@ class PanelsContainerRecordView extends View {
             }
         }
 
-        /**
-         * @private
-         * @type {Object.<string,*>[]}
-         */
+        
         this.tabDataList = tabDataList.sort((v1, v2) => v1.index - v2.index);
 
         this.panelList = this.panelList.filter(item => {
@@ -894,7 +748,7 @@ class PanelsContainerRecordView extends View {
         this.storeTab();
     }
 
-    /** @private */
+    
     storeTab() {
         const key = 'tab_' + this.name;
         const keyRecord = 'tab_' + this.name + '_record';
@@ -903,14 +757,14 @@ class PanelsContainerRecordView extends View {
         this.getSessionStorage().set(keyRecord, this.entityType + '_' + this.model.id);
     }
 
-    /** @private */
+    
     isStoredTabForThisRecord() {
         const keyRecord = 'tab_' + this.name + '_record';
 
         return this.getSessionStorage().get(keyRecord) === this.entityType + '_' + this.model.id;
     }
 
-    /** @private */
+    
     selectStoredTab() {
         const key = 'tab_' + this.name;
 
@@ -921,7 +775,7 @@ class PanelsContainerRecordView extends View {
         }
     }
 
-    /** @private */
+    
     controlTabVisibilityShow(tab) {
         if (!this.hasTabs) {
             return;
@@ -936,7 +790,7 @@ class PanelsContainerRecordView extends View {
         this.$el.find(`.tabs > [data-tab="${tab.toString()}"]`).removeClass('hidden');
     }
 
-    /** @private */
+    
     controlTabVisibilityHide(tab) {
         if (!this.hasTabs) {
             return;

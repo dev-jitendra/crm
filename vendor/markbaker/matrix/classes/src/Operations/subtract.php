@@ -1,24 +1,12 @@
 <?php
 
-/**
- *
- * Function code for the matrix subtraction operation
- *
- * @copyright  Copyright (c) 2018 Mark Baker (https://github.com/MarkBaker/PHPMatrix)
- * @license    https://opensource.org/licenses/MIT    MIT
- */
+
 
 namespace Matrix;
 
 use Matrix\Operators\Subtraction;
 
-/**
- * Subtracts two or more matrices
- *
- * @param array<int, mixed> $matrixValues The matrices to subtract
- * @return Matrix
- * @throws Exception
- */
+
 function subtract(...$matrixValues): Matrix
 {
     if (count($matrixValues) < 2) {

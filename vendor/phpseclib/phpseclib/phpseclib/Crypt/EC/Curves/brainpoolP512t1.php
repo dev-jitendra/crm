@@ -1,15 +1,6 @@
 <?php
 
-/**
- * brainpoolP512t1
- *
- * PHP version 5 and 7
- *
- * @author    Jim Wigginton <terrafrost@php.net>
- * @copyright 2017 Jim Wigginton
- * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
- * @link      http://pear.php.net/package/Math_BigInteger
- */
+
 
 namespace phpseclib3\Crypt\EC\Curves;
 
@@ -30,7 +21,7 @@ class brainpoolP512t1 extends Prime
                 'AADD9DB8DBE9C48B3FD4E6AE33C9FC07CB308DB3B3C9D20ED6639CCA703308717D4D9B009BC' .
                 '66842AECDA12AE6A380E62881FF2F2D82C68528AA6056583A48F0',
                 16
-            ), // eg. -3
+            ), 
             new BigInteger(
                 '7CBBBCF9441CFAB76E1890E46884EAE321F70C0BCB4981527897504BEC3E36A62BCDFA23049' .
                 '76540F6450085F2DAE145C22553B465763689180EA2571867423E',

@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Mail\Account\GroupAccount\Hooks;
 
@@ -204,7 +178,7 @@ class AfterFetch implements AfterFetchInterface
 
         $threshold = $d->format(DateTimeUtil::SYSTEM_DATE_TIME_FORMAT);
 
-        /** @var EmailAddressRepository $emailAddressRepository */
+        
         $emailAddressRepository = $this->entityManager->getRepository(EmailAddress::ENTITY_TYPE);
 
         $emailAddress = $emailAddressRepository->getByAddress($fromAddress);
@@ -286,7 +260,7 @@ class AfterFetch implements AfterFetchInterface
                 $subject = '[#' . $case->get('number'). '] ' . $subject;
             }
 
-            /** @var Email $reply */
+            
             $reply = $this->entityManager->getRDBRepositoryByClass(Email::class)->getNew();
 
             $reply
@@ -434,7 +408,7 @@ class AfterFetch implements AfterFetchInterface
         $userIdList = [];
 
         if ($case->hasLinkMultipleField('assignedUsers')) {
-            /** @var string[] $userIdList */
+            
             $userIdList = $case->getLinkMultipleIdList('assignedUsers');
         }
         else {
@@ -449,7 +423,7 @@ class AfterFetch implements AfterFetchInterface
             $email->addLinkMultipleId('users', $userId);
         }
 
-        /** @var string[] $teamIdList */
+        
         $teamIdList = $case->getLinkMultipleIdList('teams');
 
         foreach ($teamIdList as $teamId) {
@@ -462,12 +436,10 @@ class AfterFetch implements AfterFetchInterface
         ]);
     }
 
-    /**
-     * @param array<string, mixed> $params
-     */
+    
     private function emailToCase(Email $email, array $params): CaseObj
     {
-        /** @var CaseObj $case */
+        
         $case = $this->entityManager->getEntity(CaseObj::ENTITY_TYPE);
 
         $case->populateDefaults();
@@ -476,7 +448,7 @@ class AfterFetch implements AfterFetchInterface
 
         $bodyPlain = $email->getBodyPlain() ?? '';
 
-        /** @var string $replacedBodyPlain */
+        
         $replacedBodyPlain = preg_replace('/\s+/', '', $bodyPlain);
 
         if (trim($replacedBodyPlain) === '') {
@@ -487,12 +459,12 @@ class AfterFetch implements AfterFetchInterface
             $case->set('description', $bodyPlain);
         }
 
-        /** @var string[] $attachmentIdList */
+        
         $attachmentIdList = $email->getLinkMultipleIdList('attachments');
 
         $copiedAttachmentIdList = [];
 
-        /** @var AttachmentRepository $attachmentRepository*/
+        
         $attachmentRepository = $this->entityManager->getRepository(Attachment::ENTITY_TYPE);
 
         foreach ($attachmentIdList as $attachmentId) {
@@ -554,7 +526,7 @@ class AfterFetch implements AfterFetchInterface
 
             case InboundEmail::CASE_DISTRIBUTION_ROUND_ROBIN:
                 if ($teamId) {
-                    /** @var ?Team $team */
+                    
                     $team = $this->entityManager->getEntityById(Team::ENTITY_TYPE, $teamId);
 
                     if ($team) {
@@ -566,7 +538,7 @@ class AfterFetch implements AfterFetchInterface
 
             case InboundEmail::CASE_DISTRIBUTION_LEAST_BUSY:
                 if ($teamId) {
-                    /** @var ?Team $team */
+                    
                     $team = $this->entityManager->getEntityById(Team::ENTITY_TYPE, $teamId);
 
                     if ($team) {
@@ -624,7 +596,7 @@ class AfterFetch implements AfterFetchInterface
             'skipLinkMultipleUpdate' => true,
         ]);
 
-        // Unknown reason of doing this.
+        
         $fetchedCase = $this->entityManager
             ->getRDBRepositoryByClass(CaseObj::class)
             ->getById($case->getId());

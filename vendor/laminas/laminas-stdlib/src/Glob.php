@@ -1,4 +1,4 @@
-<?php // phpcs:disable WebimpressCodingStandard.NamingConventions.AbstractClass.Prefix,Generic.NamingConventions.ConstructorName.OldStyle
+<?php 
 
 
 declare(strict_types=1);
@@ -21,14 +21,10 @@ use const GLOB_NOESCAPE;
 use const GLOB_NOSORT;
 use const GLOB_ONLYDIR;
 
-/**
- * Wrapper for glob with fallback if GLOB_BRACE is not available.
- */
+
 abstract class Glob
 {
-    /**#@+
-     * Glob constants.
-     */
+    
     public const GLOB_MARK     = 0x01;
     public const GLOB_NOSORT   = 0x02;
     public const GLOB_NOCHECK  = 0x04;
@@ -36,19 +32,9 @@ abstract class Glob
     public const GLOB_BRACE    = 0x10;
     public const GLOB_ONLYDIR  = 0x20;
     public const GLOB_ERR      = 0x40;
-    /**#@-*/
+    
 
-    /**
-     * Find pathnames matching a pattern.
-     *
-     * @see    http://docs.php.net/glob
-     *
-     * @param  string  $pattern
-     * @param  int $flags
-     * @param  bool $forceFallback
-     * @return array
-     * @throws Exception\RuntimeException
-     */
+    
     public static function glob($pattern, $flags = 0, $forceFallback = false)
     {
         if (! defined('GLOB_BRACE') || $forceFallback) {
@@ -58,14 +44,7 @@ abstract class Glob
         return static::systemGlob($pattern, $flags);
     }
 
-    /**
-     * Use the glob function provided by the system.
-     *
-     * @param  string  $pattern
-     * @param  int     $flags
-     * @return array
-     * @throws Exception\RuntimeException
-     */
+    
     protected static function systemGlob($pattern, $flags)
     {
         if ($flags) {
@@ -99,14 +78,7 @@ abstract class Glob
         return $res;
     }
 
-    /**
-     * Expand braces manually, then use the system glob.
-     *
-     * @param  string  $pattern
-     * @param  int     $flags
-     * @return array
-     * @throws Exception\RuntimeException
-     */
+    
     protected static function fallbackGlob($pattern, $flags)
     {
         if (! self::flagsIsEqualTo($flags, self::GLOB_BRACE)) {
@@ -180,14 +152,7 @@ abstract class Glob
         return array_unique($paths);
     }
 
-    /**
-     * Find the end of the sub-pattern in a brace expression.
-     *
-     * @param  string  $pattern
-     * @param  int $begin
-     * @param  int $flags
-     * @return int|null
-     */
+    
     protected static function nextBraceSub($pattern, $begin, $flags)
     {
         $length  = strlen($pattern);
@@ -218,7 +183,7 @@ abstract class Glob
         return $current < $length ? $current : null;
     }
 
-    /** @internal */
+    
     public static function flagsIsEqualTo(int $flags, int $otherFlags): bool
     {
         return (bool) ($flags & $otherFlags);

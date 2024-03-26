@@ -1,18 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Bobir Ismailov Bobir Ismailov, Pablo Saratxaga, Mashrab Kuvatov bobir_is@yahoo.com, pablo@mandrakesoft.com, kmashrab@uni-bremen.de
- */
+
+
 return array_replace_recursive(require __DIR__.'/uz_Latn.php', [
     'formats' => [
         'L' => 'DD/MM/YY',

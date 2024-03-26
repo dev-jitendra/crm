@@ -1,99 +1,42 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/record/panels/relationship */
+
+
 
 import BottomPanelView from 'views/record/panels/bottom';
 import SearchManager from 'search-manager';
 import RecordModal from 'helpers/record-modal';
 
-/**
- * A relationship panel.
- *
- * @property {Object} defs
- */
+
 class RelationshipPanelView extends BottomPanelView {
 
-    /** @inheritDoc */
+    
     template = 'record/panels/relationship'
 
-    /**
-     * A row-actions view.
-     *
-     * @protected
-     */
+    
     rowActionsView = 'views/record/row-actions/relationship'
 
-    /**
-     * An API URL.
-     *
-     * @protected
-     * @type {string|null}
-     */
+    
     url = null
 
-    /**
-     * @type {string}
-     * @deprecated Use `entityType`.
-     */
+    
     scope
 
-    /**
-     * An entity type.
-     * @type {string}
-     */
+    
     entityType
 
-    /**
-     * Read-only.
-     */
+    
     readOnly = false
 
-    /**
-     * Fetch a collection on a model 'after:relate' event.
-     *
-     * @protected
-     */
+    
     fetchOnModelAfterRelate = false
 
-    /**
-     * @protected
-     */
+    
     noCreateScopeList = ['User', 'Team', 'Role', 'Portal']
 
-    /**
-     * @private
-     */
+    
     recordsPerPage = null
 
-    /**
-     * @protected
-     */
+    
     viewModalView = null
 
     setup() {
@@ -105,7 +48,7 @@ class RelationshipPanelView extends BottomPanelView {
             throw new Error(`No link or panelName.`);
         }
 
-        // noinspection JSDeprecatedSymbols
+        
         if (!this.scope && !this.entityType) {
             if (!this.model) {
                 throw new Error(`No model passed.`);
@@ -116,17 +59,17 @@ class RelationshipPanelView extends BottomPanelView {
             }
         }
 
-        // noinspection JSDeprecatedSymbols
+        
         if (this.scope && !this.entityType) {
-            // For backward compatibility.
-            // noinspection JSDeprecatedSymbols
+            
+            
             this.entityType = this.scope;
         }
 
         this.entityType = this.entityType || this.model.defs.links[this.link].entity;
 
-        // For backward compatibility.
-        // noinspection JSDeprecatedSymbols
+        
+        
         this.scope = this.entityType;
 
         const linkReadOnly = this.getMetadata()
@@ -293,7 +236,7 @@ class RelationshipPanelView extends BottomPanelView {
             if (this.defs.syncWithModel) {
                 this.listenTo(this.model, 'sync', (m, a, o) => {
                     if (!o.patch && !o.highlight) {
-                        // Skip if not save and not web-socket update.
+                        
                         return;
                     }
 
@@ -358,18 +301,10 @@ class RelationshipPanelView extends BottomPanelView {
         this.setupLast();
     }
 
-    /**
-     * Set up lastly.
-     *
-     * @protected
-     */
+    
     setupLast() {}
 
-    /**
-     * Set up title.
-     *
-     * @protected
-     */
+    
     setupTitle() {
         this.title = this.title || this.translate(this.link, 'links', this.model.entityType);
 
@@ -392,16 +327,12 @@ class RelationshipPanelView extends BottomPanelView {
         }
     }
 
-    /**
-     * Set up sorting.
-     *
-     * @protected
-     */
+    
     setupSorting() {
         let orderBy = this.defs.orderBy || this.defs.sortBy || this.orderBy;
         let order = this.defs.orderDirection || this.orderDirection || this.order;
 
-        if ('asc' in this.defs) { // @todo Remove.
+        if ('asc' in this.defs) { 
             order = this.defs.asc ? 'asc' : 'desc';
         }
 
@@ -418,25 +349,13 @@ class RelationshipPanelView extends BottomPanelView {
         this.defaultOrder = order;
     }
 
-    /**
-     * Set up a list layout.
-     *
-     * @protected
-     */
+    
     setupListLayout() {}
 
-    /**
-     * Set up actions.
-     *
-     * @protected
-     */
+    
     setupActions() {}
 
-    /**
-     * Set up filter actions.
-     *
-     * @protected
-     */
+    
     setupFilterActions() {
         if (!(this.filterList && this.filterList.length)) {
             return;
@@ -474,28 +393,19 @@ class RelationshipPanelView extends BottomPanelView {
         });
     }
 
-    /**
-     * Translate a filter.
-     *
-     * @param {string} name A name.
-     * @return {string}
-     */
+    
     translateFilter(name) {
         return this.translate(name, 'presetFilters', this.entityType);
     }
 
-    /**
-     * @protected
-     */
+    
     getStoredFilter() {
         const key = 'panelFilter' + this.model.entityType + '-' + (this.panelName || this.name);
 
         return this.getStorage().get('state', key) || null;
     }
 
-    /**
-     * @private
-     */
+    
     storeFilter(filter) {
         const key = 'panelFilter' + this.model.entityType + '-' + (this.panelName || this.name);
 
@@ -506,11 +416,7 @@ class RelationshipPanelView extends BottomPanelView {
         }
     }
 
-    /**
-     * Set a filter.
-     *
-     * @param {string} filter A filter.
-     */
+    
     setFilter(filter) {
         this.filter = filter;
         this.collection.data.primaryFilter = null;
@@ -520,12 +426,8 @@ class RelationshipPanelView extends BottomPanelView {
         }
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * A `select-filter` action.
-     *
-     * @protected
-     */
+    
+    
     actionSelectFilter(data) {
         const filter = data.name;
         let filterInternal = filter;
@@ -574,20 +476,12 @@ class RelationshipPanelView extends BottomPanelView {
         }
     }
 
-    /**
-     * A `refresh` action.
-     *
-     * @protected
-     */
+    
     actionRefresh() {
         this.collection.fetch();
     }
 
-    /**
-     * A `view-related-list` action.
-     *
-     * @protected
-     */
+    
     actionViewRelatedList(data) {
         const viewName =
             this.getMetadata().get(
@@ -649,35 +543,19 @@ class RelationshipPanelView extends BottomPanelView {
         });
     }
 
-    /**
-     * Is create available.
-     *
-     * @protected
-     * @param {string} scope A scope (entity type).
-     * @return {boolean};
-     */
+    
     isCreateAvailable(scope) {
         return !!this.defs.create;
     }
 
-    // noinspection JSUnusedLocalSymbols
-    /**
-     * Is select available.
-     *
-     * @protected
-     * @param {string} scope A scope (entity type).
-     * @return {boolean};
-     */
+    
+    
     isSelectAvailable(scope) {
         return !!this.defs.select;
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * A `view-related` action.
-     *
-     * @protected
-     */
+    
+    
     actionViewRelated(data) {
         const id = data.id;
         const model = this.collection.get(id);
@@ -703,12 +581,8 @@ class RelationshipPanelView extends BottomPanelView {
             });
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * An `edit-related` action.
-     *
-     * @protected
-     */
+    
+    
     actionEditRelated(data) {
         const id = data.id;
         const scope = this.collection.get(id).name;
@@ -734,12 +608,8 @@ class RelationshipPanelView extends BottomPanelView {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * An `unlink-related` action.
-     *
-     * @protected
-     */
+    
+    
     actionUnlinkRelated(data) {
         const id = data.id;
 
@@ -762,12 +632,8 @@ class RelationshipPanelView extends BottomPanelView {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * A `remove-related` action.
-     *
-     * @protected
-     */
+    
+    
     actionRemoveRelated(data) {
         const id = data.id;
 
@@ -792,12 +658,8 @@ class RelationshipPanelView extends BottomPanelView {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * An `unlink-all-related` action.
-     *
-     * @protected
-     */
+    
+    
     actionUnlinkAllRelated(data) {
         this.confirm(this.translate('unlinkAllConfirmation', 'messages'), () => {
             Espo.Ui.notify(' ... ');
@@ -818,15 +680,13 @@ class RelationshipPanelView extends BottomPanelView {
         });
     }
 
-    /**
-     * @private
-     */
+    
     setupCreateAvailability() {
         if (!this.link || !this.entityType || !this.model) {
             return;
         }
 
-        /** @type {module:model} */
+        
         const model = this.model;
 
         const entityType = model.getLinkParam(this.link, 'entity');

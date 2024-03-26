@@ -6,16 +6,10 @@ use Exception;
 use ImagickDraw;
 use ImagickPixel;
 
-/**
- * @author Francis Chuang <francis.chuang@gmail.com>
- */
+
 class ImageMagickGenerator extends BaseGenerator implements GeneratorInterface
 {
-    /**
-     * ImageMagickGenerator constructor.
-     *
-     * @throws \Exception
-     */
+    
     public function __construct()
     {
         if (!extension_loaded('imagick')) {
@@ -23,17 +17,13 @@ class ImageMagickGenerator extends BaseGenerator implements GeneratorInterface
         }
     }
 
-    /**
-     * @return string
-     */
+    
     public function getMimeType()
     {
         return 'image/png';
     }
 
-    /**
-     * @return $this
-     */
+    
     private function generateImage()
     {
         $this->generatedImage = new \Imagick();
@@ -47,14 +37,14 @@ class ImageMagickGenerator extends BaseGenerator implements GeneratorInterface
 
         $this->generatedImage->newImage($this->pixelRatio * 5, $this->pixelRatio * 5, $background, 'png');
 
-        // prepare color
+        
         $rgbColor = $this->getColor();
         $color = new ImagickPixel("rgb($rgbColor[0],$rgbColor[1],$rgbColor[2])");
 
         $draw = new ImagickDraw();
         $draw->setFillColor($color);
 
-        // draw the content
+        
         foreach ($this->getArrayOfSquare() as $lineKey => $lineValue) {
             foreach ($lineValue as $colKey => $colValue) {
                 if (true === $colValue) {
@@ -68,9 +58,7 @@ class ImageMagickGenerator extends BaseGenerator implements GeneratorInterface
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getImageBinaryData($string, $size = null, $color = null, $backgroundColor = null)
     {
         ob_start();
@@ -81,9 +69,7 @@ class ImageMagickGenerator extends BaseGenerator implements GeneratorInterface
         return $imageData;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getImageResource($string, $size = null, $color = null, $backgroundColor = null)
     {
         $this

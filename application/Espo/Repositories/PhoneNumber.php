@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Repositories;
 
@@ -37,11 +11,7 @@ use Espo\Core\Di;
 
 use stdClass;
 
-/**
- * Not to be used directly. Use utilities from `Espo\Tools\PhoneNumber` instead.
- * @internal
- * @extends Database<PhoneNumberEntity>
- */
+
 class PhoneNumber extends Database implements
 
     Di\ApplicationStateAware,
@@ -59,10 +29,7 @@ class PhoneNumber extends Database implements
     private const LOOKUP_SMALL_MAX_SIZE = 20;
     private const LOOKUP_MAX_SIZE = 50;
 
-    /**
-     * @param string[] $numberList
-     * @return string[]
-     */
+    
     public function getIds($numberList = []): array
     {
         if (empty($numberList)) {
@@ -104,9 +71,7 @@ class PhoneNumber extends Database implements
         return $ids;
     }
 
-    /**
-     * @return array<int, stdClass>
-     */
+    
     public function getPhoneNumberData(Entity $entity): array
     {
         if (!$entity->hasId()) {
@@ -149,13 +114,11 @@ class PhoneNumber extends Database implements
 
     public function getByNumber(string $number): ?PhoneNumberEntity
     {
-        /** @var ?PhoneNumberEntity */
+        
         return $this->where(['name' => $number])->findOne();
     }
 
-    /**
-     * @return Entity[]
-     */
+    
     public function getEntityListByPhoneNumberId(string $phoneNumberId, ?Entity $exceptionEntity = null): array
     {
         $entityList = [];
@@ -205,9 +168,7 @@ class PhoneNumber extends Database implements
         return $entityList;
     }
 
-    /**
-     * @param string[] $order
-     */
+    
     public function getEntityByPhoneNumberId(
         string $phoneNumberId,
         ?string $entityType = null,

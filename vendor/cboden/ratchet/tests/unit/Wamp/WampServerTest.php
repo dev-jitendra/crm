@@ -2,9 +2,7 @@
 namespace Ratchet\Wamp;
 use Ratchet\AbstractMessageComponentTestCase;
 
-/**
- * @covers Ratchet\Wamp\WampServer
- */
+
 class WampServerTest extends AbstractMessageComponentTestCase {
     public function getConnectionClassString() {
         return '\Ratchet\Wamp\WampConnection';
@@ -33,7 +31,7 @@ class WampServerTest extends AbstractMessageComponentTestCase {
     }
 
     public function testGetSubProtocols() {
-        // todo: could expand on this
+        
         $this->assertInternalType('array', $this->_serv->getSubProtocols());
     }
 

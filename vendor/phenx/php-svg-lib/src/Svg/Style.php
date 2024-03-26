@@ -1,10 +1,5 @@
 <?php
-/**
- * @package php-svg-lib
- * @link    http://github.com/PhenX/php-svg-lib
- * @author  Fabien Ménager <fabien.menager@gmail.com>
- * @license GNU LGPLv3+ http://www.gnu.org/copyleft/lesser.html
- */
+
 
 namespace Svg;
 
@@ -71,11 +66,7 @@ class Style
         );
     }
 
-    /**
-     * @param $attributes
-     *
-     * @return Style
-     */
+    
     public function fromAttributes($attributes)
     {
         $this->fillStyles($attributes);
@@ -108,18 +99,18 @@ class Style
 
         foreach ($stylesheets as $_sc) {
 
-            /** @var \Sabberworm\CSS\RuleSet\DeclarationBlock $_decl */
+            
             foreach ($_sc->getAllDeclarationBlocks() as $_decl) {
 
-                /** @var \Sabberworm\CSS\Property\Selector $_selector */
+                
                 foreach ($_decl->getSelectors() as $_selector) {
                     $_selector = $_selector->getSelector();
 
-                    // Match class name
+                    
                     if ($class !== null) {
                         foreach ($class as $_class) {
                             if ($_selector === ".$_class") {
-                                /** @var \Sabberworm\CSS\Rule\Rule $_rule */
+                                
                                 foreach ($_decl->getRules() as $_rule) {
                                     $styles[$_rule->getRule()] = $_rule->getValue() . "";
                                 }
@@ -129,9 +120,9 @@ class Style
                         }
                     }
 
-                    // Match tag name
+                    
                     if ($_selector === $tag->tagName) {
-                        /** @var \Sabberworm\CSS\Rule\Rule $_rule */
+                        
                         foreach ($_decl->getRules() as $_rule) {
                             $styles[$_rule->getRule()] = $_rule->getValue() . "";
                         }
@@ -143,7 +134,7 @@ class Style
                 if (
                     \array_key_exists("font-family", $styles)
                     && (
-                        \strtolower(\substr($this->href, 0, 7)) === "phar://"
+                        \strtolower(\substr($this->href, 0, 7)) === "phar:
                         || ($this->document->allowExternalReferences === false && \strtolower(\substr($this->href, 0, 5)) !== "data:")
                     )
                 ) {
@@ -212,22 +203,22 @@ class Style
             return "currentcolor";
         }
 
-        // SVG color name
+        
         if (isset(self::$colorNames[$color])) {
             return self::parseHexColor(self::$colorNames[$color]);
         }
 
-        // Hex color
+        
         if ($color[0] === "#") {
             return self::parseHexColor($color);
         }
 
-        // RGB color
+        
         if (strpos($color, "rgb") !== false) {
             return self::getQuad($color);
         }
 
-        // RGB color
+        
         if (strpos($color, "hsl") !== false) {
             $quad = self::getQuad($color, true);
 
@@ -294,12 +285,12 @@ class Style
             );
         }
 
-        // Gradient
+        
         if (strpos($color, "url(#") !== false) {
             $i = strpos($color, "(");
             $j = strpos($color, ")");
 
-            // Bad url format
+            
             if ($i === false || $j === false) {
                 return null;
             }
@@ -314,7 +305,7 @@ class Style
         $i = strpos($color, "(");
         $j = strpos($color, ")");
 
-        // Bad color value
+        
         if ($i === false || $j === false) {
             return null;
         }
@@ -351,7 +342,7 @@ class Style
     {
         $c = array(0, 0, 0, 1);
 
-        // #FFFFFF
+        
         if (isset($hex[6])) {
             $c[0] = hexdec(substr($hex, 1, 2));
             $c[1] = hexdec(substr($hex, 3, 2));
@@ -378,13 +369,7 @@ class Style
         return $c;
     }
 
-    /**
-     * Simple CSS parser
-     *
-     * @param $style
-     *
-     * @return array
-     */
+    
     static function parseCssStyle($style)
     {
         $matches = array();

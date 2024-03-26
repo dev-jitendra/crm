@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 if ('cli' !== \PHP_SAPI) {
     throw new Exception('This script must be run from the command line.');
@@ -38,13 +31,13 @@ $usageInstructions = <<<END
 END;
 
 $config = [
-    // if TRUE, the full list of missing translations is displayed
+    
     'verbose_output' => false,
-    // NULL = analyze all locales
+    
     'locale_to_analyze' => null,
-    // append --incomplete to only show incomplete languages
+    
     'include_completed_languages' => true,
-    // the reference files all the other translations are compared to
+    
     'original_files' => [
         'src/Symfony/Component/Form/Resources/translations/validators.en.xlf',
         'src/Symfony/Component/Security/Core/Resources/translations/security.en.xlf',
@@ -178,9 +171,7 @@ function extractTranslationKeys($filePath)
     return $translationKeys;
 }
 
-/**
- * Check whether the trans-unit id and source match with the base translation.
- */
+
 function findTransUnitMismatches(array $baseTranslationKeys, array $translatedKeys): array
 {
     $mismatches = [];

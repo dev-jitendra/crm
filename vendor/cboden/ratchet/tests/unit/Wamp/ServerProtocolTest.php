@@ -3,11 +3,7 @@ namespace Ratchet\Wamp;
 use Ratchet\Mock\Connection;
 use Ratchet\Mock\WampComponent as TestComponent;
 
-/**
- * @covers \Ratchet\Wamp\ServerProtocol
- * @covers \Ratchet\Wamp\WampServerInterface
- * @covers \Ratchet\Wamp\WampConnection
- */
+
 class ServerProtocolTest extends \PHPUnit_Framework_TestCase {
     protected $_comp;
 
@@ -32,9 +28,7 @@ class ServerProtocolTest extends \PHPUnit_Framework_TestCase {
         ];
     }
 
-    /**
-     * @dataProvider invalidMessageProvider
-     */
+    
     public function testInvalidMessages($type) {
         $this->setExpectedException('\Ratchet\Wamp\Exception');
 
@@ -58,7 +52,7 @@ class ServerProtocolTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testSubscribe() {
-        $uri = 'http://example.com';
+        $uri = 'http:
         $clientMessage = array(5, $uri);
 
         $conn = $this->newConn();
@@ -70,7 +64,7 @@ class ServerProtocolTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testUnSubscribe() {
-        $uri = 'http://example.com/endpoint';
+        $uri = 'http:
         $clientMessage = array(6, $uri);
 
         $conn = $this->newConn();
@@ -94,14 +88,12 @@ class ServerProtocolTest extends \PHPUnit_Framework_TestCase {
         ];
     }
 
-    /**
-     * @dataProvider callProvider
-     */
+    
     public function testCall() {
         $args     = func_get_args();
         $paramNum = array_shift($args);
 
-        $uri = 'http://example.com/endpoint/' . rand(1, 100);
+        $uri = 'http:
         $id  = uniqid('', false);
         $clientMessage = array_merge(array(2, $id, $uri), $args);
 
@@ -157,14 +149,12 @@ class ServerProtocolTest extends \PHPUnit_Framework_TestCase {
 
     public function eventProvider() {
         return array(
-            array('http://example.com', array('one', 'two'))
+            array('http:
           , array('curie', array(array('hello' => 'world', 'herp' => 'derp')))
         );
     }
 
-    /**
-     * @dataProvider eventProvider
-     */
+    
     public function testEvent($topic, $payload) {
         $conn = new WampConnection($this->newConn());
         $conn->event($topic, $payload);
@@ -212,7 +202,7 @@ class ServerProtocolTest extends \PHPUnit_Framework_TestCase {
         $this->_comp->onOpen($conn);
 
         $prefix  = 'incoming';
-        $fullURI   = "http://example.com/$prefix";
+        $fullURI   = "http:
         $method = 'call';
 
         $this->_comp->onMessage($conn, json_encode(array(1, $prefix, $fullURI)));
@@ -255,9 +245,7 @@ class ServerProtocolTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
-    /**
-     * @dataProvider badFormatProvider
-     */
+    
     public function testValidJsonButInvalidProtocol($message) {
         $this->setExpectedException('\Ratchet\Wamp\Exception');
 

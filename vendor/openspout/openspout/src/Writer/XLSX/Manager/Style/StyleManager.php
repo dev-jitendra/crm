@@ -10,11 +10,7 @@ use OpenSpout\Common\Entity\Style\Style;
 use OpenSpout\Writer\Common\Manager\Style\AbstractStyleManager as CommonStyleManager;
 use OpenSpout\Writer\XLSX\Helper\BorderHelper;
 
-/**
- * @internal
- *
- * @property StyleRegistry $styleRegistry
- */
+
 final class StyleManager extends CommonStyleManager
 {
     public function __construct(StyleRegistry $styleRegistry)
@@ -22,15 +18,7 @@ final class StyleManager extends CommonStyleManager
         parent::__construct($styleRegistry);
     }
 
-    /**
-     * For empty cells, we can specify a style or not. If no style are specified,
-     * then the software default will be applied. But sometimes, it may be useful
-     * to override this default style, for instance if the cell should have a
-     * background color different than the default one or some borders
-     * (fonts property don't really matter here).
-     *
-     * @return bool Whether the cell should define a custom style
-     */
+    
     public function shouldApplyStyleOnEmptyCell(?int $styleId): bool
     {
         if (null === $styleId) {
@@ -48,14 +36,12 @@ final class StyleManager extends CommonStyleManager
         return $hasStyleCustomFill || $hasStyleCustomBorders || $hasStyleCustomFormats;
     }
 
-    /**
-     * Returns the content of the "styles.xml" file, given a list of styles.
-     */
+    
     public function getStylesXMLFileContent(): string
     {
         $content = <<<'EOD'
             <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-            <styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+            <styleSheet xmlns="http:
             EOD;
 
         $content .= $this->getFormatsSectionContent();
@@ -73,9 +59,7 @@ final class StyleManager extends CommonStyleManager
         return $content;
     }
 
-    /**
-     * Returns the content of the "<numFmts>" section.
-     */
+    
     private function getFormatsSectionContent(): string
     {
         $tags = [];
@@ -83,12 +67,12 @@ final class StyleManager extends CommonStyleManager
         foreach ($registeredFormats as $styleId) {
             $numFmtId = $this->styleRegistry->getFormatIdForStyleId($styleId);
 
-            // Built-in formats do not need to be declared, skip them
+            
             if ($numFmtId < 164) {
                 continue;
             }
 
-            /** @var Style $style */
+            
             $style = $this->styleRegistry->getStyleFromStyleId($styleId);
             $format = $style->getFormat();
             $tags[] = '<numFmt numFmtId="'.$numFmtId.'" formatCode="'.$format.'"/>';
@@ -100,16 +84,14 @@ final class StyleManager extends CommonStyleManager
         return $content;
     }
 
-    /**
-     * Returns the content of the "<fonts>" section.
-     */
+    
     private function getFontsSectionContent(): string
     {
         $registeredStyles = $this->styleRegistry->getRegisteredStyles();
 
         $content = '<fonts count="'.\count($registeredStyles).'">';
 
-        /** @var Style $style */
+        
         foreach ($registeredStyles as $style) {
             $content .= '<font>';
 
@@ -138,23 +120,21 @@ final class StyleManager extends CommonStyleManager
         return $content;
     }
 
-    /**
-     * Returns the content of the "<fills>" section.
-     */
+    
     private function getFillsSectionContent(): string
     {
         $registeredFills = $this->styleRegistry->getRegisteredFills();
 
-        // Excel reserves two default fills
+        
         $fillsCount = \count($registeredFills) + 2;
         $content = sprintf('<fills count="%d">', $fillsCount);
 
         $content .= '<fill><patternFill patternType="none"/></fill>';
         $content .= '<fill><patternFill patternType="gray125"/></fill>';
 
-        // The other fills are actually registered by setting a background color
+        
         foreach ($registeredFills as $styleId) {
-            /** @var Style $style */
+            
             $style = $this->styleRegistry->getStyleFromStyleId($styleId);
 
             $backgroundColor = $style->getBackgroundColor();
@@ -169,19 +149,17 @@ final class StyleManager extends CommonStyleManager
         return $content;
     }
 
-    /**
-     * Returns the content of the "<borders>" section.
-     */
+    
     private function getBordersSectionContent(): string
     {
         $registeredBorders = $this->styleRegistry->getRegisteredBorders();
 
-        // There is one default border with index 0
+        
         $borderCount = \count($registeredBorders) + 1;
 
         $content = '<borders count="'.$borderCount.'">';
 
-        // Default border starting at index 0
+        
         $content .= '<border><left/><right/><top/><bottom/></border>';
 
         foreach ($registeredBorders as $styleId) {
@@ -190,7 +168,7 @@ final class StyleManager extends CommonStyleManager
             \assert(null !== $border);
             $content .= '<border>';
 
-            // @see https://github.com/box/spout/issues/271
+            
             foreach (BorderPart::allowedNames as $partName) {
                 $content .= BorderHelper::serializeBorderPart($border->getPart($partName));
             }
@@ -203,9 +181,7 @@ final class StyleManager extends CommonStyleManager
         return $content;
     }
 
-    /**
-     * Returns the content of the "<cellStyleXfs>" section.
-     */
+    
     private function getCellStyleXfsSectionContent(): string
     {
         return <<<'EOD'
@@ -215,9 +191,7 @@ final class StyleManager extends CommonStyleManager
             EOD;
     }
 
-    /**
-     * Returns the content of the "<cellXfs>" section.
-     */
+    
     private function getCellXfsSectionContent(): string
     {
         $registeredStyles = $this->styleRegistry->getRegisteredStyles();
@@ -266,9 +240,7 @@ final class StyleManager extends CommonStyleManager
         return $content;
     }
 
-    /**
-     * Returns the content of the "<cellStyles>" section.
-     */
+    
     private function getCellStylesSectionContent(): string
     {
         return <<<'EOD'
@@ -278,40 +250,31 @@ final class StyleManager extends CommonStyleManager
             EOD;
     }
 
-    /**
-     * Returns the fill ID associated to the given style ID.
-     * For the default style, we don't a fill.
-     */
+    
     private function getFillIdForStyleId(int $styleId): int
     {
-        // For the default style (ID = 0), we don't want to override the fill.
-        // Otherwise all cells of the spreadsheet will have a background color.
+        
+        
         $isDefaultStyle = (0 === $styleId);
 
         return $isDefaultStyle ? 0 : ($this->styleRegistry->getFillIdForStyleId($styleId) ?? 0);
     }
 
-    /**
-     * Returns the fill ID associated to the given style ID.
-     * For the default style, we don't a border.
-     */
+    
     private function getBorderIdForStyleId(int $styleId): int
     {
-        // For the default style (ID = 0), we don't want to override the border.
-        // Otherwise all cells of the spreadsheet will have a border.
+        
+        
         $isDefaultStyle = (0 === $styleId);
 
         return $isDefaultStyle ? 0 : ($this->styleRegistry->getBorderIdForStyleId($styleId) ?? 0);
     }
 
-    /**
-     * Returns the format ID associated to the given style ID.
-     * For the default style use general format.
-     */
+    
     private function getFormatIdForStyleId(int $styleId): int
     {
-        // For the default style (ID = 0), we don't want to override the format.
-        // Otherwise all cells of the spreadsheet will have a format.
+        
+        
         $isDefaultStyle = (0 === $styleId);
 
         return $isDefaultStyle ? 0 : ($this->styleRegistry->getFormatIdForStyleId($styleId) ?? 0);

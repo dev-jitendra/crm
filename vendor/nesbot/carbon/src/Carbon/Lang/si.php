@@ -1,21 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - François B
- * - Serhan Apaydın
- * - JD Isaacks
- * - Malinda Weerasinghe (MalindaWMD)
- */
+
+
 return [
     'year' => '{1}වසර 1|වසර :count',
     'a_year' => '{1}වසරක්|වසර :count',

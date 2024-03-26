@@ -4,97 +4,50 @@ namespace PhpOffice\PhpSpreadsheet\Style;
 
 class Font extends Supervisor
 {
-    // Underline types
+    
     const UNDERLINE_NONE = 'none';
     const UNDERLINE_DOUBLE = 'double';
     const UNDERLINE_DOUBLEACCOUNTING = 'doubleAccounting';
     const UNDERLINE_SINGLE = 'single';
     const UNDERLINE_SINGLEACCOUNTING = 'singleAccounting';
 
-    /**
-     * Font Name.
-     *
-     * @var string
-     */
+    
     protected $name = 'Calibri';
 
-    /**
-     * Font Size.
-     *
-     * @var float
-     */
+    
     protected $size = 11;
 
-    /**
-     * Bold.
-     *
-     * @var bool
-     */
+    
     protected $bold = false;
 
-    /**
-     * Italic.
-     *
-     * @var bool
-     */
+    
     protected $italic = false;
 
-    /**
-     * Superscript.
-     *
-     * @var bool
-     */
+    
     protected $superscript = false;
 
-    /**
-     * Subscript.
-     *
-     * @var bool
-     */
+    
     protected $subscript = false;
 
-    /**
-     * Underline.
-     *
-     * @var string
-     */
+    
     protected $underline = self::UNDERLINE_NONE;
 
-    /**
-     * Strikethrough.
-     *
-     * @var bool
-     */
+    
     protected $strikethrough = false;
 
-    /**
-     * Foreground color.
-     *
-     * @var Color
-     */
+    
     protected $color;
 
-    /**
-     * @var int
-     */
+    
     public $colorIndex;
 
-    /**
-     * Create a new Font.
-     *
-     * @param bool $isSupervisor Flag indicating if this is a supervisor or not
-     *                                    Leave this value at default unless you understand exactly what
-     *                                        its ramifications are
-     * @param bool $isConditional Flag indicating if this is a conditional style or not
-     *                                    Leave this value at default unless you understand exactly what
-     *                                        its ramifications are
-     */
+    
     public function __construct($isSupervisor = false, $isConditional = false)
     {
-        // Supervisor?
+        
         parent::__construct($isSupervisor);
 
-        // Initialise values
+        
         if ($isConditional) {
             $this->name = null;
             $this->size = null;
@@ -108,57 +61,25 @@ class Font extends Supervisor
         } else {
             $this->color = new Color(Color::COLOR_BLACK, $isSupervisor);
         }
-        // bind parent if we are a supervisor
+        
         if ($isSupervisor) {
             $this->color->bindParent($this, 'color');
         }
     }
 
-    /**
-     * Get the shared style component for the currently active cell in currently active sheet.
-     * Only used for style supervisor.
-     *
-     * @return Font
-     */
+    
     public function getSharedComponent()
     {
         return $this->parent->getSharedComponent()->getFont();
     }
 
-    /**
-     * Build style array from subcomponents.
-     *
-     * @param array $array
-     *
-     * @return array
-     */
+    
     public function getStyleArray($array)
     {
         return ['font' => $array];
     }
 
-    /**
-     * Apply styles from array.
-     *
-     * <code>
-     * $spreadsheet->getActiveSheet()->getStyle('B2')->getFont()->applyFromArray(
-     *     [
-     *         'name' => 'Arial',
-     *         'bold' => TRUE,
-     *         'italic' => FALSE,
-     *         'underline' => \PhpOffice\PhpSpreadsheet\Style\Font::UNDERLINE_DOUBLE,
-     *         'strikethrough' => FALSE,
-     *         'color' => [
-     *             'rgb' => '808080'
-     *         ]
-     *     ]
-     * );
-     * </code>
-     *
-     * @param array $pStyles Array containing style information
-     *
-     * @return $this
-     */
+    
     public function applyFromArray(array $pStyles)
     {
         if ($this->isSupervisor) {
@@ -196,11 +117,7 @@ class Font extends Supervisor
         return $this;
     }
 
-    /**
-     * Get Name.
-     *
-     * @return string
-     */
+    
     public function getName()
     {
         if ($this->isSupervisor) {
@@ -210,13 +127,7 @@ class Font extends Supervisor
         return $this->name;
     }
 
-    /**
-     * Set Name.
-     *
-     * @param string $pValue
-     *
-     * @return $this
-     */
+    
     public function setName($pValue)
     {
         if ($pValue == '') {
@@ -232,11 +143,7 @@ class Font extends Supervisor
         return $this;
     }
 
-    /**
-     * Get Size.
-     *
-     * @return float
-     */
+    
     public function getSize()
     {
         if ($this->isSupervisor) {
@@ -246,13 +153,7 @@ class Font extends Supervisor
         return $this->size;
     }
 
-    /**
-     * Set Size.
-     *
-     * @param float $pValue
-     *
-     * @return $this
-     */
+    
     public function setSize($pValue)
     {
         if ($pValue == '') {
@@ -268,11 +169,7 @@ class Font extends Supervisor
         return $this;
     }
 
-    /**
-     * Get Bold.
-     *
-     * @return bool
-     */
+    
     public function getBold()
     {
         if ($this->isSupervisor) {
@@ -282,13 +179,7 @@ class Font extends Supervisor
         return $this->bold;
     }
 
-    /**
-     * Set Bold.
-     *
-     * @param bool $pValue
-     *
-     * @return $this
-     */
+    
     public function setBold($pValue)
     {
         if ($pValue == '') {
@@ -304,11 +195,7 @@ class Font extends Supervisor
         return $this;
     }
 
-    /**
-     * Get Italic.
-     *
-     * @return bool
-     */
+    
     public function getItalic()
     {
         if ($this->isSupervisor) {
@@ -318,13 +205,7 @@ class Font extends Supervisor
         return $this->italic;
     }
 
-    /**
-     * Set Italic.
-     *
-     * @param bool $pValue
-     *
-     * @return $this
-     */
+    
     public function setItalic($pValue)
     {
         if ($pValue == '') {
@@ -340,11 +221,7 @@ class Font extends Supervisor
         return $this;
     }
 
-    /**
-     * Get Superscript.
-     *
-     * @return bool
-     */
+    
     public function getSuperscript()
     {
         if ($this->isSupervisor) {
@@ -354,11 +231,7 @@ class Font extends Supervisor
         return $this->superscript;
     }
 
-    /**
-     * Set Superscript.
-     *
-     * @return $this
-     */
+    
     public function setSuperscript(bool $pValue)
     {
         if ($this->isSupervisor) {
@@ -374,11 +247,7 @@ class Font extends Supervisor
         return $this;
     }
 
-    /**
-     * Get Subscript.
-     *
-     * @return bool
-     */
+    
     public function getSubscript()
     {
         if ($this->isSupervisor) {
@@ -388,11 +257,7 @@ class Font extends Supervisor
         return $this->subscript;
     }
 
-    /**
-     * Set Subscript.
-     *
-     * @return $this
-     */
+    
     public function setSubscript(bool $pValue)
     {
         if ($this->isSupervisor) {
@@ -408,11 +273,7 @@ class Font extends Supervisor
         return $this;
     }
 
-    /**
-     * Get Underline.
-     *
-     * @return string
-     */
+    
     public function getUnderline()
     {
         if ($this->isSupervisor) {
@@ -422,15 +283,7 @@ class Font extends Supervisor
         return $this->underline;
     }
 
-    /**
-     * Set Underline.
-     *
-     * @param bool|string $pValue \PhpOffice\PhpSpreadsheet\Style\Font underline type
-     *                                    If a boolean is passed, then TRUE equates to UNDERLINE_SINGLE,
-     *                                        false equates to UNDERLINE_NONE
-     *
-     * @return $this
-     */
+    
     public function setUnderline($pValue)
     {
         if (is_bool($pValue)) {
@@ -448,11 +301,7 @@ class Font extends Supervisor
         return $this;
     }
 
-    /**
-     * Get Strikethrough.
-     *
-     * @return bool
-     */
+    
     public function getStrikethrough()
     {
         if ($this->isSupervisor) {
@@ -462,13 +311,7 @@ class Font extends Supervisor
         return $this->strikethrough;
     }
 
-    /**
-     * Set Strikethrough.
-     *
-     * @param bool $pValue
-     *
-     * @return $this
-     */
+    
     public function setStrikethrough($pValue)
     {
         if ($pValue == '') {
@@ -485,24 +328,16 @@ class Font extends Supervisor
         return $this;
     }
 
-    /**
-     * Get Color.
-     *
-     * @return Color
-     */
+    
     public function getColor()
     {
         return $this->color;
     }
 
-    /**
-     * Set Color.
-     *
-     * @return $this
-     */
+    
     public function setColor(Color $pValue)
     {
-        // make sure parameter is a real color and not a supervisor
+        
         $color = $pValue->getIsSupervisor() ? $pValue->getSharedComponent() : $pValue;
 
         if ($this->isSupervisor) {
@@ -515,11 +350,7 @@ class Font extends Supervisor
         return $this;
     }
 
-    /**
-     * Get hash code.
-     *
-     * @return string Hash code
-     */
+    
     public function getHashCode()
     {
         if ($this->isSupervisor) {

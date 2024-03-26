@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -17,9 +13,7 @@ use function get_class;
 use function htmlentities;
 use function sprintf;
 
-/**
- * Default Slim application Plain Text Error Renderer
- */
+
 class PlainTextErrorRenderer extends AbstractErrorRenderer
 {
     public function __invoke(Throwable $exception, bool $displayErrorDetails): string
@@ -43,7 +37,7 @@ class PlainTextErrorRenderer extends AbstractErrorRenderer
         $text = sprintf("Type: %s\n", get_class($exception));
 
         $code = $exception->getCode();
-        /** @var int|string $code */
+        
         $text .= sprintf("Code: %s\n", $code);
 
         $text .= sprintf("Message: %s\n", htmlentities($exception->getMessage()));

@@ -1,13 +1,6 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 return array_replace_recursive(require __DIR__.'/en.php', [
     'meridiem' => ['RŨ', 'ŨG'],
@@ -25,19 +18,19 @@ return array_replace_recursive(require __DIR__.'/en.php', [
         'LLLL' => 'dddd, D MMMM YYYY HH:mm',
     ],
 
-    'year' => ':count murume', // less reliable
-    'y' => ':count murume', // less reliable
-    'a_year' => ':count murume', // less reliable
+    'year' => ':count murume', 
+    'y' => ':count murume', 
+    'a_year' => ':count murume', 
 
-    'month' => ':count muchaara', // less reliable
-    'm' => ':count muchaara', // less reliable
-    'a_month' => ':count muchaara', // less reliable
+    'month' => ':count muchaara', 
+    'm' => ':count muchaara', 
+    'a_month' => ':count muchaara', 
 
-    'minute' => ':count monto', // less reliable
-    'min' => ':count monto', // less reliable
-    'a_minute' => ':count monto', // less reliable
+    'minute' => ':count monto', 
+    'min' => ':count monto', 
+    'a_minute' => ':count monto', 
 
-    'second' => ':count gikeno', // less reliable
-    's' => ':count gikeno', // less reliable
-    'a_second' => ':count gikeno', // less reliable
+    'second' => ':count gikeno', 
+    's' => ':count gikeno', 
+    'a_second' => ':count gikeno', 
 ]);

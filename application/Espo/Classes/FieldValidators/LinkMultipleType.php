@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Classes\FieldValidators;
 
@@ -57,7 +31,7 @@ class LinkMultipleType
             return false;
         }
 
-        /** @var string[] $idList */
+        
         $idList = $entity->getLinkMultipleIdList($field);
 
         return count($idList) > 0;
@@ -65,7 +39,7 @@ class LinkMultipleType
 
     public function checkPattern(Entity $entity, string $field): bool
     {
-        /** @var ?mixed[] $idList */
+        
         $idList = $entity->get($field . 'Ids');
 
         if ($idList === null || $idList === []) {
@@ -103,7 +77,7 @@ class LinkMultipleType
             return true;
         }
 
-        /** @var ?stdClass $columnsData */
+        
         $columnsData = $entity->get($field . 'Columns');
 
         if ($columnsData === null) {
@@ -117,7 +91,7 @@ class LinkMultipleType
             return true;
         }
 
-        /** @var ?array<string, string> $columnsMap */
+        
         $columnsMap = $fieldDefs->getParam('columns');
 
         if ($columnsMap === null || $columnsMap === []) {
@@ -161,9 +135,7 @@ class LinkMultipleType
         return true;
     }
 
-    /**
-     * @param mixed $value
-     */
+    
     private function checkColumnValue(string $entityType, string $field, $value): bool
     {
         $fieldDefs = $this->defs
@@ -187,9 +159,7 @@ class LinkMultipleType
         return true;
     }
 
-    /**
-     * @param mixed $value
-     */
+    
     private function checkColumnValueVarchar(Defs\FieldDefs $fieldDefs, $value): bool
     {
         if ($value === null) {
@@ -226,19 +196,17 @@ class LinkMultipleType
         return true;
     }
 
-    /**
-     * @param mixed $value
-     */
+    
     private function checkColumnValueEnum(Defs\FieldDefs $fieldDefs, $value): bool
     {
         if (!is_string($value) && $value !== null) {
             return false;
         }
 
-        /** @var ?string $path */
+        
         $path = $fieldDefs->getParam('optionsPath');
 
-        /** @var string[]|null|false $optionList */
+        
         $optionList = $path ?
             $this->metadata->get($path) :
             $fieldDefs->getParam('options');
@@ -247,7 +215,7 @@ class LinkMultipleType
             return true;
         }
 
-        // For bc.
+        
         if ($optionList === false) {
             return true;
         }
@@ -257,8 +225,8 @@ class LinkMultipleType
             $optionList
         );
 
-        // For bc.
-        // @todo Remove in v9.0.
+        
+        
         if ($value === '') {
             $value = null;
         }

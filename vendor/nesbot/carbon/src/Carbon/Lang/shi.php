@@ -1,13 +1,6 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 return array_replace_recursive(require __DIR__.'/en.php', [
     'meridiem' => ['ⵜⵉⴼⴰⵡⵜ', 'ⵜⴰⴷⴳⴳⵯⴰⵜ'],
@@ -43,15 +36,15 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'd' => ':count ass',
     'a_day' => ':count ass',
 
-    'hour' => ':count urɣ', // less reliable
-    'h' => ':count urɣ', // less reliable
-    'a_hour' => ':count urɣ', // less reliable
+    'hour' => ':count urɣ', 
+    'h' => ':count urɣ', 
+    'a_hour' => ':count urɣ', 
 
-    'minute' => ':count ⴰⵎⵥⵉ', // less reliable
-    'min' => ':count ⴰⵎⵥⵉ', // less reliable
-    'a_minute' => ':count ⴰⵎⵥⵉ', // less reliable
+    'minute' => ':count ⴰⵎⵥⵉ', 
+    'min' => ':count ⴰⵎⵥⵉ', 
+    'a_minute' => ':count ⴰⵎⵥⵉ', 
 
-    'second' => ':count sin', // less reliable
-    's' => ':count sin', // less reliable
-    'a_second' => ':count sin', // less reliable
+    'second' => ':count sin', 
+    's' => ':count sin', 
+    'a_second' => ':count sin', 
 ]);

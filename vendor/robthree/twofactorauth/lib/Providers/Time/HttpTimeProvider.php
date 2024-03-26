@@ -2,16 +2,14 @@
 
 namespace RobThree\Auth\Providers\Time;
 
-/**
- * Takes the time from any webserver by doing a HEAD request on the specified URL and extracting the 'Date:' header
- */
+
 class HttpTimeProvider implements ITimeProvider
 {
     public $url;
     public $options;
     public $expectedtimeformat;
 
-    function __construct($url = 'https://google.com', $expectedtimeformat = 'D, d M Y H:i:s O+', array $options = null)
+    function __construct($url = 'https:
     {
         $this->url = $url;
         $this->expectedtimeformat = $expectedtimeformat;
@@ -26,7 +24,7 @@ class HttpTimeProvider implements ITimeProvider
                     'request_fulluri' => true,
                     'header' => array(
                         'Connection: close',
-                        'User-agent: TwoFactorAuth HttpTimeProvider (https://github.com/RobThree/TwoFactorAuth)',
+                        'User-agent: TwoFactorAuth HttpTimeProvider (https:
                         'Cache-Control: no-cache'
                     )
                 )

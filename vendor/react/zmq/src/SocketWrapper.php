@@ -7,40 +7,25 @@ use React\EventLoop\LoopInterface;
 use ZMQ;
 use ZMQSocket;
 
-/**
- * @mixin ZMQSocket
- */
+
 class SocketWrapper extends EventEmitter
 {
-    /**
-     * @var resource
-     */
+    
     public $fileDescriptor;
 
-    /**
-     * @var bool
-     */
+    
     public $closed = false;
 
-    /**
-     * @var ZMQSocket|null
-     */
+    
     protected $socket = null;
 
-    /**
-     * @var LoopInterface
-     */
+    
     protected $loop;
 
-    /**
-     * @var Buffer|null
-     */
+    
     protected $buffer = null;
 
-    /**
-     * @param ZMQSocket     $socket
-     * @param LoopInterface $loop
-     */
+    
     public function __construct(ZMQSocket $socket, LoopInterface $loop)
     {
         $this->socket = $socket;
@@ -95,33 +80,25 @@ class SocketWrapper extends EventEmitter
         }
     }
 
-    /**
-     * @return ZMQSocket
-     */
+    
     public function getWrappedSocket()
     {
         return $this->socket;
     }
 
-    /**
-     * @param string $channel
-     */
+    
     public function subscribe($channel)
     {
         $this->socket->setSockOpt(ZMQ::SOCKOPT_SUBSCRIBE, $channel);
     }
 
-    /**
-     * @param string $channel
-     */
+    
     public function unsubscribe($channel)
     {
         $this->socket->setSockOpt(ZMQ::SOCKOPT_UNSUBSCRIBE, $channel);
     }
 
-    /**
-     * @param string $message
-     */
+    
     public function send($message)
     {
         if($this->buffer !== null) {
@@ -160,12 +137,7 @@ class SocketWrapper extends EventEmitter
         $this->buffer->end();
     }
 
-    /**
-     * @param string $method
-     * @param array  $parameters
-     *
-     * @return mixed
-     */
+    
     public function __call($method, array $parameters)
     {
         return call_user_func_array(array($this->socket, $method), $parameters);

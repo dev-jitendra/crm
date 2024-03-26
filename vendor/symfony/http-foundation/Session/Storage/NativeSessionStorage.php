@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpFoundation\Session\Storage;
 
@@ -16,79 +9,30 @@ use Symfony\Component\HttpFoundation\Session\Storage\Handler\StrictSessionHandle
 use Symfony\Component\HttpFoundation\Session\Storage\Proxy\AbstractProxy;
 use Symfony\Component\HttpFoundation\Session\Storage\Proxy\SessionHandlerProxy;
 
-// Help opcache.preload discover always-needed symbols
+
 class_exists(MetadataBag::class);
 class_exists(StrictSessionHandler::class);
 class_exists(SessionHandlerProxy::class);
 
-/**
- * This provides a base class for session attribute storage.
- *
- * @author Drak <drak@zikula.org>
- */
+
 class NativeSessionStorage implements SessionStorageInterface
 {
-    /**
-     * @var SessionBagInterface[]
-     */
+    
     protected $bags = [];
 
-    /**
-     * @var bool
-     */
+    
     protected $started = false;
 
-    /**
-     * @var bool
-     */
+    
     protected $closed = false;
 
-    /**
-     * @var AbstractProxy|\SessionHandlerInterface
-     */
+    
     protected $saveHandler;
 
-    /**
-     * @var MetadataBag
-     */
+    
     protected $metadataBag;
 
-    /**
-     * Depending on how you want the storage driver to behave you probably
-     * want to override this constructor entirely.
-     *
-     * List of options for $options array with their defaults.
-     *
-     * @see https://php.net/session.configuration for options
-     * but we omit 'session.' from the beginning of the keys for convenience.
-     *
-     * ("auto_start", is not supported as it tells PHP to start a session before
-     * PHP starts to execute user-land code. Setting during runtime has no effect).
-     *
-     * cache_limiter, "" (use "0" to prevent headers from being sent entirely).
-     * cache_expire, "0"
-     * cookie_domain, ""
-     * cookie_httponly, ""
-     * cookie_lifetime, "0"
-     * cookie_path, "/"
-     * cookie_secure, ""
-     * cookie_samesite, null
-     * gc_divisor, "100"
-     * gc_maxlifetime, "1440"
-     * gc_probability, "1"
-     * lazy_write, "1"
-     * name, "PHPSESSID"
-     * referer_check, ""
-     * serialize_handler, "php"
-     * use_strict_mode, "1"
-     * use_cookies, "1"
-     * use_only_cookies, "1"
-     * use_trans_sid, "0"
-     * sid_length, "32"
-     * sid_bits_per_character, "5"
-     * trans_sid_hosts, $_SERVER['HTTP_HOST']
-     * trans_sid_tags, "a=href,area=href,frame=src,form="
-     */
+    
     public function __construct(array $options = [], AbstractProxy|\SessionHandlerInterface $handler = null, MetadataBag $metaBag = null)
     {
         if (!\extension_loaded('session')) {
@@ -110,17 +54,13 @@ class NativeSessionStorage implements SessionStorageInterface
         $this->setSaveHandler($handler);
     }
 
-    /**
-     * Gets the save handler instance.
-     */
+    
     public function getSaveHandler(): AbstractProxy|\SessionHandlerInterface
     {
         return $this->saveHandler;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function start(): bool
     {
         if ($this->started) {
@@ -136,42 +76,13 @@ class NativeSessionStorage implements SessionStorageInterface
         }
 
         $sessionId = $_COOKIE[session_name()] ?? null;
-        /*
-         * Explanation of the session ID regular expression: `/^[a-zA-Z0-9,-]{22,250}$/`.
-         *
-         * ---------- Part 1
-         *
-         * The part `[a-zA-Z0-9,-]` is related to the PHP ini directive `session.sid_bits_per_character` defined as 6.
-         * See https://www.php.net/manual/en/session.configuration.php#ini.session.sid-bits-per-character.
-         * Allowed values are integers such as:
-         * - 4 for range `a-f0-9`
-         * - 5 for range `a-v0-9`
-         * - 6 for range `a-zA-Z0-9,-`
-         *
-         * ---------- Part 2
-         *
-         * The part `{22,250}` is related to the PHP ini directive `session.sid_length`.
-         * See https://www.php.net/manual/en/session.configuration.php#ini.session.sid-length.
-         * Allowed values are integers between 22 and 256, but we use 250 for the max.
-         *
-         * Where does the 250 come from?
-         * - The length of Windows and Linux filenames is limited to 255 bytes. Then the max must not exceed 255.
-         * - The session filename prefix is `sess_`, a 5 bytes string. Then the max must not exceed 255 - 5 = 250.
-         *
-         * ---------- Conclusion
-         *
-         * The parts 1 and 2 prevent the warning below:
-         * `PHP Warning: SessionHandler::read(): Session ID is too long or contains illegal characters. Only the A-Z, a-z, 0-9, "-", and "," characters are allowed.`
-         *
-         * The part 2 prevents the warning below:
-         * `PHP Warning: SessionHandler::read(): open(filepath, O_RDWR) failed: No such file or directory (2).`
-         */
+        
         if ($sessionId && $this->saveHandler instanceof AbstractProxy && 'files' === $this->saveHandler->getSaveHandlerName() && !preg_match('/^[a-zA-Z0-9,-]{22,250}$/', $sessionId)) {
-            // the session ID in the header is invalid, create a new one
+            
             session_id(session_create_id());
         }
 
-        // ok to try and start the session
+        
         if (!session_start()) {
             throw new \RuntimeException('Failed to start the session.');
         }
@@ -181,44 +92,34 @@ class NativeSessionStorage implements SessionStorageInterface
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getId(): string
     {
         return $this->saveHandler->getId();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function setId(string $id)
     {
         $this->saveHandler->setId($id);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getName(): string
     {
         return $this->saveHandler->getName();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function setName(string $name)
     {
         $this->saveHandler->setName($name);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function regenerate(bool $destroy = false, int $lifetime = null): bool
     {
-        // Cannot regenerate the session ID for non-active sessions.
+        
         if (\PHP_SESSION_ACTIVE !== session_status()) {
             return false;
         }
@@ -240,12 +141,10 @@ class NativeSessionStorage implements SessionStorageInterface
         return session_regenerate_id($destroy);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function save()
     {
-        // Store a copy so we can restore the bags in case the session was not left empty
+        
         $session = $_SESSION;
 
         foreach ($this->bags as $bag) {
@@ -257,7 +156,7 @@ class NativeSessionStorage implements SessionStorageInterface
             unset($_SESSION[$key]);
         }
 
-        // Register error handler to add information about the current save handler
+        
         $previousHandler = set_error_handler(function ($type, $msg, $file, $line) use (&$previousHandler) {
             if (\E_WARNING === $type && str_starts_with($msg, 'session_write_close():')) {
                 $handler = $this->saveHandler instanceof SessionHandlerProxy ? $this->saveHandler->getHandler() : $this->saveHandler;
@@ -272,7 +171,7 @@ class NativeSessionStorage implements SessionStorageInterface
         } finally {
             restore_error_handler();
 
-            // Restore only if not empty
+            
             if ($_SESSION) {
                 $_SESSION = $session;
             }
@@ -282,26 +181,22 @@ class NativeSessionStorage implements SessionStorageInterface
         $this->started = false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function clear()
     {
-        // clear out the bags
+        
         foreach ($this->bags as $bag) {
             $bag->clear();
         }
 
-        // clear out the session
+        
         $_SESSION = [];
 
-        // reconnect the bags to the session
+        
         $this->loadSession();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function registerBag(SessionBagInterface $bag)
     {
         if ($this->started) {
@@ -311,9 +206,7 @@ class NativeSessionStorage implements SessionStorageInterface
         $this->bags[$bag->getName()] = $bag;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getBag(string $name): SessionBagInterface
     {
         if (!isset($this->bags[$name])) {
@@ -338,32 +231,19 @@ class NativeSessionStorage implements SessionStorageInterface
         $this->metadataBag = $metaBag;
     }
 
-    /**
-     * Gets the MetadataBag.
-     */
+    
     public function getMetadataBag(): MetadataBag
     {
         return $this->metadataBag;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function isStarted(): bool
     {
         return $this->started;
     }
 
-    /**
-     * Sets session.* ini variables.
-     *
-     * For convenience we omit 'session.' from the beginning of the keys.
-     * Explicitly ignores other ini keys.
-     *
-     * @param array $options Session ini directives [key => value]
-     *
-     * @see https://php.net/session.configuration
-     */
+    
     public function setOptions(array $options)
     {
         if (headers_sent() || \PHP_SESSION_ACTIVE === session_status()) {
@@ -390,24 +270,7 @@ class NativeSessionStorage implements SessionStorageInterface
         }
     }
 
-    /**
-     * Registers session save handler as a PHP session handler.
-     *
-     * To use internal PHP session save handlers, override this method using ini_set with
-     * session.save_handler and session.save_path e.g.
-     *
-     *     ini_set('session.save_handler', 'files');
-     *     ini_set('session.save_path', '/tmp');
-     *
-     * or pass in a \SessionHandler instance which configures session.save_handler in the
-     * constructor, for a template see NativeFileSessionHandler.
-     *
-     * @see https://php.net/session-set-save-handler
-     * @see https://php.net/sessionhandlerinterface
-     * @see https://php.net/sessionhandler
-     *
-     * @throws \InvalidArgumentException
-     */
+    
     public function setSaveHandler(AbstractProxy|\SessionHandlerInterface $saveHandler = null)
     {
         if (!$saveHandler instanceof AbstractProxy &&
@@ -416,7 +279,7 @@ class NativeSessionStorage implements SessionStorageInterface
             throw new \InvalidArgumentException('Must be instance of AbstractProxy; implement \SessionHandlerInterface; or be null.');
         }
 
-        // Wrap $saveHandler in proxy and prevent double wrapping of proxy
+        
         if (!$saveHandler instanceof AbstractProxy && $saveHandler instanceof \SessionHandlerInterface) {
             $saveHandler = new SessionHandlerProxy($saveHandler);
         } elseif (!$saveHandler instanceof AbstractProxy) {
@@ -433,14 +296,7 @@ class NativeSessionStorage implements SessionStorageInterface
         }
     }
 
-    /**
-     * Load the session with attributes.
-     *
-     * After starting the session, PHP retrieves the session from whatever handlers
-     * are set to (either PHP's internal, or a custom save handler set with session_set_save_handler()).
-     * PHP takes the return value from the read() handler, unserializes it
-     * and populates $_SESSION with the result automatically.
-     */
+    
     protected function loadSession(array &$session = null)
     {
         if (null === $session) {

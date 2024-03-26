@@ -13,20 +13,10 @@ use function serialize;
 use function sprintf;
 use function unserialize;
 
-/**
- * Serializable version of SplQueue
- *
- * @template TKey of array-key
- * @template TValue
- * @extends \SplQueue<TValue>
- */
+
 class SplQueue extends \SplQueue implements Serializable
 {
-    /**
-     * Return an array representing the queue
-     *
-     * @return list<TValue>
-     */
+    
     public function toArray()
     {
         $array = [];
@@ -36,34 +26,21 @@ class SplQueue extends \SplQueue implements Serializable
         return $array;
     }
 
-    /**
-     * Serialize
-     *
-     * @return string
-     */
+    
     #[ReturnTypeWillChange]
     public function serialize()
     {
         return serialize($this->__serialize());
     }
 
-    /**
-     * Magic method used for serializing of an instance.
-     *
-     * @return list<TValue>
-     */
+    
     #[ReturnTypeWillChange]
     public function __serialize()
     {
         return $this->toArray();
     }
 
-    /**
-     * Unserialize
-     *
-     * @param  string $data
-     * @return void
-     */
+    
     #[ReturnTypeWillChange]
     public function unserialize($data)
     {
@@ -78,12 +55,7 @@ class SplQueue extends \SplQueue implements Serializable
         $this->__unserialize($toUnserialize);
     }
 
-   /**
-    * Magic method used to rebuild an instance.
-    *
-    * @param array<array-key, TValue> $data Data array.
-    * @return void
-    */
+   
     #[ReturnTypeWillChange]
     public function __unserialize($data)
     {

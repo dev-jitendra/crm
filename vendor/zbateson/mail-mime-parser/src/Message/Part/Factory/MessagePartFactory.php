@@ -1,9 +1,5 @@
 <?php
-/**
- * This file is part of the ZBateson\MailMimeParser project.
- *
- * @license http://opensource.org/licenses/bsd-license.php BSD
- */
+
 namespace ZBateson\MailMimeParser\Message\Part\Factory;
 
 use ReflectionClass;
@@ -13,36 +9,19 @@ use ZBateson\MailMimeParser\Message\PartFilterFactory;
 use ZBateson\MailMimeParser\Message\Part\PartBuilder;
 use ZBateson\MailMimeParser\Stream\StreamFactory;
 
-/**
- * Abstract factory for subclasses of MessagePart.
- *
- * @author Zaahid Bateson
- */
+
 abstract class MessagePartFactory
 {
-    /**
-     * @var PartStreamFilterManagerFactory responsible for creating
-     *      PartStreamFilterManager instances
-     */
+    
     protected $partStreamFilterManagerFactory;
 
-    /**
-     * @var StreamFactory the StreamFactory instance
-     */
+    
     protected $streamFactory;
 
-    /**
-     * @var MessagePartFactory[] cached instances of MessagePartFactory
-     *      sub-classes
-     */
+    
     private static $instances = null;
 
-    /**
-     * Initializes class dependencies.
-     *
-     * @param StreamFactory $streamFactory
-     * @param PartStreamFilterManagerFactory $psf
-     */
+    
     public function __construct(
         StreamFactory $streamFactory,
         PartStreamFilterManagerFactory $psf
@@ -51,11 +30,7 @@ abstract class MessagePartFactory
         $this->partStreamFilterManagerFactory = $psf;
     }
     
-    /**
-     * Sets a cached singleton instance.
-     *
-     * @param MessagePartFactory $instance
-     */
+    
     protected static function setCachedInstance(MessagePartFactory $instance)
     {
         if (self::$instances === null) {
@@ -65,12 +40,7 @@ abstract class MessagePartFactory
         self::$instances[$class] = $instance;
     }
 
-    /**
-     * Returns a cached singleton instance if one exists, or null if one hasn't
-     * been created yet.
-     *
-     * @return MessagePartFactory
-     */
+    
     protected static function getCachedInstance()
     {
         $class = get_called_class();
@@ -80,15 +50,7 @@ abstract class MessagePartFactory
         return self::$instances[$class];
     }
 
-    /**
-     * Returns the singleton instance for the class.
-     *
-     * @param StreamFactory $sdf
-     * @param PartStreamFilterManagerFactory $psf
-     * @param PartFilterFactory $pf
-     * @param MessageHelperService $mhs
-     * @return MessagePartFactory
-     */
+    
     public static function getInstance(
         StreamFactory $sdf,
         PartStreamFilterManagerFactory $psf,
@@ -109,12 +71,6 @@ abstract class MessagePartFactory
         return $instance;
     }
 
-    /**
-     * Constructs a new MessagePart object and returns it
-     * 
-     * @param PartBuilder $partBuilder
-     * @param StreamInterface $messageStream
-     * @return \ZBateson\MailMimeParser\Message\Part\MessagePart
-     */
+    
     public abstract function newInstance(PartBuilder $partBuilder, StreamInterface $messageStream = null);
 }

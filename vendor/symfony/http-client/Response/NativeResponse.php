@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpClient\Response;
 
@@ -19,11 +12,7 @@ use Symfony\Component\HttpClient\Internal\ClientState;
 use Symfony\Component\HttpClient\Internal\NativeClientState;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-/**
- * @author Nicolas Grekas <p@tchwork.com>
- *
- * @internal
- */
+
 final class NativeResponse implements ResponseInterface, StreamableInterface
 {
     use CommonResponseTrait;
@@ -40,9 +29,7 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
     private $shouldBuffer;
     private $pauseExpiry = 0;
 
-    /**
-     * @internal
-     */
+    
     public function __construct(NativeClientState $multi, $context, string $url, array $options, array &$info, callable $resolver, ?callable $onProgress, ?LoggerInterface $logger)
     {
         $this->multi = $multi;
@@ -57,8 +44,8 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
         $this->inflate = !isset($options['normalized_headers']['accept-encoding']);
         $this->shouldBuffer = $options['buffer'] ?? true;
 
-        // Temporary resource to dechunk the response stream
-        $this->buffer = fopen('php://temp', 'w+');
+        
+        $this->buffer = fopen('php:
 
         $info['user_data'] = $options['user_data'];
         ++$multi->responseCount;
@@ -80,9 +67,7 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
         });
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getInfo(string $type = null)
     {
         if (!$info = $this->finalInfo) {
@@ -103,7 +88,7 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
         try {
             $this->doDestruct();
         } finally {
-            // Clear the DNS cache when all requests completed
+            
             if (0 >= --$this->multi->responseCount) {
                 $this->multi->responseCount = 0;
                 $this->multi->dnsCache = [];
@@ -147,7 +132,7 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
                     $this->context = stream_context_create([], ['options' => $context] + stream_context_get_params($this->context));
                 }
 
-                // Send request and follow redirects when needed
+                
                 $this->handle = $h = fopen($url, 'r', false, $this->context);
                 self::addResponseHeaders(stream_get_meta_data($h)['wrapper_data'], $this->info, $this->headers, $this->info['debug']);
                 $url = $resolver($this->multi, $this->headers['location'][0] ?? null, $this->context);
@@ -176,7 +161,7 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
         stream_set_blocking($h, false);
         $this->context = $this->resolver = null;
 
-        // Create dechunk buffers
+        
         if (isset($this->headers['content-length'])) {
             $this->remaining = (int) $this->headers['content-length'][0];
         } elseif ('chunked' === ($this->headers['transfer-encoding'][0] ?? null)) {
@@ -200,18 +185,14 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
         $this->multi->hosts[$host] = 1 + ($this->multi->hosts[$host] ?? 0);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     private function close(): void
     {
         $this->canary->cancel();
         $this->handle = $this->buffer = $this->inflate = $this->onProgress = null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     private static function schedule(self $response, array &$runningResponses): void
     {
         if (!isset($runningResponses[$i = $response->multi->id])) {
@@ -221,17 +202,13 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
         $runningResponses[$i][1][$response->id] = $response;
 
         if (null === $response->buffer) {
-            // Response already completed
+            
             $response->multi->handlesActivity[$response->id][] = null;
             $response->multi->handlesActivity[$response->id][] = null !== $response->info['error'] ? new TransportException($response->info['error']) : null;
         }
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @param NativeClientState $multi
-     */
+    
     private static function perform(ClientState $multi, array &$responses = null): void
     {
         foreach ($multi->openHandles as $i => [$pauseExpiry, $h, $buffer, $onProgress]) {
@@ -248,7 +225,7 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
             $info = &$multi->openHandles[$i][5];
             $e = null;
 
-            // Read incoming buffer and write it to the dechunk one
+            
             try {
                 if ($remaining && '' !== $data = (string) fread($h, 0 > $remaining ? 16372 : $remaining)) {
                     fwrite($buffer, $data);
@@ -266,12 +243,12 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
             if (!$hasActivity) {
                 if ($onProgress) {
                     try {
-                        // Notify the progress callback so that it can e.g. cancel
-                        // the request if the stream is inactive for too long
+                        
+                        
                         $info['total_time'] = microtime(true) - $info['start_time'];
                         $onProgress();
                     } catch (\Throwable $e) {
-                        // no-op
+                        
                     }
                 }
             } elseif ('' !== $data = stream_get_contents($buffer, -1, 0)) {
@@ -284,7 +261,7 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
             }
 
             if (null !== $e || !$remaining || feof($h)) {
-                // Stream completed
+                
                 $info['total_time'] = microtime(true) - $info['start_time'];
                 $info['starttransfer_time'] = $info['starttransfer_time'] ?: $info['total_time'];
 
@@ -292,7 +269,7 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
                     try {
                         $onProgress(-1);
                     } catch (\Throwable $e) {
-                        // no-op
+                        
                     }
                 }
 
@@ -326,10 +303,10 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
             }
 
             if ($response->pauseExpiry && microtime(true) < $response->pauseExpiry) {
-                // Create empty open handles to tell we still have pending requests
+                
                 $multi->openHandles[$i] = [\INF, null, null, null];
             } elseif ($maxHosts && $maxHosts > ($multi->hosts[parse_url($response->url, \PHP_URL_HOST)] ?? 0)) {
-                // Open the next pending request - this is a blocking operation so we do only one of them
+                
                 $response->open();
                 $multi->sleep = false;
                 self::perform($multi);
@@ -338,11 +315,7 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @param NativeClientState $multi
-     */
+    
     private static function select(ClientState $multi, float $timeout): int
     {
         if (!$multi->sleep = !$multi->sleep) {

@@ -11,7 +11,7 @@ use function substr;
 
 class Royalmail extends AbstractAdapter
 {
-    /** @var array<array-key, int> */
+    
     protected $rows = [
         '0' => 1,
         '1' => 1,
@@ -51,7 +51,7 @@ class Royalmail extends AbstractAdapter
         'Z' => 0,
     ];
 
-    /** @var array<array-key, int> */
+    
     protected $columns = [
         '0' => 1,
         '1' => 2,
@@ -91,9 +91,7 @@ class Royalmail extends AbstractAdapter
         'Z' => 0,
     ];
 
-    /**
-     * Constructor for this barcode adapter
-     */
+    
     public function __construct()
     {
         $this->setLength(-1);
@@ -101,12 +99,7 @@ class Royalmail extends AbstractAdapter
         $this->setChecksum('royalmail');
     }
 
-    /**
-     * Validates the checksum ()
-     *
-     * @param  string $value The barcode to validate
-     * @return bool
-     */
+    
     protected function royalmail($value)
     {
         $checksum = substr($value, -1, 1);
@@ -133,12 +126,7 @@ class Royalmail extends AbstractAdapter
         return false;
     }
 
-    /**
-     * Allows start and stop tag within checked chars
-     *
-     * @param  string $value The barcode to check for allowed characters
-     * @return bool
-     */
+    
     public function hasValidCharacters($value)
     {
         if ($value[0] === '(') {

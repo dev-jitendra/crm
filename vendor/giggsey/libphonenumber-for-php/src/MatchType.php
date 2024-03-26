@@ -2,10 +2,7 @@
 
 namespace libphonenumber;
 
-/**
- * Types of phone number matches
- * See detailed description beside the isNumberMatch() method
- */
+
 class MatchType
 {
     const NOT_A_NUMBER = 0;

@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Routing\Matcher\Dumper;
 
@@ -16,36 +9,22 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-/**
- * CompiledUrlMatcherDumper creates PHP arrays to be used with CompiledUrlMatcher.
- *
- * @author Fabien Potencier <fabien@symfony.com>
- * @author Tobias Schultze <http://tobion.de>
- * @author Arnaud Le Blanc <arnaud.lb@gmail.com>
- * @author Nicolas Grekas <p@tchwork.com>
- */
+
 class CompiledUrlMatcherDumper extends MatcherDumper
 {
     private $expressionLanguage;
     private ?\Exception $signalingException = null;
 
-    /**
-     * @var ExpressionFunctionProviderInterface[]
-     */
+    
     private array $expressionLanguageProviders = [];
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function dump(array $options = []): string
     {
         return <<<EOF
 <?php
 
-/**
- * This file has been auto-generated
- * by the Symfony Routing Component.
- */
+
 
 return [
 {$this->generateCompiledRoutes()}];
@@ -58,12 +37,10 @@ EOF;
         $this->expressionLanguageProviders[] = $provider;
     }
 
-    /**
-     * Generates the arrays for CompiledUrlMatcher's constructor.
-     */
+    
     public function getCompiledRoutes(bool $forDump = false): array
     {
-        // Group hosts by same-suffix, re-order when possible
+        
         $matchHost = false;
         $routes = new StaticPrefixCollection();
         foreach ($this->getRoutes()->all() as $name => $route) {
@@ -115,7 +92,7 @@ EOF;
             }
 
             $checkConditionCode = <<<EOF
-    static function (\$condition, \$context, \$request) { // \$checkCondition
+    static function (\$condition, \$context, \$request) { 
         switch (\$condition) {
 {$this->indent(implode("\n", $conditions), 3)}
         }
@@ -123,7 +100,7 @@ EOF;
 EOF;
             $compiledRoutes[4] = $forDump ? $checkConditionCode.",\n" : eval('return '.$checkConditionCode.';');
         } else {
-            $compiledRoutes[4] = $forDump ? "    null, // \$checkCondition\n" : null;
+            $compiledRoutes[4] = $forDump ? "    null, 
         }
 
         return $compiledRoutes;
@@ -133,9 +110,9 @@ EOF;
     {
         [$matchHost, $staticRoutes, $regexpCode, $dynamicRoutes, $checkConditionCode] = $this->getCompiledRoutes(true);
 
-        $code = self::export($matchHost).', // $matchHost'."\n";
+        $code = self::export($matchHost).', 
 
-        $code .= '[ // $staticRoutes'."\n";
+        $code .= '[ 
         foreach ($staticRoutes as $path => $routes) {
             $code .= sprintf("    %s => [\n", self::export($path));
             foreach ($routes as $route) {
@@ -145,9 +122,9 @@ EOF;
         }
         $code .= "],\n";
 
-        $code .= sprintf("[ // \$regexpList%s\n],\n", $regexpCode);
+        $code .= sprintf("[ 
 
-        $code .= '[ // $dynamicRoutes'."\n";
+        $code .= '[ 
         foreach ($dynamicRoutes as $path => $routes) {
             $code .= sprintf("    %s => [\n", self::export($path));
             foreach ($routes as $route) {
@@ -161,9 +138,7 @@ EOF;
         return $this->indent($code, 1).$checkConditionCode;
     }
 
-    /**
-     * Splits static routes from dynamic routes, so that they can be matched first, using a simple switch.
-     */
+    
     private function groupStaticRoutes(RouteCollection $collection): array
     {
         $staticRoutes = $dynamicRegex = [];
@@ -204,14 +179,7 @@ EOF;
         return [$staticRoutes, $dynamicRoutes];
     }
 
-    /**
-     * Compiles static routes in a switch statement.
-     *
-     * Condition-less paths are put in a static array in the switch's default, with generic matching logic.
-     * Paths that can match two or more routes, or have user-specified conditions are put in separate switch's cases.
-     *
-     * @throws \LogicException
-     */
+    
     private function compileStaticRoutes(array $staticRoutes, array &$conditions): array
     {
         if (!$staticRoutes) {
@@ -229,24 +197,7 @@ EOF;
         return $compiledRoutes;
     }
 
-    /**
-     * Compiles a regular expression followed by a switch statement to match dynamic routes.
-     *
-     * The regular expression matches both the host and the pathinfo at the same time. For stellar performance,
-     * it is built as a tree of patterns, with re-ordering logic to group same-prefix routes together when possible.
-     *
-     * Patterns are named so that we know which one matched (https://pcre.org/current/doc/html/pcre2syntax.html#SEC23).
-     * This name is used to "switch" to the additional logic required to match the final route.
-     *
-     * Condition-less paths are put in a static array in the switch's default, with generic matching logic.
-     * Paths that can match two or more routes, or have user-specified conditions are put in separate switch's cases.
-     *
-     * Last but not least:
-     *  - Because it is not possible to mix unicode/non-unicode patterns in a single regexp, several of them can be generated.
-     *  - The same regexp can be used several times when the logic in the switch rejects the match. When this happens, the
-     *    matching-but-failing subpattern is excluded by replacing its name by "(*F)", which forces a failure-to-match.
-     *    To ease this backlisting operation, the name of subpatterns is also the string offset where the replacement should occur.
-     */
+    
     private function compileDynamicRoutes(RouteCollection $collection, bool $matchHost, int $chunkLimit, array &$conditions): array
     {
         if (!$collection->all()) {
@@ -348,7 +299,7 @@ EOF;
             $state->regex .= $rx;
             $state->markTail = 0;
 
-            // if the regex is too large, throw a signaling exception to recompute with smaller chunk size
+            
             set_error_handler(function ($type, $message) { throw str_contains($message, $this->signalingException->getMessage()) ? $this->signalingException : new \ErrorException($message); });
             try {
                 preg_match($state->regex, '');
@@ -365,12 +316,7 @@ EOF;
         return [$regexpList, $state->routes, $code];
     }
 
-    /**
-     * Compiles a regexp tree of subpatterns that matches nested same-prefix routes.
-     *
-     * @param \stdClass $state A simple state object that keeps track of the progress of the compilation,
-     *                         and gathers the generated switch's "case" and "default" statements
-     */
+    
     private function compileStaticPrefixCollection(StaticPrefixCollection $tree, \stdClass $state, int $prefixLen, array &$conditions): string
     {
         $code = '';
@@ -413,9 +359,7 @@ EOF;
         return $code;
     }
 
-    /**
-     * Compiles a single Route to PHP code used to match it against the path info.
-     */
+    
     private function compileRoute(Route $route, string $name, string|array|null $vars, bool $hasTrailingSlash, bool $hasTrailingVar, array &$conditions): array
     {
         $defaults = $route->getDefaults();
@@ -460,9 +404,7 @@ EOF;
         return preg_replace('/^./m', str_repeat('    ', $level).'$0', $code);
     }
 
-    /**
-     * @internal
-     */
+    
     public static function export(mixed $value): string
     {
         if (null === $value) {

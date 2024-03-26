@@ -13,28 +13,18 @@ use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-/**
- * Provides Credentials from the running ECS.
- *
- * @see https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/index.html?com/amazonaws/auth/ContainerCredentialsProvider.html
- */
+
 final class ContainerProvider implements CredentialProvider
 {
-    private const ENDPOINT = 'http://169.254.170.2';
+    private const ENDPOINT = 'http:
 
-    /**
-     * @var LoggerInterface
-     */
+    
     private $logger;
 
-    /**
-     * @var HttpClientInterface
-     */
+    
     private $httpClient;
 
-    /**
-     * @var float
-     */
+    
     private $timeout;
 
     public function __construct(?HttpClientInterface $httpClient = null, ?LoggerInterface $logger = null, float $timeout = 1.0)
@@ -47,12 +37,12 @@ final class ContainerProvider implements CredentialProvider
     public function getCredentials(Configuration $configuration): ?Credentials
     {
         $relativeUri = $configuration->get(Configuration::OPTION_CONTAINER_CREDENTIALS_RELATIVE_URI);
-        // introduces an early exit if the env variable is not set.
+        
         if (empty($relativeUri)) {
             return null;
         }
 
-        // fetch credentials from ecs endpoint
+        
         try {
             $response = $this->httpClient->request('GET', self::ENDPOINT . $relativeUri, ['timeout' => $this->timeout]);
             $result = $response->toArray();

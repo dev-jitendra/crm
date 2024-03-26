@@ -21,26 +21,7 @@ use const DEBUG_BACKTRACE_IGNORE_ARGS;
 use const DIRECTORY_SEPARATOR;
 use const E_USER_DEPRECATED;
 
-/**
- * Manages Deprecation logging in different ways.
- *
- * By default triggered exceptions are not logged.
- *
- * To enable different deprecation logging mechanisms you can call the
- * following methods:
- *
- *  - Minimal collection of deprecations via getTriggeredDeprecations()
- *    \Doctrine\Deprecations\Deprecation::enableTrackingDeprecations();
- *
- *  - Uses @trigger_error with E_USER_DEPRECATED
- *    \Doctrine\Deprecations\Deprecation::enableWithTriggerError();
- *
- *  - Sends deprecation messages via a PSR-3 logger
- *    \Doctrine\Deprecations\Deprecation::enableWithPsrLogger($logger);
- *
- * Packages that trigger deprecations should use the `trigger()` or
- * `triggerIfCalledFromOutside()` methods.
- */
+
 class Deprecation
 {
     private const TYPE_NONE               = 0;
@@ -48,33 +29,25 @@ class Deprecation
     private const TYPE_TRIGGER_ERROR      = 2;
     private const TYPE_PSR_LOGGER         = 4;
 
-    /** @var int-mask-of<self::TYPE_*>|null */
+    
     private static $type;
 
-    /** @var LoggerInterface|null */
+    
     private static $logger;
 
-    /** @var array<string,bool> */
+    
     private static $ignoredPackages = [];
 
-    /** @var array<string,int> */
+    
     private static $triggeredDeprecations = [];
 
-    /** @var array<string,bool> */
+    
     private static $ignoredLinks = [];
 
-    /** @var bool */
+    
     private static $deduplication = true;
 
-    /**
-     * Trigger a deprecation for the given package and identfier.
-     *
-     * The link should point to a Github issue or Wiki entry detailing the
-     * deprecation. It is additionally used to de-duplicate the trigger of the
-     * same deprecation during a request.
-     *
-     * @param float|int|string $args
-     */
+    
     public static function trigger(string $package, string $link, string $message, ...$args): void
     {
         $type = self::$type ?? self::getTypeFromEnv();
@@ -108,25 +81,7 @@ class Deprecation
         self::delegateTriggerToBackend($message, $backtrace, $link, $package);
     }
 
-    /**
-     * Trigger a deprecation for the given package and identifier when called from outside.
-     *
-     * "Outside" means we assume that $package is currently installed as a
-     * dependency and the caller is not a file in that package. When $package
-     * is installed as a root package then deprecations triggered from the
-     * tests folder are also considered "outside".
-     *
-     * This deprecation method assumes that you are using Composer to install
-     * the dependency and are using the default /vendor/ folder and not a
-     * Composer plugin to change the install location. The assumption is also
-     * that $package is the exact composer packge name.
-     *
-     * Compared to {@link trigger()} this method causes some overhead when
-     * deprecation tracking is enabled even during deduplication, because it
-     * needs to call {@link debug_backtrace()}
-     *
-     * @param float|int|string $args
-     */
+    
     public static function triggerIfCalledFromOutside(string $package, string $link, string $message, ...$args): void
     {
         $type = self::$type ?? self::getTypeFromEnv();
@@ -137,7 +92,7 @@ class Deprecation
 
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
 
-        // first check that the caller is not from a tests folder, in which case we always let deprecations pass
+        
         if (isset($backtrace[1]['file'], $backtrace[0]['file']) && strpos($backtrace[1]['file'], DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR) === false) {
             $path = DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $package) . DIRECTORY_SEPARATOR;
 
@@ -173,9 +128,7 @@ class Deprecation
         self::delegateTriggerToBackend($message, $backtrace, $link, $package);
     }
 
-    /**
-     * @param list<array{function: string, line?: int, file?: string, class?: class-string, type?: string, args?: mixed[], object?: object}> $backtrace
-     */
+    
     private static function delegateTriggerToBackend(string $message, array $backtrace, string $link, string $package): void
     {
         $type = self::$type ?? self::getTypeFromEnv();
@@ -210,9 +163,7 @@ class Deprecation
         @trigger_error($message, E_USER_DEPRECATED);
     }
 
-    /**
-     * A non-local-aware version of PHPs basename function.
-     */
+    
     private static function basename(string $filename): string
     {
         $pos = strrpos($filename, DIRECTORY_SEPARATOR);
@@ -279,19 +230,13 @@ class Deprecation
         }, 0);
     }
 
-    /**
-     * Returns each triggered deprecation link identifier and the amount of occurrences.
-     *
-     * @return array<string,int>
-     */
+    
     public static function getTriggeredDeprecations(): array
     {
         return self::$triggeredDeprecations;
     }
 
-    /**
-     * @return int-mask-of<self::TYPE_*>
-     */
+    
     private static function getTypeFromEnv(): int
     {
         switch ($_SERVER['DOCTRINE_DEPRECATIONS'] ?? $_ENV['DOCTRINE_DEPRECATIONS'] ?? null) {

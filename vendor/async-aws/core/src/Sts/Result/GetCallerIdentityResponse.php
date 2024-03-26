@@ -5,35 +5,16 @@ namespace AsyncAws\Core\Sts\Result;
 use AsyncAws\Core\Response;
 use AsyncAws\Core\Result;
 
-/**
- * Contains the response to a successful GetCallerIdentity request, including information about the entity making the
- * request.
- */
+
 class GetCallerIdentityResponse extends Result
 {
-    /**
-     * The unique identifier of the calling entity. The exact value depends on the type of entity that is making the call.
-     * The values returned are those listed in the **aws:userid** column in the Principal table [^1] found on the **Policy
-     * Variables** reference page in the *IAM User Guide*.
-     *
-     * [^1]: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_variables.html#principaltable
-     *
-     * @var string|null
-     */
+    
     private $userId;
 
-    /**
-     * The Amazon Web Services account ID number of the account that owns or contains the calling entity.
-     *
-     * @var string|null
-     */
+    
     private $account;
 
-    /**
-     * The Amazon Web Services ARN associated with the calling entity.
-     *
-     * @var string|null
-     */
+    
     private $arn;
 
     public function getAccount(): ?string

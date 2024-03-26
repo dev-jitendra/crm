@@ -8,29 +8,19 @@ class DirectoryAttributes implements StorageAttributes
 {
     use ProxyArrayAccessToProperties;
 
-    /**
-     * @var string
-     */
+    
     private $type = StorageAttributes::TYPE_DIRECTORY;
 
-    /**
-     * @var string
-     */
+    
     private $path;
 
-    /**
-     * @var string|null
-     */
+    
     private $visibility;
 
-    /**
-     * @var int|null
-     */
+    
     private $lastModified;
 
-    /**
-     * @var array
-     */
+    
     private $extraMetadata;
 
     public function __construct(string $path, ?string $visibility = null, ?int $lastModified = null, array $extraMetadata = [])
@@ -94,9 +84,7 @@ class DirectoryAttributes implements StorageAttributes
         );
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function jsonSerialize(): array
     {
         return [

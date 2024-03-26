@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\EmailNotification;
 
@@ -69,9 +43,9 @@ class Processor
 
     private ?Htmlizer $htmlizer = null;
 
-    /** @var array<string,?EmailNotificationHandler>  */
+    
     private $emailNotificationEntityHandlerHash = [];
-    /** @var array<string,?Portal> */
+    
     private $userIdPortalCacheMap = [];
 
     public function __construct(
@@ -163,7 +137,7 @@ class Processor
             ->getQueryComposer()
             ->compose($unionQuery);
 
-        /** @var Collection<Notification> $notificationList */
+        
         $notificationList = $this->entityManager
             ->getRDBRepository(Notification::ENTITY_TYPE)
             ->findBySql($sql);
@@ -181,7 +155,7 @@ class Processor
                     $this->processNotificationMentionInPost($notification);
                 }
                 else {
-                    // For bc.
+                    
                     $methodName = 'processNotification' . ucfirst($type ?? 'Dummy');
 
                     if (method_exists($this, $methodName)) {
@@ -268,7 +242,7 @@ class Processor
 
         $userId = $notification->get('userId');
 
-        /** @var ?User $user */
+        
         $user = $this->entityManager->getEntity(User::ENTITY_TYPE, $userId);
 
         if (!$user) {
@@ -295,7 +269,7 @@ class Processor
             return;
         }
 
-        /** @var ?Note $note */
+        
         $note = $this->entityManager->getEntity(Note::ENTITY_TYPE, $notification->get('relatedId'));
 
         if (!$note) {
@@ -341,7 +315,7 @@ class Processor
         $subject = $this->getHtmlizer()->render($note, $subjectTpl, 'mention-email-subject', $data, true);
         $body = $this->getHtmlizer()->render($note, $bodyTpl, 'mention-email-body', $data, true);
 
-        /** @var Email $email */
+        
         $email = $this->entityManager->getNewEntity(Email::ENTITY_TYPE);
 
         $email->set([
@@ -391,7 +365,7 @@ class Processor
             return;
         }
 
-        /** @var ?Note $note */
+        
         $note = $this->entityManager->getEntity(Note::ENTITY_TYPE, $notification->get('relatedId'));
 
         if (!$note) {
@@ -410,7 +384,7 @@ class Processor
 
         $userId = $notification->get('userId');
 
-        /** @var ?User $user */
+        
         $user = $this->entityManager->getEntity(User::ENTITY_TYPE, $userId);
 
         if (!$user) {
@@ -453,7 +427,7 @@ class Processor
             return;
         }
 
-        /** For bc. */
+        
         $methodName = 'processNotificationNote' . $type;
 
         if (method_exists($this, $methodName)) {
@@ -468,7 +442,7 @@ class Processor
         if (!array_key_exists($key, $this->emailNotificationEntityHandlerHash)) {
             $this->emailNotificationEntityHandlerHash[$key] = null;
 
-            /** @var ?class-string<EmailNotificationHandler> $className */
+            
             $className = $this->metadata
                 ->get(['notificationDefs', $entityType, 'emailNotificationHandlerClassNameMap', $type]);
 
@@ -479,7 +453,7 @@ class Processor
             }
         }
 
-        /** @noinspection PhpExpressionAlwaysNullInspection */
+        
         return $this->emailNotificationEntityHandlerHash[$key];
     }
 
@@ -556,7 +530,7 @@ class Processor
             $body = $this->getHtmlizer()->render($note, $bodyTpl, 'note-post-email-body', $data, true);
         }
 
-        /** @var Email $email */
+        
         $email = $this->entityManager->getNewEntity(Email::ENTITY_TYPE);
 
         $email->set([
@@ -621,7 +595,7 @@ class Processor
             }
 
             if ($portalId) {
-                /** @var ?Portal $portal */
+                
                 $portal = $this->entityManager->getEntityById(Portal::ENTITY_TYPE, $portalId);
             }
 
@@ -721,7 +695,7 @@ class Processor
             true
         );
 
-        /** @var Email $email */
+        
         $email = $this->entityManager->getNewEntity(Email::ENTITY_TYPE);
 
         $email->set([
@@ -863,7 +837,7 @@ class Processor
             true
         );
 
-        /** @var Email $email */
+        
         $email = $this->entityManager->getNewEntity(Email::ENTITY_TYPE);
 
         $email->set([
@@ -907,7 +881,7 @@ class Processor
 
     private function getPortalRepository(): PortalRepository
     {
-        /** @var PortalRepository */
+        
         return $this->entityManager->getRepository(Portal::ENTITY_TYPE);
     }
 }

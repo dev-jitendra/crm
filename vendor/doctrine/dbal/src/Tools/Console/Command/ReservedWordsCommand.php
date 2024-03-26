@@ -31,10 +31,10 @@ use function implode;
 use function is_array;
 use function is_string;
 
-/** @deprecated Use database documentation instead. */
+
 class ReservedWordsCommand extends Command
 {
-    /** @var array<string,KeywordList> */
+    
     private array $keywordLists;
 
     private ConnectionProvider $connectionProvider;
@@ -43,7 +43,7 @@ class ReservedWordsCommand extends Command
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5431',
+            'https:
             'ReservedWordsCommand is deprecated. Use database documentation instead.',
         );
 
@@ -65,27 +65,18 @@ class ReservedWordsCommand extends Command
         ];
     }
 
-    /**
-     * Add or replace a keyword list.
-     */
+    
     public function setKeywordList(string $name, KeywordList $keywordList): void
     {
         $this->keywordLists[$name] = $keywordList;
     }
 
-    /**
-     * If you want to add or replace a keywords list use this command.
-     *
-     * @param string                    $name
-     * @param class-string<KeywordList> $class
-     *
-     * @return void
-     */
+    
     public function setKeywordListClass($name, $class)
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/issues/4510',
+            'https:
             'ReservedWordsCommand::setKeywordListClass() is deprecated,'
                 . ' use ReservedWordsCommand::setKeywordList() instead.',
         );
@@ -93,7 +84,7 @@ class ReservedWordsCommand extends Command
         $this->keywordLists[$name] = new $class();
     }
 
-    /** @return void */
+    
     protected function configure()
     {
         $this
@@ -136,13 +127,7 @@ The following keyword lists are currently shipped with Doctrine:
 EOT);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return int
-     *
-     * @throws Exception
-     */
+    
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln(

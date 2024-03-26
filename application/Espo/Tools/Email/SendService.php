@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\Email;
 
@@ -74,12 +48,10 @@ use Throwable;
 
 use const FILTER_VALIDATE_EMAIL;
 
-/**
- * Email sending service.
- */
+
 class SendService
 {
-    /** @var string[] */
+    
     private array $notAllowedStatusList = [
         Email::STATUS_ARCHIVED,
         Email::STATUS_SENT,
@@ -104,17 +76,7 @@ class SendService
         private GroupAccountFactory $groupAccountFactory
     ) {}
 
-    /**
-     * Send an email entity.
-     *
-     * @params Email $entity An email entity.
-     * @params ?User $user A user from what to send.
-     *
-     * @throws BadRequest If not valid.
-     * @throws SendingError On error while sending.
-     * @throws NoSmtp No SMTP settings.
-     * @throws Error An error.
-     */
+    
     public function send(Email $entity, ?User $user = null): void
     {
         if (in_array($entity->getStatus(), $this->notAllowedStatusList)) {
@@ -138,7 +100,7 @@ class SendService
         $userAddressList = [];
 
         if ($user) {
-            /** @var Collection<EmailAddress> $emailAddressCollection */
+            
             $emailAddressCollection = $this->entityManager
                 ->getRDBRepositoryByClass(User::class)
                 ->getRelation($user, 'emailAddresses')
@@ -170,7 +132,7 @@ class SendService
         }
 
         if ($user && $smtpParams) {
-            // For bc.
+            
             $smtpParams = $this->applyUserHandler($user, $smtpParams, $fromAddress);
 
             $emailSender->withSmtpParams($smtpParams);
@@ -188,7 +150,7 @@ class SendService
             $params = $params->withFromName($systemFromName);
         }
 
-        // Otherwise, allow users to send from the system SMTP with their own from-address.
+        
         if (!$smtpParams && !$systemIsShared) {
             if ($isSystemAddress) {
                 throw new NoSmtp("Can not use system SMTP. System SMTP is not shared.");
@@ -274,7 +236,7 @@ class SendService
 
     private function applyParent(?Entity $parent, SenderParams $params): SenderParams
     {
-        // @todo Refactor. Move to a separate class? Make extensible?
+        
         if ($parent instanceof CaseObj) {
             $inboundEmailId = $parent->getInboundEmailId();
 
@@ -282,7 +244,7 @@ class SendService
                 return $params;
             }
 
-            /** @var ?InboundEmail $inboundEmail */
+            
             $inboundEmail = $this->entityManager
                 ->getRDBRepositoryByClass(InboundEmail::class)
                 ->getById($inboundEmailId);
@@ -336,9 +298,7 @@ class SendService
         }
     }
 
-    /**
-     * @return array{?SmtpParams, ?Account}
-     */
+    
     private function getPersonalAccount(User $user, string $emailAddress): array
     {
         $personalAccount = $this->accountProvider->getPersonal($user, $emailAddress);
@@ -362,9 +322,7 @@ class SendService
         return [$smtpParams, $personalAccount];
     }
 
-    /**
-     * @return array{?SmtpParams, ?Account}
-     */
+    
     private function getGroupAccount(?User $user, string $emailAddress): array
     {
         $groupAccount = $user ?
@@ -397,12 +355,7 @@ class SendService
         return $smtpParams;
     }
 
-    /**
-     * @throws Forbidden
-     * @throws Error
-     * @throws NotFound
-     * @throws NoSmtp
-     */
+    
     public function sendTestEmail(SmtpParams $params, TestSendData $data): void
     {
         $emailAddress = $data->getEmailAddress();
@@ -426,7 +379,7 @@ class SendService
             throw new Forbidden();
         }
 
-        /** @var ?User $user */
+        
         $user = $userId ?
             $this->entityManager->getRDBRepositoryByClass(User::class)->getById($userId) :
             null;
@@ -435,7 +388,7 @@ class SendService
             throw new NotFound("User not found.");
         }
 
-        /** @var Email $email */
+        
         $email = $this->entityManager->getNewEntity(Email::ENTITY_TYPE);
 
         $email
@@ -446,14 +399,14 @@ class SendService
         $handlerClassName = null;
 
         if ($type === 'emailAccount' && $id) {
-            /** @var ?EmailAccount $emailAccount */
+            
             $emailAccount = $this->entityManager->getEntityById(EmailAccount::ENTITY_TYPE, $id);
 
             $handlerClassName = $emailAccount?->getSmtpHandlerClassName();
         }
 
         if ($type === 'inboundEmail' && $id) {
-            /** @var ?InboundEmail $inboundEmail */
+            
             $inboundEmail = $this->entityManager->getEntityById(InboundEmail::ENTITY_TYPE, $id);
 
             if ($inboundEmail) {
@@ -485,9 +438,7 @@ class SendService
         }
     }
 
-    /**
-     * @throws Error
-     */
+    
     public function validateEmailAddresses(Email $entity): void
     {
         $from = $entity->getFromAddress();
@@ -517,12 +468,10 @@ class SendService
         }
     }
 
-    /**
-     * Get a user personal SMTP params.
-     */
+    
     public function getUserSmtpParams(string $userId): ?SmtpParams
     {
-        /** @var ?User $user */
+        
         $user = $this->entityManager->getRDBRepositoryByClass(User::class)->getById($userId);
 
         if (!$user) {
@@ -547,7 +496,7 @@ class SendService
             return null;
         }
 
-        // For bc.
+        
         $smtpParams = $this->applyUserHandler($user, $smtpParams, strtolower($address));
 
         return $smtpParams
@@ -563,7 +512,7 @@ class SendService
             return null;
         }
 
-        /** @var ?Email $replied */
+        
         $replied = $this->entityManager
             ->getRDBRepositoryByClass(Email::class)
             ->select(['messageId'])
@@ -573,10 +522,7 @@ class SendService
         return $replied?->getMessageId();
     }
 
-    /**
-     * @internal For bc.
-     * @param array<string, mixed> $params
-     */
+    
     private function applyUserHandlerInternal(string $userId, string $emailAddress, array &$params): bool
     {
         $userData = $this->getUserDataRepository()->getByUserId($userId);
@@ -595,7 +541,7 @@ class SendService
             return false;
         }
 
-        /** @var class-string<object> $handlerClassName */
+        
         $handlerClassName = $smtpHandlers->$emailAddress;
 
         try {
@@ -619,11 +565,7 @@ class SendService
         return false;
     }
 
-    /**
-     * @throws Forbidden
-     * @throws Error
-     * @throws NoSmtp
-     */
+    
     private function obtainSendTestEmailPassword(?string $type, ?string $id): ?string
     {
         if ($type === 'emailAccount') {
@@ -670,7 +612,7 @@ class SendService
 
     private function getUserDataRepository(): UserDataRepository
     {
-        /** @var UserDataRepository */
+        
         return $this->entityManager->getRepository(UserData::ENTITY_TYPE);
     }
 }

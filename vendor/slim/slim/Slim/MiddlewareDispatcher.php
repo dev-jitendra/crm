@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -30,9 +26,7 @@ use function sprintf;
 
 class MiddlewareDispatcher implements MiddlewareDispatcherInterface
 {
-    /**
-     * Tip of the middleware call stack
-     */
+    
     protected RequestHandlerInterface $tip;
 
     protected ?CallableResolverInterface $callableResolver;
@@ -49,31 +43,19 @@ class MiddlewareDispatcher implements MiddlewareDispatcherInterface
         $this->container = $container;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function seedMiddlewareStack(RequestHandlerInterface $kernel): void
     {
         $this->tip = $kernel;
     }
 
-    /**
-     * Invoke the middleware stack
-     */
+    
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         return $this->tip->handle($request);
     }
 
-    /**
-     * Add a new middleware to the stack
-     *
-     * Middleware are organized as a stack. That means middleware
-     * that have been added before will be executed after the newly
-     * added one (last in, first out).
-     *
-     * @param MiddlewareInterface|string|callable $middleware
-     */
+    
     public function add($middleware): MiddlewareDispatcherInterface
     {
         if ($middleware instanceof MiddlewareInterface) {
@@ -88,20 +70,14 @@ class MiddlewareDispatcher implements MiddlewareDispatcherInterface
             return $this->addCallable($middleware);
         }
 
-        /** @phpstan-ignore-next-line */
+        
         throw new RuntimeException(
             'A middleware must be an object/class name referencing an implementation of ' .
             'MiddlewareInterface or a callable with a matching signature.'
         );
     }
 
-    /**
-     * Add a new middleware to the stack
-     *
-     * Middleware are organized as a stack. That means middleware
-     * that have been added before will be executed after the newly
-     * added one (last in, first out).
-     */
+    
     public function addMiddleware(MiddlewareInterface $middleware): MiddlewareDispatcherInterface
     {
         $next = $this->tip;
@@ -125,13 +101,7 @@ class MiddlewareDispatcher implements MiddlewareDispatcherInterface
         return $this;
     }
 
-    /**
-     * Add a new middleware by class name
-     *
-     * Middleware are organized as a stack. That means middleware
-     * that have been added before will be executed after the newly
-     * added one (last in, first out).
-     */
+    
     public function addDeferred(string $middleware): self
     {
         $next = $this->tip;
@@ -174,7 +144,7 @@ class MiddlewareDispatcher implements MiddlewareDispatcherInterface
                     try {
                         $callable = $this->callableResolver->resolve($this->middleware);
                     } catch (RuntimeException $e) {
-                        // Do Nothing
+                        
                     }
                 }
 
@@ -183,7 +153,7 @@ class MiddlewareDispatcher implements MiddlewareDispatcherInterface
                     $instance = null;
                     $method = null;
 
-                    // Check for Slim callable as `class:method`
+                    
                     if (preg_match(CallableResolver::$callablePattern, $resolved, $matches)) {
                         $resolved = $matches[1];
                         $method = $matches[2];
@@ -231,31 +201,21 @@ class MiddlewareDispatcher implements MiddlewareDispatcherInterface
         return $this;
     }
 
-    /**
-     * Add a (non-standard) callable middleware to the stack
-     *
-     * Middleware are organized as a stack. That means middleware
-     * that have been added before will be executed after the newly
-     * added one (last in, first out).
-     */
+    
     public function addCallable(callable $middleware): self
     {
         $next = $this->tip;
 
         if ($this->container && $middleware instanceof Closure) {
-            /** @var Closure $middleware */
+            
             $middleware = $middleware->bindTo($this->container);
         }
 
         $this->tip = new class ($middleware, $next) implements RequestHandlerInterface {
-            /**
-             * @var callable
-             */
+            
             private $middleware;
 
-            /**
-             * @var RequestHandlerInterface
-             */
+            
             private $next;
 
             public function __construct(callable $middleware, RequestHandlerInterface $next)

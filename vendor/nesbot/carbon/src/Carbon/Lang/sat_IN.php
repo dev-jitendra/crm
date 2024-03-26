@@ -1,18 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Red Hat Pune    libc-alpha@sourceware.org
- */
+
+
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [
         'L' => 'D/M/YY',
@@ -24,25 +14,25 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'weekdays_min' => ['सिंगे', 'ओते', 'बाले', 'सागुन', 'सारदी', 'जारुम', 'ञुहुम'],
     'day_of_first_week_of_year' => 1,
 
-    'month' => ':count ńindạ cando', // less reliable
-    'm' => ':count ńindạ cando', // less reliable
-    'a_month' => ':count ńindạ cando', // less reliable
+    'month' => ':count ńindạ cando', 
+    'm' => ':count ńindạ cando', 
+    'a_month' => ':count ńindạ cando', 
 
-    'week' => ':count mãhã', // less reliable
-    'w' => ':count mãhã', // less reliable
-    'a_week' => ':count mãhã', // less reliable
+    'week' => ':count mãhã', 
+    'w' => ':count mãhã', 
+    'a_week' => ':count mãhã', 
 
-    'hour' => ':count ᱥᱳᱱᱚ', // less reliable
-    'h' => ':count ᱥᱳᱱᱚ', // less reliable
-    'a_hour' => ':count ᱥᱳᱱᱚ', // less reliable
+    'hour' => ':count ᱥᱳᱱᱚ', 
+    'h' => ':count ᱥᱳᱱᱚ', 
+    'a_hour' => ':count ᱥᱳᱱᱚ', 
 
-    'minute' => ':count ᱯᱤᱞᱪᱩ', // less reliable
-    'min' => ':count ᱯᱤᱞᱪᱩ', // less reliable
-    'a_minute' => ':count ᱯᱤᱞᱪᱩ', // less reliable
+    'minute' => ':count ᱯᱤᱞᱪᱩ', 
+    'min' => ':count ᱯᱤᱞᱪᱩ', 
+    'a_minute' => ':count ᱯᱤᱞᱪᱩ', 
 
-    'second' => ':count ar', // less reliable
-    's' => ':count ar', // less reliable
-    'a_second' => ':count ar', // less reliable
+    'second' => ':count ar', 
+    's' => ':count ar', 
+    'a_second' => ':count ar', 
 
     'year' => ':count ne̲s',
     'y' => ':count ne̲s',

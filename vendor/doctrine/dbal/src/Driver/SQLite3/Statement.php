@@ -33,20 +33,20 @@ final class Statement implements StatementInterface
     private SQLite3 $connection;
     private SQLite3Stmt $statement;
 
-    /** @internal The statement can be only instantiated by its driver connection. */
+    
     public function __construct(SQLite3 $connection, SQLite3Stmt $statement)
     {
         $this->connection = $connection;
         $this->statement  = $statement;
     }
 
-    /** @inheritdoc */
+    
     public function bindValue($param, $value, $type = ParameterType::STRING): bool
     {
         if (func_num_args() < 3) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5558',
+                'https:
                 'Not passing $type to Statement::bindValue() is deprecated.'
                 . ' Pass the type corresponding to the parameter being bound.',
             );
@@ -55,12 +55,12 @@ final class Statement implements StatementInterface
         return $this->statement->bindValue($param, $value, $this->convertParamType($type));
     }
 
-    /** @inheritdoc */
+    
     public function bindParam($param, &$variable, $type = ParameterType::STRING, $length = null): bool
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5563',
+            'https:
             '%s is deprecated. Use bindValue() instead.',
             __METHOD__,
         );
@@ -68,7 +68,7 @@ final class Statement implements StatementInterface
         if (func_num_args() < 3) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5558',
+                'https:
                 'Not passing $type to Statement::bindParam() is deprecated.'
                 . ' Pass the type corresponding to the parameter being bound.',
             );
@@ -77,13 +77,13 @@ final class Statement implements StatementInterface
         return $this->statement->bindParam($param, $variable, $this->convertParamType($type));
     }
 
-    /** @inheritdoc */
+    
     public function execute($params = null): Result
     {
         if ($params !== null) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5556',
+                'https:
                 'Passing $params to Statement::execute() is deprecated. Bind parameters using'
                 . ' Statement::bindParam() or Statement::bindValue() instead.',
             );

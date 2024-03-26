@@ -1,41 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Philippe Vaucher
- * - Janne Warén
- * - digitalfrost
- * - Tsutomu Kuroda
- * - Roope Salmi
- * - tjku
- * - Max Melentiev
- * - Sami Haahtinen
- * - Teemu Leisti
- * - Artem Ignatyev
- * - Akira Matsuda
- * - Christopher Dell
- * - Enrique Vidal
- * - Simone Carletti
- * - Robert Bjarnason
- * - Aaron Patterson
- * - Nicolás Hock Isaza
- * - Tom Hughes
- * - Sven Fuchs
- * - Petri Kivikangas
- * - Nizar Jouini
- * - Marko Seppae
- * - Tomi Mynttinen (Pikseli)
- * - Petteri (powergrip)
- */
+
+
 return [
     'year' => ':count vuosi|:count vuotta',
     'y' => ':count v',

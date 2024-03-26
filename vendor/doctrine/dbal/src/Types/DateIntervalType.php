@@ -9,24 +9,18 @@ use Throwable;
 
 use function substr;
 
-/**
- * Type that maps interval string to a PHP DateInterval Object.
- */
+
 class DateIntervalType extends Type
 {
     public const FORMAT = '%RP%YY%MM%DDT%HH%IM%SS';
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getName()
     {
         return Types::DATEINTERVAL;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {
         $column['length'] = 255;
@@ -34,9 +28,7 @@ class DateIntervalType extends Type
         return $platform->getStringTypeDeclarationSQL($column);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         if ($value === null) {
@@ -50,9 +42,7 @@ class DateIntervalType extends Type
         throw ConversionException::conversionFailedInvalidType($value, $this->getName(), ['null', 'DateInterval']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         if ($value === null || $value instanceof DateInterval) {
@@ -79,16 +69,12 @@ class DateIntervalType extends Type
         }
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated
-     */
+    
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5509',
+            'https:
             '%s is deprecated.',
             __METHOD__,
         );

@@ -1,13 +1,6 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Monolog package.
- *
- * (c) Jordi Boggiano <j.boggiano@seld.be>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Monolog\Handler;
 
@@ -16,69 +9,16 @@ use Monolog\Logger;
 use Psr\Log\LogLevel;
 use Monolog\LogRecord;
 
-/**
- * Used for testing purposes.
- *
- * It records all records and gives you access to them for verification.
- *
- * @author Jordi Boggiano <j.boggiano@seld.be>
- *
- * @method bool hasEmergency(string|array $recordAssertions)
- * @method bool hasAlert(string|array $recordAssertions)
- * @method bool hasCritical(string|array $recordAssertions)
- * @method bool hasError(string|array $recordAssertions)
- * @method bool hasWarning(string|array $recordAssertions)
- * @method bool hasNotice(string|array $recordAssertions)
- * @method bool hasInfo(string|array $recordAssertions)
- * @method bool hasDebug(string|array $recordAssertions)
- *
- * @method bool hasEmergencyRecords()
- * @method bool hasAlertRecords()
- * @method bool hasCriticalRecords()
- * @method bool hasErrorRecords()
- * @method bool hasWarningRecords()
- * @method bool hasNoticeRecords()
- * @method bool hasInfoRecords()
- * @method bool hasDebugRecords()
- *
- * @method bool hasEmergencyThatContains(string $message)
- * @method bool hasAlertThatContains(string $message)
- * @method bool hasCriticalThatContains(string $message)
- * @method bool hasErrorThatContains(string $message)
- * @method bool hasWarningThatContains(string $message)
- * @method bool hasNoticeThatContains(string $message)
- * @method bool hasInfoThatContains(string $message)
- * @method bool hasDebugThatContains(string $message)
- *
- * @method bool hasEmergencyThatMatches(string $regex)
- * @method bool hasAlertThatMatches(string $regex)
- * @method bool hasCriticalThatMatches(string $regex)
- * @method bool hasErrorThatMatches(string $regex)
- * @method bool hasWarningThatMatches(string $regex)
- * @method bool hasNoticeThatMatches(string $regex)
- * @method bool hasInfoThatMatches(string $regex)
- * @method bool hasDebugThatMatches(string $regex)
- *
- * @method bool hasEmergencyThatPasses(callable $predicate)
- * @method bool hasAlertThatPasses(callable $predicate)
- * @method bool hasCriticalThatPasses(callable $predicate)
- * @method bool hasErrorThatPasses(callable $predicate)
- * @method bool hasWarningThatPasses(callable $predicate)
- * @method bool hasNoticeThatPasses(callable $predicate)
- * @method bool hasInfoThatPasses(callable $predicate)
- * @method bool hasDebugThatPasses(callable $predicate)
- */
+
 class TestHandler extends AbstractProcessingHandler
 {
-    /** @var LogRecord[] */
+    
     protected array $records = [];
-    /** @phpstan-var array<value-of<Level::VALUES>, LogRecord[]> */
+    
     protected array $recordsByLevel = [];
     private bool $skipReset = false;
 
-    /**
-     * @return array<LogRecord>
-     */
+    
     public function getRecords(): array
     {
         return $this->records;
@@ -102,21 +42,13 @@ class TestHandler extends AbstractProcessingHandler
         $this->skipReset = $skipReset;
     }
 
-    /**
-     * @param int|string|Level|LogLevel::* $level Logging level value or name
-     *
-     * @phpstan-param value-of<Level::VALUES>|value-of<Level::NAMES>|Level|LogLevel::* $level
-     */
+    
     public function hasRecords(int|string|Level $level): bool
     {
         return isset($this->recordsByLevel[Logger::toMonologLevel($level)->value]);
     }
 
-    /**
-     * @param string|array $recordAssertions Either a message string or an array containing message and optionally context keys that will be checked against all records
-     *
-     * @phpstan-param array{message: string, context?: mixed[]}|string $recordAssertions
-     */
+    
     public function hasRecord(string|array $recordAssertions, Level $level): bool
     {
         if (is_string($recordAssertions)) {
@@ -145,9 +77,7 @@ class TestHandler extends AbstractProcessingHandler
         return $this->hasRecordThatPasses(fn (LogRecord $rec) => preg_match($regex, $rec->message) > 0, $level);
     }
 
-    /**
-     * @phpstan-param callable(LogRecord, int): mixed $predicate
-     */
+    
     public function hasRecordThatPasses(callable $predicate, Level $level): bool
     {
         $level = Logger::toMonologLevel($level);
@@ -165,18 +95,14 @@ class TestHandler extends AbstractProcessingHandler
         return false;
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     protected function write(LogRecord $record): void
     {
         $this->recordsByLevel[$record->level->value][] = $record;
         $this->records[] = $record;
     }
 
-    /**
-     * @param mixed[] $args
-     */
+    
     public function __call(string $method, array $args): bool
     {
         if (preg_match('/(.*)(Debug|Info|Notice|Warning|Error|Critical|Alert|Emergency)(.*)/', $method, $matches) > 0) {

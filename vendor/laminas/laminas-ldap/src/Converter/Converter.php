@@ -36,24 +36,14 @@ use function unserialize;
 use const E_NOTICE;
 use const STR_PAD_LEFT;
 
-/**
- * Laminas\Ldap\Converter is a collection of useful LDAP related conversion functions.
- */
+
 class Converter
 {
     public const STANDARD         = 0;
     public const BOOLEAN          = 1;
     public const GENERALIZED_TIME = 2;
 
-    /**
-     * Converts all ASCII chars < 32 to "\HEX"
-     *
-     * @link   http://pear.php.net/package/Net_LDAP2
-     * @see    Net_LDAP2_Util::asc2hex32() from Benedikt Hallinger <beni@php.net>
-     *
-     * @param string $string String to convert
-     * @return string
-     */
+    
     public static function ascToHex32($string)
     {
         for ($i = 0, $len = strlen($string); $i < $len; $i++) {
@@ -69,16 +59,7 @@ class Converter
         return $string;
     }
 
-    /**
-     * Converts all Hex expressions ("\HEX") to their original ASCII characters
-     *
-     * @link   http://pear.php.net/package/Net_LDAP2
-     * @see    Net_LDAP2_Util::hex2asc() from Benedikt Hallinger <beni@php.net>,
-     *         heavily based on work from DavidSmith@byu.net
-     *
-     * @param string $string String to convert
-     * @return string
-     */
+    
     public static function hex32ToAsc($string)
     {
         $string = preg_replace_callback(
@@ -89,17 +70,7 @@ class Converter
         return $string;
     }
 
-    /**
-     * Convert any value to an LDAP-compatible value.
-     *
-     * By setting the <var>$type</var>-parameter the conversion of a certain
-     * type can be forced
-     *
-     * @param mixed $value The value to convert
-     * @param int   $type  The conversion type to use
-     * @return string|null
-     * @throws Exception\ConverterException
-     */
+    
     public static function toLdap($value, $type = self::STANDARD)
     {
         try {
@@ -134,17 +105,7 @@ class Converter
         }
     }
 
-    /**
-     * Converts a date-entity to an LDAP-compatible date-string
-     *
-     * The date-entity <var>$date</var> can be either a timestamp, a
-     * DateTime Object, a string that is parseable by strtotime().
-     *
-     * @param int|string|DateTime $date  The date-entity
-     * @param  bool                 $asUtc Whether to return the LDAP-compatible date-string as UTC or as local value
-     * @return string
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public static function toLdapDateTime($date, $asUtc = true)
     {
         if (! $date instanceof DateTime) {
@@ -168,16 +129,7 @@ class Converter
         return $date->format('YmdHis') . $timezone;
     }
 
-    /**
-     * Convert a boolean value to an LDAP-compatible string
-     *
-     * This converts a boolean value of TRUE, an integer-value of 1 and a
-     * case-insensitive string 'true' to an LDAP-compatible 'TRUE'. All other
-     * other values are converted to an LDAP-compatible 'FALSE'.
-     *
-     * @param  bool|int|string $value The boolean value to encode
-     * @return string
-     */
+    
     public static function toLdapBoolean($value)
     {
         $return = 'FALSE';
@@ -190,32 +142,13 @@ class Converter
         return $return;
     }
 
-    /**
-     * Serialize any value for storage in LDAP
-     *
-     * @param mixed $value The value to serialize
-     * @return string
-     */
+    
     public static function toLdapSerialize($value)
     {
         return serialize($value);
     }
 
-    /**
-     * Convert an LDAP-compatible value to a corresponding PHP-value.
-     *
-     * By setting the <var>$type</var>-parameter the conversion of a certain
-     * type can be forced.
-     *
-     * @see Converter::STANDARD
-     * @see Converter::BOOLEAN
-     * @see Converter::GENERALIZED_TIME
-     *
-     * @param string  $value         The value to convert
-     * @param int     $type          The conversion type to use
-     * @param  bool $dateTimeAsUtc Return DateTime values in UTC timezone
-     * @return mixed
-     */
+    
     public static function fromLdap($value, $type = self::STANDARD, $dateTimeAsUtc = true)
     {
         switch ($type) {
@@ -225,7 +158,7 @@ class Converter
                 return static::fromLdapDateTime($value);
             default:
                 if (is_numeric($value)) {
-                    // prevent numeric values to be treated as date/time
+                    
                     return $value;
                 } elseif ('TRUE' === $value || 'FALSE' === $value) {
                     return static::fromLdapBoolean($value);
@@ -236,7 +169,7 @@ class Converter
                 try {
                     return static::fromLdapUnserialize($value);
                 } catch (Exception\UnexpectedValueException $e) {
-                    // Do nothing
+                    
                 }
                 break;
         }
@@ -244,16 +177,7 @@ class Converter
         return $value;
     }
 
-    /**
-     * Convert an LDAP-Generalized-Time-entry into a DateTime-Object
-     *
-     * CAVEAT: The DateTime-Object returned will always be set to UTC-Timezone.
-     *
-     * @param string  $date  The generalized-Time
-     * @param  bool $asUtc Return the DateTime with UTC timezone
-     * @return DateTime
-     * @throws Exception\InvalidArgumentException If a non-parseable-format is given.
-     */
+    
     public static function fromLdapDateTime($date, $asUtc = true)
     {
         $datepart = [];
@@ -266,7 +190,7 @@ class Converter
         }
 
         $time = [
-            // The year is mandatory!
+            
             'year'          => $datepart[1],
             'month'         => 1,
             'day'           => 1,
@@ -280,7 +204,7 @@ class Converter
 
         $length = strlen($date);
 
-        // Check for month.
+        
         if ($length >= 6) {
             $month = substr($date, 4, 2);
             if ($month < 1 || $month > 12) {
@@ -289,7 +213,7 @@ class Converter
             $time['month'] = $month;
         }
 
-        // Check for day
+        
         if ($length >= 8) {
             $day = substr($date, 6, 2);
             if ($day < 1 || $day > 31) {
@@ -298,7 +222,7 @@ class Converter
             $time['day'] = $day;
         }
 
-        // Check for Hour
+        
         if ($length >= 10) {
             $hour = substr($date, 8, 2);
             if ($hour < 0 || $hour > 23) {
@@ -307,7 +231,7 @@ class Converter
             $time['hour'] = $hour;
         }
 
-        // Check for minute
+        
         if ($length >= 12) {
             $minute = substr($date, 10, 2);
             if ($minute < 0 || $minute > 59) {
@@ -316,7 +240,7 @@ class Converter
             $time['minute'] = $minute;
         }
 
-        // Check for seconds
+        
         if ($length >= 14) {
             $second = substr($date, 12, 2);
             if ($second < 0 || $second > 59) {
@@ -325,14 +249,14 @@ class Converter
             $time['second'] = $second;
         }
 
-        // Set Offset
+        
         $offsetRegEx = '/([Z\-\+])(\d{2}\'?){0,1}(\d{2}\'?){0,1}$/';
         $off         = [];
         if (preg_match($offsetRegEx, $date, $off)) {
             $offset = $off[1];
             if ($offset === '+' || $offset === '-') {
                 $time['offdir'] = $offset;
-                // we have an offset, so lets calculate it.
+                
                 if (isset($off[2])) {
                     $offsetHours = substr($off[2], 0, 2);
                     if ($offsetHours < 0 || $offsetHours > 12) {
@@ -352,7 +276,7 @@ class Converter
             }
         }
 
-        // Raw-Data is present, so lets create a DateTime-Object from it.
+        
         $timestring = $time['year'] . '-'
                       . str_pad($time['month'], 2, '0', STR_PAD_LEFT) . '-'
                       . str_pad($time['day'], 2, '0', STR_PAD_LEFT) . ' '
@@ -377,13 +301,7 @@ class Converter
         return $date;
     }
 
-    /**
-     * Convert an LDAP-compatible boolean value into a PHP-compatible one
-     *
-     * @param string $value The value to convert
-     * @return bool
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public static function fromLdapBoolean($value)
     {
         if ('TRUE' === $value) {
@@ -395,13 +313,7 @@ class Converter
         }
     }
 
-    /**
-     * Unserialize a serialized value to return the corresponding object
-     *
-     * @param string $value The value to convert
-     * @return mixed
-     * @throws Exception\UnexpectedValueException
-     */
+    
     public static function fromLdapUnserialize($value)
     {
         ErrorHandler::start(E_NOTICE);

@@ -2,9 +2,7 @@
 namespace Ratchet\Server;
 use Ratchet\Server\IpBlackList;
 
-/**
- * @covers Ratchet\Server\IpBlackList
- */
+
 class IpBlackListTest extends \PHPUnit_Framework_TestCase {
     protected $blocker;
     protected $mock;
@@ -105,9 +103,7 @@ class IpBlackListTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
-    /**
-     * @dataProvider addressProvider
-     */
+    
     public function testFilterAddress($expected, $input) {
         $this->assertEquals($expected, $this->blocker->filterAddress($input));
     }

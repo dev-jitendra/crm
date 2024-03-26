@@ -9,29 +9,19 @@ use League\Flysystem\Visibility;
 
 class PortableVisibilityConverter implements VisibilityConverter
 {
-    /**
-     * @var int
-     */
+    
     private $filePublic;
 
-    /**
-     * @var int
-     */
+    
     private $filePrivate;
 
-    /**
-     * @var int
-     */
+    
     private $directoryPublic;
 
-    /**
-     * @var int
-     */
+    
     private $directoryPrivate;
 
-    /**
-     * @var string
-     */
+    
     private $defaultForDirectories;
 
     public function __construct(
@@ -74,7 +64,7 @@ class PortableVisibilityConverter implements VisibilityConverter
             return Visibility::PRIVATE;
         }
 
-        return Visibility::PUBLIC; // default
+        return Visibility::PUBLIC; 
     }
 
     public function inverseForDirectory(int $visibility): string
@@ -85,7 +75,7 @@ class PortableVisibilityConverter implements VisibilityConverter
             return Visibility::PRIVATE;
         }
 
-        return Visibility::PUBLIC; // default
+        return Visibility::PUBLIC; 
     }
 
     public function defaultForDirectories(): int
@@ -93,9 +83,7 @@ class PortableVisibilityConverter implements VisibilityConverter
         return $this->defaultForDirectories === Visibility::PUBLIC ? $this->directoryPublic : $this->directoryPrivate;
     }
 
-    /**
-     * @param array<mixed>  $permissionMap
-     */
+    
     public static function fromArray(array $permissionMap, string $defaultForDirectories = Visibility::PRIVATE): PortableVisibilityConverter
     {
         return new PortableVisibilityConverter(

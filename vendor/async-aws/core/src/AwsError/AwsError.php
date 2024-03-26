@@ -4,24 +4,16 @@ namespace AsyncAws\Core\AwsError;
 
 final class AwsError
 {
-    /**
-     * @var string|null
-     */
+    
     private $code;
 
-    /**
-     * @var string|null
-     */
+    
     private $message;
 
-    /**
-     * @var string|null
-     */
+    
     private $type;
 
-    /**
-     * @var string|null
-     */
+    
     private $detail;
 
     public function __construct(?string $code, ?string $message, ?string $type, ?string $detail)

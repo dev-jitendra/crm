@@ -68,9 +68,7 @@ class errorTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider renderErrorProvider
-     */
+    
     public function testRenderingException($test)
     {
         $php = LightnCandy::compile($test['template'], $test['options']);
@@ -85,9 +83,7 @@ class errorTest extends TestCase
         $this->fail("Expected to throw exception: {$test['expected']} . CODE: $php");
     }
 
-    /**
-     * @dataProvider renderErrorProvider
-     */
+    
     public function testRenderingErrorLog($test)
     {
         start_catch_error_log();
@@ -163,9 +159,7 @@ class errorTest extends TestCase
         }, $errorCases);
     }
 
-    /**
-     * @dataProvider errorProvider
-     */
+    
     public function testErrors($test)
     {
         global $tmpdir;
@@ -173,7 +167,7 @@ class errorTest extends TestCase
         $php = LightnCandy::compile($test['template'], $test['options']);
         $context = LightnCandy::getContext();
 
-        // This case should be compiled without error
+        
         if (!isset($test['expected'])) {
             $this->assertEquals(true, true);
             return;

@@ -1,23 +1,12 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpClient\Exception;
 
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-/**
- * @author Nicolas Grekas <p@tchwork.com>
- *
- * @internal
- */
+
 trait HttpExceptionTrait
 {
     private $response;
@@ -52,17 +41,17 @@ trait HttpExceptionTrait
             }
         }
 
-        // Try to guess a better error message using common API error formats
-        // The MIME type isn't explicitly checked because some formats inherit from others
-        // Ex: JSON:API follows RFC 7807 semantics, Hydra can be used in any JSON-LD-compatible format
+        
+        
+        
         if ($isJson && $body = json_decode($response->getContent(false), true)) {
             if (isset($body['hydra:title']) || isset($body['hydra:description'])) {
-                // see http://www.hydra-cg.com/spec/latest/core/#description-of-http-status-codes-and-errors
+                
                 $separator = isset($body['hydra:title'], $body['hydra:description']) ? "\n\n" : '';
                 $message = ($body['hydra:title'] ?? '').$separator.($body['hydra:description'] ?? '');
             } elseif ((isset($body['title']) || isset($body['detail']))
                 && (is_scalar($body['title'] ?? '') && is_scalar($body['detail'] ?? ''))) {
-                // see RFC 7807 and https://jsonapi.org/format/#error-objects
+                
                 $separator = isset($body['title'], $body['detail']) ? "\n\n" : '';
                 $message = ($body['title'] ?? '').$separator.($body['detail'] ?? '');
             }

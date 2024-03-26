@@ -13,17 +13,10 @@ use function get_debug_type;
 use function method_exists;
 use function sprintf;
 
-/**
- * @psalm-import-type ServiceManagerConfiguration from ServiceManager
- * @extends AbstractPluginManager<ValidatorInterface>
- */
+
 class ValidatorPluginManager extends AbstractPluginManager
 {
-    /**
-     * Default set of aliases
-     *
-     * @inheritDoc
-     */
+    
     protected $aliases = [
         'alnum'                  => I18nValidator\Alnum::class,
         'Alnum'                  => I18nValidator\Alnum::class,
@@ -199,7 +192,7 @@ class ValidatorPluginManager extends AbstractPluginManager
         'uuid'                   => Uuid::class,
         'Uuid'                   => Uuid::class,
 
-        // Legacy Zend Framework aliases
+        
         'Zend\I18nValidator\Alnum'             => I18nValidator\Alnum::class,
         'Zend\I18n\Validator\Alpha'            => I18nValidator\Alpha::class,
         'Zend\Validator\Barcode'               => Barcode::class,
@@ -262,7 +255,7 @@ class ValidatorPluginManager extends AbstractPluginManager
         'Zend\Validator\Uri'                   => Uri::class,
         'Zend\Validator\Uuid'                  => Uuid::class,
 
-        // v2 normalized FQCNs
+        
         'zendvalidatorbarcode'              => Barcode::class,
         'zendvalidatorbetween'              => Between::class,
         'zendvalidatorbitwise'              => Bitwise::class,
@@ -326,11 +319,7 @@ class ValidatorPluginManager extends AbstractPluginManager
         'zendvalidatoruuid'                 => Uuid::class,
     ];
 
-    /**
-     * Default set of factories
-     *
-     * @inheritDoc
-     */
+    
     protected $factories = [
         I18nValidator\Alnum::class       => InvokableFactory::class,
         I18nValidator\Alpha::class       => InvokableFactory::class,
@@ -397,7 +386,7 @@ class ValidatorPluginManager extends AbstractPluginManager
         Uri::class                       => InvokableFactory::class,
         Uuid::class                      => InvokableFactory::class,
 
-        // v2 canonical FQCNs
+        
         'laminasvalidatorbarcodecode25interleaved' => InvokableFactory::class,
         'laminasvalidatorbarcodecode25'            => InvokableFactory::class,
         'laminasvalidatorbarcodecode39ext'         => InvokableFactory::class,
@@ -489,37 +478,16 @@ class ValidatorPluginManager extends AbstractPluginManager
         'laminasvalidatoruuid'                     => InvokableFactory::class,
     ];
 
-    /**
-     * Whether or not to share by default; default to false (v2)
-     *
-     * @var bool
-     */
+    
     protected $shareByDefault = false;
 
-    /**
-     * Whether or not to share by default; default to false (v3)
-     *
-     * @var bool
-     */
+    
     protected $sharedByDefault = false;
 
-    /**
-     * Default instance type
-     *
-     * @inheritDoc
-     */
+    
     protected $instanceOf = ValidatorInterface::class;
 
-    /**
-     * Constructor
-     *
-     * After invoking parent constructor, add an initializer to inject the
-     * attached translator, if any, to the currently requested helper.
-     *
-     * {@inheritDoc}
-     *
-     * @param ServiceManagerConfiguration $v3config
-     */
+    
     public function __construct($configOrContainerInstance = null, array $v3config = [])
     {
         parent::__construct($configOrContainerInstance, $v3config);
@@ -528,10 +496,7 @@ class ValidatorPluginManager extends AbstractPluginManager
         $this->addInitializer([$this, 'injectValidatorPluginManager']);
     }
 
-    /**
-     * @param mixed $instance
-     * @psalm-assert ValidatorInterface $instance
-     */
+    
     public function validate($instance)
     {
         if (! $instance instanceof $this->instanceOf) {
@@ -544,14 +509,7 @@ class ValidatorPluginManager extends AbstractPluginManager
         }
     }
 
-    /**
-     * For v2 compatibility: validate plugin instance.
-     *
-     * Proxies to `validate()`.
-     *
-     * @return void
-     * @throws Exception\RuntimeException
-     */
+    
     public function validatePlugin(mixed $plugin)
     {
         try {
@@ -565,13 +523,7 @@ class ValidatorPluginManager extends AbstractPluginManager
         }
     }
 
-    /**
-     * Inject a validator instance with the registered translator
-     *
-     * @param  ContainerInterface|object $first
-     * @param  ContainerInterface|object $second
-     * @return void
-     */
+    
     public function injectTranslator($first, $second)
     {
         if ($first instanceof ContainerInterface) {
@@ -582,7 +534,7 @@ class ValidatorPluginManager extends AbstractPluginManager
             $validator = $first;
         }
 
-        // V2 means we pull it from the parent container
+        
         if ($container === $this && method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
             $container = $container->getServiceLocator();
         }
@@ -594,13 +546,7 @@ class ValidatorPluginManager extends AbstractPluginManager
         }
     }
 
-    /**
-     * Inject a validator plugin manager
-     *
-     * @param  ContainerInterface|object $first
-     * @param  ContainerInterface|object $second
-     * @return void
-     */
+    
     public function injectValidatorPluginManager($first, $second)
     {
         if ($first instanceof ContainerInterface) {

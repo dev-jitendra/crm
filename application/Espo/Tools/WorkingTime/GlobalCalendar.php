@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\WorkingTime;
 
@@ -52,15 +26,12 @@ class GlobalCalendar implements Calendar
     private ?WorkingTimeCalendar $workingTimeCalendar = null;
     private ?CalendarUtil $util = null;
 
-    /** @var ?array{WorkingDate[], WorkingDate[]} */
+    
     private ?array $cache = null;
     private ?string $cacheKey = null;
     private DateTimeZone $timezone;
 
-    /**
-     * @param EntityManager $entityManager
-     * @param Config $config
-     */
+    
     public function __construct(EntityManager $entityManager, Config $config)
     {
         $this->entityManager = $entityManager;
@@ -98,9 +69,7 @@ class GlobalCalendar implements Calendar
         return $this->timezone;
     }
 
-    /**
-     * @return WorkingWeekday[]
-     */
+    
     public function getWorkingWeekdays(): array
     {
         if ($this->workingTimeCalendar === null) {
@@ -110,9 +79,7 @@ class GlobalCalendar implements Calendar
         return $this->workingTimeCalendar->getWorkingWeekdays();
     }
 
-    /**
-     * @return WorkingDate[]
-     */
+    
     public function getNonWorkingDates(Date $from, Date $to): array
     {
         if ($this->workingTimeCalendar === null) {
@@ -122,9 +89,7 @@ class GlobalCalendar implements Calendar
         return $this->getDates($from, $to)[0];
     }
 
-    /**
-     * @return WorkingDate[]
-     */
+    
     public function getWorkingDates(Date $from, Date $to): array
     {
         if ($this->workingTimeCalendar === null) {
@@ -134,9 +99,7 @@ class GlobalCalendar implements Calendar
         return $this->getDates($from, $to)[1];
     }
 
-    /**
-     * @return array{WorkingDate[], WorkingDate[]}
-     */
+    
     private function getDates(Date $from, Date $to): array
     {
         $cacheKey = $from->toString() . '-' . $to->toString();
@@ -170,10 +133,7 @@ class GlobalCalendar implements Calendar
         return $this->cache;
     }
 
-    /**
-     * @param WorkingTimeRange $range
-     * @return WorkingDate[]
-     */
+    
     private function rangeToDates(WorkingTimeRange $range): array
     {
         if (!$this->util) {
@@ -183,9 +143,7 @@ class GlobalCalendar implements Calendar
         return $this->util->rangeToDates($range);
     }
 
-    /**
-     * @return WorkingTimeRange[]
-     */
+    
     private function fetchRanges(Date $from, Date $to): array
     {
         if ($this->workingTimeCalendar === null) {

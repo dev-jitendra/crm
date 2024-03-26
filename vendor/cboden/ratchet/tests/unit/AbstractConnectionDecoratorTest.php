@@ -2,10 +2,7 @@
 namespace Ratchet;
 use Ratchet\Mock\ConnectionDecorator;
 
-/**
- * @covers Ratchet\AbstractConnectionDecorator
- * @covers Ratchet\ConnectionInterface
- */
+
 class AbstractConnectionDecoratorTest extends \PHPUnit_Framework_TestCase {
     protected $mock;
     protected $l1;
@@ -126,7 +123,7 @@ class AbstractConnectionDecoratorTest extends \PHPUnit_Framework_TestCase {
         $this->assertSame($this->l2, $this->l1->decorator->conn);
         $this->assertSame($this->l2, $this->l2->decorator->conn);
 
-        // just for fun
+        
         $this->assertSame($this->l2, $this->l2->decorator->conn->decorator->conn->decorator->conn);
     }
 

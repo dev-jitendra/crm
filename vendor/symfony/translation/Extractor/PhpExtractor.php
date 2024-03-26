@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation\Extractor;
 
@@ -16,27 +9,17 @@ trigger_deprecation('symfony/translation', '6.2', '"%s" is deprecated, use "%s" 
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Translation\MessageCatalogue;
 
-/**
- * PhpExtractor extracts translation messages from a PHP template.
- *
- * @author Michel Salib <michelsalib@hotmail.com>
- *
- * @deprecated since Symfony 6.2, use the PhpAstExtractor instead
- */
+
 class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
 {
     public const MESSAGE_TOKEN = 300;
     public const METHOD_ARGUMENTS_TOKEN = 1000;
     public const DOMAIN_TOKEN = 1001;
 
-    /**
-     * Prefix for new found message.
-     */
+    
     private string $prefix = '';
 
-    /**
-     * The sequence that captures translation messages.
-     */
+    
     protected $sequences = [
         [
             '->',
@@ -147,9 +130,7 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
         $this->prefix = $prefix;
     }
 
-    /**
-     * Normalizes a token.
-     */
+    
     protected function normalizeToken(mixed $token): ?string
     {
         if (isset($token[1]) && 'b"' !== $token) {
@@ -159,9 +140,7 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
         return $token;
     }
 
-    /**
-     * Seeks to a non-whitespace token.
-     */
+    
     private function seekToNextRelevantToken(\Iterator $tokenIterator)
     {
         for (; $tokenIterator->valid(); $tokenIterator->next()) {
@@ -193,10 +172,7 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
         }
     }
 
-    /**
-     * Extracts the message from the iterator while the tokens
-     * match allowed message tokens.
-     */
+    
     private function getValue(\Iterator $tokenIterator)
     {
         $message = '';
@@ -206,7 +182,7 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
         for (; $tokenIterator->valid(); $tokenIterator->next()) {
             $t = $tokenIterator->current();
             if ('.' === $t) {
-                // Concatenate with next token
+                
                 continue;
             }
             if (!isset($t[1])) {
@@ -253,9 +229,7 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
         return $message;
     }
 
-    /**
-     * Extracts trans message from PHP tokens.
-     */
+    
     protected function parseTokens(array $tokens, MessageCatalogue $catalog, string $filename)
     {
         $tokenIterator = new \ArrayIterator($tokens);
@@ -304,9 +278,7 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
         }
     }
 
-    /**
-     * @throws \InvalidArgumentException
-     */
+    
     protected function canBeExtracted(string $file): bool
     {
         return $this->isFile($file) && 'php' === pathinfo($file, \PATHINFO_EXTENSION);

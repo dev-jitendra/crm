@@ -1,13 +1,6 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Monolog package.
- *
- * (c) Jordi Boggiano <j.boggiano@seld.be>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Monolog\Handler;
 
@@ -16,15 +9,7 @@ use Monolog\Level;
 use Monolog\Utils;
 use Monolog\LogRecord;
 
-/**
- * Stores logs to files that are rotated every day and a limited number of files are kept.
- *
- * This rotation is only intended to be used as a workaround. Using logrotate to
- * handle the rotation is strongly encouraged when you can use it.
- *
- * @author Christophe Coevoet <stof@notk.org>
- * @author Jordi Boggiano <j.boggiano@seld.be>
- */
+
 class RotatingFileHandler extends StreamHandler
 {
     public const FILE_PER_DAY = 'Y-m-d';
@@ -38,11 +23,7 @@ class RotatingFileHandler extends StreamHandler
     protected string $filenameFormat;
     protected string $dateFormat;
 
-    /**
-     * @param int      $maxFiles       The maximal amount of files to keep (0 means unlimited)
-     * @param int|null $filePermission Optional file permissions (default (0644) are only for owner read/write)
-     * @param bool     $useLocking     Try to lock log file before doing any writes
-     */
+    
     public function __construct(string $filename, int $maxFiles = 0, int|string|Level $level = Level::Debug, bool $bubble = true, ?int $filePermission = null, bool $useLocking = false, string $dateFormat = self::FILE_PER_DAY, string $filenameFormat  = '{filename}-{date}')
     {
         $this->filename = Utils::canonicalizePath($filename);
@@ -53,9 +34,7 @@ class RotatingFileHandler extends StreamHandler
         parent::__construct($this->getTimedFilename(), $level, $bubble, $filePermission, $useLocking);
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function close(): void
     {
         parent::close();
@@ -65,9 +44,7 @@ class RotatingFileHandler extends StreamHandler
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function reset(): void
     {
         parent::reset();
@@ -77,9 +54,7 @@ class RotatingFileHandler extends StreamHandler
         }
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setFilenameFormat(string $filenameFormat, string $dateFormat): self
     {
         $this->setDateFormat($dateFormat);
@@ -95,12 +70,10 @@ class RotatingFileHandler extends StreamHandler
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     protected function write(LogRecord $record): void
     {
-        // on the first record written, if the log is new, we should rotate (once per day)
+        
         if (null === $this->mustRotate) {
             $this->mustRotate = null === $this->url || !file_exists($this->url);
         }
@@ -113,40 +86,38 @@ class RotatingFileHandler extends StreamHandler
         parent::write($record);
     }
 
-    /**
-     * Rotates the files.
-     */
+    
     protected function rotate(): void
     {
-        // update filename
+        
         $this->url = $this->getTimedFilename();
         $this->nextRotation = $this->getNextRotation();
 
-        // skip GC of old logs if files are unlimited
+        
         if (0 === $this->maxFiles) {
             return;
         }
 
         $logFiles = glob($this->getGlobPattern());
         if (false === $logFiles) {
-            // failed to glob
+            
             return;
         }
 
         if ($this->maxFiles >= count($logFiles)) {
-            // no files to remove
+            
             return;
         }
 
-        // Sorting the files by name to remove the older ones
+        
         usort($logFiles, function ($a, $b) {
             return strcmp($b, $a);
         });
 
         foreach (array_slice($logFiles, $this->maxFiles) as $file) {
             if (is_writable($file)) {
-                // suppress errors here as unlink() might fail if two processes
-                // are cleaning up/rotating at the same time
+                
+                
                 set_error_handler(function (int $errno, string $errstr, string $errfile, int $errline): bool {
                     return false;
                 });

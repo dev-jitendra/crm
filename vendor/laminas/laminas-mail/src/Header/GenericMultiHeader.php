@@ -6,15 +6,10 @@ use function explode;
 use function implode;
 use function strpos;
 
-/**
- * Generic class for Headers with multiple occurs in the same message
- */
+
 class GenericMultiHeader extends GenericHeader implements MultipleHeadersInterface
 {
-    /**
-     * @param string $headerLine
-     * @return array|GenericHeader|GenericMultiHeader|static
-     */
+    
     public static function fromString($headerLine)
     {
         [$fieldName, $fieldValue] = GenericHeader::splitHeaderLine($headerLine);
@@ -31,13 +26,7 @@ class GenericMultiHeader extends GenericHeader implements MultipleHeadersInterfa
         return new static($fieldName, $fieldValue);
     }
 
-    /**
-     * Cast multiple header objects to a single string header
-     *
-     * @param  array $headers
-     * @throws Exception\InvalidArgumentException
-     * @return string
-     */
+    
     public function toStringMultipleHeaders(array $headers)
     {
         $name   = $this->getFieldName();

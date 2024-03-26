@@ -17,26 +17,16 @@ use function mb_substr;
 
 class MbString extends AbstractStringWrapper
 {
-    /**
-     * List of supported character sets (upper case)
-     *
-     * @link http://php.net/manual/mbstring.supported-encodings.php
-     *
-     * @var null|string[]
-     */
+    
     protected static $encodings;
 
-    /**
-     * Get a list of supported character encodings
-     *
-     * @return string[]
-     */
+    
     public static function getSupportedEncodings()
     {
         if (static::$encodings === null) {
             static::$encodings = array_map('strtoupper', mb_list_encodings());
 
-            // FIXME: Converting € (UTF-8) to ISO-8859-16 gives a wrong result
+            
             $indexIso885916 = array_search('ISO-8859-16', static::$encodings, true);
             if ($indexIso885916 !== false) {
                 unset(static::$encodings[$indexIso885916]);
@@ -46,11 +36,7 @@ class MbString extends AbstractStringWrapper
         return static::$encodings;
     }
 
-    /**
-     * Constructor
-     *
-     * @throws Exception\ExtensionNotLoadedException
-     */
+    
     public function __construct()
     {
         if (! extension_loaded('mbstring')) {
@@ -60,50 +46,25 @@ class MbString extends AbstractStringWrapper
         }
     }
 
-    /**
-     * Returns the length of the given string
-     *
-     * @param string $str
-     * @return int|false
-     */
+    
     public function strlen($str)
     {
         return mb_strlen($str, $this->getEncoding());
     }
 
-    /**
-     * Returns the portion of string specified by the start and length parameters
-     *
-     * @param string   $str
-     * @param int      $offset
-     * @param int|null $length
-     * @return string|false
-     */
+    
     public function substr($str, $offset = 0, $length = null)
     {
         return mb_substr($str, $offset, $length, $this->getEncoding());
     }
 
-    /**
-     * Find the position of the first occurrence of a substring in a string
-     *
-     * @param string $haystack
-     * @param string $needle
-     * @param int    $offset
-     * @return int|false
-     */
+    
     public function strpos($haystack, $needle, $offset = 0)
     {
         return mb_strpos($haystack, $needle, $offset, $this->getEncoding());
     }
 
-    /**
-     * Convert a string from defined encoding to the defined convert encoding
-     *
-     * @param string  $str
-     * @param bool $reverse
-     * @return string|false
-     */
+    
     public function convert($str, $reverse = false)
     {
         $encoding        = $this->getEncoding();

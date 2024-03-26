@@ -23,41 +23,29 @@ use function strtok;
 
 use const CASE_LOWER;
 
-/**
- * SQL Server Schema Manager.
- *
- * @extends AbstractSchemaManager<SQLServerPlatform>
- */
+
 class SQLServerSchemaManager extends AbstractSchemaManager
 {
     private ?string $databaseCollation = null;
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listTableNames()
     {
         return $this->doListTableNames();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listTables()
     {
         return $this->doListTables();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @deprecated Use {@see introspectTable()} instead.
-     */
+    
     public function listTableDetails($name)
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5595',
+            'https:
             '%s is deprecated. Use introspectTable() instead.',
             __METHOD__,
         );
@@ -65,33 +53,25 @@ class SQLServerSchemaManager extends AbstractSchemaManager
         return $this->doListTableDetails($name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listTableColumns($table, $database = null)
     {
         return $this->doListTableColumns($table, $database);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listTableIndexes($table)
     {
         return $this->doListTableIndexes($table);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listTableForeignKeys($table, $database = null)
     {
         return $this->doListTableForeignKeys($table, $database);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listSchemaNames(): array
     {
         return $this->_conn->fetchFirstColumn(
@@ -103,17 +83,13 @@ SQL,
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableSequenceDefinition($sequence)
     {
         return new Sequence($sequence['name'], (int) $sequence['increment'], (int) $sequence['start_value']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableTableColumnDefinition($tableColumn)
     {
         $dbType = strtok($tableColumn['type'], '(), ');
@@ -135,12 +111,12 @@ SQL,
             case 'nchar':
             case 'nvarchar':
             case 'ntext':
-                // Unicode data requires 2 bytes per character
+                
                 $length /= 2;
                 break;
 
             case 'varchar':
-                // TEXT type is returned as VARCHAR(MAX) with a length of -1
+                
                 if ($length === -1) {
                     $dbType = 'text';
                 }
@@ -208,9 +184,7 @@ SQL,
         return $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableTableForeignKeysList($tableForeignKeys)
     {
         $foreignKeys = [];
@@ -238,9 +212,7 @@ SQL,
         return parent::_getPortableTableForeignKeysList($foreignKeys);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableTableIndexesList($tableIndexes, $tableName = null)
     {
         foreach ($tableIndexes as &$tableIndex) {
@@ -252,9 +224,7 @@ SQL,
         return parent::_getPortableTableIndexesList($tableIndexes, $tableName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableTableForeignKeyDefinition($tableForeignKey)
     {
         return new ForeignKeyConstraint(
@@ -266,9 +236,7 @@ SQL,
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableTableDefinition($table)
     {
         if ($table['schema_name'] !== 'dbo') {
@@ -278,24 +246,18 @@ SQL,
         return $table['table_name'];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableDatabaseDefinition($database)
     {
         return $database['name'];
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated Use {@see listSchemaNames()} instead.
-     */
+    
     protected function getPortableNamespaceDefinition(array $namespace)
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/issues/4503',
+            'https:
             'SQLServerSchemaManager::getPortableNamespaceDefinition() is deprecated,'
                 . ' use SQLServerSchemaManager::listSchemaNames() instead.',
         );
@@ -303,18 +265,14 @@ SQL,
         return $namespace['name'];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableViewDefinition($view)
     {
-        // @todo
+        
         return new View($view['name'], $view['definition']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function alterTable(TableDiff $tableDiff)
     {
         $droppedColumns = $tableDiff->getDroppedColumns();
@@ -338,13 +296,7 @@ SQL,
         parent::alterTable($tableDiff);
     }
 
-    /**
-     * Returns the names of the constraints for a given column.
-     *
-     * @return iterable<string>
-     *
-     * @throws Exception
-     */
+    
     private function getColumnConstraints(string $table, string $column): iterable
     {
         return $this->_conn->iterateColumn(
@@ -367,13 +319,13 @@ SQL
         );
     }
 
-    /** @throws Exception */
+    
     public function createComparator(): Comparator
     {
         return new SQLServer\Comparator($this->_platform, $this->getDatabaseCollation());
     }
 
-    /** @throws Exception */
+    
     private function getDatabaseCollation(): string
     {
         if ($this->databaseCollation === null) {
@@ -382,7 +334,7 @@ SQL
                 . $this->_platform->getCurrentDatabaseExpression(),
             );
 
-            // a database is always selected, even if omitted in the connection parameters
+            
             assert(is_string($databaseCollation));
 
             $this->databaseCollation = $databaseCollation;
@@ -393,7 +345,7 @@ SQL
 
     protected function selectTableNames(string $databaseName): Result
     {
-        // The "sysdiagrams" table must be ignored as it's internal SQL Server table for Database Diagrams
+        
         $sql = <<<'SQL'
 SELECT name AS table_name,
        SCHEMA_NAME(schema_id) AS schema_name
@@ -442,7 +394,7 @@ SQL;
                 AND       prop.name = 'MS_Description'
 SQL;
 
-        // The "sysdiagrams" table must be ignored as it's internal SQL Server table for Database Diagrams
+        
         $conditions = ["obj.type = 'U'", "obj.name != 'sysdiagrams'"];
         $params     = [];
 
@@ -541,9 +493,7 @@ SQL;
         return $this->_conn->executeQuery($sql, $params);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     protected function fetchTableOptionsByTable(string $databaseName, ?string $tableName = null): array
     {
         $sql = <<<'SQL'
@@ -564,7 +514,7 @@ SQL;
 
         $sql .= ' WHERE ' . implode(' AND ', $conditions);
 
-        /** @var array<string,array<string,mixed>> $metadata */
+        
         $metadata = $this->_conn->executeQuery($sql, $params)
             ->fetchAllAssociativeIndexed();
 
@@ -580,13 +530,7 @@ SQL;
         return $tableOptions;
     }
 
-    /**
-     * Returns the where clause to filter schema and table name in a query.
-     *
-     * @param string $table        The full qualified name of the table.
-     * @param string $schemaColumn The name of the column to compare the schema to in the where clause.
-     * @param string $tableColumn  The name of the column to compare the table to in the where clause.
-     */
+    
     private function getTableWhereClause($table, $schemaColumn, $tableColumn): string
     {
         if (strpos($table, '.') !== false) {

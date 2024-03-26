@@ -10,72 +10,28 @@ use AsyncAws\S3\Enum\RequestPayer;
 
 final class DeleteObjectRequest extends Input
 {
-    /**
-     * The bucket name of the bucket containing the object.
-     *
-     * @required
-     *
-     * @var string|null
-     */
+    
     private $bucket;
 
-    /**
-     * Key name of the object to delete.
-     *
-     * @required
-     *
-     * @var string|null
-     */
+    
     private $key;
 
-    /**
-     * The concatenation of the authentication device's serial number, a space, and the value that is displayed on your
-     * authentication device. Required to permanently delete a versioned object if versioning is configured with MFA delete
-     * enabled.
-     *
-     * @var string|null
-     */
+    
     private $mfa;
 
-    /**
-     * VersionId used to reference a specific version of the object.
-     *
-     * @var string|null
-     */
+    
     private $versionId;
 
-    /**
-     * @var null|RequestPayer::*
-     */
+    
     private $requestPayer;
 
-    /**
-     * Indicates whether S3 Object Lock should bypass Governance-mode restrictions to process this operation.
-     *
-     * @var bool|null
-     */
+    
     private $bypassGovernanceRetention;
 
-    /**
-     * The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail
-     * with an HTTP `403 (Access Denied)` error.
-     *
-     * @var string|null
-     */
+    
     private $expectedBucketOwner;
 
-    /**
-     * @param array{
-     *   Bucket?: string,
-     *   Key?: string,
-     *   MFA?: string,
-     *   VersionId?: string,
-     *   RequestPayer?: RequestPayer::*,
-     *   BypassGovernanceRetention?: bool,
-     *   ExpectedBucketOwner?: string,
-     *   @region?: string,
-     * } $input
-     */
+    
     public function __construct(array $input = [])
     {
         $this->bucket = $input['Bucket'] ?? null;
@@ -118,9 +74,7 @@ final class DeleteObjectRequest extends Input
         return $this->mfa;
     }
 
-    /**
-     * @return RequestPayer::*|null
-     */
+    
     public function getRequestPayer(): ?string
     {
         return $this->requestPayer;
@@ -131,12 +85,10 @@ final class DeleteObjectRequest extends Input
         return $this->versionId;
     }
 
-    /**
-     * @internal
-     */
+    
     public function request(): Request
     {
-        // Prepare headers
+        
         $headers = ['content-type' => 'application/xml'];
         if (null !== $this->mfa) {
             $headers['x-amz-mfa'] = $this->mfa;
@@ -154,13 +106,13 @@ final class DeleteObjectRequest extends Input
             $headers['x-amz-expected-bucket-owner'] = $this->expectedBucketOwner;
         }
 
-        // Prepare query
+        
         $query = [];
         if (null !== $this->versionId) {
             $query['versionId'] = $this->versionId;
         }
 
-        // Prepare URI
+        
         $uri = [];
         if (null === $v = $this->bucket) {
             throw new InvalidArgument(sprintf('Missing parameter "Bucket" for "%s". The value cannot be null.', __CLASS__));
@@ -172,10 +124,10 @@ final class DeleteObjectRequest extends Input
         $uri['Key'] = $v;
         $uriString = '/' . rawurlencode($uri['Bucket']) . '/' . str_replace('%2F', '/', rawurlencode($uri['Key']));
 
-        // Prepare Body
+        
         $body = '';
 
-        // Return the Request
+        
         return new Request('DELETE', $uriString, $query, $headers, StreamFactory::create($body));
     }
 
@@ -214,9 +166,7 @@ final class DeleteObjectRequest extends Input
         return $this;
     }
 
-    /**
-     * @param RequestPayer::*|null $value
-     */
+    
     public function setRequestPayer(?string $value): self
     {
         $this->requestPayer = $value;

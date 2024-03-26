@@ -17,49 +17,31 @@ use function strtoupper;
 
 use const OPENSSL_KEYTYPE_RSA;
 
-/**
- * RSA instance options
- */
+
 class RsaOptions extends AbstractOptions
 {
-    /** @var Rsa\PrivateKey */
+    
     protected $privateKey;
 
-    /** @var Rsa\PublicKey */
+    
     protected $publicKey;
 
-    /** @var string */
+    
     protected $hashAlgorithm = 'sha1';
 
-    /**
-     * Signature hash algorithm defined by openss constants
-     *
-     * @var int
-     */
+    
     protected $opensslSignatureAlgorithm;
 
-    /** @var string */
+    
     protected $passPhrase;
 
-    /**
-     * Output is binary
-     *
-     * @var bool
-     */
+    
     protected $binaryOutput = true;
 
-    /**
-     * OPENSSL padding
-     *
-     * @var int|null
-     */
+    
     protected $opensslPadding;
 
-    /**
-     * Set private key
-     *
-     * @return RsaOptions Provides a fluent interface
-     */
+    
     public function setPrivateKey(Rsa\PrivateKey $key)
     {
         $this->privateKey = $key;
@@ -67,67 +49,39 @@ class RsaOptions extends AbstractOptions
         return $this;
     }
 
-    /**
-     * Get private key
-     *
-     * @return null|Rsa\PrivateKey
-     */
+    
     public function getPrivateKey()
     {
         return $this->privateKey;
     }
 
-    /**
-     * Set public key
-     *
-     * @return RsaOptions Provides a fluent interface
-     */
+    
     public function setPublicKey(Rsa\PublicKey $key)
     {
         $this->publicKey = $key;
         return $this;
     }
 
-    /**
-     * Get public key
-     *
-     * @return null|Rsa\PublicKey
-     */
+    
     public function getPublicKey()
     {
         return $this->publicKey;
     }
 
-    /**
-     * Set pass phrase
-     *
-     * @param string $phrase
-     * @return RsaOptions Provides a fluent interface
-     */
+    
     public function setPassPhrase($phrase)
     {
         $this->passPhrase = (string) $phrase;
         return $this;
     }
 
-    /**
-     * Get pass phrase
-     *
-     * @return string
-     */
+    
     public function getPassPhrase()
     {
         return $this->passPhrase;
     }
 
-    /**
-     * Set hash algorithm
-     *
-     * @param  string $hash
-     * @return RsaOptions Provides a fluent interface
-     * @throws Rsa\Exception\RuntimeException
-     * @throws Rsa\Exception\InvalidArgumentException
-     */
+    
     public function setHashAlgorithm($hash)
     {
         $hashUpper = strtoupper($hash);
@@ -142,17 +96,13 @@ class RsaOptions extends AbstractOptions
         return $this;
     }
 
-    /**
-     * Get hash algorithm
-     *
-     * @return string
-     */
+    
     public function getHashAlgorithm()
     {
         return $this->hashAlgorithm;
     }
 
-    /** @return string */
+    
     public function getOpensslSignatureAlgorithm()
     {
         if (! isset($this->opensslSignatureAlgorithm)) {
@@ -161,57 +111,33 @@ class RsaOptions extends AbstractOptions
         return $this->opensslSignatureAlgorithm;
     }
 
-    /**
-     * Enable/disable the binary output
-     *
-     * @param  bool $value
-     * @return RsaOptions Provides a fluent interface
-     */
+    
     public function setBinaryOutput($value)
     {
         $this->binaryOutput = (bool) $value;
         return $this;
     }
 
-    /**
-     * Get the value of binary output
-     *
-     * @return bool
-     */
+    
     public function getBinaryOutput()
     {
         return $this->binaryOutput;
     }
 
-    /**
-     * Get the OPENSSL padding
-     *
-     * @return int|null
-     */
+    
     public function getOpensslPadding()
     {
         return $this->opensslPadding;
     }
 
-    /**
-     * Set the OPENSSL padding
-     *
-     * @param int|null $opensslPadding
-     * @return RsaOptions Provides a fluent interface
-     */
+    
     public function setOpensslPadding($opensslPadding)
     {
         $this->opensslPadding = (int) $opensslPadding;
         return $this;
     }
 
-    /**
-     * Generate new private/public key pair
-     *
-     * @param  array $opensslConfig
-     * @return RsaOptions Provides a fluent interface
-     * @throws Rsa\Exception\RuntimeException
-     */
+    
     public function generateKeys(array $opensslConfig = [])
     {
         $opensslConfig = array_replace(
@@ -223,7 +149,7 @@ class RsaOptions extends AbstractOptions
             $opensslConfig
         );
 
-        // generate
+        
         $resource = openssl_pkey_new($opensslConfig);
         if (false === $resource) {
             throw new Exception\RuntimeException(
@@ -231,7 +157,7 @@ class RsaOptions extends AbstractOptions
             );
         }
 
-        // export key
+        
         $passPhrase = $this->getPassPhrase();
         $result     = openssl_pkey_export($resource, $private, $passPhrase, $opensslConfig);
         if (false === $result) {

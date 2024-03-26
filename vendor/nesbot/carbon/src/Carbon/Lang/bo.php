@@ -1,19 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Josh Soref
- * - JD Isaacks
- */
+
+
 return [
     'year' => '{1}ལོ་གཅིག|]1,Inf[:count ལོ',
     'month' => '{1}ཟླ་བ་གཅིག|]1,Inf[:count ཟླ་བ',

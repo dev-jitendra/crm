@@ -1,13 +1,6 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Carbon\Laravel;
 
@@ -24,10 +17,10 @@ use Throwable;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
-    /** @var callable|null */
+    
     protected $appGetter = null;
 
-    /** @var callable|null */
+    
     protected $localeGetter = null;
 
     public function setAppGetter(?callable $appGetter): void
@@ -80,14 +73,14 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
                 $root = Date::getFacadeRoot();
                 $root->setLocale($locale);
             } catch (Throwable $e) {
-                // Non Carbon class in use in Date facade
+                
             }
         }
     }
 
     public function register()
     {
-        // Needed for Laravel < 5.3 compatibility
+        
     }
 
     protected function getLocale()

@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpClient;
 
@@ -20,10 +13,7 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-/**
- * @author Antoine Bluchet <soyuka@gmail.com>
- * @author Nicolas Grekas <p@tchwork.com>
- */
+
 final class EventSourceHttpClient implements HttpClientInterface
 {
     use AsyncDecoratorTrait;

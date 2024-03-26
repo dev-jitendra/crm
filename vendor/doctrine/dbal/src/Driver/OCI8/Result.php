@@ -25,62 +25,46 @@ use const OCI_RETURN_NULLS;
 
 final class Result implements ResultInterface
 {
-    /** @var resource */
+    
     private $statement;
 
-    /**
-     * @internal The result can be only instantiated by its driver connection or statement.
-     *
-     * @param resource $statement
-     */
+    
     public function __construct($statement)
     {
         $this->statement = $statement;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function fetchNumeric()
     {
         return $this->fetch(OCI_NUM);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function fetchAssociative()
     {
         return $this->fetch(OCI_ASSOC);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function fetchOne()
     {
         return FetchUtils::fetchOne($this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function fetchAllNumeric(): array
     {
         return $this->fetchAll(OCI_NUM, OCI_FETCHSTATEMENT_BY_ROW);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function fetchAllAssociative(): array
     {
         return $this->fetchAll(OCI_ASSOC, OCI_FETCHSTATEMENT_BY_ROW);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function fetchFirstColumn(): array
     {
         return $this->fetchAll(OCI_NUM, OCI_FETCHSTATEMENT_BY_COLUMN)[0];
@@ -113,11 +97,7 @@ final class Result implements ResultInterface
         oci_cancel($this->statement);
     }
 
-    /**
-     * @return mixed|false
-     *
-     * @throws Exception
-     */
+    
     private function fetch(int $mode)
     {
         $result = oci_fetch_array($this->statement, $mode | OCI_RETURN_NULLS | OCI_RETURN_LOBS);
@@ -129,7 +109,7 @@ final class Result implements ResultInterface
         return $result;
     }
 
-    /** @return array<mixed> */
+    
     private function fetchAll(int $mode, int $fetchStructure): array
     {
         oci_fetch_all(

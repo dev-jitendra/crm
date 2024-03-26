@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Select;
 
@@ -35,14 +9,10 @@ use Espo\Core\Utils\Json;
 use InvalidArgumentException;
 use stdClass;
 
-/**
- * Search parameters.
- *
- * @immutable
- */
+
 class SearchParams
 {
-    /** @var array<string, mixed> */
+    
     private array $rawParams = [];
 
     public const ORDER_ASC = 'ASC';
@@ -50,87 +20,61 @@ class SearchParams
 
     private function __construct() {}
 
-    /**
-     * @return array<string, mixed>
-     */
+    
     public function getRaw(): array
     {
         return $this->rawParams;
     }
 
-    /**
-     * Attributes to be selected.
-     *
-     * @return ?string[]
-     */
+    
     public function getSelect(): ?array
     {
         return $this->rawParams['select'] ?? null;
     }
 
-    /**
-     * An order-by field.
-     */
+    
     public function getOrderBy(): ?string
     {
         return $this->rawParams['orderBy'] ?? null;
     }
 
-    /**
-     * An order direction.
-     *
-     * @return self::ORDER_ASC|self::ORDER_DESC
-     */
+    
     public function getOrder(): ?string
     {
         return $this->rawParams['order'] ?? null;
     }
 
-    /**
-     * An offset.
-     */
+    
     public function getOffset(): ?int
     {
         return $this->rawParams['offset'] ?? null;
     }
 
-    /**
-     * A max-size.
-     */
+    
     public function getMaxSize(): ?int
     {
         return $this->rawParams['maxSize'] ?? null;
     }
 
-    /**
-     * A text filter.
-     */
+    
     public function getTextFilter(): ?string
     {
         return $this->rawParams['textFilter'] ?? null;
     }
 
-    /**
-     * A primary filter.
-     */
+    
     public function getPrimaryFilter(): ?string
     {
         return $this->rawParams['primaryFilter'] ?? null;
     }
 
-    /**
-     * A bool filter list.
-     *
-     * @return string[]
-     */
+    
     public function getBoolFilterList(): array
     {
         return $this->rawParams['boolFilterList'] ?? [];
     }
 
-    /**
-     * A where.
-     */
+    
     public function getWhere(): ?WhereItem
     {
         $raw = $this->rawParams['where'] ?? null;
@@ -145,19 +89,13 @@ class SearchParams
         ]);
     }
 
-    /**
-     * A max text attribute length.
-     */
+    
     public function getMaxTextAttributeLength(): ?int
     {
         return $this->rawParams['maxTextAttributeLength'] ?? null;
     }
 
-    /**
-     * With attributes to be selected. NULL means to select all attributes.
-     *
-     * @param string[]|null $select
-     */
+    
     public function withSelect(?array $select): self
     {
         $obj = clone $this;
@@ -166,9 +104,7 @@ class SearchParams
         return $obj;
     }
 
-    /**
-     * With an order-by field.
-     */
+    
     public function withOrderBy(?string $orderBy): self
     {
         $obj = clone $this;
@@ -177,11 +113,7 @@ class SearchParams
         return $obj;
     }
 
-    /**
-     * With an order direction.
-     *
-     * @param self::ORDER_ASC|self::ORDER_DESC|null $order
-     */
+    
     public function withOrder(?string $order): self
     {
         $obj = clone $this;
@@ -198,9 +130,7 @@ class SearchParams
         return $obj;
     }
 
-    /**
-     * With an offset.
-     */
+    
     public function withOffset(?int $offset): self
     {
         $obj = clone $this;
@@ -209,9 +139,7 @@ class SearchParams
         return $obj;
     }
 
-    /**
-     * With a mix size.
-     */
+    
     public function withMaxSize(?int $maxSize): self
     {
         $obj = clone $this;
@@ -220,9 +148,7 @@ class SearchParams
         return $obj;
     }
 
-    /**
-     * With a text filter.
-     */
+    
     public function withTextFilter(?string $filter): self
     {
         $obj = clone $this;
@@ -231,12 +157,7 @@ class SearchParams
         return $obj;
     }
 
-    /**
-     * With a primary filter.
-     *
-     * @param string|null $primaryFilter
-     * @return $this
-     */
+    
     public function withPrimaryFilter(?string $primaryFilter): self
     {
         $obj = clone $this;
@@ -245,11 +166,7 @@ class SearchParams
         return $obj;
     }
 
-    /**
-     * With a bool filter list. Previously set bool filter will be unset.
-     *
-     * @param string[] $boolFilterList
-     */
+    
     public function withBoolFilterList(array $boolFilterList): self
     {
         $obj = clone $this;
@@ -267,9 +184,7 @@ class SearchParams
         return $obj;
     }
 
-    /**
-     * With a where. The previously set where will be unset.
-     */
+    
     public function withWhere(WhereItem $where): self
     {
         $obj = clone $this;
@@ -285,9 +200,7 @@ class SearchParams
         return $obj;
     }
 
-    /**
-     * With a where added.
-     */
+    
     public function withWhereAdded(WhereItem $whereItem): self
     {
         $obj = clone $this;
@@ -301,9 +214,7 @@ class SearchParams
         return $obj;
     }
 
-    /**
-     * With max text attribute length (long texts will be cut to avoid fetching too much data).
-     */
+    
     public function withMaxTextAttributeLength(?int $value): self
     {
         $obj = clone $this;
@@ -313,19 +224,13 @@ class SearchParams
         return $obj;
     }
 
-    /**
-     * Create an empty instance.
-     */
+    
     public static function create(): self
     {
         return new self();
     }
 
-    /**
-     * Create an instance from a raw.
-     *
-     * @param stdClass|array<string, mixed> $params
-     */
+    
     public static function fromRaw($params): self
     {
         if (!is_array($params) && !$params instanceof stdClass) {
@@ -347,12 +252,12 @@ class SearchParams
         $offset = $params['offset'] ?? null;
         $maxSize = $params['maxSize'] ?? null;
 
-        // For bc.
+        
         if (is_string($offset) && is_numeric($offset)) {
             $offset = (int) $offset;
         }
 
-        // For bc.
+        
         if (is_string($maxSize) && is_numeric($maxSize)) {
             $maxSize = (int) $maxSize;
         }
@@ -447,9 +352,7 @@ class SearchParams
         return $object;
     }
 
-    /**
-     * Merge two SelectParams instances.
-     */
+    
     public static function merge(self $searchParams1, self $searchParams2): self
     {
         $paramList = [
@@ -494,11 +397,7 @@ class SearchParams
         return self::fromRaw($params);
     }
 
-    /**
-     * For compatibility with the legacy definition.
-     *
-     * @param array<string, mixed> $params
-     */
+    
     private function adjustParams(array &$params): void
     {
         if (!$params['where']) {

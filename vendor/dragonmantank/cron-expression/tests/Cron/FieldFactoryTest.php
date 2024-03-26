@@ -8,14 +8,10 @@ use Cron\FieldFactory;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @author Michael Dowling <mtdowling@gmail.com>
- */
+
 class FieldFactoryTest extends TestCase
 {
-    /**
-     * @covers \Cron\FieldFactory::getField
-     */
+    
     public function testRetrievesFieldInstances()
     {
         $mappings = [
@@ -33,9 +29,7 @@ class FieldFactoryTest extends TestCase
         }
     }
 
-    /**
-     * @covers \Cron\FieldFactory::getField
-     */
+    
     public function testValidatesFieldPosition()
     {
         $this->expectException(InvalidArgumentException::class);

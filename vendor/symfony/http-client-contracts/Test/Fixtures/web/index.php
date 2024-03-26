@@ -1,14 +1,14 @@
 <?php
 
 if ('cli-server' !== \PHP_SAPI) {
-    // safe guard against unwanted execution
+    
     throw new \Exception("You cannot run this script directly, it's a fixture for TestHttpServer.");
 }
 
 $vars = [];
 
 if (!$_POST) {
-    $_POST = json_decode(file_get_contents('php://input'), true);
+    $_POST = json_decode(file_get_contents('php:
     $_POST['content-type'] = $_SERVER['HTTP_CONTENT_TYPE'] ?? '?';
 }
 
@@ -18,7 +18,7 @@ foreach ($_SERVER as $k => $v) {
             if (0 !== strpos($k, 'HTTP_')) {
                 continue 2;
             }
-            // no break
+            
         case 'SERVER_NAME':
         case 'SERVER_PROTOCOL':
         case 'REQUEST_URI':
@@ -41,8 +41,8 @@ switch ($vars['REQUEST_URI']) {
 
     case '/':
     case '/?a=a&b=b':
-    case 'http://127.0.0.1:8057/':
-    case 'http://localhost:8057/':
+    case 'http:
+    case 'http:
         ob_start('ob_gzhandler');
         break;
 
@@ -74,21 +74,21 @@ switch ($vars['REQUEST_URI']) {
 
     case '/301':
         if ('Basic Zm9vOmJhcg==' === $vars['HTTP_AUTHORIZATION']) {
-            header('Location: http://127.0.0.1:8057/302', true, 301);
+            header('Location: http:
         }
         break;
 
     case '/301/bad-tld':
-        header('Location: http://foo.example.', true, 301);
+        header('Location: http:
         break;
 
     case '/301/invalid':
-        header('Location: //?foo=bar', true, 301);
+        header('Location: 
         break;
 
     case '/302':
         if (!isset($vars['HTTP_AUTHORIZATION'])) {
-            header('Location: http://localhost:8057/', true, 302);
+            header('Location: http:
         }
         break;
 
@@ -103,7 +103,7 @@ switch ($vars['REQUEST_URI']) {
         return;
 
     case '/307':
-        header('Location: http://localhost:8057/post', true, 307);
+        header('Location: http:
         break;
 
     case '/length-broken':

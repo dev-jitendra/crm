@@ -1,20 +1,6 @@
 <?php
 
-/**
- * XML Formatted EC Key Handler
- *
- * More info:
- *
- * https://www.w3.org/TR/xmldsig-core/#sec-ECKeyValue
- * http://en.wikipedia.org/wiki/XML_Signature
- *
- * PHP version 5
- *
- * @author    Jim Wigginton <terrafrost@php.net>
- * @copyright 2015 Jim Wigginton
- * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
- * @link      http://phpseclib.sourceforge.net
- */
+
 
 namespace phpseclib3\Crypt\EC\Formats\Keys;
 
@@ -27,36 +13,18 @@ use phpseclib3\Exception\BadConfigurationException;
 use phpseclib3\Exception\UnsupportedCurveException;
 use phpseclib3\Math\BigInteger;
 
-/**
- * XML Formatted EC Key Handler
- *
- * @author  Jim Wigginton <terrafrost@php.net>
- */
+
 abstract class XML
 {
     use Common;
 
-    /**
-     * Default namespace
-     *
-     * @var string
-     */
+    
     private static $namespace;
 
-    /**
-     * Flag for using RFC4050 syntax
-     *
-     * @var bool
-     */
+    
     private static $rfc4050 = false;
 
-    /**
-     * Break a public or private key down into its constituent components
-     *
-     * @param string $key
-     * @param string $password optional
-     * @return array
-     */
+    
     public static function load($key, $password = '')
     {
         self::initialize_static_variables();
@@ -71,12 +39,12 @@ abstract class XML
 
         $use_errors = libxml_use_internal_errors(true);
 
-        $temp = self::isolateNamespace($key, 'http://www.w3.org/2009/xmldsig11#');
+        $temp = self::isolateNamespace($key, 'http:
         if ($temp) {
             $key = $temp;
         }
 
-        $temp = self::isolateNamespace($key, 'http://www.w3.org/2001/04/xmldsig-more#');
+        $temp = self::isolateNamespace($key, 'http:
         if ($temp) {
             $key = $temp;
         }
@@ -105,39 +73,13 @@ abstract class XML
         return compact('curve', 'QA');
     }
 
-    /**
-     * Case-insensitive xpath query
-     *
-     * @param \DOMXPath $xpath
-     * @param string $name
-     * @param string $error optional
-     * @param bool $decode optional
-     * @return \DOMNodeList
-     */
+    
     private static function query(\DOMXPath $xpath, $name, $error = null, $decode = true)
     {
         $query = '/';
         $names = explode('/', $name);
         foreach ($names as $name) {
-            $query .= "/*[translate(local-name(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='$name']";
-        }
-        $result = $xpath->query($query);
-        if (!isset($error)) {
-            return $result;
-        }
-
-        if (!$result->length) {
-            throw new \RuntimeException($error);
-        }
-        return $decode ? self::decodeValue($result->item(0)->textContent) : $result->item(0)->textContent;
-    }
-
-    /**
-     * Finds the first element in the relevant namespace, strips the namespacing and returns the XML for that element.
-     *
-     * @param string $xml
-     * @param string $ns
-     */
+            $query .= "
     private static function isolateNamespace($xml, $ns)
     {
         $dom = new \DOMDocument();
@@ -145,7 +87,7 @@ abstract class XML
             return false;
         }
         $xpath = new \DOMXPath($dom);
-        $nodes = $xpath->query("//*[namespace::*[.='$ns'] and not(../namespace::*[.='$ns'])]");
+        $nodes = $xpath->query("
         if (!$nodes->length) {
             return false;
         }
@@ -157,23 +99,13 @@ abstract class XML
         return $dom->saveXML($node);
     }
 
-    /**
-     * Decodes the value
-     *
-     * @param string $value
-     */
+    
     private static function decodeValue($value)
     {
         return Strings::base64_decode(str_replace(["\r", "\n", ' ', "\t"], '', $value));
     }
 
-    /**
-     * Extract points from an XML document
-     *
-     * @param \DOMXPath $xpath
-     * @param \phpseclib3\Crypt\EC\BaseCurves\Base $curve
-     * @return object[]
-     */
+    
     private static function extractPointRFC4050(\DOMXPath $xpath, BaseCurve $curve)
     {
         $x = self::query($xpath, 'publickey/x');
@@ -194,13 +126,7 @@ abstract class XML
         return $point;
     }
 
-    /**
-     * Returns an instance of \phpseclib3\Crypt\EC\BaseCurves\Base based
-     * on the curve parameters
-     *
-     * @param \DomXPath $xpath
-     * @return \phpseclib3\Crypt\EC\BaseCurves\Base|false
-     */
+    
     private static function loadCurveByParam(\DOMXPath $xpath)
     {
         $namedCurve = self::query($xpath, 'namedcurve');
@@ -274,13 +200,7 @@ abstract class XML
         }
     }
 
-    /**
-     * Returns an instance of \phpseclib3\Crypt\EC\BaseCurves\Base based
-     * on the curve parameters
-     *
-     * @param \DomXPath $xpath
-     * @return \phpseclib3\Crypt\EC\BaseCurves\Base|false
-     */
+    
     private static function loadCurveByParamRFC4050(\DOMXPath $xpath)
     {
         $fieldTypes = [
@@ -335,42 +255,25 @@ abstract class XML
         }
     }
 
-    /**
-     * Sets the namespace. dsig11 is the most common one.
-     *
-     * Set to null to unset. Used only for creating public keys.
-     *
-     * @param string $namespace
-     */
+    
     public static function setNamespace($namespace)
     {
         self::$namespace = $namespace;
     }
 
-    /**
-     * Uses the XML syntax specified in https://tools.ietf.org/html/rfc4050
-     */
+    
     public static function enableRFC4050Syntax()
     {
         self::$rfc4050 = true;
     }
 
-    /**
-     * Uses the XML syntax specified in https://www.w3.org/TR/xmldsig-core/#sec-ECParameters
-     */
+    
     public static function disableRFC4050Syntax()
     {
         self::$rfc4050 = false;
     }
 
-    /**
-     * Convert a public key to the appropriate format
-     *
-     * @param \phpseclib3\Crypt\EC\BaseCurves\Base $curve
-     * @param \phpseclib3\Math\Common\FiniteField\Integer[] $publicKey
-     * @param array $options optional
-     * @return string
-     */
+    
     public static function savePublicKey(BaseCurve $curve, array $publicKey, array $options = [])
     {
         self::initialize_static_variables();
@@ -387,7 +290,7 @@ abstract class XML
         }
 
         if (self::$rfc4050) {
-            return '<' . $pre . 'ECDSAKeyValue xmlns' . $post . '="http://www.w3.org/2001/04/xmldsig-more#">' . "\r\n" .
+            return '<' . $pre . 'ECDSAKeyValue xmlns' . $post . '="http:
                    self::encodeXMLParameters($curve, $pre, $options) . "\r\n" .
                    '<' . $pre . 'PublicKey>' . "\r\n" .
                    '<' . $pre . 'X Value="' . $publicKey[0] . '" />' . "\r\n" .
@@ -398,20 +301,13 @@ abstract class XML
 
         $publicKey = "\4" . $publicKey[0]->toBytes() . $publicKey[1]->toBytes();
 
-        return '<' . $pre . 'ECDSAKeyValue xmlns' . $post . '="http://www.w3.org/2009/xmldsig11#">' . "\r\n" .
+        return '<' . $pre . 'ECDSAKeyValue xmlns' . $post . '="http:
                self::encodeXMLParameters($curve, $pre, $options) . "\r\n" .
                '<' . $pre . 'PublicKey>' . Strings::base64_encode($publicKey) . '</' . $pre . 'PublicKey>' . "\r\n" .
                '</' . $pre . 'ECDSAKeyValue>';
     }
 
-    /**
-     * Encode Parameters
-     *
-     * @param \phpseclib3\Crypt\EC\BaseCurves\Base $curve
-     * @param string $pre
-     * @param array $options optional
-     * @return string|false
-     */
+    
     private static function encodeXMLParameters(BaseCurve $curve, $pre, array $options = [])
     {
         $result = self::encodeParameters($curve, true, $options);

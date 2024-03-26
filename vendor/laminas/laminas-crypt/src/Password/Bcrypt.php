@@ -19,25 +19,18 @@ use const E_USER_DEPRECATED;
 use const PASSWORD_BCRYPT;
 use const PHP_VERSION_ID;
 
-/**
- * Bcrypt algorithm using crypt() function of PHP
- */
+
 class Bcrypt implements PasswordInterface
 {
     public const MIN_SALT_SIZE = 22;
 
-    /** @var string */
+    
     protected $cost = '10';
 
-    /** @var string */
+    
     protected $salt;
 
-    /**
-     * Constructor
-     *
-     * @param array|Traversable $options
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public function __construct($options = [])
     {
         if (! empty($options)) {
@@ -64,42 +57,24 @@ class Bcrypt implements PasswordInterface
         }
     }
 
-    /**
-     * Bcrypt
-     *
-     * @param  string $password
-     * @throws Exception\RuntimeException
-     * @return string
-     */
+    
     public function create($password)
     {
         $options = ['cost' => (int) $this->cost];
-        if (PHP_VERSION_ID < 70000) { // salt is deprecated from PHP 7.0
+        if (PHP_VERSION_ID < 70000) { 
             $salt            = $this->salt ?: Rand::getBytes(self::MIN_SALT_SIZE);
             $options['salt'] = $salt;
         }
         return password_hash($password, PASSWORD_BCRYPT, $options);
     }
 
-    /**
-     * Verify if a password is correct against a hash value
-     *
-     * @param  string $password
-     * @param  string $hash
-     * @return bool
-     */
+    
     public function verify($password, $hash)
     {
         return password_verify($password, $hash);
     }
 
-    /**
-     * Set the cost parameter
-     *
-     * @param  int|string $cost
-     * @throws Exception\InvalidArgumentException
-     * @return Bcrypt Provides a fluent interface
-     */
+    
     public function setCost($cost)
     {
         if (! empty($cost)) {
@@ -114,23 +89,13 @@ class Bcrypt implements PasswordInterface
         return $this;
     }
 
-    /**
-     * Get the cost parameter
-     *
-     * @return string
-     */
+    
     public function getCost()
     {
         return $this->cost;
     }
 
-    /**
-     * Set the salt value
-     *
-     * @param  string $salt
-     * @throws Exception\InvalidArgumentException
-     * @return Bcrypt Provides a fluent interface
-     */
+    
     public function setSalt($salt)
     {
         if (PHP_VERSION_ID >= 70000) {
@@ -147,11 +112,7 @@ class Bcrypt implements PasswordInterface
         return $this;
     }
 
-    /**
-     * Get the salt value
-     *
-     * @return string
-     */
+    
     public function getSalt()
     {
         if (PHP_VERSION_ID >= 70000) {
@@ -161,19 +122,7 @@ class Bcrypt implements PasswordInterface
         return $this->salt;
     }
 
-    /**
-     * Benchmark the bcrypt hash generation to determine the cost parameter based on time to target.
-     *
-     * The default time to test is 50 milliseconds which is a good baseline for
-     * systems handling interactive logins. If you increase the time, you will
-     * get high cost with better security, but potentially expose your system
-     * to DoS attacks.
-     *
-     * @see php.net/manual/en/function.password-hash.php#refsect1-function.password-hash-examples
-     *
-     * @param float $timeTarget Defaults to 50ms (0.05)
-     * @return int Maximum cost value that falls within the time to target.
-     */
+    
     public function benchmarkCost($timeTarget = 0.05)
     {
         $cost = 8;

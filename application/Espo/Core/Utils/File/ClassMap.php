@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Utils\File;
 
@@ -48,12 +22,7 @@ class ClassMap
         private PathProvider $pathProvider
     ) {}
 
-    /**
-     * Return paths to class files.
-     *
-     * @param ?string[] $allowedMethods If specified, classes w/o specified method will be ignored.
-     * @return array<string, class-string>
-     */
+    
     public function getData(
         string $path,
         ?string $cacheKey = null,
@@ -68,7 +37,7 @@ class ClassMap
             $this->dataCache->has($cacheKey) &&
             $this->config->get('useCache')
         ) {
-            /** @var array<string,class-string> $data */
+            
             $data = $this->dataCache->get($cacheKey);
         }
 
@@ -109,11 +78,7 @@ class ClassMap
         return $data;
     }
 
-    /**
-     * @param string[]|string $dirs
-     * @param ?string[] $allowedMethods
-     * @return array<string,class-string>
-     */
+    
     private function getClassNameHash($dirs, ?array $allowedMethods = [], bool $subDirs = false): array
     {
         if (is_string($dirs)) {
@@ -124,7 +89,7 @@ class ClassMap
 
         foreach ($dirs as $dir) {
             if (file_exists($dir)) {
-                /** @var string[] $fileList */
+                
                 $fileList = $this->fileManager->getFileList($dir, $subDirs, '\.php$', true);
 
                 $this->fillHashFromFileList($fileList, $dir, $allowedMethods, $data);
@@ -134,11 +99,7 @@ class ClassMap
         return $data;
     }
 
-    /**
-     * @param string[] $fileList
-     * @param ?string[] $allowedMethods
-     * @param array<string,class-string> $data
-     */
+    
     private function fillHashFromFileList(
         array $fileList,
         string $dir,

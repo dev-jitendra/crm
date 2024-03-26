@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpClient;
 
@@ -18,11 +11,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Contracts\HttpClient\ResponseStreamInterface;
 
-/**
- * A test-friendly HttpClient that doesn't make actual HTTP requests.
- *
- * @author Nicolas Grekas <p@tchwork.com>
- */
+
 class MockHttpClient implements HttpClientInterface
 {
     use HttpClientTrait;
@@ -31,9 +20,7 @@ class MockHttpClient implements HttpClientInterface
     private $baseUri;
     private $requestsCount = 0;
 
-    /**
-     * @param callable|callable[]|ResponseInterface|ResponseInterface[]|iterable|null $responseFactory
-     */
+    
     public function __construct($responseFactory = null, string $baseUri = null)
     {
         if ($responseFactory instanceof ResponseInterface) {
@@ -50,9 +37,7 @@ class MockHttpClient implements HttpClientInterface
         $this->baseUri = $baseUri;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function request(string $method, string $url, array $options = []): ResponseInterface
     {
         [$url, $options] = $this->prepareRequest($method, $url, $options, ['base_uri' => $this->baseUri], true);
@@ -78,9 +63,7 @@ class MockHttpClient implements HttpClientInterface
         return MockResponse::fromRequest($method, $url, $options, $response);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function stream($responses, float $timeout = null): ResponseStreamInterface
     {
         if ($responses instanceof ResponseInterface) {

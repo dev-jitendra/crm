@@ -1,28 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - monkeycon
- * - François B
- * - Jason Katz-Brown
- * - Konstantin Konev
- * - Chris Lam
- * - Serhan Apaydın
- * - Gary Lo
- * - JD Isaacks
- * - Chris Hemp
- * - shankesgk2
- * - Daniel Cheung (danvim)
- */
+
+
 return [
     'year' => ':count:optional-space年',
     'y' => ':count:optional-space年',

@@ -15,14 +15,14 @@ class DataSeries
     const TYPE_PIECHART = 'pieChart';
     const TYPE_PIECHART_3D = 'pie3DChart';
     const TYPE_DOUGHNUTCHART = 'doughnutChart';
-    const TYPE_DONUTCHART = self::TYPE_DOUGHNUTCHART; // Synonym
+    const TYPE_DONUTCHART = self::TYPE_DOUGHNUTCHART; 
     const TYPE_SCATTERCHART = 'scatterChart';
     const TYPE_SURFACECHART = 'surfaceChart';
     const TYPE_SURFACECHART_3D = 'surface3DChart';
     const TYPE_RADARCHART = 'radarChart';
     const TYPE_BUBBLECHART = 'bubbleChart';
     const TYPE_STOCKCHART = 'stockChart';
-    const TYPE_CANDLECHART = self::TYPE_STOCKCHART; // Synonym
+    const TYPE_CANDLECHART = self::TYPE_STOCKCHART; 
 
     const GROUPING_CLUSTERED = 'clustered';
     const GROUPING_STACKED = 'stacked';
@@ -44,82 +44,34 @@ class DataSeries
     const EMPTY_AS_ZERO = 'zero';
     const EMPTY_AS_SPAN = 'span';
 
-    /**
-     * Series Plot Type.
-     *
-     * @var string
-     */
+    
     private $plotType;
 
-    /**
-     * Plot Grouping Type.
-     *
-     * @var string
-     */
+    
     private $plotGrouping;
 
-    /**
-     * Plot Direction.
-     *
-     * @var string
-     */
+    
     private $plotDirection;
 
-    /**
-     * Plot Style.
-     *
-     * @var null|string
-     */
+    
     private $plotStyle;
 
-    /**
-     * Order of plots in Series.
-     *
-     * @var array of integer
-     */
+    
     private $plotOrder = [];
 
-    /**
-     * Plot Label.
-     *
-     * @var array of DataSeriesValues
-     */
+    
     private $plotLabel = [];
 
-    /**
-     * Plot Category.
-     *
-     * @var array of DataSeriesValues
-     */
+    
     private $plotCategory = [];
 
-    /**
-     * Smooth Line.
-     *
-     * @var bool
-     */
+    
     private $smoothLine;
 
-    /**
-     * Plot Values.
-     *
-     * @var array of DataSeriesValues
-     */
+    
     private $plotValues = [];
 
-    /**
-     * Create a new DataSeries.
-     *
-     * @param null|mixed $plotType
-     * @param null|mixed $plotGrouping
-     * @param int[] $plotOrder
-     * @param DataSeriesValues[] $plotLabel
-     * @param DataSeriesValues[] $plotCategory
-     * @param DataSeriesValues[] $plotValues
-     * @param null|string $plotDirection
-     * @param bool $smoothLine
-     * @param null|string $plotStyle
-     */
+    
     public function __construct($plotType = null, $plotGrouping = null, array $plotOrder = [], array $plotLabel = [], array $plotCategory = [], array $plotValues = [], $plotDirection = null, $smoothLine = false, $plotStyle = null)
     {
         $this->plotType = $plotType;
@@ -146,23 +98,13 @@ class DataSeries
         $this->plotDirection = $plotDirection;
     }
 
-    /**
-     * Get Plot Type.
-     *
-     * @return string
-     */
+    
     public function getPlotType()
     {
         return $this->plotType;
     }
 
-    /**
-     * Set Plot Type.
-     *
-     * @param string $plotType
-     *
-     * @return $this
-     */
+    
     public function setPlotType($plotType)
     {
         $this->plotType = $plotType;
@@ -170,23 +112,13 @@ class DataSeries
         return $this;
     }
 
-    /**
-     * Get Plot Grouping Type.
-     *
-     * @return string
-     */
+    
     public function getPlotGrouping()
     {
         return $this->plotGrouping;
     }
 
-    /**
-     * Set Plot Grouping Type.
-     *
-     * @param string $groupingType
-     *
-     * @return $this
-     */
+    
     public function setPlotGrouping($groupingType)
     {
         $this->plotGrouping = $groupingType;
@@ -194,23 +126,13 @@ class DataSeries
         return $this;
     }
 
-    /**
-     * Get Plot Direction.
-     *
-     * @return string
-     */
+    
     public function getPlotDirection()
     {
         return $this->plotDirection;
     }
 
-    /**
-     * Set Plot Direction.
-     *
-     * @param string $plotDirection
-     *
-     * @return $this
-     */
+    
     public function setPlotDirection($plotDirection)
     {
         $this->plotDirection = $plotDirection;
@@ -218,33 +140,19 @@ class DataSeries
         return $this;
     }
 
-    /**
-     * Get Plot Order.
-     *
-     * @return int[]
-     */
+    
     public function getPlotOrder()
     {
         return $this->plotOrder;
     }
 
-    /**
-     * Get Plot Labels.
-     *
-     * @return array of DataSeriesValues
-     */
+    
     public function getPlotLabels()
     {
         return $this->plotLabel;
     }
 
-    /**
-     * Get Plot Label by Index.
-     *
-     * @param mixed $index
-     *
-     * @return DataSeriesValues
-     */
+    
     public function getPlotLabelByIndex($index)
     {
         $keys = array_keys($this->plotLabel);
@@ -257,23 +165,13 @@ class DataSeries
         return false;
     }
 
-    /**
-     * Get Plot Categories.
-     *
-     * @return array of DataSeriesValues
-     */
+    
     public function getPlotCategories()
     {
         return $this->plotCategory;
     }
 
-    /**
-     * Get Plot Category by Index.
-     *
-     * @param mixed $index
-     *
-     * @return DataSeriesValues
-     */
+    
     public function getPlotCategoryByIndex($index)
     {
         $keys = array_keys($this->plotCategory);
@@ -286,23 +184,13 @@ class DataSeries
         return false;
     }
 
-    /**
-     * Get Plot Style.
-     *
-     * @return null|string
-     */
+    
     public function getPlotStyle()
     {
         return $this->plotStyle;
     }
 
-    /**
-     * Set Plot Style.
-     *
-     * @param null|string $plotStyle
-     *
-     * @return $this
-     */
+    
     public function setPlotStyle($plotStyle)
     {
         $this->plotStyle = $plotStyle;
@@ -310,23 +198,13 @@ class DataSeries
         return $this;
     }
 
-    /**
-     * Get Plot Values.
-     *
-     * @return array of DataSeriesValues
-     */
+    
     public function getPlotValues()
     {
         return $this->plotValues;
     }
 
-    /**
-     * Get Plot Values by Index.
-     *
-     * @param mixed $index
-     *
-     * @return DataSeriesValues
-     */
+    
     public function getPlotValuesByIndex($index)
     {
         $keys = array_keys($this->plotValues);
@@ -339,33 +217,19 @@ class DataSeries
         return false;
     }
 
-    /**
-     * Get Number of Plot Series.
-     *
-     * @return int
-     */
+    
     public function getPlotSeriesCount()
     {
         return count($this->plotValues);
     }
 
-    /**
-     * Get Smooth Line.
-     *
-     * @return bool
-     */
+    
     public function getSmoothLine()
     {
         return $this->smoothLine;
     }
 
-    /**
-     * Set Smooth Line.
-     *
-     * @param bool $smoothLine
-     *
-     * @return $this
-     */
+    
     public function setSmoothLine($smoothLine)
     {
         $this->smoothLine = $smoothLine;

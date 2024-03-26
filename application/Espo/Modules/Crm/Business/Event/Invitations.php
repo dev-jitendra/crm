@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Modules\Crm\Business\Event;
 
@@ -61,16 +35,14 @@ class Invitations
     private $entityManager;
     private $emailSender;
     private $config;
-    private $dateTime; /** @phpstan-ignore-line */
+    private $dateTime; 
     private $language;
-    private $number; /** @phpstan-ignore-line */
+    private $number; 
     private $templateFileManager;
-    private $fileManager; /** @phpstan-ignore-line */
+    private $fileManager; 
     private $htmlizerFactory;
 
-    /**
-     * Some dependencies are unused to keep backward compatibility.
-     */
+    
     public function __construct(
         EntityManager $entityManager,
         ?SmtpParams $smtpParams,
@@ -95,28 +67,19 @@ class Invitations
         $this->htmlizerFactory = $htmlizerFactory;
     }
 
-    /**
-     * @throws SendingError
-     * @throws Error
-     */
+    
     public function sendInvitation(Entity $entity, Entity $invitee, string $link): void
     {
         $this->sendInternal($entity, $invitee, $link);
     }
 
-    /**
-     * @throws SendingError
-     * @throws Error
-     */
+    
     public function sendCancellation(Entity $entity, Entity $invitee, string $link): void
     {
         $this->sendInternal($entity, $invitee, $link, self::TYPE_CANCELLATION);
     }
 
-    /**
-     * @throws SendingError
-     * @throws Error
-     */
+    
     private function sendInternal(
         Entity $entity,
         Entity $invitee,
@@ -133,7 +96,7 @@ class Invitations
             return;
         }
 
-        /** @var Email $email */
+        
         $email = $this->entityManager->getNewEntity(Email::ENTITY_TYPE);
 
         $email->set('to', $emailAddress);
@@ -195,7 +158,7 @@ class Invitations
 
         $attachmentName = ucwords($this->language->translateLabel($entity->getEntityType(), 'scopeNames')) . '.ics';
 
-        /** @var Attachment $attachment */
+        
         $attachment = $this->entityManager->getNewEntity(Attachment::ENTITY_TYPE);
 
         $attachment->set([
@@ -220,7 +183,7 @@ class Invitations
 
     private function createUniqueId(Entity $entity, Entity $invitee, string $link): UniqueId
     {
-        /** @var UniqueId $uid */
+        
         $uid = $this->entityManager->getNewEntity(UniqueId::ENTITY_TYPE);
 
         $uid->set('data', [
@@ -255,7 +218,7 @@ class Invitations
 
     protected function getIcsContents(Entity $entity, string $type): string
     {
-        /** @var ?User $user */
+        
         $user = $this->entityManager
             ->getRDBRepository($entity->getEntityType())
             ->getRelation($entity, 'assignedUser')
@@ -277,7 +240,7 @@ class Invitations
             Ics::METHOD_CANCEL :
             Ics::METHOD_REQUEST;
 
-        $ics = new Ics('//EspoCRM//EspoCRM Calendar//EN', [
+        $ics = new Ics('
             'method' => $method,
             'startDate' => strtotime($entity->get('dateStart')),
             'endDate' => strtotime($entity->get('dateEnd')),

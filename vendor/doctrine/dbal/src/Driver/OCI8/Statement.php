@@ -25,24 +25,18 @@ use const SQLT_CHR;
 
 final class Statement implements StatementInterface
 {
-    /** @var resource */
+    
     private $connection;
 
-    /** @var resource */
+    
     private $statement;
 
-    /** @var array<int,string> */
+    
     private array $parameterMap;
 
     private ExecutionMode $executionMode;
 
-    /**
-     * @internal The statement can be only instantiated by its driver connection.
-     *
-     * @param resource          $connection
-     * @param resource          $statement
-     * @param array<int,string> $parameterMap
-     */
+    
     public function __construct($connection, $statement, array $parameterMap, ExecutionMode $executionMode)
     {
         $this->connection    = $connection;
@@ -51,15 +45,13 @@ final class Statement implements StatementInterface
         $this->executionMode = $executionMode;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function bindValue($param, $value, $type = ParameterType::STRING): bool
     {
         if (func_num_args() < 3) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5558',
+                'https:
                 'Not passing $type to Statement::bindValue() is deprecated.'
                     . ' Pass the type corresponding to the parameter being bound.',
             );
@@ -68,16 +60,12 @@ final class Statement implements StatementInterface
         return $this->bindParam($param, $value, $type);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated Use {@see bindValue()} instead.
-     */
+    
     public function bindParam($param, &$variable, $type = ParameterType::STRING, $length = null): bool
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5563',
+            'https:
             '%s is deprecated. Use bindValue() instead.',
             __METHOD__,
         );
@@ -85,7 +73,7 @@ final class Statement implements StatementInterface
         if (func_num_args() < 3) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5558',
+                'https:
                 'Not passing $type to Statement::bindParam() is deprecated.'
                     . ' Pass the type corresponding to the parameter being bound.',
             );
@@ -119,9 +107,7 @@ final class Statement implements StatementInterface
         );
     }
 
-    /**
-     * Converts DBAL parameter type to oci8 parameter type
-     */
+    
     private function convertParameterType(int $type): int
     {
         switch ($type) {
@@ -136,15 +122,13 @@ final class Statement implements StatementInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function execute($params = null): ResultInterface
     {
         if ($params !== null) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5556',
+                'https:
                 'Passing $params to Statement::execute() is deprecated. Bind parameters using'
                     . ' Statement::bindParam() or Statement::bindValue() instead.',
             );

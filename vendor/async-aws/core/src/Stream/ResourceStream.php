@@ -4,37 +4,23 @@ namespace AsyncAws\Core\Stream;
 
 use AsyncAws\Core\Exception\InvalidArgument;
 
-/**
- * Convert a resource into a Stream.
- *
- * @author Jérémy Derussé <jeremy@derusse.com>
- *
- * @internal
- */
+
 final class ResourceStream implements RequestStream
 {
-    /**
-     * @var resource
-     */
+    
     private $content;
 
-    /**
-     * @var int
-     */
+    
     private $chunkSize;
 
-    /**
-     * @param resource $content
-     */
+    
     private function __construct($content, int $chunkSize = 64 * 1024)
     {
         $this->content = $content;
         $this->chunkSize = $chunkSize;
     }
 
-    /**
-     * @param self|resource $content
-     */
+    
     public static function create($content, int $chunkSize = 64 * 1024): ResourceStream
     {
         if ($content instanceof self) {
@@ -76,9 +62,7 @@ final class ResourceStream implements RequestStream
         }
     }
 
-    /**
-     * @return resource
-     */
+    
     public function getResource()
     {
         return $this->content;

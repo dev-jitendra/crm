@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Routing\Matcher\Dumper;
 
@@ -17,13 +10,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\RedirectableUrlMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
 
-/**
- * @author Nicolas Grekas <p@tchwork.com>
- *
- * @internal
- *
- * @property RequestContext $context
- */
+
 trait CompiledUrlMatcherTrait
 {
     private bool $matchHost = false;
@@ -31,9 +18,7 @@ trait CompiledUrlMatcherTrait
     private array $regexpList = [];
     private array $dynamicRoutes = [];
 
-    /**
-     * @var callable|null
-     */
+    
     private $checkCondition;
 
     public function match(string $pathinfo): array
@@ -49,7 +34,7 @@ trait CompiledUrlMatcherTrait
             throw new ResourceNotFoundException(sprintf('No routes found for "%s".', $pathinfo));
         }
         if (!\in_array($this->context->getMethod(), ['HEAD', 'GET'], true)) {
-            // no-op
+            
         } elseif ($allowSchemes) {
             redirect_scheme:
             $scheme = $this->context->getScheme();
@@ -133,7 +118,7 @@ trait CompiledUrlMatcherTrait
             while (preg_match($regex, $matchedPathinfo, $matches)) {
                 foreach ($this->dynamicRoutes[$m = (int) $matches['MARK']] as [$ret, $vars, $requiredMethods, $requiredSchemes, $hasTrailingSlash, $hasTrailingVar, $condition]) {
                     if (null !== $condition) {
-                        if (0 === $condition) { // marks the last route in the regexp
+                        if (0 === $condition) { 
                             continue 3;
                         }
                         if (!($this->checkCondition)($condition, $context, 0 < $condition ? $request ?? $request = $this->request ?: $this->createRequest($pathinfo) : null)) {

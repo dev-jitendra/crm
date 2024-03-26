@@ -1,25 +1,6 @@
 <?php
 
-/**
- * PKCS#8 Formatted RSA-PSS Key Handler
- *
- * PHP version 5
- *
- * Used by PHP's openssl_public_encrypt() and openssl's rsautl (when -pubin is set)
- *
- * Processes keys with the following headers:
- *
- * -----BEGIN ENCRYPTED PRIVATE KEY-----
- * -----BEGIN PRIVATE KEY-----
- * -----BEGIN PUBLIC KEY-----
- *
- * Analogous to "openssl genpkey -algorithm rsa-pss".
- *
- * @author    Jim Wigginton <terrafrost@php.net>
- * @copyright 2015 Jim Wigginton
- * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
- * @link      http://phpseclib.sourceforge.net
- */
+
 
 namespace phpseclib3\Crypt\RSA\Formats\Keys;
 
@@ -29,44 +10,22 @@ use phpseclib3\File\ASN1;
 use phpseclib3\File\ASN1\Maps;
 use phpseclib3\Math\BigInteger;
 
-/**
- * PKCS#8 Formatted RSA-PSS Key Handler
- *
- * @author  Jim Wigginton <terrafrost@php.net>
- */
+
 abstract class PSS extends Progenitor
 {
-    /**
-     * OID Name
-     *
-     * @var string
-     */
+    
     const OID_NAME = 'id-RSASSA-PSS';
 
-    /**
-     * OID Value
-     *
-     * @var string
-     */
+    
     const OID_VALUE = '1.2.840.113549.1.1.10';
 
-    /**
-     * OIDs loaded
-     *
-     * @var bool
-     */
+    
     private static $oidsLoaded = false;
 
-    /**
-     * Child OIDs loaded
-     *
-     * @var bool
-     */
+    
     protected static $childOIDsLoaded = false;
 
-    /**
-     * Initialize static variables
-     */
+    
     private static function initialize_static_variables()
     {
         if (!self::$oidsLoaded) {
@@ -88,13 +47,7 @@ abstract class PSS extends Progenitor
         }
     }
 
-    /**
-     * Break a public or private key down into its constituent components
-     *
-     * @param string $key
-     * @param string $password optional
-     * @return array
-     */
+    
     public static function load($key, $password = '')
     {
         self::initialize_static_variables();
@@ -151,19 +104,7 @@ abstract class PSS extends Progenitor
         return $result;
     }
 
-    /**
-     * Convert a private key to the appropriate format.
-     *
-     * @param \phpseclib3\Math\BigInteger $n
-     * @param \phpseclib3\Math\BigInteger $e
-     * @param \phpseclib3\Math\BigInteger $d
-     * @param array $primes
-     * @param array $exponents
-     * @param array $coefficients
-     * @param string $password optional
-     * @param array $options optional
-     * @return string
-     */
+    
     public static function savePrivateKey(BigInteger $n, BigInteger $e, BigInteger $d, array $primes, array $exponents, array $coefficients, $password = '', array $options = [])
     {
         self::initialize_static_variables();
@@ -174,14 +115,7 @@ abstract class PSS extends Progenitor
         return self::wrapPrivateKey($key, [], $params, $password, null, '', $options);
     }
 
-    /**
-     * Convert a public key to the appropriate format
-     *
-     * @param \phpseclib3\Math\BigInteger $n
-     * @param \phpseclib3\Math\BigInteger $e
-     * @param array $options optional
-     * @return string
-     */
+    
     public static function savePublicKey(BigInteger $n, BigInteger $e, array $options = [])
     {
         self::initialize_static_variables();
@@ -192,29 +126,10 @@ abstract class PSS extends Progenitor
         return self::wrapPublicKey($key, $params);
     }
 
-    /**
-     * Encodes PSS parameters
-     *
-     * @param array $options
-     * @return string
-     */
+    
     public static function savePSSParams(array $options)
     {
-        /*
-         The trailerField field is an integer.  It provides
-         compatibility with IEEE Std 1363a-2004 [P1363A].  The value
-         MUST be 1, which represents the trailer field with hexadecimal
-         value 0xBC.  Other trailer fields, including the trailer field
-         composed of HashID concatenated with 0xCC that is specified in
-         IEEE Std 1363a, are not supported.  Implementations that
-         perform signature generation MUST omit the trailerField field,
-         indicating that the default trailer field value was used.
-         Implementations that perform signature validation MUST
-         recognize both a present trailerField field with value 1 and an
-         absent trailerField field.
-
-         source: https://tools.ietf.org/html/rfc4055#page-9
-        */
+        
         $params = [
             'trailerField' => new BigInteger(1)
         ];

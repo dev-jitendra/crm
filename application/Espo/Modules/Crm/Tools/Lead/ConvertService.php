@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Modules\Crm\Tools\Lead;
 
@@ -66,15 +40,10 @@ class ConvertService
         private FieldUtil $fieldUtil
     ) {}
 
-    /**
-     * Convert a lead.
-     *
-     * @throws Forbidden
-     * @throws Conflict
-     */
+    
     public function convert(string $id, Values $records, Params $params): Lead
     {
-        /** @var Lead $lead */
+        
         $lead = $this->recordServiceContainer
             ->get(Lead::ENTITY_TYPE)
             ->getEntity($id);
@@ -99,7 +68,7 @@ class ConvertService
             $account->set($records->get(Account::ENTITY_TYPE));
 
             if ($duplicateCheck) {
-                /** @var Account[] $rDuplicateList */
+                
                 $rDuplicateList = $this->recordServiceContainer
                     ->get(Account::ENTITY_TYPE)
                     ->findDuplicates($account);
@@ -134,7 +103,7 @@ class ConvertService
             }
 
             if ($duplicateCheck) {
-                /** @var Contact[] $rDuplicateList */
+                
                 $rDuplicateList = $this->recordServiceContainer
                     ->get(Contact::ENTITY_TYPE)
                     ->findDuplicates($contact);
@@ -173,7 +142,7 @@ class ConvertService
             }
 
             if ($duplicateCheck) {
-                /** @var Opportunity[] $rDuplicateList */
+                
                 $rDuplicateList = $this->recordServiceContainer
                     ->get(Opportunity::ENTITY_TYPE)
                     ->findDuplicates($opportunity);
@@ -215,7 +184,7 @@ class ConvertService
 
         $leadRepository = $this->entityManager->getRDBRepository(Lead::ENTITY_TYPE);
 
-        /** @var Collection<Meeting> $meetings */
+        
         $meetings = $leadRepository
             ->getRelation($lead, 'meetings')
             ->select(['id', 'parentId', 'parentType'])
@@ -243,7 +212,7 @@ class ConvertService
             }
         }
 
-        /** @var Collection<Call> $calls */
+        
         $calls = $leadRepository
             ->getRelation($lead, 'calls')
             ->select(['id', 'parentId', 'parentType'])
@@ -271,7 +240,7 @@ class ConvertService
             }
         }
 
-        /** @var Collection<Email> $emails */
+        
         $emails = $leadRepository
             ->getRelation($lead, 'emails')
             ->select(['id', 'parentId', 'parentType'])
@@ -292,7 +261,7 @@ class ConvertService
             }
         }
 
-        /** @var Collection<Document> $documents */
+        
         $documents = $leadRepository
             ->getRelation($lead, 'documents')
             ->select(['id'])
@@ -331,14 +300,10 @@ class ConvertService
         return $lead;
     }
 
-    /**
-     * Get values for the conversion form.
-     *
-     * @throws Forbidden
-     */
+    
     public function getValues(string $id): Values
     {
-        /** @var Lead $lead */
+        
         $lead = $this->recordServiceContainer
             ->get(Lead::ENTITY_TYPE)
             ->getEntity($id);
@@ -349,7 +314,7 @@ class ConvertService
 
         $values = Values::create();
 
-        /** @var string[] $entityList */
+        
         $entityList = $this->metadata->get('entityDefs.Lead.convertEntityList', []);
 
         $ignoreAttributeList = [
@@ -361,7 +326,7 @@ class ConvertService
             'createdByName',
         ];
 
-        /** @var array<string, array<string, string>> $convertFieldsDefs */
+        
         $convertFieldsDefs = $this->metadata->get('entityDefs.Lead.convertFields', []);
 
         foreach ($entityList as $entityType) {
@@ -372,7 +337,7 @@ class ConvertService
             $attributes = [];
             $fieldMap = [];
 
-            /** @var string[] $fieldList */
+            
             $fieldList = array_keys($this->metadata->get('entityDefs.Lead.fields', []));
 
             foreach ($fieldList as $field) {
@@ -478,7 +443,7 @@ class ConvertService
 
     private function getAttachmentRepository(): AttachmentRepository
     {
-        /** @var AttachmentRepository */
+        
         return $this->entityManager->getRepository(Attachment::ENTITY_TYPE);
     }
 }

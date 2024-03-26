@@ -9,58 +9,31 @@ use React\EventLoop\Tick\FutureTickQueue;
 use React\EventLoop\Timer\Timer;
 use SplObjectStorage;
 
-/**
- * An `ext-ev` based event loop.
- *
- * This loop uses the [`ev` PECL extension](https://pecl.php.net/package/ev),
- * that provides an interface to `libev` library.
- * `libev` itself supports a number of system-specific backends (epoll, kqueue).
- *
- * This loop is known to work with PHP 5.4 through PHP 8+.
- *
- * @see http://php.net/manual/en/book.ev.php
- * @see https://bitbucket.org/osmanov/pecl-ev/overview
- */
+
 class ExtEvLoop implements LoopInterface
 {
-    /**
-     * @var EvLoop
-     */
+    
     private $loop;
 
-    /**
-     * @var FutureTickQueue
-     */
+    
     private $futureTickQueue;
 
-    /**
-     * @var SplObjectStorage
-     */
+    
     private $timers;
 
-    /**
-     * @var EvIo[]
-     */
+    
     private $readStreams = array();
 
-    /**
-     * @var EvIo[]
-     */
+    
     private $writeStreams = array();
 
-    /**
-     * @var bool
-     */
+    
     private $running;
 
-    /**
-     * @var SignalsHandler
-     */
+    
     private $signals;
 
-    /**
-     * @var \EvSignal[]
-     */
+    
     private $signalEvents = array();
 
     public function __construct()
@@ -84,12 +57,7 @@ class ExtEvLoop implements LoopInterface
         $this->readStreams[$key] = $event;
     }
 
-    /**
-     * @param resource $stream
-     * @param callable $listener
-     *
-     * @return \Closure
-     */
+    
     private function getStreamListenerClosure($stream, $listener)
     {
         return function () use ($stream, $listener) {
@@ -216,7 +184,7 @@ class ExtEvLoop implements LoopInterface
 
     public function __destruct()
     {
-        /** @var TimerInterface $timer */
+        
         foreach ($this->timers as $timer) {
             $this->cancelTimer($timer);
         }

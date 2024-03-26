@@ -1,35 +1,15 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpFoundation\Session\Storage;
 
-/**
- * MockFileSessionStorage is used to mock sessions for
- * functional testing where you may need to persist session data
- * across separate PHP processes.
- *
- * No PHP session is actually started since a session can be initialized
- * and shutdown only once per PHP execution cycle and this class does
- * not pollute any session related globals, including session_*() functions
- * or session.* PHP ini directives.
- *
- * @author Drak <drak@zikula.org>
- */
+
 class MockFileSessionStorage extends MockArraySessionStorage
 {
     private string $savePath;
 
-    /**
-     * @param string|null $savePath Path of directory to save session files
-     */
+    
     public function __construct(string $savePath = null, string $name = 'MOCKSESSID', MetadataBag $metaBag = null)
     {
         if (null === $savePath) {
@@ -45,9 +25,7 @@ class MockFileSessionStorage extends MockArraySessionStorage
         parent::__construct($name, $metaBag);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function start(): bool
     {
         if ($this->started) {
@@ -65,9 +43,7 @@ class MockFileSessionStorage extends MockArraySessionStorage
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function regenerate(bool $destroy = false, int $lifetime = null): bool
     {
         if (!$this->started) {
@@ -81,9 +57,7 @@ class MockFileSessionStorage extends MockArraySessionStorage
         return parent::regenerate($destroy, $lifetime);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function save()
     {
         if (!$this->started) {
@@ -114,15 +88,12 @@ class MockFileSessionStorage extends MockArraySessionStorage
             $this->data = $data;
         }
 
-        // this is needed when the session object is re-used across multiple requests
-        // in functional tests.
+        
+        
         $this->started = false;
     }
 
-    /**
-     * Deletes a session from persistent storage.
-     * Deliberately leaves session data in memory intact.
-     */
+    
     private function destroy(): void
     {
         set_error_handler(static function () {});
@@ -133,17 +104,13 @@ class MockFileSessionStorage extends MockArraySessionStorage
         }
     }
 
-    /**
-     * Calculate path to file.
-     */
+    
     private function getFilePath(): string
     {
         return $this->savePath.'/'.$this->id.'.mocksess';
     }
 
-    /**
-     * Reads session from storage and loads session.
-     */
+    
     private function read(): void
     {
         set_error_handler(static function () {});

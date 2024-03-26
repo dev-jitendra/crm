@@ -1,117 +1,32 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/main */
+
+
 
 import View from 'view';
 
-/**
- * A base main view. The detail, edit, list views to be extended from.
- */
+
 class MainView extends View {
 
-    /**
-     * A scope name.
-     *
-     * @type {string} scope
-     */
+    
     scope = ''
 
-    /**
-     * A name.
-     *
-     * @type {string} name
-     */
+    
     name = ''
 
-    /**
-     * A top-right menu item (button or dropdown action).
-     * Handled by a class method `action{Action}`, a click handler or a handler class.
-     *
-     * @typedef {Object} module:views/main~MenuItem
-     *
-     * @property {string} [name] A name.
-     * @property {string} [action] An action.
-     * @property {string} [link] A link.
-     * @property {string} [label] A translatable label.
-     * @property {string} [labelTranslation] A label translation path.
-     * @property {'default'|'danger'|'success'|'warning'} [style] A style. Only for buttons.
-     * @property {boolean} [hidden]
-     * @property {Object.<string,string|number|boolean>} [data] Data attribute values.
-     * @property {string} [title] A title.
-     * @property {string} [iconHtml] An icon HTML.
-     * @property {string} [iconClass] An icon class.
-     * @property {string} [html] An HTML.
-     * @property {string} [text] A text.
-     * @property {string} [className] An additional class name. Only for buttons.
-     * @property {'create'|'read'|'edit'|'stream'|'delete'} [acl] Access to a record (or a scope if `aclScope` specified)
-     *   required for a menu item.
-     * @property {string} [aclScope] A scope to check access to with the `acl` parameter.
-     * @property {string} [configCheck] A config parameter defining a menu item availability.
-     *   If starts with `!`, then the result is negated.
-     * @property {module:utils~AccessDefs[]} [accessDataList] Access definitions.
-     * @property {string} [handler] A handler.
-     * @property {string} [initFunction] An init method in the handler.
-     * @property {string} [actionFunction] An action method in the handler.
-     * @property {string} [checkVisibilityFunction] A method in the handler that determine whether an item is available.
-     * @property {function()} [onClick] A click handler.
-     */
+    
 
-    /**
-     * Top-right menu definitions.
-     *
-     * @type {{
-     *     buttons: module:views/main~MenuItem[],
-     *     dropdown: module:views/main~MenuItem[],
-     *     actions: module:views/main~MenuItem[],
-     * }} menu
-     * @private
-     * @internal
-     */
+    
     menu = {}
 
-    /**
-     * @private
-     * @type {JQuery|null}
-     */
+    
     $headerActionsContainer = null
 
-    /**
-     * A shortcut-key => action map.
-     *
-     * @protected
-     * @type {?Object.<string,string|function (JQueryKeyEventObject): void>}
-     */
+    
     shortcutKeys = null
 
-    /** @inheritDoc */
+    
     events = {
-        /** @this MainView */
+        
         'click .action': function (e) {
             Espo.Utils.handleAction(this, e.originalEvent, e.currentTarget, {
                 actionItems: [...this.menu.buttons, ...this.menu.dropdown],
@@ -122,7 +37,7 @@ class MainView extends View {
 
     lastUrl
 
-    /** @inheritDoc */
+    
     init() {
         this.scope = this.options.scope || this.scope;
         this.menu = {};
@@ -135,10 +50,7 @@ class MainView extends View {
             this.menu = this.getMetadata().get(['clientDefs', this.scope, 'menu', key]) || {};
         }
 
-        /**
-         * @private
-         * @type {string[]}
-         */
+        
         this.headerActionItemTypeList = ['buttons', 'dropdown', 'actions'];
 
         this.menu = Espo.Utils.cloneDeep(this.menu);
@@ -265,21 +177,12 @@ class MainView extends View {
         }
     }
 
-    /**
-     * Update a last history URL.
-     */
+    
     updateLastUrl() {
         this.lastUrl = this.getRouter().getCurrentUrl();
     }
 
-    /**
-     * @internal
-     * @returns {{
-     *     buttons?: module:views/main~MenuItem[],
-     *     dropdown?: module:views/main~MenuItem[],
-     *     actions?: module:views/main~MenuItem[],
-     * }}
-     */
+    
     getMenu() {
         if (this.menuDisabled || !this.menu) {
             return {};
@@ -339,22 +242,12 @@ class MainView extends View {
         return menu;
     }
 
-    /**
-     * Get a header HTML. To be overridden.
-     *
-     * @returns {string} HTML.
-     */
+    
     getHeader() {
         return '';
     }
 
-    /**
-     * Build a header HTML. To be called from the #getHeader method.
-     * Beware of XSS.
-     *
-     * @param {(string|Element|JQuery)[]} itemList A breadcrumb path. Like: Account > Name > edit.
-     * @returns {string} HTML
-     */
+    
     buildHeaderHtml(itemList) {
         const $itemList = itemList.map(item => {
             return $('<div>')
@@ -385,23 +278,13 @@ class MainView extends View {
     }
 
 
-    /**
-     * Get an icon HTML.
-     *
-     * @returns {string} HTML
-     */
+    
     getHeaderIconHtml() {
         return this.getHelper().getScopeColorIconHtml(this.scope);
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * Action 'showModal'.
-     *
-     * @todo Revise. To be removed?
-     *
-     * @param {Object} data
-     */
+    
+    
     actionShowModal(data) {
         const view = data.view;
 
@@ -427,14 +310,7 @@ class MainView extends View {
         });
     }
 
-    /**
-     * Add a menu item.
-     *
-     * @param {'buttons'|'dropdown'} type A type.
-     * @param {module:views/main~MenuItem|false} item Item definitions.
-     * @param {boolean} [toBeginning=false] To beginning.
-     * @param {boolean} [doNotReRender=false] Skip re-render.
-     */
+    
     addMenuItem(type, item, toBeginning, doNotReRender) {
         if (item) {
             item.name = item.name || item.action || Espo.Utils.generateId();
@@ -477,12 +353,7 @@ class MainView extends View {
         }
     }
 
-    /**
-     * Remove a menu item.
-     *
-     * @param {string} name An item name.
-     * @param {boolean} [doNotReRender] Skip re-render.
-     */
+    
     removeMenuItem(name, doNotReRender) {
         let index = -1;
         let type = false;
@@ -522,11 +393,7 @@ class MainView extends View {
         }
     }
 
-    /**
-     * Disable a menu item.
-     *
-     * @param {string} name A name.
-     */
+    
     disableMenuItem(name) {
         if (!this.$headerActionsContainer) {
             return;
@@ -538,11 +405,7 @@ class MainView extends View {
             .attr('disabled');
     }
 
-    /**
-     * Enable a menu item.
-     *
-     * @param {string} name A name.
-     */
+    
     enableMenuItem(name) {
         if (!this.$headerActionsContainer) {
             return;
@@ -554,13 +417,8 @@ class MainView extends View {
             .removeAttr('disabled');
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * Action 'navigateToRoot'.
-     *
-     * @param {Object} data
-     * @param {MouseEvent} event
-     */
+    
+    
     actionNavigateToRoot(data, event) {
         event.stopPropagation();
 
@@ -576,11 +434,7 @@ class MainView extends View {
         });
     }
 
-    /**
-     * Hide a menu item.
-     *
-     * @param {string} name A name.
-     */
+    
     hideHeaderActionItem(name) {
         this.headerActionItemTypeList.forEach(t => {
             (this.menu[t] || []).forEach(item => {
@@ -603,11 +457,7 @@ class MainView extends View {
         this.adjustButtons();
     }
 
-    /**
-     * Show a hidden menu item.
-     *
-     * @param {string} name A name.
-     */
+    
     showHeaderActionItem(name) {
         this.headerActionItemTypeList.forEach(t => {
             (this.menu[t] || []).forEach(item => {
@@ -638,12 +488,7 @@ class MainView extends View {
         processUi();
     }
 
-    /**
-     * Whether a menu has any non-hidden dropdown items.
-     *
-     * @private
-     * @returns {boolean}
-     */
+    
     hasMenuVisibleDropdownItems() {
         let hasItems = false;
 
@@ -656,9 +501,7 @@ class MainView extends View {
         return hasItems;
     }
 
-    /**
-     * @private
-     */
+    
     controlMenuDropdownVisibility() {
         const $group = this.$headerActionsContainer.find('.dropdown-group');
 
@@ -673,17 +516,12 @@ class MainView extends View {
         $group.find('> button').addClass('hidden');
     }
 
-    /**
-     * @protected
-     * @return {module:views/header}
-     */
+    
     getHeaderView() {
         return this.getView('header');
     }
 
-    /**
-     * @private
-     */
+    
     adjustButtons() {
         const $buttons = this.$headerActionsContainer.find('.btn');
 
@@ -697,12 +535,7 @@ class MainView extends View {
         $buttonsVisible.last().addClass('radius-right');
     }
 
-    /**
-     * Called when a stored view is reused (by the controller).
-     *
-     * @public
-     * @param {Object.<string, *>} params Routing params.
-     */
+    
     setupReuse(params) {}
 }
 

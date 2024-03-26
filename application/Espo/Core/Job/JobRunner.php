@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Job;
 
@@ -54,9 +28,7 @@ class JobRunner
         private Config $config
     ) {}
 
-    /**
-     * Run a job entity. Does not throw exceptions.
-     */
+    
     public function run(JobEntity $jobEntity): void
     {
         try {
@@ -67,27 +39,20 @@ class JobRunner
         }
     }
 
-    /**
-     * Run a job entity. Throws exceptions.
-     *
-     * @throws Throwable
-     */
+    
     public function runThrowingException(JobEntity $jobEntity): void
     {
         $this->runInternal($jobEntity, true);
     }
 
-    /**
-     * Run a job by ID. A job must have status 'Ready'.
-     * Used when running jobs in parallel processes.
-     */
+    
     public function runById(string $id): void
     {
         if ($id === '') {
             throw new RuntimeException("Empty job ID.");
         }
 
-        /** @var ?JobEntity $jobEntity */
+        
         $jobEntity = $this->entityManager->getEntityById(JobEntity::ENTITY_TYPE, $id);
 
         if (!$jobEntity) {
@@ -103,9 +68,7 @@ class JobRunner
         $this->run($jobEntity);
     }
 
-    /**
-     * @throws Throwable
-     */
+    
     private function runInternal(JobEntity $jobEntity, bool $throwException = false): void
     {
         $isSuccess = true;
@@ -178,9 +141,7 @@ class JobRunner
         }
     }
 
-    /**
-     * @throws Error
-     */
+    
     private function runJobNamed(JobEntity $jobEntity): void
     {
         $jobName = $jobEntity->getJob();
@@ -194,9 +155,7 @@ class JobRunner
         $this->runJob($job, $jobEntity);
     }
 
-    /**
-     * @throws Error
-     */
+    
     private function runScheduledJob(JobEntity $jobEntity): void
     {
         $jobName = $jobEntity->getScheduledJobJob();
@@ -223,10 +182,7 @@ class JobRunner
         $this->runJob($job, $jobEntity);
     }
 
-    /**
-     * @param Job|JobDataLess $job
-     * @internal Native type is not used for bc.
-     */
+    
     private function runJob($job, JobEntity $jobEntity): void
     {
         if ($job instanceof JobDataLess) {
@@ -242,9 +198,7 @@ class JobRunner
         $job->run($data);
     }
 
-    /**
-     * @throws Error
-     */
+    
     private function runService(JobEntity $jobEntity): void
     {
         $serviceName = $jobEntity->getServiceName();

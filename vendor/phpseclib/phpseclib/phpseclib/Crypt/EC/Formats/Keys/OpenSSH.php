@@ -1,17 +1,6 @@
 <?php
 
-/**
- * OpenSSH Formatted EC Key Handler
- *
- * PHP version 5
- *
- * Place in $HOME/.ssh/authorized_keys
- *
- * @author    Jim Wigginton <terrafrost@php.net>
- * @copyright 2015 Jim Wigginton
- * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
- * @link      http://phpseclib.sourceforge.net
- */
+
 
 namespace phpseclib3\Crypt\EC\Formats\Keys;
 
@@ -22,20 +11,12 @@ use phpseclib3\Crypt\EC\Curves\Ed25519;
 use phpseclib3\Exception\UnsupportedCurveException;
 use phpseclib3\Math\BigInteger;
 
-/**
- * OpenSSH Formatted EC Key Handler
- *
- * @author  Jim Wigginton <terrafrost@php.net>
- */
+
 abstract class OpenSSH extends Progenitor
 {
     use Common;
 
-    /**
-     * Supported Key Types
-     *
-     * @var array
-     */
+    
     protected static $types = [
         'ecdsa-sha2-nistp256',
         'ecdsa-sha2-nistp384',
@@ -43,13 +24,7 @@ abstract class OpenSSH extends Progenitor
         'ssh-ed25519'
     ];
 
-    /**
-     * Break a public or private key down into its constituent components
-     *
-     * @param string $key
-     * @param string $password optional
-     * @return array
-     */
+    
     public static function load($key, $password = '')
     {
         $parsed = parent::load($key, $password);
@@ -99,11 +74,7 @@ abstract class OpenSSH extends Progenitor
         ];
     }
 
-    /**
-     * Returns the alias that corresponds to a curve
-     *
-     * @return string
-     */
+    
     private static function getAlias(BaseCurve $curve)
     {
         self::initialize_static_variables();
@@ -131,14 +102,7 @@ abstract class OpenSSH extends Progenitor
         return $alias;
     }
 
-    /**
-     * Convert an EC public key to the appropriate format
-     *
-     * @param \phpseclib3\Crypt\EC\BaseCurves\Base $curve
-     * @param \phpseclib3\Math\Common\FiniteField\Integer[] $publicKey
-     * @param array $options optional
-     * @return string
-     */
+    
     public static function savePublicKey(BaseCurve $curve, array $publicKey, array $options = [])
     {
         $comment = isset($options['comment']) ? $options['comment'] : self::$comment;
@@ -168,17 +132,7 @@ abstract class OpenSSH extends Progenitor
         return $key;
     }
 
-    /**
-     * Convert a private key to the appropriate format.
-     *
-     * @param \phpseclib3\Math\BigInteger $privateKey
-     * @param \phpseclib3\Crypt\EC\Curves\Ed25519 $curve
-     * @param \phpseclib3\Math\Common\FiniteField\Integer[] $publicKey
-     * @param string $secret optional
-     * @param string $password optional
-     * @param array $options optional
-     * @return string
-     */
+    
     public static function savePrivateKey(BigInteger $privateKey, BaseCurve $curve, array $publicKey, $secret = null, $password = '', array $options = [])
     {
         if ($curve instanceof Ed25519) {

@@ -31,79 +31,35 @@ use function usort;
 use const CASE_LOWER;
 use const SORT_LOCALE_STRING;
 
-/**
- * Laminas\Ldap\Collection\DefaultIterator is the default collection iterator implementation
- * using ext/ldap
- *
- * @template-implements Iterator<string, array{dn: string, ...}>
- */
+
 class DefaultIterator implements Iterator, Countable
 {
     public const ATTRIBUTE_TO_LOWER = 1;
     public const ATTRIBUTE_TO_UPPER = 2;
     public const ATTRIBUTE_NATIVE   = 3;
 
-    /**
-     * LDAP Connection
-     *
-     * @var \Laminas\Ldap\Ldap
-     */
+    
     protected $ldap;
 
-    /**
-     * Result identifier resource
-     *
-     * @var Result|null
-     */
+    
     protected $resultId;
 
-    /**
-     * Current result entry identifier
-     *
-     * @var ResultEntry|null
-     */
+    
     protected $current;
 
-    /**
-     * Number of items in query result
-     *
-     * @var int
-     */
+    
     protected $itemCount = -1;
 
-    /**
-     * The method that will be applied to the attribute's names.
-     *
-     * @var  integer|callable
-     */
+    
     protected $attributeNameTreatment = self::ATTRIBUTE_TO_LOWER;
 
-    /**
-     * This array holds a list of resources and sorting-values.
-     *
-     * Each result is represented by an array containing the keys <var>resource</var>
-     * which holds a resource of a result-item and the key <var>sortValue</var>
-     * which holds the value by which the array will be sorted.
-     *
-     * The resources will be filled on creating the instance and the sorting values
-     * on sorting.
-     *
-     * @var array
-     * @psalm-var array<array{resource: ResultEntry, sortValue: string}>
-     */
+    
     protected $entries = [];
 
-    /**
-     * The function to sort the entries by
-     *
-     * @var callable
-     */
+    
     protected $sortFunction;
 
-    /**
-     * @param  Result $resultId
-     * @throws LdapException If no entries was found.
-     */
+    
     public function __construct(Ldap\Ldap $ldap, $resultId)
     {
         $this->setSortFunction('strnatcasecmp');
@@ -141,11 +97,7 @@ class DefaultIterator implements Iterator, Countable
         $this->close();
     }
 
-    /**
-     * Closes the current result set
-     *
-     * @return bool
-     */
+    
     public function close()
     {
         $isClosed = false;
@@ -160,29 +112,13 @@ class DefaultIterator implements Iterator, Countable
         return $isClosed;
     }
 
-    /**
-     * Gets the current LDAP connection.
-     *
-     * @return \Laminas\Ldap\Ldap
-     */
+    
     public function getLDAP()
     {
         return $this->ldap;
     }
 
-    /**
-     * Sets the attribute name treatment.
-     *
-     * Can either be one of the following constants
-     * - Laminas\Ldap\Collection\DefaultIterator::ATTRIBUTE_TO_LOWER
-     * - Laminas\Ldap\Collection\DefaultIterator::ATTRIBUTE_TO_UPPER
-     * - Laminas\Ldap\Collection\DefaultIterator::ATTRIBUTE_NATIVE
-     * or a valid callback accepting the attribute's name as it's only
-     * argument and returning the new attribute's name.
-     *
-     * @param  int|callable $attributeNameTreatment
-     * @return DefaultIterator Provides a fluent interface
-     */
+    
     public function setAttributeNameTreatment($attributeNameTreatment)
     {
         if (is_callable($attributeNameTreatment)) {
@@ -213,31 +149,20 @@ class DefaultIterator implements Iterator, Countable
         return $this;
     }
 
-    /**
-     * Returns the currently set attribute name treatment
-     *
-     * @return int|callable
-     */
+    
     public function getAttributeNameTreatment()
     {
         return $this->attributeNameTreatment;
     }
 
-    /**
-     * @inheritDoc
-     *
-     * Returns the number of items in current result
-     */
+    
     #[ReturnTypeWillChange]
     public function count()
     {
         return $this->itemCount;
     }
 
-    /**
-     * @inheritDoc
-     * @throws LdapException
-     */
+    
     #[ReturnTypeWillChange]
     public function current()
     {
@@ -292,10 +217,7 @@ class DefaultIterator implements Iterator, Countable
         return $entry;
     }
 
-    /**
-     * @inheritDoc
-     * @throws LdapException
-     */
+    
     #[ReturnTypeWillChange]
     public function key()
     {
@@ -319,7 +241,7 @@ class DefaultIterator implements Iterator, Countable
         return $currentDn;
     }
 
-    /** @inheritDoc */
+    
     #[ReturnTypeWillChange]
     public function next()
     {
@@ -328,7 +250,7 @@ class DefaultIterator implements Iterator, Countable
         $this->current = $nextEntry['resource'] ?? null;
     }
 
-    /** @inheritDoc */
+    
     #[ReturnTypeWillChange]
     public function rewind()
     {
@@ -337,21 +259,14 @@ class DefaultIterator implements Iterator, Countable
         $this->current = $nextEntry['resource'] ?? null;
     }
 
-    /** @inheritDoc */
+    
     #[ReturnTypeWillChange]
     public function valid()
     {
         return Handler::isResultEntryHandle($this->current);
     }
 
-    /**
-     * Set a sorting-algorithm for this iterator
-     *
-     * The callable has to accept two parameters that will be compared.
-     *
-     * @param callable $sortFunction The algorithm to be used for sorting
-     * @return DefaultIterator Provides a fluent interface
-     */
+    
     public function setSortFunction(callable $sortFunction)
     {
         $this->sortFunction = $sortFunction;
@@ -359,19 +274,7 @@ class DefaultIterator implements Iterator, Countable
         return $this;
     }
 
-    /**
-     * Sort the iterator
-     *
-     * Sorting is done using the set sortFunction which is by default strnatcasecmp.
-     *
-     * The attribute is determined by lowercasing everything.
-     *
-     * The sort-value will be the first value of the attribute.
-     *
-     * @param string $sortAttribute The attribute to sort by. If not given the
-     *                              value set via setSortAttribute is used.
-     * @return void
-     */
+    
     public function sort($sortAttribute)
     {
         foreach ($this->entries as $key => $entry) {

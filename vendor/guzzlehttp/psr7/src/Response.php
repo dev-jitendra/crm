@@ -5,14 +5,12 @@ namespace GuzzleHttp\Psr7;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 
-/**
- * PSR-7 response implementation.
- */
+
 class Response implements ResponseInterface
 {
     use MessageTrait;
 
-    /** @var array Map of standard HTTP status code/reason phrases */
+    
     private static $phrases = [
         100 => 'Continue',
         101 => 'Switching Protocols',
@@ -74,19 +72,13 @@ class Response implements ResponseInterface
         511 => 'Network Authentication Required',
     ];
 
-    /** @var string */
+    
     private $reasonPhrase = '';
 
-    /** @var int */
+    
     private $statusCode = 200;
 
-    /**
-     * @param int                                  $status  Status code
-     * @param array                                $headers Response headers
-     * @param string|resource|StreamInterface|null $body    Response body
-     * @param string                               $version Protocol version
-     * @param string|null                          $reason  Reason phrase (when empty a default will be used based on the status code)
-     */
+    
     public function __construct(
         $status = 200,
         array $headers = [],

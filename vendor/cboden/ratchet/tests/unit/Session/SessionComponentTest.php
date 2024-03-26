@@ -4,11 +4,7 @@ use Ratchet\AbstractMessageComponentTestCase;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\NullSessionHandler;
 
-/**
- * @covers Ratchet\Session\SessionProvider
- * @covers Ratchet\Session\Storage\VirtualSessionStorage
- * @covers Ratchet\Session\Storage\Proxy\VirtualProxy
- */
+
 class SessionProviderTest extends AbstractMessageComponentTestCase {
     public function setUp() {
         return $this->markTestIncomplete('Test needs to be updated for ini_set issue in PHP 7.2');
@@ -44,9 +40,7 @@ class SessionProviderTest extends AbstractMessageComponentTestCase {
         );
     }
 
-    /**
-     * @dataProvider classCaseProvider
-     */
+    
     public function testToClassCase($in, $out) {
         $ref = new \ReflectionClass('\\Ratchet\\Session\\SessionProvider');
         $method = $ref->getMethod('toClassCase');
@@ -56,9 +50,7 @@ class SessionProviderTest extends AbstractMessageComponentTestCase {
         $this->assertEquals($out, $method->invokeArgs($component, array($in)));
     }
 
-    /**
-     * I think I have severely butchered this test...it's not so much of a unit test as it is a full-fledged component test
-     */
+    
     public function testConnectionValueFromPdo() {
         if (!extension_loaded('PDO') || !extension_loaded('pdo_sqlite')) {
             return $this->markTestSkipped('Session test requires PDO and pdo_sqlite');

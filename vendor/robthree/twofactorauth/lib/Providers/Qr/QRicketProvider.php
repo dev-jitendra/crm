@@ -2,7 +2,7 @@
 
 namespace RobThree\Auth\Providers\Qr;
 
-// http://qrickit.com/qrickit_apps/qrickit_api.php
+
 class QRicketProvider extends BaseHTTPQRCodeProvider 
 {
     public $errorcorrectionlevel;
@@ -43,7 +43,7 @@ class QRicketProvider extends BaseHTTPQRCodeProvider
     
     public function getUrl($qrtext, $size) 
     {
-        return 'http://qrickit.com/api/qr'
+        return 'http:
             . '?qrsize=' . $size
             . '&e=' . strtolower($this->errorcorrectionlevel)
             . '&bgdcolor=' . $this->bgcolor

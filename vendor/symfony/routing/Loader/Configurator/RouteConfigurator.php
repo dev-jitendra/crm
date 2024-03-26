@@ -1,21 +1,12 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Routing\Loader\Configurator;
 
 use Symfony\Component\Routing\RouteCollection;
 
-/**
- * @author Nicolas Grekas <p@tchwork.com>
- */
+
 class RouteConfigurator
 {
     use Traits\AddTrait;
@@ -29,17 +20,11 @@ class RouteConfigurator
         $this->collection = $collection;
         $this->route = $route;
         $this->name = $name;
-        $this->parentConfigurator = $parentConfigurator; // for GC control
+        $this->parentConfigurator = $parentConfigurator; 
         $this->prefixes = $prefixes;
     }
 
-    /**
-     * Sets the host to use for all child routes.
-     *
-     * @param string|array $host the host, or the localized hosts
-     *
-     * @return $this
-     */
+    
     final public function host(string|array $host): static
     {
         $this->addHost($this->route, $host);

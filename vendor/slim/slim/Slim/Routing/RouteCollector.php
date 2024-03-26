@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -29,10 +25,7 @@ use function sprintf;
 use function is_readable;
 use function is_writable;
 
-/**
- * RouteCollector is used to collect routes and route groups
- * as well as generate paths and URLs relative to its environment
- */
+
 class RouteCollector implements RouteCollectorInterface
 {
     protected RouteParserInterface $routeParser;
@@ -43,40 +36,22 @@ class RouteCollector implements RouteCollectorInterface
 
     protected InvocationStrategyInterface $defaultInvocationStrategy;
 
-    /**
-     * Base path used in pathFor()
-     */
+    
     protected string $basePath = '';
 
-    /**
-     * Path to fast route cache file. Set to null to disable route caching
-     */
+    
     protected ?string $cacheFile = null;
 
-    /**
-     * Routes
-     *
-     * @var RouteInterface[]
-     */
+    
     protected array $routes = [];
 
-    /**
-     * Routes indexed by name
-     *
-     * @var RouteInterface[]
-     */
+    
     protected array $routesByName = [];
 
-    /**
-     * Route groups
-     *
-     * @var RouteGroupInterface[]
-     */
+    
     protected array $routeGroups = [];
 
-    /**
-     * Route counter incrementer
-     */
+    
     protected int $routeCounter = 0;
 
     protected ResponseFactoryInterface $responseFactory;
@@ -105,9 +80,7 @@ class RouteCollector implements RouteCollectorInterface
         return $this->routeParser;
     }
 
-    /**
-     * Get default route invocation strategy
-     */
+    
     public function getDefaultInvocationStrategy(): InvocationStrategyInterface
     {
         return $this->defaultInvocationStrategy;
@@ -119,17 +92,13 @@ class RouteCollector implements RouteCollectorInterface
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getCacheFile(): ?string
     {
         return $this->cacheFile;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function setCacheFile(string $cacheFile): RouteCollectorInterface
     {
         if (file_exists($cacheFile) && !is_readable($cacheFile)) {
@@ -148,17 +117,13 @@ class RouteCollector implements RouteCollectorInterface
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getBasePath(): string
     {
         return $this->basePath;
     }
 
-    /**
-     * Set the base path used in urlFor()
-     */
+    
     public function setBasePath(string $basePath): RouteCollectorInterface
     {
         $this->basePath = $basePath;
@@ -166,17 +131,13 @@ class RouteCollector implements RouteCollectorInterface
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getRoutes(): array
     {
         return $this->routes;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function removeNamedRoute(string $name): RouteCollectorInterface
     {
         $route = $this->getNamedRoute($name);
@@ -185,9 +146,7 @@ class RouteCollector implements RouteCollectorInterface
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getNamedRoute(string $name): RouteInterface
     {
         if (isset($this->routesByName[$name])) {
@@ -209,9 +168,7 @@ class RouteCollector implements RouteCollectorInterface
         throw new RuntimeException('Named route does not exist for name: ' . $name);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function lookupRoute(string $identifier): RouteInterface
     {
         if (!isset($this->routes[$identifier])) {
@@ -220,9 +177,7 @@ class RouteCollector implements RouteCollectorInterface
         return $this->routes[$identifier];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function group(string $pattern, $callable): RouteGroupInterface
     {
         $routeGroup = $this->createGroup($pattern, $callable);
@@ -234,9 +189,7 @@ class RouteCollector implements RouteCollectorInterface
         return $routeGroup;
     }
 
-    /**
-     * @param string|callable $callable
-     */
+    
     protected function createGroup(string $pattern, $callable): RouteGroupInterface
     {
         $routeCollectorProxy = $this->createProxy($pattern);
@@ -254,9 +207,7 @@ class RouteCollector implements RouteCollectorInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function map(array $methods, string $pattern, $handler): RouteInterface
     {
         $route = $this->createRoute($methods, $pattern, $handler);
@@ -272,10 +223,7 @@ class RouteCollector implements RouteCollectorInterface
         return $route;
     }
 
-    /**
-     * @param string[]        $methods
-     * @param callable|string $callable
-     */
+    
     protected function createRoute(array $methods, string $pattern, $callable): RouteInterface
     {
         return new Route(

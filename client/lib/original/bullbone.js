@@ -5,20 +5,13 @@ Espo.loader.setContextId('lib!bullbone');
     (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.bullbone = {}, global._, global.$, global.Handlebard));
 })(this, (function (exports, _, $, Handlebars) { 'use strict';
 
-    /**
-     * Credits to Backbone.js.
-     * Copyright (c) 2010-2022 Jeremy Ashkenas, DocumentCloud
-     */
+    
 
-    /**
-     * An Events mixin.
-     *
-     * @alias Bull.Events
-     */
+    
     const Events = {};
 
     if ('Backbone' in window) {
-        /** For backward compatibility. */
+        
         window.Backbone.Events = Events;
     }
 
@@ -30,7 +23,7 @@ Espo.loader.setContextId('lib!bullbone');
         let i = 0, names;
 
         if (name && typeof name === 'object') {
-            // Handle event maps.
+            
             if (callback !== void 0 && 'context' in opts && opts.context === void 0) {
                 opts.context = callback;
             }
@@ -39,25 +32,19 @@ Espo.loader.setContextId('lib!bullbone');
                 events = eventsApi(iteratee, events, names[i], name[names[i]], opts);
             }
         } else if (name && eventSplitter.test(name)) {
-            // Handle space-separated event names by delegating them individually.
+            
             for (names = name.split(eventSplitter); i < names.length; i++) {
                 events = iteratee(events, names[i], callback, opts);
             }
         } else {
-            // Finally, standard events.
+            
             events = iteratee(events, name, callback, opts);
         }
 
         return events;
     };
 
-    /**
-     * Subscribe to an event.
-     *
-     * @param {string} name An event.
-     * @param {Bull.Events~callback} callback A callback.
-     * @param {Object} [context] Deprecated.
-     */
+    
     Events.on = function (name, callback, context) {
         this._events = eventsApi(onApi, this._events || {}, name, callback, {
             context: context,
@@ -69,21 +56,15 @@ Espo.loader.setContextId('lib!bullbone');
             let listeners = this._listeners || (this._listeners = {});
 
             listeners[_listening.id] = _listening;
-            // Allow the listening to use a counter, instead of tracking
-            // callbacks for library interop
+            
+            
             _listening.interop = false;
         }
 
         return this;
     };
 
-    /**
-     * Subscribe to an event of other object.
-     *
-     * @param {Object} other What to listen.
-     * @param {string} name An event.
-     * @param {Bull.Events~callback} callback A callback.
-     */
+    
     Events.listenTo = function (other, name, callback) {
         if (!other) {
             return this;
@@ -93,15 +74,15 @@ Espo.loader.setContextId('lib!bullbone');
         let listeningTo = this._listeningTo || (this._listeningTo = {});
         let listening = _listening = listeningTo[id];
 
-        // This object is not listening to any other events on `obj` yet.
-        // Set up the necessary references to track the listening callbacks.
+        
+        
         if (!listening) {
             this._listenId || (this._listenId = _.uniqueId('l'));
 
             listening = _listening = listeningTo[id] = new Listening(this, other);
         }
 
-        // Bind callbacks on obj.
+        
         let error = tryCatchOn(other, name, callback, this);
         _listening = void 0;
 
@@ -109,7 +90,7 @@ Espo.loader.setContextId('lib!bullbone');
             throw error;
         }
 
-        // If the target obj is not Backbone.Events, track events manually.
+        
         if (listening.interop) {
             listening.on(name, callback);
         }
@@ -140,15 +121,7 @@ Espo.loader.setContextId('lib!bullbone');
         }
     };
 
-    /**
-     * Unsubscribe from an event or all events.
-     *
-     * @function off
-     * @memberof Bull.Events
-     * @param {string} [name] From a specific event.
-     * @param {Bull.Events~callback} [callback] From a specific callback.
-     * @param {Object} [context] Deprecated.
-     */
+    
     Events.off = function(name, callback, context) {
         if (!this._events) {
             return this;
@@ -162,13 +135,7 @@ Espo.loader.setContextId('lib!bullbone');
         return this;
     };
 
-    /**
-     * Stop listening to other object. No arguments will remove all listeners.
-     *
-     * @param {Object} [other] To remove listeners to a specific object.
-     * @param {string} [name] To remove listeners to a specific event.
-     * @param {Bull.Events~callback} [callback] To remove listeners to a specific callback.
-     */
+    
     Events.stopListening = function (other, name, callback) {
         let listeningTo = this._listeningTo;
 
@@ -181,8 +148,8 @@ Espo.loader.setContextId('lib!bullbone');
         for (let i = 0; i < ids.length; i++) {
             let listening = listeningTo[ids[i]];
 
-            // If listening doesn't exist, this object is not currently
-            // listening to obj. Break out early.
+            
+            
             if (!listening) {
                 break;
             }
@@ -209,7 +176,7 @@ Espo.loader.setContextId('lib!bullbone');
         let context = options.context, listeners = options.listeners;
         let i = 0, names;
 
-        // Delete all event listeners and "drop" events.
+        
         if (!name && !context && !callback) {
             for (names = _.keys(listeners); i < names.length; i++) {
                 listeners[names[i]].cleanup();
@@ -224,12 +191,12 @@ Espo.loader.setContextId('lib!bullbone');
             name = names[i];
             let handlers = events[name];
 
-            // Bail out if there are no events stored.
+            
             if (!handlers) {
                 break;
             }
 
-            // Find any remaining events.
+            
             let remaining = [];
 
             for (let j = 0; j < handlers.length; j++) {
@@ -250,7 +217,7 @@ Espo.loader.setContextId('lib!bullbone');
                 }
             }
 
-            // Replace events if there are any remaining.  Otherwise, clean up.
+            
             if (remaining.length) {
                 events[name] = remaining;
             } else {
@@ -261,15 +228,9 @@ Espo.loader.setContextId('lib!bullbone');
         return events;
     };
 
-    /**
-     * Subscribe to an event. Fired once.
-     *
-     * @param {string} name An event.
-     * @param {Bull.Events~callback} callback A callback.
-     * @param {Object} [context] Deprecated.
-     */
+    
     Events.once = function (name, callback, context) {
-        // Map the event into a `{event: once}` object.
+        
         let events = eventsApi(onceMap, {}, name, callback, this.off.bind(this));
 
         if (typeof name === 'string' && context == null) {
@@ -279,15 +240,9 @@ Espo.loader.setContextId('lib!bullbone');
         return this.on(events, callback, context);
     };
 
-    /**
-     * Subscribe to an event of other object. Fired once. Will be automatically unsubscribed on view removal.
-     *
-     * @param {Object} other What to listen.
-     * @param {string} name An event.
-     * @param {Bull.Events~callback} callback A callback.
-     */
+    
     Events.listenToOnce = function (other, name, callback) {
-        // Map the event into a `{event: once}` object.
+        
         let events = eventsApi(onceMap, {}, name, callback, this.stopListening.bind(this, other));
 
         return this.listenTo(other, events);
@@ -306,12 +261,7 @@ Espo.loader.setContextId('lib!bullbone');
         return map;
     };
 
-    /**
-     * Trigger an event.
-     *
-     * @param {string} name An event.
-     * @param {...*} arguments Arguments.
-     */
+    
     Events.trigger = function(name) {
         if (!this._events) {
             return this;
@@ -408,215 +358,59 @@ Espo.loader.setContextId('lib!bullbone');
         }
     };
 
-    // noinspection JSUnusedGlobalSymbols
+    
 
 
-    /**
-     * View options passed to a view on creation.
-     *
-     * @typedef {Object.<string, *>} Bull.View~Options
-     *
-     * @property {string} [selector] A DOM element selector relative to a parent view.
-     * @property {string} [fullSelector] A full DOM element selector.
-     * @property {string[]} [optionsToPass] Options to be automatically passed to child views
-     *   of the created view.
-     * @property {(function: Object)|Object} [data] Data that will be passed to a template or a function
-     *   that returns data.
-     * @property {string} [template] A template name.
-     * @property {string} [templateContent] Template content.
-     * @property {Object} [layoutDefs] Internal layout defs.
-     * @property {Object} [layoutData] Internal layout data.
-     * @property {boolean} [notToRender] Not to render on ready.
-     * @property {Object.<string, Bull.View~NestedViewItem>} [views] Child view definitions.
-     * @property {string} [name] A view name.
-     * @property {Bull.Model} [model] A model.
-     * @property {Bull.Collection} [collection] A collection.
-     * @property {Bull.View.DomEvents} [events] DOM events.
-     * @property {boolean} [setViewBeforeCallback] A child view will be set to a parent before a promise is resolved.
-     */
+    
 
-    /**
-     * @typedef {Object} Bull
-     */
+    
 
-    /**
-     * A model.
-     *
-     * @typedef {Object} Bull~Model
-     * @type Object
-     * @mixes Bull.Events
-     */
+    
 
-    /**
-     * A collection.
-     *
-     * @typedef {Object} Bull~Collection
-     * @type Object
-     * @mixes Bull.Events
-     */
+    
 
-    /**
-     * Nested view definitions.
-     *
-     * @typedef {Object} Bull.View~NestedViewItem
-     *
-     * @property {string} view A view name/path.
-     * @property {string} [selector] A DOM element selector relative to a parent view.
-     * @property {string} [fullSelector] A full DOM element selector.
-     * @property {string} [el] Deprecated. Use `fullSelector`. A full DOM element selector.
-     */
+    
 
-    /**
-     * After a view is rendered.
-     *
-     * @event Bull.View#after:render
-     */
+    
 
-    /**
-     * Once a view is ready for rendering (loaded).
-     *
-     * @event Bull.View#ready
-     */
+    
 
-    /**
-     * Once a view is removed.
-     *
-     * @event Bull.View#remove
-     */
+    
 
-    /**
-     * A get-HTML callback.
-     *
-     * @callback Bull.View~getHtmlCallback
-     *
-     * @param {string} html An HTML.
-     */
+    
 
-    /**
-     * A DOM event callback.
-     *
-     * @callback Bull.View~domEventCallback
-     *
-     * @param {jQuery.Event} e An event.
-     */
+    
 
-    /**
-     * A DOM event handler callback.
-     *
-     * @callback Bull.View~domEventHandlerCallback
-     * @param {Event} event An event.
-     * @param {HTMLElement} A target element.
-     */
+    
 
-    /**
-     * @typedef {'click'|'mousedown'|'keydown'|string} Bull.View~domEventType
-     */
+    
 
-    /**
-     * @callback Bull.Events~callback
-     *
-     * @param {...*} arguments
-     */
+    
 
-    /**
-     * @mixin Bull.Events
-     */
+    
 
-    /**
-     * Trigger an event.
-     *
-     * @function trigger
-     * @memberof Bull.Events
-     * @param {string} event An event.
-     * @param {...*} arguments Arguments.
-     */
+    
 
-    /**
-     * Subscribe to an event.
-     *
-     * @function on
-     * @memberof Bull.Events
-     * @param {string} event An event.
-     * @param {Bull.Events~callback} callback A callback.
-     */
+    
 
-    /**
-     * Subscribe to an event. Fired once.
-     *
-     * @function once
-     * @memberof Bull.Events
-     * @param {string} event An event.
-     * @param {Bull.Events~callback} callback A callback.
-     */
+    
 
-    /**
-     * Unsubscribe from an event or all events.
-     *
-     * @function off
-     * @memberof Bull.Events
-     * @param {string} [event] From a specific event.
-     * @param {Bull.Events~callback} [callback] From a specific callback.
-     */
+    
 
-    /**
-     * Subscribe to an event of other object. Will be automatically unsubscribed on view removal.
-     *
-     * @function listenTo
-     * @memberof Bull.Events
-     * @param {Object} other What to listen.
-     * @param {string} event An event.
-     * @param {Bull.Events~callback} callback A callback.
-     */
+    
 
-    /**
-     * Subscribe to an event of other object. Fired once. Will be automatically unsubscribed on view removal.
-     *
-     * @function listenToOnce
-     * @memberof Bull.Events
-     * @param {Object} other What to listen.
-     * @param {string} event An event.
-     * @param {Bull.Events~callback} callback A callback.
-     */
+    
 
-    /**
-     * Stop listening to other object. No arguments will remove all listeners.
-     *
-     * @function stopListening
-     * @memberof Bull.Events
-     * @param {Object} [other] To remove listeners to a specific object.
-     * @param {string} [event] To remove listeners to a specific event.
-     * @param {Bull.Events~callback} [callback] To remove listeners to a specific callback.
-     */
+    
 
-    /**
-     * DOM event listeners.
-     *
-     * @typedef {Object.<string, Bull.View~domEventCallback>} Bull.View.DomEvents
-     */
+    
 
-    /**
-     * @typedef {Object} Bull.View~nestedViewItemDefs
-     * @property {string} name A name.
-     * @property {string|Bull.View|boolean} [view] A view.
-     * @property {string} [template] A template.
-     * @property {boolean} [notToRender] Not to render.
-     * @property {string} [selector] A relative selector.
-     * @property {string} [fullSelector] A full selector.
-     * @property {Object.<string, *>} [options] Options.
-     */
+    
 
-    /**
-     * A view.
-     *
-     * @alias Bull.View
-     * @mixes Bull.Events
-     */
+    
     class View {
 
-        /**
-         * @param {Object.<string, *>} [options]
-         * @mixes Bull.Events
-         */
+        
         constructor(options = {}) {
             this.cid = _.uniqueId('view');
 
@@ -638,207 +432,99 @@ Espo.loader.setContextId('lib!bullbone');
             }
         }
 
-        /**
-         * An ID, unique among all views.
-         * @type {string}
-         * @public
-         */
+        
         cid
 
-        /**
-         * @type {string}
-         * @private
-         */
+        
         _elementSelector
 
-        /**
-         * Is component. Components does not require a DOM container defined by a parent view.
-         * Should have one root DOM element.
-         *
-         * An experimental feature.
-         *
-         * @readonly
-         * @type {boolean}
-         */
+        
         isComponent = false
 
-        /**
-         * A DOM element.
-         *
-         * @type {Element}
-         */
+        
         element
 
-        /**
-         * A template name/path.
-         *
-         * @type {string|null}
-         * @protected
-         */
+        
         template = null
 
-        /**
-         * Template content. Alternative to specifying a template name/path.
-         *
-         * @type {string|null}
-         * @protected
-         */
+        
         templateContent = null
 
-        /**
-         * DOM event listeners. Recommended to use `addHandler` method instead.
-         *
-         * @type {Bull.View.DomEvents}
-         * @protected
-         */
+        
         events = null
 
-        /**
-         * Not to render a view automatically when a view tree is built (ready).
-         * Afterward, it can be rendered manually.
-         *
-         * @type {boolean}
-         * @protected
-         */
+        
         notToRender = false
 
-        /**
-         * Layout definitions.
-         *
-         * @type {Object|null}
-         * @protected
-         * @internal
-         */
+        
         _layoutDefs = null
 
-        /**
-         * Layout data.
-         *
-         * @type {Object|null}
-         * @protected
-         */
+        
         layoutData = null
 
-        /**
-         * Whether the view is ready for rendering (all necessary data is loaded).
-         *
-         * @type {boolean}
-         * @public
-         */
+        
         isReady = false
 
-        /**
-         * Definitions for nested views that should be automatically created.
-         * Format: viewKey => view defs.
-         *
-         * Example: ```
-         * {
-         *   body: {
-         *     view: 'view/path/body',
-         *     selector: '> .body',
-         *   }
-         * }
-         * ```
-         *
-         * @type {Object.<string, Bull.View~NestedViewItem>|null}
-         * @protected
-         */
+        
         views = null
 
-        /**
-         * A list of options to be automatically passed to child views.
-         *
-         * @type {string[]|null}
-         * @protected
-         */
+        
         optionsToPass = null
 
-        /**
-         * Nested views.
-         *
-         * @type {Object.<string, View>}
-         * @protected
-         * @internal
-         */
+        
         nestedViews = null
 
-        /**
-         * @private
-         * @type {Bull.Factory}
-         */
+        
         _factory = null
 
-        /**
-         * A helper.
-         *
-         * @protected
-         */
+        
         _helper = null
 
-        /**
-         * @type {string|null}
-         * @private
-         */
+        
         _template = null
-        /**
-         * @type {Object.<string, Bull.View~nestedViewItemDefs>|null}
-         * @private
-         */
+        
         _nestedViewDefs = null
-        /**
-         * @type {Bull.Templator}
-         * @private
-         */
+        
         _templator = null
-        /** @private */
+        
         _renderer = null
-        /**
-         * @type {Bull.Layouter}
-         * @private
-         */
+        
         _layouter = null
-        /** @private */
+        
         _templateCompiled = null
-        /** @private */
+        
         _parentView = null
-        /** @private */
+        
         _path = ''
-        /** @private */
+        
         _wait = false
-        /** @private */
+        
         _waitViewList = null
-        /** @private */
+        
         _nestedViewsFromLayoutLoaded = false
-        /** @private */
+        
         _readyConditionList = null
-        /** @private */
+        
         _isRendered = false
-        /** @private */
+        
         _isFullyRendered = false
-        /** @private */
+        
         _isBeingRendered = false
-        /** @private */
+        
         _isRemoved = false
-        /** @private */
+        
         _isRenderCanceled = false
-        /** @private */
+        
         _preCompiledTemplates = null
 
-        /**
-         * Set a DOM element selector.
-         *
-         * @param {string} selector A full DOM selector.
-         */
+        
         setElement(selector) {
             this.undelegateEvents();
             this._setElement(selector);
             this._delegateEvents();
         }
 
-        /**
-         * Removes all view's delegated events. Useful if you want to disable
-         * or remove a view from the DOM temporarily.
-         */
+        
         undelegateEvents() {
             if (!this.$el) {
                 return;
@@ -847,7 +533,7 @@ Espo.loader.setContextId('lib!bullbone');
             this.$el.off('.delegateEvents' + this.cid);
         }
 
-        /** @private */
+        
         _delegateEvents() {
             let events = _.result(this, 'events');
 
@@ -874,18 +560,12 @@ Espo.loader.setContextId('lib!bullbone');
             }
         }
 
-        /** @private */
+        
         _delegate(eventName, selector, listener) {
             this.$el.on(eventName + '.delegateEvents' + this.cid, selector, listener);
         }
 
-        /**
-         * Add a DOM event handler. To be called in `setup` method.
-         *
-         * @param {Bull.View~domEventType} type An event type.
-         * @param {string} selector A CSS selector.
-         * @param {Bull.View~domEventHandlerCallback|string} handler A handler.
-         */
+        
         addHandler(type, selector, handler) {
             let key = type + ' ' + selector;
 
@@ -904,82 +584,46 @@ Espo.loader.setContextId('lib!bullbone');
             this.events[key] = (e) => this[handler](e.originalEvent, e.currentTarget);
         }
 
-        /**
-         * To be run by the view-factory after instantiating. Should not be overridden.
-         * Not called from the constructor to be able to use ES6 classes with property initializers,
-         * as overridden properties not available in a constructor.
-         *
-         * @param {{
-         *   factory: Bull.Factory,
-         *   renderer: Bull.Renderer,
-         *   templator: Bull.Templator,
-         *   layouter: Bull.Layouter,
-         *   helper?: Object,
-         *   onReady?: function(Bull.View): void,
-         *   preCompiledTemplates?: Object,
-         * }} data
-         * @internal
-         */
+        
         _initialize(data) {
-            /**
-             * @type {Bull.Factory}
-             * @private
-             */
+            
             this._factory = data.factory;
 
-            /**
-             * @type {Bull.Renderer}
-             * @private
-             */
+            
             this._renderer = data.renderer;
 
-            /**
-             * @type {Bull.Templator}
-             * @private
-             */
+            
             this._templator = data.templator;
 
-            /**
-             * @type {Bull.Layouter}
-             * @private
-             */
+            
             this._layouter = data.layouter;
 
-            /**
-             * @type {(function(): void)|null}
-             * @private
-             */
+            
             this._onReady = data.onReady || null;
 
-            /**
-             * @type {Object|null}
-             * @private
-             */
+            
             this._helper = data.helper || null;
 
-            /**
-             * @type {Object}
-             * @private
-             */
+            
             this._preCompiledTemplates = data.preCompiledTemplates || {};
 
             this.events = _.clone(this.events || {});
             this.notToRender = ('notToRender' in this.options) ? this.options.notToRender : this.notToRender;
 
             this.nestedViews = {};
-            /** @private */
+            
             this._nestedViewDefs = {};
 
             if (this._waitViewList == null) {
-                /** @private */
+                
                 this._waitViewList = [];
             }
 
-            /** @private */
+            
             this._waitPromiseCount = 0;
 
             if (this._readyConditionList == null) {
-                /** @private */
+                
                 this._readyConditionList = [];
             }
 
@@ -1009,21 +653,15 @@ Espo.loader.setContextId('lib!bullbone');
 
             this.template = this.options.template || this.template;
 
-            /** @private */
+            
             this._layoutDefs = this.options.layoutDefs || this.options._layout;
-            /**
-             * @private
-             * @type {Object|null}
-             */
+            
             this.layoutData = this.options.layoutData || this.layoutData;
-            /**
-             * @type {string|null}
-             * @private
-             */
+            
             this._template = this.templateContent || this.options.templateContent || this._template;
 
             if (this._template != null && this._templator.compilable) {
-                /** @private */
+                
                 this._templateCompiled = this._templator.compileTemplate(this._template);
             }
 
@@ -1056,46 +694,21 @@ Espo.loader.setContextId('lib!bullbone');
             this._tryReady();
         }
 
-        /**
-         * Compose template data. A key => value result will be passed to
-         * a template.
-         *
-         * @protected
-         * @returns {Object.<string, *>|{}}
-         */
+        
         data() {
             return {};
         }
 
-        /**
-         * Initialize the view. Is invoked before #setup.
-         *
-         * @protected
-         */
+        
         init() {}
 
-        /**
-         * Set up the view. Is invoked after #init.
-         *
-         * @protected
-         */
+        
         setup() {}
 
-        /**
-         * Additional setup. Is invoked after #setup.
-         * Useful to let developers override setup logic w/o needing to call
-         * a parent method in right order.
-         *
-         * @protected
-         */
+        
         setupFinal() {}
 
-        /**
-         * Set a view container element if it doesn't exist yet. It will call setElement after render.
-         *
-         * @param {string} fullSelector A full DOM selector.
-         * @protected
-         */
+        
         setElementInAdvance(fullSelector) {
             if (this._setElementInAdvancedInProcess) {
                 return;
@@ -1110,82 +723,45 @@ Espo.loader.setContextId('lib!bullbone');
             });
         }
 
-        /**
-         * Get a full DOM element selector.
-         *
-         * @public
-         * @return {string|null}
-         */
+        
         getSelector() {
             return this._elementSelector || null
         }
 
-        /**
-         * Set a full DOM element selector.
-         *
-         * @public
-         * @param {string} selector A selector.
-         */
+        
         setSelector(selector) {
             this._elementSelector = selector;
 
-            // For backward compatibility.
+            
             this.options.el = selector;
         }
 
-        /**
-         * Checks whether the view has been already rendered
-         *
-         * @public
-         * @return {boolean}
-         */
+        
         isRendered() {
             return this._isRendered;
         }
 
-        /**
-         * Checks whether the view has been fully rendered (afterRender has been executed).
-         *
-         * @public
-         * @return {boolean}
-         */
+        
         isFullyRendered() {
             return this._isFullyRendered;
         }
 
-        /**
-         * Whether the view is being rendered at the moment.
-         *
-         * @public
-         * @return {boolean}
-         */
+        
         isBeingRendered() {
             return this._isBeingRendered;
         }
 
-        /**
-         * Whether the view is removed.
-         *
-         * @public
-         * @return {boolean}
-         */
+        
         isRemoved() {
             return this._isRemoved;
         }
 
-        /**
-         * Get HTML of view but don't render it.
-         *
-         * @public
-         * @param {Bull.View~getHtmlCallback} callback A callback with an HTML.
-         */
+        
         getHtml(callback) {
             this._getHtml(callback);
         }
 
-        /**
-         * Cancel rendering.
-         */
+        
         cancelRender() {
             if (!this.isBeingRendered()) {
                 return;
@@ -1194,19 +770,12 @@ Espo.loader.setContextId('lib!bullbone');
             this._isRenderCanceled = true;
         }
 
-        /**
-         * Un-cancel rendering.
-         */
+        
         uncancelRender() {
             this._isRenderCanceled = false;
         }
 
-        /**
-         * Render the view.
-         *
-         * @param {function()} [callback] Deprecated. Use promise.
-         * @return {Promise<this>}
-         */
+        
         render(callback) {
             this._isRendered = false;
             this._isFullyRendered = false;
@@ -1243,10 +812,7 @@ Espo.loader.setContextId('lib!bullbone');
             });
         }
 
-        /**
-         * @param {string} html
-         * @private
-         */
+        
         _renderComponentInDom(html) {
             if (!this.element) {
                 if (!this._elementSelector) {
@@ -1275,10 +841,7 @@ Espo.loader.setContextId('lib!bullbone');
             this.setElement(this._elementSelector);
         }
 
-        /**
-         * @param {string} html
-         * @private
-         */
+        
         _renderInDom(html) {
             if (!this.$el.length && this._elementSelector) {
                 this.setElement(this._elementSelector);
@@ -1287,12 +850,7 @@ Espo.loader.setContextId('lib!bullbone');
             this.$el.html(html);
         }
 
-        /**
-         * Re-render the view.
-         *
-         * @param {boolean} [force=false] To render if was not rendered.
-         * @return {Promise<this>}
-         */
+        
         reRender(force) {
             if (this.isRendered()) {
                 return this.render();
@@ -1312,11 +870,11 @@ Espo.loader.setContextId('lib!bullbone');
                 return this.render();
             }
 
-            // Don't reject, preventing an exception on a non-caught promise.
+            
             return new Promise(() => {});
         }
 
-        /** @private */
+        
         _afterRender() {
             this._isBeingRendered = false;
             this._isRendered = true;
@@ -1338,18 +896,10 @@ Espo.loader.setContextId('lib!bullbone');
             this._isFullyRendered = true;
         }
 
-        /**
-         * Executed after render.
-         *
-         * @protected
-         */
+        
         afterRender() {}
 
-        /**
-         * Proceed when rendered.
-         *
-         * @return {Promise<void>}
-         */
+        
         whenRendered() {
             if (this.isRendered()) {
                 return Promise.resolve();
@@ -1360,7 +910,7 @@ Espo.loader.setContextId('lib!bullbone');
             });
         }
 
-        /** @private */
+        
         _tryReady() {
             if (this.isReady) {
                 return;
@@ -1400,7 +950,7 @@ Espo.loader.setContextId('lib!bullbone');
             this._makeReady();
         }
 
-        /** @private */
+        
         _makeReady() {
             this.isReady = true;
             this.trigger('ready');
@@ -1410,10 +960,7 @@ Espo.loader.setContextId('lib!bullbone');
             }
         }
 
-        /**
-         * @private
-         * @param {Bull.View~nestedViewItemDefs[]} [list
-         */
+        
         _addDefinedNestedViewDefs(list) {
             for (let name in this.views) {
                 let o = _.clone(this.views[name]);
@@ -1428,10 +975,7 @@ Espo.loader.setContextId('lib!bullbone');
             return list;
         }
 
-        /**
-         * @private
-         * @return {Bull.View~nestedViewItemDefs[]}
-         */
+        
         _getNestedViewDefsFromLayout() {
             let itemList = this._layouter.findNestedViews(this._layoutDefs);
 
@@ -1458,10 +1002,7 @@ Espo.loader.setContextId('lib!bullbone');
             return nestedViewDefsFiltered;
         }
 
-        /**
-         * @private
-         * @param {function()} callback
-         */
+        
         _loadNestedViews(callback) {
             let nestedViewDefs = this._layoutDefs != null ?
                 this._getNestedViewDefsFromLayout() : [];
@@ -1479,7 +1020,7 @@ Espo.loader.setContextId('lib!bullbone');
 
             tryReady();
 
-            nestedViewDefs.forEach(/** Bull.View~nestedViewItemDefs */def => {
+            nestedViewDefs.forEach(def => {
                 let key = def.name;
                 let viewName = this._factory.defaultViewName;
                 let view;
@@ -1516,8 +1057,8 @@ Espo.loader.setContextId('lib!bullbone');
                     options.template = def.template;
                 }
 
-                // noinspection JSUnresolvedReference
-                let fullSelector = def.fullSelector || /** @type {string} */def.el;
+                
+                let fullSelector = def.fullSelector || def.el;
 
                 if (fullSelector) {
                     options.fullSelector = fullSelector;
@@ -1557,10 +1098,7 @@ Espo.loader.setContextId('lib!bullbone');
             });
         }
 
-        /**
-         * @private
-         * @return {Object.<string, *>}
-         */
+        
         _getData() {
             if (this.options.data) {
                 if (typeof this.options.data === 'function') {
@@ -1577,13 +1115,7 @@ Espo.loader.setContextId('lib!bullbone');
             return this.data;
         }
 
-        /**
-         * @private
-         * @return {{
-         *     key: string,
-         *     view: View,
-         * }[]}
-         */
+        
         _getNestedViewsAsArray() {
             let nestedViewsArray = [];
 
@@ -1597,10 +1129,7 @@ Espo.loader.setContextId('lib!bullbone');
             return nestedViewsArray;
         }
 
-        /**
-         * @private
-         * @param {function(Object.<string, *>)} callback
-         */
+        
         _getNestedViewsHtmlMap(callback) {
             let data = {};
             let items = this._getNestedViewsAsArray();
@@ -1640,17 +1169,10 @@ Espo.loader.setContextId('lib!bullbone');
             });
         }
 
-        /**
-         * Provides the ability to modify template data right before render.
-         *
-         * @param {Object.<string, *>} data Data.
-         */
+        
         handleDataBeforeRender(data) {}
 
-        /**
-         * @private
-         * @param {function(string)} callback
-         */
+        
         _getHtml(callback) {
             this._isBeingRendered = true;
             this.trigger('render', this);
@@ -1695,23 +1217,17 @@ Espo.loader.setContextId('lib!bullbone');
             });
         }
 
-        /**
-         * @private
-         * @return {string|null}
-         */
+        
         _getTemplateName() {
             return this.template || null;
         }
 
-        /** @private */
+        
         _getLayoutData() {
             return this.layoutData;
         }
 
-        /**
-         * @private
-         * @param {function(*)} callback
-         */
+        
         _getTemplate(callback) {
             if (
                 this._templator &&
@@ -1754,7 +1270,7 @@ Espo.loader.setContextId('lib!bullbone');
             this._templator.getTemplate(templateName, layoutOptions, callback);
         }
 
-        /** @private */
+        
         _updatePath(parentPath, viewKey) {
             this._path = parentPath + '/' + viewKey;
 
@@ -1763,11 +1279,7 @@ Espo.loader.setContextId('lib!bullbone');
             }
         }
 
-        /**
-         * @private
-         * @param {string} key
-         * @return {string|null}
-         */
+        
         _getSelectorForNestedView(key) {
             if (!(key in this._nestedViewDefs)) {
                 return null;
@@ -1797,22 +1309,12 @@ Espo.loader.setContextId('lib!bullbone');
             return currentEl + ' [data-view="' + key + '"]';
         }
 
-        /**
-         * Whether the view has a nested view.
-         *
-         * @param {string} key A view key.
-         * @return {boolean}
-         */
+        
         hasView(key) {
             return key in this.nestedViews;
         }
 
-        /**
-         * Get a nested view.
-         *
-         * @param {string} key A view key.
-         * @return {View|null}
-         */
+        
         getView(key) {
             if (key in this.nestedViews) {
                 return this.nestedViews[key];
@@ -1821,12 +1323,7 @@ Espo.loader.setContextId('lib!bullbone');
             return null;
         }
 
-        /**
-         * Get a nested view key by a view instance.
-         *
-         * @param {View} view A view.
-         * @return {string|null}
-         */
+        
         getViewKey(view) {
             for (let key in this.nestedViews) {
                 if (view === this.nestedViews[key]) {
@@ -1837,14 +1334,7 @@ Espo.loader.setContextId('lib!bullbone');
             return null;
         }
 
-        /**
-         * Assign a view instance as nested.
-         *
-         * @param {string} key A view key.
-         * @param {Bull.View} view A view.
-         * @param {string} [selector] A relative selector.
-         * @return {Promise<View>}
-         */
+        
         assignView(key, view, selector) {
             this.clearView(key);
 
@@ -1860,8 +1350,8 @@ Espo.loader.setContextId('lib!bullbone');
                     selector = `[data-view-cid="${view.cid}"]`;
                 }
 
-                if (selector/* || !view.getSelector()*/) {
-                    //selector = selector || `[data-view="${key}"]`;
+                if (selector) {
+                    
 
                     view.setSelector(this.getSelector() + ' ' + selector);
                 }
@@ -1879,16 +1369,7 @@ Espo.loader.setContextId('lib!bullbone');
             return promise;
         }
 
-        /**
-         * Create a nested view. The important method.
-         *
-         * @param {string} key A view key.
-         * @param {string} viewName A view name/path.
-         * @param {Bull.View~Options} options View options. Custom options can be passed as well.
-         * @param {Function} [callback] Deprecated. Use a promise. Invoked once a nested view is ready (loaded).
-         * @param {boolean} [wait=true] Set false if no need a parent view to wait till nested view loaded.
-         * @return {Promise<View>}
-         */
+        
         createView(key, viewName, options, callback, wait) {
             this.clearView(key);
 
@@ -1911,9 +1392,7 @@ Espo.loader.setContextId('lib!bullbone');
                     options.fullSelector = this.getSelector() + ' ' + options.selector;
                 }
 
-                /*if (!fullSelector && !options.fullSelector) {
-                    options.fullSelector = this.getSelector() + ` [data-view="${key}"]`;
-                }*/
+                
 
                 this._factory.create(viewName, options, view => {
                     if (view.isComponent && !options.fullSelector) {
@@ -1934,15 +1413,7 @@ Espo.loader.setContextId('lib!bullbone');
             return promise;
         }
 
-        /**
-         * @param {string} key
-         * @param {Bull.View} view
-         * @param {function} resolve
-         * @param {Promise} promise
-         * @param {function} [callback]
-         * @param {boolean} [setViewBeforeCallback]
-         * @private
-         */
+        
         _assignViewCallback(
             key,
             view,
@@ -1959,7 +1430,7 @@ Espo.loader.setContextId('lib!bullbone');
 
             delete this._viewPromiseHash[key];
 
-            // noinspection JSUnresolvedReference
+            
             if (promise && promise._isToCancel) {
                 if (!view.isRemoved()) {
                     view.remove();
@@ -1987,13 +1458,7 @@ Espo.loader.setContextId('lib!bullbone');
             }
         }
 
-        /**
-         * Set a nested view.
-         *
-         * @param {string} key A view key.
-         * @param {Bull.View} view A view name/path.
-         * @param {string} [fullSelector] A full DOM selector for a view container.
-         */
+        
         setView(key, view, fullSelector) {
             fullSelector = fullSelector || this._getSelectorForNestedView(key) || view.getSelector();
 
@@ -2015,11 +1480,7 @@ Espo.loader.setContextId('lib!bullbone');
             this._tryReady();
         }
 
-        /**
-         * Clear a nested view. Initiates removal of the nested view.
-         *
-         * @param {string} key A view key.
-         */
+        
         clearView(key) {
             if (key in this.nestedViews) {
                 this.nestedViews[key].remove();
@@ -2036,11 +1497,7 @@ Espo.loader.setContextId('lib!bullbone');
             }
         }
 
-        /**
-         * Removes a nested view for cases when it's supposed that this view can be re-used in future.
-         *
-         * @param {string} key A view key.
-         */
+        
         unchainView(key) {
             if (key in this.nestedViews) {
                 this.nestedViews[key]._parentView = null;
@@ -2050,50 +1507,27 @@ Espo.loader.setContextId('lib!bullbone');
             }
         }
 
-        /**
-         * Get a parent view.
-         *
-         * @return {Bull.View}
-         */
+        
         getParentView() {
             return this._parentView;
         }
 
-        /**
-         * Has a parent view.
-         *
-         * @return {boolean}
-         */
+        
         hasParentView() {
             return !!this._parentView;
         }
 
-        /**
-         * Add a condition for the view getting ready.
-         *
-         * @param {(Function|boolean)} condition A condition.
-         */
+        
         addReadyCondition(condition) {
             this._readyConditionList.push(condition);
         }
 
-        /**
-         * Wait for a nested view.
-         *
-         * @protected
-         * @param {string} key A view key.
-         */
+        
         waitForView(key) {
             this._waitViewList.push(key);
         }
 
-        /**
-         * Makes the view to wait for a promise (if a Promise is passed as a parameter).
-         * Adds a wait condition if true is passed. Removes the wait condition if false.
-         *
-         * @protected
-         * @param {Promise|boolean} wait A wait-promise or true/false.
-         */
+        
         wait(wait) {
             if (typeof wait === 'object' && (wait instanceof Promise || typeof wait.then === 'function')) {
                 this._waitPromiseCount++;
@@ -2110,7 +1544,7 @@ Espo.loader.setContextId('lib!bullbone');
                 this._waitPromiseCount++;
 
                 let promise = new Promise(resolve => {
-                    // noinspection JSUnresolvedReference
+                    
                     resolve(wait.call(this));
                 });
 
@@ -2132,11 +1566,7 @@ Espo.loader.setContextId('lib!bullbone');
             this._tryReady();
         }
 
-        /**
-         * @private
-         * @param {string} [cid]
-         * @return {Element}
-         */
+        
         _createPlaceholderElement(cid) {
             let span = document.createElement('span');
 
@@ -2145,7 +1575,7 @@ Espo.loader.setContextId('lib!bullbone');
             return span;
         }
 
-        /** @private */
+        
         _replaceWithPlaceholderElement() {
             if (!this.element) {
                 return;
@@ -2156,12 +1586,7 @@ Espo.loader.setContextId('lib!bullbone');
             parent.replaceChild(this._createPlaceholderElement(), this.element);
         }
 
-        /**
-         * Remove the view and all nested tree. Removes an element from DOM. Triggers the 'remove' event.
-         *
-         * @public
-         * @param {boolean} [dontEmpty] Skips emptying an element container.
-         */
+        
         remove(dontEmpty) {
             this.cancelRender();
 
@@ -2198,22 +1623,15 @@ Espo.loader.setContextId('lib!bullbone');
             return this;
         }
 
-        /**
-         * Called on view removal.
-         *
-         * @protected
-         */
+        
         onRemove() {}
 
-        /** @private */
+        
         _setElement(fullSelector) {
             const setElement = () => {
                 this.element = this.$el[0];
 
-                /**
-                 * @todo Remove.
-                 * @deprecated
-                 */
+                
                 this.el = this.element;
             };
 
@@ -2243,12 +1661,7 @@ Espo.loader.setContextId('lib!bullbone');
             setElement();
         }
 
-        /**
-         * Propagate an event to nested views.
-         *
-         * @public
-         * @param {...*} arguments
-         */
+        
         propagateEvent() {
             this.trigger.apply(this, arguments);
 
@@ -2259,24 +1672,14 @@ Espo.loader.setContextId('lib!bullbone');
             }
         }
 
-        /**
-         * Set a template. Experimental.
-         *
-         * @protected
-         * @param {string} [template]
-         */
+        
         setTemplate(template) {
             this.template = template;
 
             this._templateCompiled = null;
         }
 
-        /**
-         * Set template content. Experimental.
-         *
-         * @protected
-         * @param {string} templateContent
-         */
+        
         setTemplateContent(templateContent) {
             this._templateCompiled = this._templator.compileTemplate(templateContent);
         }
@@ -2299,7 +1702,7 @@ Espo.loader.setContextId('lib!bullbone');
 
             child = function () {
                 if (new.target) {
-                    // noinspection JSCheckFunctionSignatures
+                    
                     let obj = Reflect.construct(parent, arguments, new.target);
 
                     for (let prop of Object.getOwnPropertyNames(obj)) {
@@ -2311,16 +1714,16 @@ Espo.loader.setContextId('lib!bullbone');
                     return obj;
                 }
 
-                // noinspection JSCheckFunctionSignatures
+                
                 return Reflect.construct(parent, arguments, TemporaryHelperConstructor);
             };
 
             _.extend(child, parent, staticProps);
 
-            // noinspection JSUnresolvedReference
+            
             child.prototype = _.create(parent.prototype, protoProps);
             child.prototype.constructor = child;
-            // noinspection JSUnresolvedReference
+            
             child.__super__ = parent.prototype;
             child.prototype.__isEs = true;
 
@@ -2330,22 +1733,22 @@ Espo.loader.setContextId('lib!bullbone');
         }
 
         child = function () {
-            // noinspection JSUnresolvedReference
+            
             if (parent.prototype.__isEs) {
-                // noinspection JSCheckFunctionSignatures
+                
                 return Reflect.construct(parent, arguments, new.target);
             }
 
-            // noinspection JSUnresolvedReference
+            
             return parent.apply(this, arguments);
         };
 
         _.extend(child, parent, staticProps);
 
-        // noinspection JSUnresolvedReference
+        
         child.prototype = _.create(parent.prototype, protoProps);
         child.prototype.constructor = child;
-        // noinspection JSUnresolvedReference
+        
         child.__super__ = parent.prototype;
 
         return child;
@@ -2355,16 +1758,7 @@ Espo.loader.setContextId('lib!bullbone');
 
     class Loader {
 
-        /**
-         * @param {{
-         *     paths?: Object.<string, string>,
-         *     exts?: Object.<string, string>,
-         *     normalize?: Object.<string, string>,
-         *     loaders?: Object.<string, function(*): void>,
-         *     path?: function(string, string): void,
-         *     isJson?: Object.<string, boolean>,
-         * }}options
-         */
+        
         constructor(options) {
             options = {...options};
 
@@ -2502,9 +1896,7 @@ Espo.loader.setContextId('lib!bullbone');
         }
     }
 
-    /**
-     * @alias Bull.Renderer
-     */
+    
     class Renderer {
 
         constructor(options) {
@@ -2522,15 +1914,10 @@ Espo.loader.setContextId('lib!bullbone');
         }
     }
 
-    /**
-     * @alias Bull.Layouter
-     */
+    
     class Layouter {
 
-        /**
-         * @param {Object} layoutDefs
-         * @return {Bull.View~nestedViewItemDefs[]}
-         */
+        
         findNestedViews(layoutDefs) {
             if (!layoutDefs) {
                 throw new Error("Can not find nested views. No layout data and name.");
@@ -2612,26 +1999,17 @@ Espo.loader.setContextId('lib!bullbone');
         }
     }
 
-    /**
-     * @alias Bull.Templator
-     */
+    
     class Templator {
 
-        /**
-         * @param {{
-         *   loader?: Loader,
-         * }|null} data
-         */
+        
         constructor(data) {
             data = data || {};
 
             this._templates = {};
             this._layoutTemplates = {};
 
-            /**
-             * @type {Loader|null}
-             * @private
-             */
+            
             this._loader = data.loader || null;
 
             if ('compilable' in data) {
@@ -2648,14 +2026,7 @@ Espo.loader.setContextId('lib!bullbone');
             this._templates[name] = template;
         }
 
-        /**
-         * @param {string} [name]
-         * @param {{
-         *     layout?: Object,
-         *     data?: Object.<string, *>
-         * }} [layoutOptions]
-         * @param callback
-         */
+        
         getTemplate(name, layoutOptions,  callback) {
             layoutOptions = layoutOptions || {};
 
@@ -2752,61 +2123,12 @@ Espo.loader.setContextId('lib!bullbone');
 
     let root = window;
 
-    /**
-     * @callback viewLoader
-     * @param {string} viewName,
-     * @param {function(): void} callback
-     */
+    
 
-    /**
-     * A view factory.
-     *
-     * @alias Bull.Factory
-     */
+    
     class Factory {
 
-        /**
-         * @param {{
-         *   defaultViewName?: string,
-         *   customLoader?: Object,
-         *   customRenderer?: Object,
-         *   customLayouter?: Object,
-         *   customTemplator?: Object,
-         *   helper?: Object,
-         *   viewLoader?: function(string, function(Bull.View)),
-         *   resources?: {
-         *       loaders?: {
-         *           template?: function(string, function(string)),
-         *           layoutTemplate?: function(string, function(string)),
-         *       }
-         *   },
-         *   preCompiledTemplates?: Object.<string, function()>,
-         * }|null} options Configuration options.
-         * <ul>
-         *  <li>defaultViewName: {String} Default name for views when it is not defined.</li>
-         *  <li>viewLoader: {Function} Function that loads view class ({Function} in javascript)
-         *  by the given view name and callback function as parameters. Here you can load js code using sync XHR request.
-         *  If not defined it will look up classes in window object.</li>
-         *  <li>helper: {Object} View Helper that will be injected into all views.</li>
-         *  <li>resources: {Object} Resources loading options: paths, exts, loaders. Example: <br>
-         *    <i>{
-         *      paths: { // Custom paths for resource files.
-         *        templates: 'resources/templates',
-         *        layoutTemplate: 'resources/templates/layouts',
-         *      },
-         *      exts: { // Custom extensions of resource files.
-         *        templates: 'tpl',
-         *      },
-         *      loaders: {}, // Custom resources loading functions. Define it if some type of resources needs to be loaded
-         *      path: function (type, name) {} // Custom path function. Should return path to the needed resource.
-         *    }</i>
-         *  </li>
-         *  <li>rendering: {Object} Rendering options: method (Method is the custom function for a rendering.
-         *  Define it if you want to use another templating engine. <i>Function (template, data)</i>).</li>
-         *  <li>templating: {Object} Templating options: {bool} compilable (If templates are compilable (like Handlebars).
-         *  True by default.)</li>
-         * </ul>
-         */
+        
         constructor(options) {
             options = options || {};
 
@@ -2825,30 +2147,24 @@ Espo.loader.setContextId('lib!bullbone');
             this._preCompiledTemplates = options.preCompiledTemplates;
         }
 
-        /** @private */
+        
         defaultViewName = 'View'
-        /** @private */
+        
         _layouter = null
-        /** @private */
+        
         _templator = null
-        /** @private */
+        
         _renderer = null
-        /** @private */
+        
         _loader = null
-        /** @private */
+        
         _helper = null
-        /** @private */
+        
         _viewClassHash = null
-        /** @private */
+        
         _viewLoader = null
 
-        /**
-         * Create a view.
-         *
-         * @param {string} viewName A view name/path.
-         * @param {Bull.View~Options} [options] Options.
-         * @param {function(Bull.View)} [callback] Invoked once the view is ready.
-         */
+        
         create(viewName, options, callback) {
             this._getViewClass(viewName, viewClass => {
                 if (typeof viewClass === 'undefined') {
@@ -2861,12 +2177,7 @@ Espo.loader.setContextId('lib!bullbone');
             });
         }
 
-        /**
-         * Prepare a view instance.
-         *
-         * @param {Bull.View} view A view.
-         * @param {function(Bull.View)} [callback] Invoked once the view is ready.
-         */
+        
         prepare(view, callback) {
             view._initialize({
                 factory: this,
@@ -2879,7 +2190,7 @@ Espo.loader.setContextId('lib!bullbone');
             });
         }
 
-        /** @private */
+        
         _getViewClassFunction(viewName, callback) {
             let viewClass = root[viewName];
 
@@ -2890,7 +2201,7 @@ Espo.loader.setContextId('lib!bullbone');
             callback(viewClass);
         }
 
-        /** @private */
+        
         _getViewClass(viewName, callback) {
             if (viewName in this._viewClassHash) {
                 callback(this._viewClassHash[viewName]);

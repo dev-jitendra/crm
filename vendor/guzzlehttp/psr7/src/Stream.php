@@ -4,21 +4,10 @@ namespace GuzzleHttp\Psr7;
 
 use Psr\Http\Message\StreamInterface;
 
-/**
- * PHP stream implementation.
- *
- * @var $stream
- */
+
 class Stream implements StreamInterface
 {
-    /**
-     * Resource modes.
-     *
-     * @var string
-     *
-     * @see http://php.net/manual/function.fopen.php
-     * @see http://php.net/manual/en/function.gzopen.php
-     */
+    
     const READABLE_MODES = '/r|a\+|ab\+|w\+|wb\+|x\+|xb\+|c\+|cb\+/';
     const WRITABLE_MODES = '/a|w|r\+|rb\+|rw|x|c/';
 
@@ -30,20 +19,7 @@ class Stream implements StreamInterface
     private $uri;
     private $customMetadata;
 
-    /**
-     * This constructor accepts an associative array of options.
-     *
-     * - size: (int) If a read stream would otherwise have an indeterminate
-     *   size, but the size is known due to foreknowledge, then you can
-     *   provide that size, in bytes.
-     * - metadata: (array) Any additional metadata to return when the metadata
-     *   of the stream is accessed.
-     *
-     * @param resource $stream  Stream resource to wrap.
-     * @param array    $options Associative array of options.
-     *
-     * @throws \InvalidArgumentException if the stream is not a stream resource
-     */
+    
     public function __construct($stream, $options = [])
     {
         if (!is_resource($stream)) {
@@ -66,9 +42,7 @@ class Stream implements StreamInterface
         $this->uri = $this->getMetadata('uri');
     }
 
-    /**
-     * Closes the stream when the destructed
-     */
+    
     public function __destruct()
     {
         $this->close();
@@ -135,7 +109,7 @@ class Stream implements StreamInterface
             return null;
         }
 
-        // Clear the stat cache if the stream has a URI
+        
         if ($this->uri) {
             clearstatcache(true, $this->uri);
         }
@@ -242,7 +216,7 @@ class Stream implements StreamInterface
             throw new \RuntimeException('Cannot write to a non-writable stream');
         }
 
-        // We can't know the size after writing anything
+        
         $this->size = null;
         $result = fwrite($this->stream, $string);
 

@@ -26,11 +26,7 @@ use function strtoupper;
 
 class CreditCard extends AbstractValidator
 {
-    /**
-     * Detected CCI list
-     *
-     * @var string
-     */
+    
     public const ALL              = 'All';
     public const AMERICAN_EXPRESS = 'American_Express';
     public const UNIONPAY         = 'Unionpay';
@@ -53,11 +49,7 @@ class CreditCard extends AbstractValidator
     public const SERVICE        = 'creditcardService';
     public const SERVICEFAILURE = 'creditcardServiceFailure';
 
-    /**
-     * Validation failure message template definitions
-     *
-     * @var array
-     */
+    
     protected $messageTemplates = [
         self::CHECKSUM       => 'The input seems to contain an invalid checksum',
         self::CONTENT        => 'The input must contain only digits',
@@ -68,11 +60,7 @@ class CreditCard extends AbstractValidator
         self::SERVICEFAILURE => 'An exception has been raised while validating the input',
     ];
 
-    /**
-     * List of CCV names
-     *
-     * @var array
-     */
+    
     protected $cardName = [
         0  => self::AMERICAN_EXPRESS,
         1  => self::DINERS_CLUB,
@@ -88,11 +76,7 @@ class CreditCard extends AbstractValidator
         11 => self::MIR,
     ];
 
-    /**
-     * List of allowed CCV lengths
-     *
-     * @var array
-     */
+    
     protected $cardLength = [
         self::AMERICAN_EXPRESS => [15],
         self::DINERS_CLUB      => [14],
@@ -108,11 +92,7 @@ class CreditCard extends AbstractValidator
         self::MIR              => [13, 16],
     ];
 
-    /**
-     * List of accepted CCV provider tags
-     *
-     * @var array
-     */
+    
     protected $cardType = [
         self::AMERICAN_EXPRESS => ['34', '37'],
         self::DINERS_CLUB      => ['300', '301', '302', '303', '304', '305', '36'],
@@ -231,21 +211,13 @@ class CreditCard extends AbstractValidator
         self::MIR              => ['2200', '2201', '2202', '2203', '2204'],
     ];
 
-    /**
-     * Options for this validator
-     *
-     * @var array
-     */
+    
     protected $options = [
-        'service' => null, // Service callback for additional validation
-        'type'    => [], // CCIs which are accepted by validation
+        'service' => null, 
+        'type'    => [], 
     ];
 
-    /**
-     * Constructor
-     *
-     * @param string|array|Traversable $options OPTIONAL Type of CCI to allow
-     */
+    
     public function __construct($options = [])
     {
         if ($options instanceof Traversable) {
@@ -275,34 +247,20 @@ class CreditCard extends AbstractValidator
         parent::__construct($options);
     }
 
-    /**
-     * Returns a list of accepted CCIs
-     *
-     * @return array
-     */
+    
     public function getType()
     {
         return $this->options['type'];
     }
 
-    /**
-     * Sets CCIs which are accepted by validation
-     *
-     * @param  string|array $type Type to allow for validation
-     * @return CreditCard Provides a fluid interface
-     */
+    
     public function setType($type)
     {
         $this->options['type'] = [];
         return $this->addType($type);
     }
 
-    /**
-     * Adds a CCI to be accepted by validation
-     *
-     * @param  string|array $type Type to allow for validation
-     * @return $this Provides a fluid interface
-     */
+    
     public function addType($type)
     {
         if (is_string($type)) {
@@ -329,23 +287,13 @@ class CreditCard extends AbstractValidator
         return $this;
     }
 
-    /**
-     * Returns the actual set service
-     *
-     * @return callable
-     */
+    
     public function getService()
     {
         return $this->options['service'];
     }
 
-    /**
-     * Sets a new callback for service validation
-     *
-     * @param  callable $service
-     * @return $this
-     * @throws InvalidArgumentException On invalid service callback.
-     */
+    
     public function setService($service)
     {
         if (! is_callable($service)) {
@@ -356,15 +304,10 @@ class CreditCard extends AbstractValidator
         return $this;
     }
 
-    // The following rule is buggy for parameters attributes
-    // phpcs:disable SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing.NoSpaceBetweenTypeHintAndParameter
+    
+    
 
-    /**
-     * Returns true if and only if $value follows the Luhn algorithm (mod-10 checksum)
-     *
-     * @param  string $value
-     * @return bool
-     */
+    
     public function isValid(
         #[SensitiveParameter]
         $value
@@ -440,5 +383,5 @@ class CreditCard extends AbstractValidator
         return true;
     }
 
-    // phpcs:enable SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing.NoSpaceBetweenTypeHintAndParameter
+    
 }

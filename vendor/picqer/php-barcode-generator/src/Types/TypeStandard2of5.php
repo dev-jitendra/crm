@@ -6,11 +6,7 @@ use Picqer\Barcode\Barcode;
 use Picqer\Barcode\Exceptions\InvalidCharacterException;
 use Picqer\Barcode\Helpers\BinarySequenceConverter;
 
-/*
- * Standard 2 of 5 barcodes.
- * Used in airline ticket marking, photofinishing
- * Contains digits (0 to 9) and encodes the data only in the width of bars.
- */
+
 
 class TypeStandard2of5 implements TypeInterface
 {
@@ -29,7 +25,7 @@ class TypeStandard2of5 implements TypeInterface
         $chr['8'] = '11101010111010';
         $chr['9'] = '10111010111010';
         if ($this->checksum) {
-            // add checksum
+            
             $code .= $this->checksum_s25($code);
         }
         $seq = '11011010';
@@ -46,13 +42,7 @@ class TypeStandard2of5 implements TypeInterface
         return BinarySequenceConverter::convert($code, $seq);
     }
 
-    /**
-     * Checksum for standard 2 of 5 barcodes.
-     *
-     * @param $code (string) code to process.
-     * @return int checksum.
-     * @protected
-     */
+    
     protected function checksum_s25($code)
     {
         $len = strlen($code);

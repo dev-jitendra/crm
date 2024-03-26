@@ -1,20 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Josh Soref
- * - JD Isaacks
- * - Nay Lin Aung
- */
+
+
 return [
     'year' => '{1}တစ်နှစ်|]1,Inf[:count နှစ်',
     'y' => ':count နှစ်',

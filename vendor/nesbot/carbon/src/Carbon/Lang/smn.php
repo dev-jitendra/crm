@@ -1,13 +1,6 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 return array_replace_recursive(require __DIR__.'/en.php', [
     'meridiem' => ['ip.', 'ep.'],
@@ -27,9 +20,9 @@ return array_replace_recursive(require __DIR__.'/en.php', [
         'LLLL' => 'dddd, MMMM D. YYYY H.mm',
     ],
 
-    'hour' => ':count äigi', // less reliable
-    'h' => ':count äigi', // less reliable
-    'a_hour' => ':count äigi', // less reliable
+    'hour' => ':count äigi', 
+    'h' => ':count äigi', 
+    'a_hour' => ':count äigi', 
 
     'year' => ':count ihe',
     'y' => ':count ihe',

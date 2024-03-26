@@ -1,75 +1,27 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module dynamic-logic */
 
-/**
- * Dynamic logic. Handles form appearance and behaviour depending on conditions.
- *
- * @internal Instantiated in advanced-pack.
- */
+
+
+
 class DynamicLogic {
 
-    /**
-     * @param {Object} defs Definitions.
-     * @param {module:views/record/base} recordView A record view.
-     */
+    
     constructor(defs, recordView) {
 
-        /**
-         * @type {Object} Definitions.
-         * @private
-         */
+        
         this.defs = defs || {};
 
-        /**
-         *
-         * @type {module:views/record/base}
-         * @private
-         */
+        
         this.recordView = recordView;
 
-        /**
-         * @type {string[]}
-         * @private
-         */
+        
         this.fieldTypeList = ['visible', 'required', 'readOnly'];
 
-        /**
-         * @type {string[]}
-         * @private
-         */
+        
         this.panelTypeList = ['visible', 'styled'];
     }
 
-    /**
-     * Process.
-     */
+    
     process() {
         const fields = this.defs.fields || {};
 
@@ -143,11 +95,7 @@ class DynamicLogic {
         });
     }
 
-    /**
-     * @param {string} panel A panel name.
-     * @param {string} type A type.
-     * @private
-     */
+    
     processPanel(panel, type) {
         const panels = this.defs.panels || {};
         const item = (panels[panel] || {});
@@ -176,12 +124,7 @@ class DynamicLogic {
         this[methodName](panel);
     }
 
-    /**
-     * Check a condition group.
-     * @param {Object} data A condition group.
-     * @param {'and'|'or'|'not'} [type='and'] A type.
-     * @returns {boolean}
-     */
+    
     checkConditionGroup(data, type) {
         type = type || 'and';
 
@@ -221,10 +164,7 @@ class DynamicLogic {
         return result;
     }
 
-    /**
-     * @private
-     * @param {string} attribute
-     */
+    
     getAttributeValue(attribute) {
         if (attribute.startsWith('$')) {
             if (attribute === '$user.id') {
@@ -239,19 +179,14 @@ class DynamicLogic {
         return this.recordView.model.get(attribute);
     }
 
-    /**
-     * Check a condition.
-     *
-     * @param {Object} defs Definitions.
-     * @returns {boolean}
-     */
+    
     checkCondition(defs) {
         defs = defs || {};
 
         const type = defs.type || 'equals';
 
         if (['or', 'and', 'not'].includes(type)) {
-            return this.checkConditionGroup(defs.value, /** @type {'or'|'and'|'not'} */ type);
+            return this.checkConditionGroup(defs.value,  type);
         }
 
         const attribute = defs.attribute;
@@ -419,119 +354,77 @@ class DynamicLogic {
         return false;
     }
 
-    /**
-     * @param {string} field
-     * @param {string[]} optionList
-     * @private
-     */
+    
     setOptionList(field, optionList) {
         this.recordView.setFieldOptionList(field, optionList);
     }
 
-    /**
-     * @param {string} field
-     * @private
-     */
+    
     resetOptionList(field) {
         this.recordView.resetFieldOptionList(field);
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * @param {string} field
-     * @private
-     */
+    
+    
     makeFieldVisibleTrue(field) {
         this.recordView.showField(field);
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * @param {string} field
-     * @private
-     */
+    
+    
     makeFieldVisibleFalse(field) {
         this.recordView.hideField(field);
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * @param {string} field
-     * @private
-     */
+    
+    
     makeFieldRequiredTrue(field) {
         this.recordView.setFieldRequired(field);
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * @param {string} field
-     * @private
-     */
+    
+    
     makeFieldRequiredFalse(field) {
         this.recordView.setFieldNotRequired(field);
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * @param {string} field
-     * @private
-     */
+    
+    
     makeFieldReadOnlyTrue(field) {
         this.recordView.setFieldReadOnly(field);
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * @param {string} field
-     * @private
-     */
+    
+    
     makeFieldReadOnlyFalse(field) {
         this.recordView.setFieldNotReadOnly(field);
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * @param {string} panel
-     * @private
-     */
+    
+    
     makePanelVisibleTrue(panel) {
         this.recordView.showPanel(panel, 'dynamicLogic');
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * @param {string} panel
-     * @private
-     */
+    
+    
     makePanelVisibleFalse(panel) {
         this.recordView.hidePanel(panel, false, 'dynamicLogic');
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * @param {string} panel
-     * @private
-     */
+    
+    
     makePanelStyledTrue(panel) {
         this.recordView.stylePanel(panel);
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * @param {string} panel
-     * @private
-     */
+    
+    
     makePanelStyledFalse(panel) {
         this.recordView.unstylePanel(panel);
     }
 
-    /**
-     * Add a panel-visible condition.
-     *
-     * @param {string} name A panel name.
-     * @param {Object} item Condition definitions.
-     */
+    
     addPanelVisibleCondition(name, item) {
         this.defs.panels = this.defs.panels || {};
         this.defs.panels[name] = this.defs.panels[name] || {};
@@ -541,12 +434,7 @@ class DynamicLogic {
         this.processPanel(name, 'visible');
     }
 
-    /**
-     * Add a panel-styled condition.
-     *
-     * @param {string} name A panel name.
-     * @param {Object} item Condition definitions.
-     */
+    
     addPanelStyledCondition(name, item) {
         this.defs.panels = this.defs.panels || {};
         this.defs.panels[name] = this.defs.panels[name] || {};

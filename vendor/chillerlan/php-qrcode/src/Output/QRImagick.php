@@ -1,16 +1,5 @@
 <?php
-/**
- * Class QRImagick
- *
- * @filesource   QRImagick.php
- * @created      04.07.2018
- * @package      chillerlan\QRCode\Output
- * @author       smiley <smiley@chillerlan.net>
- * @copyright    2018 smiley
- * @license      MIT
- *
- * @noinspection PhpComposerExtensionStubsInspection
- */
+
 
 namespace chillerlan\QRCode\Output;
 
@@ -21,31 +10,22 @@ use Imagick, ImagickDraw, ImagickPixel;
 
 use function extension_loaded, is_string;
 
-/**
- * ImageMagick output module (requires ext-imagick)
- *
- * @see http://php.net/manual/book.imagick.php
- * @see http://phpimagick.com
- */
+
 class QRImagick extends QROutputAbstract{
 
 	protected Imagick $imagick;
 
-	/**
-	 * @inheritDoc
-	 */
+	
 	public function __construct(SettingsContainerInterface $options, QRMatrix $matrix){
 
 		if(!extension_loaded('imagick')){
-			throw new QRCodeException('ext-imagick not loaded'); // @codeCoverageIgnore
+			throw new QRCodeException('ext-imagick not loaded'); 
 		}
 
 		parent::__construct($options, $matrix);
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	
 	protected function setModuleValues():void{
 
 		foreach($this::DEFAULT_MODULE_VALUES as $type => $defaultValue){
@@ -62,11 +42,7 @@ class QRImagick extends QROutputAbstract{
 		}
 	}
 
-	/**
-	 * @inheritDoc
-	 *
-	 * @return string|\Imagick
-	 */
+	
 	public function dump(string $file = null){
 		$file ??= $this->options->cachefile;
 		$this->imagick = new Imagick;
@@ -93,9 +69,7 @@ class QRImagick extends QROutputAbstract{
 		return $imageData;
 	}
 
-	/**
-	 * Creates the QR image via ImagickDraw
-	 */
+	
 	protected function drawImage():void{
 		$draw = new ImagickDraw;
 

@@ -10,22 +10,15 @@ use AsyncAws\S3\ValueObject\Error;
 
 class DeleteObjectsOutput extends Result
 {
-    /**
-     * Container element for a successful delete. It identifies the object that was successfully deleted.
-     */
+    
     private $deleted = [];
 
     private $requestCharged;
 
-    /**
-     * Container for a failed delete operation that describes the object that Amazon S3 attempted to delete and the error it
-     * encountered.
-     */
+    
     private $errors = [];
 
-    /**
-     * @return DeletedObject[]
-     */
+    
     public function getDeleted(): array
     {
         $this->initialize();
@@ -33,9 +26,7 @@ class DeleteObjectsOutput extends Result
         return $this->deleted;
     }
 
-    /**
-     * @return Error[]
-     */
+    
     public function getErrors(): array
     {
         $this->initialize();
@@ -43,9 +34,7 @@ class DeleteObjectsOutput extends Result
         return $this->errors;
     }
 
-    /**
-     * @return RequestCharged::*|null
-     */
+    
     public function getRequestCharged(): ?string
     {
         $this->initialize();
@@ -64,9 +53,7 @@ class DeleteObjectsOutput extends Result
         $this->errors = !$data->Error ? [] : $this->populateResultErrors($data->Error);
     }
 
-    /**
-     * @return DeletedObject[]
-     */
+    
     private function populateResultDeletedObjects(\SimpleXMLElement $xml): array
     {
         $items = [];
@@ -82,9 +69,7 @@ class DeleteObjectsOutput extends Result
         return $items;
     }
 
-    /**
-     * @return Error[]
-     */
+    
     private function populateResultErrors(\SimpleXMLElement $xml): array
     {
         $items = [];

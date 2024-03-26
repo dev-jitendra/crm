@@ -33,9 +33,7 @@ abstract class AbstractConnectionMiddleware implements ServerInfoAwareConnection
         return $this->wrappedConnection->query($sql);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function quote($value, $type = ParameterType::STRING)
     {
         return $this->wrappedConnection->quote($value, $type);
@@ -46,15 +44,13 @@ abstract class AbstractConnectionMiddleware implements ServerInfoAwareConnection
         return $this->wrappedConnection->exec($sql);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function lastInsertId($name = null)
     {
         if ($name !== null) {
             Deprecation::triggerIfCalledFromOutside(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/issues/4687',
+                'https:
                 'The usage of Connection::lastInsertId() with a sequence name is deprecated.',
             );
         }
@@ -62,33 +58,25 @@ abstract class AbstractConnectionMiddleware implements ServerInfoAwareConnection
         return $this->wrappedConnection->lastInsertId($name);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function beginTransaction()
     {
         return $this->wrappedConnection->beginTransaction();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function commit()
     {
         return $this->wrappedConnection->commit();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function rollBack()
     {
         return $this->wrappedConnection->rollBack();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getServerVersion()
     {
         if (! $this->wrappedConnection instanceof ServerInfoAwareConnection) {
@@ -98,7 +86,7 @@ abstract class AbstractConnectionMiddleware implements ServerInfoAwareConnection
         return $this->wrappedConnection->getServerVersion();
     }
 
-    /** @return resource|object */
+    
     public function getNativeConnection()
     {
         if (! method_exists($this->wrappedConnection, 'getNativeConnection')) {

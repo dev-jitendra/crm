@@ -5,7 +5,7 @@ namespace PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 class Xlfn
 {
     const XLFNREGEXP = '/(?<!_xlfn[.])\\b('
-            // functions added with Excel 2010
+            
         . 'beta[.]dist'
         . '|beta[.]inv'
         . '|binom[.]dist'
@@ -61,7 +61,7 @@ class Xlfn
         . '|var[.]s'
         . '|weibull[.]dist'
         . '|z[.]test'
-        // functions added with Excel 2013
+        
         . '|acot'
         . '|acoth'
         . '|arabic'
@@ -114,14 +114,14 @@ class Xlfn
         . '|unicode'
         . '|webservice'
         . '|xor'
-        // functions added with Excel 2016
+        
         . '|forecast[.]et2'
         . '|forecast[.]ets[.]confint'
         . '|forecast[.]ets[.]seasonality'
         . '|forecast[.]ets[.]stat'
         . '|forecast[.]linear'
         . '|switch'
-        // functions added with Excel 2019
+        
         . '|concat'
         . '|countifs'
         . '|ifs'
@@ -129,7 +129,7 @@ class Xlfn
         . '|minifs'
         . '|sumifs'
         . '|textjoin'
-        // functions added with Excel 365
+        
         . '|filter'
         . '|randarray'
         . '|sequence'
@@ -140,18 +140,13 @@ class Xlfn
         . '|xmatch'
         . ')(?=\\s*[(])/i';
 
-    /**
-     * Prefix function name in string with _xlfn. where required.
-     */
+    
     public static function addXlfn(string $funcstring): string
     {
         return preg_replace(self::XLFNREGEXP, '_xlfn.$1', $funcstring);
     }
 
-    /**
-     * Prefix function name in string with _xlfn. where required.
-     * Leading character, expected to be equals sign, is stripped.
-     */
+    
     public static function addXlfnStripEquals(string $funcstring): string
     {
         return self::addXlfn(substr($funcstring, 1));

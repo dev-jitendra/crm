@@ -13,29 +13,21 @@ use Doctrine\Deprecations\Deprecation;
 
 use function assert;
 
-/**
- * Abstract base implementation of the {@see Driver} interface for IBM DB2 based drivers.
- */
+
 abstract class AbstractDB2Driver implements Driver
 {
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getDatabasePlatform()
     {
         return new DB2Platform();
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated Use {@link DB2Platform::createSchemaManager()} instead.
-     */
+    
     public function getSchemaManager(Connection $conn, AbstractPlatform $platform)
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5458',
+            'https:
             'AbstractDB2Driver::getSchemaManager() is deprecated.'
                 . ' Use DB2Platform::createSchemaManager() instead.',
         );

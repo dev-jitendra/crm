@@ -1,18 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Zuza Software Foundation (Translate.org.za) Dwayne Bailey dwayne@translate.org.za
- */
+
+
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [
         'L' => 'DD/MM/YYYY',
@@ -24,25 +14,25 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'weekdays_min' => ['Son', 'Mma', 'Bed', 'Rar', 'Ne', 'Hla', 'Moq'],
     'day_of_first_week_of_year' => 1,
 
-    'week' => ':count Sontaha', // less reliable
-    'w' => ':count Sontaha', // less reliable
-    'a_week' => ':count Sontaha', // less reliable
+    'week' => ':count Sontaha', 
+    'w' => ':count Sontaha', 
+    'a_week' => ':count Sontaha', 
 
-    'day' => ':count letsatsi', // less reliable
-    'd' => ':count letsatsi', // less reliable
-    'a_day' => ':count letsatsi', // less reliable
+    'day' => ':count letsatsi', 
+    'd' => ':count letsatsi', 
+    'a_day' => ':count letsatsi', 
 
-    'hour' => ':count sešupanako', // less reliable
-    'h' => ':count sešupanako', // less reliable
-    'a_hour' => ':count sešupanako', // less reliable
+    'hour' => ':count sešupanako', 
+    'h' => ':count sešupanako', 
+    'a_hour' => ':count sešupanako', 
 
-    'minute' => ':count menyane', // less reliable
-    'min' => ':count menyane', // less reliable
-    'a_minute' => ':count menyane', // less reliable
+    'minute' => ':count menyane', 
+    'min' => ':count menyane', 
+    'a_minute' => ':count menyane', 
 
-    'second' => ':count thusa', // less reliable
-    's' => ':count thusa', // less reliable
-    'a_second' => ':count thusa', // less reliable
+    'second' => ':count thusa', 
+    's' => ':count thusa', 
+    'a_second' => ':count thusa', 
 
     'year' => ':count selemo',
     'y' => ':count selemo',

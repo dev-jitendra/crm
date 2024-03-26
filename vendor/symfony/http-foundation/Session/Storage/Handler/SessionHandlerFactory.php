@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpFoundation\Session\Storage\Handler;
 
@@ -16,9 +9,7 @@ use Symfony\Component\Cache\Adapter\AbstractAdapter;
 use Symfony\Component\Cache\Traits\RedisClusterProxy;
 use Symfony\Component\Cache\Traits\RedisProxy;
 
-/**
- * @author Nicolas Grekas <p@tchwork.com>
- */
+
 class SessionHandlerFactory
 {
     public static function createHandler(object|string $connection): AbstractSessionHandler
@@ -44,7 +35,7 @@ class SessionHandlerFactory
 
             case !\is_string($connection):
                 throw new \InvalidArgumentException(sprintf('Unsupported Connection: "%s".', get_debug_type($connection)));
-            case str_starts_with($connection, 'file://'):
+            case str_starts_with($connection, 'file:
                 $savePath = substr($connection, 7);
 
                 return new StrictSessionHandler(new NativeFileSessionHandler('' === $savePath ? null : $savePath));
@@ -60,22 +51,22 @@ class SessionHandlerFactory
 
                 return new $handlerClass($connection, array_intersect_key($options ?: [], ['prefix' => 1, 'ttl' => 1]));
 
-            case str_starts_with($connection, 'pdo_oci://'):
+            case str_starts_with($connection, 'pdo_oci:
                 if (!class_exists(DriverManager::class)) {
                     throw new \InvalidArgumentException(sprintf('Unsupported DSN "%s". Try running "composer require doctrine/dbal".', $connection));
                 }
                 $connection = DriverManager::getConnection(['url' => $connection])->getWrappedConnection();
-                // no break;
+                
 
-            case str_starts_with($connection, 'mssql://'):
-            case str_starts_with($connection, 'mysql://'):
-            case str_starts_with($connection, 'mysql2://'):
-            case str_starts_with($connection, 'pgsql://'):
-            case str_starts_with($connection, 'postgres://'):
-            case str_starts_with($connection, 'postgresql://'):
-            case str_starts_with($connection, 'sqlsrv://'):
-            case str_starts_with($connection, 'sqlite://'):
-            case str_starts_with($connection, 'sqlite3://'):
+            case str_starts_with($connection, 'mssql:
+            case str_starts_with($connection, 'mysql:
+            case str_starts_with($connection, 'mysql2:
+            case str_starts_with($connection, 'pgsql:
+            case str_starts_with($connection, 'postgres:
+            case str_starts_with($connection, 'postgresql:
+            case str_starts_with($connection, 'sqlsrv:
+            case str_starts_with($connection, 'sqlite:
+            case str_starts_with($connection, 'sqlite3:
                 return new PdoSessionHandler($connection, $options ?: []);
         }
 

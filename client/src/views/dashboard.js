@@ -1,32 +1,6 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/dashboard */
+
+
 
 import View from 'view';
 import GridStack from 'gridstack';
@@ -41,13 +15,13 @@ class DashboardView extends View {
     WIDTH_MULTIPLIER = 3
 
     events = {
-        /** @this DashboardView */
+        
         'click button[data-action="selectTab"]': function (e) {
             const tab = parseInt($(e.currentTarget).data('tab'));
 
             this.selectTab(tab);
         },
-        /** @this DashboardView */
+        
         'click .dashboard-buttons [data-action="addDashlet"]': function () {
             this.createView('addDashlet', 'views/modals/add-dashlet', {}, view => {
                 view.render();
@@ -57,7 +31,7 @@ class DashboardView extends View {
                 });
             });
         },
-        /** @this DashboardView */
+        
         'click .dashboard-buttons [data-action="editTabs"]': function () {
             this.editTabs();
         },
@@ -414,7 +388,7 @@ class DashboardView extends View {
             this.saveLayout();
         });
 
-        // noinspection SpellCheckingInspection
+        
         this.grid.on('resizestop', e => {
             const id = $(e.target).data('id');
             const view = this.getView('dashlet-' + id);
@@ -509,7 +483,7 @@ class DashboardView extends View {
 
         const $item = this.$gridstack.find('.grid-stack-item[data-id="' + id + '"]');
 
-        // noinspection JSUnresolvedReference
+        
         this.grid.removeWidget($item.get(0), true);
 
         const layout = this.dashboardLayout[this.currentTab].layout;

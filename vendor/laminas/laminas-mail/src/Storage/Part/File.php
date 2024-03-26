@@ -20,26 +20,14 @@ use const SEEK_END;
 
 class File extends Part
 {
-    /** @var array */
+    
     protected $contentPos = [];
-    /** @var array */
+    
     protected $partPos = [];
-    /** @var resource */
+    
     protected $fh;
 
-    /**
-     * Public constructor
-     *
-     * This handler supports the following params:
-     * - file     filename or open file handler with message content (required)
-     * - startPos start position of message or part in file (default: current position)
-     * - endPos   end position of message or part in file (default: end of file)
-     * - EOL      end of Line for messages
-     *
-     * @param   array $params  full message with or without headers
-     * @throws Exception\RuntimeException
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public function __construct(array $params)
     {
         if (empty($params['file'])) {
@@ -104,7 +92,7 @@ class File extends Part
 
             if ($line == '--' . $boundary) {
                 if ($part) {
-                    // not first part
+                    
                     $part[1]         = $lastPos;
                     $this->partPos[] = $part;
                 }
@@ -118,14 +106,7 @@ class File extends Part
         $this->countParts = count($this->partPos);
     }
 
-    /**
-     * Body of part
-     *
-     * If part is multipart the raw content of this part with all sub parts is returned
-     *
-     * @param resource $stream Optional
-     * @return string body
-     */
+    
     public function getContent($stream = null)
     {
         fseek($this->fh, $this->contentPos[0]);
@@ -136,25 +117,13 @@ class File extends Part
         return $length < 1 ? '' : fread($this->fh, $length);
     }
 
-    /**
-     * Return size of part
-     *
-     * Quite simple implemented currently (not decoding). Handle with care.
-     *
-     * @return int size
-     */
+    
     public function getSize()
     {
         return $this->contentPos[1] - $this->contentPos[0];
     }
 
-    /**
-     * Get part of multipart message
-     *
-     * @param  int $num number of part starting with 1 for first part
-     * @throws Exception\RuntimeException
-     * @return Part wanted part
-     */
+    
     public function getPart($num)
     {
         --$num;

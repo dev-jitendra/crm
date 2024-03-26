@@ -1,50 +1,22 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Mail\Importer;
 
 use Espo\Entities\EmailFilter;
 
-/**
- * @immutable
- */
+
 class Data
 {
     private ?string $assignedUserId = null;
-    /** @var string[] */
+    
     private array $teamIdList = [];
-    /** @var string[] */
+    
     private array $userIdList = [];
-    /** @var iterable<EmailFilter> */
+    
     private iterable $filterList = [];
     private bool $fetchOnlyHeader = false;
-    /** @var array<string, string> */
+    
     private array $folderData = [];
     private ?string $groupEmailFolderId = null;
 
@@ -58,25 +30,19 @@ class Data
         return $this->assignedUserId;
     }
 
-    /**
-     * @return string[]
-     */
+    
     public function getTeamIdList(): array
     {
         return $this->teamIdList;
     }
 
-    /**
-     * @return string[]
-     */
+    
     public function getUserIdList(): array
     {
         return $this->userIdList;
     }
 
-    /**
-     * @return iterable<EmailFilter>
-     */
+    
     public function getFilterList(): iterable
     {
         return $this->filterList;
@@ -87,9 +53,7 @@ class Data
         return $this->fetchOnlyHeader;
     }
 
-    /**
-     * @return array<string, string>
-     */
+    
     public function getFolderData(): array
     {
         return $this->folderData;
@@ -109,9 +73,7 @@ class Data
         return $obj;
     }
 
-    /**
-     * @param string[] $teamIdList
-     */
+    
     public function withTeamIdList(array $teamIdList): self
     {
         $obj = clone $this;
@@ -121,9 +83,7 @@ class Data
         return $obj;
     }
 
-    /**
-     * @param string[] $userIdList
-     */
+    
     public function withUserIdList(array $userIdList): self
     {
         $obj = clone $this;
@@ -132,9 +92,7 @@ class Data
         return $obj;
     }
 
-    /**
-     * @param iterable<EmailFilter> $filterList
-     */
+    
     public function withFilterList(iterable $filterList): self
     {
         $obj = clone $this;
@@ -151,9 +109,7 @@ class Data
         return $obj;
     }
 
-    /**
-     * @param array<string, string> $folderData
-     */
+    
     public function withFolderData(array $folderData): self
     {
         $obj = clone $this;

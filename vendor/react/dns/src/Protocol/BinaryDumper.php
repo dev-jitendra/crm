@@ -8,10 +8,7 @@ use React\Dns\Query\Query;
 
 final class BinaryDumper
 {
-    /**
-     * @param Message $message
-     * @return string
-     */
+    
     public function toBinary(Message $message)
     {
         $data = '';
@@ -25,10 +22,7 @@ final class BinaryDumper
         return $data;
     }
 
-    /**
-     * @param Message $message
-     * @return string
-     */
+    
     private function headerToBinary(Message $message)
     {
         $data = '';
@@ -42,7 +36,7 @@ final class BinaryDumper
         $flags = ($flags << 1) | ($message->tc ? 1 : 0);
         $flags = ($flags << 1) | ($message->rd ? 1 : 0);
         $flags = ($flags << 1) | ($message->ra ? 1 : 0);
-        $flags = ($flags << 3) | 0; // skip unused zero bit
+        $flags = ($flags << 3) | 0; 
         $flags = ($flags << 4) | $message->rcode;
 
         $data .= pack('n', $flags);
@@ -55,10 +49,7 @@ final class BinaryDumper
         return $data;
     }
 
-    /**
-     * @param Query[] $questions
-     * @return string
-     */
+    
     private function questionToBinary(array $questions)
     {
         $data = '';
@@ -71,16 +62,13 @@ final class BinaryDumper
         return $data;
     }
 
-    /**
-     * @param Record[] $records
-     * @return string
-     */
+    
     private function recordsToBinary(array $records)
     {
         $data = '';
 
         foreach ($records as $record) {
-            /* @var $record Record */
+            
             switch ($record->type) {
                 case Message::TYPE_A:
                 case Message::TYPE_AAAA:
@@ -150,7 +138,7 @@ final class BinaryDumper
                     }
                     break;
                 default:
-                    // RDATA is already stored as binary value for unknown record types
+                    
                     $binary = $record->data;
             }
 
@@ -162,10 +150,7 @@ final class BinaryDumper
         return $data;
     }
 
-    /**
-     * @param string[] $texts
-     * @return string
-     */
+    
     private function textsToBinary(array $texts)
     {
         $data = '';
@@ -175,17 +160,14 @@ final class BinaryDumper
         return $data;
     }
 
-    /**
-     * @param string $host
-     * @return string
-     */
+    
     private function domainNameToBinary($host)
     {
         if ($host === '') {
             return "\0";
         }
 
-        // break up domain name at each dot that is not preceeded by a backslash (escaped notation)
+        
         return $this->textsToBinary(
             \array_map(
                 'stripcslashes',

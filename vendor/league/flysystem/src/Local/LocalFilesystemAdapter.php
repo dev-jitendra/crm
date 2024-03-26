@@ -45,39 +45,25 @@ use function stream_copy_to_stream;
 
 class LocalFilesystemAdapter implements FilesystemAdapter
 {
-    /**
-     * @var int
-     */
+    
     public const SKIP_LINKS = 0001;
 
-    /**
-     * @var int
-     */
+    
     public const DISALLOW_LINKS = 0002;
 
-    /**
-     * @var PathPrefixer
-     */
+    
     private $prefixer;
 
-    /**
-     * @var int
-     */
+    
     private $writeFlags;
 
-    /**
-     * @var int
-     */
+    
     private $linkHandling;
 
-    /**
-     * @var VisibilityConverter
-     */
+    
     private $visibility;
 
-    /**
-     * @var MimeTypeDetector
-     */
+    
     private $mimeTypeDetector;
 
     public function __construct(
@@ -159,7 +145,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
 
         $contents = $this->listDirectoryRecursively($location, RecursiveIteratorIterator::CHILD_FIRST);
 
-        /** @var SplFileInfo $file */
+        
         foreach ($contents as $file) {
             if ( ! $this->deleteFileInfoObject($file)) {
                 throw UnableToDeleteDirectory::atLocation($prefix, "Unable to delete file at " . $file->getPathname());
@@ -203,7 +189,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
             return;
         }
 
-        /** @var SplFileInfo[] $iterator */
+        
         $iterator = $deep ? $this->listDirectoryRecursively($location) : $this->listDirectory($location);
 
         foreach ($iterator as $fileInfo) {

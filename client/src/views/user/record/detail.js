@@ -1,30 +1,4 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 import DetailRecordView from 'views/record/detail';
 
@@ -35,11 +9,7 @@ class UserDetailRecordView extends DetailRecordView {
 
     editModeDisabled = true
 
-    /**
-     * @name model
-     * @type module:models/user
-     * @memberOf UserDetailRecordView#
-     */
+    
 
     setup() {
         super.setup();
@@ -180,7 +150,7 @@ class UserDetailRecordView extends DetailRecordView {
                 return true;
             }
 
-            const aclDefs = /** @type {Object.<string, *>|null} */
+            const aclDefs = 
                 this.getMetadata().get(['entityAcl', 'User', 'fields', item]);
 
             if (!aclDefs) {
@@ -272,7 +242,7 @@ class UserDetailRecordView extends DetailRecordView {
         }
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionChangePassword() {
         Espo.Ui.notify(' ... ');
 
@@ -288,22 +258,22 @@ class UserDetailRecordView extends DetailRecordView {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionPreferences() {
         this.getRouter().navigate('#Preferences/edit/' + this.model.id, {trigger: true});
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionEmailAccounts() {
         this.getRouter().navigate('#EmailAccount/list/userId=' + this.model.id, {trigger: true});
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionExternalAccounts() {
         this.getRouter().navigate('#ExternalAccount', {trigger: true});
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionAccess() {
         Espo.Ui.notify(' ... ');
 
@@ -387,7 +357,7 @@ class UserDetailRecordView extends DetailRecordView {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionGenerateNewApiKey() {
         this.confirm(this.translate('confirmation', 'messages'), () => {
             Espo.Ajax
@@ -398,7 +368,7 @@ class UserDetailRecordView extends DetailRecordView {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionViewSecurity() {
         this.createView('dialog', 'views/user/modals/security', {
             userModel: this.model,
@@ -407,7 +377,7 @@ class UserDetailRecordView extends DetailRecordView {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionSendPasswordChangeLink() {
         this.confirm({
             message: this.translate('sendPasswordChangeLinkConfirmation', 'messages', 'User'),
@@ -424,7 +394,7 @@ class UserDetailRecordView extends DetailRecordView {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionGenerateNewPassword() {
         this.confirm(
             this.translate('generateAndSendNewPassword', 'messages', 'User')
@@ -439,7 +409,7 @@ class UserDetailRecordView extends DetailRecordView {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionLogin() {
         const anotherUser = this.model.get('userName');
         const username = this.getUser().get('userName');

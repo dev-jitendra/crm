@@ -11,29 +11,16 @@ use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\Service\ResetInterface;
 
-/**
- * Chains several CredentialProvider together.
- *
- * Credentials are fetched from the first CredentialProvider that does not returns null.
- * The CredentialProvider will be memoized and will be directly called the next times.
- *
- * @author Jérémy Derussé <jeremy@derusse.com>
- */
+
 final class ChainProvider implements CredentialProvider, ResetInterface
 {
-    /**
-     * @var iterable<CredentialProvider>
-     */
+    
     private $providers;
 
-    /**
-     * @var array<string, CredentialProvider|null>
-     */
+    
     private $lastSuccessfulProvider = [];
 
-    /**
-     * @param iterable<CredentialProvider> $providers
-     */
+    
     public function __construct(iterable $providers)
     {
         $this->providers = $providers;

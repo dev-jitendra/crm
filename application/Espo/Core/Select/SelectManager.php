@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Select;
 
@@ -52,11 +26,7 @@ use DateInterval;
 
 use ReflectionMethod;
 
-/**
- * @deprecated As of v7.0. Use SelectBuilder instead.
- *
- * Used for generating and managing select parameters which subsequently will be feed to ORM.
- */
+
 class SelectManager
 {
     protected $entityType;
@@ -314,11 +284,7 @@ class SelectManager
         $this->applyLeftJoinsFromWhere($where, $result);
     }
 
-    /**
-     * Convert 'where' parameters from the frontend format to the format needed by ORM.
-     *
-     * @return array Where clause for ORM.
-     */
+    
     public function convertWhere(array $where, bool $ignoreAdditionaFilterTypes = false, array &$result = []) : array
     {
         $whereClause = [];
@@ -536,9 +502,7 @@ class SelectManager
         $this->q(['q' => $textFilter], $result);
     }
 
-    /**
-     * Get empty select parameters.
-     */
+    
     public function getEmptySelectParams() : array
     {
         $result = [];
@@ -845,15 +809,7 @@ class SelectManager
         return $result;
     }
 
-    /**
-     * Build select parameters for ORM from parameters in the frontend format.
-     *
-     * @param $params Parameters in front-end format.
-     * @param $withAcl To apply ACL.
-     * @param $checkWherePermission To check passed filters, whether a user has an access to use these filters.
-     * @param $forbidComplexExpressions To forbid complex expression usage.
-     * @return array Parameters for ORM.
-     */
+    
     public function buildSelectParams(
         array $params,
         bool $withAcl = false,
@@ -864,9 +820,7 @@ class SelectManager
         return $this->getSelectParams($params, $withAcl, $checkWherePermission, $forbidComplexExpressions);
     }
 
-    /**
-     * The same as buildSelectParams.
-     */
+    
     public function getSelectParams(
         array $params,
         bool $withAcl = false,
@@ -900,9 +854,7 @@ class SelectManager
         return $raw;
     }
 
-    /**
-     * Apply default order to select parameters.
-     */
+    
     public function applyDefaultOrder(array &$result)
     {
         $orderBy = $this->getMetadata()->get(['entityDefs', $this->entityType, 'collection', 'orderBy']);
@@ -967,7 +919,7 @@ class SelectManager
         if (strpos($attribute, '.')) {
             list($link, $attribute) = explode('.', $attribute);
             if (!$this->getSeed()->hasRelation($link)) {
-                // TODO allow alias
+                
                 throw new Forbidden("SelectManager::checkWhere: Unknown relation '{$link}' in where.");
             }
             $entityType = $this->getSeed()->getRelationParam($link, 'entity');
@@ -1025,7 +977,7 @@ class SelectManager
         $timeZone = $item['timeZone'] ?? 'UTC';
         $type = $item['type'] ?? null;
 
-        // for backward compatibility
+        
         if (!$attribute && isset($item['field'])) {
             $attribute = $item['field'];
         }
@@ -1337,7 +1289,7 @@ class SelectManager
         $value = $item['value'] ?? null;
         $attribute = $item['attribute'] ?? null;
 
-        // for backward compatibility
+        
         if (!$attribute && !empty($item['field'])) {
             $attribute = $item['field'];
         }
@@ -1916,27 +1868,21 @@ class SelectManager
         return $part;
     }
 
-    /**
-     * Apply an order to select parameters.
-     */
+    
     public function applyOrder(string $sortBy, $desc, array &$result)
     {
         $this->prepareResult($result);
         $this->order($sortBy, $desc, $result);
     }
 
-    /**
-     * Apply a limit to select parameters.
-     */
+    
     public function applyLimit(?int $offset, ?int $maxSize, array &$result)
     {
         $this->prepareResult($result);
         $this->limit($offset, $maxSize, $result);
     }
 
-    /**
-     * Fallback for backward compatibility.
-     */
+    
     public function hasInheritedAccessMethod() : bool
     {
         $method = new ReflectionMethod($this, 'access');
@@ -1944,9 +1890,7 @@ class SelectManager
         return $method->getDeclaringClass()->getName() !== SelectManager::class;
     }
 
-    /**
-     * Fallback for backward compatibility.
-     */
+    
     public function applyAccessToQueryBuilder(OrmSelectBuilder $queryBuilder)
     {
         $result = $queryBuilder->build()->getRaw();
@@ -1956,9 +1900,7 @@ class SelectManager
         $queryBuilder->setRawParams($result);
     }
 
-    /**
-     * Fallback for backward compatibility.
-     */
+    
     public function hasInheritedAccessFilterMethod(string $filterName) : bool
     {
         if (
@@ -1980,9 +1922,7 @@ class SelectManager
         return $method->getDeclaringClass()->getName() !== SelectManager::class;
     }
 
-    /**
-     * Fallback for backward compatibility.
-     */
+    
     public function applyAccessFilterToQueryBuilder(OrmSelectBuilder $queryBuilder, string $filterName)
     {
         $methodName = 'access' . ucfirst($filterName);
@@ -1994,9 +1934,7 @@ class SelectManager
         $queryBuilder->setRawParams($result);
     }
 
-    /**
-     * Fallback for backward compatibility.
-     */
+    
     public function hasBoolFilter(string $filter) : bool
     {
         $method = 'boolFilter' . ucfirst($filter);
@@ -2004,9 +1942,7 @@ class SelectManager
         return method_exists($this, $method);
     }
 
-    /**
-     * Fallback for backward compatibility.
-     */
+    
     public function applyBoolFilterToQueryBuilder(OrmSelectBuilder $queryBuilder, string $filter) : array
     {
         $result = $queryBuilder->build()->getRaw();
@@ -2024,9 +1960,7 @@ class SelectManager
         return $rawWhereClause;
     }
 
-    /**
-     * Fallback for backward compatibility.
-     */
+    
     public function hasPrimaryFilter(string $filter) : bool
     {
         if (
@@ -2046,9 +1980,7 @@ class SelectManager
         return false;
     }
 
-    /**
-     * Fallback for backward compatibility.
-     */
+    
     public function applyPrimaryFilterToQueryBuilder(OrmSelectBuilder $queryBuilder, string $filter)
     {
         $result = $queryBuilder->build()->getRaw();
@@ -2058,9 +1990,7 @@ class SelectManager
         $queryBuilder->setRawParams($result);
     }
 
-    /**
-     * Apply a primary filter to select parameters.
-     */
+    
     public function applyPrimaryFilter(string $filter, array &$result)
     {
         $this->prepareResult($result);
@@ -2092,9 +2022,7 @@ class SelectManager
         $this->applyPrimaryFilter($filter, $result);
     }
 
-    /**
-     * Apply a bool filter to select parameters.
-     */
+    
     public function applyBoolFilter(string $filter, array &$result)
     {
         $this->prepareResult($result);
@@ -2108,9 +2036,7 @@ class SelectManager
         }
     }
 
-    /**
-     * Apply a list of bool filters to select parameters.
-     */
+    
     public function applyBoolFilterList(array $filterList, array &$result)
     {
         $this->prepareResult($result);
@@ -2136,9 +2062,7 @@ class SelectManager
         }
     }
 
-    /**
-     * Apply a text filter to select parameters.
-     */
+    
     public function applyTextFilter(string $textFilter, array &$result)
     {
         $this->prepareResult($result);
@@ -2150,9 +2074,7 @@ class SelectManager
 
     }
 
-    /**
-     * Check whether a link is already in JOINs. If an existing join has alias, then the alias is checked, the link is ignored.
-     */
+    
     public function hasJoin($join, array &$result)
     {
         $list = $result['joins'] ?? [];
@@ -2172,10 +2094,7 @@ class SelectManager
         return false;
     }
 
-    /**
-     * Check whether a link is already in LEFT JOINs. If an existing join has alias, then the alias is checked,
-     * the link is ignored.
-     */
+    
     public function hasLeftJoin($leftJoin, array &$result)
     {
         $list = $result['leftJoins'] ?? [];
@@ -2195,9 +2114,7 @@ class SelectManager
         return false;
     }
 
-    /**
-     * Check whether a link is already joined. If an existing join has alias, then the alias is checked, the link is ignored.
-     */
+    
     public function hasLinkJoined($join, array &$result)
     {
         if (in_array($join, $result['joins'])) {
@@ -2227,11 +2144,7 @@ class SelectManager
         return false;
     }
 
-    /**
-     * Add JOIN.
-     *
-     * @param string|array $join Format used for array: [link, alias, conditions].
-     */
+    
     public function addJoin($join, array &$result)
     {
         if (empty($result['joins'])) {
@@ -2263,11 +2176,7 @@ class SelectManager
         $result['joins'][] = $join;
     }
 
-    /**
-     * Add LEFT JOIN.
-     *
-     * @param string|array $join Format used for array: [link, alias, conditions].
-     */
+    
     public function addLeftJoin($leftJoin, array &$result)
     {
         if (empty($result['leftJoins'])) {
@@ -2304,9 +2213,7 @@ class SelectManager
         $result['joinConditions'][$join] = $condition;
     }
 
-    /**
-     * Set DISTINCT.
-     */
+    
     public function setDistinct(bool $distinct, array &$result)
     {
         $result['distinct'] = (bool) $distinct;
@@ -2478,7 +2385,7 @@ class SelectManager
             $textFilter = str_replace('*', '%', $textFilter);
         } else {
             if (!$useFullTextSearch) {
-                //$textFilterForFullTextSearch .= '*';
+                
             }
         }
 

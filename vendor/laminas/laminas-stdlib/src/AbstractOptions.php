@@ -17,29 +17,17 @@ use function str_replace;
 use function strtolower;
 use function ucwords;
 
-/**
- * @template TValue
- * @implements ParameterObjectInterface<string, TValue>
- */
+
 abstract class AbstractOptions implements ParameterObjectInterface
 {
-    // phpcs:disable PSR2.Classes.PropertyDeclaration.Underscore,WebimpressCodingStandard.NamingConventions.ValidVariableName.NotCamelCapsProperty
+    
 
-    /**
-     * We use the __ prefix to avoid collisions with properties in
-     * user-implementations.
-     *
-     * @var bool
-     */
+    
     protected $__strictMode__ = true;
 
-    // phpcs:enable
+    
 
-    /**
-     * Constructor
-     *
-     * @param  iterable<string, TValue>|AbstractOptions<TValue>|null $options
-     */
+    
     public function __construct($options = null)
     {
         if (null !== $options) {
@@ -47,13 +35,7 @@ abstract class AbstractOptions implements ParameterObjectInterface
         }
     }
 
-    /**
-     * Set one or more configuration properties
-     *
-     * @param  iterable<string, TValue>|AbstractOptions<TValue> $options
-     * @throws Exception\InvalidArgumentException
-     * @return AbstractOptions Provides fluent interface
-     */
+    
     public function setFromArray($options)
     {
         if ($options instanceof self) {
@@ -79,22 +61,18 @@ abstract class AbstractOptions implements ParameterObjectInterface
         return $this;
     }
 
-    /**
-     * Cast to array
-     *
-     * @return array<string, TValue>
-     */
+    
     public function toArray()
     {
         $array = [];
 
         $transform = static function (array $letters): string {
-            /** @var list<string> $letters */
+            
             $letter = array_shift($letters);
             return '_' . strtolower($letter);
         };
 
-        /** @psalm-var TValue $value */
+        
         foreach (get_object_vars($this) as $key => $value) {
             if ($key === '__strictMode__') {
                 continue;
@@ -106,16 +84,7 @@ abstract class AbstractOptions implements ParameterObjectInterface
         return $array;
     }
 
-    /**
-     * Set a configuration property
-     *
-     * @see ParameterObject::__set()
-     *
-     * @param string $key
-     * @param TValue|null $value
-     * @throws Exception\BadMethodCallException
-     * @return void
-     */
+    
     public function __set($key, $value)
     {
         $setter = 'set' . str_replace('_', '', $key);
@@ -136,15 +105,7 @@ abstract class AbstractOptions implements ParameterObjectInterface
         }
     }
 
-    /**
-     * Get a configuration property
-     *
-     * @see ParameterObject::__get()
-     *
-     * @param string $key
-     * @throws Exception\BadMethodCallException
-     * @return TValue
-     */
+    
     public function __get($key)
     {
         $getter = 'get' . str_replace('_', '', $key);
@@ -160,14 +121,7 @@ abstract class AbstractOptions implements ParameterObjectInterface
         ));
     }
 
-    /**
-     * Test if a configuration property is null
-     *
-     * @see ParameterObject::__isset()
-     *
-     * @param string $key
-     * @return bool
-     */
+    
     public function __isset($key)
     {
         $getter = 'get' . str_replace('_', '', $key);
@@ -175,15 +129,7 @@ abstract class AbstractOptions implements ParameterObjectInterface
         return method_exists($this, $getter) && null !== $this->__get($key);
     }
 
-    /**
-     * Set a configuration property to NULL
-     *
-     * @see ParameterObject::__unset()
-     *
-     * @param string $key
-     * @throws Exception\InvalidArgumentException
-     * @return void
-     */
+    
     public function __unset($key)
     {
         try {

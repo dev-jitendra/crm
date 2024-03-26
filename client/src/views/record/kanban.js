@@ -1,38 +1,10 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/record/kanban */
+
+
 
 import ListRecordView from 'views/record/list';
 
-/**
- * A kanban record view.
- */
+
 class KanbanRecordView extends ListRecordView {
 
     template = 'record/kanban'
@@ -56,16 +28,11 @@ class KanbanRecordView extends ListRecordView {
     buttonsDisabled = false
     backDragStarted = true
 
-    /**
-     * A button list.
-     *
-     * @protected
-     * @type {module:views/record/list~button[]}
-     */
+    
     buttonList = []
 
     events = {
-         /** @this KanbanRecordView */
+         
         'click a.link': function (e) {
             if (e.ctrlKey || e.metaKey || e.shiftKey) {
                 return;
@@ -96,7 +63,7 @@ class KanbanRecordView extends ListRecordView {
             this.getRouter().navigate('#' + scope + '/view/' + id, {trigger: false});
             this.getRouter().dispatch(scope, 'view', options);
         },
-        /** @this KanbanRecordView */
+        
         'click [data-action="groupShowMore"]': function (e) {
             const $target = $(e.currentTarget);
 
@@ -104,32 +71,32 @@ class KanbanRecordView extends ListRecordView {
 
             this.groupShowMore(group);
         },
-        /** @this KanbanRecordView */
+        
         'click .action': function (e) {
             Espo.Utils.handleAction(this, e.originalEvent, e.currentTarget, {
                 actionItems: [...this.buttonList],
                 className: 'list-action-item',
             });
         },
-        /** @this KanbanRecordView */
+        
         'mouseenter th.group-header': function (e) {
             const group = $(e.currentTarget).attr('data-name');
 
             this.showPlus(group);
         },
-        /** @this KanbanRecordView */
+        
         'mouseleave th.group-header': function (e) {
             const group = $(e.currentTarget).attr('data-name');
 
             this.hidePlus(group);
         },
-        /** @this KanbanRecordView */
+        
         'click [data-action="createInGroup"]': function (e) {
             const group = $(e.currentTarget).attr('data-group');
 
             this.actionCreateInGroup(group);
         },
-        /** @this KanbanRecordView */
+        
         'mousedown .kanban-columns td': function (e) {
             if ($(e.originalEvent.target).closest('.item').length) {
                 return;
@@ -137,7 +104,7 @@ class KanbanRecordView extends ListRecordView {
 
             this.initBackDrag(e.originalEvent);
         },
-        /** @this KanbanRecordView */
+        
         'auxclick a.link': function (e) {
             const isCombination = e.button === 1 && (e.ctrlKey || e.metaKey);
 
@@ -171,9 +138,9 @@ class KanbanRecordView extends ListRecordView {
         },
     }
 
-    // noinspection JSCheckFunctionSignatures
+    
     data() {
-        // noinspection JSValidateTypes
+        
         return {
             scope: this.scope,
             header: this.header,
@@ -212,12 +179,12 @@ class KanbanRecordView extends ListRecordView {
         }
     }
 
-    /** @inheritDoc */
+    
     getModelScope(id) {
         return this.scope;
     }
 
-    /** @inheritDoc */
+    
     setup() {
         if (typeof this.collection === 'undefined') {
             throw new Error('Collection has not been injected into Record.List view.');
@@ -565,11 +532,7 @@ class KanbanRecordView extends ListRecordView {
         });
     }
 
-    /**
-     * @param {string} group
-     * @param {string} [id] Prepend. To be used after save.
-     * @return {Promise}
-     */
+    
     storeGroupOrder(group, id) {
         const ids = this.getGroupOrderFromDom(group);
 
@@ -584,10 +547,7 @@ class KanbanRecordView extends ListRecordView {
         });
     }
 
-    /**
-     * @param {string} group
-     * @return {string[]}
-     */
+    
     getGroupOrderFromDom(group) {
         const ids = [];
 
@@ -600,9 +560,7 @@ class KanbanRecordView extends ListRecordView {
         return ids;
     }
 
-    /**
-     * @param {string} group
-     */
+    
     reOrderGroup(group) {
         const groupCollection = this.getGroupCollection(group);
         const ids = this.getGroupOrderFromDom(group);
@@ -713,7 +671,7 @@ class KanbanRecordView extends ListRecordView {
     }
 
     buildRows(callback) {
-        // noinspection JSUnresolvedReference
+        
         const groupList = (this.collection.dataAdditional || {}).groupList || [];
 
         this.collection.reset();
@@ -1010,7 +968,7 @@ class KanbanRecordView extends ListRecordView {
             .get(0).outerHTML;
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionMoveOver(data) {
         const model = this.collection.get(data.id);
 
@@ -1022,11 +980,7 @@ class KanbanRecordView extends ListRecordView {
         });
     }
 
-    /**
-     *
-     * @param {string} group
-     * @return {module:collection}
-     */
+    
     getGroupCollection(group) {
         let collection = null;
 
@@ -1039,9 +993,7 @@ class KanbanRecordView extends ListRecordView {
         return collection;
     }
 
-    /**
-     * @param {string} group
-     */
+    
     showPlus(group) {
         const $el = this.plusElementMap[group];
 
@@ -1052,9 +1004,7 @@ class KanbanRecordView extends ListRecordView {
         $el.removeClass('hidden');
     }
 
-    /**
-     * @param {string} group
-     */
+    
     hidePlus(group) {
         const $el = this.plusElementMap[group];
 
@@ -1065,9 +1015,7 @@ class KanbanRecordView extends ListRecordView {
         $el.addClass('hidden');
     }
 
-    /**
-     * @param {string} group
-     */
+    
     actionCreateInGroup(group) {
         const attributes = {};
 
@@ -1081,7 +1029,7 @@ class KanbanRecordView extends ListRecordView {
             scope: this.scope,
         };
 
-        this.createView('quickCreate', viewName, options, /** module:views/modals/edit */view => {
+        this.createView('quickCreate', viewName, options, view => {
             view.getRecordView().setFieldReadOnly(this.statusField, true);
 
             view.render();
@@ -1113,7 +1061,7 @@ class KanbanRecordView extends ListRecordView {
         const startX = e.clientX;
 
         $document.on('mousemove.' + this.cid, (e) => {
-            // noinspection JSUnresolvedReference
+            
             const dx = e.originalEvent.clientX - startX;
 
             containerEl.scrollLeft = startLeft - dx;

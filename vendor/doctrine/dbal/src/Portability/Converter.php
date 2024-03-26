@@ -12,30 +12,25 @@ use function rtrim;
 
 final class Converter
 {
-    /** @var callable */
+    
     private $convertNumeric;
 
-    /** @var callable */
+    
     private $convertAssociative;
 
-    /** @var callable */
+    
     private $convertOne;
 
-    /** @var callable */
+    
     private $convertAllNumeric;
 
-    /** @var callable */
+    
     private $convertAllAssociative;
 
-    /** @var callable */
+    
     private $convertFirstColumn;
 
-    /**
-     * @param bool     $convertEmptyStringToNull Whether each empty string should be converted to NULL
-     * @param bool     $rightTrimString          Whether each string should right-trimmed
-     * @param int|null $case                     Convert the case of the column names
-     *                                           (one of {@see CASE_LOWER} and {@see CASE_UPPER})
-     */
+    
     public function __construct(bool $convertEmptyStringToNull, bool $rightTrimString, ?int $case)
     {
         $convertValue       = $this->createConvertValue($convertEmptyStringToNull, $rightTrimString);
@@ -51,85 +46,49 @@ final class Converter
         $this->convertFirstColumn    = $this->createConvertAll($convertValue, [self::class, 'id']);
     }
 
-    /**
-     * @param array<int,mixed>|false $row
-     *
-     * @return list<mixed>|false
-     */
+    
     public function convertNumeric($row)
     {
         return ($this->convertNumeric)($row);
     }
 
-    /**
-     * @param array<string,mixed>|false $row
-     *
-     * @return array<string,mixed>|false
-     */
+    
     public function convertAssociative($row)
     {
         return ($this->convertAssociative)($row);
     }
 
-    /**
-     * @param mixed|false $value
-     *
-     * @return mixed|false
-     */
+    
     public function convertOne($value)
     {
         return ($this->convertOne)($value);
     }
 
-    /**
-     * @param list<list<mixed>> $data
-     *
-     * @return list<list<mixed>>
-     */
+    
     public function convertAllNumeric(array $data): array
     {
         return ($this->convertAllNumeric)($data);
     }
 
-    /**
-     * @param list<array<string,mixed>> $data
-     *
-     * @return list<array<string,mixed>>
-     */
+    
     public function convertAllAssociative(array $data): array
     {
         return ($this->convertAllAssociative)($data);
     }
 
-    /**
-     * @param list<mixed> $data
-     *
-     * @return list<mixed>
-     */
+    
     public function convertFirstColumn(array $data): array
     {
         return ($this->convertFirstColumn)($data);
     }
 
-    /**
-     * @param T $value
-     *
-     * @return T
-     *
-     * @template T
-     */
+    
     private static function id($value)
     {
         return $value;
     }
 
-    /**
-     * @param T $value
-     *
-     * @return T|null
-     *
-     * @template T
-     */
+    
     private static function convertEmptyStringToNull($value)
     {
         if ($value === '') {
@@ -139,14 +98,7 @@ final class Converter
         return $value;
     }
 
-    /**
-     * @param T $value
-     *
-     * @return T|string
-     * @psalm-return (T is string ? string : T)
-     *
-     * @template T
-     */
+    
     private static function rightTrimString($value)
     {
         if (! is_string($value)) {
@@ -156,14 +108,7 @@ final class Converter
         return rtrim($value);
     }
 
-    /**
-     * Creates a function that will convert each individual value retrieved from the database
-     *
-     * @param bool $convertEmptyStringToNull Whether each empty string should be converted to NULL
-     * @param bool $rightTrimString          Whether each string should right-trimmed
-     *
-     * @return callable|null The resulting function or NULL if no conversion is needed
-     */
+    
     private function createConvertValue(bool $convertEmptyStringToNull, bool $rightTrimString): ?callable
     {
         $functions = [];
@@ -179,14 +124,7 @@ final class Converter
         return $this->compose(...$functions);
     }
 
-    /**
-     * Creates a function that will convert each array-row retrieved from the database
-     *
-     * @param callable|null $function The function that will convert each value
-     * @param int|null      $case     Column name case
-     *
-     * @return callable|null The resulting function or NULL if no conversion is needed
-     */
+    
     private function createConvertRow(?callable $function, ?int $case): ?callable
     {
         $functions = [];
@@ -204,26 +142,14 @@ final class Converter
         return $this->compose(...$functions);
     }
 
-    /**
-     * Creates a function that will be applied to the return value of Statement::fetch*()
-     * or an identity function if no conversion is needed
-     *
-     * @param callable|null $function The function that will convert each tow
-     * @param callable      $id       Identity function
-     */
+    
     private function createConvert(?callable $function, callable $id): callable
     {
         if ($function === null) {
             return $id;
         }
 
-        return /**
-                * @param T $value
-                *
-                * @psalm-return (T is false ? false : T)
-                *
-                * @template T
-                */
+        return 
             static function ($value) use ($function) {
                 if ($value === false) {
                     return false;
@@ -233,13 +159,7 @@ final class Converter
             };
     }
 
-    /**
-     * Creates a function that will be applied to the return value of Statement::fetchAll*()
-     * or an identity function if no transformation is required
-     *
-     * @param callable|null $function The function that will transform each value
-     * @param callable      $id       Identity function
-     */
+    
     private function createConvertAll(?callable $function, callable $id): callable
     {
         if ($function === null) {
@@ -249,11 +169,7 @@ final class Converter
         return $this->createMapper($function);
     }
 
-    /**
-     * Creates a function that maps each value of the array using the given function
-     *
-     * @param callable $function The function that maps each value of the array
-     */
+    
     private function createMapper(callable $function): callable
     {
         return static function (array $array) use ($function): array {
@@ -261,15 +177,7 @@ final class Converter
         };
     }
 
-    /**
-     * Creates a composition of the given set of functions
-     *
-     * @param callable(T):T ...$functions The functions to compose
-     *
-     * @return callable(T):T|null
-     *
-     * @template T
-     */
+    
     private function compose(callable ...$functions): ?callable
     {
         return array_reduce($functions, static function (?callable $carry, callable $item): callable {
@@ -277,13 +185,7 @@ final class Converter
                 return $item;
             }
 
-            return /**
-                    * @param T $value
-                    *
-                    * @return T
-                    *
-                    * @template T
-                    */
+            return 
                 static function ($value) use ($carry, $item) {
                     return $item($carry($value));
                 };

@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\ExternalAccount;
 
@@ -47,30 +21,19 @@ use Espo\ORM\Entity;
 
 class ClientManager
 {
-    /**
-     * @var EntityManager
-     */
+    
     protected $entityManager;
 
-    /**
-     * @var Metadata
-     */
+    
     protected $metadata;
 
-    /**
-     * @var Config
-     */
+    
     protected $config;
 
-    /**
-     * @var InjectableFactory|null
-     */
+    
     protected $injectableFactory = null;
 
-    /**
-     *
-     * @var array<string, array<string, mixed>>
-     */
+    
     protected $clientMap = [];
 
     public function __construct(
@@ -85,22 +48,14 @@ class ClientManager
         $this->injectableFactory = $injectableFactory;
     }
 
-    /**
-     * @param array{
-     *   accessToken: ?string,
-     *   tokenType: ?string,
-     *   expiresAt?: ?string,
-     *   refreshToken?: ?string,
-     * } $data
-     * @throws Error
-     */
+    
     public function storeAccessToken(string $hash, array $data): void
     {
         if (empty($this->clientMap[$hash]) || empty($this->clientMap[$hash]['externalAccountEntity'])) {
             return;
         }
 
-        /** @var ExternalAccountEntity $externalAccountEntity */
+        
         $externalAccountEntity = $this->clientMap[$hash]['externalAccountEntity'];
 
         $externalAccountEntity->set('accessToken', $data['accessToken']);
@@ -149,10 +104,10 @@ class ClientManager
             throw new Error();
         }
 
-        /** @var IntegrationEntity|null $integrationEntity */
+        
         $integrationEntity = $this->entityManager->getEntity(IntegrationEntity::ENTITY_TYPE, $integration);
 
-        /** @var ExternalAccountEntity|null $externalAccountEntity */
+        
         $externalAccountEntity = $this->entityManager
             ->getEntity(ExternalAccountEntity::ENTITY_TYPE, $integration . '__' . $userId);
 
@@ -172,7 +127,7 @@ class ClientManager
             return null;
         }
 
-        /** @var class-string $className */
+        
         $className = $this->metadata->get("integrations.{$integration}.clientClassName");
 
         $client = $this->injectableFactory->create($className);
@@ -195,14 +150,14 @@ class ClientManager
 
     protected function createOAuth2(string $integration, string $userId): ?object
     {
-        /** @var IntegrationEntity|null $integrationEntity */
+        
         $integrationEntity = $this->entityManager->getEntity(IntegrationEntity::ENTITY_TYPE, $integration);
 
-        /** @var ExternalAccountEntity|null $externalAccountEntity */
+        
         $externalAccountEntity = $this->entityManager
             ->getEntity(ExternalAccountEntity::ENTITY_TYPE, $integration . '__' . $userId);
 
-        /** @var class-string $className */
+        
         $className = $this->metadata->get("integrations.{$integration}.clientClassName");
 
         $redirectUri = $this->config->get('siteUrl') . '?entryPoint=oauthCallback';
@@ -265,7 +220,7 @@ class ClientManager
             ]);
         }
         else {
-            // For backward compatibility.
+            
             $client = new $className($oauth2Client, $params, $this);
         }
 
@@ -274,10 +229,7 @@ class ClientManager
         return $client;
     }
 
-    /**
-     * @param object $client
-     * @return void
-     */
+    
     protected function addToClientMap(
         $client,
         IntegrationEntity $integrationEntity,
@@ -293,10 +245,7 @@ class ClientManager
         ];
     }
 
-    /**
-     * @param object $client
-     * @throws Error
-     */
+    
     protected function getClientRecord($client): Entity
     {
         $data = $this->clientMap[spl_object_hash($client)];
@@ -308,10 +257,7 @@ class ClientManager
         return $data['externalAccountEntity'];
     }
 
-    /**
-     * @param object $client
-     * @throws Error
-     */
+    
     public function isClientLocked($client): bool
     {
         $externalAccountEntity = $this->getClientRecord($client);
@@ -379,10 +325,7 @@ class ClientManager
         ]);
     }
 
-    /**
-     * @param IClient $client
-     * @throws Error
-     */
+    
     public function reFetchClient(object $client): void
     {
         $externalAccountEntity = $this->getClientRecord($client);

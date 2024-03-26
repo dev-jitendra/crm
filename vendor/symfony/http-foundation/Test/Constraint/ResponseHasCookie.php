@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpFoundation\Test\Constraint;
 
@@ -28,9 +21,7 @@ final class ResponseHasCookie extends Constraint
         $this->domain = $domain;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function toString(): string
     {
         $str = sprintf('has cookie "%s"', $this->name);
@@ -44,21 +35,13 @@ final class ResponseHasCookie extends Constraint
         return $str;
     }
 
-    /**
-     * @param Response $response
-     *
-     * {@inheritdoc}
-     */
+    
     protected function matches($response): bool
     {
         return null !== $this->getCookie($response);
     }
 
-    /**
-     * @param Response $response
-     *
-     * {@inheritdoc}
-     */
+    
     protected function failureDescription($response): string
     {
         return 'the Response '.$this->toString();

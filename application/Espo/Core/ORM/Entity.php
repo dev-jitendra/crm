@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\ORM;
 
@@ -36,14 +10,10 @@ use Espo\ORM\Type\RelationType;
 use LogicException;
 use stdClass;
 
-/**
- * An entity.
- */
+
 class Entity extends BaseEntity
 {
-    /**
-     * Has a link-multiple field.
-     */
+    
     public function hasLinkMultipleField(string $field): bool
     {
         return
@@ -51,17 +21,13 @@ class Entity extends BaseEntity
             $this->getAttributeParam($field . 'Ids', 'isLinkMultipleIdList');
     }
 
-    /**
-     * Has a link field.
-     */
+    
     public function hasLinkField(string $field): bool
     {
         return $this->hasAttribute($field . 'Id') && $this->hasRelation($field);
     }
 
-    /**
-     * Has a link-parent field.
-     */
+    
     public function hasLinkParentField(string $field): bool
     {
         return
@@ -70,9 +36,7 @@ class Entity extends BaseEntity
             $this->hasRelation($field);
     }
 
-    /**
-     * Load a parent-name field.
-     */
+    
     public function loadParentNameField(string $field): void
     {
         if (!$this->hasLinkParentField($field)) {
@@ -114,13 +78,7 @@ class Entity extends BaseEntity
         $this->set($field . 'Name', null);
     }
 
-    /**
-     * @param string $link
-     * @return ?array{
-     *     orderBy: string|array<int, array{string, string}>|null,
-     *     order: ?string,
-     * }
-     */
+    
     protected function getRelationOrderParams(string $link): ?array
     {
         $field = $link;
@@ -173,9 +131,7 @@ class Entity extends BaseEntity
         ];
     }
 
-    /**
-     * @param ?array<string, string> $columns
-     */
+    
     public function loadLinkMultipleField(string $field, ?array $columns = null): void
     {
         if (!$this->hasLinkMultipleField($field)) {
@@ -212,7 +168,7 @@ class Entity extends BaseEntity
 
         if ($orderParams) {
             $orderBy = $orderParams['orderBy'] ?? null;
-            /** @var string|bool|null $order */
+            
             $order = $orderParams['order'] ?? null;
         }
 
@@ -280,9 +236,7 @@ class Entity extends BaseEntity
         }
     }
 
-    /**
-     * Load a link field.
-     */
+    
     public function loadLinkField(string $field): void
     {
         if (!$this->hasLinkField($field)) {
@@ -326,9 +280,7 @@ class Entity extends BaseEntity
         $this->set($field . 'Name', $entityName);
     }
 
-    /**
-     * Get a link-multiple name.
-     */
+    
     public function getLinkMultipleName(string $field, string $id): ?string
     {
         $namesAttribute = $field . 'Names';
@@ -350,9 +302,7 @@ class Entity extends BaseEntity
         return $object?->$id ?? null;
     }
 
-    /**
-     * Set a link-multiple name.
-     */
+    
     public function setLinkMultipleName(string $field, string $id, ?string $value): void
     {
         $namesAttribute = $field . 'Names';
@@ -376,9 +326,7 @@ class Entity extends BaseEntity
         $this->set($namesAttribute, $object);
     }
 
-    /**
-     * Get a link-multiple column value.
-     */
+    
     public function getLinkMultipleColumn(string $field, string $column, string $id): mixed
     {
         $columnsAttribute = $field . 'Columns';
@@ -400,9 +348,7 @@ class Entity extends BaseEntity
         return $object?->$id?->$column ?? null;
     }
 
-    /**
-     * Set a link-multiple column value.
-     */
+    
     public function setLinkMultipleColumn(string $field, string $column, string $id, mixed $value): void
     {
         $columnsAttribute = $field . 'Columns';
@@ -423,11 +369,7 @@ class Entity extends BaseEntity
         $this->set($columnsAttribute, $object);
     }
 
-    /**
-     * Set link-multiple IDs.
-     *
-     * @param string[] $idList
-     */
+    
     public function setLinkMultipleIdList(string $field, array $idList): void
     {
         $idsAttribute = $field . 'Ids';
@@ -439,9 +381,7 @@ class Entity extends BaseEntity
         $this->set($idsAttribute, $idList);
     }
 
-    /**
-     * Add an ID to a link-multiple field.
-     */
+    
     public function addLinkMultipleId(string $field, string $id): void
     {
         $idsAttribute = $field . 'Ids';
@@ -481,9 +421,7 @@ class Entity extends BaseEntity
         $this->set($idsAttribute, $idList);
     }
 
-    /**
-     * Remove an ID from link-multiple field.
-     */
+    
     public function removeLinkMultipleId(string $field, string $id): void
     {
         if (!$this->hasLinkMultipleId($field, $id)) {
@@ -503,11 +441,7 @@ class Entity extends BaseEntity
         $this->setLinkMultipleIdList($field, $list);
     }
 
-    /**
-     * Get link-multiple field IDs.
-     *
-     * @return string[]
-     */
+    
     public function getLinkMultipleIdList(string $field): array
     {
         $idsAttribute = $field . 'Ids';
@@ -522,13 +456,11 @@ class Entity extends BaseEntity
             }
         }
 
-        /** @var string[] */
+        
         return $this->get($idsAttribute) ?? [];
     }
 
-    /**
-     * Has an ID in a link-multiple field.
-     */
+    
     public function hasLinkMultipleId(string $field, string $id): bool
     {
         $idsAttribute = $field . 'Ids';
@@ -547,7 +479,7 @@ class Entity extends BaseEntity
             return false;
         }
 
-        /** @var string[] $idList */
+        
         $idList = $this->get($idsAttribute) ?? [];
 
         return in_array($id, $idList);

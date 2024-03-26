@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -14,9 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
 use Throwable;
 
-/**
- * @method int getCode()
- */
+
 class HttpException extends RuntimeException
 {
     protected ServerRequestInterface $request;

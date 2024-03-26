@@ -1,13 +1,6 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 return array_replace_recursive(require __DIR__.'/en.php', [
     'meridiem' => ['Z.MU.', 'Z.MW.'],
@@ -50,7 +43,7 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'min' => 'iminuta :count',
     'a_minute' => 'iminuta :count',
 
-    'second' => 'inguvu :count', // less reliable
-    's' => 'inguvu :count', // less reliable
-    'a_second' => 'inguvu :count', // less reliable
+    'second' => 'inguvu :count', 
+    's' => 'inguvu :count', 
+    'a_second' => 'inguvu :count', 
 ]);

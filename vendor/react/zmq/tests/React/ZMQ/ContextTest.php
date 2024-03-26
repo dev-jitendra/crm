@@ -7,9 +7,7 @@ use ZMQ;
 
 class ContextTest extends TestCase
 {
-    /**
-     * @test
-     */
+    
     public function itShouldWrapARealZMQContext()
     {
         $loop = $this->getMockBuilder('React\EventLoop\LoopInterface')->getMock();
@@ -28,9 +26,7 @@ class ContextTest extends TestCase
         $context->getSocket(ZMQ::SOCKET_PULL, null);
     }
 
-    /**
-     * @test
-     */
+    
     public function getSocketShouldWrapSockets()
     {
         $loop = $this->getMockBuilder('React\EventLoop\LoopInterface')->getMock();
@@ -41,9 +37,7 @@ class ContextTest extends TestCase
         $this->assertInstanceOf('React\ZMQ\SocketWrapper', $socket);
     }
 
-    /**
-     * @test
-     */
+    
     public function getSocketShouldAddReadListener()
     {
         $loop = $this->getMockBuilder('React\EventLoop\LoopInterface')->getMock();
@@ -57,9 +51,7 @@ class ContextTest extends TestCase
         $context->getSocket(ZMQ::SOCKET_PULL);
     }
 
-    /**
-     * @test
-     */
+    
     public function getSocketShouldNotAddReadListenerForNonReadableSocketType()
     {
         $loop = $this->getMockBuilder('React\EventLoop\LoopInterface')->getMock();

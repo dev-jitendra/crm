@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Utils;
 
@@ -33,19 +7,10 @@ use Espo\Core\Api\Route as RouteItem;
 use Espo\Core\Utils\File\Manager as FileManager;
 use Espo\Core\Utils\Resource\PathProvider;
 
-/**
- * @phpstan-type RouteArrayShape array{
- *     route: string,
- *     adjustedRoute: string,
- *     method: string,
- *     noAuth?: bool,
- *     params?: array<string, mixed>,
- *     actionClassName: ?class-string<\Espo\Core\Api\Action>
- *   }
- */
+
 class Route
 {
-    /** @var ?RouteArrayShape[] */
+    
     private $data = null;
     private string $cacheKey = 'routes';
     private string $routesFileName = 'routes.json';
@@ -58,11 +23,7 @@ class Route
         private PathProvider $pathProvider
     ) {}
 
-    /**
-     * Get all routes.
-     *
-     * @return RouteItem[]
-     */
+    
     public function getFullList(): array
     {
         if (!isset($this->data)) {
@@ -91,7 +52,7 @@ class Route
         $useCache = $this->config->get('useCache');
 
         if ($this->dataCache->has($this->cacheKey) && $useCache) {
-            /** @var ?(RouteArrayShape[]) $data  */
+            
             $data = $this->dataCache->get($this->cacheKey);
 
             $this->data = $data;
@@ -106,9 +67,7 @@ class Route
         }
     }
 
-    /**
-     * @return RouteArrayShape[]
-     */
+    
     private function unify(): array
     {
         $customData = $this->addDataFromFile([], $this->pathProvider->getCustom() . $this->routesFileName);
@@ -133,10 +92,7 @@ class Route
         );
     }
 
-    /**
-     * @param RouteArrayShape[] $currentData
-     * @return RouteArrayShape[]
-     */
+    
     private function addDataFromFile(array $currentData, string $routeFile): array
     {
         if (!$this->fileManager->exists($routeFile)) {
@@ -150,12 +106,7 @@ class Route
         return $this->appendRoutesToData($currentData, $data);
     }
 
-    /**
-     *
-     * @param RouteArrayShape[] $data
-     * @param RouteArrayShape[] $newData
-     * @return RouteArrayShape[]
-     */
+    
     private function appendRoutesToData(array $data, array $newData): array
     {
         foreach ($newData as $route) {
@@ -177,13 +128,11 @@ class Route
         return $data;
     }
 
-    /**
-     * Check and adjust the route path.
-     */
+    
     private function adjustPath(string $path): string
     {
-        // to fast route format
-        /** @var string $pathFormatted */
+        
+        
         $pathFormatted = preg_replace('/\:([a-zA-Z0-9]+)/', '{${1}}', trim($path));
 
         if (!str_starts_with($pathFormatted, '/')) {
@@ -195,21 +144,21 @@ class Route
 
     public static function detectBasePath(): string
     {
-        /** @var string $serverScriptName */
+        
         $serverScriptName = $_SERVER['SCRIPT_NAME'];
 
-        /** @var string $serverRequestUri */
+        
         $serverRequestUri = $_SERVER['REQUEST_URI'];
 
-        /** @var string $scriptName */
+        
         $scriptName = parse_url($serverScriptName , PHP_URL_PATH);
 
         $scriptNameModified = str_replace('public/api/', 'api/', $scriptName);
 
         $scriptDir = dirname($scriptNameModified);
 
-        /** @var string $uri */
-        $uri = parse_url('http://any.com' . $serverRequestUri, PHP_URL_PATH);
+        
+        $uri = parse_url('http:
 
         if (stripos($uri, $scriptName) === 0) {
             return $scriptName;
@@ -226,11 +175,11 @@ class Route
     {
         $basePath = self::detectBasePath();
 
-        /** @var string $serverRequestUri */
+        
         $serverRequestUri = $_SERVER['REQUEST_URI'];
 
-        /** @var string $uri */
-        $uri = parse_url('http://any.com' . $serverRequestUri, PHP_URL_PATH);
+        
+        $uri = parse_url('http:
 
         if ($uri === $basePath) {
             return '/';
@@ -243,10 +192,7 @@ class Route
         return '/';
     }
 
-    /**
-     * @param RouteArrayShape $newRoute
-     * @param array<int, RouteArrayShape> $routeList
-     */
+    
     static private function isRouteInList(array $newRoute, array $routeList): bool
     {
         foreach ($routeList as $route) {

@@ -21,39 +21,27 @@ use function trim;
 
 use const CASE_LOWER;
 
-/**
- * Oracle Schema Manager.
- *
- * @extends AbstractSchemaManager<OraclePlatform>
- */
+
 class OracleSchemaManager extends AbstractSchemaManager
 {
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listTableNames()
     {
         return $this->doListTableNames();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listTables()
     {
         return $this->doListTables();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @deprecated Use {@see introspectTable()} instead.
-     */
+    
     public function listTableDetails($name)
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5595',
+            'https:
             '%s is deprecated. Use introspectTable() instead.',
             __METHOD__,
         );
@@ -61,33 +49,25 @@ class OracleSchemaManager extends AbstractSchemaManager
         return $this->doListTableDetails($name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listTableColumns($table, $database = null)
     {
         return $this->doListTableColumns($table, $database);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listTableIndexes($table)
     {
         return $this->doListTableIndexes($table);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listTableForeignKeys($table, $database = null)
     {
         return $this->doListTableForeignKeys($table, $database);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableViewDefinition($view)
     {
         $view = array_change_key_case($view, CASE_LOWER);
@@ -95,9 +75,7 @@ class OracleSchemaManager extends AbstractSchemaManager
         return new View($this->getQuotedIdentifierName($view['view_name']), $view['text']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableTableDefinition($table)
     {
         $table = array_change_key_case($table, CASE_LOWER);
@@ -105,11 +83,7 @@ class OracleSchemaManager extends AbstractSchemaManager
         return $this->getQuotedIdentifierName($table['table_name']);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @link http://ezcomponents.org/docs/api/trunk/DatabaseSchema/ezcDbSchemaPgsqlReader.html
-     */
+    
     protected function _getPortableTableIndexesList($tableIndexes, $tableName = null)
     {
         $indexBuffer = [];
@@ -136,9 +110,7 @@ class OracleSchemaManager extends AbstractSchemaManager
         return parent::_getPortableTableIndexesList($indexBuffer, $tableName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableTableColumnDefinition($tableColumn)
     {
         $tableColumn = array_change_key_case($tableColumn, CASE_LOWER);
@@ -158,7 +130,7 @@ class OracleSchemaManager extends AbstractSchemaManager
             $tableColumn['column_name'] = '';
         }
 
-        // Default values returned from database sometimes have trailing spaces.
+        
         if (is_string($tableColumn['data_default'])) {
             $tableColumn['data_default'] = trim($tableColumn['data_default']);
         }
@@ -168,7 +140,7 @@ class OracleSchemaManager extends AbstractSchemaManager
         }
 
         if ($tableColumn['data_default'] !== null) {
-            // Default values returned from database are represented as literal expressions
+            
             if (preg_match('/^\'(.*)\'$/s', $tableColumn['data_default'], $matches) === 1) {
                 $tableColumn['data_default'] = str_replace("''", "'", $matches[1]);
             }
@@ -235,9 +207,7 @@ class OracleSchemaManager extends AbstractSchemaManager
         return new Column($this->getQuotedIdentifierName($tableColumn['column_name']), Type::getType($type), $options);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableTableForeignKeysList($tableForeignKeys)
     {
         $list = [];
@@ -267,9 +237,7 @@ class OracleSchemaManager extends AbstractSchemaManager
         return parent::_getPortableTableForeignKeysList($list);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     protected function _getPortableTableForeignKeyDefinition($tableForeignKey): ForeignKeyConstraint
     {
         return new ForeignKeyConstraint(
@@ -281,9 +249,7 @@ class OracleSchemaManager extends AbstractSchemaManager
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableSequenceDefinition($sequence)
     {
         $sequence = array_change_key_case($sequence, CASE_LOWER);
@@ -295,9 +261,7 @@ class OracleSchemaManager extends AbstractSchemaManager
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableDatabaseDefinition($database)
     {
         $database = array_change_key_case($database, CASE_LOWER);
@@ -305,9 +269,7 @@ class OracleSchemaManager extends AbstractSchemaManager
         return $database['username'];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function createDatabase($database)
     {
         $statement = $this->_platform->getCreateDatabaseSQL($database);
@@ -324,15 +286,7 @@ class OracleSchemaManager extends AbstractSchemaManager
         $this->_conn->executeStatement($statement);
     }
 
-    /**
-     * @internal The method should be only used from within the OracleSchemaManager class hierarchy.
-     *
-     * @param string $table
-     *
-     * @return bool
-     *
-     * @throws Exception
-     */
+    
     public function dropAutoincrement($table)
     {
         $sql = $this->_platform->getDropAutoincrementSql($table);
@@ -343,9 +297,7 @@ class OracleSchemaManager extends AbstractSchemaManager
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function dropTable($name)
     {
         $this->tryMethod('dropAutoincrement', $name);
@@ -353,14 +305,7 @@ class OracleSchemaManager extends AbstractSchemaManager
         parent::dropTable($name);
     }
 
-    /**
-     * Returns the quoted representation of the given identifier name.
-     *
-     * Quotes non-uppercase identifiers explicitly to preserve case
-     * and thus make references to the particular identifier work.
-     *
-     * @param string $identifier The identifier to quote.
-     */
+    
     private function getQuotedIdentifierName($identifier): string
     {
         if (preg_match('/[a-z]/', $identifier) === 1) {
@@ -497,9 +442,7 @@ SQL;
         return $this->_conn->executeQuery($sql, $params);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     protected function fetchTableOptionsByTable(string $databaseName, ?string $tableName = null): array
     {
         $sql = 'SELECT TABLE_NAME, COMMENTS';
@@ -514,7 +457,7 @@ SQL;
 
         $sql .= ' FROM ALL_TAB_COMMENTS WHERE ' . implode(' AND ', $conditions);
 
-        /** @var array<string,array<string,mixed>> $metadata */
+        
         $metadata = $this->_conn->executeQuery($sql, $params)
             ->fetchAllAssociativeIndexed();
 

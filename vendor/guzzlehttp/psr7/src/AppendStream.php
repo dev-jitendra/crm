@@ -4,26 +4,17 @@ namespace GuzzleHttp\Psr7;
 
 use Psr\Http\Message\StreamInterface;
 
-/**
- * Reads from multiple streams, one after the other.
- *
- * This is a read-only stream decorator.
- *
- * @final
- */
+
 class AppendStream implements StreamInterface
 {
-    /** @var StreamInterface[] Streams being decorated */
+    
     private $streams = [];
 
     private $seekable = true;
     private $current = 0;
     private $pos = 0;
 
-    /**
-     * @param StreamInterface[] $streams Streams to decorate. Each stream must
-     *                                   be readable.
-     */
+    
     public function __construct(array $streams = [])
     {
         foreach ($streams as $stream) {
@@ -41,20 +32,14 @@ class AppendStream implements StreamInterface
         }
     }
 
-    /**
-     * Add a stream to the AppendStream
-     *
-     * @param StreamInterface $stream Stream to append. Must be readable.
-     *
-     * @throws \InvalidArgumentException if the stream is not readable
-     */
+    
     public function addStream(StreamInterface $stream)
     {
         if (!$stream->isReadable()) {
             throw new \InvalidArgumentException('Each stream must be readable');
         }
 
-        // The stream is only seekable if all streams are seekable
+        
         if (!$stream->isSeekable()) {
             $this->seekable = false;
         }
@@ -67,11 +52,7 @@ class AppendStream implements StreamInterface
         return Utils::copyToString($this);
     }
 
-    /**
-     * Closes each attached stream.
-     *
-     * {@inheritdoc}
-     */
+    
     public function close()
     {
         $this->pos = $this->current = 0;
@@ -84,13 +65,7 @@ class AppendStream implements StreamInterface
         $this->streams = [];
     }
 
-    /**
-     * Detaches each attached stream.
-     *
-     * Returns null as it's not clear which underlying stream resource to return.
-     *
-     * {@inheritdoc}
-     */
+    
     public function detach()
     {
         $this->pos = $this->current = 0;
@@ -110,14 +85,7 @@ class AppendStream implements StreamInterface
         return $this->pos;
     }
 
-    /**
-     * Tries to calculate the size by adding the size of each stream.
-     *
-     * If any of the streams do not return a valid number, then the size of the
-     * append stream cannot be determined and null is returned.
-     *
-     * {@inheritdoc}
-     */
+    
     public function getSize()
     {
         $size = 0;
@@ -145,11 +113,7 @@ class AppendStream implements StreamInterface
         $this->seek(0);
     }
 
-    /**
-     * Attempts to seek to the given position. Only supports SEEK_SET.
-     *
-     * {@inheritdoc}
-     */
+    
     public function seek($offset, $whence = SEEK_SET)
     {
         if (!$this->seekable) {
@@ -160,7 +124,7 @@ class AppendStream implements StreamInterface
 
         $this->pos = $this->current = 0;
 
-        // Rewind each stream
+        
         foreach ($this->streams as $i => $stream) {
             try {
                 $stream->rewind();
@@ -170,7 +134,7 @@ class AppendStream implements StreamInterface
             }
         }
 
-        // Seek to the actual position by reading from each stream
+        
         while ($this->pos < $offset && !$this->eof()) {
             $result = $this->read(min(8096, $offset - $this->pos));
             if ($result === '') {
@@ -179,11 +143,7 @@ class AppendStream implements StreamInterface
         }
     }
 
-    /**
-     * Reads from all of the appended streams until the length is met or EOF.
-     *
-     * {@inheritdoc}
-     */
+    
     public function read($length)
     {
         $buffer = '';
@@ -193,7 +153,7 @@ class AppendStream implements StreamInterface
 
         while ($remaining > 0) {
 
-            // Progress to the next stream if needed.
+            
             if ($progressToNext || $this->streams[$this->current]->eof()) {
                 $progressToNext = false;
                 if ($this->current === $total) {
@@ -204,7 +164,7 @@ class AppendStream implements StreamInterface
 
             $result = $this->streams[$this->current]->read($remaining);
 
-            // Using a loose comparison here to match on '', false, and null
+            
             if ($result == null) {
                 $progressToNext = true;
                 continue;

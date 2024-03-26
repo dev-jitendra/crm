@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim-Psr7/blob/master/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -27,9 +23,7 @@ use const PHP_URL_QUERY;
 
 class UriFactory implements UriFactoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    
     public function createUri(string $uri = ''): UriInterface
     {
         $parts = parse_url($uri);
@@ -50,26 +44,18 @@ class UriFactory implements UriFactoryInterface
         return new Uri($scheme, $host, $port, $path, $query, $fragment, $user, $pass);
     }
 
-    /**
-     * Create new Uri from environment.
-     *
-     * @internal This method is not part of PSR-17
-     *
-     * @param array $globals The global server variables.
-     *
-     * @return Uri
-     */
+    
     public function createFromGlobals(array $globals): Uri
     {
-        // Scheme
+        
         $https = $globals['HTTPS'] ?? false;
         $scheme = !$https || $https === 'off' ? 'http' : 'https';
 
-        // Authority: Username and password
+        
         $username = $globals['PHP_AUTH_USER'] ?? '';
         $password = $globals['PHP_AUTH_PW'] ?? '';
 
-        // Authority: Host
+        
         $host = '';
         if (isset($globals['HTTP_HOST'])) {
             $host = $globals['HTTP_HOST'];
@@ -77,7 +63,7 @@ class UriFactory implements UriFactoryInterface
             $host = $globals['SERVER_NAME'];
         }
 
-        // Authority: Port
+        
         $port = !empty($globals['SERVER_PORT']) ? (int)$globals['SERVER_PORT'] : ($scheme === 'https' ? 443 : 80);
         if (preg_match('/^(\[[a-fA-F0-9:.]+])(:\d+)?\z/', $host, $matches)) {
             $host = $matches[1];
@@ -93,21 +79,21 @@ class UriFactory implements UriFactoryInterface
             }
         }
 
-        // Query string
+        
         $queryString = $globals['QUERY_STRING'] ?? '';
 
-        // Request URI
+        
         $requestUri = '';
         if (isset($globals['REQUEST_URI'])) {
             $uriFragments = explode('?', $globals['REQUEST_URI']);
             $requestUri = $uriFragments[0];
 
             if ($queryString === '' && count($uriFragments) > 1) {
-                $queryString = parse_url('https://www.example.com' . $globals['REQUEST_URI'], PHP_URL_QUERY) ?? '';
+                $queryString = parse_url('https:
             }
         }
 
-        // Build Uri and return
+        
         return new Uri($scheme, $host, $port, $requestUri, $queryString, '', $username, $password);
     }
 }

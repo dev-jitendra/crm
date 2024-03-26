@@ -1,50 +1,22 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/record/edit */
+
+
 
 import DetailRecordView from 'views/record/detail';
 
-/**
- * An edit-record view. Used for create and edit.
- */
+
 class EditRecordView extends DetailRecordView {
 
-    /** @inheritDoc */
+    
     template = 'record/edit'
 
-    /** @inheritDoc */
+    
     type = 'edit'
-    /** @inheritDoc */
+    
     fieldsMode = 'edit'
-    /** @inheritDoc */
+    
     mode = 'edit'
-    /** @inheritDoc */
+    
     buttonList = [
         {
             name: 'save',
@@ -58,35 +30,27 @@ class EditRecordView extends DetailRecordView {
             title: 'Esc',
         }
     ]
-    /** @inheritDoc */
+    
     dropdownItemList = []
-    /** @inheritDoc */
+    
     sideView = 'views/record/edit-side'
-    /** @inheritDoc */
+    
     bottomView = 'views/record/edit-bottom'
-    /** @inheritDoc */
+    
     duplicateAction = false
-    /** @inheritDoc */
+    
     saveAndContinueEditingAction = true
-    /** @inheritDoc */
+    
     saveAndNewAction = true
-    /** @inheritDoc */
+    
     setupHandlerType = 'record/edit'
 
-    /**
-     * @param {
-     *     module:views/record/detail~options |
-     *     {
-     *         duplicateSourceId?: string,
-     *         focusForCreate?: boolean,
-     *     }
-     * } options Options.
-     */
+    
     constructor(options) {
         super(options);
     }
 
-    /** @inheritDoc */
+    
     actionSave(data) {
         data = data || {};
 
@@ -103,16 +67,12 @@ class EditRecordView extends DetailRecordView {
             .catch(reason => Promise.reject(reason));
     }
 
-    /**
-     * A `cancel` action.
-     */
+    
     actionCancel() {
         this.cancel();
     }
 
-    /**
-     * Cancel.
-     */
+    
     cancel() {
         if (this.isChanged) {
             this.resetModelChanges();
@@ -122,7 +82,7 @@ class EditRecordView extends DetailRecordView {
         this.exit('cancel');
     }
 
-    /** @inheritDoc */
+    
     setupBeforeFinal() {
         if (this.model.isNew()) {
             this.populateDefaults();
@@ -149,7 +109,7 @@ class EditRecordView extends DetailRecordView {
         }
     }
 
-    /** @inheritDoc */
+    
     setupActionItems() {
         super.setupActionItems();
 
@@ -177,9 +137,7 @@ class EditRecordView extends DetailRecordView {
         }
     }
 
-    /**
-     * A `save-and-create-new` action.
-     */
+    
     actionSaveAndNew(data) {
         data = data || {};
 
@@ -203,10 +161,7 @@ class EditRecordView extends DetailRecordView {
         }
     }
 
-    /**
-     * @protected
-     * @param {JQueryKeyEventObject} e
-     */
+    
     handleShortcutKeyEscape(e) {
         if (this.buttonsDisabled) {
             return;
@@ -235,10 +190,7 @@ class EditRecordView extends DetailRecordView {
         this.actionCancel();
     }
 
-    /**
-     * @protected
-     * @param {JQueryKeyEventObject} e
-     */
+    
     handleShortcutKeyCtrlAltEnter(e) {
         if (this.buttonsDisabled) {
             return;

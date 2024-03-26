@@ -1,13 +1,6 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 return array_replace_recursive(require __DIR__.'/en.php', [
     'meridiem' => ['kíkíríg', 'ngəgógəle'],
@@ -26,30 +19,6 @@ return array_replace_recursive(require __DIR__.'/en.php', [
         'LLLL' => 'dddd D MMMM YYYY HH:mm',
     ],
 
-    // Too unreliable
-    /*
-    'year' => ':count mbu', // less reliable
-    'y' => ':count mbu', // less reliable
-    'a_year' => ':count mbu', // less reliable
-
-    'month' => ':count ngòn', // less reliable
-    'm' => ':count ngòn', // less reliable
-    'a_month' => ':count ngòn', // less reliable
-
-    'week' => ':count mësë', // less reliable
-    'w' => ':count mësë', // less reliable
-    'a_week' => ':count mësë', // less reliable
-
-    'day' => ':count mësë', // less reliable
-    'd' => ':count mësë', // less reliable
-    'a_day' => ':count mësë', // less reliable
-
-    'hour' => ':count awola', // less reliable
-    'h' => ':count awola', // less reliable
-    'a_hour' => ':count awola', // less reliable
-
-    'minute' => ':count awola', // less reliable
-    'min' => ':count awola', // less reliable
-    'a_minute' => ':count awola', // less reliable
-    */
+    
+    
 ]);

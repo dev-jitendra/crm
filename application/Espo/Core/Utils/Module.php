@@ -1,50 +1,22 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Utils;
 
 use Espo\Core\Utils\File\Manager as FileManager;
 
-/**
- * Gets module parameters.
- */
+
 class Module
 {
     private const DEFAULT_ORDER = 11;
 
-    /** @var ?array<string, array<string, mixed>> */
+    
     private $data = null;
-    /** @var ?string[]  */
+    
     private $list = null;
-    /** @var ?string[] */
+    
     private $internalList = null;
-    /** @var ?string[]  */
+    
     private $orderedList = null;
 
     private string $cacheKey = 'modules';
@@ -58,13 +30,7 @@ class Module
         private bool $useCache = false
     ) {}
 
-    /**
-     * Get module parameters.
-     *
-     * @param string|string[]|null $key
-     * @param mixed $defaultValue
-     * @return mixed
-     */
+    
     public function get($key = null, $defaultValue = null)
     {
         if ($this->data === null) {
@@ -87,7 +53,7 @@ class Module
             $this->dataCache &&
             $this->dataCache->has($this->cacheKey)
         ) {
-            /** @var array<string, array<string, mixed>> $data */
+            
             $data = $this->dataCache->get($this->cacheKey);
 
             $this->data = $data;
@@ -102,12 +68,7 @@ class Module
         }
     }
 
-    /**
-     * Get an ordered list of modules.
-     *
-     * @return string[]
-     * @todo Use cache if available.
-     */
+    
     public function getOrderedList(): array
     {
         if ($this->orderedList !== null) {
@@ -128,11 +89,7 @@ class Module
         return $this->orderedList;
     }
 
-    /**
-     * Get the list of internal modules.
-     *
-     * @return string[]
-     */
+    
     public function getInternalList(): array
     {
         if ($this->internalList === null) {
@@ -154,11 +111,7 @@ class Module
         return $basePath . '/' . $moduleName;
     }
 
-    /**
-     * Get the list of modules. Not ordered.
-     *
-     * @return string[]
-     */
+    
     public function getList(): array
     {
         if ($this->list === null) {
@@ -171,10 +124,7 @@ class Module
         return $this->list;
     }
 
-    /**
-     * @todo Use event-dispatcher class (passed via constructor).
-     * `$this->clearCacheEventDispatcher->subscribe(...);`
-     */
+    
     public function clearCache(): void
     {
         $this->data = null;
@@ -183,9 +133,7 @@ class Module
         $this->orderedList = null;
     }
 
-    /**
-     * @return array<string, array<string, mixed>>
-     */
+    
     private function loadData(): array
     {
         $data = [];
@@ -197,9 +145,7 @@ class Module
         return $data;
     }
 
-    /**
-     * @return array<string, mixed>
-     */
+    
     private function loadModuleData(string $moduleName): array
     {
         $path = $this->getModulePath($moduleName) . '/' . $this->moduleFilePath;

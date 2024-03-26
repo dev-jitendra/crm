@@ -1,39 +1,21 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpFoundation;
 
-// Help opcache.preload discover always-needed symbols
+
 class_exists(AcceptHeaderItem::class);
 
-/**
- * Represents an Accept-* header.
- *
- * An accept header is compound with a list of items,
- * sorted by descending quality.
- *
- * @author Jean-François Simon <contact@jfsimon.fr>
- */
+
 class AcceptHeader
 {
-    /**
-     * @var AcceptHeaderItem[]
-     */
+    
     private array $items = [];
 
     private bool $sorted = true;
 
-    /**
-     * @param AcceptHeaderItem[] $items
-     */
+    
     public function __construct(array $items)
     {
         foreach ($items as $item) {
@@ -41,9 +23,7 @@ class AcceptHeader
         }
     }
 
-    /**
-     * Builds an AcceptHeader instance from a string.
-     */
+    
     public static function fromString(?string $headerValue): self
     {
         $index = 0;
@@ -61,35 +41,25 @@ class AcceptHeader
         }, $parts));
     }
 
-    /**
-     * Returns header value's string representation.
-     */
+    
     public function __toString(): string
     {
         return implode(',', $this->items);
     }
 
-    /**
-     * Tests if header has given value.
-     */
+    
     public function has(string $value): bool
     {
         return isset($this->items[$value]);
     }
 
-    /**
-     * Returns given value's item, if exists.
-     */
+    
     public function get(string $value): ?AcceptHeaderItem
     {
-        return $this->items[$value] ?? $this->items[explode('/', $value)[0].'/*'] ?? $this->items['*/*'] ?? $this->items['*'] ?? null;
+        return $this->items[$value] ?? $this->items[explode('/', $value)[0].'*'] ?? $this->items['*'] ?? null;
     }
 
-    /**
-     * Adds an item.
-     *
-     * @return $this
-     */
+    
     public function add(AcceptHeaderItem $item): static
     {
         $this->items[$item->getValue()] = $item;
@@ -98,11 +68,7 @@ class AcceptHeader
         return $this;
     }
 
-    /**
-     * Returns all items.
-     *
-     * @return AcceptHeaderItem[]
-     */
+    
     public function all(): array
     {
         $this->sort();
@@ -110,9 +76,7 @@ class AcceptHeader
         return $this->items;
     }
 
-    /**
-     * Filters items on their value using given regex.
-     */
+    
     public function filter(string $pattern): self
     {
         return new self(array_filter($this->items, function (AcceptHeaderItem $item) use ($pattern) {
@@ -120,9 +84,7 @@ class AcceptHeader
         }));
     }
 
-    /**
-     * Returns first item.
-     */
+    
     public function first(): ?AcceptHeaderItem
     {
         $this->sort();
@@ -130,9 +92,7 @@ class AcceptHeader
         return !empty($this->items) ? reset($this->items) : null;
     }
 
-    /**
-     * Sorts items by descending quality.
-     */
+    
     private function sort(): void
     {
         if (!$this->sorted) {

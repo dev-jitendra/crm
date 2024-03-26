@@ -11,15 +11,7 @@ use function is_string;
 
 trait FileInformationTrait
 {
-    /**
-     * Returns array if the procedure is identified
-     *
-     * @param  string|array|object $value       Filename to check
-     * @param  null|array          $file        File data (when using legacy Laminas_File_Transfer API)
-     * @param  bool                $hasType     Return with filetype (optional)
-     * @param  bool                $hasBasename Return with basename - is calculated from location path (optional)
-     * @return array
-     */
+    
     protected function getFileInfo(
         $value,
         ?array $file = null,
@@ -41,14 +33,7 @@ trait FileInformationTrait
         return $this->getFileBasedFileInfo($value, $hasType, $hasBasename);
     }
 
-    /**
-     * Generate file information array with legacy Laminas_File_Transfer API
-     *
-     * @param array  $file        File data
-     * @param bool   $hasType     Return with filetype
-     * @param bool   $hasBasename Basename is calculated from location path
-     * @return array
-     */
+    
     private function getLegacyFileInfo(
         array $file,
         $hasType = false,
@@ -70,14 +55,7 @@ trait FileInformationTrait
         return $fileInfo;
     }
 
-    /**
-     * Generate file information array with SAPI
-     *
-     * @param array $file        File data from SAPI
-     * @param bool  $hasType     Return with filetype
-     * @param bool  $hasBasename Filename is calculated from location path
-     * @return array
-     */
+    
     private function getSapiFileInfo(
         array $file,
         $hasType = false,
@@ -105,13 +83,7 @@ trait FileInformationTrait
         return $fileInfo;
     }
 
-    /**
-     * Generate file information array with PSR-7 UploadedFileInterface
-     *
-     * @param bool                  $hasType     Return with filetype
-     * @param bool                  $hasBasename Filename is calculated from location path
-     * @return array
-     */
+    
     private function getPsr7FileInfo(
         UploadedFileInterface $file,
         $hasType = false,
@@ -133,14 +105,7 @@ trait FileInformationTrait
         return $fileInfo;
     }
 
-    /**
-     * Generate file information array with base method
-     *
-     * @param string $file        File path
-     * @param bool   $hasType     Return with filetype
-     * @param bool   $hasBasename Filename is calculated from location path
-     * @return array
-     */
+    
     private function getFileBasedFileInfo(
         $file,
         $hasType = false,

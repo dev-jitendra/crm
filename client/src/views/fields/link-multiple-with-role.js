@@ -1,70 +1,28 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 import LinkMultipleFieldView from 'views/fields/link-multiple';
 import Select from 'ui/select';
 
-/**
- * A link-multiple field with a relation column.
- * @deprecated Prefer using `link-multiple-with-columns` instead.
- */
+
 class LinkMultipleWithRoleFieldView extends LinkMultipleFieldView {
 
-    /**
-     * A role field type.
-     */
+    
     roleType = 'enum'
-    /**
-     * A relation column name.
-     */
+    
     columnName = 'role'
-    /**
-     * The role field is defined in a foreign entity.
-     */
+    
     roleFieldIsForeign = true
-    /**
-     * A value to fetch for an empty role.
-     */
+    
     emptyRoleValue = null
-    /**
-     * A role placeholder text.
-     */
+    
     rolePlaceholderText = null
-    /**
-     * A role value max length.
-     * @protected
-     */
+    
     roleMaxLength = 50
 
-    /** @const */
+    
     ROLE_TYPE_ENUM = 'enum'
-    // noinspection JSUnusedGlobalSymbols
-    /** @const */
+    
+    
     ROLE_TYPE_VARCHAR = 'varchar'
 
     setup() {
@@ -105,7 +63,7 @@ class LinkMultipleWithRoleFieldView extends LinkMultipleFieldView {
     }
 
     getDetailLinkHtml(id, name) {
-        // Do not use the `html` method to avoid XSS.
+        
 
         name = name || this.nameHash[id] || id;
 
@@ -217,15 +175,9 @@ class LinkMultipleWithRoleFieldView extends LinkMultipleFieldView {
     }
 
 
-    /**
-     * Build a role select element.
-     *
-     * @param {string} id
-     * @param {string|null} roleValue
-     * @return {JQuery}
-     */
+    
     getJQSelect(id, roleValue) {
-        // Do not use the `html` method to avoid XSS.
+        
 
         let $role = $('<select>')
             .addClass('role form-control input-sm')
@@ -248,11 +200,9 @@ class LinkMultipleWithRoleFieldView extends LinkMultipleFieldView {
         return $role;
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     addLinkHtml(id, name) {
-        // Do not use the `html` method to avoid XSS.
+        
 
         name = name || id;
 
@@ -297,7 +247,7 @@ class LinkMultipleWithRoleFieldView extends LinkMultipleFieldView {
 
             $role = $('<input>')
                 .addClass('role form-control input-sm')
-                .attr('maxlength', this.roleMaxLength) // @todo Get the value from metadata.
+                .attr('maxlength', this.roleMaxLength) 
                 .attr('placeholder', text)
                 .attr('data-id', id)
                 .attr('value', role || '');
@@ -362,5 +312,5 @@ class LinkMultipleWithRoleFieldView extends LinkMultipleFieldView {
     }
 }
 
-// noinspection JSDeprecatedSymbols
+
 export default LinkMultipleWithRoleFieldView;

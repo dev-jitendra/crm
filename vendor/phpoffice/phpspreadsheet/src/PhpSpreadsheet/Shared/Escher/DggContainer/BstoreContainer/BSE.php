@@ -15,73 +15,41 @@ class BSE
     const BLIPTYPE_TIFF = 0x11;
     const BLIPTYPE_CMYKJPEG = 0x12;
 
-    /**
-     * The parent BLIP Store Entry Container.
-     *
-     * @var \PhpOffice\PhpSpreadsheet\Shared\Escher\DggContainer\BstoreContainer
-     */
+    
     private $parent;
 
-    /**
-     * The BLIP (Big Large Image or Picture).
-     *
-     * @var BSE\Blip
-     */
+    
     private $blip;
 
-    /**
-     * The BLIP type.
-     *
-     * @var int
-     */
+    
     private $blipType;
 
-    /**
-     * Set parent BLIP Store Entry Container.
-     *
-     * @param \PhpOffice\PhpSpreadsheet\Shared\Escher\DggContainer\BstoreContainer $parent
-     */
+    
     public function setParent($parent): void
     {
         $this->parent = $parent;
     }
 
-    /**
-     * Get the BLIP.
-     *
-     * @return BSE\Blip
-     */
+    
     public function getBlip()
     {
         return $this->blip;
     }
 
-    /**
-     * Set the BLIP.
-     *
-     * @param BSE\Blip $blip
-     */
+    
     public function setBlip($blip): void
     {
         $this->blip = $blip;
         $blip->setParent($this);
     }
 
-    /**
-     * Get the BLIP type.
-     *
-     * @return int
-     */
+    
     public function getBlipType()
     {
         return $this->blipType;
     }
 
-    /**
-     * Set the BLIP type.
-     *
-     * @param int $blipType
-     */
+    
     public function setBlipType($blipType): void
     {
         $this->blipType = $blipType;

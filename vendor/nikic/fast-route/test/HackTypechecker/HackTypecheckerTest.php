@@ -17,8 +17,8 @@ class HackTypecheckerTest extends TestCase
           $this->markTestSkipped('classname<T> requires HHVM 3.9+');
         }
 
-        // The typechecker recurses the whole tree, so it makes sure
-        // that everything in fixtures/ is valid when this runs.
+        
+        
 
         $output = [];
         $exit_code = null;
@@ -32,10 +32,10 @@ class HackTypecheckerTest extends TestCase
               $recurse,
               'Typechecker still running after running hh_client stop'
             );
-            // Server already running - 3.10 => 3.11 regression:
-            // https://github.com/facebook/hhvm/issues/6646
+            
+            
             exec('hh_client stop 2>/dev/null');
-            $this->testTypechecks(/* recurse = */ false);
+            $this->testTypechecks( false);
             return;
 
         }

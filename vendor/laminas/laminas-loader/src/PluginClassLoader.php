@@ -1,4 +1,4 @@
-<?php // phpcs:disable SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse
+<?php 
 
 namespace Laminas\Loader;
 
@@ -16,52 +16,30 @@ use function is_object;
 use function is_string;
 use function strtolower;
 
-/**
- * Plugin class locator interface
- */
+
 class PluginClassLoader implements PluginClassLocator
 {
-    /**
-     * List of plugin name => class name pairs
-     *
-     * @var array
-     */
+    
     protected $plugins = [];
 
-    /**
-     * Static map allow global seeding of plugin loader
-     *
-     * @var array
-     */
+    
     protected static $staticMap = [];
 
-    /**
-     * Constructor
-     *
-     * @param  null|array|Traversable $map If provided, seeds the loader with a map
-     */
+    
     public function __construct($map = null)
     {
-        // Merge in static overrides
+        
         if (! empty(static::$staticMap)) {
             $this->registerPlugins(static::$staticMap);
         }
 
-        // Merge in constructor arguments
+        
         if ($map !== null) {
             $this->registerPlugins($map);
         }
     }
 
-    /**
-     * Add a static map of plugins
-     *
-     * A null value will clear the static map.
-     *
-     * @param  null|array|Traversable $map
-     * @throws Exception\InvalidArgumentException
-     * @return void
-     */
+    
     public static function addStaticMap($map)
     {
         if (null === $map) {
@@ -77,36 +55,14 @@ class PluginClassLoader implements PluginClassLocator
         }
     }
 
-    /**
-     * Register a class to a given short name
-     *
-     * @param  string $shortName
-     * @param  string $className
-     * @return PluginClassLoader
-     */
+    
     public function registerPlugin($shortName, $className)
     {
         $this->plugins[strtolower($shortName)] = $className;
         return $this;
     }
 
-    /**
-     * Register many plugins at once
-     *
-     * If $map is a string, assumes that the map is the class name of a
-     * Traversable object (likely a ShortNameLocator); it will then instantiate
-     * this class and use it to register plugins.
-     *
-     * If $map is an array or Traversable object, it will iterate it to
-     * register plugin names/classes.
-     *
-     * For all other arguments, or if the string $map is not a class or not a
-     * Traversable class, an exception will be raised.
-     *
-     * @param  string|array|Traversable $map
-     * @return PluginClassLoader
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public function registerPlugins($map)
     {
         if (is_string($map)) {
@@ -122,7 +78,7 @@ class PluginClassLoader implements PluginClassLocator
             throw new Exception\InvalidArgumentException('Map provided is invalid; must be traversable');
         }
 
-        // iterator_apply doesn't work as expected with IteratorAggregate
+        
         if ($map instanceof IteratorAggregate) {
             $map = $map->getIterator();
         }
@@ -145,12 +101,7 @@ class PluginClassLoader implements PluginClassLocator
         return $this;
     }
 
-    /**
-     * Unregister a short name lookup
-     *
-     * @param  mixed $shortName
-     * @return PluginClassLoader
-     */
+    
     public function unregisterPlugin($shortName)
     {
         $lookup = strtolower($shortName);
@@ -160,45 +111,26 @@ class PluginClassLoader implements PluginClassLocator
         return $this;
     }
 
-    /**
-     * Get a list of all registered plugins
-     *
-     * @return array|Traversable
-     */
+    
     public function getRegisteredPlugins()
     {
         return $this->plugins;
     }
 
-    /**
-     * Whether or not a plugin by a specific name has been registered
-     *
-     * @param  string $name
-     * @return bool
-     */
+    
     public function isLoaded($name)
     {
         $lookup = strtolower($name);
         return isset($this->plugins[$lookup]);
     }
 
-    /**
-     * Return full class name for a named helper
-     *
-     * @param  string $name
-     * @return string|false
-     */
+    
     public function getClassName($name)
     {
         return $this->load($name);
     }
 
-    /**
-     * Load a helper via the name provided
-     *
-     * @param  string $name
-     * @return string|false
-     */
+    
     public function load($name)
     {
         if (! $this->isLoaded($name)) {
@@ -207,14 +139,7 @@ class PluginClassLoader implements PluginClassLocator
         return $this->plugins[strtolower($name)];
     }
 
-    /**
-     * Defined by IteratorAggregate
-     *
-     * Returns an instance of ArrayIterator, containing a map of
-     * all plugins
-     *
-     * @return ArrayIterator
-     */
+    
     #[ReturnTypeWillChange]
     public function getIterator()
     {

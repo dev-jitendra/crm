@@ -12,22 +12,16 @@ use function fwrite;
 use function is_resource;
 use function is_string;
 
-/**
- * Type that maps an SQL BLOB to a PHP resource stream.
- */
+
 class BlobType extends Type
 {
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {
         return $platform->getBlobTypeDeclarationSQL($column);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         if ($value === null) {
@@ -35,7 +29,7 @@ class BlobType extends Type
         }
 
         if (is_string($value)) {
-            $fp = fopen('php://temp', 'rb+');
+            $fp = fopen('php:
             assert(is_resource($fp));
             fwrite($fp, $value);
             fseek($fp, 0);
@@ -49,17 +43,13 @@ class BlobType extends Type
         return $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getName()
     {
         return Types::BLOB;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getBindingType()
     {
         return ParameterType::LARGE_OBJECT;

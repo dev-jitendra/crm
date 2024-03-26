@@ -1,30 +1,4 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 import EditRecordView from 'views/record/edit';
 import UserDetailRecordView from 'views/user/record/detail';
@@ -33,11 +7,7 @@ class UserEditRecordView extends EditRecordView {
 
     sideView = 'views/user/record/edit-side'
 
-    /**
-     * @name model
-     * @type module:models/user
-     * @memberOf UserEditRecordView#
-     */
+    
 
     setup() {
         super.setup();
@@ -145,7 +115,7 @@ class UserEditRecordView extends EditRecordView {
         this.model.set('sendAccessInfo', false);
     }
 
-    // noinspection SpellCheckingInspection
+    
     isPasswordSendable() {
         if (this.model.isPortal()) {
             if (!(this.model.get('portalsIds') || []).length) {
@@ -165,7 +135,7 @@ class UserEditRecordView extends EditRecordView {
         UserDetailRecordView.prototype.setupNonAdminFieldsAccess.call(this);
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     controlFieldAppearance() {
         UserDetailRecordView.prototype.controlFieldAppearance.call(this);
     }
@@ -328,7 +298,7 @@ class UserEditRecordView extends EditRecordView {
         super.exit(after);
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     errorHandlerUserNameExists() {
         Espo.Ui.error(this.translate('userNameExists', 'messages', 'User'))
     }

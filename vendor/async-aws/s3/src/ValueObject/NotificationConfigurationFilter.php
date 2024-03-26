@@ -6,11 +6,7 @@ final class NotificationConfigurationFilter
 {
     private $key;
 
-    /**
-     * @param array{
-     *   Key?: null|S3KeyFilter|array,
-     * } $input
-     */
+    
     public function __construct(array $input)
     {
         $this->key = isset($input['Key']) ? S3KeyFilter::create($input['Key']) : null;
@@ -26,9 +22,7 @@ final class NotificationConfigurationFilter
         return $this->key;
     }
 
-    /**
-     * @internal
-     */
+    
     public function requestBody(\DomElement $node, \DomDocument $document): void
     {
         if (null !== $v = $this->key) {

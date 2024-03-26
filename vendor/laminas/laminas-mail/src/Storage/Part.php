@@ -25,77 +25,31 @@ use function trim;
 
 class Part implements RecursiveIterator, Part\PartInterface, Stringable
 {
-    /**
-     * Headers of the part
-     *
-     * @var Headers|null
-     */
+    
     protected $headers;
 
-    /**
-     * raw part body
-     *
-     * @var null|string
-     */
+    
     protected $content;
 
-    /**
-     * toplines as fetched with headers
-     *
-     * @var string
-     */
+    
     protected $topLines = '';
 
-    /**
-     * parts of multipart message
-     *
-     * @var array
-     */
+    
     protected $parts = [];
 
-    /**
-     * count of parts of a multipart message
-     *
-     * @var null|int
-     */
+    
     protected $countParts;
 
-    /**
-     * current position of iterator
-     *
-     * @var int
-     */
+    
     protected $iterationPos = 1;
 
-    /**
-     * mail handler, if late fetch is active
-     *
-     * @var null|AbstractStorage
-     */
+    
     protected $mail;
 
-    /**
-     * message number for mail handler
-     *
-     * @var int
-     */
+    
     protected $messageNum = 0;
 
-    /**
-     * Public constructor
-     *
-     * Part supports different sources for content. The possible params are:
-     * - handler    an instance of AbstractStorage for late fetch
-     * - id         number of message for handler
-     * - raw        raw content with header and body as string
-     * - headers    headers as array (name => value) or string, if a content part is found it's used as toplines
-     * - noToplines ignore content found after headers in param 'headers'
-     * - content    content as string
-     * - strict     strictly parse raw content
-     *
-     * @param   array $params  full message with or without headers
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public function __construct(array $params)
     {
         if (isset($params['handler'])) {
@@ -138,11 +92,7 @@ class Part implements RecursiveIterator, Part\PartInterface, Stringable
         }
     }
 
-    /**
-     * Check if part is a multipart message
-     *
-     * @return bool if part is multipart
-     */
+    
     public function isMultipart()
     {
         try {
@@ -152,14 +102,7 @@ class Part implements RecursiveIterator, Part\PartInterface, Stringable
         }
     }
 
-    /**
-     * Body of part
-     *
-     * If part is multipart the raw content of this part with all sub parts is returned
-     *
-     * @throws Exception\RuntimeException
-     * @return string body
-     */
+    
     public function getContent()
     {
         if ($this->content !== null) {
@@ -173,27 +116,16 @@ class Part implements RecursiveIterator, Part\PartInterface, Stringable
         throw new Exception\RuntimeException('no content');
     }
 
-    /**
-     * Return size of part
-     *
-     * Quite simple implemented currently (not decoding). Handle with care.
-     *
-     * @return int size
-     */
+    
     public function getSize()
     {
         return strlen($this->getContent());
     }
 
-    /**
-     * Cache content and split in parts if multipart
-     *
-     * @throws Exception\RuntimeException
-     * @return void
-     */
+    
     protected function cacheContent()
     {
-        // caching content if we can't fetch parts
+        
         if ($this->content === null && $this->mail) {
             $this->content = $this->mail->getRawContent($this->messageNum);
         }
@@ -202,7 +134,7 @@ class Part implements RecursiveIterator, Part\PartInterface, Stringable
             return;
         }
 
-        // split content in parts
+        
         $boundary = $this->getHeaderField('content-type', 'boundary');
         if (! $boundary) {
             throw new Exception\RuntimeException('no boundary found in content type to split message');
@@ -217,13 +149,7 @@ class Part implements RecursiveIterator, Part\PartInterface, Stringable
         }
     }
 
-    /**
-     * Get part of multipart message
-     *
-     * @param  int $num number of part starting with 1 for first part
-     * @throws Exception\RuntimeException
-     * @return Part wanted part
-     */
+    
     public function getPart($num)
     {
         if (isset($this->parts[$num])) {
@@ -234,10 +160,10 @@ class Part implements RecursiveIterator, Part\PartInterface, Stringable
             throw new Exception\RuntimeException('part not found');
         }
 
-        // if ($this->mail && $this->mail->hasFetchPart) {
-            // TODO: fetch part
-            // return
-        // }
+        
+            
+            
+        
 
         $this->cacheContent();
 
@@ -248,11 +174,7 @@ class Part implements RecursiveIterator, Part\PartInterface, Stringable
         return $this->parts[$num];
     }
 
-    /**
-     * Count parts of a multipart part
-     *
-     * @return int number of sub-parts
-     */
+    
     public function countParts()
     {
         if ($this->countParts) {
@@ -264,10 +186,10 @@ class Part implements RecursiveIterator, Part\PartInterface, Stringable
             return $this->countParts;
         }
 
-        // if ($this->mail && $this->mail->hasFetchPart) {
-            // TODO: fetch part
-            // return
-        // }
+        
+            
+            
+        
 
         $this->cacheContent();
 
@@ -275,14 +197,7 @@ class Part implements RecursiveIterator, Part\PartInterface, Stringable
         return $this->countParts;
     }
 
-    /**
-     * Access headers collection
-     *
-     * Lazy-loads if not already attached.
-     *
-     * @return Headers
-     * @throws Exception\RuntimeException
-     */
+    
     public function getHeaders()
     {
         if (null === $this->headers) {
@@ -302,17 +217,7 @@ class Part implements RecursiveIterator, Part\PartInterface, Stringable
         return $this->headers;
     }
 
-    /**
-     * Get a header in specified format
-     *
-     * Internally headers that occur more than once are saved as array, all other as string. If $format
-     * is set to string implode is used to concat the values (with Mime::LINEEND as delim).
-     *
-     * @param  string $name   name of header, matches case-insensitive, but camel-case is replaced with dashes
-     * @param  string $format change type of return value to 'string' or 'array'
-     * @throws Exception\InvalidArgumentException
-     * @return string|array|HeaderInterface|ArrayIterator value of header in wanted or internal format
-     */
+    
     public function getHeader($name, $format = null)
     {
         $header = $this->getHeaders()->get($name);
@@ -355,72 +260,31 @@ class Part implements RecursiveIterator, Part\PartInterface, Stringable
         return $return;
     }
 
-    /**
-     * Get a specific field from a header like content type or all fields as array
-     *
-     * If the header occurs more than once, only the value from the first header
-     * is returned.
-     *
-     * Throws an Exception if the requested header does not exist. If
-     * the specific header field does not exist, returns null.
-     *
-     * @param  string $name       name of header, like in getHeader()
-     * @param  string $wantedPart the wanted part, default is first, if null an array with all parts is returned
-     * @param  string $firstName  key name for the first part
-     * @return string|array wanted part or all parts as array($firstName => firstPart, partname => value)
-     * @throws RuntimeException
-     */
+    
     public function getHeaderField($name, $wantedPart = '0', $firstName = '0')
     {
         return Mime\Decode::splitHeaderField(current($this->getHeader($name, 'array')), $wantedPart, $firstName);
     }
 
-    /**
-     * Getter for mail headers - name is matched in lowercase
-     *
-     * This getter is short for Part::getHeader($name, 'string')
-     *
-     * @see Part::getHeader()
-     *
-     * @param  string $name header name
-     * @return string value of header
-     * @throws Exception\ExceptionInterface
-     */
+    
     public function __get($name)
     {
         return $this->getHeader($name, 'string');
     }
 
-    /**
-     * Isset magic method proxy to hasHeader
-     *
-     * This method is short syntax for Part::hasHeader($name);
-     *
-     * @see Part::hasHeader
-     *
-     * @param  string $name
-     * @return bool
-     */
+    
     public function __isset($name)
     {
         return $this->getHeaders()->has($name);
     }
 
-    /**
-     * magic method to get content of part
-     *
-     * @return string content
-     */
+    
     public function __toString(): string
     {
         return $this->getContent();
     }
 
-    /**
-     * implements RecursiveIterator::hasChildren()
-     *
-     * @return bool current element has children/is multipart
-     */
+    
     #[ReturnTypeWillChange]
     public function hasChildren()
     {
@@ -428,22 +292,14 @@ class Part implements RecursiveIterator, Part\PartInterface, Stringable
         return $current && $current instanceof self && $current->isMultipart();
     }
 
-    /**
-     * implements RecursiveIterator::getChildren()
-     *
-     * @return Part same as self::current()
-     */
+    
     #[ReturnTypeWillChange]
     public function getChildren()
     {
         return $this->current();
     }
 
-    /**
-     * implements Iterator::valid()
-     *
-     * @return bool check if there's a current element
-     */
+    
     #[ReturnTypeWillChange]
     public function valid()
     {
@@ -453,40 +309,28 @@ class Part implements RecursiveIterator, Part\PartInterface, Stringable
         return $this->iterationPos && $this->iterationPos <= $this->countParts;
     }
 
-    /**
-     * implements Iterator::next()
-     */
+    
     #[ReturnTypeWillChange]
     public function next()
     {
         ++$this->iterationPos;
     }
 
-    /**
-     * implements Iterator::key()
-     *
-     * @return string key/number of current part
-     */
+    
     #[ReturnTypeWillChange]
     public function key()
     {
         return $this->iterationPos;
     }
 
-    /**
-     * implements Iterator::current()
-     *
-     * @return Part current part
-     */
+    
     #[ReturnTypeWillChange]
     public function current()
     {
         return $this->getPart($this->iterationPos);
     }
 
-    /**
-     * implements Iterator::rewind()
-     */
+    
     #[ReturnTypeWillChange]
     public function rewind()
     {

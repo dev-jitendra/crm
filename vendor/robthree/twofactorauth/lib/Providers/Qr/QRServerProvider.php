@@ -2,7 +2,7 @@
 
 namespace RobThree\Auth\Providers\Qr;
 
-// http://goqr.me/api/doc/create-qr-code/
+
 class QRServerProvider extends BaseHTTPQRCodeProvider 
 {
     public $errorcorrectionlevel;
@@ -58,7 +58,7 @@ class QRServerProvider extends BaseHTTPQRCodeProvider
     
     public function getUrl($qrtext, $size) 
     {
-        return 'https://api.qrserver.com/v1/create-qr-code/'
+        return 'https:
             . '?size=' . $size . 'x' . $size
             . '&ecc=' . strtoupper($this->errorcorrectionlevel)
             . '&margin=' . $this->margin

@@ -7,13 +7,13 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var EspoFunnel = {};
 window.EspoFunnel = EspoFunnel;
 (function (EspoFunnel) {
-  EspoFunnel.Funnel = /*#__PURE__*/function () {
+  EspoFunnel.Funnel = function () {
     function Funnel(container, params, dataList) {
       _classCallCheck(this, Funnel);
 
       this.params = Object.assign({}, params || {});
       this.dataList = dataList || [];
-      this.element = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      this.element = document.createElementNS('http:
 
       if (container) {
         container.appendChild(this.element);
@@ -111,7 +111,7 @@ window.EspoFunnel = EspoFunnel;
     }, {
       key: "drawTrapElement",
       value: function drawTrapElement(iTop, iBottom, centerX, halfTopWidth, halfBottomWidth, color) {
-        var element = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        var element = document.createElementNS('http:
         var d = 'M' + (centerX + halfTopWidth) + ',' + iTop + ' ';
         d += 'L' + (centerX - halfTopWidth) + ',' + iTop + ' ';
         d += 'L' + (centerX - halfBottomWidth) + ',' + iBottom + ' ';

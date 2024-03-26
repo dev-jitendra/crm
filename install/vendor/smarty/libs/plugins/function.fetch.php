@@ -1,25 +1,7 @@
 <?php
-/**
- * Smarty plugin
- *
- * @package Smarty
- * @subpackage PluginsFunction
- */
 
-/**
- * Smarty {fetch} plugin
- *
- * Type:     function<br>
- * Name:     fetch<br>
- * Purpose:  fetch file, web or ftp data and display results
- *
- * @link http://www.smarty.net/manual/en/language.function.fetch.php {fetch}
- *       (Smarty online manual)
- * @author Monte Ohrt <monte at ohrt dot com>
- * @param array                    $params   parameters
- * @param Smarty_Internal_Template $template template object
- * @return string|null if the assign parameter is passed, Smarty assigns the result to a template variable
- */
+
+
 function smarty_function_fetch($params, $template)
 {
     if (empty($params['file'])) {
@@ -28,24 +10,24 @@ function smarty_function_fetch($params, $template)
         return;
     }
 
-    // strip file protocol
-    if (stripos($params['file'], 'file://') === 0) {
+    
+    if (stripos($params['file'], 'file:
         $params['file'] = substr($params['file'], 7);
     }
 
-    $protocol = strpos($params['file'], '://');
+    $protocol = strpos($params['file'], ':
     if ($protocol !== false) {
         $protocol = strtolower(substr($params['file'], 0, $protocol));
     }
 
     if (isset($template->smarty->security_policy)) {
         if ($protocol) {
-            // remote resource (or php stream, …)
+            
             if (!$template->smarty->security_policy->isTrustedUri($params['file'])) {
                 return;
             }
         } else {
-            // local file
+            
             if (!$template->smarty->security_policy->isTrustedResourceDir($params['file'])) {
                 return;
             }
@@ -54,9 +36,9 @@ function smarty_function_fetch($params, $template)
 
     $content = '';
     if ($protocol == 'http') {
-        // http fetch
+        
         if ($uri_parts = parse_url($params['file'])) {
-            // set defaults
+            
             $host = $server_name = $uri_parts['host'];
             $timeout = 30;
             $accept = "image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, */*";
@@ -76,7 +58,7 @@ function smarty_function_fetch($params, $template)
             if (!empty($uri_parts['pass'])) {
                 $pass = $uri_parts['pass'];
             }
-            // loop through parameters, setup headers
+            
             foreach ($params as $param_key => $param_value) {
                 switch ($param_key) {
                     case "file":

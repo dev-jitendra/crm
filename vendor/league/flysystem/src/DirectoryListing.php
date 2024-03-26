@@ -8,19 +8,13 @@ use Generator;
 use IteratorAggregate;
 use Traversable;
 
-/**
- * @template T
- */
+
 class DirectoryListing implements IteratorAggregate
 {
-    /**
-     * @var iterable<T>
-     */
+    
     private $listing;
 
-    /**
-     * @param iterable<T> $listing
-     */
+    
     public function __construct(iterable $listing)
     {
         $this->listing = $listing;
@@ -50,17 +44,13 @@ class DirectoryListing implements IteratorAggregate
         return new DirectoryListing($generator);
     }
 
-    /**
-     * @return iterable<T>
-     */
+    
     public function getIterator(): iterable
     {
         return $this->listing;
     }
 
-    /**
-     * @return T[]
-     */
+    
     public function toArray(): array
     {
         return $this->listing instanceof Traversable

@@ -1,14 +1,10 @@
 <?php
-/**
- * This file is part of the ZBateson\MailMimeParser project.
- *
- * @license http://opensource.org/licenses/bsd-license.php BSD
- */
+
 namespace ZBateson\MailMimeParser\Header;
 
 abstract class HeaderConsts
 {
-    // Headers according to the table at https://tools.ietf.org/html/rfc5322#section-3.6
+    
     const RETURN_PATH = 'Return-Path';
     const RECEIVED = 'Received';
     const RESENT_DATE = 'Resent-Date';
@@ -34,7 +30,7 @@ abstract class HeaderConsts
     const COMMENTS = 'Comments';
     const KEYWORDS = 'Keywords';
     
-    const MIME_VERSION = 'MIME-Version'; // https://tools.ietf.org/html/rfc2045#section-4
-    const CONTENT_TYPE = 'Content-Type'; // https://tools.ietf.org/html/rfc2045#section-5
-    const AUTO_SUBMITTED = 'Auto-Submitted'; // https://tools.ietf.org/html/rfc3834#section-5
+    const MIME_VERSION = 'MIME-Version'; 
+    const CONTENT_TYPE = 'Content-Type'; 
+    const AUTO_SUBMITTED = 'Auto-Submitted'; 
 }

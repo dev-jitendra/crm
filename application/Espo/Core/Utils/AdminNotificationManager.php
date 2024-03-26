@@ -1,40 +1,12 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Utils;
 
 use Espo\Entities\Extension;
 use Espo\ORM\EntityManager;
 
-/**
- * Notifications on the admin panel.
- */
+
 class AdminNotificationManager
 {
     public function __construct(
@@ -44,9 +16,7 @@ class AdminNotificationManager
         private ScheduledJob $scheduledJob
     ) {}
 
-    /**
-     * @return array<int, array{id: string, type: string, message: string}>
-     */
+    
     public function getNotificationList(): array
     {
         $notificationList = [];
@@ -115,9 +85,7 @@ class AdminNotificationManager
         return $this->scheduledJob->isCronConfigured();
     }
 
-    /**
-     * @return ?array{currentVersion:string,latestVersion:string}
-     */
+    
     private function getInstanceNeedingUpgrade(): ?array
     {
         $latestVersion = $this->config->get('latestVersion');
@@ -142,10 +110,7 @@ class AdminNotificationManager
         return null;
     }
 
-    /**
-     *
-     * @return array<string, array{currentVersion: string, latestVersion: string, extensionName: string}>
-     */
+    
     private function getExtensionsNeedingUpgrade(): array
     {
         $extensions = [];
@@ -190,9 +155,7 @@ class AdminNotificationManager
         return $extension->get('version');
     }
 
-    /**
-     * @param array<string, string> $data
-     */
+    
     private function prepareMessage(string $message, array $data = []): string
     {
         foreach ($data as $name => $value) {
@@ -202,9 +165,7 @@ class AdminNotificationManager
         return $message;
     }
 
-    /**
-     * @return array<int, array{id: string, type: string, message: string}>
-     */
+    
     private function getExtensionLicenseNotificationList(): array
     {
         $extensionList = $this->entityManager

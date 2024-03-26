@@ -2,14 +2,7 @@
 
 namespace Picqer\Barcode\Types;
 
-/*
- * POSTNET and PLANET barcodes.
- * Used by U.S. Postal Service for automated mail sorting
- *
- * @param $code (string) zip code to represent. Must be a string containing a zip code of the form DDDDD or
- *     DDDDD-DDDD.
- * @param $planet (boolean) if true print the PLANET barcode, otherwise print POSTNET
- */
+
 
 use Picqer\Barcode\Barcode;
 use Picqer\Barcode\BarcodeBar;
@@ -36,7 +29,7 @@ class TypePostnet implements TypeInterface
 
         $barcode = new Barcode($code);
 
-        // calculate checksum
+        
         $sum = 0;
         for ($i = 0; $i < $len; ++$i) {
             $sum += intval($code[$i]);
@@ -48,7 +41,7 @@ class TypePostnet implements TypeInterface
         $code .= $chkd;
         $len = strlen($code);
 
-        // start bar
+        
         $barcode->addBar(new BarcodeBar(1, 2, 1));
         $barcode->addBar(new BarcodeBar(1, 2, 0));
 
@@ -61,7 +54,7 @@ class TypePostnet implements TypeInterface
             }
         }
 
-        // end bar
+        
         $barcode->addBar(new BarcodeBar(1, 2, 1));
 
         return $barcode;

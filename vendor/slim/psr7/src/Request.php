@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim-Psr7/blob/master/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -31,24 +27,16 @@ use function str_replace;
 
 class Request extends Message implements ServerRequestInterface
 {
-    /**
-     * @var string
-     */
+    
     protected $method;
 
-    /**
-     * @var UriInterface
-     */
+    
     protected $uri;
 
-    /**
-     * @var string
-     */
+    
     protected $requestTarget;
 
-    /**
-     * @var ?array
-     */
+    
     protected $queryParams;
 
     protected array $cookies;
@@ -57,26 +45,13 @@ class Request extends Message implements ServerRequestInterface
 
     protected array $attributes;
 
-    /**
-     * @var null|array|object
-     */
+    
     protected $parsedBody;
 
-    /**
-     * @var UploadedFileInterface[]
-     */
+    
     protected array $uploadedFiles;
 
-    /**
-     * @param string           $method        The request method
-     * @param UriInterface     $uri           The request URI object
-     * @param HeadersInterface $headers       The request headers collection
-     * @param array            $cookies       The request cookies collection
-     * @param array            $serverParams  The server environment variables
-     * @param StreamInterface  $body          The request body object
-     * @param array            $uploadedFiles The request uploadedFiles collection
-     * @throws InvalidArgumentException on invalid HTTP method
-     */
+    
     public function __construct(
         $method,
         UriInterface $uri,
@@ -104,28 +79,20 @@ class Request extends Message implements ServerRequestInterface
         }
     }
 
-    /**
-     * This method is applied to the cloned object after PHP performs an initial shallow-copy.
-     * This method completes a deep-copy by creating new objects for the cloned object's internal reference pointers.
-     */
+    
     public function __clone()
     {
         $this->headers = clone $this->headers;
         $this->body = clone $this->body;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getMethod(): string
     {
         return $this->method;
     }
 
-    /**
-     * {@inheritdoc}
-     * @return static
-     */
+    
     public function withMethod($method)
     {
         $method = $this->filterMethod($method);
@@ -135,18 +102,10 @@ class Request extends Message implements ServerRequestInterface
         return $clone;
     }
 
-    /**
-     * Validate the HTTP method
-     *
-     * @param  string $method
-     *
-     * @return string
-     *
-     * @throws InvalidArgumentException on invalid HTTP method.
-     */
+    
     protected function filterMethod($method): string
     {
-        /** @var mixed $method */
+        
         if (!is_string($method)) {
             throw new InvalidArgumentException(sprintf(
                 'Unsupported HTTP method; must be a string, received %s',
@@ -164,9 +123,7 @@ class Request extends Message implements ServerRequestInterface
         return $method;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getRequestTarget(): string
     {
         if ($this->requestTarget) {
@@ -188,10 +145,7 @@ class Request extends Message implements ServerRequestInterface
         return $path;
     }
 
-    /**
-     * {@inheritdoc}
-     * @return static
-     */
+    
     public function withRequestTarget($requestTarget)
     {
         if (!is_string($requestTarget) || preg_match('#\s#', $requestTarget)) {
@@ -206,18 +160,13 @@ class Request extends Message implements ServerRequestInterface
         return $clone;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getUri(): UriInterface
     {
         return $this->uri;
     }
 
-    /**
-     * {@inheritdoc}
-     * @return static
-     */
+    
     public function withUri(UriInterface $uri, $preserveHost = false)
     {
         $clone = clone $this;
@@ -236,18 +185,13 @@ class Request extends Message implements ServerRequestInterface
         return $clone;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getCookieParams(): array
     {
         return $this->cookies;
     }
 
-    /**
-     * {@inheritdoc}
-     * @return static
-     */
+    
     public function withCookieParams(array $cookies)
     {
         $clone = clone $this;
@@ -256,9 +200,7 @@ class Request extends Message implements ServerRequestInterface
         return $clone;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getQueryParams(): array
     {
         if (is_array($this->queryParams)) {
@@ -269,16 +211,13 @@ class Request extends Message implements ServerRequestInterface
             return [];
         }
 
-        parse_str($this->uri->getQuery(), $this->queryParams); // <-- URL decodes data
+        parse_str($this->uri->getQuery(), $this->queryParams); 
         assert(is_array($this->queryParams));
 
         return $this->queryParams;
     }
 
-    /**
-     * {@inheritdoc}
-     * @return static
-     */
+    
     public function withQueryParams(array $query)
     {
         $clone = clone $this;
@@ -287,18 +226,13 @@ class Request extends Message implements ServerRequestInterface
         return $clone;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getUploadedFiles(): array
     {
         return $this->uploadedFiles;
     }
 
-    /**
-     * {@inheritdoc}
-     * @return static
-     */
+    
     public function withUploadedFiles(array $uploadedFiles)
     {
         $clone = clone $this;
@@ -307,35 +241,25 @@ class Request extends Message implements ServerRequestInterface
         return $clone;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getServerParams(): array
     {
         return $this->serverParams;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getAttributes(): array
     {
         return $this->attributes;
     }
 
-    /**
-     * {@inheritdoc}
-     * @return mixed
-     */
+    
     public function getAttribute($name, $default = null)
     {
         return $this->attributes[$name] ?? $default;
     }
 
-    /**
-     * {@inheritdoc}
-     * @return static
-     */
+    
     public function withAttribute($name, $value)
     {
         $clone = clone $this;
@@ -344,10 +268,7 @@ class Request extends Message implements ServerRequestInterface
         return $clone;
     }
 
-    /**
-     * {@inheritdoc}
-     * @return static
-     */
+    
     public function withoutAttribute($name)
     {
         $clone = clone $this;
@@ -357,21 +278,16 @@ class Request extends Message implements ServerRequestInterface
         return $clone;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getParsedBody()
     {
         return $this->parsedBody;
     }
 
-    /**
-     * {@inheritdoc}
-     * @return static
-     */
+    
     public function withParsedBody($data)
     {
-        /** @var mixed $data */
+        
         if (!is_null($data) && !is_object($data) && !is_array($data)) {
             throw new InvalidArgumentException('Parsed body value must be an array, an object, or null');
         }

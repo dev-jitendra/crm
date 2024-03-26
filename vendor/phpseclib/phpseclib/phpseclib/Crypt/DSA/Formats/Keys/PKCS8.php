@@ -1,25 +1,6 @@
 <?php
 
-/**
- * PKCS#8 Formatted DSA Key Handler
- *
- * PHP version 5
- *
- * Processes keys with the following headers:
- *
- * -----BEGIN ENCRYPTED PRIVATE KEY-----
- * -----BEGIN PRIVATE KEY-----
- * -----BEGIN PUBLIC KEY-----
- *
- * Analogous to ssh-keygen's pkcs8 format (as specified by -m). Although PKCS8
- * is specific to private keys it's basically creating a DER-encoded wrapper
- * for keys. This just extends that same concept to public keys (much like ssh-keygen)
- *
- * @author    Jim Wigginton <terrafrost@php.net>
- * @copyright 2015 Jim Wigginton
- * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
- * @link      http://phpseclib.sourceforge.net
- */
+
 
 namespace phpseclib3\Crypt\DSA\Formats\Keys;
 
@@ -28,41 +9,19 @@ use phpseclib3\File\ASN1;
 use phpseclib3\File\ASN1\Maps;
 use phpseclib3\Math\BigInteger;
 
-/**
- * PKCS#8 Formatted DSA Key Handler
- *
- * @author  Jim Wigginton <terrafrost@php.net>
- */
+
 abstract class PKCS8 extends Progenitor
 {
-    /**
-     * OID Name
-     *
-     * @var string
-     */
+    
     const OID_NAME = 'id-dsa';
 
-    /**
-     * OID Value
-     *
-     * @var string
-     */
+    
     const OID_VALUE = '1.2.840.10040.4.1';
 
-    /**
-     * Child OIDs loaded
-     *
-     * @var bool
-     */
+    
     protected static $childOIDsLoaded = false;
 
-    /**
-     * Break a public or private key down into its constituent components
-     *
-     * @param string $key
-     * @param string $password optional
-     * @return array
-     */
+    
     public static function load($key, $password = '')
     {
         $key = parent::load($key, $password);
@@ -96,18 +55,7 @@ abstract class PKCS8 extends Progenitor
         return $components;
     }
 
-    /**
-     * Convert a private key to the appropriate format.
-     *
-     * @param \phpseclib3\Math\BigInteger $p
-     * @param \phpseclib3\Math\BigInteger $q
-     * @param \phpseclib3\Math\BigInteger $g
-     * @param \phpseclib3\Math\BigInteger $y
-     * @param \phpseclib3\Math\BigInteger $x
-     * @param string $password optional
-     * @param array $options optional
-     * @return string
-     */
+    
     public static function savePrivateKey(BigInteger $p, BigInteger $q, BigInteger $g, BigInteger $y, BigInteger $x, $password = '', array $options = [])
     {
         $params = [
@@ -121,16 +69,7 @@ abstract class PKCS8 extends Progenitor
         return self::wrapPrivateKey($key, [], $params, $password, null, '', $options);
     }
 
-    /**
-     * Convert a public key to the appropriate format
-     *
-     * @param \phpseclib3\Math\BigInteger $p
-     * @param \phpseclib3\Math\BigInteger $q
-     * @param \phpseclib3\Math\BigInteger $g
-     * @param \phpseclib3\Math\BigInteger $y
-     * @param array $options optional
-     * @return string
-     */
+    
     public static function savePublicKey(BigInteger $p, BigInteger $q, BigInteger $g, BigInteger $y, array $options = [])
     {
         $params = [

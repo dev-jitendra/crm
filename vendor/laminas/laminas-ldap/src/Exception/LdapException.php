@@ -86,16 +86,12 @@ class LdapException extends Exception implements ExceptionInterface
     public const LDAP_X_NO_REFERRALS_FOUND           = 0x4110;
     public const LDAP_X_CANNOT_CHAIN                 = 0x4111;
 
-    /* internal error code constants */
+    
 
     public const LDAP_X_DOMAIN_MISMATCH      = 0x7001;
     public const LDAP_X_EXTENSION_NOT_LOADED = 0x7002;
 
-    /**
-     * @param Ldap   $ldap Laminas\Ldap\Ldap object
-     * @param string $str  Informative exception message
-     * @param int    $code LDAP error code
-     */
+    
     public function __construct(?Ldap $ldap = null, $str = null, $code = 0)
     {
         $errorMessages = [];

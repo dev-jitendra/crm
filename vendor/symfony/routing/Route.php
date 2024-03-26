@@ -1,22 +1,10 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Routing;
 
-/**
- * A Route describes a route and its parameters.
- *
- * @author Fabien Potencier <fabien@symfony.com>
- * @author Tobias Schultze <http://tobion.de>
- */
+
 class Route implements \Serializable
 {
     private string $path = '/';
@@ -29,23 +17,7 @@ class Route implements \Serializable
     private string $condition = '';
     private $compiled = null;
 
-    /**
-     * Constructor.
-     *
-     * Available options:
-     *
-     *  * compiler_class: A class name able to compile this route instance (RouteCompiler by default)
-     *  * utf8:           Whether UTF-8 matching is enforced ot not
-     *
-     * @param string          $path         The path pattern to match
-     * @param array           $defaults     An array of default parameter values
-     * @param array           $requirements An array of requirements for parameters (regexes)
-     * @param array           $options      An array of options
-     * @param string|null     $host         The host pattern to match
-     * @param string|string[] $schemes      A required URI scheme or an array of restricted schemes
-     * @param string|string[] $methods      A required HTTP method or an array of restricted methods
-     * @param string|null     $condition    A condition that should evaluate to true for the route to match
-     */
+    
     public function __construct(string $path, array $defaults = [], array $requirements = [], array $options = [], ?string $host = '', string|array $schemes = [], string|array $methods = [], ?string $condition = '')
     {
         $this->setPath($path);
@@ -73,9 +45,7 @@ class Route implements \Serializable
         ];
     }
 
-    /**
-     * @internal
-     */
+    
     final public function serialize(): string
     {
         throw new \BadMethodCallException('Cannot serialize '.__CLASS__);
@@ -99,9 +69,7 @@ class Route implements \Serializable
         }
     }
 
-    /**
-     * @internal
-     */
+    
     final public function unserialize(string $serialized)
     {
         $this->__unserialize(unserialize($serialized));
@@ -112,15 +80,13 @@ class Route implements \Serializable
         return $this->path;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setPath(string $pattern): static
     {
         $pattern = $this->extractInlineDefaultsAndRequirements($pattern);
 
-        // A pattern must start with a slash and must not have multiple slashes at the beginning because the
-        // generated path for this route would be confused with a network path, e.g. '//domain.com/path'.
+        
+        
         $this->path = '/'.ltrim(trim($pattern), '/');
         $this->compiled = null;
 
@@ -132,9 +98,7 @@ class Route implements \Serializable
         return $this->host;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setHost(?string $pattern): static
     {
         $this->host = $this->extractInlineDefaultsAndRequirements((string) $pattern);
@@ -143,25 +107,13 @@ class Route implements \Serializable
         return $this;
     }
 
-    /**
-     * Returns the lowercased schemes this route is restricted to.
-     * So an empty array means that any scheme is allowed.
-     *
-     * @return string[]
-     */
+    
     public function getSchemes(): array
     {
         return $this->schemes;
     }
 
-    /**
-     * Sets the schemes (e.g. 'https') this route is restricted to.
-     * So an empty array means that any scheme is allowed.
-     *
-     * @param string|string[] $schemes The scheme or an array of schemes
-     *
-     * @return $this
-     */
+    
     public function setSchemes(string|array $schemes): static
     {
         $this->schemes = array_map('strtolower', (array) $schemes);
@@ -170,33 +122,19 @@ class Route implements \Serializable
         return $this;
     }
 
-    /**
-     * Checks if a scheme requirement has been set.
-     */
+    
     public function hasScheme(string $scheme): bool
     {
         return \in_array(strtolower($scheme), $this->schemes, true);
     }
 
-    /**
-     * Returns the uppercased HTTP methods this route is restricted to.
-     * So an empty array means that any method is allowed.
-     *
-     * @return string[]
-     */
+    
     public function getMethods(): array
     {
         return $this->methods;
     }
 
-    /**
-     * Sets the HTTP methods (e.g. 'POST') this route is restricted to.
-     * So an empty array means that any method is allowed.
-     *
-     * @param string|string[] $methods The method or an array of methods
-     *
-     * @return $this
-     */
+    
     public function setMethods(string|array $methods): static
     {
         $this->methods = array_map('strtoupper', (array) $methods);
@@ -210,9 +148,7 @@ class Route implements \Serializable
         return $this->options;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setOptions(array $options): static
     {
         $this->options = [
@@ -222,9 +158,7 @@ class Route implements \Serializable
         return $this->addOptions($options);
     }
 
-    /**
-     * @return $this
-     */
+    
     public function addOptions(array $options): static
     {
         foreach ($options as $name => $option) {
@@ -235,11 +169,7 @@ class Route implements \Serializable
         return $this;
     }
 
-    /**
-     * Sets an option value.
-     *
-     * @return $this
-     */
+    
     public function setOption(string $name, mixed $value): static
     {
         $this->options[$name] = $value;
@@ -248,9 +178,7 @@ class Route implements \Serializable
         return $this;
     }
 
-    /**
-     * Returns the option value or null when not found.
-     */
+    
     public function getOption(string $name): mixed
     {
         return $this->options[$name] ?? null;
@@ -266,9 +194,7 @@ class Route implements \Serializable
         return $this->defaults;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setDefaults(array $defaults): static
     {
         $this->defaults = [];
@@ -276,9 +202,7 @@ class Route implements \Serializable
         return $this->addDefaults($defaults);
     }
 
-    /**
-     * @return $this
-     */
+    
     public function addDefaults(array $defaults): static
     {
         if (isset($defaults['_locale']) && $this->isLocalized()) {
@@ -303,9 +227,7 @@ class Route implements \Serializable
         return \array_key_exists($name, $this->defaults);
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setDefault(string $name, mixed $default): static
     {
         if ('_locale' === $name && $this->isLocalized()) {
@@ -323,9 +245,7 @@ class Route implements \Serializable
         return $this->requirements;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setRequirements(array $requirements): static
     {
         $this->requirements = [];
@@ -333,9 +253,7 @@ class Route implements \Serializable
         return $this->addRequirements($requirements);
     }
 
-    /**
-     * @return $this
-     */
+    
     public function addRequirements(array $requirements): static
     {
         if (isset($requirements['_locale']) && $this->isLocalized()) {
@@ -360,9 +278,7 @@ class Route implements \Serializable
         return \array_key_exists($key, $this->requirements);
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setRequirement(string $key, string $regex): static
     {
         if ('_locale' === $key && $this->isLocalized()) {
@@ -380,9 +296,7 @@ class Route implements \Serializable
         return $this->condition;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setCondition(?string $condition): static
     {
         $this->condition = (string) $condition;
@@ -391,14 +305,7 @@ class Route implements \Serializable
         return $this;
     }
 
-    /**
-     * Compiles the route.
-     *
-     * @throws \LogicException If the Route cannot be compiled because the
-     *                         path or host pattern is invalid
-     *
-     * @see RouteCompiler which is responsible for the compilation process
-     */
+    
     public function compile(): CompiledRoute
     {
         if (null !== $this->compiled) {

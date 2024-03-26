@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Services;
 
@@ -47,18 +21,15 @@ use ArrayAccess;
 use Espo\ORM\Query\Part\Order;
 use stdClass;
 
-/**
- * @template TEntity of Entity
- * @extends Record<TEntity>
- */
+
 class RecordTree extends Record
 {
     private const MAX_DEPTH = 2;
 
     private ?Entity $seed = null;
-    /** @var ?string */
+    
     protected $subjectEntityType = null;
-    /** @var ?string */
+    
     protected $categoryField = null;
 
     public function __construct(string $entityType = '')
@@ -72,11 +43,7 @@ class RecordTree extends Record
         $this->readOnlyLinkList[] = 'children';
     }
 
-    /**
-     * @param array<string, mixed> $params
-     * @return ?Collection<Entity>
-     * @throws Forbidden
-     */
+    
     public function getTree(
         string $parentId = null,
         array $params = [],
@@ -90,10 +57,7 @@ class RecordTree extends Record
         return $this->getTreeInternal($parentId, $params, $maxDepth, 0);
     }
 
-    /**
-     * @param array<string, mixed> $params
-     * @return ?Collection<Entity>
-     */
+    
     protected function getTreeInternal(
         string $parentId = null,
         array $params = [],
@@ -209,10 +173,7 @@ class RecordTree extends Record
         return true;
     }
 
-    /**
-     * @throws Forbidden
-     * @throws NotFound
-     */
+    
     public function getCategoryData(?string $id): ?stdClass
     {
         if (!$this->acl->check($this->entityType, AclTable::ACTION_READ)) {
@@ -241,10 +202,7 @@ class RecordTree extends Record
         ];
     }
 
-    /**
-     * @return string[]
-     * @throws Forbidden
-     */
+    
     public function getTreeItemPath(?string $parentId = null): array
     {
         if (!$this->acl->check($this->entityType, AclTable::ACTION_READ)) {
@@ -328,10 +286,7 @@ class RecordTree extends Record
         parent::link($id, $link, $foreignId);
     }
 
-    /**
-     * @return string[]
-     * @throws Forbidden
-     */
+    
     public function getLastChildrenIdList(?string $parentId = null): array
     {
         if (!$this->acl->check($this->entityType, Table::ACTION_READ)) {

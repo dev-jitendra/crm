@@ -6,9 +6,7 @@ use function strlen;
 
 class Ean8 extends AbstractAdapter
 {
-    /**
-     * Constructor for this barcode adapter
-     */
+    
     public function __construct()
     {
         $this->setLength([7, 8]);
@@ -16,12 +14,7 @@ class Ean8 extends AbstractAdapter
         $this->setChecksum('gtin');
     }
 
-    /**
-     * Overrides parent checkLength
-     *
-     * @param string $value Value
-     * @return bool
-     */
+    
     public function hasValidLength($value)
     {
         if (strlen($value) === 7) {

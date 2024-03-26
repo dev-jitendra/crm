@@ -27,17 +27,13 @@ use function strrev;
 use function strtolower;
 use function strtr;
 
-/**
- * Apache password authentication
- *
- * @see http://httpd.apache.org/docs/2.2/misc/password_encryptions.html
- */
+
 class Apache implements PasswordInterface
 {
     public const BASE64  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
     public const ALPHA64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
-    /** @var array */
+    
     protected $supportedFormat = [
         'crypt',
         'sha1',
@@ -45,21 +41,16 @@ class Apache implements PasswordInterface
         'digest',
     ];
 
-    /** @var string */
+    
     protected $format;
 
-    /** @var string AuthName (realm) for digest authentication */
+    
     protected $authName;
 
-    /** @var string UserName */
+    
     protected $userName;
 
-    /**
-     * Constructor
-     *
-     * @param  array|Traversable $options
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public function __construct($options = [])
     {
         if (empty($options)) {
@@ -85,13 +76,7 @@ class Apache implements PasswordInterface
         }
     }
 
-    /**
-     * Generate the hash of a password
-     *
-     * @param  string $password
-     * @throws Exception\RuntimeException
-     * @return string
-     */
+    
     public function create($password)
     {
         if (empty($this->format)) {
@@ -122,13 +107,7 @@ class Apache implements PasswordInterface
         return $hash;
     }
 
-    /**
-     * Verify if a password is correct against a hash value
-     *
-     * @param  string  $password
-     * @param  string  $hash
-     * @return bool
-     */
+    
     public function verify($password, $hash)
     {
         if (mb_substr($hash, 0, 5, '8bit') === '{SHA}') {
@@ -149,7 +128,7 @@ class Apache implements PasswordInterface
 
         $bcryptPattern = '/\$2[ay]?\$[0-9]{2}\$[' . addcslashes(static::BASE64, '+/') . '\.]{53}/';
 
-        if (mb_strlen($hash, '8bit') > 13 && ! preg_match($bcryptPattern, $hash)) { // digest
+        if (mb_strlen($hash, '8bit') > 13 && ! preg_match($bcryptPattern, $hash)) { 
             if (empty($this->userName) || empty($this->authName)) {
                 throw new Exception\RuntimeException(
                     'You must specify UserName and AuthName (realm) to verify the digest'
@@ -162,13 +141,7 @@ class Apache implements PasswordInterface
         return Utils::compareStrings($hash, crypt($password, $hash));
     }
 
-    /**
-     * Set the format of the password
-     *
-     * @param  string $format
-     * @throws Exception\InvalidArgumentException
-     * @return Apache Provides a fluent interface
-     */
+    
     public function setFormat($format)
     {
         $format = strtolower($format);
@@ -184,22 +157,13 @@ class Apache implements PasswordInterface
         return $this;
     }
 
-    /**
-     * Get the format of the password
-     *
-     * @return string
-     */
+    
     public function getFormat()
     {
         return $this->format;
     }
 
-    /**
-     * Set the AuthName (for digest authentication)
-     *
-     * @param  string $name
-     * @return Apache Provides a fluent interface
-     */
+    
     public function setAuthName($name)
     {
         $this->authName = $name;
@@ -207,22 +171,13 @@ class Apache implements PasswordInterface
         return $this;
     }
 
-    /**
-     * Get the AuthName (for digest authentication)
-     *
-     * @return string
-     */
+    
     public function getAuthName()
     {
         return $this->authName;
     }
 
-    /**
-     * Set the username
-     *
-     * @param  string $name
-     * @return Apache Provides a fluent interface
-     */
+    
     public function setUserName($name)
     {
         $this->userName = $name;
@@ -230,34 +185,19 @@ class Apache implements PasswordInterface
         return $this;
     }
 
-    /**
-     * Get the username
-     *
-     * @return string
-     */
+    
     public function getUserName()
     {
         return $this->userName;
     }
 
-    /**
-     * Convert a binary string using the alphabet "./0-9A-Za-z"
-     *
-     * @param  string $value
-     * @return string
-     */
+    
     protected function toAlphabet64($value)
     {
         return strtr(strrev(mb_substr(base64_encode($value), 2, null, '8bit')), self::BASE64, self::ALPHA64);
     }
 
-    /**
-     * APR1 MD5 algorithm
-     *
-     * @param  string      $password
-     * @param  null|string $salt
-     * @return string
-     */
+    
     protected function apr1Md5($password, $salt = null)
     {
         if (null === $salt) {

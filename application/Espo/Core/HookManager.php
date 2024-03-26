@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core;
 
@@ -38,30 +12,20 @@ use Espo\Core\Utils\Metadata;
 use Espo\Core\Utils\Module\PathProvider;
 use Espo\Core\Utils\Util;
 
-/**
- * Runs hooks. E.g. beforeSave, afterSave. Hooks can be located in a folder
- * that matches a certain entity type or in the `Common` folder.
- * Common hooks are applied to all entity types.
- *
- * - `Espo\Hooks\Common\MyHook` – a common hook;
- * - `Espo\Hooks\{EntityType}\MyHook` – an entity type specific hook;
- * - `Espo\Modules\{ModuleName}\Hooks\{EntityType}\MyHook` – in a module.
- *
- * @link https://docs.espocrm.com/development/hooks/
- */
+
 class HookManager
 {
     private const DEFAULT_ORDER = 9;
 
-    /** @var ?array<string, array<string, mixed>> */
+    
     private $data = null;
     private bool $isDisabled = false;
-    /** @var array<string, class-string[]> */
+    
     private $hookListHash = [];
-    /** @var array<class-string, object> */
+    
     private $hooks;
     private string $cacheKey = 'hooks';
-    /** @var string[] */
+    
     private $ignoredMethodList = [
         '__construct',
         'getDependencyList',
@@ -79,13 +43,7 @@ class HookManager
         private GeneralInvoker $generalInvoker
     ) {}
 
-    /**
-     * @param string $scope A scope (entity type).
-     * @param string $hookName A hook name.
-     * @param mixed $injection A subject (usually an entity).
-     * @param array<string, mixed> $options Options.
-     * @param array<string, mixed> $hookData Additional hook data.
-     */
+    
     public function process(
         string $scope,
         string $hookName,
@@ -125,17 +83,13 @@ class HookManager
         }
     }
 
-    /**
-     * Disable hook processing.
-     */
+    
     public function disable(): void
     {
         $this->isDisabled = true;
     }
 
-    /**
-     * Enable hook processing.
-     */
+    
     public function enable(): void
     {
         $this->isDisabled = false;
@@ -144,7 +98,7 @@ class HookManager
     private function loadHooks(): void
     {
         if ($this->config->get('useCache') && $this->dataCache->has($this->cacheKey)) {
-            /** @var array<string, array<string, mixed>> $cachedData */
+            
             $cachedData = $this->dataCache->get($this->cacheKey);
 
             $this->data = $cachedData;
@@ -171,9 +125,7 @@ class HookManager
         }
     }
 
-    /**
-     * @param class-string $className
-     */
+    
     private function createHookByClassName(string $className): object
     {
         if (!class_exists($className)) {
@@ -185,18 +137,14 @@ class HookManager
         return $obj;
     }
 
-    /**
-     * @param string $hookDir
-     * @param array<string, array<string, mixed>> $hookData
-     * @return array<string, array<string, mixed>>
-     */
+    
     private function readHookData(string $hookDir, array $hookData = []): array
     {
         if (!$this->fileManager->exists($hookDir)) {
             return $hookData;
         }
 
-        /** @var array<string, string[]> $fileList */
+        
         $fileList = $this->fileManager->getFileList($hookDir, 1, '\.php$', true);
 
         foreach ($fileList as $scopeName => $hookFiles) {
@@ -211,7 +159,7 @@ class HookManager
 
                 $hookMethods = array_diff($classMethods, $this->ignoredMethodList);
 
-                /** @var string[] $hookMethods */
+                
                 $hookMethods = array_filter($hookMethods, function ($item) {
                     if (str_starts_with($item, 'set')) {
                         return false;
@@ -242,9 +190,7 @@ class HookManager
         return $hookData;
     }
 
-    /**
-     * @param class-string $className
-     */
+    
     private function hookClassIsSuppressed(string $className): bool
     {
         $suppressList = $this->metadata->get(['app', 'hook', 'suppressClassNameList']) ?? [];
@@ -252,12 +198,7 @@ class HookManager
         return in_array($className, $suppressList);
     }
 
-    /**
-     * Sort hooks by the order parameter.
-     *
-     * @param array<string, array<string, mixed>> $hooks
-     * @return array<string, array<string, mixed>>
-     */
+    
     private function sortHooks(array $hooks): array
     {
         foreach ($hooks as &$scopeHooks) {
@@ -269,11 +210,7 @@ class HookManager
         return $hooks;
     }
 
-    /**
-     * Get sorted hook list.
-     *
-     * @return class-string[]
-     */
+    
     private function getHookList(string $scope, string $hookName): array
     {
         $key = $scope . '_' . $hookName;
@@ -303,12 +240,7 @@ class HookManager
         return $this->hookListHash[$key];
     }
 
-    /**
-     * Check if hook exists in the list.
-     *
-     * @param class-string $className
-     * @param array<string, mixed> $hookData
-     */
+    
     private function hookExists(string $className, array $hookData): bool
     {
         $class = preg_replace('/^.*\\\(.*)$/', '$1', $className);
@@ -322,10 +254,7 @@ class HookManager
         return false;
     }
 
-    /**
-     * @param array<string, mixed> $a
-     * @param array<string, mixed> $b
-     */
+    
     private function cmpHooks($a, $b): int
     {
         if ($a['order'] == $b['order']) {

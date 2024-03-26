@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpClient\Internal;
 
@@ -32,13 +25,7 @@ use Amp\Socket\SocketAddress;
 use Amp\Success;
 use Psr\Log\LoggerInterface;
 
-/**
- * Internal representation of the Amp client's state.
- *
- * @author Nicolas Grekas <p@tchwork.com>
- *
- * @internal
- */
+
 final class AmpClientState extends ClientState
 {
     public $dnsCache = [];
@@ -61,9 +48,7 @@ final class AmpClientState extends ClientState
         $this->logger = &$logger;
     }
 
-    /**
-     * @return Promise<Response>
-     */
+    
     public function request(array $options, Request $request, CancellationToken $cancellation, array &$info, \Closure $onProgress, &$handle): Promise
     {
         if ($options['proxy']) {
@@ -71,7 +56,7 @@ final class AmpClientState extends ClientState
                 $options['proxy']['auth'] = $request->getHeader('proxy-authorization');
             }
 
-            // Matching "no_proxy" should follow the behavior of curl
+            
             $host = $request->getUri()->getHost();
             foreach ($options['proxy']['no_proxy'] as $rule) {
                 $dotRule = '.'.ltrim($rule, '.');
@@ -167,7 +152,7 @@ final class AmpClientState extends ClientState
 
         if ($options['bindto']) {
             if (file_exists($options['bindto'])) {
-                $connector->uri = 'unix://'.$options['bindto'];
+                $connector->uri = 'unix:
             } else {
                 $context = $context->withBindTo($options['bindto']);
             }

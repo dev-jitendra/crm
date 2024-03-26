@@ -1,69 +1,22 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module num-util */
 
-/**
- * A number util.
- */
+
+
+
 class NumberUtil {
 
-    /**
-     * @param {module:models/settings} config A config.
-     * @param {module:models/preferences} preferences Preferences.
-     */
+    
     constructor(config, preferences) {
-        /**
-         * @private
-         * @type {module:models/settings}
-         */
+        
         this.config = config;
 
-        /**
-         * @private
-         * @type {module:models/preferences}
-         */
+        
         this.preferences = preferences;
 
-        /**
-         * A thousand separator.
-         *
-         * @private
-         * @type {string|null}
-         */
+        
         this.thousandSeparator = null;
 
-        /**
-         * A decimal mark.
-         *
-         * @private
-         * @type {string|null}
-         */
+        
         this.decimalMark = null;
 
         this.config.on('change', () => {
@@ -76,21 +29,11 @@ class NumberUtil {
             this.decimalMark = null;
         });
 
-        /**
-         * A max decimal places.
-         *
-         * @private
-         * @type {number}
-         */
+        
         this.maxDecimalPlaces = 10;
     }
 
-    /**
-     * Format an integer number.
-     *
-     * @param {number} value A value.
-     * @returns {string}
-     */
+    
     formatInt(value) {
         if (value === null || value === undefined) {
             return '';
@@ -103,14 +46,8 @@ class NumberUtil {
         return stringValue;
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * Format a float number.
-     *
-     * @param {number} value A value.
-     * @param {number} [decimalPlaces] Decimal places.
-     * @returns {string}
-     */
+    
+    
     formatFloat(value, decimalPlaces) {
         if (value === null || value === undefined) {
             return '';
@@ -158,10 +95,7 @@ class NumberUtil {
         return parts.join(this.getDecimalMark());
     }
 
-    /**
-     * @private
-     * @returns {string}
-     */
+    
     getThousandSeparator() {
         if (this.thousandSeparator !== null) {
             return this.thousandSeparator;
@@ -176,21 +110,13 @@ class NumberUtil {
             thousandSeparator = this.config.get('thousandSeparator');
         }
 
-        /**
-         * A thousand separator.
-         *
-         * @private
-         * @type {string|null}
-         */
+        
         this.thousandSeparator = thousandSeparator;
 
         return thousandSeparator;
     }
 
-    /**
-     * @private
-     * @returns {string}
-     */
+    
     getDecimalMark() {
         if (this.decimalMark !== null) {
             return this.decimalMark;
@@ -207,12 +133,7 @@ class NumberUtil {
             }
         }
 
-        /**
-         * A decimal mark.
-         *
-         * @private
-         * @type {string|null}
-         */
+        
         this.decimalMark = decimalMark;
 
         return decimalMark;

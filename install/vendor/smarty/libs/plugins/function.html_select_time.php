@@ -1,36 +1,12 @@
 <?php
-/**
- * Smarty plugin
- *
- * @package Smarty
- * @subpackage PluginsFunction
- */
 
-/**
- * @ignore
- */
+
+
 require_once(SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php');
-/**
- * @ignore
- */
+
 require_once(SMARTY_PLUGINS_DIR . 'shared.make_timestamp.php');
 
-/**
- * Smarty {html_select_time} function plugin
- *
- * Type:     function<br>
- * Name:     html_select_time<br>
- * Purpose:  Prints the dropdowns for time selection
- *
- * @link http://www.smarty.net/manual/en/language.function.html.select.time.php {html_select_time}
- *          (Smarty online manual)
- * @author Roberto Berto <roberto@berto.net>
- * @author Monte Ohrt <monte AT ohrt DOT com>
- * @param array                    $params   parameters
- * @param Smarty_Internal_Template $template template object
- * @return string
- * @uses smarty_make_timestamp()
- */
+
 function smarty_function_html_select_time($params, $template)
 {
     $prefix = "Time_";
@@ -150,7 +126,7 @@ function smarty_function_html_select_time($params, $template)
 
     if (isset($params['time']) && is_array($params['time'])) {
         if (isset($params['time'][$prefix . 'Hour'])) {
-            // $_REQUEST[$field_array] given
+            
             foreach (array('H' => 'Hour',  'i' => 'Minute', 's' => 'Second') as $_elementKey => $_elementName) {
                 $_variableName = '_' . strtolower($_elementName);
                 $$_variableName = isset($params['time'][$prefix . $_elementName])
@@ -163,7 +139,7 @@ function smarty_function_html_select_time($params, $template)
             $time = strtotime( $_hour . ':' . $_minute . ':' . $_second . $_meridian );
             list($_hour, $_minute, $_second) = $time = explode('-', date('H-i-s', $time));
         } elseif (isset($params['time'][$field_array][$prefix . 'Hour'])) {
-            // $_REQUEST given
+            
             foreach (array('H' => 'Hour',  'i' => 'Minute', 's' => 'Second') as $_elementKey => $_elementName) {
                 $_variableName = '_' . strtolower($_elementName);
                 $$_variableName = isset($params['time'][$field_array][$prefix . $_elementName])
@@ -176,7 +152,7 @@ function smarty_function_html_select_time($params, $template)
             $time = strtotime( $_hour . ':' . $_minute . ':' . $_second . $_meridian );
             list($_hour, $_minute, $_second) = $time = explode('-', date('H-i-s', $time));
         } else {
-            // no date found, use NOW
+            
             list($_year, $_month, $_day) = $time = explode('-', date('Y-m-d'));
         }
     } elseif ($time === null) {
@@ -189,7 +165,7 @@ function smarty_function_html_select_time($params, $template)
         list($_hour, $_minute, $_second) = $time = explode('-', date('H-i-s', $time));
     }
 
-    // generate hour <select>
+    
     if ($display_hours) {
         $_html_hours = '';
         $_extra = '';
@@ -238,7 +214,7 @@ function smarty_function_html_select_time($params, $template)
         $_html_hours .= '</select>';
     }
 
-    // generate minute <select>
+    
     if ($display_minutes) {
         $_html_minutes = '';
         $_extra = '';
@@ -278,7 +254,7 @@ function smarty_function_html_select_time($params, $template)
         $_html_minutes .= '</select>';
     }
 
-    // generate second <select>
+    
     if ($display_seconds) {
         $_html_seconds = '';
         $_extra = '';
@@ -318,7 +294,7 @@ function smarty_function_html_select_time($params, $template)
         $_html_seconds .= '</select>';
     }
 
-    // generate meridian <select>
+    
     if ($display_meridian && !$use_24_hours) {
         $_html_meridian = '';
         $_extra = '';

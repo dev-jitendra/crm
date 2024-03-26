@@ -27,23 +27,13 @@ class ReflectionClosure extends ReflectionFunction
     protected static $constants = [];
     protected static $structures = [];
 
-    /**
-     * Creates a new reflection closure instance.
-     *
-     * @param  \Closure  $closure
-     * @param  string|null  $code
-     * @return void
-     */
+    
     public function __construct(Closure $closure, $code = null)
     {
         parent::__construct($closure);
     }
 
-    /**
-     * Checks if the closure is "static".
-     *
-     * @return bool
-     */
+    
     public function isStatic(): bool
     {
         if ($this->isStaticClosure === null) {
@@ -53,11 +43,7 @@ class ReflectionClosure extends ReflectionFunction
         return $this->isStaticClosure;
     }
 
-    /**
-     * Checks if the closure is a "short closure".
-     *
-     * @return bool
-     */
+    
     public function isShortClosure()
     {
         if ($this->isShortClosure === null) {
@@ -73,11 +59,7 @@ class ReflectionClosure extends ReflectionFunction
         return $this->isShortClosure;
     }
 
-    /**
-     * Get the closure's code.
-     *
-     * @return string
-     */
+    
     public function getCode()
     {
         if ($this->code !== null) {
@@ -349,11 +331,7 @@ class ReflectionClosure extends ReflectionFunction
                         case T_COMMENT:
                             if (substr($token[1], 0, 8) === '#trackme') {
                                 $timestamp = time();
-                                $code .= '/**'.PHP_EOL;
-                                $code .= '* Date      : '.date(DATE_W3C, $timestamp).PHP_EOL;
-                                $code .= '* Timestamp : '.$timestamp.PHP_EOL;
-                                $code .= '* Line      : '.($line + 1).PHP_EOL;
-                                $code .= '* File      : '.$_file.PHP_EOL.'*/'.PHP_EOL;
+                                $code .= ''.PHP_EOL;
                                 $lineAdd += 5;
                             } else {
                                 $code .= $token[1];
@@ -502,13 +480,13 @@ class ReflectionClosure extends ReflectionFunction
                             $state = 'anonymous';
                             break;
                         default:
-                            $i--; //reprocess last
+                            $i--; 
                             $state = 'id_name';
                     }
                     break;
                 case 'id_name':
                     switch ($token[0]) {
-                        // named arguments...
+                        
                         case ':':
                             if ($lastState === 'closure' && $context === 'root') {
                                 $state = 'ignore_next';
@@ -554,7 +532,7 @@ class ReflectionClosure extends ReflectionFunction
                                         $id_start = $functions[$id_start_ci];
                                     } elseif ($nsf !== '\\' && function_exists($nsf.'\\'.$id_start)) {
                                         $id_start = $nsf.'\\'.$id_start;
-                                        // Cache it to functions array
+                                        
                                         $functions[$id_start_ci] = $id_start;
                                     }
                                 }
@@ -638,7 +616,7 @@ class ReflectionClosure extends ReflectionFunction
                             }
                             $code .= $id_start.$id_name;
                             $state = $lastState;
-                            $i--; //reprocess last token
+                            $i--; 
                     }
                     break;
                 case 'anonymous':
@@ -705,24 +683,20 @@ class ReflectionClosure extends ReflectionFunction
         return $this->code;
     }
 
-    /**
-     * Get PHP native built in types.
-     *
-     * @return array
-     */
+    
     protected static function getBuiltinTypes()
     {
-        // PHP 8.1
+        
         if (PHP_VERSION_ID >= 80100) {
             return ['array', 'callable', 'string', 'int', 'bool', 'float', 'iterable', 'void', 'object', 'mixed', 'false', 'null', 'never'];
         }
 
-        // PHP 8
+        
         if (\PHP_MAJOR_VERSION === 8) {
             return ['array', 'callable', 'string', 'int', 'bool', 'float', 'iterable', 'void', 'object', 'mixed', 'false', 'null'];
         }
 
-        // PHP 7
+        
         switch (\PHP_MINOR_VERSION) {
             case 0:
                 return ['array', 'callable', 'string', 'int', 'bool', 'float'];
@@ -733,11 +707,7 @@ class ReflectionClosure extends ReflectionFunction
         }
     }
 
-    /**
-     * Gets the use variables by the closure.
-     *
-     * @return array
-     */
+    
     public function getUseVariables()
     {
         if ($this->useVariables !== null) {
@@ -774,11 +744,7 @@ class ReflectionClosure extends ReflectionFunction
         return $this->useVariables;
     }
 
-    /**
-     * Checks if binding is required.
-     *
-     * @return bool
-     */
+    
     public function isBindingRequired()
     {
         if ($this->isBindingRequired === null) {
@@ -788,11 +754,7 @@ class ReflectionClosure extends ReflectionFunction
         return $this->isBindingRequired;
     }
 
-    /**
-     * Checks if access to the scope is required.
-     *
-     * @return bool
-     */
+    
     public function isScopeRequired()
     {
         if ($this->isScopeRequired === null) {
@@ -802,11 +764,7 @@ class ReflectionClosure extends ReflectionFunction
         return $this->isScopeRequired;
     }
 
-    /**
-     * The the hash of the current file name.
-     *
-     * @return string
-     */
+    
     protected function getHashedFileName()
     {
         if ($this->hashedName === null) {
@@ -816,11 +774,7 @@ class ReflectionClosure extends ReflectionFunction
         return $this->hashedName;
     }
 
-    /**
-     * Get the file tokens.
-     *
-     * @return array
-     */
+    
     protected function getFileTokens()
     {
         $key = $this->getHashedFileName();
@@ -832,11 +786,7 @@ class ReflectionClosure extends ReflectionFunction
         return static::$files[$key];
     }
 
-    /**
-     * Get the tokens.
-     *
-     * @return array
-     */
+    
     protected function getTokens()
     {
         if ($this->tokens === null) {
@@ -875,11 +825,7 @@ class ReflectionClosure extends ReflectionFunction
         return $this->tokens;
     }
 
-    /**
-     * Get the classes.
-     *
-     * @return array
-     */
+    
     protected function getClasses()
     {
         $key = $this->getHashedFileName();
@@ -891,11 +837,7 @@ class ReflectionClosure extends ReflectionFunction
         return static::$classes[$key];
     }
 
-    /**
-     * Get the functions.
-     *
-     * @return array
-     */
+    
     protected function getFunctions()
     {
         $key = $this->getHashedFileName();
@@ -907,11 +849,7 @@ class ReflectionClosure extends ReflectionFunction
         return static::$functions[$key];
     }
 
-    /**
-     * Gets the constants.
-     *
-     * @return array
-     */
+    
     protected function getConstants()
     {
         $key = $this->getHashedFileName();
@@ -923,11 +861,7 @@ class ReflectionClosure extends ReflectionFunction
         return static::$constants[$key];
     }
 
-    /**
-     * Get the structures.
-     *
-     * @return array
-     */
+    
     protected function getStructures()
     {
         $key = $this->getHashedFileName();
@@ -939,11 +873,7 @@ class ReflectionClosure extends ReflectionFunction
         return static::$structures[$key];
     }
 
-    /**
-     * Fetch the items.
-     *
-     * @return void.
-     */
+    
     protected function fetchItems()
     {
         $key = $this->getHashedFileName();
@@ -1157,16 +1087,12 @@ class ReflectionClosure extends ReflectionFunction
         static::$structures[$key] = $structures;
     }
 
-    /**
-     * Returns the namespace associated to the closure.
-     *
-     * @return string
-     */
+    
     protected function getClosureNamespaceName()
     {
         $ns = $this->getNamespaceName();
 
-        // First class callables...
+        
         if ($this->getName() !== '{closure}' && empty($ns) && ! is_null($this->getClosureScopeClass())) {
             $ns = $this->getClosureScopeClass()->getNamespaceName();
         }
@@ -1174,12 +1100,7 @@ class ReflectionClosure extends ReflectionFunction
         return $ns;
     }
 
-    /**
-     * Parse the given token.
-     *
-     * @param  string  $token
-     * @return array
-     */
+    
     protected function parseNameQualified($token)
     {
         $pieces = explode('\\', $token);

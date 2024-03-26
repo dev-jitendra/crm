@@ -17,42 +17,30 @@ use function trim;
 
 use const DIRECTORY_SEPARATOR;
 
-/**
- * Validator which checks if the file already exists in the directory
- */
+
 class Exists extends AbstractValidator
 {
     use FileInformationTrait;
 
-    /**
-     * @const string Error constants
-     */
+    
     public const DOES_NOT_EXIST = 'fileExistsDoesNotExist';
 
-    /** @var array Error message templates */
+    
     protected $messageTemplates = [
         self::DOES_NOT_EXIST => 'File does not exist',
     ];
 
-    /**
-     * Options for this validator
-     *
-     * @var array
-     */
+    
     protected $options = [
-        'directory' => null, // internal list of directories
+        'directory' => null, 
     ];
 
-    /** @var array Error message template variables */
+    
     protected $messageVariables = [
         'directory' => ['options' => 'directory'],
     ];
 
-    /**
-     * Sets validator options
-     *
-     * @param string|array|Traversable $options
-     */
+    
     public function __construct($options = null)
     {
         if (is_string($options)) {
@@ -66,12 +54,7 @@ class Exists extends AbstractValidator
         parent::__construct($options);
     }
 
-    /**
-     * Returns the set file directories which are checked
-     *
-     * @param  bool $asArray Returns the values as array; when false, a concatenated string is returned
-     * @return string|null
-     */
+    
     public function getDirectory($asArray = false)
     {
         $asArray   = (bool) $asArray;
@@ -83,12 +66,7 @@ class Exists extends AbstractValidator
         return $directory;
     }
 
-    /**
-     * Sets the file directory which will be checked
-     *
-     * @param string|array $directory The directories to validate
-     * @return self Provides a fluent interface
-     */
+    
     public function setDirectory($directory)
     {
         $this->options['directory'] = null;
@@ -96,13 +74,7 @@ class Exists extends AbstractValidator
         return $this;
     }
 
-    /**
-     * Adds the file directory which will be checked
-     *
-     * @param string|array $directory The directory to add for validation
-     * @return self Provides a fluent interface
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public function addDirectory($directory)
     {
         $directories = $this->getDirectory(true);
@@ -125,7 +97,7 @@ class Exists extends AbstractValidator
         }
         $directories = array_unique($directories);
 
-        // Sanity check to ensure no empty values
+        
         foreach ($directories as $key => $dir) {
             if (empty($dir)) {
                 unset($directories[$key]);
@@ -138,13 +110,7 @@ class Exists extends AbstractValidator
         return $this;
     }
 
-    /**
-     * Returns true if and only if the file already exists in the set directories
-     *
-     * @param  string|array $value Real file to check for existence
-     * @param  array        $file  File data from \Laminas\File\Transfer\Transfer (optional)
-     * @return bool
-     */
+    
     public function isValid($value, $file = null)
     {
         $fileInfo = $this->getFileInfo($value, $file, false, true);

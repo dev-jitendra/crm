@@ -13,29 +13,21 @@ use Doctrine\Deprecations\Deprecation;
 
 use function assert;
 
-/**
- * Abstract base implementation of the {@see Doctrine\DBAL\Driver} interface for SQLite based drivers.
- */
+
 abstract class AbstractSQLiteDriver implements Driver
 {
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getDatabasePlatform()
     {
         return new SqlitePlatform();
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated Use {@link SqlitePlatform::createSchemaManager()} instead.
-     */
+    
     public function getSchemaManager(Connection $conn, AbstractPlatform $platform)
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5458',
+            'https:
             'AbstractSQLiteDriver::getSchemaManager() is deprecated.'
                 . ' Use SqlitePlatform::createSchemaManager() instead.',
         );

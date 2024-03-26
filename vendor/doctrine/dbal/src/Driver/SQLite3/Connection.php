@@ -13,7 +13,7 @@ final class Connection implements ServerInfoAwareConnection
 {
     private SQLite3 $connection;
 
-    /** @internal The connection can be only instantiated by its driver. */
+    
     public function __construct(SQLite3 $connection)
     {
         $this->connection = $connection;
@@ -45,7 +45,7 @@ final class Connection implements ServerInfoAwareConnection
         return new Result($result, $this->connection->changes());
     }
 
-    /** @inheritdoc */
+    
     public function quote($value, $type = ParameterType::STRING): string
     {
         return sprintf('\'%s\'', SQLite3::escapeString($value));
@@ -62,7 +62,7 @@ final class Connection implements ServerInfoAwareConnection
         return $this->connection->changes();
     }
 
-    /** @inheritdoc */
+    
     public function lastInsertId($name = null): int
     {
         return $this->connection->lastInsertRowID();

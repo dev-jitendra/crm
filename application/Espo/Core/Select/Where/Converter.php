@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Select\Where;
 
@@ -39,9 +13,7 @@ use Espo\ORM\Query\Part\WhereClause;
 use Espo\ORM\Query\Part\WhereItem;
 use Espo\ORM\Query\SelectBuilder as QueryBuilder;
 
-/**
- * Converts a search where (passed from front-end) to a where clause (for ORM).
- */
+
 class Converter
 {
     private const TYPE_IN_CATEGORY = 'inCategory';
@@ -55,9 +27,7 @@ class Converter
         private ORMDefs $ormDefs
     ) {}
 
-    /**
-     * @throws Error
-     */
+    
     public function convert(QueryBuilder $queryBuilder, Item $item): WhereItem
     {
         $whereClause = [];
@@ -79,10 +49,7 @@ class Converter
         return WhereClause::fromRaw($whereClause);
     }
 
-    /**
-     * @return array<int|string, mixed>
-     * @throws Error
-     */
+    
     private function itemToList(Item $item): array
     {
         if ($item->getType() !== 'and') {
@@ -100,10 +67,7 @@ class Converter
         return $list;
     }
 
-    /**
-     * @return ?array<int|string, mixed>
-     * @throws Error
-     */
+    
     private function processItem(QueryBuilder $queryBuilder, Item $item): ?array
     {
         $type = $item->getType();
@@ -114,7 +78,7 @@ class Converter
             $type === self::TYPE_IN_CATEGORY ||
             $type === self::TYPE_IS_USER_FROM_TEAMS
         ) {
-            // Processing special filters. Only at the top level of the tree.
+            
 
             if (!$attribute) {
                 throw new Error("Bad where definition. Missing attribute.");
@@ -134,11 +98,7 @@ class Converter
         return $this->itemConverter->convert($queryBuilder, $item)->getRaw();
     }
 
-    /**
-     * @param mixed $value
-     * @return array<int|string, mixed>
-     * @throws Error
-     */
+    
     private function applyInCategory(QueryBuilder $queryBuilder, string $attribute, $value): array
     {
         $link = $attribute;
@@ -200,11 +160,7 @@ class Converter
         throw new Error("Not supported link '{$link}' in where item.");
     }
 
-    /**
-     * @param mixed $value
-     * @return array<int|string, mixed>
-     * @throws Error
-     */
+    
     private function applyIsUserFromTeams(QueryBuilder $queryBuilder, string $attribute, $value): array
     {
         $link = $attribute;

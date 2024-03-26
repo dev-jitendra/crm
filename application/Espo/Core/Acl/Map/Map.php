@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Acl\Map;
 
@@ -37,18 +11,16 @@ use Espo\Core\Utils\ObjectUtil;
 use stdClass;
 use RuntimeException;
 
-/**
- * Provides quick access to ACL data.
- */
+
 class Map
 {
     private stdClass $data;
     private string $cacheKey;
-    /** @var array<string, string[]> */
+    
     private $forbiddenFieldsCache = [];
-    /** @var array<string, string[]> */
+    
     private $forbiddenAttributesCache;
-    /** @var string[] */
+    
     private $fieldLevelList = [
         Table::LEVEL_YES,
         Table::LEVEL_NO,
@@ -65,7 +37,7 @@ class Map
         $this->cacheKey = $cacheKeyProvider->get();
 
         if ($this->config->get('useCache') && $this->dataCache->has($this->cacheKey)) {
-            /** @var stdClass $cachedData */
+            
             $cachedData = $this->dataCache->get($this->cacheKey);
 
             $this->data = $cachedData;
@@ -79,23 +51,13 @@ class Map
         }
     }
 
-    /**
-     * Get raw data (for front-end).
-     */
+    
     public function getData(): stdClass
     {
         return ObjectUtil::clone($this->data);
     }
 
-    /**
-     * Get a list of forbidden attributes for a scope and action.
-     *
-     * @param string $scope A scope.
-     * @param string $action An action.
-     * @param string $thresholdLevel An attribute will be treated as forbidden if the level is
-     * equal to or lower than the threshold.
-     * @return string[]
-     */
+    
     public function getScopeForbiddenAttributeList(
         string $scope,
         string $action = Table::ACTION_READ,
@@ -159,15 +121,7 @@ class Map
         return $attributeList;
     }
 
-    /**
-     * Get a list of forbidden fields for a scope and action.
-     *
-     * @param string $scope A scope.
-     * @param string $action An action.
-     * @param string $thresholdLevel An attribute will be treated as forbidden if the level is
-     * equal to or lower than the threshold.
-     * @return string[]
-     */
+    
     public function getScopeForbiddenFieldList(
         string $scope,
         string $action = Table::ACTION_READ,

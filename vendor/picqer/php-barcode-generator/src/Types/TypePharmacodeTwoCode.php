@@ -2,10 +2,7 @@
 
 namespace Picqer\Barcode\Types;
 
-/*
- * Pharmacode two-track
- * Contains digits (0 to 9)
- */
+
 
 use Picqer\Barcode\Barcode;
 use Picqer\Barcode\BarcodeBar;

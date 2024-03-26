@@ -10,14 +10,10 @@ use function substr;
 
 final class PathPrefixer
 {
-    /**
-     * @var string
-     */
+    
     private $prefix = '';
 
-    /**
-     * @var string
-     */
+    
     private $separator = '/';
 
     public function __construct(string $prefix, string $separator = '/')
@@ -38,7 +34,7 @@ final class PathPrefixer
 
     public function stripPrefix(string $path): string
     {
-        /* @var string */
+        
         return substr($path, strlen($this->prefix));
     }
 

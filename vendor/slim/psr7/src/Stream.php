@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim-Psr7/blob/master/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -34,18 +30,10 @@ use const SEEK_SET;
 
 class Stream implements StreamInterface
 {
-    /**
-     * Bit mask to determine if the stream is a pipe
-     *
-     * This is octal as per header stat.h
-     */
+    
     public const FSTAT_MODE_S_IFIFO = 0010000;
 
-    /**
-     * The underlying stream resource
-     *
-     * @var resource|null
-     */
+    
     protected $stream;
 
     protected ?array $meta;
@@ -64,12 +52,7 @@ class Stream implements StreamInterface
 
     protected ?StreamInterface $cache;
 
-    /**
-     * @param  resource         $stream A PHP resource handle.
-     * @param  ?StreamInterface $cache  A stream to cache $stream (useful for non-seekable streams)
-     *
-     * @throws InvalidArgumentException If argument is not a resource.
-     */
+    
     public function __construct($stream, ?StreamInterface $cache = null)
     {
         $this->attach($stream);
@@ -80,10 +63,7 @@ class Stream implements StreamInterface
         $this->cache = $cache;
     }
 
-    /**
-     * {@inheritdoc}
-     * @return array|mixed
-     */
+    
     public function getMetadata($key = null)
     {
         if (!$this->stream) {
@@ -99,17 +79,7 @@ class Stream implements StreamInterface
         return $this->meta[$key] ?? null;
     }
 
-    /**
-     * Attach new resource to this object.
-     *
-     * @internal This method is not part of the PSR-7 standard.
-     *
-     * @param resource $stream A PHP resource handle.
-     *
-     * @throws InvalidArgumentException If argument is not a valid PHP resource.
-     *
-     * @return void
-     */
+    
     protected function attach($stream): void
     {
         if (!is_resource($stream)) {
@@ -123,9 +93,7 @@ class Stream implements StreamInterface
         $this->stream = $stream;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function detach()
     {
         $oldResource = $this->stream;
@@ -143,9 +111,7 @@ class Stream implements StreamInterface
         return $oldResource;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function __toString(): string
     {
         if (!$this->stream) {
@@ -161,9 +127,7 @@ class Stream implements StreamInterface
         return $this->getContents();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function close(): void
     {
         if ($this->stream) {
@@ -177,9 +141,7 @@ class Stream implements StreamInterface
         $this->detach();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getSize(): ?int
     {
         if ($this->stream && !$this->size) {
@@ -193,9 +155,7 @@ class Stream implements StreamInterface
         return $this->size;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function tell(): int
     {
         $position = false;
@@ -211,17 +171,13 @@ class Stream implements StreamInterface
         return $position;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function eof(): bool
     {
         return !$this->stream || feof($this->stream);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function isReadable(): bool
     {
         if ($this->readable !== null) {
@@ -241,9 +197,7 @@ class Stream implements StreamInterface
         return $this->readable;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function isWritable(): bool
     {
         if ($this->writable === null) {
@@ -261,9 +215,7 @@ class Stream implements StreamInterface
         return $this->writable;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function isSeekable(): bool
     {
         if ($this->seekable === null) {
@@ -277,9 +229,7 @@ class Stream implements StreamInterface
         return $this->seekable;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function seek($offset, $whence = SEEK_SET): void
     {
         if (!$this->isSeekable() || $this->stream && fseek($this->stream, $offset, $whence) === -1) {
@@ -287,9 +237,7 @@ class Stream implements StreamInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function rewind(): void
     {
         if (!$this->isSeekable() || $this->stream && rewind($this->stream) === false) {
@@ -297,9 +245,7 @@ class Stream implements StreamInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function read($length): string
     {
         $data = false;
@@ -321,10 +267,7 @@ class Stream implements StreamInterface
         throw new RuntimeException('Could not read from stream.');
     }
 
-    /**
-     * {@inheritdoc}
-     * @return int
-     */
+    
     public function write($string)
     {
         $written = false;
@@ -341,9 +284,7 @@ class Stream implements StreamInterface
         throw new RuntimeException('Could not write to stream.');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getContents(): string
     {
         if ($this->cache && $this->finished) {
@@ -370,13 +311,7 @@ class Stream implements StreamInterface
         throw new RuntimeException('Could not get contents of stream.');
     }
 
-    /**
-     * Returns whether or not the stream is a pipe.
-     *
-     * @internal This method is not part of the PSR-7 standard.
-     *
-     * @return bool
-     */
+    
     public function isPipe(): bool
     {
         if ($this->isPipe === null) {

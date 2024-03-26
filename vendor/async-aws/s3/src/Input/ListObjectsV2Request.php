@@ -11,99 +11,37 @@ use AsyncAws\S3\Enum\RequestPayer;
 
 final class ListObjectsV2Request extends Input
 {
-    /**
-     * Bucket name to list.
-     *
-     * @required
-     *
-     * @var string|null
-     */
+    
     private $bucket;
 
-    /**
-     * A delimiter is a character you use to group keys.
-     *
-     * @var string|null
-     */
+    
     private $delimiter;
 
-    /**
-     * Encoding type used by Amazon S3 to encode object keys in the response.
-     *
-     * @var null|EncodingType::*
-     */
+    
     private $encodingType;
 
-    /**
-     * Sets the maximum number of keys returned in the response. By default the API returns up to 1,000 key names. The
-     * response might contain fewer keys but will never contain more.
-     *
-     * @var int|null
-     */
+    
     private $maxKeys;
 
-    /**
-     * Limits the response to keys that begin with the specified prefix.
-     *
-     * @var string|null
-     */
+    
     private $prefix;
 
-    /**
-     * ContinuationToken indicates Amazon S3 that the list is being continued on this bucket with a token. ContinuationToken
-     * is obfuscated and is not a real key.
-     *
-     * @var string|null
-     */
+    
     private $continuationToken;
 
-    /**
-     * The owner field is not present in listV2 by default, if you want to return owner field with each key in the result
-     * then set the fetch owner field to true.
-     *
-     * @var bool|null
-     */
+    
     private $fetchOwner;
 
-    /**
-     * StartAfter is where you want Amazon S3 to start listing from. Amazon S3 starts listing after this specified key.
-     * StartAfter can be any key in the bucket.
-     *
-     * @var string|null
-     */
+    
     private $startAfter;
 
-    /**
-     * Confirms that the requester knows that she or he will be charged for the list objects request in V2 style. Bucket
-     * owners need not specify this parameter in their requests.
-     *
-     * @var null|RequestPayer::*
-     */
+    
     private $requestPayer;
 
-    /**
-     * The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail
-     * with an HTTP `403 (Access Denied)` error.
-     *
-     * @var string|null
-     */
+    
     private $expectedBucketOwner;
 
-    /**
-     * @param array{
-     *   Bucket?: string,
-     *   Delimiter?: string,
-     *   EncodingType?: EncodingType::*,
-     *   MaxKeys?: int,
-     *   Prefix?: string,
-     *   ContinuationToken?: string,
-     *   FetchOwner?: bool,
-     *   StartAfter?: string,
-     *   RequestPayer?: RequestPayer::*,
-     *   ExpectedBucketOwner?: string,
-     *   @region?: string,
-     * } $input
-     */
+    
     public function __construct(array $input = [])
     {
         $this->bucket = $input['Bucket'] ?? null;
@@ -139,9 +77,7 @@ final class ListObjectsV2Request extends Input
         return $this->delimiter;
     }
 
-    /**
-     * @return EncodingType::*|null
-     */
+    
     public function getEncodingType(): ?string
     {
         return $this->encodingType;
@@ -167,9 +103,7 @@ final class ListObjectsV2Request extends Input
         return $this->prefix;
     }
 
-    /**
-     * @return RequestPayer::*|null
-     */
+    
     public function getRequestPayer(): ?string
     {
         return $this->requestPayer;
@@ -180,12 +114,10 @@ final class ListObjectsV2Request extends Input
         return $this->startAfter;
     }
 
-    /**
-     * @internal
-     */
+    
     public function request(): Request
     {
-        // Prepare headers
+        
         $headers = ['content-type' => 'application/xml'];
         if (null !== $this->requestPayer) {
             if (!RequestPayer::exists($this->requestPayer)) {
@@ -197,7 +129,7 @@ final class ListObjectsV2Request extends Input
             $headers['x-amz-expected-bucket-owner'] = $this->expectedBucketOwner;
         }
 
-        // Prepare query
+        
         $query = [];
         if (null !== $this->delimiter) {
             $query['delimiter'] = $this->delimiter;
@@ -224,7 +156,7 @@ final class ListObjectsV2Request extends Input
             $query['start-after'] = $this->startAfter;
         }
 
-        // Prepare URI
+        
         $uri = [];
         if (null === $v = $this->bucket) {
             throw new InvalidArgument(sprintf('Missing parameter "Bucket" for "%s". The value cannot be null.', __CLASS__));
@@ -232,10 +164,10 @@ final class ListObjectsV2Request extends Input
         $uri['Bucket'] = $v;
         $uriString = '/' . rawurlencode($uri['Bucket']) . '?list-type=2';
 
-        // Prepare Body
+        
         $body = '';
 
-        // Return the Request
+        
         return new Request('GET', $uriString, $query, $headers, StreamFactory::create($body));
     }
 
@@ -260,9 +192,7 @@ final class ListObjectsV2Request extends Input
         return $this;
     }
 
-    /**
-     * @param EncodingType::*|null $value
-     */
+    
     public function setEncodingType(?string $value): self
     {
         $this->encodingType = $value;
@@ -298,9 +228,7 @@ final class ListObjectsV2Request extends Input
         return $this;
     }
 
-    /**
-     * @param RequestPayer::*|null $value
-     */
+    
     public function setRequestPayer(?string $value): self
     {
         $this->requestPayer = $value;

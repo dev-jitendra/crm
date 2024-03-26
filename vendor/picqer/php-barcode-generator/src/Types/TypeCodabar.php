@@ -6,10 +6,7 @@ use Picqer\Barcode\Barcode;
 use Picqer\Barcode\BarcodeBar;
 use Picqer\Barcode\Exceptions\InvalidCharacterException;
 
-/*
- * CODABAR barcodes.
- * Older code often used in library systems, sometimes in blood banks
- */
+
 
 class TypeCodabar implements TypeInterface
 {

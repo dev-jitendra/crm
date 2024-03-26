@@ -17,24 +17,15 @@ use function rtrim;
 use function str_repeat;
 use function unpack;
 
-/**
- * Pseudorandom number generator (PRNG)
- */
-// phpcs:ignore WebimpressCodingStandard.NamingConventions.AbstractClass.Prefix
+
+
 abstract class Rand
 {
-    /** @deprecated No longer used internally */
-    // phpcs:ignore SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
+    
+    
     protected static $generator;
 
-    /**
-     * Generate random bytes using different approaches
-     * If PHP 7 is running we use the random_bytes() function
-     *
-     * @param  int $length
-     * @return string
-     * @throws Exception\RuntimeException
-     */
+    
     public static function getBytes($length)
     {
         try {
@@ -54,25 +45,14 @@ abstract class Rand
         }
     }
 
-    /**
-     * Generate random boolean
-     *
-     * @return bool
-     */
+    
     public static function getBoolean()
     {
         $byte = static::getBytes(1);
         return (bool) (ord($byte) % 2);
     }
 
-    /**
-     * Generate a random integer between $min and $max
-     *
-     * @param  int $min
-     * @param  int $max
-     * @return int
-     * @throws Exception\DomainException
-     */
+    
     public static function getInteger($min, $max)
     {
         try {
@@ -92,46 +72,26 @@ abstract class Rand
         }
     }
 
-    /**
-     * Generate random float [0..1)
-     * This function generates floats with platform-dependent precision
-     *
-     * PHP uses double precision floating-point format (64-bit) which has
-     * 52-bits of significand precision. We gather 7 bytes of random data,
-     * and we fix the exponent to the bias (1023). In this way we generate
-     * a float of 1.mantissa.
-     *
-     * @return float
-     */
+    
     public static function getFloat()
     {
         $bytes = static::getBytes(7);
-        // phpcs:ignore SlevomatCodingStandard.Operators.RequireCombinedAssignmentOperator.RequiredCombinedAssigmentOperator
+        
         $bytes[6] = $bytes[6] | chr(0xF0);
-        $bytes   .= chr(63); // exponent bias (1023)
+        $bytes   .= chr(63); 
         $float    = unpack('d', $bytes)[1];
 
         return $float - 1;
     }
 
-    /**
-     * Generate a random string of specified length.
-     *
-     * Uses supplied character list for generating the new string.
-     * If no character list provided - uses Base 64 character set.
-     *
-     * @param  int $length
-     * @param  string|null $charlist
-     * @return string
-     * @throws Exception\DomainException
-     */
+    
     public static function getString($length, $charlist = null)
     {
         if ($length < 1) {
             throw new Exception\DomainException('Length should be >= 1');
         }
 
-        // charlist is empty or not provided
+        
         if (empty($charlist)) {
             $numBytes = ceil($length * 0.75);
             $bytes    = static::getBytes($numBytes);
@@ -140,7 +100,7 @@ abstract class Rand
 
         $listLen = mb_strlen($charlist, '8bit');
 
-        // phpcs:ignore SlevomatCodingStandard.Operators.DisallowEqualOperators.DisallowedEqualOperator
+        
         if ($listLen == 1) {
             return str_repeat($charlist, $length);
         }

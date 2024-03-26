@@ -4,26 +4,7 @@ use Ratchet\MessageComponentInterface;
 use Ratchet\WebSocket\WsServerInterface;
 use Ratchet\ConnectionInterface;
 
-/**
- * WebSocket Application Messaging Protocol
- *
- * @link http://wamp.ws/spec
- * @link https://github.com/oberstet/autobahn-js
- *
- * +--------------+----+------------------+
- * | Message Type | ID | DIRECTION        |
- * |--------------+----+------------------+
- * | WELCOME      | 0  | Server-to-Client |
- * | PREFIX       | 1  | Bi-Directional   |
- * | CALL         | 2  | Client-to-Server |
- * | CALL RESULT  | 3  | Server-to-Client |
- * | CALL ERROR   | 4  | Server-to-Client |
- * | SUBSCRIBE    | 5  | Client-to-Server |
- * | UNSUBSCRIBE  | 6  | Client-to-Server |
- * | PUBLISH      | 7  | Client-to-Server |
- * | EVENT        | 8  | Server-to-Client |
- * +--------------+----+------------------+
- */
+
 class ServerProtocol implements MessageComponentInterface, WsServerInterface {
     const MSG_WELCOME     = 0;
     const MSG_PREFIX      = 1;
@@ -35,27 +16,19 @@ class ServerProtocol implements MessageComponentInterface, WsServerInterface {
     const MSG_PUBLISH     = 7;
     const MSG_EVENT       = 8;
 
-    /**
-     * @var WampServerInterface
-     */
+    
     protected $_decorating;
 
-    /**
-     * @var \SplObjectStorage
-     */
+    
     protected $connections;
 
-    /**
-     * @param WampServerInterface $serverComponent An class to propagate calls through
-     */
+    
     public function __construct(WampServerInterface $serverComponent) {
         $this->_decorating = $serverComponent;
         $this->connections = new \SplObjectStorage;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getSubProtocols() {
         if ($this->_decorating instanceof WsServerInterface) {
             $subs   = $this->_decorating->getSubProtocols();
@@ -67,9 +40,7 @@ class ServerProtocol implements MessageComponentInterface, WsServerInterface {
         return ['wamp'];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function onOpen(ConnectionInterface $conn) {
         $decor = new WampConnection($conn);
         $this->connections->attach($conn, $decor);
@@ -77,11 +48,7 @@ class ServerProtocol implements MessageComponentInterface, WsServerInterface {
         $this->_decorating->onOpen($decor);
     }
 
-    /**
-     * {@inheritdoc}
-     * @throws \Ratchet\Wamp\Exception
-     * @throws \Ratchet\Wamp\JsonException
-     */
+    
     public function onMessage(ConnectionInterface $from, $msg) {
         $from = $this->connections[$from];
 
@@ -142,9 +109,7 @@ class ServerProtocol implements MessageComponentInterface, WsServerInterface {
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function onClose(ConnectionInterface $conn) {
         $decor = $this->connections[$conn];
         $this->connections->detach($conn);
@@ -152,9 +117,7 @@ class ServerProtocol implements MessageComponentInterface, WsServerInterface {
         $this->_decorating->onClose($decor);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function onError(ConnectionInterface $conn, \Exception $e) {
         return $this->_decorating->onError($this->connections[$conn], $e);
     }

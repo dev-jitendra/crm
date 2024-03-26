@@ -6,11 +6,7 @@ use Picqer\Barcode\Barcode;
 use Picqer\Barcode\Exceptions\InvalidCheckDigitException;
 use Picqer\Barcode\Helpers\BinarySequenceConverter;
 
-/*
- * UPC-Based Extensions
- * 2-Digit Ext.: Used to indicate magazines and newspaper issue numbers
- * 5-Digit Ext.: Used to mark suggested retail price of books
- */
+
 
 class TypeUpcExtension2 implements TypeInterface
 {
@@ -20,10 +16,10 @@ class TypeUpcExtension2 implements TypeInterface
     {
         $len = $this->length;
 
-        // Padding
+        
         $code = str_pad($code, $len, '0', STR_PAD_LEFT);
 
-        // Calculate check digit
+        
         if ($len == 2) {
             $r = $code % 4;
         } elseif ($len == 5) {
@@ -33,9 +29,9 @@ class TypeUpcExtension2 implements TypeInterface
             throw new InvalidCheckDigitException();
         }
 
-        // Convert digits to bars
+        
         $codes = [
-            'A' => [ // left odd parity
+            'A' => [ 
                 '0' => '0001101',
                 '1' => '0011001',
                 '2' => '0010011',
@@ -47,7 +43,7 @@ class TypeUpcExtension2 implements TypeInterface
                 '8' => '0110111',
                 '9' => '0001011'
             ],
-            'B' => [ // left even parity
+            'B' => [ 
                 '0' => '0100111',
                 '1' => '0110011',
                 '2' => '0011011',
@@ -83,10 +79,10 @@ class TypeUpcExtension2 implements TypeInterface
         ];
 
         $p = $parities[$len][$r];
-        $seq = '1011'; // left guard bar
+        $seq = '1011'; 
         $seq .= $codes[$p[0]][$code[0]];
         for ($i = 1; $i < $len; ++$i) {
-            $seq .= '01'; // separator
+            $seq .= '01'; 
             $seq .= $codes[$p[$i]][$code[$i]];
         }
 

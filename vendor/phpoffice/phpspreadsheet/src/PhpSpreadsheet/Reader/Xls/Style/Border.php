@@ -23,14 +23,7 @@ class Border
         0x0D => StyleBorder::BORDER_SLANTDASHDOT,
     ];
 
-    /**
-     * Map border style
-     * OpenOffice documentation: 2.5.11.
-     *
-     * @param int $index
-     *
-     * @return string
-     */
+    
     public static function lookup($index)
     {
         if (isset(self::$map[$index])) {

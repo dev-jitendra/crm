@@ -47,14 +47,14 @@ final class RetryExecutor implements ExecutorInterface
                     $e
                 ));
 
-                // avoid garbage references by replacing all closures in call stack.
-                // what a lovely piece of code!
+                
+                
                 $r = new \ReflectionProperty('Exception', 'trace');
                 $r->setAccessible(true);
                 $trace = $r->getValue($e);
 
-                // Exception trace arguments are not available on some PHP 7.4 installs
-                // @codeCoverageIgnoreStart
+                
+                
                 foreach ($trace as $ti => $one) {
                     if (isset($one['args'])) {
                         foreach ($one['args'] as $ai => $arg) {
@@ -64,7 +64,7 @@ final class RetryExecutor implements ExecutorInterface
                         }
                     }
                 }
-                // @codeCoverageIgnoreEnd
+                
                 $r->setValue($e, $trace);
             } else {
                 --$retries;

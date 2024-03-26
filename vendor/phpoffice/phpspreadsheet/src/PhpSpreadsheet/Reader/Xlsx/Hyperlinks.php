@@ -20,7 +20,7 @@ class Hyperlinks
     public function readHyperlinks(SimpleXMLElement $relsWorksheet): void
     {
         foreach ($relsWorksheet->Relationship as $element) {
-            if ($element['Type'] == 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink') {
+            if ($element['Type'] == 'http:
                 $this->hyperlinks[(string) $element['Id']] = (string) $element['Target'];
             }
         }
@@ -35,8 +35,8 @@ class Hyperlinks
 
     private function setHyperlink(SimpleXMLElement $hyperlink, Worksheet $worksheet): void
     {
-        // Link url
-        $linkRel = $hyperlink->attributes('http://schemas.openxmlformats.org/officeDocument/2006/relationships');
+        
+        $linkRel = $hyperlink->attributes('http:
 
         foreach (Coordinate::extractAllCellReferencesInRange($hyperlink['ref']) as $cellReference) {
             $cell = $worksheet->getCell($cellReference);
@@ -47,10 +47,10 @@ class Hyperlinks
                 }
                 $cell->getHyperlink()->setUrl($hyperlinkUrl);
             } elseif (isset($hyperlink['location'])) {
-                $cell->getHyperlink()->setUrl('sheet://' . (string) $hyperlink['location']);
+                $cell->getHyperlink()->setUrl('sheet:
             }
 
-            // Tooltip
+            
             if (isset($hyperlink['tooltip'])) {
                 $cell->getHyperlink()->setTooltip((string) $hyperlink['tooltip']);
             }

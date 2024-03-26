@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\App;
 
@@ -72,9 +46,7 @@ class AppService
         private SystemUser $systemUser
     ) {}
 
-    /**
-     * @return array<string, mixed>
-     */
+    
     public function getUserData(): array
     {
         $preferencesData = $this->preferences->getValueMap();
@@ -119,9 +91,7 @@ class AppService
         ];
     }
 
-    /**
-     * @return array<string, mixed>
-     */
+    
     private function getAppParams(): array
     {
         $user = $this->user;
@@ -150,11 +120,11 @@ class AppService
             'systemUserId' => $this->systemUser->getId(),
         ];
 
-        /** @var array<string, array<string, mixed>> $map */
+        
         $map = $this->metadata->get(['app', 'appParams']) ?? [];
 
         foreach ($map as $paramKey => $item) {
-            /** @var ?class-string<AppParam> $className */
+            
             $className = $item['className'] ?? null;
 
             if (!$className) {
@@ -162,7 +132,7 @@ class AppService
             }
 
             try {
-                /** @var AppParam $obj */
+                
                 $obj = $this->injectableFactory->create($className);
 
                 $itemParams = $obj->get();
@@ -226,7 +196,7 @@ class AppService
         if (!$this->user->isAdmin()) {
             $data = unserialize(serialize($data));
 
-            /** @var string[] $scopeList */
+            
             $scopeList = array_keys($this->metadata->get(['scopes'], []));
 
             foreach ($scopeList as $scope) {
@@ -241,12 +211,7 @@ class AppService
         return $data;
     }
 
-    /**
-     * @return array{
-     *     emailAddressList: string[],
-     *     userEmailAddressList: string[],
-     * }
-     */
+    
     private function getEmailAddressData(): array
     {
         $user = $this->user;
@@ -257,7 +222,7 @@ class AppService
         $emailAddressList = [];
         $userEmailAddressList = [];
 
-        /** @var Collection<\Espo\Entities\EmailAddress> $emailAddressCollection */
+        
         $emailAddressCollection = $this->entityManager
             ->getRDBRepositoryByClass(User::class)
             ->getRelation($user, 'emailAddresses')
@@ -302,10 +267,7 @@ class AppService
         ];
     }
 
-    /**
-     * @param string[] $emailAddressList
-     * @return string[]
-     */
+    
     private function filterUserEmailAddressList(User $user, array $emailAddressList): array
     {
         $emailAccountCollection = $this->entityManager
@@ -329,9 +291,7 @@ class AppService
         ));
     }
 
-    /**
-     * @return string[]
-     */
+    
     private function getUserGroupEmailAddressList(User $user): array
     {
         $groupEmailAccountPermission = $this->acl->getPermissionLevel('groupEmailAccountPermission');
@@ -398,9 +358,7 @@ class AppService
         return [];
     }
 
-    /**
-     * @return int
-     */
+    
     private function getMaxUploadSize()
     {
         $maxSize = 0;
@@ -414,10 +372,7 @@ class AppService
         return $maxSize;
     }
 
-    /**
-     * @param string|false $size
-     * @return int
-     */
+    
     private function convertPHPSizeToBytes($size)
     {
         if (is_numeric($size)) {

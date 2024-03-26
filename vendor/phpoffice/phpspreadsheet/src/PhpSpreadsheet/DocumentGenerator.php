@@ -9,9 +9,7 @@ use UnexpectedValueException;
 
 class DocumentGenerator
 {
-    /**
-     * @param array[] $phpSpreadsheetFunctions
-     */
+    
     public static function generateFunctionListByCategory(array $phpSpreadsheetFunctions): string
     {
         $result = "# Function list by category\n";
@@ -69,9 +67,7 @@ class DocumentGenerator
         );
     }
 
-    /**
-     * @param array[] $phpSpreadsheetFunctions
-     */
+    
     public static function generateFunctionListByName(array $phpSpreadsheetFunctions): string
     {
         $categoryConstants = array_flip(self::getCategories());

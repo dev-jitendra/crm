@@ -1,275 +1,103 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/modal */
+
+
 
 import View from 'view';
 
-/**
- * A base modal view. Can be extended or used directly.
- *
- * @see https://docs.espocrm.com/development/modal/
- */
+
 class ModalView extends View {
 
-    /**
-     * A button or dropdown action item.
-     *
-     * @typedef {Object} module:views/modal~Button
-     *
-     * @property {string} name A name.
-     * @property {string} [label] A label. To be translated
-     *   (with a scope defined in the `scope` class property).
-     * @property {string} [text] A text (not translated).
-     * @property {string} [labelTranslation] A label translation path.
-     * @property {string} [html] HTML.
-     * @property {boolean} [pullLeft=false] Deprecated. Use the `position` property.
-     * @property {'left'|'right'} [position='left'] A position.
-     * @property {'default'|'danger'|'success'|'warning'} [style='default'] A style.
-     * @property {boolean} [hidden=false] Is hidden.
-     * @property {boolean} [disabled=false] Disabled.
-     * @property {function(module:ui.Dialog): void} [onClick] Called on click. If not defined, then
-     * the `action<Name>` class method will be called.
-     * @property {string} [className] An additional class name.
-     * @property {string} [title] A title text.
-     * @property {'primary'|'danger'|'success'|'warning'|'text'} [style] A style.
-     * @property {string} [iconHtml] An icon HTML.
-     * @property {string} [iconClass] An icon class.
-     */
+    
 
-    /**
-     * @typedef {Object} module:views/modal~Options
-     * @property {string} [headerText] A header text.
-     * @property {HTMLElement} [headerElement] A header element.
-     * @property {'static'|boolean} [backdrop] A backdrop.
-     * @property {module:views/modal~Button} [buttonList] Buttons.
-     * @property {module:views/modal~Button} [dropdownItemList] Buttons.
-     */
+    
 
-    /**
-     * @param {module:views/modal~Options | Option.<string, *>} [options] Options.
-     */
+    
     constructor(options) {
         super(options);
     }
 
-    /**
-     * A CSS name.
-     *
-     * @protected
-     */
+    
     cssName = 'modal-dialog'
 
-    /**
-     * A class-name. Use `'dialog dialog-record'` for modals containing a record form.
-     *
-     * @protected
-     */
+    
     className = 'dialog'
 
-    /**
-     * @protected
-     * @deprecated Use `headerHtml`
-     */
+    
     header
 
-    /**
-     * A header HTML. Beware of XSS.
-     *
-     * @protected
-     * @type {string|null}
-     */
+    
     headerHtml
 
-    /**
-     * A header JQuery instance.
-     *
-     * @protected
-     * @type {JQuery}
-     */
+    
     $header
 
-    /**
-     * A header element.
-     *
-     * @protected
-     * @type {Element}
-     */
+    
     headerElement
 
-    /**
-     * A header text.
-     *
-     * @protected
-     * @type {string}
-     */
+    
     headerText
 
-    /**
-     * A dialog instance.
-     *
-     * @protected
-     * @type {Espo.Ui.Dialog}
-     */
+    
     dialog
 
-    /**
-     * A container selector.
-     *
-     * @protected
-     * @type {string}
-     */
+    
     containerSelector = ''
 
-    /**
-     * A scope name. Used when translating button labels.
-     *
-     * @type {string|null}
-     */
+    
     scope = null
 
-    /**
-     * A backdrop.
-     *
-     * @protected
-     * @type {'static'|boolean}
-     */
+    
     backdrop = 'static'
 
-    /**
-     * Buttons.
-     *
-     * @protected
-     * @type {module:views/modal~Button[]}
-     */
+    
     buttonList = []
 
-    /**
-     * Dropdown action items.
-     *
-     * @protected
-     * @type {Array<module:views/modal~Button|false>}
-     */
+    
     dropdownItemList = []
 
-    /**
-     * @deprecated Use `buttonList`.
-     * @protected
-     * @todo Remove.
-     */
+    
     buttons = []
 
-    /**
-     * A width.
-     *
-     * @protected
-     * @type {number|null}
-     */
+    
     width = null
 
-    /**
-     * Not used.
-     *
-     * @deprecated
-     */
+    
     fitHeight = false
 
-    /**
-     * To disable fitting to a window height.
-     *
-     * @protected
-     * @type {boolean}
-     */
+    
     noFullHeight = false
 
-    /**
-     * Disable the ability to close by pressing the `Esc` key.
-     *
-     * @protected
-     * @type {boolean}
-     */
+    
     escapeDisabled = false
 
-    /**
-     * Is draggable.
-     *
-     * @protected
-     * @type {boolean}
-     */
+    
     isDraggable = false
 
-    /**
-     * Is collapsable.
-     *
-     * @protected
-     * @type {boolean}
-     */
+    
     isCollapsable = false
 
-    /**
-     * Is collapsed. Do not change value. Only for reading.
-     *
-     * @protected
-     * @type {boolean}
-     */
+    
     isCollapsed = false
 
-    /**
-     * @inheritDoc
-     */
+    
     events = {
-        /** @this module:views/modal */
+        
         'click .action': function (e) {
             Espo.Utils.handleAction(this, e.originalEvent, e.currentTarget);
         },
-        /** @this module:views/modal */
+        
         'click [data-action="collapseModal"]': function () {
             this.collapse();
         },
     }
 
-    /**
-     * @protected
-     * @type {boolean|null}
-     */
+    
     footerAtTheTop = null
 
-    /**
-     * A shortcut-key => action map.
-     *
-     * @protected
-     * @type {?Object.<string,string|function (JQueryKeyEventObject): void>}
-     */
+    
     shortcutKeys = null
 
-    /**
-     * @inheritDoc
-     */
+    
     init() {
         const id = this.cssName + '-container-' + Math.floor((Math.random() * 10000) + 1).toString();
 
@@ -291,7 +119,7 @@ class ModalView extends View {
         this.buttonList = Espo.Utils.cloneDeep(this.buttonList);
         this.dropdownItemList = Espo.Utils.cloneDeep(this.dropdownItemList);
 
-        // @todo Remove in v9.0.
+        
         this.buttons = Espo.Utils.cloneDeep(this.buttons);
 
         if (this.shortcutKeys) {
@@ -423,16 +251,11 @@ class ModalView extends View {
         }
     }
 
-    /**
-     * Get a button list for a dialog.
-     *
-     * @private
-     * @return {module:ui.Dialog~Button[]}
-     */
+    
     getDialogButtonList() {
         const buttonListExt = [];
 
-        // @todo remove it as deprecated.
+        
         this.buttons.forEach(item => {
             const o = Espo.Utils.clone(item);
 
@@ -447,7 +270,7 @@ class ModalView extends View {
             let o = {};
 
             if (typeof item === 'string') {
-                o.name = /** @type string */item;
+                o.name = item;
             } else if (typeof item === 'object') {
                 o = item;
             } else {
@@ -490,12 +313,7 @@ class ModalView extends View {
         return buttonListExt;
     }
 
-    /**
-     * Get a dropdown item list for a dialog.
-     *
-     * @private
-     * @return {module:ui.Dialog~Button[]}
-     */
+    
     getDialogDropdownItemList() {
         const dropdownItemListExt = [];
 
@@ -503,7 +321,7 @@ class ModalView extends View {
             let o = {};
 
             if (typeof item === 'string') {
-                o.name = /** @type string */item;
+                o.name = item;
             } else if (typeof item === 'object') {
                 o = item;
             } else {
@@ -523,7 +341,7 @@ class ModalView extends View {
             }
 
             o.onClick = o.onClick || ((d, e) => {
-                // noinspection ES6ConvertLetToConst
+                
                 let handler = o.handler || (o.data || {}).handler;
 
                 Espo.Utils.handleAction(this, e.originalEvent, e.currentTarget, {
@@ -539,7 +357,7 @@ class ModalView extends View {
         return dropdownItemListExt;
     }
 
-    /** @private */
+    
     updateDialog() {
         if (!this.dialog) {
             return;
@@ -551,7 +369,7 @@ class ModalView extends View {
         );
     }
 
-    /** @private */
+    
     onDialogClose() {
         if (!this.isBeingRendered() && !this.isCollapsed) {
             this.trigger('close');
@@ -559,39 +377,27 @@ class ModalView extends View {
         }
     }
 
-    /**
-     * @protected
-     */
+    
     onBackdropClick() {}
 
-    /**
-     * A `cancel` action.
-     */
+    
     actionCancel() {
         this.trigger('cancel');
         this.dialog.close();
     }
 
-    /**
-     * A `close` action.
-     */
+    
     actionClose() {
         this.trigger('cancel');
         this.dialog.close();
     }
 
-    /**
-     * Close a dialog.
-     */
+    
     close() {
         this.dialog.close();
     }
 
-    /**
-     * Disable a button.
-     *
-     * @param {string} name A button name.
-     */
+    
     disableButton(name) {
         this.buttonList.forEach((d) => {
             if (d.name !== name) {
@@ -610,11 +416,7 @@ class ModalView extends View {
             .attr('disabled', 'disabled');
     }
 
-    /**
-     * Enable a button.
-     *
-     * @param {string} name A button name.
-     */
+    
     enableButton(name) {
         this.buttonList.forEach((d) => {
             if (d.name !== name) {
@@ -633,14 +435,7 @@ class ModalView extends View {
             .removeAttr('disabled');
     }
 
-    /**
-     * Add a button.
-     *
-     * @param {module:views/modal~Button} o Button definitions.
-     * @param {boolean|string} [position=false] True prepends, false appends. If a string
-     *   then will be added after a button with a corresponding name.
-     * @param {boolean} [doNotReRender=false] Do not re-render.
-     */
+    
     addButton(o, position, doNotReRender) {
         let index = -1;
 
@@ -681,13 +476,7 @@ class ModalView extends View {
         }
     }
 
-    /**
-     * Add a dropdown item.
-     *
-     * @param {module:views/modal~Button} o Button definitions.
-     * @param {boolean} [toBeginning=false] To prepend.
-     * @param {boolean} [doNotReRender=false] Do not re-render.
-     */
+    
     addDropdownItem(o, toBeginning, doNotReRender) {
         if (!o) {
             toBeginning ?
@@ -718,7 +507,7 @@ class ModalView extends View {
         }
     }
 
-    /** @private */
+    
     reRenderFooter() {
         if (!this.dialog) {
             return;
@@ -735,12 +524,7 @@ class ModalView extends View {
         this.dialog.initButtonEvents();
     }
 
-    /**
-     * Remove a button or a dropdown action item.
-     *
-     * @param {string} name A name.
-     * @param {boolean} [doNotReRender=false] Do not re-render.
-     */
+    
     removeButton(name, doNotReRender) {
         let index = -1;
 
@@ -773,12 +557,7 @@ class ModalView extends View {
         }
     }
 
-    /**
-     * @deprecated Use `showActionItem`.
-     *
-     * @protected
-     * @param {string} name
-     */
+    
     showButton(name) {
         for (const item of this.buttonList) {
             if (item.name === name) {
@@ -797,12 +576,7 @@ class ModalView extends View {
         this.adjustButtons();
     }
 
-    /**
-     * @deprecated Use `hideActionItem`.
-     *
-     * @protected
-     * @param {string} name
-     */
+    
     hideButton(name) {
         for (const item of this.buttonList) {
             if (item.name === name) {
@@ -821,11 +595,7 @@ class ModalView extends View {
         this.adjustButtons();
     }
 
-    /**
-     * Show an action item (button or dropdown item).
-     *
-     * @param {string} name A name.
-     */
+    
     showActionItem(name) {
         for (const item of this.buttonList) {
             if (item.name === name) {
@@ -860,11 +630,7 @@ class ModalView extends View {
         this.adjustButtons();
     }
 
-    /**
-     * Hide an action item (button or dropdown item).
-     *
-     * @param {string} name A name.
-     */
+    
     hideActionItem(name) {
         for (const item of this.buttonList) {
             if (item.name === name) {
@@ -899,11 +665,7 @@ class ModalView extends View {
         this.adjustButtons();
     }
 
-    /**
-     * Whether an action item exists (hidden, disabled or not).
-     *
-     * @param {string} name An action item name.
-     */
+    
     hasActionItem(name) {
         const hasButton = this.buttonList
             .findIndex(item => item.name === name) !== -1;
@@ -916,11 +678,7 @@ class ModalView extends View {
             .findIndex(item => item.name === name) !== -1;
     }
 
-    /**
-     * Whether an action item is visible and not disabled.
-     *
-     * @param {string} name An action item name.
-     */
+    
     hasAvailableActionItem(name) {
         const hasButton = this.buttonList
             .findIndex(item => item.name === name && !item.disabled && !item.hidden) !== -1;
@@ -933,10 +691,7 @@ class ModalView extends View {
             .findIndex(item => item.name === name && !item.disabled && !item.hidden) !== -1;
     }
 
-    /**
-     * @private
-     * @return {boolean}
-     */
+    
     isDropdownItemListEmpty() {
         if (this.dropdownItemList.length === 0) {
             return true;
@@ -953,10 +708,7 @@ class ModalView extends View {
         return isEmpty;
     }
 
-    /**
-     * @private
-     * @param {number} [step=0]
-     */
+    
     adjustHeaderFontSize(step) {
         step = step || 0;
 
@@ -996,9 +748,7 @@ class ModalView extends View {
         }
     }
 
-    /**
-     * Collapse.
-     */
+    
     collapse() {
         this.beforeCollapse().then(data => {
             if (!this.getParentView()) {
@@ -1055,23 +805,18 @@ class ModalView extends View {
         this.getParentView().unchainView(key);
     }
 
-    /**
-     * Called before collapse. Can be extended to execute some logic, e.g. save form data.
-     *
-     * @protected
-     * @return {Promise}
-     */
+    
     beforeCollapse() {
         return new Promise(resolve => resolve());
     }
 
-    /** @private */
+    
     adjustButtons() {
         this.adjustLeftButtons();
         this.adjustRightButtons();
     }
 
-    /** @private */
+    
     adjustLeftButtons() {
         const $buttons = this.$el.find('footer.modal-footer > .main-btn-group button.btn');
 
@@ -1085,7 +830,7 @@ class ModalView extends View {
         $buttonsVisible.last().addClass('radius-right');
     }
 
-    /** @private */
+    
     adjustRightButtons() {
         const $buttons = this.$el.find('footer.modal-footer > .additional-btn-group button.btn:not(.btn-text)');
 
@@ -1104,9 +849,7 @@ class ModalView extends View {
         }
     }
 
-    /**
-     * @protected
-     */
+    
     initBodyScrollListener() {
         const $body = this.$el.find('> .dialog > .modal-dialog > .modal-content > .modal-body');
         const $footer = $body.parent().find('> .modal-footer');

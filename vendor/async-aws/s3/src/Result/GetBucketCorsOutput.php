@@ -8,15 +8,10 @@ use AsyncAws\S3\ValueObject\CORSRule;
 
 class GetBucketCorsOutput extends Result
 {
-    /**
-     * A set of origins and methods (cross-origin access that you want to allow). You can add up to 100 rules to the
-     * configuration.
-     */
+    
     private $corsRules = [];
 
-    /**
-     * @return CORSRule[]
-     */
+    
     public function getCorsRules(): array
     {
         $this->initialize();
@@ -30,9 +25,7 @@ class GetBucketCorsOutput extends Result
         $this->corsRules = !$data->CORSRule ? [] : $this->populateResultCORSRules($data->CORSRule);
     }
 
-    /**
-     * @return string[]
-     */
+    
     private function populateResultAllowedHeaders(\SimpleXMLElement $xml): array
     {
         $items = [];
@@ -46,9 +39,7 @@ class GetBucketCorsOutput extends Result
         return $items;
     }
 
-    /**
-     * @return string[]
-     */
+    
     private function populateResultAllowedMethods(\SimpleXMLElement $xml): array
     {
         $items = [];
@@ -62,9 +53,7 @@ class GetBucketCorsOutput extends Result
         return $items;
     }
 
-    /**
-     * @return string[]
-     */
+    
     private function populateResultAllowedOrigins(\SimpleXMLElement $xml): array
     {
         $items = [];
@@ -78,9 +67,7 @@ class GetBucketCorsOutput extends Result
         return $items;
     }
 
-    /**
-     * @return CORSRule[]
-     */
+    
     private function populateResultCORSRules(\SimpleXMLElement $xml): array
     {
         $items = [];
@@ -97,9 +84,7 @@ class GetBucketCorsOutput extends Result
         return $items;
     }
 
-    /**
-     * @return string[]
-     */
+    
     private function populateResultExposeHeaders(\SimpleXMLElement $xml): array
     {
         $items = [];

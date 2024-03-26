@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Record;
 
@@ -39,15 +13,13 @@ use Espo\ORM\Repository\Util as RepositoryUtil;
 
 use RuntimeException;
 
-/**
- * Create a service for a specific user.
- */
+
 class ServiceFactory
 {
     private const RECORD_SERVICE_NAME = 'Record';
     private const RECORD_TREE_SERVICE_NAME = 'RecordTree';
 
-    /** @var array<string, string> */
+    
     private $defaultTypeMap = [
         'CategoryTree' => self::RECORD_TREE_SERVICE_NAME,
     ];
@@ -60,41 +32,25 @@ class ServiceFactory
         private AclManager $aclManager
     ) {}
 
-    /**
-     * Create a record service by an entity class name.
-     *
-     * @template T of Entity
-     * @param class-string<T> $className An entity class name.
-     * @return Service<T>
-     */
+    
     public function createByClass(string $className): Service
     {
         $entityType = RepositoryUtil::getEntityTypeByClass($className);
 
-        /** @var Service<T> */
+        
         return $this->create($entityType);
     }
 
-    /**
-     * Create a record service for a user by an entity class name.
-     *
-     * @template T of Entity
-     * @param class-string<T> $className An entity class name.
-     * @return Service<T>
-     */
+    
     public function createByClassForUser(string $className, User $user): Service
     {
         $entityType = RepositoryUtil::getEntityTypeByClass($className);
 
-        /** @var Service<T> */
+        
         return $this->createForUser($entityType, $user);
     }
 
-    /**
-     * Create a record service by an entity type.
-     *
-     * @return Service<Entity>
-     */
+    
     public function create(string $entityType): Service
     {
         $obj = $this->createInternal($entityType);
@@ -105,11 +61,7 @@ class ServiceFactory
         return $obj;
     }
 
-    /**
-     * Create a record service for a user.
-     *
-     * @return Service<Entity>
-     */
+    
     public function createForUser(string $entityType, User $user): Service
     {
         $obj = $this->createInternal($entityType);
@@ -122,9 +74,7 @@ class ServiceFactory
         return $obj;
     }
 
-    /**
-     * @return Service<Entity>
-     */
+    
     private function createInternal(string $entityType): Service
     {
         if (!$this->metadata->get(['scopes', $entityType, 'entity'])) {
@@ -144,9 +94,7 @@ class ServiceFactory
         return $service;
     }
 
-    /**
-     * @return Service<Entity>
-     */
+    
     private function createDefault(string $entityType): Service
     {
         $default = self::RECORD_SERVICE_NAME;

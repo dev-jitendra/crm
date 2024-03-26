@@ -8,9 +8,9 @@ use Matrix\Matrix;
 
 class MathTrig
 {
-    //
-    //    Private method to return an array of the factors of the input value
-    //
+    
+    
+    
     private static function factors($value)
     {
         $startVal = floor(sqrt($value));
@@ -39,27 +39,16 @@ class MathTrig
         return ($num - ($num % $n)) / $n;
     }
 
-    /**
-     * ARABIC.
-     *
-     * Converts a Roman numeral to an Arabic numeral.
-     *
-     * Excel Function:
-     *        ARABIC(text)
-     *
-     * @param string $roman
-     *
-     * @return int|string the arabic numberal contrived from the roman numeral
-     */
+    
     public static function ARABIC($roman)
     {
-        // An empty string should return 0
+        
         $roman = substr(trim(strtoupper((string) Functions::flattenSingleValue($roman))), 0, 255);
         if ($roman === '') {
             return 0;
         }
 
-        // Convert the roman numeral to an arabic number
+        
         $negativeNumber = $roman[0] === '-';
         if ($negativeNumber) {
             $roman = substr($roman, 1);
@@ -68,24 +57,17 @@ class MathTrig
         try {
             $arabic = self::calculateArabic(str_split($roman));
         } catch (Exception $e) {
-            return Functions::VALUE(); // Invalid character detected
+            return Functions::VALUE(); 
         }
 
         if ($negativeNumber) {
-            $arabic *= -1; // The number should be negative
+            $arabic *= -1; 
         }
 
         return $arabic;
     }
 
-    /**
-     * Recursively calculate the arabic value of a roman numeral.
-     *
-     * @param int $sum
-     * @param int $subtract
-     *
-     * @return int
-     */
+    
     protected static function calculateArabic(array $roman, &$sum = 0, $subtract = 0)
     {
         $lookup = [
@@ -118,27 +100,7 @@ class MathTrig
         return $sum;
     }
 
-    /**
-     * ATAN2.
-     *
-     * This function calculates the arc tangent of the two variables x and y. It is similar to
-     *        calculating the arc tangent of y ÷ x, except that the signs of both arguments are used
-     *        to determine the quadrant of the result.
-     * The arctangent is the angle from the x-axis to a line containing the origin (0, 0) and a
-     *        point with coordinates (xCoordinate, yCoordinate). The angle is given in radians between
-     *        -pi and pi, excluding -pi.
-     *
-     * Note that the Excel ATAN2() function accepts its arguments in the reverse order to the standard
-     *        PHP atan2() function, so we need to reverse them here before calling the PHP atan() function.
-     *
-     * Excel Function:
-     *        ATAN2(xCoordinate,yCoordinate)
-     *
-     * @param float $xCoordinate the x-coordinate of the point
-     * @param float $yCoordinate the y-coordinate of the point
-     *
-     * @return float|string the inverse tangent of the specified x- and y-coordinates, or a string containing an error
-     */
+    
     public static function ATAN2($xCoordinate = null, $yCoordinate = null)
     {
         $xCoordinate = Functions::flattenSingleValue($xCoordinate);
@@ -164,20 +126,7 @@ class MathTrig
         return Functions::VALUE();
     }
 
-    /**
-     * BASE.
-     *
-     * Converts a number into a text representation with the given radix (base).
-     *
-     * Excel Function:
-     *        BASE(Number, Radix [Min_length])
-     *
-     * @param float $number
-     * @param float $radix
-     * @param int $minLength
-     *
-     * @return string the text representation with the given radix (base)
-     */
+    
     public static function BASE($number, $radix, $minLength = null)
     {
         $number = Functions::flattenSingleValue($number);
@@ -185,18 +134,18 @@ class MathTrig
         $minLength = Functions::flattenSingleValue($minLength);
 
         if (is_numeric($number) && is_numeric($radix) && ($minLength === null || is_numeric($minLength))) {
-            // Truncate to an integer
+            
             $number = (int) $number;
             $radix = (int) $radix;
             $minLength = (int) $minLength;
 
             if ($number < 0 || $number >= 2 ** 53 || $radix < 2 || $radix > 36) {
-                return Functions::NAN(); // Numeric range constraints
+                return Functions::NAN(); 
             }
 
             $outcome = strtoupper((string) base_convert($number, 10, $radix));
             if ($minLength !== null) {
-                $outcome = str_pad($outcome, $minLength, '0', STR_PAD_LEFT); // String padding
+                $outcome = str_pad($outcome, $minLength, '0', STR_PAD_LEFT); 
             }
 
             return $outcome;
@@ -205,22 +154,7 @@ class MathTrig
         return Functions::VALUE();
     }
 
-    /**
-     * CEILING.
-     *
-     * Returns number rounded up, away from zero, to the nearest multiple of significance.
-     *        For example, if you want to avoid using pennies in your prices and your product is
-     *        priced at $4.42, use the formula =CEILING(4.42,0.05) to round prices up to the
-     *        nearest nickel.
-     *
-     * Excel Function:
-     *        CEILING(number[,significance])
-     *
-     * @param float $number the number you want to round
-     * @param float $significance the multiple to which you want to round
-     *
-     * @return float|string Rounded Number, or a string containing an error
-     */
+    
     public static function CEILING($number, $significance = null)
     {
         $number = Functions::flattenSingleValue($number);
@@ -246,20 +180,7 @@ class MathTrig
         return Functions::VALUE();
     }
 
-    /**
-     * COMBIN.
-     *
-     * Returns the number of combinations for a given number of items. Use COMBIN to
-     *        determine the total possible number of groups for a given number of items.
-     *
-     * Excel Function:
-     *        COMBIN(numObjs,numInSet)
-     *
-     * @param int $numObjs Number of different objects
-     * @param int $numInSet Number of objects in each combination
-     *
-     * @return int|string Number of combinations, or a string containing an error
-     */
+    
     public static function COMBIN($numObjs, $numInSet)
     {
         $numObjs = Functions::flattenSingleValue($numObjs);
@@ -278,22 +199,7 @@ class MathTrig
         return Functions::VALUE();
     }
 
-    /**
-     * EVEN.
-     *
-     * Returns number rounded up to the nearest even integer.
-     * You can use this function for processing items that come in twos. For example,
-     *        a packing crate accepts rows of one or two items. The crate is full when
-     *        the number of items, rounded up to the nearest two, matches the crate's
-     *        capacity.
-     *
-     * Excel Function:
-     *        EVEN(number)
-     *
-     * @param float $number Number to round
-     *
-     * @return int|string Rounded Number, or a string containing an error
-     */
+    
     public static function EVEN($number)
     {
         $number = Functions::flattenSingleValue($number);
@@ -313,19 +219,7 @@ class MathTrig
         return Functions::VALUE();
     }
 
-    /**
-     * FACT.
-     *
-     * Returns the factorial of a number.
-     * The factorial of a number is equal to 1*2*3*...* number.
-     *
-     * Excel Function:
-     *        FACT(factVal)
-     *
-     * @param float $factVal Factorial Value
-     *
-     * @return int|string Factorial, or a string containing an error
-     */
+    
     public static function FACT($factVal)
     {
         $factVal = Functions::flattenSingleValue($factVal);
@@ -353,18 +247,7 @@ class MathTrig
         return Functions::VALUE();
     }
 
-    /**
-     * FACTDOUBLE.
-     *
-     * Returns the double factorial of a number.
-     *
-     * Excel Function:
-     *        FACTDOUBLE(factVal)
-     *
-     * @param float $factVal Factorial Value
-     *
-     * @return int|string Double Factorial, or a string containing an error
-     */
+    
     public static function FACTDOUBLE($factVal)
     {
         $factLoop = Functions::flattenSingleValue($factVal);
@@ -386,19 +269,7 @@ class MathTrig
         return Functions::VALUE();
     }
 
-    /**
-     * FLOOR.
-     *
-     * Rounds number down, toward zero, to the nearest multiple of significance.
-     *
-     * Excel Function:
-     *        FLOOR(number[,significance])
-     *
-     * @param float $number Number to round
-     * @param float $significance Significance
-     *
-     * @return float|string Rounded Number, or a string containing an error
-     */
+    
     public static function FLOOR($number, $significance = null)
     {
         $number = Functions::flattenSingleValue($number);
@@ -428,20 +299,7 @@ class MathTrig
         return Functions::VALUE();
     }
 
-    /**
-     * FLOOR.MATH.
-     *
-     * Round a number down to the nearest integer or to the nearest multiple of significance.
-     *
-     * Excel Function:
-     *        FLOOR.MATH(number[,significance[,mode]])
-     *
-     * @param float $number Number to round
-     * @param float $significance Significance
-     * @param int $mode direction to round negative numbers
-     *
-     * @return float|string Rounded Number, or a string containing an error
-     */
+    
     public static function FLOORMATH($number, $significance = null, $mode = 0)
     {
         $number = Functions::flattenSingleValue($number);
@@ -467,19 +325,7 @@ class MathTrig
         return Functions::VALUE();
     }
 
-    /**
-     * FLOOR.PRECISE.
-     *
-     * Rounds number down, toward zero, to the nearest multiple of significance.
-     *
-     * Excel Function:
-     *        FLOOR.PRECISE(number[,significance])
-     *
-     * @param float $number Number to round
-     * @param float $significance Significance
-     *
-     * @return float|string Rounded Number, or a string containing an error
-     */
+    
     public static function FLOORPRECISE($number, $significance = 1)
     {
         $number = Functions::flattenSingleValue($number);
@@ -503,24 +349,11 @@ class MathTrig
         return $b ? self::evaluateGCD($b, $a % $b) : $a;
     }
 
-    /**
-     * GCD.
-     *
-     * Returns the greatest common divisor of a series of numbers.
-     * The greatest common divisor is the largest integer that divides both
-     *        number1 and number2 without a remainder.
-     *
-     * Excel Function:
-     *        GCD(number1[,number2[, ...]])
-     *
-     * @param mixed ...$args Data values
-     *
-     * @return int|mixed|string Greatest Common Divisor, or a string containing an error
-     */
+    
     public static function GCD(...$args)
     {
         $args = Functions::flattenArray($args);
-        // Loop through arguments
+        
         foreach (Functions::flattenArray($args) as $value) {
             if (!is_numeric($value)) {
                 return Functions::VALUE();
@@ -537,18 +370,7 @@ class MathTrig
         return $gcd;
     }
 
-    /**
-     * INT.
-     *
-     * Casts a floating point value to an integer
-     *
-     * Excel Function:
-     *        INT(number)
-     *
-     * @param float $number Number to cast to an integer
-     *
-     * @return int|string Integer value, or a string containing an error
-     */
+    
     public static function INT($number)
     {
         $number = Functions::flattenSingleValue($number);
@@ -565,26 +387,12 @@ class MathTrig
         return Functions::VALUE();
     }
 
-    /**
-     * LCM.
-     *
-     * Returns the lowest common multiplier of a series of numbers
-     * The least common multiple is the smallest positive integer that is a multiple
-     * of all integer arguments number1, number2, and so on. Use LCM to add fractions
-     * with different denominators.
-     *
-     * Excel Function:
-     *        LCM(number1[,number2[, ...]])
-     *
-     * @param mixed ...$args Data values
-     *
-     * @return int|string Lowest Common Multiplier, or a string containing an error
-     */
+    
     public static function LCM(...$args)
     {
         $returnValue = 1;
         $allPoweredFactors = [];
-        // Loop through arguments
+        
         foreach (Functions::flattenArray($args) as $value) {
             if (!is_numeric($value)) {
                 return Functions::VALUE();
@@ -617,19 +425,7 @@ class MathTrig
         return $returnValue;
     }
 
-    /**
-     * LOG_BASE.
-     *
-     * Returns the logarithm of a number to a specified base. The default base is 10.
-     *
-     * Excel Function:
-     *        LOG(number[,base])
-     *
-     * @param float $number The positive real number for which you want the logarithm
-     * @param float $base The base of the logarithm. If base is omitted, it is assumed to be 10.
-     *
-     * @return float|string The result, or a string containing an error
-     */
+    
     public static function logBase($number = null, $base = 10)
     {
         $number = Functions::flattenSingleValue($number);
@@ -645,18 +441,7 @@ class MathTrig
         return log($number, $base);
     }
 
-    /**
-     * MDETERM.
-     *
-     * Returns the matrix determinant of an array.
-     *
-     * Excel Function:
-     *        MDETERM(array)
-     *
-     * @param array $matrixValues A matrix of values
-     *
-     * @return float|string The result, or a string containing an error
-     */
+    
     public static function MDETERM($matrixValues)
     {
         $matrixData = [];
@@ -695,18 +480,7 @@ class MathTrig
         }
     }
 
-    /**
-     * MINVERSE.
-     *
-     * Returns the inverse matrix for the matrix stored in an array.
-     *
-     * Excel Function:
-     *        MINVERSE(array)
-     *
-     * @param array $matrixValues A matrix of values
-     *
-     * @return array|string The result, or a string containing an error
-     */
+    
     public static function MINVERSE($matrixValues)
     {
         $matrixData = [];
@@ -749,14 +523,7 @@ class MathTrig
         }
     }
 
-    /**
-     * MMULT.
-     *
-     * @param array $matrixData1 A matrix of values
-     * @param array $matrixData2 A matrix of values
-     *
-     * @return array|string The result, or a string containing an error
-     */
+    
     public static function MMULT($matrixData1, $matrixData2)
     {
         $matrixAData = $matrixBData = [];
@@ -811,14 +578,7 @@ class MathTrig
         }
     }
 
-    /**
-     * MOD.
-     *
-     * @param int $a Dividend
-     * @param int $b Divisor
-     *
-     * @return int|string Remainder, or a string containing an error
-     */
+    
     public static function MOD($a = 1, $b = 1)
     {
         $a = (float) Functions::flattenSingleValue($a);
@@ -835,16 +595,7 @@ class MathTrig
         return fmod($a, $b);
     }
 
-    /**
-     * MROUND.
-     *
-     * Rounds a number to the nearest multiple of a specified value
-     *
-     * @param float $number Number to round
-     * @param int $multiple Multiple to which you want to round $number
-     *
-     * @return float|string Rounded Number, or a string containing an error
-     */
+    
     public static function MROUND($number, $multiple)
     {
         $number = Functions::flattenSingleValue($number);
@@ -866,22 +617,14 @@ class MathTrig
         return Functions::VALUE();
     }
 
-    /**
-     * MULTINOMIAL.
-     *
-     * Returns the ratio of the factorial of a sum of values to the product of factorials.
-     *
-     * @param mixed[] $args An array of mixed values for the Data Series
-     *
-     * @return float|string The result, or a string containing an error
-     */
+    
     public static function MULTINOMIAL(...$args)
     {
         $summer = 0;
         $divisor = 1;
-        // Loop through arguments
+        
         foreach (Functions::flattenArray($args) as $arg) {
-            // Is it a numeric value?
+            
             if (is_numeric($arg)) {
                 if ($arg < 1) {
                     return Functions::NAN();
@@ -893,7 +636,7 @@ class MathTrig
             }
         }
 
-        // Return
+        
         if ($summer > 0) {
             $summer = self::FACT($summer);
 
@@ -903,15 +646,7 @@ class MathTrig
         return 0;
     }
 
-    /**
-     * ODD.
-     *
-     * Returns number rounded up to the nearest odd integer.
-     *
-     * @param float $number Number to round
-     *
-     * @return int|string Rounded Number, or a string containing an error
-     */
+    
     public static function ODD($number)
     {
         $number = Functions::flattenSingleValue($number);
@@ -937,54 +672,34 @@ class MathTrig
         return Functions::VALUE();
     }
 
-    /**
-     * POWER.
-     *
-     * Computes x raised to the power y.
-     *
-     * @param float $x
-     * @param float $y
-     *
-     * @return float|string The result, or a string containing an error
-     */
+    
     public static function POWER($x = 0, $y = 2)
     {
         $x = Functions::flattenSingleValue($x);
         $y = Functions::flattenSingleValue($y);
 
-        // Validate parameters
+        
         if ($x == 0.0 && $y == 0.0) {
             return Functions::NAN();
         } elseif ($x == 0.0 && $y < 0.0) {
             return Functions::DIV0();
         }
 
-        // Return
+        
         $result = $x ** $y;
 
         return (!is_nan($result) && !is_infinite($result)) ? $result : Functions::NAN();
     }
 
-    /**
-     * PRODUCT.
-     *
-     * PRODUCT returns the product of all the values and cells referenced in the argument list.
-     *
-     * Excel Function:
-     *        PRODUCT(value1[,value2[, ...]])
-     *
-     * @param mixed ...$args Data values
-     *
-     * @return float
-     */
+    
     public static function PRODUCT(...$args)
     {
-        // Return value
+        
         $returnValue = null;
 
-        // Loop through arguments
+        
         foreach (Functions::flattenArray($args) as $arg) {
-            // Is it a numeric value?
+            
             if ((is_numeric($arg)) && (!is_string($arg))) {
                 if ($returnValue === null) {
                     $returnValue = $arg;
@@ -994,7 +709,7 @@ class MathTrig
             }
         }
 
-        // Return
+        
         if ($returnValue === null) {
             return 0;
         }
@@ -1002,27 +717,15 @@ class MathTrig
         return $returnValue;
     }
 
-    /**
-     * QUOTIENT.
-     *
-     * QUOTIENT function returns the integer portion of a division. Numerator is the divided number
-     *        and denominator is the divisor.
-     *
-     * Excel Function:
-     *        QUOTIENT(value1[,value2[, ...]])
-     *
-     * @param mixed ...$args Data values
-     *
-     * @return float
-     */
+    
     public static function QUOTIENT(...$args)
     {
-        // Return value
+        
         $returnValue = null;
 
-        // Loop through arguments
+        
         foreach (Functions::flattenArray($args) as $arg) {
-            // Is it a numeric value?
+            
             if ((is_numeric($arg)) && (!is_string($arg))) {
                 if ($returnValue === null) {
                     $returnValue = ($arg == 0) ? 0 : $arg;
@@ -1036,18 +739,11 @@ class MathTrig
             }
         }
 
-        // Return
+        
         return (int) $returnValue;
     }
 
-    /**
-     * RAND.
-     *
-     * @param int $min Minimal value
-     * @param int $max Maximal value
-     *
-     * @return int Random number
-     */
+    
     public static function RAND($min = 0, $max = 0)
     {
         $min = Functions::flattenSingleValue($min);
@@ -1092,16 +788,7 @@ class MathTrig
         return $roman . $mill[$m] . $cent[$c] . $tens[$t] . $ones[$aValue];
     }
 
-    /**
-     * ROUNDUP.
-     *
-     * Rounds a number up to a specified number of decimal places
-     *
-     * @param float $number Number to round
-     * @param int $digits Number of digits to which you want to round $number
-     *
-     * @return float|string Rounded Number, or a string containing an error
-     */
+    
     public static function ROUNDUP($number, $digits)
     {
         $number = Functions::flattenSingleValue($number);
@@ -1122,16 +809,7 @@ class MathTrig
         return Functions::VALUE();
     }
 
-    /**
-     * ROUNDDOWN.
-     *
-     * Rounds a number down to a specified number of decimal places
-     *
-     * @param float $number Number to round
-     * @param int $digits Number of digits to which you want to round $number
-     *
-     * @return float|string Rounded Number, or a string containing an error
-     */
+    
     public static function ROUNDDOWN($number, $digits)
     {
         $number = Functions::flattenSingleValue($number);
@@ -1152,20 +830,12 @@ class MathTrig
         return Functions::VALUE();
     }
 
-    /**
-     * SERIESSUM.
-     *
-     * Returns the sum of a power series
-     *
-     * @param mixed[] $args An array of mixed values for the Data Series
-     *
-     * @return float|string The result, or a string containing an error
-     */
+    
     public static function SERIESSUM(...$args)
     {
         $returnValue = 0;
 
-        // Loop through arguments
+        
         $aArgs = Functions::flattenArray($args);
 
         $x = array_shift($aArgs);
@@ -1173,10 +843,10 @@ class MathTrig
         $m = array_shift($aArgs);
 
         if ((is_numeric($x)) && (is_numeric($n)) && (is_numeric($m))) {
-            // Calculate
+            
             $i = 0;
             foreach ($aArgs as $arg) {
-                // Is it a numeric value?
+                
                 if ((is_numeric($arg)) && (!is_string($arg))) {
                     $returnValue += $arg * $x ** ($n + ($m * $i++));
                 } else {
@@ -1190,16 +860,7 @@ class MathTrig
         return Functions::VALUE();
     }
 
-    /**
-     * SIGN.
-     *
-     * Determines the sign of a number. Returns 1 if the number is positive, zero (0)
-     *        if the number is 0, and -1 if the number is negative.
-     *
-     * @param float $number Number to round
-     *
-     * @return int|string sign value, or a string containing an error
-     */
+    
     public static function SIGN($number)
     {
         $number = Functions::flattenSingleValue($number);
@@ -1218,15 +879,7 @@ class MathTrig
         return Functions::VALUE();
     }
 
-    /**
-     * SQRTPI.
-     *
-     * Returns the square root of (number * pi).
-     *
-     * @param float $number Number
-     *
-     * @return float|string Square Root of Number * Pi, or a string containing an error
-     */
+    
     public static function SQRTPI($number)
     {
         $number = Functions::flattenSingleValue($number);
@@ -1263,7 +916,7 @@ class MathTrig
             function ($index) use ($cellReference) {
                 [, $row, $column] = explode('.', $index);
                 if ($cellReference->getWorksheet()->cellExists($column . $row)) {
-                    //take this cell out if it contains the SUBTOTAL or AGGREGATE functions in a formula
+                    
                     $isFormula = $cellReference->getWorksheet()->getCell($column . $row)->isFormula();
                     $cellFormula = !preg_match('/^=.*\b(SUBTOTAL|AGGREGATE)\s*\(/i', $cellReference->getWorksheet()->getCell($column . $row)->getValue());
 
@@ -1276,29 +929,14 @@ class MathTrig
         );
     }
 
-    /**
-     * SUBTOTAL.
-     *
-     * Returns a subtotal in a list or database.
-     *
-     * @param int $functionType
-     *            A number 1 to 11 that specifies which function to
-     *                    use in calculating subtotals within a range
-     *                    list
-     *            Numbers 101 to 111 shadow the functions of 1 to 11
-     *                    but ignore any values in the range that are
-     *                    in hidden rows or columns
-     * @param mixed[] $args A mixed data series of values
-     *
-     * @return float|string
-     */
+    
     public static function SUBTOTAL($functionType, ...$args)
     {
         $cellReference = array_pop($args);
         $aArgs = Functions::flattenArrayIndexed($args);
         $subtotal = Functions::flattenSingleValue($functionType);
 
-        // Calculate
+        
         if ((is_numeric($subtotal)) && (!is_string($subtotal))) {
             if ($subtotal > 100) {
                 $aArgs = self::filterHiddenArgs($cellReference, $aArgs);
@@ -1335,25 +973,14 @@ class MathTrig
         return Functions::VALUE();
     }
 
-    /**
-     * SUM.
-     *
-     * SUM computes the sum of all the values and cells referenced in the argument list.
-     *
-     * Excel Function:
-     *        SUM(value1[,value2[, ...]])
-     *
-     * @param mixed ...$args Data values
-     *
-     * @return float
-     */
+    
     public static function SUM(...$args)
     {
         $returnValue = 0;
 
-        // Loop through the arguments
+        
         foreach (Functions::flattenArray($args) as $arg) {
-            // Is it a numeric value?
+            
             if ((is_numeric($arg)) && (!is_string($arg))) {
                 $returnValue += $arg;
             } elseif (Functions::isError($arg)) {
@@ -1364,20 +991,7 @@ class MathTrig
         return $returnValue;
     }
 
-    /**
-     * SUMIF.
-     *
-     * Counts the number of cells that contain numbers within the list of arguments
-     *
-     * Excel Function:
-     *        SUMIF(value1[,value2[, ...]],condition)
-     *
-     * @param mixed $aArgs Data values
-     * @param string $condition the criteria that defines which cells will be summed
-     * @param mixed $sumArgs
-     *
-     * @return float
-     */
+    
     public static function SUMIF($aArgs, $condition, $sumArgs = [])
     {
         $returnValue = 0;
@@ -1388,7 +1002,7 @@ class MathTrig
             $sumArgs = $aArgs;
         }
         $condition = Functions::ifCondition($condition);
-        // Loop through arguments
+        
         foreach ($aArgs as $key => $arg) {
             if (!is_numeric($arg)) {
                 $arg = str_replace('"', '""', $arg);
@@ -1402,7 +1016,7 @@ class MathTrig
                 is_numeric($sumValue) &&
                 Calculation::getInstance()->_calculateFormulaValue($testCondition)
             ) {
-                // Is it a value within our criteria and only numeric can be added to the result
+                
                 $returnValue += $sumValue;
             }
         }
@@ -1410,23 +1024,12 @@ class MathTrig
         return $returnValue;
     }
 
-    /**
-     * SUMIFS.
-     *
-     *    Counts the number of cells that contain numbers within the list of arguments
-     *
-     *    Excel Function:
-     *        SUMIFS(value1[,value2[, ...]],condition)
-     *
-     * @param mixed $args Data values
-     *
-     * @return float
-     */
+    
     public static function SUMIFS(...$args)
     {
         $arrayList = $args;
 
-        // Return value
+        
         $returnValue = 0;
 
         $sumArgs = Functions::flattenArray(array_shift($arrayList));
@@ -1438,23 +1041,23 @@ class MathTrig
             $conditions[] = Functions::ifCondition(array_shift($arrayList));
         }
 
-        // Loop through each sum and see if arguments and conditions are true
+        
         foreach ($sumArgs as $index => $value) {
             $valid = true;
 
             foreach ($conditions as $cidx => $condition) {
                 $arg = $aArgsArray[$cidx][$index];
 
-                // Loop through arguments
+                
                 if (!is_numeric($arg)) {
                     $arg = Calculation::wrapResult(strtoupper($arg));
                 }
                 $testCondition = '=' . $arg . $condition;
                 if (!Calculation::getInstance()->_calculateFormulaValue($testCondition)) {
-                    // Is not a value within our criteria
+                    
                     $valid = false;
 
-                    break; // if false found, don't need to check other conditions
+                    break; 
                 }
             }
 
@@ -1463,20 +1066,11 @@ class MathTrig
             }
         }
 
-        // Return
+        
         return $returnValue;
     }
 
-    /**
-     * SUMPRODUCT.
-     *
-     * Excel Function:
-     *        SUMPRODUCT(value1[,value2[, ...]])
-     *
-     * @param mixed ...$args Data values
-     *
-     * @return float|string The result, or a string containing an error
-     */
+    
     public static function SUMPRODUCT(...$args)
     {
         $arrayList = $args;
@@ -1508,25 +1102,14 @@ class MathTrig
         return array_sum($wrkArray);
     }
 
-    /**
-     * SUMSQ.
-     *
-     * SUMSQ returns the sum of the squares of the arguments
-     *
-     * Excel Function:
-     *        SUMSQ(value1[,value2[, ...]])
-     *
-     * @param mixed ...$args Data values
-     *
-     * @return float
-     */
+    
     public static function SUMSQ(...$args)
     {
         $returnValue = 0;
 
-        // Loop through arguments
+        
         foreach (Functions::flattenArray($args) as $arg) {
-            // Is it a numeric value?
+            
             if ((is_numeric($arg)) && (!is_string($arg))) {
                 $returnValue += ($arg * $arg);
             }
@@ -1535,14 +1118,7 @@ class MathTrig
         return $returnValue;
     }
 
-    /**
-     * SUMX2MY2.
-     *
-     * @param mixed[] $matrixData1 Matrix #1
-     * @param mixed[] $matrixData2 Matrix #2
-     *
-     * @return float
-     */
+    
     public static function SUMX2MY2($matrixData1, $matrixData2)
     {
         $array1 = Functions::flattenArray($matrixData1);
@@ -1562,14 +1138,7 @@ class MathTrig
         return $result;
     }
 
-    /**
-     * SUMX2PY2.
-     *
-     * @param mixed[] $matrixData1 Matrix #1
-     * @param mixed[] $matrixData2 Matrix #2
-     *
-     * @return float
-     */
+    
     public static function SUMX2PY2($matrixData1, $matrixData2)
     {
         $array1 = Functions::flattenArray($matrixData1);
@@ -1589,14 +1158,7 @@ class MathTrig
         return $result;
     }
 
-    /**
-     * SUMXMY2.
-     *
-     * @param mixed[] $matrixData1 Matrix #1
-     * @param mixed[] $matrixData2 Matrix #2
-     *
-     * @return float
-     */
+    
     public static function SUMXMY2($matrixData1, $matrixData2)
     {
         $array1 = Functions::flattenArray($matrixData1);
@@ -1616,28 +1178,19 @@ class MathTrig
         return $result;
     }
 
-    /**
-     * TRUNC.
-     *
-     * Truncates value to the number of fractional digits by number_digits.
-     *
-     * @param float $value
-     * @param int $digits
-     *
-     * @return float|string Truncated value, or a string containing an error
-     */
+    
     public static function TRUNC($value = 0, $digits = 0)
     {
         $value = Functions::flattenSingleValue($value);
         $digits = Functions::flattenSingleValue($digits);
 
-        // Validate parameters
+        
         if ((!is_numeric($value)) || (!is_numeric($digits))) {
             return Functions::VALUE();
         }
         $digits = floor($digits);
 
-        // Truncate
+        
         $adjust = 10 ** $digits;
 
         if (($digits > 0) && (rtrim((int) ((abs($value) - abs((int) $value)) * $adjust), '0') < $adjust / 10)) {
@@ -1647,15 +1200,7 @@ class MathTrig
         return ((int) ($value * $adjust)) / $adjust;
     }
 
-    /**
-     * SEC.
-     *
-     * Returns the secant of an angle.
-     *
-     * @param float $angle Number
-     *
-     * @return float|string The secant of the angle
-     */
+    
     public static function SEC($angle)
     {
         $angle = Functions::flattenSingleValue($angle);
@@ -1669,15 +1214,7 @@ class MathTrig
         return ($result == 0.0) ? Functions::DIV0() : 1 / $result;
     }
 
-    /**
-     * SECH.
-     *
-     * Returns the hyperbolic secant of an angle.
-     *
-     * @param float $angle Number
-     *
-     * @return float|string The hyperbolic secant of the angle
-     */
+    
     public static function SECH($angle)
     {
         $angle = Functions::flattenSingleValue($angle);
@@ -1691,15 +1228,7 @@ class MathTrig
         return ($result == 0.0) ? Functions::DIV0() : 1 / $result;
     }
 
-    /**
-     * CSC.
-     *
-     * Returns the cosecant of an angle.
-     *
-     * @param float $angle Number
-     *
-     * @return float|string The cosecant of the angle
-     */
+    
     public static function CSC($angle)
     {
         $angle = Functions::flattenSingleValue($angle);
@@ -1713,15 +1242,7 @@ class MathTrig
         return ($result == 0.0) ? Functions::DIV0() : 1 / $result;
     }
 
-    /**
-     * CSCH.
-     *
-     * Returns the hyperbolic cosecant of an angle.
-     *
-     * @param float $angle Number
-     *
-     * @return float|string The hyperbolic cosecant of the angle
-     */
+    
     public static function CSCH($angle)
     {
         $angle = Functions::flattenSingleValue($angle);
@@ -1735,15 +1256,7 @@ class MathTrig
         return ($result == 0.0) ? Functions::DIV0() : 1 / $result;
     }
 
-    /**
-     * COT.
-     *
-     * Returns the cotangent of an angle.
-     *
-     * @param float $angle Number
-     *
-     * @return float|string The cotangent of the angle
-     */
+    
     public static function COT($angle)
     {
         $angle = Functions::flattenSingleValue($angle);
@@ -1757,15 +1270,7 @@ class MathTrig
         return ($result == 0.0) ? Functions::DIV0() : 1 / $result;
     }
 
-    /**
-     * COTH.
-     *
-     * Returns the hyperbolic cotangent of an angle.
-     *
-     * @param float $angle Number
-     *
-     * @return float|string The hyperbolic cotangent of the angle
-     */
+    
     public static function COTH($angle)
     {
         $angle = Functions::flattenSingleValue($angle);
@@ -1779,15 +1284,7 @@ class MathTrig
         return ($result == 0.0) ? Functions::DIV0() : 1 / $result;
     }
 
-    /**
-     * ACOT.
-     *
-     * Returns the arccotangent of a number.
-     *
-     * @param float $number Number
-     *
-     * @return float|string The arccotangent of the number
-     */
+    
     public static function ACOT($number)
     {
         $number = Functions::flattenSingleValue($number);
@@ -1799,15 +1296,7 @@ class MathTrig
         return (M_PI / 2) - atan($number);
     }
 
-    /**
-     * ACOTH.
-     *
-     * Returns the hyperbolic arccotangent of a number.
-     *
-     * @param float $number Number
-     *
-     * @return float|string The hyperbolic arccotangent of the number
-     */
+    
     public static function ACOTH($number)
     {
         $number = Functions::flattenSingleValue($number);

@@ -16,7 +16,7 @@ final class Options extends AbstractOptions
 
     public bool $SHOULD_USE_INLINE_STRINGS = true;
 
-    /** @var MergeCell[] */
+    
     private array $MERGE_CELLS = [];
 
     private ?PageMargin $pageMargin = null;
@@ -34,16 +34,7 @@ final class Options extends AbstractOptions
         $this->DEFAULT_ROW_STYLE = $defaultRowStyle;
     }
 
-    /**
-     * Row coordinates are indexed from 1, columns from 0 (A = 0),
-     * so a merge B2:G2 looks like $writer->mergeCells(1, 2, 6, 2);.
-     *
-     * @param 0|positive-int $topLeftColumn
-     * @param positive-int   $topLeftRow
-     * @param 0|positive-int $bottomRightColumn
-     * @param positive-int   $bottomRightRow
-     * @param 0|positive-int $sheetIndex
-     */
+    
     public function mergeCells(
         int $topLeftColumn,
         int $topLeftRow,
@@ -60,11 +51,7 @@ final class Options extends AbstractOptions
         );
     }
 
-    /**
-     * @return MergeCell[]
-     *
-     * @internal
-     */
+    
     public function getMergeCells(): array
     {
         return $this->MERGE_CELLS;

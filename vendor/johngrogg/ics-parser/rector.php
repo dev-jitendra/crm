@@ -7,7 +7,7 @@ use Rector\Php53\Rector\Ternary\TernaryToElvisRector;
 use Rector\Set\ValueObject\SetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-// rector process src
+
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
@@ -49,8 +49,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         Rector\Php71\Rector\FuncCall\CountOnNullRector::class,
         Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector::class,
         Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector::class,
-        // PHP 5.6 incompatible
-        Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector::class, // PHP 7
+        
+        Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector::class, 
         Rector\Php70\Rector\If_\IfToSpaceshipRector::class,
         Rector\Php70\Rector\Ternary\TernaryToSpaceshipRector::class,
         Rector\Php71\Rector\BinaryOp\IsIterableRector::class,

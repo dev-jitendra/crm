@@ -6,22 +6,16 @@ use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\Deprecations\Deprecation;
 
-/**
- * Immutable type of {@see TimeType}.
- */
+
 class TimeImmutableType extends TimeType
 {
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getName()
     {
         return Types::TIME_IMMUTABLE;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         if ($value === null) {
@@ -39,9 +33,7 @@ class TimeImmutableType extends TimeType
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         if ($value === null || $value instanceof DateTimeImmutable) {
@@ -61,16 +53,12 @@ class TimeImmutableType extends TimeType
         return $dateTime;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated
-     */
+    
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5509',
+            'https:
             '%s is deprecated.',
             __METHOD__,
         );

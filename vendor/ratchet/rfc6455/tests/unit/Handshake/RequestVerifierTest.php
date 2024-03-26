@@ -5,13 +5,9 @@ namespace Ratchet\RFC6455\Test\Unit\Handshake;
 use Ratchet\RFC6455\Handshake\RequestVerifier;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers Ratchet\RFC6455\Handshake\RequestVerifier
- */
+
 class RequestVerifierTest extends TestCase {
-    /**
-     * @var RequestVerifier
-     */
+    
     protected $_v;
 
     public function setUp() {
@@ -29,9 +25,7 @@ class RequestVerifierTest extends TestCase {
             array(false, 'PATCH')
         );
     }
-    /**
-     * @dataProvider methodProvider
-     */
+    
     public function testMethodMustBeGet($result, $in) {
         $this->assertEquals($result, $this->_v->verifyMethod($in));
     }
@@ -53,9 +47,7 @@ class RequestVerifierTest extends TestCase {
         );
     }
 
-    /**
-     * @dataProvider httpVersionProvider
-     */
+    
     public function testHttpVersionIsAtLeast1Point1($expected, $in) {
         $this->assertEquals($expected, $this->_v->verifyHTTPVersion($in));
     }
@@ -71,9 +63,7 @@ class RequestVerifierTest extends TestCase {
         );
     }
 
-    /**
-     * @dataProvider URIProvider
-     */
+    
     public function testRequestUri($expected, $in) {
         $this->assertEquals($expected, $this->_v->verifyRequestURI($in));
     }
@@ -85,9 +75,7 @@ class RequestVerifierTest extends TestCase {
         );
     }
 
-    /**
-     * @dataProvider HostProvider
-     */
+    
     public function testVerifyHostIsSet($expected, $in) {
         $this->assertEquals($expected, $this->_v->verifyHost($in));
     }
@@ -102,9 +90,7 @@ class RequestVerifierTest extends TestCase {
         );
     }
 
-    /**
-     * @dataProvider upgradeProvider
-     */
+    
     public function testVerifyUpgradeIsWebSocket($expected, $val) {
         $this->assertEquals($expected, $this->_v->verifyUpgradeRequest($val));
     }
@@ -116,7 +102,7 @@ class RequestVerifierTest extends TestCase {
             array(true,  ['keep-alive', 'Upgrade']),
             array(true,  ['Upgrade', 'keep-alive']),
             array(true,  ['keep-alive', 'Upgrade', 'something']),
-            // as seen in Firefox 47.0.1 - see https://github.com/ratchetphp/RFC6455/issues/14
+            
             array(true,  ['keep-alive, Upgrade']),
             array(true,  ['Upgrade, keep-alive']),
             array(true,  ['keep-alive, Upgrade, something']),
@@ -126,9 +112,7 @@ class RequestVerifierTest extends TestCase {
         );
     }
 
-    /**
-     * @dataProvider connectionProvider
-     */
+    
     public function testConnectionHeaderVerification($expected, $val) {
         $this->assertEquals($expected, $this->_v->verifyConnection($val));
     }
@@ -151,9 +135,7 @@ class RequestVerifierTest extends TestCase {
         );
     }
 
-    /**
-     * @dataProvider keyProvider
-     */
+    
     public function testKeyIsBase64Encoded16BitNonce($expected, $val) {
         $this->assertEquals($expected, $this->_v->verifyKey($val));
     }
@@ -171,9 +153,7 @@ class RequestVerifierTest extends TestCase {
         );
     }
 
-    /**
-     * @dataProvider versionProvider
-     */
+    
     public function testVersionEquals13($expected, $in) {
         $this->assertEquals($expected, $this->_v->verifyVersion($in));
     }

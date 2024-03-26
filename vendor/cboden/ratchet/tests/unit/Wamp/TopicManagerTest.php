@@ -1,20 +1,14 @@
 <?php
 namespace Ratchet\Wamp;
 
-/**
- * @covers Ratchet\Wamp\TopicManager
- */
+
 class TopicManagerTest extends \PHPUnit_Framework_TestCase {
     private $mock;
 
-    /**
-     * @var \Ratchet\Wamp\TopicManager
-     */
+    
     private $mngr;
 
-    /**
-     * @var \Ratchet\ConnectionInterface
-     */
+    
     private $conn;
 
     public function setUp() {
@@ -191,9 +185,7 @@ class TopicManagerTest extends \PHPUnit_Framework_TestCase {
         ];
     }
 
-    /**
-     * @dataProvider topicConnExpectationProvider
-     */
+    
     public function testTopicRetentionFromLeavingConnections($methodCall, $expectation) {
         $topicName = 'checkTopic';
         list($topic, $attribute) = $this->topicProvider($topicName);

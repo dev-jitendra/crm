@@ -15,23 +15,16 @@ use function ucwords;
 
 class GenericHeader implements HeaderInterface, UnstructuredInterface
 {
-    /** @var string */
+    
     protected $fieldName;
 
-    /** @var string */
+    
     protected $fieldValue = '';
 
-    /**
-     * Header encoding
-     *
-     * @var null|string
-     */
+    
     protected $encoding;
 
-    /**
-     * @param string $headerLine
-     * @return GenericHeader
-     */
+    
     public static function fromString($headerLine)
     {
         [$name, $value] = self::splitHeaderLine($headerLine);
@@ -39,13 +32,7 @@ class GenericHeader implements HeaderInterface, UnstructuredInterface
         return new static($name, $value);
     }
 
-    /**
-     * Splits the header line in `name` and `value` parts.
-     *
-     * @param string $headerLine
-     * @return string[] `name` in the first index and `value` in the second.
-     * @throws InvalidArgumentException If header does not match with the format ``name:value``.
-     */
+    
     public static function splitHeaderLine($headerLine)
     {
         $parts = explode(':', $headerLine, 2);
@@ -66,12 +53,7 @@ class GenericHeader implements HeaderInterface, UnstructuredInterface
         return $parts;
     }
 
-    /**
-     * Constructor
-     *
-     * @param string $fieldName  Optional
-     * @param null|string $fieldValue Optional
-     */
+    
     public function __construct($fieldName = null, $fieldValue = null)
     {
         if (! $fieldName) {
@@ -85,20 +67,14 @@ class GenericHeader implements HeaderInterface, UnstructuredInterface
         }
     }
 
-    /**
-     * Set header name
-     *
-     * @param  string $fieldName
-     * @return GenericHeader
-     * @throws Exception\InvalidArgumentException;
-     */
+    
     public function setFieldName($fieldName)
     {
         if (! is_string($fieldName) || empty($fieldName)) {
             throw new InvalidArgumentException('Header name must be a string');
         }
 
-        // Pre-filter to normalize valid characters, change underscore to dash
+        
         $fieldName = str_replace(' ', '-', ucwords(str_replace(['_', '-'], ' ', $fieldName)));
 
         if (! HeaderName::isValid($fieldName)) {
@@ -111,21 +87,13 @@ class GenericHeader implements HeaderInterface, UnstructuredInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
+    
     public function getFieldName()
     {
         return $this->fieldName;
     }
 
-    /**
-     * Set header value
-     *
-     * @param  string $fieldValue
-     * @return GenericHeader
-     * @throws Exception\InvalidArgumentException;
-     */
+    
     public function setFieldValue($fieldValue)
     {
         $fieldValue = (string) $fieldValue;
@@ -142,9 +110,7 @@ class GenericHeader implements HeaderInterface, UnstructuredInterface
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function getFieldValue($format = HeaderInterface::FORMAT_RAW)
     {
         if (HeaderInterface::FORMAT_ENCODED === $format) {
@@ -154,10 +120,7 @@ class GenericHeader implements HeaderInterface, UnstructuredInterface
         return $this->fieldValue;
     }
 
-    /**
-     * @param string $encoding
-     * @return self
-     */
+    
     public function setEncoding($encoding)
     {
         if ($encoding === $this->encoding) {
@@ -185,9 +148,7 @@ class GenericHeader implements HeaderInterface, UnstructuredInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
+    
     public function getEncoding()
     {
         if (! $this->encoding) {
@@ -197,9 +158,7 @@ class GenericHeader implements HeaderInterface, UnstructuredInterface
         return $this->encoding;
     }
 
-    /**
-     * @return string
-     */
+    
     public function toString()
     {
         $name = $this->getFieldName();

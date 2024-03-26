@@ -1,25 +1,13 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Monolog package.
- *
- * (c) Jordi Boggiano <j.boggiano@seld.be>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Monolog\Formatter;
 
 use Monolog\Level;
 use Monolog\LogRecord;
 
-/**
- * Serializes a log message according to RFC 5424
- *
- * @author Dalibor Karlović <dalibor.karlovic@sigwin.hr>
- * @author Renat Gabdullin <renatobyj@gmail.com>
- */
+
 class SyslogFormatter extends LineFormatter
 {
     private const SYSLOG_FACILITY_USER = 1;
@@ -43,10 +31,7 @@ class SyslogFormatter extends LineFormatter
         return parent::format($record);
     }
 
-    /**
-     * @param LogRecord $record
-     * @return array<string, mixed>
-     */
+    
     private function formatExtra(LogRecord $record): array
     {
         $extra = $record->extra;

@@ -1,13 +1,6 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 return array_replace_recursive(require __DIR__.'/en.php', [
     'meridiem' => ['Kiroko', 'Hwaĩ-inĩ'],
@@ -25,31 +18,31 @@ return array_replace_recursive(require __DIR__.'/en.php', [
         'LLLL' => 'dddd, D MMMM YYYY HH:mm',
     ],
 
-    'year' => ':count mĩaka', // less reliable
-    'y' => ':count mĩaka', // less reliable
-    'a_year' => ':count mĩaka', // less reliable
+    'year' => ':count mĩaka', 
+    'y' => ':count mĩaka', 
+    'a_year' => ':count mĩaka', 
 
-    'month' => ':count mweri', // less reliable
-    'm' => ':count mweri', // less reliable
-    'a_month' => ':count mweri', // less reliable
+    'month' => ':count mweri', 
+    'm' => ':count mweri', 
+    'a_month' => ':count mweri', 
 
-    'week' => ':count kiumia', // less reliable
-    'w' => ':count kiumia', // less reliable
-    'a_week' => ':count kiumia', // less reliable
+    'week' => ':count kiumia', 
+    'w' => ':count kiumia', 
+    'a_week' => ':count kiumia', 
 
-    'day' => ':count mũthenya', // less reliable
-    'd' => ':count mũthenya', // less reliable
-    'a_day' => ':count mũthenya', // less reliable
+    'day' => ':count mũthenya', 
+    'd' => ':count mũthenya', 
+    'a_day' => ':count mũthenya', 
 
-    'hour' => ':count thaa', // less reliable
-    'h' => ':count thaa', // less reliable
-    'a_hour' => ':count thaa', // less reliable
+    'hour' => ':count thaa', 
+    'h' => ':count thaa', 
+    'a_hour' => ':count thaa', 
 
-    'minute' => ':count mundu', // less reliable
-    'min' => ':count mundu', // less reliable
-    'a_minute' => ':count mundu', // less reliable
+    'minute' => ':count mundu', 
+    'min' => ':count mundu', 
+    'a_minute' => ':count mundu', 
 
-    'second' => ':count igego', // less reliable
-    's' => ':count igego', // less reliable
-    'a_second' => ':count igego', // less reliable
+    'second' => ':count igego', 
+    's' => ':count igego', 
+    'a_second' => ':count igego', 
 ]);

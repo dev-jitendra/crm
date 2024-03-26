@@ -1,13 +1,6 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 return array_replace_recursive(require __DIR__.'/en.php', [
     'meridiem' => ['ꎸꄑ', 'ꁯꋒ'],
@@ -25,31 +18,31 @@ return array_replace_recursive(require __DIR__.'/en.php', [
         'LLLL' => 'YYYY MMMM D, dddd h:mm a',
     ],
 
-    'year' => ':count ꒉ', // less reliable
-    'y' => ':count ꒉ', // less reliable
-    'a_year' => ':count ꒉ', // less reliable
+    'year' => ':count ꒉ', 
+    'y' => ':count ꒉ', 
+    'a_year' => ':count ꒉ', 
 
     'month' => ':count ꆪ',
     'm' => ':count ꆪ',
     'a_month' => ':count ꆪ',
 
-    'week' => ':count ꏃ', // less reliable
-    'w' => ':count ꏃ', // less reliable
-    'a_week' => ':count ꏃ', // less reliable
+    'week' => ':count ꏃ', 
+    'w' => ':count ꏃ', 
+    'a_week' => ':count ꏃ', 
 
-    'day' => ':count ꏜ', // less reliable
-    'd' => ':count ꏜ', // less reliable
-    'a_day' => ':count ꏜ', // less reliable
+    'day' => ':count ꏜ', 
+    'd' => ':count ꏜ', 
+    'a_day' => ':count ꏜ', 
 
     'hour' => ':count ꄮꈉ',
     'h' => ':count ꄮꈉ',
     'a_hour' => ':count ꄮꈉ',
 
-    'minute' => ':count ꀄꊭ', // less reliable
-    'min' => ':count ꀄꊭ', // less reliable
-    'a_minute' => ':count ꀄꊭ', // less reliable
+    'minute' => ':count ꀄꊭ', 
+    'min' => ':count ꀄꊭ', 
+    'a_minute' => ':count ꀄꊭ', 
 
-    'second' => ':count ꇅ', // less reliable
-    's' => ':count ꇅ', // less reliable
-    'a_second' => ':count ꇅ', // less reliable
+    'second' => ':count ꇅ', 
+    's' => ':count ꇅ', 
+    'a_second' => ':count ꇅ', 
 ]);

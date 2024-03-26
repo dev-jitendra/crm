@@ -33,14 +33,14 @@ class Properties
         $xmlCore = $this->extractPropertyData($propertyData);
 
         if (is_object($xmlCore)) {
-            $xmlCore->registerXPathNamespace('dc', 'http://purl.org/dc/elements/1.1/');
-            $xmlCore->registerXPathNamespace('dcterms', 'http://purl.org/dc/terms/');
-            $xmlCore->registerXPathNamespace('cp', 'http://schemas.openxmlformats.org/package/2006/metadata/core-properties');
+            $xmlCore->registerXPathNamespace('dc', 'http:
+            $xmlCore->registerXPathNamespace('dcterms', 'http:
+            $xmlCore->registerXPathNamespace('cp', 'http:
 
             $this->docProps->setCreator((string) self::getArrayItem($xmlCore->xpath('dc:creator')));
             $this->docProps->setLastModifiedBy((string) self::getArrayItem($xmlCore->xpath('cp:lastModifiedBy')));
-            $this->docProps->setCreated(strtotime(self::getArrayItem($xmlCore->xpath('dcterms:created')))); //! respect xsi:type
-            $this->docProps->setModified(strtotime(self::getArrayItem($xmlCore->xpath('dcterms:modified')))); //! respect xsi:type
+            $this->docProps->setCreated(strtotime(self::getArrayItem($xmlCore->xpath('dcterms:created')))); 
+            $this->docProps->setModified(strtotime(self::getArrayItem($xmlCore->xpath('dcterms:modified')))); 
             $this->docProps->setTitle((string) self::getArrayItem($xmlCore->xpath('dc:title')));
             $this->docProps->setDescription((string) self::getArrayItem($xmlCore->xpath('dc:description')));
             $this->docProps->setSubject((string) self::getArrayItem($xmlCore->xpath('dc:subject')));
@@ -69,11 +69,11 @@ class Properties
 
         if (is_object($xmlCore)) {
             foreach ($xmlCore as $xmlProperty) {
-                /** @var SimpleXMLElement $xmlProperty */
+                
                 $cellDataOfficeAttributes = $xmlProperty->attributes();
                 if (isset($cellDataOfficeAttributes['name'])) {
                     $propertyName = (string) $cellDataOfficeAttributes['name'];
-                    $cellDataOfficeChildren = $xmlProperty->children('http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes');
+                    $cellDataOfficeChildren = $xmlProperty->children('http:
 
                     $attributeType = $cellDataOfficeChildren->getName();
                     $attributeValue = (string) $cellDataOfficeChildren->{$attributeType};

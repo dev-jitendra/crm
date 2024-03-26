@@ -2,9 +2,7 @@
 namespace Ratchet\Application\Server;
 use Ratchet\Server\FlashPolicy;
 
-/**
- * @covers Ratchet\Server\FlashPolicy
- */
+
 class FlashPolicyTest extends \PHPUnit_Framework_TestCase {
 
     protected $_policy;
@@ -33,9 +31,7 @@ class FlashPolicyTest extends \PHPUnit_Framework_TestCase {
         $this->_policy->renderPolicy();
     }
 
-    /**
-     * @dataProvider siteControl
-     */
+    
     public function testSiteControlValidation($accept, $permittedCrossDomainPolicies) {
         $this->assertEquals($accept, $this->_policy->validateSiteControl($permittedCrossDomainPolicies));
     }
@@ -55,9 +51,7 @@ class FlashPolicyTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
-    /**
-     * @dataProvider URI
-     */
+    
     public function testDomainValidation($accept, $domain) {
         $this->assertEquals($accept, $this->_policy->validateDomain($domain));
     }
@@ -70,9 +64,9 @@ class FlashPolicyTest extends \PHPUnit_Framework_TestCase {
           , array(true, '*.example.com')
           , array(true, 'www.example.com')
           , array(true, 'dev.dev.example.com')
-          , array(true, 'http://example.com')
-          , array(true, 'https://example.com')
-          , array(true, 'http://*.example.com')
+          , array(true, 'http:
+          , array(true, 'https:
+          , array(true, 'http:
           , array(false, 'exam*ple.com')
           , array(true, '127.0.255.1')
           , array(true, 'localhost')
@@ -84,9 +78,7 @@ class FlashPolicyTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
-    /**
-     * @dataProvider ports
-     */
+    
     public function testPortValidation($accept, $ports) {
         $this->assertEquals($accept, $this->_policy->validatePorts($ports));
     }

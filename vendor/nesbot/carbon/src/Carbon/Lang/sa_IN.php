@@ -1,18 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - The Debian project Christian Perrier bubulle@debian.org
- */
+
+
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [
         'L' => 'D-MM-YY',
@@ -25,9 +15,9 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'day_of_first_week_of_year' => 1,
     'meridiem' => ['पूर्वाह्न', 'अपराह्न'],
 
-    'minute' => ':count होरा', // less reliable
-    'min' => ':count होरा', // less reliable
-    'a_minute' => ':count होरा', // less reliable
+    'minute' => ':count होरा', 
+    'min' => ':count होरा', 
+    'a_minute' => ':count होरा', 
 
     'year' => ':count वर्ष',
     'y' => ':count वर्ष',

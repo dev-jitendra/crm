@@ -21,27 +21,13 @@ use function sprintf;
 use function strtolower;
 use function var_export;
 
-/**
- * @implements Iterator<string, AddressInterface>
- * @final
- */
+
 class AddressList implements Countable, Iterator
 {
-    /**
-     * List of Address objects we're managing
-     *
-     * @var array<string, AddressInterface>
-     */
+    
     protected $addresses = [];
 
-    /**
-     * Add an address to the list
-     *
-     * @param  string|AddressInterface $emailOrAddress
-     * @param  null|string $name
-     * @throws Exception\InvalidArgumentException
-     * @return $this
-     */
+    
     public function add($emailOrAddress, $name = null)
     {
         if (is_string($emailOrAddress)) {
@@ -66,17 +52,7 @@ class AddressList implements Countable, Iterator
         return $this;
     }
 
-    /**
-     * Add many addresses at once
-     *
-     * If an email key is provided, it will be used as the email, and the value
-     * as the name. Otherwise, the value is passed as the sole argument to add(),
-     * and, as such, can be either email strings or Address\AddressInterface objects.
-     *
-     * @param  array $addresses
-     * @throws Exception\RuntimeException
-     * @return $this
-     */
+    
     public function addMany(array $addresses)
     {
         foreach ($addresses as $key => $value) {
@@ -97,27 +73,14 @@ class AddressList implements Countable, Iterator
         return $this;
     }
 
-    /**
-     * Add an address to the list from any valid string format, such as
-     *  - "Laminas Dev" <dev@laminas.com>
-     *  - dev@laminas.com
-     *
-     * @param string $address
-     * @param null|string $comment Comment associated with the address, if any.
-     * @throws Exception\InvalidArgumentException
-     * @return $this
-     */
+    
     public function addFromString($address, $comment = null)
     {
         $this->add(Address::fromString($address, $comment));
         return $this;
     }
 
-    /**
-     * Merge another address list into this one
-     *
-     * @return $this
-     */
+    
     public function merge(self $addressList)
     {
         foreach ($addressList as $address) {
@@ -126,24 +89,14 @@ class AddressList implements Countable, Iterator
         return $this;
     }
 
-    /**
-     * Does the email exist in this list?
-     *
-     * @param  string $email
-     * @return bool
-     */
+    
     public function has($email)
     {
         $email = strtolower($email);
         return isset($this->addresses[$email]);
     }
 
-    /**
-     * Get an address by email
-     *
-     * @param  string $email
-     * @return false|AddressInterface
-     */
+    
     public function get($email)
     {
         $email = strtolower($email);
@@ -154,12 +107,7 @@ class AddressList implements Countable, Iterator
         return $this->addresses[$email];
     }
 
-    /**
-     * Delete an address from the list
-     *
-     * @param  string $email
-     * @return bool
-     */
+    
     public function delete($email)
     {
         $email = strtolower($email);
@@ -171,72 +119,42 @@ class AddressList implements Countable, Iterator
         return true;
     }
 
-    /**
-     * Return count of addresses
-     *
-     * @return int
-     */
+    
     #[ReturnTypeWillChange]
     public function count()
     {
         return count($this->addresses);
     }
 
-    /**
-     * Rewind iterator
-     *
-     * @see addresses
-     *
-     * @return false|AddressInterface the value of the first addresses element, or false if the addresses is
-     * empty.
-     */
+    
     #[ReturnTypeWillChange]
     public function rewind()
     {
         return reset($this->addresses);
     }
 
-    /**
-     * Return current item in iteration
-     *
-     * @return AddressInterface
-     */
+    
     #[ReturnTypeWillChange]
     public function current()
     {
         return current($this->addresses);
     }
 
-    /**
-     * Return key of current item of iteration
-     *
-     * @return string
-     */
+    
     #[ReturnTypeWillChange]
     public function key()
     {
         return key($this->addresses);
     }
 
-    /**
-     * Move to next item
-     *
-     * @see addresses
-     *
-     * @return false|AddressInterface the addresses value in the next place that's pointed to by the
-     * internal array pointer, or false if there are no more elements.
-     */
+    
     #[ReturnTypeWillChange]
     public function next()
     {
         return next($this->addresses);
     }
 
-    /**
-     * Is the current item of iteration valid?
-     *
-     * @return bool
-     */
+    
     #[ReturnTypeWillChange]
     public function valid()
     {
@@ -244,13 +162,7 @@ class AddressList implements Countable, Iterator
         return $key !== null && $key !== false;
     }
 
-    /**
-     * Create an address object
-     *
-     * @param  string $email
-     * @param  string|null $name
-     * @return Address
-     */
+    
     protected function createAddress($email, $name)
     {
         return new Address($email, $name);

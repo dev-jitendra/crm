@@ -8,9 +8,7 @@ use DateInterval;
 
 final class DateIntervalFormatHelper
 {
-    /**
-     * @see https://www.php.net/manual/en/dateinterval.format.php.
-     */
+    
     private const dateIntervalFormats = [
         'hh' => '%H',
         'h' => '%h',
@@ -20,24 +18,17 @@ final class DateIntervalFormatHelper
         's' => '%s',
     ];
 
-    /**
-     * Excel stores durations as fractions of days (24h = 1).
-     *
-     * Only fills hours/minutes/seconds because those are the only values that we can format back out again.
-     * Excel can also only handle those units as duration.
-     * PHP's DateInterval is also quite limited - it will not automatically convert unit overflow
-     *  (60 seconds are not converted to 1 minute).
-     */
+    
     public static function createDateIntervalFromHours(float $dayFractions): DateInterval
     {
-        $time = abs($dayFractions) * 24; // convert to hours
+        $time = abs($dayFractions) * 24; 
         $hours = floor($time);
         $time = ($time - $hours) * 60;
-        $minutes = (int) floor($time); // must cast to int for type strict compare below
+        $minutes = (int) floor($time); 
         $time = ($time - $minutes) * 60;
-        $seconds = (int) round($time); // must cast to int for type strict compare below
+        $seconds = (int) round($time); 
 
-        // Bubble up rounding gain if we ended up with 60 seconds - disadvantage of using fraction of days for small durations:
+        
         if (60 === $seconds) {
             $seconds = 0;
             ++$minutes;
@@ -57,7 +48,7 @@ final class DateIntervalFormatHelper
 
     public static function isDurationFormat(string $excelFormat): bool
     {
-        // Only consider formats with leading brackets as valid duration formats (e.g. "[hh]:mm", "[mm]:ss", etc.):
+        
         return 1 === preg_match('/^(\[hh?](:mm(:ss)?)?|\[mm?](:ss)?|\[ss?])$/', $excelFormat);
     }
 
@@ -71,7 +62,7 @@ final class DateIntervalFormatHelper
             $phpFormatParts[] = self::dateIntervalFormats[$formatPart];
         }
 
-        // Add the minus sign for potential negative durations:
+        
         return '%r'.implode(':', $phpFormatParts);
     }
 
@@ -79,8 +70,8 @@ final class DateIntervalFormatHelper
     {
         $phpFormat = self::toPHPDateIntervalFormat($excelDateFormat, $startUnit);
 
-        // We have to move the hours to minutes or hours+minutes to seconds if the format in Excel did the same:
-        $startUnit = $startUnit[0]; // only take the first char
+        
+        $startUnit = $startUnit[0]; 
         $dateIntervalClone = clone $dateInterval;
         if ('m' === $startUnit) {
             $dateIntervalClone->i = $dateIntervalClone->i + $dateIntervalClone->h * 60;

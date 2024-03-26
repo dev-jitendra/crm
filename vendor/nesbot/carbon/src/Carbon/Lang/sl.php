@@ -1,34 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Philippe Vaucher
- * - Tsutomu Kuroda
- * - tjku
- * - Max Melentiev
- * - Juanito Fatas
- * - Akira Matsuda
- * - Christopher Dell
- * - Enrique Vidal
- * - Simone Carletti
- * - Aaron Patterson
- * - Nicolás Hock Isaza
- * - Miha Rebernik
- * - Gal Jakič (morpheus7CS)
- * - Glavić
- * - Anže Časar
- * - Lovro Tramšek (Lovro1107)
- * - burut13
- */
+
+
 
 use Carbon\CarbonInterface;
 

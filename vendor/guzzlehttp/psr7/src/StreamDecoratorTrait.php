@@ -4,29 +4,16 @@ namespace GuzzleHttp\Psr7;
 
 use Psr\Http\Message\StreamInterface;
 
-/**
- * Stream decorator trait
- *
- * @property StreamInterface stream
- */
+
 trait StreamDecoratorTrait
 {
-    /**
-     * @param StreamInterface $stream Stream to decorate
-     */
+    
     public function __construct(StreamInterface $stream)
     {
         $this->stream = $stream;
     }
 
-    /**
-     * Magic method used to create a new stream if streams are not added in
-     * the constructor of a decorator (e.g., LazyOpenStream).
-     *
-     * @param string $name Name of the property (allows "stream" only).
-     *
-     * @return StreamInterface
-     */
+    
     public function __get($name)
     {
         if ($name == 'stream') {
@@ -45,7 +32,7 @@ trait StreamDecoratorTrait
             }
             return $this->getContents();
         } catch (\Exception $e) {
-            // Really, PHP? https://bugs.php.net/bug.php?id=53648
+            
             trigger_error('StreamDecorator::__toString exception: '
                 . (string) $e, E_USER_ERROR);
             return '';
@@ -57,19 +44,12 @@ trait StreamDecoratorTrait
         return Utils::copyToString($this);
     }
 
-    /**
-     * Allow decorators to implement custom methods
-     *
-     * @param string $method Missing method name
-     * @param array  $args   Method arguments
-     *
-     * @return mixed
-     */
+    
     public function __call($method, array $args)
     {
         $result = call_user_func_array([$this->stream, $method], $args);
 
-        // Always return the wrapped object if the result is a return $this
+        
         return $result === $this->stream ? $this : $result;
     }
 
@@ -138,13 +118,7 @@ trait StreamDecoratorTrait
         return $this->stream->write($string);
     }
 
-    /**
-     * Implement in subclasses to dynamically create streams when requested.
-     *
-     * @return StreamInterface
-     *
-     * @throws \BadMethodCallException
-     */
+    
     protected function createStream()
     {
         throw new \BadMethodCallException('Not implemented');

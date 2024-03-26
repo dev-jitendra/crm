@@ -6,9 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class BufferTest extends TestCase
 {
-    /**
-     * @test
-     */
+    
     public function sendShouldQueueMessages()
     {
         $loop = $this->getMockBuilder('React\EventLoop\LoopInterface')->getMock();
@@ -32,9 +30,7 @@ class BufferTest extends TestCase
         $buffer->send('foo');
     }
 
-    /**
-     * @test
-     */
+    
     public function loopShouldSendQueuedMessages()
     {
         $writeListener = function () {};

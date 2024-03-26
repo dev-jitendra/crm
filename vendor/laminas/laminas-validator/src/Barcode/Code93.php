@@ -9,11 +9,7 @@ use function substr;
 
 class Code93 extends AbstractAdapter
 {
-    /**
-     * Note that the characters !"§& are only synonyms
-     *
-     * @var array
-     */
+    
     protected $check = [
         '0' => 0,
         '1' => 1,
@@ -64,9 +60,7 @@ class Code93 extends AbstractAdapter
         '&' => 46,
     ];
 
-    /**
-     * Constructor for this barcode adapter
-     */
+    
     public function __construct()
     {
         $this->setLength(-1);
@@ -75,12 +69,7 @@ class Code93 extends AbstractAdapter
         $this->useChecksum(false);
     }
 
-    /**
-     * Validates the checksum (Modulo CK)
-     *
-     * @param  string $value The barcode to validate
-     * @return bool
-     */
+    
     protected function code93($value)
     {
         $checksum = substr($value, -2, 2);

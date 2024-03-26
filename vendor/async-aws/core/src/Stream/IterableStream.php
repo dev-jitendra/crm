@@ -4,29 +4,19 @@ namespace AsyncAws\Core\Stream;
 
 use AsyncAws\Core\Exception\InvalidArgument;
 
-/**
- * Convert an iterator into a Stream.
- *
- * @author Jérémy Derussé <jeremy@derusse.com>
- */
+
 final class IterableStream implements ReadOnceResultStream, RequestStream
 {
-    /**
-     * @var iterable<string>
-     */
+    
     private $content;
 
-    /**
-     * @param iterable<string> $content
-     */
+    
     private function __construct(iterable $content)
     {
         $this->content = $content;
     }
 
-    /**
-     * @param self|iterable<string> $content
-     */
+    
     public static function create($content): IterableStream
     {
         if ($content instanceof self) {

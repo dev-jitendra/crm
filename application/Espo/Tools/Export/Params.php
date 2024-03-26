@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\Export;
 
@@ -34,20 +8,18 @@ use Espo\Core\Select\Where\Item as WhereItem;
 
 use RuntimeException;
 
-/**
- * @immutable
- */
+
 class Params
 {
     private string $entityType;
-    /** @var ?string[] */
+    
     private $attributeList = null;
-    /** @var ?string[] */
+    
     private $fieldList = null;
     private ?string $fileName = null;
     private ?string $format = null;
     private ?string $name = null;
-    /** @var array<string, mixed> */
+    
     private array $params = [];
     private ?SearchParams $searchParams = null;
     private bool $applyAccessControl = true;
@@ -57,10 +29,7 @@ class Params
         $this->entityType = $entityType;
     }
 
-    /**
-     * @param array<string, mixed> $params
-     * @throws RuntimeException
-     */
+    
     public static function fromRaw(array $params): self
     {
         $entityType = $params['entityType'] ?? null;
@@ -146,7 +115,7 @@ class Params
         return $obj;
     }
 
-    /** @noinspection PhpUnused */
+    
     public function withFileName(?string $fileName): self
     {
         $obj = clone $this;
@@ -179,9 +148,7 @@ class Params
         return $obj;
     }
 
-    /**
-     * @param ?string[] $fieldList
-     */
+    
     public function withFieldList(?array $fieldList): self
     {
         $obj = clone $this;
@@ -190,9 +157,7 @@ class Params
         return $obj;
     }
 
-    /**
-     * @param ?string[] $attributeList
-     */
+    
     public function withAttributeList(?array $attributeList): self
     {
         $obj = clone $this;
@@ -209,9 +174,7 @@ class Params
         return $obj;
     }
 
-    /**
-     * Get search params.
-     */
+    
     public function getSearchParams(): SearchParams
     {
         $searchParams = $this->searchParams ?? SearchParams::create();
@@ -227,95 +190,67 @@ class Params
         return $searchParams;
     }
 
-    /**
-     * Get a target entity type.
-     */
+    
     public function getEntityType(): string
     {
         return $this->entityType;
     }
 
-    /**
-     * Get a filename for a result export file.
-     */
+    
     public function getFileName(): ?string
     {
         return $this->fileName;
     }
 
-    /**
-     * Get a name.
-     */
+    
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * Get a format.
-     */
+    
     public function getFormat(): ?string
     {
         return $this->format;
     }
 
-    /**
-     * Get attributes to be exported.
-     *
-     * @return ?string[]
-     */
+    
     public function getAttributeList(): ?array
     {
         return $this->attributeList;
     }
 
-    /**
-     * Get fields to be exported.
-     *
-     * @return ?string[]
-     */
+    
     public function getFieldList(): ?array
     {
         return $this->fieldList;
     }
 
-    /**
-     * Get a parameter list.
-     *
-     * @return string[]
-     */
+    
     public function getParamList(): array
     {
         return array_keys($this->params);
     }
 
-    /**
-     * Get a parameter value.
-     */
+    
     public function getParam(string $name): mixed
     {
         return $this->params[$name] ?? null;
     }
 
-    /**
-     * Has a parameter.
-     */
+    
     public function hasParam(string $name): bool
     {
         return array_key_exists($name, $this->params);
     }
 
-    /**
-     * Whether all fields should be exported.
-     */
+    
     public function allFields(): bool
     {
         return $this->fieldList === null && $this->attributeList === null;
     }
 
-    /**
-     * Whether to apply access control.
-     */
+    
     public function applyAccessControl(): bool
     {
         return $this->applyAccessControl;

@@ -57,7 +57,7 @@ class ConditionalStyles
             ksort($cfRules);
             $conditionalStyles = $this->readStyleRules($cfRules);
 
-            // Extract all cell references in $ref
+            
             $cellBlocks = explode(' ', str_replace('$', '', strtoupper($ref)));
             foreach ($cellBlocks as $cellBlock) {
                 $worksheet->getStyle($cellBlock)->setConditionalStyles($conditionalStyles);

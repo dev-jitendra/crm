@@ -1,10 +1,5 @@
 <?php
-/**
- * @package php-svg-lib
- * @link    http://github.com/PhenX/php-svg-lib
- * @author  Fabien Ménager <fabien.menager@gmail.com>
- * @license GNU LGPLv3+ http://www.gnu.org/copyleft/lesser.html
- */
+
 
 namespace Svg\Tag;
 
@@ -58,7 +53,7 @@ class Image extends AbstractTag
 
         $this->document->getSurface()->transform(1, 0, 0, -1, 0, $height);
 
-        if (\strtolower(\substr($this->href, 0, 7)) === "phar://" || ($this->document->allowExternalReferences === false && \strtolower(\substr($this->href, 0, 5) !== "data:"))) {
+        if (\strtolower(\substr($this->href, 0, 7)) === "phar:
             return;
         }
 

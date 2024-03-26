@@ -1,21 +1,12 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * This translator should only be used in a development environment.
- */
+
 final class PseudoLocalizationTranslator implements TranslatorInterface
 {
     private const EXPANSION_CHARACTER = '~';
@@ -26,44 +17,10 @@ final class PseudoLocalizationTranslator implements TranslatorInterface
     private bool $brackets;
     private bool $parseHTML;
 
-    /**
-     * @var string[]
-     */
+    
     private array $localizableHTMLAttributes;
 
-    /**
-     * Available options:
-     *  * accents:
-     *      type: boolean
-     *      default: true
-     *      description: replace ASCII characters of the translated string with accented versions or similar characters
-     *      example: if true, "foo" => "ƒöö".
-     *
-     *  * expansion_factor:
-     *      type: float
-     *      default: 1
-     *      validation: it must be greater than or equal to 1
-     *      description: expand the translated string by the given factor with spaces and tildes
-     *      example: if 2, "foo" => "~foo ~"
-     *
-     *  * brackets:
-     *      type: boolean
-     *      default: true
-     *      description: wrap the translated string with brackets
-     *      example: if true, "foo" => "[foo]"
-     *
-     *  * parse_html:
-     *      type: boolean
-     *      default: false
-     *      description: parse the translated string as HTML - looking for HTML tags has a performance impact but allows to preserve them from alterations - it also allows to compute the visible translated string length which is useful to correctly expand ot when it contains HTML
-     *      warning: unclosed tags are unsupported, they will be fixed (closed) by the parser - eg, "foo <div>bar" => "foo <div>bar</div>"
-     *
-     *  * localizable_html_attributes:
-     *      type: string[]
-     *      default: []
-     *      description: the list of HTML attributes whose values can be altered - it is only useful when the "parse_html" option is set to true
-     *      example: if ["title"], and with the "accents" option set to true, "<a href="#" title="Go to your profile">Profile</a>" => "<a href="#" title="Ĝö ţö ýöûŕ þŕöƒîļé">Þŕöƒîļé</a>" - if "title" was not in the "localizable_html_attributes" list, the title attribute data would be left unchanged.
-     */
+    
     public function __construct(TranslatorInterface $translator, array $options = [])
     {
         $this->translator = $translator;
@@ -146,7 +103,7 @@ final class PseudoLocalizationTranslator implements TranslatorInterface
 
             $parts[] = [false, false, '<'.$childNode->tagName];
 
-            /** @var \DOMAttr $attribute */
+            
             foreach ($childNode->attributes as $attribute) {
                 $parts[] = [false, false, ' '.$attribute->nodeName.'="'];
 

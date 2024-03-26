@@ -588,9 +588,7 @@ class Html
 
     protected $stringData = '';
 
-    /**
-     * @var RichText
-     */
+    
     protected $richTextObject;
 
     protected function initialise(): void
@@ -603,30 +601,24 @@ class Html
         $this->stringData = '';
     }
 
-    /**
-     * Parse HTML formatting and return the resulting RichText.
-     *
-     * @param string $html
-     *
-     * @return RichText
-     */
+    
     public function toRichTextObject($html)
     {
         $this->initialise();
 
-        //    Create a new DOM object
+        
         $dom = new DOMDocument();
-        //    Load the HTML file into the DOM object
-        //  Note the use of error suppression, because typically this will be an html fragment, so not fully valid markup
+        
+        
         $prefix = '<?xml encoding="UTF-8">';
         @$dom->loadHTML($prefix . $html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        //    Discard excess white space
+        
         $dom->preserveWhiteSpace = false;
 
         $this->richTextObject = new RichText();
         $this->parseElements($dom);
 
-        // Clean any further spurious whitespace
+        
         $this->cleanWhitespace();
 
         return $this->richTextObject;
@@ -636,11 +628,11 @@ class Html
     {
         foreach ($this->richTextObject->getRichTextElements() as $key => $element) {
             $text = $element->getText();
-            // Trim any leading spaces on the first run
+            
             if ($key == 0) {
                 $text = ltrim($text);
             }
-            // Trim any spaces immediately after a line break
+            
             $text = preg_replace('/\n */mu', "\n", $text);
             $element->setText($text);
         }
@@ -800,9 +792,7 @@ class Html
         $this->buildTextRun();
     }
 
-    /**
-     * @param string $callbackTag
-     */
+    
     protected function handleCallback(DOMElement $element, $callbackTag, array $callbacks): void
     {
         if (isset($callbacks[$callbackTag])) {

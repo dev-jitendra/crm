@@ -14,19 +14,16 @@ use function trim;
 
 class MessageId implements HeaderInterface
 {
-    /** @var string */
+    
     protected $messageId;
 
-    /**
-     * @param string $headerLine
-     * @return static
-     */
+    
     public static function fromString($headerLine)
     {
         [$name, $value] = GenericHeader::splitHeaderLine($headerLine);
         $value          = HeaderWrap::mimeDecodeValue($value);
 
-        // check to ensure proper header type for this factory
+        
         if (strtolower($name) !== 'message-id') {
             throw new Exception\InvalidArgumentException('Invalid header line for Message-ID string');
         }
@@ -37,54 +34,38 @@ class MessageId implements HeaderInterface
         return $header;
     }
 
-    /**
-     * @return string
-     */
+    
     public function getFieldName()
     {
         return 'Message-ID';
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function getFieldValue($format = HeaderInterface::FORMAT_RAW)
     {
         return $this->messageId;
     }
 
-    /**
-     * @param string $encoding
-     * @return self
-     */
+    
     public function setEncoding($encoding)
     {
-        // This header must be always in US-ASCII
+        
         return $this;
     }
 
-    /**
-     * @return string
-     */
+    
     public function getEncoding()
     {
         return 'ASCII';
     }
 
-    /**
-     * @return string
-     */
+    
     public function toString()
     {
         return 'Message-ID: ' . $this->getFieldValue();
     }
 
-    /**
-     * Set the message id
-     *
-     * @param string|null $id
-     * @return MessageId
-     */
+    
     public function setId($id = null)
     {
         if ($id === null) {
@@ -104,21 +85,13 @@ class MessageId implements HeaderInterface
         return $this;
     }
 
-    /**
-     * Retrieve the message id
-     *
-     * @return string
-     */
+    
     public function getId()
     {
         return $this->messageId;
     }
 
-    /**
-     * Creates the Message-ID
-     *
-     * @return string
-     */
+    
     public function createMessageId()
     {
         $time = time();

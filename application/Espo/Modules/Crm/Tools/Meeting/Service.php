@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Modules\Crm\Tools\Meeting;
 
@@ -58,16 +32,10 @@ class Service
         private Metadata $metadata
     ) {}
 
-    /**
-     * Set an acceptance for a current user.
-     *
-     * @throws BadRequest
-     * @throws NotFound
-     * @throws Forbidden
-     */
+    
     public function setAcceptance(string $entityType, string $id, string $status): void
     {
-        /** @var string[] $statusList */
+        
         $statusList = $this->entityManager
             ->getDefs()
             ->getEntity($entityType)
@@ -144,10 +112,7 @@ class Service
         ], $options);
     }
 
-    /**
-     * @param string[] $ids
-     * @throws Forbidden
-     */
+    
     public function massSetHeld(string $entityType, array $ids): void
     {
         if (!$this->acl->checkScope($entityType, Acl\Table::ACTION_EDIT)) {
@@ -165,10 +130,7 @@ class Service
         }
     }
 
-    /**
-     * @param string[] $ids
-     * @throws Forbidden
-     */
+    
     public function massSetNotHeld(string $entityType, array $ids): void
     {
         if (!$this->acl->checkScope($entityType, Acl\Table::ACTION_EDIT)) {
@@ -186,13 +148,7 @@ class Service
         }
     }
 
-    /**
-     * Get all attendees.
-     *
-     * @throws Forbidden
-     * @throws NotFound
-     * @return RecordCollection<Entity>
-     */
+    
     public function getAttendees(string $entityType, string $id): RecordCollection
     {
         $entity = $this->entityManager->getEntityById($entityType, $id);
@@ -234,7 +190,7 @@ class Service
             $list = array_merge($list, [...$itemCollection]);
         }
 
-        /** @var Collection<Entity> $collection */
+        
         $collection = $this->entityManager->getCollectionFactory()->create(null, $list);
 
         foreach ($collection as $e) {

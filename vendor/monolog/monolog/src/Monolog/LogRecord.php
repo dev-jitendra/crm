@@ -1,24 +1,12 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Monolog package.
- *
- * (c) Jordi Boggiano <j.boggiano@seld.be>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Monolog;
 
 use ArrayAccess;
 
-/**
- * Monolog log record
- *
- * @author Jordi Boggiano <j.boggiano@seld.be>
- * @template-implements ArrayAccess<'message'|'level'|'context'|'level_name'|'channel'|'datetime'|'extra', int|string|\DateTimeImmutable|array<mixed>>
- */
+
 class LogRecord implements ArrayAccess
 {
     private const MODIFIABLE_FIELDS = [
@@ -31,9 +19,9 @@ class LogRecord implements ArrayAccess
         public readonly string $channel,
         public readonly Level $level,
         public readonly string $message,
-        /** @var array<mixed> */
+        
         public readonly array $context = [],
-        /** @var array<mixed> */
+        
         public array $extra = [],
         public mixed $formatted = null,
     ) {
@@ -77,7 +65,7 @@ class LogRecord implements ArrayAccess
     public function &offsetGet(mixed $offset): mixed
     {
         if ($offset === 'level_name' || $offset === 'level') {
-            // avoid returning readonly props by ref as this is illegal
+            
             if ($offset === 'level_name') {
                 $copy = $this->level->getName();
             } else {
@@ -91,15 +79,13 @@ class LogRecord implements ArrayAccess
             return $this->{$offset};
         }
 
-        // avoid returning readonly props by ref as this is illegal
+        
         $copy = $this->{$offset};
 
         return $copy;
     }
 
-    /**
-     * @phpstan-return array{message: string, context: mixed[], level: value-of<Level::VALUES>, level_name: value-of<Level::NAMES>, channel: string, datetime: \DateTimeImmutable, extra: mixed[]}
-     */
+    
     public function toArray(): array
     {
         return [

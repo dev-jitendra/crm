@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -17,9 +13,7 @@ use function get_class;
 use function sprintf;
 use function str_replace;
 
-/**
- * Default Slim application XML Error Renderer
- */
+
 class XmlErrorRenderer extends AbstractErrorRenderer
 {
     public function __invoke(Throwable $exception, bool $displayErrorDetails): string
@@ -44,9 +38,7 @@ class XmlErrorRenderer extends AbstractErrorRenderer
         return $xml;
     }
 
-    /**
-     * Returns a CDATA section with the given content.
-     */
+    
     private function createCdataSection(string $content): string
     {
         return sprintf('<![CDATA[%s]]>', str_replace(']]>', ']]]]><![CDATA[>', $content));

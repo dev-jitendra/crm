@@ -1,9 +1,7 @@
 <?php
 namespace Ratchet\Wamp;
 
-/**
- * @covers Ratchet\Wamp\Topic
- */
+
 class TopicTest extends \PHPUnit_Framework_TestCase {
     public function testGetId() {
         $id    = uniqid();

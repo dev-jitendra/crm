@@ -21,78 +21,78 @@
 
     var ExifTags = EXIF.Tags = {
 
-        // version tags
-        0x9000 : "ExifVersion",             // EXIF version
-        0xA000 : "FlashpixVersion",         // Flashpix format version
+        
+        0x9000 : "ExifVersion",             
+        0xA000 : "FlashpixVersion",         
 
-        // colorspace tags
-        0xA001 : "ColorSpace",              // Color space information tag
+        
+        0xA001 : "ColorSpace",              
 
-        // image configuration
-        0xA002 : "PixelXDimension",         // Valid width of meaningful image
-        0xA003 : "PixelYDimension",         // Valid height of meaningful image
-        0x9101 : "ComponentsConfiguration", // Information about channels
-        0x9102 : "CompressedBitsPerPixel",  // Compressed bits per pixel
+        
+        0xA002 : "PixelXDimension",         
+        0xA003 : "PixelYDimension",         
+        0x9101 : "ComponentsConfiguration", 
+        0x9102 : "CompressedBitsPerPixel",  
 
-        // user information
-        0x927C : "MakerNote",               // Any desired information written by the manufacturer
-        0x9286 : "UserComment",             // Comments by user
+        
+        0x927C : "MakerNote",               
+        0x9286 : "UserComment",             
 
-        // related file
-        0xA004 : "RelatedSoundFile",        // Name of related sound file
+        
+        0xA004 : "RelatedSoundFile",        
 
-        // date and time
-        0x9003 : "DateTimeOriginal",        // Date and time when the original image was generated
-        0x9004 : "DateTimeDigitized",       // Date and time when the image was stored digitally
-        0x9290 : "SubsecTime",              // Fractions of seconds for DateTime
-        0x9291 : "SubsecTimeOriginal",      // Fractions of seconds for DateTimeOriginal
-        0x9292 : "SubsecTimeDigitized",     // Fractions of seconds for DateTimeDigitized
+        
+        0x9003 : "DateTimeOriginal",        
+        0x9004 : "DateTimeDigitized",       
+        0x9290 : "SubsecTime",              
+        0x9291 : "SubsecTimeOriginal",      
+        0x9292 : "SubsecTimeDigitized",     
 
-        // picture-taking conditions
-        0x829A : "ExposureTime",            // Exposure time (in seconds)
-        0x829D : "FNumber",                 // F number
-        0x8822 : "ExposureProgram",         // Exposure program
-        0x8824 : "SpectralSensitivity",     // Spectral sensitivity
-        0x8827 : "ISOSpeedRatings",         // ISO speed rating
-        0x8828 : "OECF",                    // Optoelectric conversion factor
-        0x9201 : "ShutterSpeedValue",       // Shutter speed
-        0x9202 : "ApertureValue",           // Lens aperture
-        0x9203 : "BrightnessValue",         // Value of brightness
-        0x9204 : "ExposureBias",            // Exposure bias
-        0x9205 : "MaxApertureValue",        // Smallest F number of lens
-        0x9206 : "SubjectDistance",         // Distance to subject in meters
-        0x9207 : "MeteringMode",            // Metering mode
-        0x9208 : "LightSource",             // Kind of light source
-        0x9209 : "Flash",                   // Flash status
-        0x9214 : "SubjectArea",             // Location and area of main subject
-        0x920A : "FocalLength",             // Focal length of the lens in mm
-        0xA20B : "FlashEnergy",             // Strobe energy in BCPS
-        0xA20C : "SpatialFrequencyResponse",    //
-        0xA20E : "FocalPlaneXResolution",   // Number of pixels in width direction per FocalPlaneResolutionUnit
-        0xA20F : "FocalPlaneYResolution",   // Number of pixels in height direction per FocalPlaneResolutionUnit
-        0xA210 : "FocalPlaneResolutionUnit",    // Unit for measuring FocalPlaneXResolution and FocalPlaneYResolution
-        0xA214 : "SubjectLocation",         // Location of subject in image
-        0xA215 : "ExposureIndex",           // Exposure index selected on camera
-        0xA217 : "SensingMethod",           // Image sensor type
-        0xA300 : "FileSource",              // Image source (3 == DSC)
-        0xA301 : "SceneType",               // Scene type (1 == directly photographed)
-        0xA302 : "CFAPattern",              // Color filter array geometric pattern
-        0xA401 : "CustomRendered",          // Special processing
-        0xA402 : "ExposureMode",            // Exposure mode
-        0xA403 : "WhiteBalance",            // 1 = auto white balance, 2 = manual
-        0xA404 : "DigitalZoomRation",       // Digital zoom ratio
-        0xA405 : "FocalLengthIn35mmFilm",   // Equivalent foacl length assuming 35mm film camera (in mm)
-        0xA406 : "SceneCaptureType",        // Type of scene
-        0xA407 : "GainControl",             // Degree of overall image gain adjustment
-        0xA408 : "Contrast",                // Direction of contrast processing applied by camera
-        0xA409 : "Saturation",              // Direction of saturation processing applied by camera
-        0xA40A : "Sharpness",               // Direction of sharpness processing applied by camera
-        0xA40B : "DeviceSettingDescription",    //
-        0xA40C : "SubjectDistanceRange",    // Distance to subject
+        
+        0x829A : "ExposureTime",            
+        0x829D : "FNumber",                 
+        0x8822 : "ExposureProgram",         
+        0x8824 : "SpectralSensitivity",     
+        0x8827 : "ISOSpeedRatings",         
+        0x8828 : "OECF",                    
+        0x9201 : "ShutterSpeedValue",       
+        0x9202 : "ApertureValue",           
+        0x9203 : "BrightnessValue",         
+        0x9204 : "ExposureBias",            
+        0x9205 : "MaxApertureValue",        
+        0x9206 : "SubjectDistance",         
+        0x9207 : "MeteringMode",            
+        0x9208 : "LightSource",             
+        0x9209 : "Flash",                   
+        0x9214 : "SubjectArea",             
+        0x920A : "FocalLength",             
+        0xA20B : "FlashEnergy",             
+        0xA20C : "SpatialFrequencyResponse",    
+        0xA20E : "FocalPlaneXResolution",   
+        0xA20F : "FocalPlaneYResolution",   
+        0xA210 : "FocalPlaneResolutionUnit",    
+        0xA214 : "SubjectLocation",         
+        0xA215 : "ExposureIndex",           
+        0xA217 : "SensingMethod",           
+        0xA300 : "FileSource",              
+        0xA301 : "SceneType",               
+        0xA302 : "CFAPattern",              
+        0xA401 : "CustomRendered",          
+        0xA402 : "ExposureMode",            
+        0xA403 : "WhiteBalance",            
+        0xA404 : "DigitalZoomRation",       
+        0xA405 : "FocalLengthIn35mmFilm",   
+        0xA406 : "SceneCaptureType",        
+        0xA407 : "GainControl",             
+        0xA408 : "Contrast",                
+        0xA409 : "Saturation",              
+        0xA40A : "Sharpness",               
+        0xA40B : "DeviceSettingDescription",    
+        0xA40C : "SubjectDistanceRange",    
 
-        // other tags
+        
         0xA005 : "InteroperabilityIFDPointer",
-        0xA420 : "ImageUniqueID"            // Identifier assigned uniquely to each image
+        0xA420 : "ImageUniqueID"            
     };
 
     var TiffTags = EXIF.TiffTags = {
@@ -165,7 +165,7 @@
         0x001E : "GPSDifferential"
     };
 
-     // EXIF 2.3 Spec
+     
     var IFD1Tags = EXIF.IFD1Tags = {
         0x0100: "ImageWidth",
         0x0101: "ImageHeight",
@@ -181,8 +181,8 @@
         0x011B: "YResolution",
         0x011C: "PlanarConfiguration",
         0x0128: "ResolutionUnit",
-        0x0201: "JpegIFOffset",    // When image format is JPEG, this value show offset to JPEG data stored.(aka "ThumbnailOffset" or "JPEGInterchangeFormat")
-        0x0202: "JpegIFByteCount", // When image format is JPEG, this value shows data size of JPEG image (aka "ThumbnailLength" or "JPEGInterchangeFormatLength")
+        0x0201: "JpegIFOffset",    
+        0x0202: "JpegIFByteCount", 
         0x0211: "YCbCrCoefficients",
         0x0212: "YCbCrSubSampling",
         0x0213: "YCbCrPositioning",
@@ -341,7 +341,7 @@
 
 
     function base64ToArrayBuffer(base64, contentType) {
-        contentType = contentType || base64.match(/^data\:([^\;]+)\;base64,/mi)[1] || ''; // e.g. 'data:image/jpeg;base64,...' => 'image/jpeg'
+        contentType = contentType || base64.match(/^data\:([^\;]+)\;base64,/mi)[1] || ''; 
         base64 = base64.replace(/^data\:([^\;]+)\;base64,/gmi, '');
         var binary = atob(base64);
         var len = binary.length;
@@ -381,11 +381,11 @@
         }
 
         if (img.src) {
-            if (/^data\:/i.test(img.src)) { // Data URI
+            if (/^data\:/i.test(img.src)) { 
                 var arrayBuffer = base64ToArrayBuffer(img.src);
                 handleBinaryFile(arrayBuffer);
 
-            } else if (/^blob\:/i.test(img.src)) { // Object URL
+            } else if (/^blob\:/i.test(img.src)) { 
                 var fileReader = new FileReader();
                 fileReader.onload = function(e) {
                     handleBinaryFile(e.target.result);
@@ -424,7 +424,7 @@
         if (debug) console.log("Got file of length " + file.byteLength);
         if ((dataView.getUint8(0) != 0xFF) || (dataView.getUint8(1) != 0xD8)) {
             if (debug) console.log("Not a valid JPEG");
-            return false; // not a valid jpeg
+            return false; 
         }
 
         var offset = 2,
@@ -434,21 +434,21 @@
         while (offset < length) {
             if (dataView.getUint8(offset) != 0xFF) {
                 if (debug) console.log("Not a valid marker at offset " + offset + ", found: " + dataView.getUint8(offset));
-                return false; // not a valid marker, something is wrong
+                return false; 
             }
 
             marker = dataView.getUint8(offset + 1);
             if (debug) console.log(marker);
 
-            // we could implement handling for other markers here,
-            // but we're only looking for 0xFFE1 for EXIF data
+            
+            
 
             if (marker == 225) {
                 if (debug) console.log("Found 0xFFE1 marker");
 
                 return readEXIFData(dataView, offset + 4, dataView.getUint16(offset + 2) - 2);
 
-                // offset += 2 + file.getShortAt(offset+2, true);
+                
 
             } else {
                 offset += 2 + dataView.getUint16(offset+2);
@@ -464,7 +464,7 @@
         if (debug) console.log("Got file of length " + file.byteLength);
         if ((dataView.getUint8(0) != 0xFF) || (dataView.getUint8(1) != 0xD8)) {
             if (debug) console.log("Not a valid JPEG");
-            return false; // not a valid jpeg
+            return false; 
         }
 
         var offset = 2,
@@ -486,12 +486,12 @@
 
             if ( isFieldSegmentStart(dataView, offset )){
 
-                // Get the length of the name header (which is padded to an even number of bytes)
+                
                 var nameHeaderLength = dataView.getUint8(offset+7);
                 if(nameHeaderLength % 2 !== 0) nameHeaderLength += 1;
-                // Check for pre photoshop 6 format
+                
                 if(nameHeaderLength === 0) {
-                    // Always 4
+                    
                     nameHeaderLength = 4;
                 }
 
@@ -505,7 +505,7 @@
             }
 
 
-            // Not the marker, continue searching
+            
             offset++;
 
         }
@@ -536,9 +536,9 @@
                     segmentSize = dataSize + 5;
                     fieldName = IptcFieldMap[segmentType];
                     fieldValue = getStringFromDB(dataView, segmentStartPos+5, dataSize);
-                    // Check if we already stored a value with this name
+                    
                     if(data.hasOwnProperty(fieldName)) {
-                        // Value already stored with this name, create multivalue field
+                        
                         if(data[fieldName] instanceof Array) {
                             data[fieldName].push(fieldValue);
                         }
@@ -584,8 +584,8 @@
             numerator, denominator;
 
         switch (type) {
-            case 1: // byte, 8-bit unsigned int
-            case 7: // undefined, 8-bit byte, value depending on field
+            case 1: 
+            case 7: 
                 if (numValues == 1) {
                     return file.getUint8(entryOffset + 8, !bigEnd);
                 } else {
@@ -597,11 +597,11 @@
                     return vals;
                 }
 
-            case 2: // ascii, 8-bit byte
+            case 2: 
                 offset = numValues > 4 ? valueOffset : (entryOffset + 8);
                 return getStringFromDB(file, offset, numValues-1);
 
-            case 3: // short, 16 bit int
+            case 3: 
                 if (numValues == 1) {
                     return file.getUint16(entryOffset + 8, !bigEnd);
                 } else {
@@ -613,7 +613,7 @@
                     return vals;
                 }
 
-            case 4: // long, 32 bit int
+            case 4: 
                 if (numValues == 1) {
                     return file.getUint32(entryOffset + 8, !bigEnd);
                 } else {
@@ -624,7 +624,7 @@
                     return vals;
                 }
 
-            case 5:    // rational = two long values, first is numerator, second is denominator
+            case 5:    
                 if (numValues == 1) {
                     numerator = file.getUint32(valueOffset, !bigEnd);
                     denominator = file.getUint32(valueOffset+4, !bigEnd);
@@ -644,7 +644,7 @@
                     return vals;
                 }
 
-            case 9: // slong, 32 bit signed int
+            case 9: 
                 if (numValues == 1) {
                     return file.getInt32(entryOffset + 8, !bigEnd);
                 } else {
@@ -655,7 +655,7 @@
                     return vals;
                 }
 
-            case 10: // signed rational, two slongs, first is numerator, second is denominator
+            case 10: 
                 if (numValues == 1) {
                     return file.getInt32(valueOffset, !bigEnd) / file.getInt32(valueOffset+4, !bigEnd);
                 } else {
@@ -668,53 +668,50 @@
         }
     }
 
-    /**
-    * Given an IFD (Image File Directory) start offset
-    * returns an offset to next IFD or 0 if it's the last IFD.
-    */
+    
     function getNextIFDOffset(dataView, dirStart, bigEnd){
-        //the first 2bytes means the number of directory entries contains in this IFD
+        
         var entries = dataView.getUint16(dirStart, !bigEnd);
 
-        // After last directory entry, there is a 4bytes of data,
-        // it means an offset to next IFD.
-        // If its value is '0x00000000', it means this is the last IFD and there is no linked IFD.
+        
+        
+        
 
-        return dataView.getUint32(dirStart + 2 + entries * 12, !bigEnd); // each entry is 12 bytes long
+        return dataView.getUint32(dirStart + 2 + entries * 12, !bigEnd); 
     }
 
     function readThumbnailImage(dataView, tiffStart, firstIFDOffset, bigEnd){
-        // get the IFD1 offset
+        
         var IFD1OffsetPointer = getNextIFDOffset(dataView, tiffStart+firstIFDOffset, bigEnd);
 
         if (!IFD1OffsetPointer) {
-            // console.log('******** IFD1Offset is empty, image thumb not found ********');
+            
             return {};
         }
-        else if (IFD1OffsetPointer > dataView.byteLength) { // this should not happen
-            // console.log('******** IFD1Offset is outside the bounds of the DataView ********');
+        else if (IFD1OffsetPointer > dataView.byteLength) { 
+            
             return {};
         }
-        // console.log('*******  thumbnail IFD offset (IFD1) is: %s', IFD1OffsetPointer);
+        
 
         var thumbTags = readTags(dataView, tiffStart, tiffStart + IFD1OffsetPointer, IFD1Tags, bigEnd)
 
-        // EXIF 2.3 specification for JPEG format thumbnail
+        
 
-        // If the value of Compression(0x0103) Tag in IFD1 is '6', thumbnail image format is JPEG.
-        // Most of Exif image uses JPEG format for thumbnail. In that case, you can get offset of thumbnail
-        // by JpegIFOffset(0x0201) Tag in IFD1, size of thumbnail by JpegIFByteCount(0x0202) Tag.
-        // Data format is ordinary JPEG format, starts from 0xFFD8 and ends by 0xFFD9. It seems that
-        // JPEG format and 160x120pixels of size are recommended thumbnail format for Exif2.1 or later.
+        
+        
+        
+        
+        
 
         if (thumbTags['Compression']) {
-            // console.log('Thumbnail image found!');
+            
 
             switch (thumbTags['Compression']) {
                 case 6:
-                    // console.log('Thumbnail image format is JPEG');
+                    
                     if (thumbTags.JpegIFOffset && thumbTags.JpegIFByteCount) {
-                    // extract the thumbnail
+                    
                         var tOffset = tiffStart + thumbTags.JpegIFOffset;
                         var tLength = thumbTags.JpegIFByteCount;
                         thumbTags['blob'] = new Blob([new Uint8Array(dataView.buffer, tOffset, tLength)], {
@@ -755,7 +752,7 @@
             exifData, gpsData,
             tiffOffset = start + 6;
 
-        // test for TIFF validity and endianness
+        
         if (file.getUint16(tiffOffset) == 0x4949) {
             bigEnd = false;
         } else if (file.getUint16(tiffOffset) == 0x4D4D) {
@@ -833,7 +830,7 @@
             }
         }
 
-        // extract thumbnail
+        
         tags['thumbnail'] = readThumbnailImage(file, tiffOffset, firstIFDOffset, bigEnd);
 
         return tags;
@@ -842,7 +839,7 @@
    function findXMPinJPEG(file) {
 
         if (!('DOMParser' in self)) {
-            // console.warn('XML parsing not supported without DOMParser');
+            
             return;
         }
         var dataView = new DataView(file);
@@ -850,7 +847,7 @@
         if (debug) console.log("Got file of length " + file.byteLength);
         if ((dataView.getUint8(0) != 0xFF) || (dataView.getUint8(1) != 0xD8)) {
            if (debug) console.log("Not a valid JPEG");
-           return false; // not a valid jpeg
+           return false; 
         }
 
         var offset = 2,
@@ -866,20 +863,20 @@
                 xmpString = xmpString.substring( xmpString.indexOf( '<x:xmpmeta' ), xmpEndIndex );
 
                 var indexOfXmp = xmpString.indexOf('x:xmpmeta') + 10
-                //Many custom written programs embed xmp/xml without any namespace. Following are some of them.
-                //Without these namespaces, XML is thought to be invalid by parsers
+                
+                
                 xmpString = xmpString.slice(0, indexOfXmp)
-                            + 'xmlns:Iptc4xmpCore="http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/" '
-                            + 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
-                            + 'xmlns:tiff="http://ns.adobe.com/tiff/1.0/" '
-                            + 'xmlns:plus="http://schemas.android.com/apk/lib/com.google.android.gms.plus" '
-                            + 'xmlns:ext="http://www.gettyimages.com/xsltExtension/1.0" '
-                            + 'xmlns:exif="http://ns.adobe.com/exif/1.0/" '
-                            + 'xmlns:stEvt="http://ns.adobe.com/xap/1.0/sType/ResourceEvent#" '
-                            + 'xmlns:stRef="http://ns.adobe.com/xap/1.0/sType/ResourceRef#" '
-                            + 'xmlns:crs="http://ns.adobe.com/camera-raw-settings/1.0/" '
-                            + 'xmlns:xapGImg="http://ns.adobe.com/xap/1.0/g/img/" '
-                            + 'xmlns:Iptc4xmpExt="http://iptc.org/std/Iptc4xmpExt/2008-02-29/" '
+                            + 'xmlns:Iptc4xmpCore="http:
+                            + 'xmlns:xsi="http:
+                            + 'xmlns:tiff="http:
+                            + 'xmlns:plus="http:
+                            + 'xmlns:ext="http:
+                            + 'xmlns:exif="http:
+                            + 'xmlns:stEvt="http:
+                            + 'xmlns:stRef="http:
+                            + 'xmlns:crs="http:
+                            + 'xmlns:xapGImg="http:
+                            + 'xmlns:Iptc4xmpExt="http:
                             + xmpString.slice(indexOfXmp)
 
                 var domDocument = dom.parseFromString( xmpString, 'text/xml' );
@@ -893,7 +890,7 @@
     function xml2json(xml) {
         var json = {};
       
-        if (xml.nodeType == 1) { // element node
+        if (xml.nodeType == 1) { 
           if (xml.attributes.length > 0) {
             json['@attributes'] = {};
             for (var j = 0; j < xml.attributes.length; j++) {
@@ -901,11 +898,11 @@
               json['@attributes'][attribute.nodeName] = attribute.nodeValue;
             }
           }
-        } else if (xml.nodeType == 3) { // text node
+        } else if (xml.nodeType == 3) { 
           return xml.nodeValue;
         }
       
-        // deal with children
+        
         if (xml.hasChildNodes()) {
           for(var i = 0; i < xml.childNodes.length; i++) {
             var child = xml.childNodes.item(i);

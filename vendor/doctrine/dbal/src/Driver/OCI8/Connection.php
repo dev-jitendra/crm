@@ -26,17 +26,13 @@ use function str_replace;
 
 final class Connection implements ServerInfoAwareConnection
 {
-    /** @var resource */
+    
     private $connection;
 
     private Parser $parser;
     private ExecutionMode $executionMode;
 
-    /**
-     * @internal The connection can be only instantiated by its driver.
-     *
-     * @param resource $connection
-     */
+    
     public function __construct($connection)
     {
         $this->connection    = $connection;
@@ -58,7 +54,7 @@ final class Connection implements ServerInfoAwareConnection
         return $matches[1];
     }
 
-    /** @throws Parser\Exception */
+    
     public function prepare(string $sql): DriverStatement
     {
         $visitor = new ConvertPositionalToNamedPlaceholders();
@@ -71,18 +67,13 @@ final class Connection implements ServerInfoAwareConnection
         return new Statement($this->connection, $statement, $visitor->getParameterMap(), $this->executionMode);
     }
 
-    /**
-     * @throws Exception
-     * @throws Parser\Exception
-     */
+    
     public function query(string $sql): ResultInterface
     {
         return $this->prepare($sql)->execute();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function quote($value, $type = ParameterType::STRING)
     {
         if (is_int($value) || is_float($value)) {
@@ -94,24 +85,13 @@ final class Connection implements ServerInfoAwareConnection
         return "'" . addcslashes($value, "\000\n\r\\\032") . "'";
     }
 
-    /**
-     * @throws Exception
-     * @throws Parser\Exception
-     */
+    
     public function exec(string $sql): int
     {
         return $this->prepare($sql)->execute()->rowCount();
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @param string|null $name
-     *
-     * @return int|false
-     *
-     * @throws Parser\Exception
-     */
+    
     public function lastInsertId($name = null)
     {
         if ($name === null) {
@@ -120,7 +100,7 @@ final class Connection implements ServerInfoAwareConnection
 
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/issues/4687',
+            'https:
             'The usage of Connection::lastInsertId() with a sequence name is deprecated.',
         );
 
@@ -162,7 +142,7 @@ final class Connection implements ServerInfoAwareConnection
         return true;
     }
 
-    /** @return resource */
+    
     public function getNativeConnection()
     {
         return $this->connection;

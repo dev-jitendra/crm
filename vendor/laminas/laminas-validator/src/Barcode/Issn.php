@@ -9,9 +9,7 @@ use function substr;
 
 class Issn extends AbstractAdapter
 {
-    /**
-     * Constructor for this barcode adapter
-     */
+    
     public function __construct()
     {
         $this->setLength([8, 13]);
@@ -19,12 +17,7 @@ class Issn extends AbstractAdapter
         $this->setChecksum('gtin');
     }
 
-    /**
-     * Allows X on length of 8 chars
-     *
-     * @param  string $value The barcode to check for allowed characters
-     * @return bool
-     */
+    
     public function hasValidCharacters($value)
     {
         if (strlen($value) !== 8) {
@@ -36,12 +29,7 @@ class Issn extends AbstractAdapter
         return parent::hasValidCharacters($value);
     }
 
-    /**
-     * Validates the checksum
-     *
-     * @param  string $value The barcode to check the checksum for
-     * @return bool
-     */
+    
     public function hasValidChecksum($value)
     {
         if (strlen($value) === 8) {
@@ -53,13 +41,7 @@ class Issn extends AbstractAdapter
         return parent::hasValidChecksum($value);
     }
 
-    /**
-     * Validates the checksum ()
-     * ISSN implementation (reversed mod11)
-     *
-     * @param  string $value The barcode to validate
-     * @return bool
-     */
+    
     protected function issn($value)
     {
         $checksum = substr($value, -1, 1);

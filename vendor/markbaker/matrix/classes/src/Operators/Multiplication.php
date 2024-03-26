@@ -8,13 +8,7 @@ use Matrix\Exception;
 
 class Multiplication extends Operator
 {
-    /**
-     * Execute the multiplication
-     *
-     * @param mixed $value The matrix or numeric value to multiply the current base value by
-     * @throws Exception If the provided argument is not appropriate for the operation
-     * @return $this The operation object, allowing multiple multiplications to be chained
-     **/
+    
     public function execute($value): Operator
     {
         if (is_array($value)) {
@@ -30,12 +24,7 @@ class Multiplication extends Operator
         throw new Exception('Invalid argument for multiplication');
     }
 
-    /**
-     * Execute the multiplication for a scalar
-     *
-     * @param mixed $value The numeric value to multiply with the current base value
-     * @return $this The operation object, allowing multiple mutiplications to be chained
-     **/
+    
     protected function multiplyScalar($value): Operator
     {
         for ($row = 0; $row < $this->rows; ++$row) {
@@ -47,13 +36,7 @@ class Multiplication extends Operator
         return $this;
     }
 
-    /**
-     * Execute the multiplication for a matrix
-     *
-     * @param Matrix $value The numeric value to multiply with the current base value
-     * @return $this The operation object, allowing multiple mutiplications to be chained
-     * @throws Exception If the provided argument is not appropriate for the operation
-     **/
+    
     protected function multiplyMatrix(Matrix $value): Operator
     {
         $this->validateReflectingDimensions($value);

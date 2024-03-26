@@ -10,54 +10,22 @@ use AsyncAws\S3\Enum\RequestPayer;
 
 final class GetObjectAclRequest extends Input
 {
-    /**
-     * The bucket name that contains the object for which to get the ACL information.
-     *
-     * @required
-     *
-     * @var string|null
-     */
+    
     private $bucket;
 
-    /**
-     * The key of the object for which to get the ACL information.
-     *
-     * @required
-     *
-     * @var string|null
-     */
+    
     private $key;
 
-    /**
-     * VersionId used to reference a specific version of the object.
-     *
-     * @var string|null
-     */
+    
     private $versionId;
 
-    /**
-     * @var null|RequestPayer::*
-     */
+    
     private $requestPayer;
 
-    /**
-     * The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail
-     * with an HTTP `403 (Access Denied)` error.
-     *
-     * @var string|null
-     */
+    
     private $expectedBucketOwner;
 
-    /**
-     * @param array{
-     *   Bucket?: string,
-     *   Key?: string,
-     *   VersionId?: string,
-     *   RequestPayer?: RequestPayer::*,
-     *   ExpectedBucketOwner?: string,
-     *   @region?: string,
-     * } $input
-     */
+    
     public function __construct(array $input = [])
     {
         $this->bucket = $input['Bucket'] ?? null;
@@ -88,9 +56,7 @@ final class GetObjectAclRequest extends Input
         return $this->key;
     }
 
-    /**
-     * @return RequestPayer::*|null
-     */
+    
     public function getRequestPayer(): ?string
     {
         return $this->requestPayer;
@@ -101,12 +67,10 @@ final class GetObjectAclRequest extends Input
         return $this->versionId;
     }
 
-    /**
-     * @internal
-     */
+    
     public function request(): Request
     {
-        // Prepare headers
+        
         $headers = ['content-type' => 'application/xml'];
         if (null !== $this->requestPayer) {
             if (!RequestPayer::exists($this->requestPayer)) {
@@ -118,13 +82,13 @@ final class GetObjectAclRequest extends Input
             $headers['x-amz-expected-bucket-owner'] = $this->expectedBucketOwner;
         }
 
-        // Prepare query
+        
         $query = [];
         if (null !== $this->versionId) {
             $query['versionId'] = $this->versionId;
         }
 
-        // Prepare URI
+        
         $uri = [];
         if (null === $v = $this->bucket) {
             throw new InvalidArgument(sprintf('Missing parameter "Bucket" for "%s". The value cannot be null.', __CLASS__));
@@ -136,10 +100,10 @@ final class GetObjectAclRequest extends Input
         $uri['Key'] = $v;
         $uriString = '/' . rawurlencode($uri['Bucket']) . '/' . str_replace('%2F', '/', rawurlencode($uri['Key'])) . '?acl';
 
-        // Prepare Body
+        
         $body = '';
 
-        // Return the Request
+        
         return new Request('GET', $uriString, $query, $headers, StreamFactory::create($body));
     }
 
@@ -164,9 +128,7 @@ final class GetObjectAclRequest extends Input
         return $this;
     }
 
-    /**
-     * @param RequestPayer::*|null $value
-     */
+    
     public function setRequestPayer(?string $value): self
     {
         $this->requestPayer = $value;

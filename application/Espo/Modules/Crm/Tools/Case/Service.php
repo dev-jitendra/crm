@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Modules\Crm\Tools\Case;
 
@@ -61,13 +35,10 @@ class Service
         $this->selectBuilderFactory = $selectBuilderFactory;
     }
 
-    /**
-     * @throws ForbiddenSilent
-     * @return EmailAddressEntityPair[]
-     */
+    
     public function getEmailAddressList(string $id): array
     {
-        /** @var CaseObj $entity */
+        
         $entity = $this->serviceContainer
             ->get(CaseObj::ENTITY_TYPE)
             ->getEntity($id);
@@ -112,9 +83,7 @@ class Service
         return $list;
     }
 
-    /**
-     * @param EmailAddressEntityPair[] $dataList
-     */
+    
     private function getAccountEmailAddress(CaseObj $entity, array $dataList): ?EmailAddressEntityPair
     {
         $accountLink = $entity->getAccount();
@@ -123,7 +92,7 @@ class Service
             return null;
         }
 
-        /** @var ?Account $account */
+        
         $account = $this->entityManager->getEntityById(Account::ENTITY_TYPE, $accountLink->getId());
 
         if (!$account) {
@@ -149,9 +118,7 @@ class Service
         return new EmailAddressEntityPair(EmailAddress::create($emailAddress), $account);
     }
 
-    /**
-     * @param EmailAddressEntityPair[] $dataList
-     */
+    
     private function getLeadEmailAddress(CaseObj $entity, array $dataList): ?EmailAddressEntityPair
     {
         $leadLink = $entity->getLead();
@@ -160,7 +127,7 @@ class Service
             return null;
         }
 
-        /** @var ?Lead $lead */
+        
         $lead = $this->entityManager->getEntityById(Lead::ENTITY_TYPE, $leadLink->getId());
 
         if (!$lead) {
@@ -186,9 +153,7 @@ class Service
         return new EmailAddressEntityPair(EmailAddress::create($emailAddress), $lead);
     }
 
-    /**
-     * @return EmailAddressEntityPair[]
-     */
+    
     private function getContactEmailAddressList(CaseObj $entity): array
     {
         $contactsLinkMultiple = $entity->getContacts();
@@ -224,7 +189,7 @@ class Service
             ])
             ->build();
 
-        /** @var Collection<Contact> $contactCollection */
+        
         $contactCollection = $this->entityManager
             ->getRDBRepositoryByClass(Contact::class)
             ->clone($query)

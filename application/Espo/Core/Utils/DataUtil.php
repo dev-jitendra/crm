@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Utils;
 
@@ -35,11 +9,7 @@ use stdClass;
 
 class DataUtil
 {
-    /**
-     * @param array<string|int, mixed> $data
-     * @param array<int, string|string[]>|string $unsetList
-     * @return array<string|int, mixed>
-     */
+    
     public static function unsetByKey(&$data, $unsetList, bool $removeEmptyItems = false)
     {
         if (empty($unsetList)) {
@@ -119,11 +89,7 @@ class DataUtil
         return $data;
     }
 
-    /**
-     * @param array<string|int, mixed>|stdClass $data
-     * @param mixed $needle
-     * @return array<string|int, mixed>|stdClass
-     */
+    
     public static function unsetByValue(&$data, $needle)
     {
         if (is_object($data)) {
@@ -155,24 +121,20 @@ class DataUtil
         return $data;
     }
 
-    /**
-     * @param array<string, mixed>|stdClass $data
-     * @param array<string, mixed>|stdClass $overrideData
-     * @return array<string|int, mixed>|stdClass
-     */
+    
     public static function merge($data, $overrideData)
     {
         $appendIdentifier = '__APPEND__';
 
-        /** @var mixed $data */
-        /** @var mixed $overrideData */
+        
+        
 
         if (empty($data) && empty($overrideData)) {
             if (is_array($data) || is_array($overrideData)) {
                 return [];
             }
 
-            /** @var array<string|int, mixed>|stdClass */
+            
             return $overrideData;
         }
 
@@ -199,7 +161,7 @@ class DataUtil
                 $data = [];
             }
 
-            /** @var array<string, mixed> $data */
+            
 
             if (in_array($appendIdentifier, $overrideData)) {
                 foreach ($overrideData as $item) {
@@ -216,7 +178,7 @@ class DataUtil
             return $overrideData;
         }
 
-        /** @var array<string|int, mixed>|stdClass */
+        
         return $overrideData;
     }
 }

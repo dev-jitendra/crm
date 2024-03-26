@@ -6,16 +6,10 @@ namespace AsyncAws\Core\Test;
 
 use AsyncAws\Core\Stream\ResultStream;
 
-/**
- * Simple streamable body used for testing.
- *
- * @author Tobias Nyholm <tobias.nyholm@gmail.com>
- */
+
 class SimpleResultStream implements ResultStream
 {
-    /**
-     * @var string
-     */
+    
     private $data;
 
     public function __construct(string $data)
@@ -35,12 +29,12 @@ class SimpleResultStream implements ResultStream
 
     public function getContentAsResource()
     {
-        $resource = fopen('php://temp', 'rw+');
+        $resource = fopen('php:
 
         try {
             fwrite($resource, $this->data);
 
-            // Rewind
+            
             fseek($resource, 0, \SEEK_SET);
 
             return $resource;

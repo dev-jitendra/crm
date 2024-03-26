@@ -5,9 +5,7 @@ namespace PhpOffice\PhpSpreadsheet\Writer\Ods\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Shared\XMLWriter;
 
-/**
- * @author     Alexander Pervakov <frost-nzcr4@jagmort.com>
- */
+
 class Comment
 {
     public static function write(XMLWriter $objWriter, Cell $cell): void

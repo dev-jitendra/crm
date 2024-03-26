@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Utils\Database\Schema;
 
@@ -34,14 +8,7 @@ use Espo\ORM\Defs\IndexDefs;
 
 class Utils
 {
-    /**
-     * Get indexes in specific format.
-     * @deprecated
-     *
-     * @param array<string, mixed> $defs
-     * @param string[] $ignoreFlags @todo Remove parameter?
-     * @return array<string, array<string, mixed>>
-     */
+    
     public static function getIndexes(array $defs, array $ignoreFlags = []): array
     {
         $indexList = [];
@@ -82,7 +49,7 @@ class Utils
                 if ($columns !== []) {
                     $indexType = self::getIndexTypeByIndexDefs($indexDefs);
 
-                    // @todo Revise, may to be removed.
+                    
                     $indexList[$entityType][$tableIndexName]['type'] = $indexType;
 
                     $indexList[$entityType][$tableIndexName]['columns'] = array_map(
@@ -93,7 +60,7 @@ class Utils
             }
         }
 
-        /** @var array<string, array<string, mixed>> */
+        
         return $indexList;
     }
 
@@ -110,15 +77,7 @@ class Utils
         return 'index';
     }
 
-    /**
-     * @deprecated
-     *
-     * @param array<string, mixed> $ormMeta
-     * @param int $indexMaxLength
-     * @param ?array<string, mixed> $indexList
-     * @param int $characterLength
-     * @return array<string, mixed>
-     */
+    
     public static function getFieldListExceededIndexMaxLength(
         array $ormMeta,
         $indexMaxLength = 1000,
@@ -178,11 +137,7 @@ class Utils
         return $fields;
     }
 
-    /**
-     * @param array<string, mixed> $ormFieldDefs
-     * @param int $characterLength
-     * @return int
-     */
+    
     private static function getFieldLength(array $ormFieldDefs, $characterLength = 4)
     {
         $length = 0;
@@ -203,7 +158,7 @@ class Utils
         $type = self::getDbFieldType($ormFieldDefs);
 
         $length = $defaultLength[$type] ?? $length;
-        //$length = isset($ormFieldDefs['len']) ? $ormFieldDefs['len'] : $length;
+        
 
         switch ($type) {
             case 'varchar':
@@ -215,18 +170,13 @@ class Utils
         return $length;
     }
 
-    /**
-     * @param array<string, mixed> $ormFieldDefs
-     * @return string
-     */
+    
     private static function getDbFieldType(array $ormFieldDefs)
     {
         return $ormFieldDefs['dbType'] ?? $ormFieldDefs['type'];
     }
 
-    /**
-     * @param array<string, mixed> $ormFieldDefs
-     */
+    
     private static function getFieldType(array $ormFieldDefs): string
     {
         return $ormFieldDefs['type'] ?? self::getDbFieldType($ormFieldDefs);

@@ -6,9 +6,7 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler;
 
 class VirtualSessionStoragePDOTest extends \PHPUnit_Framework_TestCase {
-    /**
-     * @var VirtualSessionStorage
-     */
+    
     protected $_virtualSessionStorage;
 
     protected $_pathToDB;

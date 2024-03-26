@@ -1,18 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Softaragones Jordi Mallach Pérez, Juan Pablo Martínez bug-glibc-locales@gnu.org, softaragones@softaragones.org
- */
+
+
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [
         'L' => 'DD/MM/YYYY',
@@ -41,9 +31,9 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'd' => ':count día',
     'a_day' => ':count día',
 
-    'hour' => ':count reloch', // less reliable
-    'h' => ':count reloch', // less reliable
-    'a_hour' => ':count reloch', // less reliable
+    'hour' => ':count reloch', 
+    'h' => ':count reloch', 
+    'a_hour' => ':count reloch', 
 
     'minute' => ':count minuto',
     'min' => ':count minuto',

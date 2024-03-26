@@ -20,7 +20,7 @@ class BucketNotExistsWaiter extends Waiter
             return self::STATE_SUCCESS;
         }
 
-        /** @psalm-suppress TypeDoesNotContainType */
+        
         return null === $exception ? self::STATE_PENDING : self::STATE_FAILURE;
     }
 

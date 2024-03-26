@@ -27,9 +27,7 @@ final class SheetView
     private int $freezeRow = 0;
     private string $freezeColumn = 'A';
 
-    /**
-     * @return $this
-     */
+    
     public function setShowFormulas(bool $showFormulas): self
     {
         $this->showFormulas = $showFormulas;
@@ -37,9 +35,7 @@ final class SheetView
         return $this;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setShowGridLines(bool $showGridLines): self
     {
         $this->showGridLines = $showGridLines;
@@ -47,9 +43,7 @@ final class SheetView
         return $this;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setShowRowColHeaders(bool $showRowColHeaders): self
     {
         $this->showRowColHeaders = $showRowColHeaders;
@@ -57,9 +51,7 @@ final class SheetView
         return $this;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setShowZeroes(bool $showZeroes): self
     {
         $this->showZeroes = $showZeroes;
@@ -67,9 +59,7 @@ final class SheetView
         return $this;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setRightToLeft(bool $rightToLeft): self
     {
         $this->rightToLeft = $rightToLeft;
@@ -77,9 +67,7 @@ final class SheetView
         return $this;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setTabSelected(bool $tabSelected): self
     {
         $this->tabSelected = $tabSelected;
@@ -87,9 +75,7 @@ final class SheetView
         return $this;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setShowOutlineSymbols(bool $showOutlineSymbols): self
     {
         $this->showOutlineSymbols = $showOutlineSymbols;
@@ -97,9 +83,7 @@ final class SheetView
         return $this;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setDefaultGridColor(bool $defaultGridColor): self
     {
         $this->defaultGridColor = $defaultGridColor;
@@ -107,9 +91,7 @@ final class SheetView
         return $this;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setView(string $view): self
     {
         $this->view = $view;
@@ -117,9 +99,7 @@ final class SheetView
         return $this;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setTopLeftCell(string $topLeftCell): self
     {
         $this->topLeftCell = $topLeftCell;
@@ -127,9 +107,7 @@ final class SheetView
         return $this;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setColorId(int $colorId): self
     {
         $this->colorId = $colorId;
@@ -137,9 +115,7 @@ final class SheetView
         return $this;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setZoomScale(int $zoomScale): self
     {
         $this->zoomScale = $zoomScale;
@@ -147,9 +123,7 @@ final class SheetView
         return $this;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setZoomScaleNormal(int $zoomScaleNormal): self
     {
         $this->zoomScaleNormal = $zoomScaleNormal;
@@ -157,9 +131,7 @@ final class SheetView
         return $this;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setZoomScalePageLayoutView(int $zoomScalePageLayoutView): self
     {
         $this->zoomScalePageLayoutView = $zoomScalePageLayoutView;
@@ -167,9 +139,7 @@ final class SheetView
         return $this;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setWorkbookViewId(int $workbookViewId): self
     {
         $this->workbookViewId = $workbookViewId;
@@ -177,11 +147,7 @@ final class SheetView
         return $this;
     }
 
-    /**
-     * @param positive-int $freezeRow Set to 2 to fix the first row
-     *
-     * @return $this
-     */
+    
     public function setFreezeRow(int $freezeRow): self
     {
         if ($freezeRow < 1) {
@@ -193,11 +159,7 @@ final class SheetView
         return $this;
     }
 
-    /**
-     * @param string $freezeColumn Set to B to fix the first column
-     *
-     * @return $this
-     */
+    
     public function setFreezeColumn(string $freezeColumn): self
     {
         $this->freezeColumn = strtoupper($freezeColumn);
@@ -250,12 +212,10 @@ final class SheetView
         ]).'/>';
     }
 
-    /**
-     * @param array<string, bool|int|string> $data with key containing the attribute name and value containing the attribute value
-     */
+    
     private function generateAttributes(array $data): string
     {
-        // Create attribute for each key
+        
         $attributes = array_map(static function (string $key, bool|int|string $value): string {
             if (\is_bool($value)) {
                 $value = $value ? 'true' : 'false';
@@ -264,7 +224,7 @@ final class SheetView
             return $key.'="'.$value.'"';
         }, array_keys($data), $data);
 
-        // Append all attributes
+        
         return ' '.implode(' ', $attributes);
     }
 }

@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -19,25 +15,19 @@ use Slim\MiddlewareDispatcher;
 
 class RouteGroup implements RouteGroupInterface
 {
-    /**
-     * @var callable|string
-     */
+    
     protected $callable;
 
     protected CallableResolverInterface $callableResolver;
 
     protected RouteCollectorProxyInterface $routeCollectorProxy;
 
-    /**
-     * @var MiddlewareInterface[]|string[]|callable[]
-     */
+    
     protected array $middleware = [];
 
     protected string $pattern;
 
-    /**
-     * @param callable|string              $callable
-     */
+    
     public function __construct(
         string $pattern,
         $callable,
@@ -50,9 +40,7 @@ class RouteGroup implements RouteGroupInterface
         $this->routeCollectorProxy = $routeCollectorProxy;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function collectRoutes(): RouteGroupInterface
     {
         if ($this->callableResolver instanceof AdvancedCallableResolverInterface) {
@@ -64,27 +52,21 @@ class RouteGroup implements RouteGroupInterface
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function add($middleware): RouteGroupInterface
     {
         $this->middleware[] = $middleware;
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function addMiddleware(MiddlewareInterface $middleware): RouteGroupInterface
     {
         $this->middleware[] = $middleware;
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function appendMiddlewareToDispatcher(MiddlewareDispatcher $dispatcher): RouteGroupInterface
     {
         foreach ($this->middleware as $middleware) {
@@ -94,9 +76,7 @@ class RouteGroup implements RouteGroupInterface
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getPattern(): string
     {
         return $this->pattern;

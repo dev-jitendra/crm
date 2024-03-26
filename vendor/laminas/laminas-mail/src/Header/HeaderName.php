@@ -7,21 +7,12 @@ use function strlen;
 
 final class HeaderName
 {
-    /**
-     * No public constructor.
-     */
+    
     private function __construct()
     {
     }
 
-    /**
-     * Filter the header name according to RFC 2822
-     *
-     * @see    http://www.rfc-base.org/txt/rfc-2822.txt (section 2.2)
-     *
-     * @param  string $name
-     * @return string
-     */
+    
     public static function filter($name)
     {
         $result = '';
@@ -35,12 +26,7 @@ final class HeaderName
         return $result;
     }
 
-    /**
-     * Determine if the header name contains any invalid characters.
-     *
-     * @param string $name
-     * @return bool
-     */
+    
     public static function isValid($name)
     {
         $tot = strlen($name);
@@ -53,15 +39,7 @@ final class HeaderName
         return true;
     }
 
-    /**
-     * Assert that the header name is valid.
-     *
-     * Raises an exception if invalid.
-     *
-     * @param string $name
-     * @throws Exception\RuntimeException
-     * @return void
-     */
+    
     public static function assertValid($name)
     {
         if (! self::isValid($name)) {

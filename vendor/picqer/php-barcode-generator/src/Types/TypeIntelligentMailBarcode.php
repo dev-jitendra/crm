@@ -6,31 +6,7 @@ use Picqer\Barcode\Barcode;
 use Picqer\Barcode\BarcodeBar;
 use Picqer\Barcode\Exceptions\BarcodeException;
 
-/*
- * IMB - Intelligent Mail Barcode - Onecode - USPS-B-3200
- * (requires PHP bcmath extension)
- * Intelligent Mail barcode is a 65-bar code for use on mail in the United States.
- * The fields are described as follows:<ul><li>The Barcode Identifier shall be assigned by USPS to encode the
- * presort identification that is currently printed in human readable form on the optional endorsement line (OEL)
- * as well as for future USPS use. This shall be two digits, with the second digit in the range of 0–4. The
- * allowable encoding ranges shall be 00–04, 10–14, 20–24, 30–34, 40–44, 50–54, 60–64, 70–74, 80–84, and
- * 90–94.</li><li>The Service Type Identifier shall be assigned by USPS for any combination of services requested
- * on the mailpiece. The allowable encoding range shall be 000http://it2.php.net/manual/en/function.dechex.php–999.
- * Each 3-digit value shall correspond to a particular mail class with a particular combination of service(s). Each
- * service program, such as OneCode Confirm and OneCode ACS, shall provide the list of Service Type Identifier
- * values.</li><li>The Mailer or Customer Identifier shall be assigned by USPS as a unique, 6 or 9 digit number
- * that identifies a business entity. The allowable encoding range for the 6 digit Mailer ID shall be 000000-
- * 899999, while the allowable encoding range for the 9 digit Mailer ID shall be 900000000-999999999.</li><li>The
- * Serial or Sequence Number shall be assigned by the mailer for uniquely identifying and tracking mailpieces. The
- * allowable encoding range shall be 000000000–999999999 when used with a 6 digit Mailer ID and 000000-999999 when
- * used with a 9 digit Mailer ID. e. The Delivery Point ZIP Code shall be assigned by the mailer for routing the
- * mailpiece. This shall replace POSTNET for routing the mailpiece to its final delivery point. The length may be
- * 0, 5, 9, or 11 digits. The allowable encoding ranges shall be no ZIP Code, 00000–99999,  000000000–999999999,
- * and 00000000000–99999999999.</li></ul>
- *
- * code to print, separate the ZIP (routing code) from the rest using a minus char '-'
- *     (BarcodeID_ServiceTypeID_MailerID_SerialNumber-RoutingCode)
- */
+
 
 class TypeIntelligentMailBarcode implements TypeInterface
 {
@@ -311,7 +287,7 @@ class TypeIntelligentMailBarcode implements TypeInterface
         } else {
             $routing_code = '';
         }
-        // Conversion of Routing Code
+        
         switch (strlen($routing_code)) {
             case 0:
                 $binary_code = 0;
@@ -339,25 +315,25 @@ class TypeIntelligentMailBarcode implements TypeInterface
         $binary_code = bcadd($binary_code, $tracking_number[1]);
         $binary_code .= substr($tracking_number, 2, 18);
 
-        // convert to hexadecimal
+        
         $binary_code = $this->dec_to_hex($binary_code);
 
-        // pad to get 13 bytes
+        
         $binary_code = str_pad($binary_code, 26, '0', STR_PAD_LEFT);
 
-        // convert string to array of bytes
+        
         $binary_code_arr = chunk_split($binary_code, 2, "\r");
         $binary_code_arr = substr($binary_code_arr, 0, -1);
         $binary_code_arr = explode("\r", $binary_code_arr);
 
-        // calculate frame check sequence
+        
         $fcs = $this->imb_crc11fcs($binary_code_arr);
 
-        // exclude first 2 bits from first byte
+        
         $first_byte = sprintf('%2s', dechex((hexdec($binary_code_arr[0]) << 2) >> 2));
         $binary_code_102bit = $first_byte . substr($binary_code, 2);
 
-        // convert binary data to codewords
+        
         $codewords = [];
         $data = $this->hex_to_dec($binary_code_102bit);
         $codewords[0] = bcmod($data, 636) * 2;
@@ -371,11 +347,11 @@ class TypeIntelligentMailBarcode implements TypeInterface
             $codewords[9] += 659;
         }
 
-        // generate lookup tables
+        
         $table2of13 = $this->imb_tables(2, 78);
         $table5of13 = $this->imb_tables(5, 1287);
 
-        // convert codewords to characters
+        
         $characters = [];
         $bitmask = 512;
         foreach ($codewords as $val) {
@@ -385,7 +361,7 @@ class TypeIntelligentMailBarcode implements TypeInterface
                 $chrcode = (int)$table2of13[($val - 1287)];
             }
             if (($fcs & $bitmask) > 0) {
-                // bitwise invert
+                
                 $chrcode = ((~$chrcode) & 8191);
             }
             $characters[] = $chrcode;
@@ -393,25 +369,25 @@ class TypeIntelligentMailBarcode implements TypeInterface
         }
         $characters = array_reverse($characters);
 
-        // build bars
+        
         $barcode = new Barcode($code);
         for ($i = 0; $i < 65; ++$i) {
             $asc = (($characters[$asc_chr[$i]] & pow(2, $asc_pos[$i])) > 0);
             $dsc = (($characters[$dsc_chr[$i]] & pow(2, $dsc_pos[$i])) > 0);
             if ($asc AND $dsc) {
-                // full bar (F)
+                
                 $p = 0;
                 $h = 3;
             } elseif ($asc) {
-                // ascender (A)
+                
                 $p = 0;
                 $h = 2;
             } elseif ($dsc) {
-                // descender (D)
+                
                 $p = 1;
                 $h = 2;
             } else {
-                // tracker (T)
+                
                 $p = 1;
                 $h = 1;
             }
@@ -424,13 +400,7 @@ class TypeIntelligentMailBarcode implements TypeInterface
         return $barcode;
     }
 
-    /**
-     * Convert large integer number to hexadecimal representation.
-     * (requires PHP bcmath extension)
-     *
-     * @param $number (string) number to convert specified as a string
-     * @return string hexadecimal representation
-     */
+    
     protected function dec_to_hex($number)
     {
         if ($number == 0) {
@@ -449,18 +419,12 @@ class TypeIntelligentMailBarcode implements TypeInterface
     }
 
 
-    /**
-     * Intelligent Mail Barcode calculation of Frame Check Sequence
-     *
-     * @param $code_arr (string) array of hexadecimal values (13 bytes holding 102 bits right justified).
-     * @return int 11 bit Frame Check Sequence as integer (decimal base)
-     * @protected
-     */
+    
     protected function imb_crc11fcs($code_arr)
     {
-        $genpoly = 0x0F35; // generator polynomial
-        $fcs = 0x07FF; // Frame Check Sequence
-        // do most significant byte skipping the 2 most significant bits
+        $genpoly = 0x0F35; 
+        $fcs = 0x07FF; 
+        
         $data = hexdec($code_arr[0]) << 5;
         for ($bit = 2; $bit < 8; ++$bit) {
             if (($fcs ^ $data) & 0x400) {
@@ -471,7 +435,7 @@ class TypeIntelligentMailBarcode implements TypeInterface
             $fcs &= 0x7FF;
             $data <<= 1;
         }
-        // do rest of bytes
+        
         for ($byte = 1; $byte < 13; ++$byte) {
             $data = hexdec($code_arr[$byte]) << 3;
             for ($bit = 0; $bit < 8; ++$bit) {
@@ -488,13 +452,7 @@ class TypeIntelligentMailBarcode implements TypeInterface
         return $fcs;
     }
 
-    /**
-     * Convert large hexadecimal number to decimal representation (string).
-     * (requires PHP bcmath extension)
-     *
-     * @param $hex (string) hexadecimal number to convert specified as a string
-     * @return string hexadecimal representation
-     */
+    
     protected function hex_to_dec($hex)
     {
         $dec = 0;
@@ -509,31 +467,24 @@ class TypeIntelligentMailBarcode implements TypeInterface
     }
 
 
-    /**
-     * generate Nof13 tables used for Intelligent Mail Barcode
-     *
-     * @param $n (int) is the type of table: 2 for 2of13 table, 5 for 5of13table
-     * @param $size (int) size of table (78 for n=2 and 1287 for n=5)
-     * @return array requested table
-     * @protected
-     */
+    
     protected function imb_tables(int $n, int $size): array
     {
         $table = [];
-        $lli = 0; // LUT lower index
-        $lui = $size - 1; // LUT upper index
+        $lli = 0; 
+        $lui = $size - 1; 
         for ($count = 0; $count < 8192; ++$count) {
             $bit_count = 0;
             for ($bit_index = 0; $bit_index < 13; ++$bit_index) {
                 $bit_count += intval(($count & (1 << $bit_index)) != 0);
             }
-            // if we don't have the right number of bits on, go on to the next value
+            
             if ($bit_count == $n) {
                 $reverse = ($this->imb_reverse_us($count) >> 3);
-                // if the reverse is less than count, we have already visited this pair before
+                
                 if ($reverse >= $count) {
-                    // If count is symmetric, place it at the first free slot from the end of the list.
-                    // Otherwise, place it at the first free slot from the beginning of the list AND place $reverse ath the next free slot from the beginning of the list
+                    
+                    
                     if ($reverse == $count) {
                         $table[$lui] = $count;
                         --$lui;
@@ -550,13 +501,7 @@ class TypeIntelligentMailBarcode implements TypeInterface
         return $table;
     }
 
-    /**
-     * Reverse unsigned short value
-     *
-     * @param $num (int) value to reversr
-     * @return int reversed value
-     * @protected
-     */
+    
     protected function imb_reverse_us($num)
     {
         $rev = 0;

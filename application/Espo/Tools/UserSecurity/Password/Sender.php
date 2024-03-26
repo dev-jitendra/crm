@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\UserSecurity\Password;
 
@@ -54,13 +28,7 @@ class Sender
         private TemplateFileManager $templateFileManager
     ) {}
 
-    /**
-     * Send access info for a new user.
-     *
-     * @throws Error
-     * @throws NoSmtp
-     * @throws SendingError
-     */
+    
     public function sendAccessInfo(User $user, PasswordChangeRequest $request): void
     {
         $emailAddress = $user->getEmailAddress();
@@ -75,7 +43,7 @@ class Sender
             throw new Error("Could not send access info.");
         }
 
-        /** @var Email $email */
+        
         $email = $this->entityManager->getNewEntity(Email::ENTITY_TYPE);
 
         $htmlizer = $this->htmlizerFactory->createNoAcl();
@@ -91,11 +59,7 @@ class Sender
         $this->createSender()->send($email);
     }
 
-    /**
-     * Send a plain password in email.
-     *
-     * @throws SendingError
-     */
+    
     public function sendPassword(User $user, string $password): void
     {
         $emailAddress = $user->getEmailAddress();
@@ -104,7 +68,7 @@ class Sender
             return;
         }
 
-        /** @var Email $email */
+        
         $email = $this->entityManager->getNewEntity(Email::ENTITY_TYPE);
 
         if (!$this->isSmtpConfigured()) {
@@ -135,9 +99,7 @@ class Sender
         return $this->emailSender->create();
     }
 
-    /**
-     * @return array{?string, ?string, ?array<string, mixed>}
-     */
+    
     private function getAccessInfoTemplateData(
         User $user,
         ?string $password = null,
@@ -177,7 +139,7 @@ class Sender
                 ->find();
 
             foreach ($portalList as $portal) {
-                /** @var Portal $portal */
+                
                 $this->getPortalRepository()->loadUrlField($portal);
 
                 $urlList[] = $portal->getUrl() . $urlSuffix;
@@ -207,7 +169,7 @@ class Sender
 
     private function getPortalRepository(): PortalRepository
     {
-        /** @var PortalRepository */
+        
         return $this->entityManager->getRDBRepository(Portal::ENTITY_TYPE);
     }
 }

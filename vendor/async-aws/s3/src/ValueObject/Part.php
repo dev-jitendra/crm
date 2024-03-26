@@ -2,39 +2,22 @@
 
 namespace AsyncAws\S3\ValueObject;
 
-/**
- * Container for elements related to a part.
- */
+
 final class Part
 {
-    /**
-     * Part number identifying the part. This is a positive integer between 1 and 10,000.
-     */
+    
     private $partNumber;
 
-    /**
-     * Date and time at which the part was uploaded.
-     */
+    
     private $lastModified;
 
-    /**
-     * Entity tag returned when the part was uploaded.
-     */
+    
     private $etag;
 
-    /**
-     * Size in bytes of the uploaded part data.
-     */
+    
     private $size;
 
-    /**
-     * @param array{
-     *   PartNumber?: null|int,
-     *   LastModified?: null|\DateTimeImmutable,
-     *   ETag?: null|string,
-     *   Size?: null|string,
-     * } $input
-     */
+    
     public function __construct(array $input)
     {
         $this->partNumber = $input['PartNumber'] ?? null;

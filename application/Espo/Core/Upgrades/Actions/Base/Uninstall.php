@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Upgrades\Actions\Base;
 
@@ -35,11 +9,7 @@ use Espo\Core\Utils\Json;
 
 class Uninstall extends \Espo\Core\Upgrades\Actions\Base
 {
-    /**
-     * @param array<string, mixed> $data
-     * @return void
-     * @throws Error
-     */
+    
     public function run($data)
     {
         $processId = $data['id'];
@@ -64,20 +34,20 @@ class Uninstall extends \Espo\Core\Upgrades\Actions\Base
 
         $this->beforeRunAction();
 
-        /* run before uninstall script */
+        
         if (!isset($data['skipBeforeScript']) || !$data['skipBeforeScript']) {
             $this->runScript('beforeUninstall');
         }
 
         $backupPath = $this->getPath('backupPath');
         if (file_exists($backupPath)) {
-            /* copy core files */
+            
             if (!$this->copyFiles()) {
                 $this->throwErrorAndRemovePackage('Cannot copy files.');
             }
         }
 
-        /* remove extension files, saved in fileList */
+        
         if (!$this->deleteFiles('delete', true)) {
             $this->throwErrorAndRemovePackage('Permission denied to delete files.');
         }
@@ -92,14 +62,14 @@ class Uninstall extends \Espo\Core\Upgrades\Actions\Base
             }
         }
 
-        /* run after uninstall script */
+        
         if (!isset($data['skipAfterScript']) || !$data['skipAfterScript']) {
             $this->runScript('afterUninstall');
         }
 
         $this->afterRunAction();
 
-        /* delete backup files */
+        
         $this->deletePackageFiles();
 
         $this->finalize();
@@ -109,10 +79,7 @@ class Uninstall extends \Espo\Core\Upgrades\Actions\Base
         $this->clearCache();
     }
 
-    /**
-     * @return int
-     * @throws Error
-     */
+    
     protected function restoreFiles()
     {
         $packagePath = $this->getPath('packagePath');
@@ -145,12 +112,7 @@ class Uninstall extends \Espo\Core\Upgrades\Actions\Base
         return $res;
     }
 
-    /**
-     * @param ?string $type
-     * @param string $dest
-     * @return bool
-     * @throws Error
-     */
+    
     protected function copyFiles($type = null, $dest = '')
     {
         $backupPath = $this->getPath('backupPath');
@@ -162,13 +124,7 @@ class Uninstall extends \Espo\Core\Upgrades\Actions\Base
         return $res;
     }
 
-    /**
-     * Get backup path.
-     *
-     * @param bool $isPackage
-     * @return string
-     * @throws Error
-     */
+    
     protected function getPackagePath($isPackage = false)
     {
         if ($isPackage) {
@@ -178,10 +134,7 @@ class Uninstall extends \Espo\Core\Upgrades\Actions\Base
         return $this->getPath('backupPath');
     }
 
-    /**
-     * @return bool
-     * @throws Error
-     */
+    
     protected function deletePackageFiles()
     {
         $backupPath = $this->getPath('backupPath');
@@ -190,13 +143,7 @@ class Uninstall extends \Espo\Core\Upgrades\Actions\Base
         return $res;
     }
 
-    /**
-     * @param string $errorMessage
-     * @param bool $deletePackage
-     * @param bool $systemRebuild
-     * @return void
-     * @throws Error
-     */
+    
     public function throwErrorAndRemovePackage($errorMessage = '', $deletePackage = true, $systemRebuild = true)
     {
         $this->restoreFiles();
@@ -204,10 +151,7 @@ class Uninstall extends \Espo\Core\Upgrades\Actions\Base
         parent::throwErrorAndRemovePackage($errorMessage, false, $systemRebuild);
     }
 
-    /**
-     * @return string[]
-     * @throws Error
-     */
+    
     protected function getCopyFileList()
     {
         if (!isset($this->data['fileList'])) {
@@ -220,10 +164,7 @@ class Uninstall extends \Espo\Core\Upgrades\Actions\Base
         return $this->data['fileList'];
     }
 
-    /**
-     * @return string[]
-     * @throws Error
-     */
+    
     protected function getRestoreFileList()
     {
         if (!isset($this->data['restoreFileList'])) {
@@ -240,11 +181,7 @@ class Uninstall extends \Espo\Core\Upgrades\Actions\Base
         return $this->data['restoreFileList'];
     }
 
-    /**
-     * @param string $type
-     * @return string[]
-     * @throws Error
-     */
+    
     protected function getDeleteList($type = 'delete')
     {
         if ($type == 'delete') {

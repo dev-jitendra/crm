@@ -9,21 +9,13 @@ use Sabberworm\CSS\Parsing\UnexpectedTokenException;
 
 class LineName extends ValueList
 {
-    /**
-     * @param array<int, RuleValueList|CSSFunction|CSSString|LineName|Size|URL|string> $aComponents
-     * @param int $iLineNo
-     */
+    
     public function __construct(array $aComponents = [], $iLineNo = 0)
     {
         parent::__construct($aComponents, ' ', $iLineNo);
     }
 
-    /**
-     * @return LineName
-     *
-     * @throws UnexpectedTokenException
-     * @throws UnexpectedEOFException
-     */
+    
     public static function parse(ParserState $oParserState)
     {
         $oParserState->consume('[');
@@ -47,17 +39,13 @@ class LineName extends ValueList
         return new LineName($aNames, $oParserState->currentLine());
     }
 
-    /**
-     * @return string
-     */
+    
     public function __toString()
     {
         return $this->render(new OutputFormat());
     }
 
-    /**
-     * @return string
-     */
+    
     public function render(OutputFormat $oOutputFormat)
     {
         return '[' . parent::render(OutputFormat::createCompact()) . ']';

@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core;
 
@@ -44,31 +18,23 @@ use ReflectionNamedType;
 use LogicException;
 use RuntimeException;
 
-/**
- * DI container for services. Lazy initialization is used. Services are instantiated only once.
- * @see https://docs.espocrm.com/development/di/.
- */
+
 class Container implements ContainerInterface
 {
     private const ID_CONTAINER = 'container';
     private const ID_INJECTABLE_FACTORY = 'injectableFactory';
 
-    /** @var array<string, object> */
+    
     private array $data = [];
-    /** @var array<string, ReflectionClass<object>> */
+    
     private array $classCache = [];
-    /** @var array<string, class-string<Loader>> */
+    
     private array $loaderClassNames;
 
     private ?Configuration $configuration = null;
     private InjectableFactory $injectableFactory;
 
-    /**
-     * @param class-string<Configuration> $configurationClassName
-     * @param array<string, class-string<Loader>> $loaderClassNames
-     * @param array<string, object> $services
-     * @throws NotFoundExceptionInterface
-     */
+    
     public function __construct(
         string $configurationClassName,
         private BindingContainer $bindingContainer,
@@ -85,16 +51,14 @@ class Container implements ContainerInterface
             $this->setForced($name, $service);
         }
 
-        /** @var InjectableFactory $injectableFactory */
+        
         $injectableFactory = $this->get(self::ID_INJECTABLE_FACTORY);
         $this->injectableFactory = $injectableFactory;
 
         $this->configuration = $this->injectableFactory->create($configurationClassName);
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function get(string $id): object
     {
         if (!$this->isSet($id)) {
@@ -108,9 +72,7 @@ class Container implements ContainerInterface
         return $this->data[$id];
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function has(string $id): bool
     {
         if ($this->isSet($id)) {
@@ -142,13 +104,7 @@ class Container implements ContainerInterface
         return false;
     }
 
-    /**
-     * @inheritDoc
-     * @template T of object
-     * @param class-string<T> $className A class name or interface name.
-     * @return T A service instance.
-     * @throws NotFoundExceptionInterface If not gettable.
-     */
+    
     public function getByClass(string $className): object
     {
         $binding = $this->bindingContainer->getByInterface($className);
@@ -163,7 +119,7 @@ class Container implements ContainerInterface
             throw new LogicException();
         }
 
-        /** @var T */
+        
         return $this->get($id);
     }
 
@@ -218,10 +174,7 @@ class Container implements ContainerInterface
         $this->classCache[$id] = new ReflectionClass($className);
     }
 
-    /**
-     * @param class-string<Loader> $loaderClassName
-     * @throws RuntimeException
-     */
+    
     private function initClassByLoader(string $id, string $loaderClassName): void
     {
         $loaderClass = new ReflectionClass($loaderClassName);
@@ -238,18 +191,13 @@ class Container implements ContainerInterface
             throw new RuntimeException("Loader method for service '{$id}' does not have a named return type.");
         }
 
-        /** @var class-string $className */
+        
         $className = $returnType->getName();
 
         $this->classCache[$id] = new ReflectionClass($className);
     }
 
-    /**
-     * Get a class of a service.
-     *
-     * @return ReflectionClass<object>
-     * @throws RuntimeException If not gettable.
-     */
+    
     public function getClass(string $id): ReflectionClass
     {
         if (!$this->has($id)) {
@@ -263,9 +211,7 @@ class Container implements ContainerInterface
         return $this->classCache[$id];
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function set(string $id, object $object): void
     {
         assert($this->configuration !== null);
@@ -297,9 +243,7 @@ class Container implements ContainerInterface
         return $this->injectableFactory->create($loaderClassName);
     }
 
-    /**
-     * @return ?class-string<Loader>
-     */
+    
     private function getLoaderClassName(string $id): ?string
     {
         $loader = $this->loaderClassNames[$id] ?? null;
@@ -313,9 +257,7 @@ class Container implements ContainerInterface
         return $this->configuration->getLoaderClassName($id);
     }
 
-    /**
-     * @throws NotFoundExceptionInterface
-     */
+    
     private function load(string $id): void
     {
         if ($id === self::ID_CONTAINER) {

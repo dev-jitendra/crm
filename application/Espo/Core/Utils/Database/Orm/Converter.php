@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Utils\Database\Orm;
 
@@ -45,7 +19,7 @@ use LogicException;
 
 class Converter
 {
-    /** @var ?array<string, mixed> */
+    
     private ?array $entityDefs = null;
 
     private string $defaultAttributeType = Entity::VARCHAR;
@@ -53,17 +27,13 @@ class Converter
     private const INDEX_TYPE_UNIQUE = 'unique';
     private const INDEX_TYPE_INDEX = 'index';
 
-    /** @var array<string, int> */
+    
     private array $defaultLengthMap = [
         Entity::VARCHAR => 255,
         Entity::INT => 11,
     ];
 
-    /**
-     * Mapping entityDefs => ORM.
-     *
-     * @var array<string, string>
-     */
+    
     private array $paramMap = [
         'type' => 'type',
         'dbType' => 'dbType',
@@ -75,7 +45,7 @@ class Converter
         'entity' => 'entity',
         'notStorable' => 'notStorable',
         'link' => 'relation',
-        'field' => 'foreign',  // @todo change "foreign" to "field"
+        'field' => 'foreign',  
         'unique' => 'unique',
         'index' => 'index',
         'default' => 'default',
@@ -89,10 +59,10 @@ class Converter
         'scale' => 'scale',
     ];
 
-    /** @var array<string, mixed> */
+    
     private array $idParams = [];
 
-    /** @var string[] */
+    
     private array $copyEntityProperties = ['indexes'];
 
     private IndexHelper $indexHelper;
@@ -114,10 +84,7 @@ class Converter
         $this->idParams['dbType'] = $metadataProvider->getIdDbType();
     }
 
-    /**
-     * @param bool $reload
-     * @return array<string, mixed>
-     */
+    
     private function getEntityDefs($reload = false)
     {
         if (empty($this->entityDefs) || $reload) {
@@ -127,11 +94,7 @@ class Converter
         return $this->entityDefs;
     }
 
-    /**
-     * Covert metadata > entityDefs to ORM metadata.
-     *
-     * @return array<string, array<string, mixed>>
-     */
+    
     public function process(): array
     {
         $entityDefs = $this->getEntityDefs(true);
@@ -147,7 +110,7 @@ class Converter
                 $ormMetadata[$entityType]['modifierClassName'] = $entityMetadata['modifierClassName'];
             }
 
-            /** @var array<string, array<string, mixed>> $ormMetadata */
+            
             $ormMetadata = Util::merge(
                 $ormMetadata,
                 $this->convertEntity($entityType, $entityMetadata)
@@ -155,7 +118,7 @@ class Converter
         }
 
         foreach ($ormMetadata as $entityType => $entityOrmMetadata) {
-            /** @var array<string, array<string, mixed>> $ormMetadata */
+            
             $ormMetadata = Util::merge(
                 $ormMetadata,
                 $this->createEntityTypesFromRelations($entityType, $entityOrmMetadata)
@@ -163,7 +126,7 @@ class Converter
         }
 
         foreach ($entityDefs as $entityMetadata) {
-            /** @var array<string, array<string, mixed>> $ormMetadata */
+            
             $ormMetadata = Util::merge(
                 $ormMetadata,
                 $this->obtainAdditionalTablesOrmMetadata($entityMetadata)
@@ -180,10 +143,7 @@ class Converter
         return $this->indexHelper->composeKey($defs, $entityType);
     }
 
-    /**
-     * @param array<string, mixed> $entityMetadata
-     * @return array<string, mixed>
-     */
+    
     private function convertEntity(string $entityType, array $entityMetadata): array
     {
         $ormMetadata = [];
@@ -234,19 +194,16 @@ class Converter
         return $ormMetadata;
     }
 
-    /**
-     * @param array<string, mixed> $ormMetadata
-     * @return array<string, mixed>
-     */
+    
     private function afterFieldsProcess(array $ormMetadata): array
     {
-        foreach ($ormMetadata as /*$entityType =>*/ &$entityParams) {
+        foreach ($ormMetadata as  &$entityParams) {
             if (empty($entityParams['attributes'])) {
                 print_r($entityParams);
             }
             foreach ($entityParams['attributes'] as $attribute => &$attributeParams) {
 
-                // Remove fields without type.
+                
                 if (
                     !isset($attributeParams['type']) &&
                     (!isset($attributeParams['notStorable']) || $attributeParams['notStorable'] === false)
@@ -307,10 +264,7 @@ class Converter
         return $ormMetadata;
     }
 
-    /**
-     * @param array<string, mixed> $ormMetadata
-     * @return array<string, mixed>
-     */
+    
     private function afterProcess(array $ormMetadata): array
     {
         foreach ($ormMetadata as $entityType => &$entityParams) {
@@ -330,9 +284,7 @@ class Converter
         return $ormMetadata;
     }
 
-    /**
-     * @param array<string, mixed> $data
-     */
+    
     private function obtainForeignType(array $data, string $entityType, string $attribute): ?string
     {
         $params = $data[$entityType]['attributes'][$attribute] ?? [];
@@ -357,15 +309,12 @@ class Converter
         return $foreignParams['type'] ?? null;
     }
 
-    /**
-     * @param array<string, mixed> $entityMetadata
-     * @return array<string, mixed>
-     */
+    
     private function convertFields(string $entityType, array &$entityMetadata): array
     {
         $entityMetadata['fields'] ??= [];
 
-        // List of unmerged fields with default field definitions in $output.
+        
         $unmergedFields = [
             'name',
         ];
@@ -405,7 +354,7 @@ class Converter
                     $output[$attribute] = $fieldDefs;
                 }
 
-                /** @var array<string, array<string, mixed>> $output */
+                
             }
 
             if (isset($fieldTypeMetadata['linkDefs'])) {
@@ -430,12 +379,7 @@ class Converter
         return $output;
     }
 
-    /**
-     * Apply field converters and other corrections.
-     *
-     * @param array<string, mixed> $ormMetadata
-     * @return array<string, mixed>
-     */
+    
     private function correctFields(string $entityType, array $ormMetadata): array
     {
         $entityMetadata = $ormMetadata[$entityType];
@@ -447,7 +391,7 @@ class Converter
                 continue;
             }
 
-            /** @var ?class-string<FieldConverter> $className */
+            
             $className =
                 $this->metadata->get(['entityDefs', $entityType, 'fields', $field, 'converterClassName']) ??
                 $this->metadata->get(['fields', $type, 'converterClassName']);
@@ -463,14 +407,14 @@ class Converter
 
                 $converter = $this->injectableFactory->create($className);
 
-                /** @var array<string, mixed> $rawFieldDefs */
+                
                 $rawFieldDefs = $this->metadata->get(['entityDefs', $entityType, 'fields', $field]);
 
                 $fieldDefs = FieldDefs::fromRaw($rawFieldDefs, $field);
 
                 $convertedEntityDefs = $converter->convert($fieldDefs, $entityType);
 
-                /** @var array<string, mixed> $ormMetadata */
+                
                 $ormMetadata = Util::merge($ormMetadata, [$entityType => $convertedEntityDefs->toAssoc()]);
             }
 
@@ -488,13 +432,13 @@ class Converter
                     ]
                 ];
 
-                /** @var array<string, mixed> $ormMetadata */
+                
                 $ormMetadata = Util::merge($ormMetadata, $defaultMetadataPart);
             }
         }
 
-        // @todo Refactor.
-        /** @var array<string, mixed> $scopeDefs */
+        
+        
         $scopeDefs = $this->metadata->get(['scopes', $entityType]) ?? [];
 
         if ($scopeDefs['stream'] ?? false) {
@@ -519,7 +463,7 @@ class Converter
             }
         }
 
-        // @todo Refactor.
+        
         if ($this->metadata->get(['entityDefs', $entityType, 'optimisticConcurrencyControl'])) {
             $ormMetadata[$entityType]['attributes']['versionNumber'] = [
                 'type' => Entity::INT,
@@ -531,11 +475,7 @@ class Converter
         return $ormMetadata;
     }
 
-    /**
-     * @param array<string, mixed> $fieldParams
-     * @param ?array<string, mixed> $fieldTypeMetadata
-     * @return array<string, mixed>|false
-     */
+    
     private function convertField(
         array $fieldParams,
         ?array $fieldTypeMetadata = null
@@ -547,7 +487,7 @@ class Converter
         $this->prepareFieldParamsBeforeConvert($fieldParams);
 
         if (isset($fieldTypeMetadata['fieldDefs'])) {
-            /** @var array<string, mixed> $fieldParams */
+            
             $fieldParams = Util::merge($fieldParams, $fieldTypeMetadata['fieldDefs']);
         }
 
@@ -585,9 +525,7 @@ class Converter
         return $fieldDefs;
     }
 
-    /**
-     * @param array<string, mixed> $fieldParams
-     */
+    
     private function prepareFieldParamsBeforeConvert(array &$fieldParams): void
     {
         $type = $fieldParams['type'] ?? null;
@@ -599,11 +537,7 @@ class Converter
         }
     }
 
-    /**
-     * @param array<string, mixed> $entityMetadata
-     * @param array<string, mixed> $ormMetadata
-     * @return array<string, mixed>
-     */
+    
     private function convertLinks(string $entityType, array $entityMetadata, array $ormMetadata): array
     {
         if (!isset($entityMetadata['links'])) {
@@ -620,7 +554,7 @@ class Converter
             $convertedLink = $this->relationConverter->process($linkName, $linkParams, $entityType, $ormMetadata);
 
             if ($convertedLink) {
-                /** @var array<string, mixed> $relationships */
+                
                 $relationships = Util::merge($convertedLink, $relationships);
             }
         }
@@ -628,10 +562,7 @@ class Converter
         return $relationships;
     }
 
-    /**
-     * @param array<string, mixed> $attributeParams
-     * @return array<string, mixed>
-     */
+    
     private function getInitValues(array $attributeParams)
     {
         $values = [];
@@ -667,9 +598,7 @@ class Converter
         return $values;
     }
 
-    /**
-     * @param array<string, mixed> $ormMetadata
-     */
+    
     private function applyFullTextSearch(array &$ormMetadata, string $entityType): void
     {
         if (!$this->metadata->get(['entityDefs', $entityType, 'collection', 'fullTextSearch'])) {
@@ -731,9 +660,7 @@ class Converter
         }
     }
 
-    /**
-     * @param array<string, mixed> $ormMetadata
-     */
+    
     private function applyIndexes(array &$ormMetadata, string $entityType): void
     {
         $defs = &$ormMetadata[$entityType];
@@ -818,29 +745,26 @@ class Converter
         }
     }
 
-    /**
-     * @param array<string, mixed> $defs
-     * @return array<string, mixed>
-     */
+    
     private function obtainAdditionalTablesOrmMetadata(array $defs): array
     {
-        /** @var array<string, array<string, mixed>> $additionalDefs */
+        
         $additionalDefs = $defs['additionalTables'] ?? [];
 
         if ($additionalDefs === []) {
             return [];
         }
 
-        /** @var string[] $entityTypeList */
+        
         $entityTypeList = array_keys($additionalDefs);
 
         foreach ($entityTypeList as $itemEntityType) {
             $this->applyIndexes($additionalDefs, $itemEntityType);
         }
 
-        // For backward compatibility. Actual as of v8.0.
-        // @todo Remove in v10.0.
-        // @todo Add deprecation warning in v9.0. If 'fields' is set.
+        
+        
+        
         foreach ($additionalDefs as &$entityDefs) {
             if (!isset($entityDefs['attributes'])) {
                 $entityDefs['attributes'] = $entityDefs['fields'] ?? [];
@@ -852,10 +776,7 @@ class Converter
         return $additionalDefs;
     }
 
-    /**
-     * @param array<string, mixed> $defs
-     * @return array<string, mixed>
-     */
+    
     private function createEntityTypesFromRelations(string $entityType, array $defs): array
     {
         $result = [];
@@ -875,7 +796,7 @@ class Converter
                     'id' => [
                         'type' => Entity::ID,
                         'autoincrement' => true,
-                        'dbType' => Types::BIGINT, // ignored because of `skipRebuild`
+                        'dbType' => Types::BIGINT, 
                     ],
                     'deleted' => [
                         'type' => Entity::BOOL,
@@ -930,9 +851,7 @@ class Converter
         return $result;
     }
 
-    /**
-     * @return array<string, mixed>
-     */
+    
     private static function convertIndexDefsToRaw(IndexDefs $indexDefs): array
     {
         return [
@@ -943,10 +862,7 @@ class Converter
         ];
     }
 
-    /**
-     * @param array<string, mixed> $attributesMetadata
-     * @return array<string, mixed>
-     */
+    
     private static function getEntityIndexListFromAttributes(array $attributesMetadata): array
     {
         $indexList = [];
@@ -977,7 +893,7 @@ class Converter
             }
         }
 
-        /** @var array<string, mixed> */
+        
         return $indexList;
     }
 

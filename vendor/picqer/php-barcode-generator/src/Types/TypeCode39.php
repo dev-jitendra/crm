@@ -7,10 +7,7 @@ use Picqer\Barcode\BarcodeBar;
 use Picqer\Barcode\Exceptions\InvalidCharacterException;
 use Picqer\Barcode\Exceptions\InvalidLengthException;
 
-/*
- * CODE 39 - ANSI MH10.8M-1983 - USD-3 - 3 of 9.
- * General-purpose code in very wide use world-wide
- */
+
 
 class TypeCode39 implements TypeInterface
 {
@@ -71,16 +68,16 @@ class TypeCode39 implements TypeInterface
         }
 
         if ($this->extended) {
-            // extended mode
+            
             $code = $this->encode_code39_ext($code);
         }
 
         if ($this->checksum) {
-            // checksum
+            
             $code .= $this->checksum_code39($code);
         }
 
-        // add start and stop codes
+        
         $code = '*' . $code . '*';
 
         $barcode = new Barcode($code);
@@ -101,7 +98,7 @@ class TypeCode39 implements TypeInterface
                 $barcode->addBar(new BarcodeBar($barWidth, 1, $drawBar));
             }
 
-            // inter character gap
+            
             $barcode->addBar(new BarcodeBar(1, 1, false));
         }
 
@@ -109,13 +106,7 @@ class TypeCode39 implements TypeInterface
     }
 
 
-    /**
-     * Encode a string to be used for CODE 39 Extended mode.
-     *
-     * @param string $code code to represent.
-     * @return bool|string encoded string.
-     * @protected
-     */
+    
     protected function encode_code39_ext($code)
     {
         $encode = [
@@ -262,13 +253,7 @@ class TypeCode39 implements TypeInterface
     }
 
 
-    /**
-     * Calculate CODE 39 checksum (modulo 43).
-     *
-     * @param string $code code to represent.
-     * @return string char checksum.
-     * @protected
-     */
+    
     protected function checksum_code39($code)
     {
         $chars = [

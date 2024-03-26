@@ -10,10 +10,10 @@ use function sprintf;
 
 trait VerifyDeprecations
 {
-    /** @var array<string,int> */
+    
     private $doctrineDeprecationsExpectations = [];
 
-    /** @var array<string,int> */
+    
     private $doctrineNoDeprecationsExpectations = [];
 
     public function expectDeprecationWithIdentifier(string $identifier): void
@@ -26,17 +26,13 @@ trait VerifyDeprecations
         $this->doctrineNoDeprecationsExpectations[$identifier] = Deprecation::getTriggeredDeprecations()[$identifier] ?? 0;
     }
 
-    /**
-     * @before
-     */
+    
     public function enableDeprecationTracking(): void
     {
         Deprecation::enableTrackingDeprecations();
     }
 
-    /**
-     * @after
-     */
+    
     public function verifyDeprecationsAreTriggered(): void
     {
         foreach ($this->doctrineDeprecationsExpectations as $identifier => $expectation) {

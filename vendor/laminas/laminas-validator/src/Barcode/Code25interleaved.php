@@ -4,11 +4,7 @@ namespace Laminas\Validator\Barcode;
 
 class Code25interleaved extends AbstractAdapter
 {
-    /**
-     * Constructor
-     *
-     * Sets check flag to false.
-     */
+    
     public function __construct()
     {
         $this->setLength('even');

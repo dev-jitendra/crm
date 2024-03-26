@@ -1,56 +1,36 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Contracts\Service;
 
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
-// Help opcache.preload discover always-needed symbols
+
 class_exists(ContainerExceptionInterface::class);
 class_exists(NotFoundExceptionInterface::class);
 
-/**
- * A trait to help implement ServiceProviderInterface.
- *
- * @author Robin Chalas <robin.chalas@gmail.com>
- * @author Nicolas Grekas <p@tchwork.com>
- */
+
 trait ServiceLocatorTrait
 {
     private $factories;
     private $loading = [];
     private $providedTypes;
 
-    /**
-     * @param callable[] $factories
-     */
+    
     public function __construct(array $factories)
     {
         $this->factories = $factories;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return bool
-     */
+    
     public function has($id)
     {
         return isset($this->factories[$id]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function get($id)
     {
         if (!isset($this->factories[$id])) {
@@ -73,9 +53,7 @@ trait ServiceLocatorTrait
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getProvidedServices(): array
     {
         if (null === $this->providedTypes) {

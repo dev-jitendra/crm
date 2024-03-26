@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Authentication\Oidc;
 
@@ -54,9 +28,7 @@ class KeysProvider
         private Log $log
     ) {}
 
-    /**
-     * @return Key[]
-     */
+    
     public function get(): array
     {
         $list = [];
@@ -75,9 +47,7 @@ class KeysProvider
         return $list;
     }
 
-    /**
-     * @return stdClass[]
-     */
+    
     private function getRaw(): array
     {
         $raw = $this->getRawFromCache();
@@ -91,9 +61,7 @@ class KeysProvider
         return $raw;
     }
 
-    /**
-     * @return stdClass[]
-     */
+    
     private function load(): array
     {
         $endpoint = $this->configDataProvider->getJwksEndpoint();
@@ -115,7 +83,7 @@ class KeysProvider
             CURLOPT_PROTOCOLS => CURLPROTO_HTTPS | CURLPROTO_HTTP,
         ]);
 
-        /** @var string|false $response */
+        
         $response = curl_exec($curl);
         $error = curl_error($curl);
         $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
@@ -144,9 +112,7 @@ class KeysProvider
         return $parsedResponse->keys;
     }
 
-    /**
-     * @return ?stdClass[]
-     */
+    
     private function getRawFromCache(): ?array
     {
         if (!$this->config->get('useCache')) {
@@ -163,7 +129,7 @@ class KeysProvider
             return null;
         }
 
-        /** @var ?int $timestamp */
+        
         $timestamp = $data->timestamp;
 
         if (!$timestamp) {
@@ -176,7 +142,7 @@ class KeysProvider
             return null;
         }
 
-        /** @var ?stdClass[] $keys */
+        
         $keys = $data->keys ?? null;
 
         if ($keys === null) {
@@ -186,9 +152,7 @@ class KeysProvider
         return $keys;
     }
 
-    /**
-     * @param stdClass[] $raw
-     */
+    
     private function storeRawToCache(array $raw): void
     {
         if (!$this->config->get('useCache')) {

@@ -11,30 +11,18 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-/**
- * Provides Credentials from Web Identity or OpenID Connect Federation.
- *
- * @see https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-idp_oidc.html
- *
- * @author Jérémy Derussé <jeremy@derusse.com>
- */
+
 final class WebIdentityProvider implements CredentialProvider
 {
     use DateFromResult;
 
-    /**
-     * @var IniFileLoader
-     */
+    
     private $iniFileLoader;
 
-    /**
-     * @var LoggerInterface
-     */
+    
     private $logger;
 
-    /**
-     * @var HttpClientInterface|null
-     */
+    
     private $httpClient;
 
     public function __construct(?LoggerInterface $logger = null, ?IniFileLoader $iniFileLoader = null, ?HttpClientInterface $httpClient = null)
@@ -66,7 +54,7 @@ final class WebIdentityProvider implements CredentialProvider
             return null;
         }
 
-        /** @var string $profile */
+        
         $profile = $configuration->get(Configuration::OPTION_PROFILE);
         if (!isset($profilesData[$profile])) {
             $this->logger->warning('Profile "{profile}" not found.', ['profile' => $profile]);
@@ -130,11 +118,7 @@ final class WebIdentityProvider implements CredentialProvider
         );
     }
 
-    /**
-     * @see https://github.com/async-aws/aws/issues/900
-     * @see https://github.com/aws/aws-sdk-php/issues/2014
-     * @see https://github.com/aws/aws-sdk-php/pull/2043
-     */
+    
     private function getTokenFileContent(string $tokenFile): string
     {
         $token = @file_get_contents($tokenFile);

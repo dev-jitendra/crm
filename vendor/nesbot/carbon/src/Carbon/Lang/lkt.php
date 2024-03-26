@@ -1,31 +1,24 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 return array_replace_recursive(require __DIR__.'/en.php', [
 
-    'month' => ':count haŋwí', // less reliable
-    'm' => ':count haŋwí', // less reliable
-    'a_month' => ':count haŋwí', // less reliable
+    'month' => ':count haŋwí', 
+    'm' => ':count haŋwí', 
+    'a_month' => ':count haŋwí', 
 
-    'week' => ':count šakówiŋ', // less reliable
-    'w' => ':count šakówiŋ', // less reliable
-    'a_week' => ':count šakówiŋ', // less reliable
+    'week' => ':count šakówiŋ', 
+    'w' => ':count šakówiŋ', 
+    'a_week' => ':count šakówiŋ', 
 
-    'hour' => ':count maza škaŋškaŋ', // less reliable
-    'h' => ':count maza škaŋškaŋ', // less reliable
-    'a_hour' => ':count maza škaŋškaŋ', // less reliable
+    'hour' => ':count maza škaŋškaŋ', 
+    'h' => ':count maza škaŋškaŋ', 
+    'a_hour' => ':count maza škaŋškaŋ', 
 
-    'minute' => ':count číkʼala', // less reliable
-    'min' => ':count číkʼala', // less reliable
-    'a_minute' => ':count číkʼala', // less reliable
+    'minute' => ':count číkʼala', 
+    'min' => ':count číkʼala', 
+    'a_minute' => ':count číkʼala', 
 
     'year' => ':count waníyetu',
     'y' => ':count waníyetu',

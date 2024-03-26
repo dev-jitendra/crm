@@ -1,32 +1,6 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/list-with-categories */
+
+
 
 import ListView from 'views/list';
 
@@ -37,10 +11,10 @@ class ListWithCategories extends ListView {
     quickCreate = true
     storeViewAfterCreate = true
     storeViewAfterUpdate = true
-    /** @type {string|null} */
+    
     currentCategoryId = null
     currentCategoryName = ''
-    /** @type {string|null} */
+    
     categoryScope = null
     categoryField = 'category'
     categoryFilterType = 'inCategory'
@@ -49,12 +23,9 @@ class ListWithCategories extends ListView {
     expandedTogglerDisabled = false
     keepCurrentRootUrl = true
     hasNavigationPanel = false
-    /** @private */
+    
     nestedCollectionIsBeingFetched = false
-    /**
-     * @type {module:collections/tree}
-     * @private
-     */
+    
     nestedCategoriesCollection
 
     data() {
@@ -143,9 +114,7 @@ class ListWithCategories extends ListView {
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     setupReuse(params) {
         this.applyRoutingParams(params);
     }
@@ -236,7 +205,7 @@ class ListWithCategories extends ListView {
         this.$el.focus();
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionExpand() {
         this.isExpanded = true;
 
@@ -259,7 +228,7 @@ class ListWithCategories extends ListView {
         this.collection.fetch();
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionCollapse() {
         this.isExpanded = false;
         this.setIsExpandedStoredValue(false);
@@ -278,7 +247,7 @@ class ListWithCategories extends ListView {
         this.collection.fetch();
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionOpenCategory(data) {
         this.openCategory(data.id || null, data.name);
 
@@ -444,18 +413,14 @@ class ListWithCategories extends ListView {
         });
     }
 
-    /**
-     * @return {module:views/record/list-nested-categories}
-     */
+    
     getNestedCategoriesView() {
-        return /** @type module:views/record/list-nested-categories */this.getView('nestedCategories');
+        return this.getView('nestedCategories');
     }
 
-    /**
-     * @return {module:views/record/list-tree}
-     */
+    
     getCategoriesView() {
-        return /** @type module:views/record/list-tree */this.getView('categories');
+        return this.getView('categories');
     }
 
     loadNestedCategories() {
@@ -643,7 +608,7 @@ class ListWithCategories extends ListView {
         return this.currentCategoryId;
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionManageCategories() {
         this.clearView('categories');
         this.clearView('nestedCategories');
@@ -714,7 +679,7 @@ class ListWithCategories extends ListView {
         this.$listContainer.removeClass('hidden');
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionToggleNavigationPanel() {
         const value = !this.hasNavigationPanel;
 

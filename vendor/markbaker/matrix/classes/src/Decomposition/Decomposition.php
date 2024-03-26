@@ -10,9 +10,7 @@ class Decomposition
     const LU = 'LU';
     const QR = 'QR';
 
-    /**
-     * @throws Exception
-     */
+    
     public static function decomposition($type, Matrix $matrix)
     {
         switch (strtoupper($type)) {

@@ -1,14 +1,10 @@
-/*!
-FullCalendar Moment Plugin v6.1.8
-Docs & License: https://fullcalendar.io/docs/moment-plugin
-(c) 2023 Adam Shaw
-*/
+
 FullCalendar.Moment = (function (exports, core, moment, internal) {
     'use strict';
 
     function _interopDefault (e) { return e && e.__esModule ? e : { 'default': e }; }
 
-    var moment__default = /*#__PURE__*/_interopDefault(moment);
+    var moment__default = _interopDefault(moment);
 
     function toMoment(date, calendar) {
         if (!(calendar instanceof internal.CalendarImpl)) {
@@ -18,9 +14,9 @@ FullCalendar.Moment = (function (exports, core, moment, internal) {
         return convertToMoment(date, dateEnv.timeZone, null, dateEnv.locale.codes[0]);
     }
     function toMomentDuration(fcDuration) {
-        return moment__default["default"].duration(fcDuration); // moment accepts all the props that fc.Duration already has!
+        return moment__default["default"].duration(fcDuration); 
     }
-    // Internal Utils
+    
     function convertToMoment(input, timeZone, timeZoneOffset, locale) {
         let mom;
         if (timeZone === 'local') {
@@ -49,14 +45,14 @@ FullCalendar.Moment = (function (exports, core, moment, internal) {
             let endMom = convertToMoment(arg.end.array, arg.timeZone, arg.end.timeZoneOffset, arg.localeCodes[0]);
             return formatRange(cmd, createMomentFormatFunc(startMom), createMomentFormatFunc(endMom), arg.defaultSeparator);
         }
-        return convertToMoment(arg.date.array, arg.timeZone, arg.date.timeZoneOffset, arg.localeCodes[0]).format(cmd.whole); // TODO: test for this
+        return convertToMoment(arg.date.array, arg.timeZone, arg.date.timeZoneOffset, arg.localeCodes[0]).format(cmd.whole); 
     }
     function createMomentFormatFunc(mom) {
-        return (cmdStr) => (cmdStr ? mom.format(cmdStr) : '' // because calling with blank string results in ISO8601 :(
+        return (cmdStr) => (cmdStr ? mom.format(cmdStr) : '' 
         );
     }
     function parseCmdStr(cmdStr) {
-        let parts = cmdStr.match(/^(.*?)\{(.*)\}(.*)$/); // TODO: lookbehinds for escape characters
+        let parts = cmdStr.match(/^(.*?)\{(.*)\}(.*)$/); 
         if (parts) {
             let middle = parseCmdStr(parts[2]);
             return {

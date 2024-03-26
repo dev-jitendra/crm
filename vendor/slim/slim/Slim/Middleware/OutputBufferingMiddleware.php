@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -32,9 +28,7 @@ class OutputBufferingMiddleware implements MiddlewareInterface
 
     protected string $style;
 
-    /**
-     * @param string $style Either "append" or "prepend"
-     */
+    
     public function __construct(StreamFactoryInterface $streamFactory, string $style = 'append')
     {
         $this->streamFactory = $streamFactory;
@@ -45,9 +39,7 @@ class OutputBufferingMiddleware implements MiddlewareInterface
         }
     }
 
-    /**
-     * @throws Throwable
-     */
+    
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         try {

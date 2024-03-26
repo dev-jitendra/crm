@@ -1,9 +1,7 @@
 <?php
 namespace Ratchet\Http;
 
-/**
- * @covers Ratchet\Http\HttpRequestParser
- */
+
 class HttpRequestParserTest extends \PHPUnit_Framework_TestCase {
     protected $parser;
 
@@ -22,9 +20,7 @@ class HttpRequestParserTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
-    /**
-     * @dataProvider headersProvider
-     */
+    
     public function testIsEom($expected, $message) {
         $this->assertEquals($expected, $this->parser->isEom($message));
     }

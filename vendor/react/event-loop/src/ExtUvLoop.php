@@ -6,17 +6,7 @@ use React\EventLoop\Tick\FutureTickQueue;
 use React\EventLoop\Timer\Timer;
 use SplObjectStorage;
 
-/**
- * An `ext-uv` based event loop.
- *
- * This loop uses the [`uv` PECL extension](https://pecl.php.net/package/uv),
- * that provides an interface to `libuv` library.
- * `libuv` itself supports a number of system-specific backends (epoll, kqueue).
- *
- * This loop is known to work with PHP 7.x.
- *
- * @see https://github.com/bwoebi/php-uv
- */
+
 final class ExtUvLoop implements LoopInterface
 {
     private $uv;
@@ -43,21 +33,13 @@ final class ExtUvLoop implements LoopInterface
         $this->signals = new SignalsHandler();
     }
 
-    /**
-     * Returns the underlying ext-uv event loop. (Internal ReactPHP use only.)
-     *
-     * @internal
-     *
-     * @return resource
-     */
+    
     public function getUvLoop()
     {
         return $this->uv;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function addReadStream($stream, $listener)
     {
         if (isset($this->readStreams[(int) $stream])) {
@@ -68,9 +50,7 @@ final class ExtUvLoop implements LoopInterface
         $this->addStream($stream);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function addWriteStream($stream, $listener)
     {
         if (isset($this->writeStreams[(int) $stream])) {
@@ -81,9 +61,7 @@ final class ExtUvLoop implements LoopInterface
         $this->addStream($stream);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function removeReadStream($stream)
     {
         if (!isset($this->streamEvents[(int) $stream])) {
@@ -94,9 +72,7 @@ final class ExtUvLoop implements LoopInterface
         $this->removeStream($stream);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function removeWriteStream($stream)
     {
         if (!isset($this->streamEvents[(int) $stream])) {
@@ -107,9 +83,7 @@ final class ExtUvLoop implements LoopInterface
         $this->removeStream($stream);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function addTimer($interval, $callback)
     {
         $timer = new Timer($interval, $callback, false);
@@ -136,9 +110,7 @@ final class ExtUvLoop implements LoopInterface
         return $timer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function addPeriodicTimer($interval, $callback)
     {
         $timer = new Timer($interval, $callback, true);
@@ -160,9 +132,7 @@ final class ExtUvLoop implements LoopInterface
         return $timer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function cancelTimer(TimerInterface $timer)
     {
         if (isset($this->timers[$timer])) {
@@ -171,9 +141,7 @@ final class ExtUvLoop implements LoopInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function futureTick($listener)
     {
         $this->futureTickQueue->add($listener);
@@ -202,9 +170,7 @@ final class ExtUvLoop implements LoopInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function run()
     {
         $this->running = true;
@@ -219,9 +185,9 @@ final class ExtUvLoop implements LoopInterface
                 && !$this->timers->count()
                 && $this->signals->isEmpty();
 
-            // Use UV::RUN_ONCE when there are only I/O events active in the loop and block until one of those triggers,
-            // otherwise use UV::RUN_NOWAIT.
-            // @link http://docs.libuv.org/en/v1.x/loop.html#c.uv_run
+            
+            
+            
             $flags = \UV::RUN_ONCE;
             if ($wasJustStopped || $hasPendingCallbacks) {
                 $flags = \UV::RUN_NOWAIT;
@@ -233,9 +199,7 @@ final class ExtUvLoop implements LoopInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function stop()
     {
         $this->running = false;
@@ -287,20 +251,16 @@ final class ExtUvLoop implements LoopInterface
         \uv_poll_start($this->streamEvents[(int) $stream], $flags, $this->streamListener);
     }
 
-    /**
-     * Create a stream listener
-     *
-     * @return callable Returns a callback
-     */
+    
     private function createStreamListener()
     {
         $callback = function ($event, $status, $events, $stream) {
-            // libuv automatically stops polling on error, re-enable polling to match other loop implementations
+            
             if ($status !== 0) {
                 $this->pollStream($stream);
 
-                // libuv may report no events on error, but this should still invoke stream listeners to report closed connections
-                // re-enable both readable and writable, correct listeners will be checked below anyway
+                
+                
                 if ($events === 0) {
                     $events = \UV::READABLE | \UV::WRITABLE;
                 }
@@ -318,10 +278,7 @@ final class ExtUvLoop implements LoopInterface
         return $callback;
     }
 
-    /**
-     * @param float $interval
-     * @return int
-     */
+    
     private function convertFloatSecondsToMilliseconds($interval)
     {
         if ($interval < 0) {

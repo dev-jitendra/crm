@@ -1,13 +1,6 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Monolog package.
- *
- * (c) Jordi Boggiano <j.boggiano@seld.be>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Monolog\Handler;
 
@@ -22,23 +15,14 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\Transport\TransportInterface;
 use Symfony\Component\Mime\Email;
 
-/**
- * SymfonyMailerHandler uses Symfony's Mailer component to send the emails
- *
- * @author Jordi Boggiano <j.boggiano@seld.be>
- */
+
 class SymfonyMailerHandler extends MailHandler
 {
     protected MailerInterface|TransportInterface $mailer;
-    /** @var Email|Closure(string, LogRecord[]): Email */
+    
     private Email|Closure $emailTemplate;
 
-    /**
-     * @phpstan-param Email|Closure(string, LogRecord[]): Email $email
-     *
-     * @param MailerInterface|TransportInterface $mailer The mailer to use
-     * @param Closure|Email                      $email  An email template, the subject/body will be replaced
-     */
+    
     public function __construct($mailer, Email|Closure $email, int|string|Level $level = Level::Error, bool $bubble = true)
     {
         parent::__construct($level, $bubble);
@@ -47,30 +31,19 @@ class SymfonyMailerHandler extends MailHandler
         $this->emailTemplate = $email;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     protected function send(string $content, array $records): void
     {
         $this->mailer->send($this->buildMessage($content, $records));
     }
 
-    /**
-     * Gets the formatter for the Swift_Message subject.
-     *
-     * @param string|null $format The format of the subject
-     */
+    
     protected function getSubjectFormatter(?string $format): FormatterInterface
     {
         return new LineFormatter($format);
     }
 
-    /**
-     * Creates instance of Email to be sent
-     *
-     * @param  string      $content formatted email body to be sent
-     * @param  LogRecord[] $records Log records that formed the content
-     */
+    
     protected function buildMessage(string $content, array $records): Email
     {
         $message = null;

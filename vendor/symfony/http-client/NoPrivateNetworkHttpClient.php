@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpClient;
 
@@ -20,11 +13,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Contracts\HttpClient\ResponseStreamInterface;
 
-/**
- * Decorator that blocks requests to private networks by default.
- *
- * @author Hallison Boaventura <hallisonboaventura@gmail.com>
- */
+
 final class NoPrivateNetworkHttpClient implements HttpClientInterface, LoggerAwareInterface
 {
     use HttpClientTrait;
@@ -47,10 +36,7 @@ final class NoPrivateNetworkHttpClient implements HttpClientInterface, LoggerAwa
     private $client;
     private $subnets;
 
-    /**
-     * @param string|array|null $subnets String or array of subnets using CIDR notation that will be used by IpUtils.
-     *                                   If null is passed, the standard private subnets will be used.
-     */
+    
     public function __construct(HttpClientInterface $client, $subnets = null)
     {
         if (!(\is_array($subnets) || \is_string($subnets) || null === $subnets)) {
@@ -65,9 +51,7 @@ final class NoPrivateNetworkHttpClient implements HttpClientInterface, LoggerAwa
         $this->subnets = $subnets;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function request(string $method, string $url, array $options = []): ResponseInterface
     {
         $onProgress = $options['on_progress'] ?? null;
@@ -93,17 +77,13 @@ final class NoPrivateNetworkHttpClient implements HttpClientInterface, LoggerAwa
         return $this->client->request($method, $url, $options);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function stream($responses, float $timeout = null): ResponseStreamInterface
     {
         return $this->client->stream($responses, $timeout);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function setLogger(LoggerInterface $logger): void
     {
         if ($this->client instanceof LoggerAwareInterface) {

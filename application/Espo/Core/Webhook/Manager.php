@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Webhook;
 
@@ -41,21 +15,19 @@ use Espo\Entities\WebhookEventQueueItem;
 
 use RuntimeException;
 
-/**
- * Processes events. Holds an information about existing events.
- */
+
 class Manager
 {
     private string $cacheKey = 'webhooks';
 
-    /** @var string[] */
+    
     protected $skipAttributeList = [
         'isFollowed',
         'modifiedAt',
         'modifiedBy'
     ];
 
-    /** @var ?array<string, bool> */
+    
     private $data = null;
 
     public function __construct(
@@ -72,7 +44,7 @@ class Manager
     private function loadData(): void
     {
         if ($this->config->get('useCache') && $this->dataCache->has($this->cacheKey)) {
-            /** @var array<string, bool> $data */
+            
             $data = $this->dataCache->get($this->cacheKey);
 
             $this->data = $data;
@@ -96,9 +68,7 @@ class Manager
         $this->dataCache->store($this->cacheKey, $this->data);
     }
 
-    /**
-     * @return array<string, bool>
-     */
+    
     private function buildData(): array
     {
         $data = [];
@@ -114,7 +84,7 @@ class Manager
             ->find();
 
         foreach ($list as $webhook) {
-            /** @var string $event */
+            
             $event = $webhook->getEvent();
 
             $data[$event] = true;
@@ -123,9 +93,7 @@ class Manager
         return $data;
     }
 
-    /**
-     * Add an event. To cache the information that at least one webhook for this event exists.
-     */
+    
     public function addEvent(string $event): void
     {
         $this->data[$event] = true;
@@ -135,9 +103,7 @@ class Manager
         }
     }
 
-    /**
-     * Remove an event. If no webhooks with this event left, then it will be removed from the cache.
-     */
+    
     public function removeEvent(string $event): void
     {
         $notExists = !$this->entityManager
@@ -168,9 +134,7 @@ class Manager
         $this->log->debug("Webhook: {$event} on record {$entity->getId()}.");
     }
 
-    /**
-     * Process 'create' event.
-     */
+    
     public function processCreate(Entity $entity): void
     {
         $event = $entity->getEntityType() . '.create';
@@ -189,9 +153,7 @@ class Manager
         $this->logDebugEvent($event, $entity);
     }
 
-    /**
-     * Process 'delete' event.
-     */
+    
     public function processDelete(Entity $entity): void
     {
         $event = $entity->getEntityType() . '.delete';
@@ -212,9 +174,7 @@ class Manager
         $this->logDebugEvent($event, $entity);
     }
 
-    /**
-     * Process 'update' event.
-     */
+    
     public function processUpdate(Entity $entity): void
     {
         $event = $entity->getEntityType() . '.update';

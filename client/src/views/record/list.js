@@ -1,32 +1,6 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/record/list */
+
+
 
 import View from 'view';
 import MassActionHelper from 'helpers/mass-action';
@@ -36,260 +10,110 @@ import SelectProvider from 'helpers/list/select-provider';
 import RecordListSettingsView from 'views/record/list/settings';
 import ListSettingsHelper from 'helpers/list/settings';
 
-/**
- * A record-list view. Renders and processes list items, actions.
- *
- * @todo Document all options.
- */
+
 class ListRecordView extends View {
 
-    /**
-     * A row action.
-     *
-     * @typedef {Object} module:views/record/list~rowAction
-     *
-     * @property {string} action An action.
-     * @property {string} [label] A label.
-     * @property {string} [link] A link.
-     * @property {string} [text] A text.
-     * @property {Object.<string, string|number|boolean>} [data] Data attributes.
-     */
+    
 
-    /** @inheritDoc */
+    
     template = 'record/list'
 
-    /**
-     * A type. Can be 'list', 'listSmall'.
-     */
+    
     type = 'list'
 
-    /** @inheritDoc */
+    
     name = 'list'
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * A presentation type.
-     */
+    
+    
     presentationType = 'table'
 
-    /**
-     * If true checkboxes will be shown. Can be overridden by an option parameter.
-     *
-     * @protected
-     */
+    
     checkboxes = true
 
-    /**
-     * If true clicking on the record link will trigger 'select' event with model passed.
-     * Can be overridden by an option parameter.
-     */
+    
     selectable = false
 
-    /**
-     * A row-actions view. A dropdown on the right side.
-     *
-     * @protected
-     * @type {string}
-     */
+    
     rowActionsView = 'views/record/row-actions/default'
 
-    /**
-     * Disable row-actions. Can be overridden by an option parameter.
-     */
+    
     rowActionsDisabled = false
 
-    /**
-     * An entity type. Set automatically.
-     *
-     * @type {string|null}
-     */
+    
     entityType = null
 
-    /**
-     * A scope. Set automatically.
-     *
-     * @type {?string}
-     */
+    
     scope = null
 
-    /**
-     * @protected
-     */
+    
     _internalLayoutType = 'list-row'
 
-    /**
-     * A selector to a list container.
-     *
-     * @protected
-     */
+    
     listContainerEl = '.list > table > tbody'
 
-    /**
-     * To show number of records. Can be overridden by an option parameter.
-     *
-     * @protected
-     */
+    
     showCount = true
 
-    /**
-     * @protected
-     */
+    
     rowActionsColumnWidth = 25
 
-    /**
-     * @protected
-     */
+    
     checkboxColumnWidth = 40
 
-    /**
-     * @protected
-     */
+    
     minColumnWidth = 100
 
-    /**
-     * A button. Handled by a class method `action{Name}` or a handler.
-     *
-     * @typedef {Object} module:views/record/list~button
-     *
-     * @property {string} name A name.
-     * @property {string} label A label. To be translated in a current scope.
-     * @property {'default'|'danger'|'warning'|'success'} [style] A style.
-     * @property {boolean} [hidden] Hidden.
-     * @property {function()} [onClick] A click handler.
-     */
+    
 
-    /**
-     * A button list.
-     *
-     * @protected
-     * @type {module:views/record/list~button[]}
-     */
+    
     buttonList = []
 
-    /**
-     * A dropdown item. Handled by a class method `action{Name}` or a handler.
-     *
-     * @typedef {Object} module:views/record/list~dropdownItem
-     *
-     * @property {string} name A name.
-     * @property {string} [label] A label. To be translated in a current scope.
-     * @property {string} [html] An HTML.
-     * @property {boolean} [hidden] Hidden.
-     * @property {function()} [onClick] A click handler.
-     */
+    
 
-    /**
-     * A dropdown item list. Can be overridden by an option parameter.
-     *
-     * @protected
-     * @type {module:views/record/list~dropdownItem[]}
-     */
+    
     dropdownItemList = []
 
-    /**
-     * Disable a header. Can be overridden by an option parameter.
-     *
-     * @protected
-     */
+    
     headerDisabled = false
 
-    /**
-     * Disable mass actions. Can be overridden by an option parameter.
-     *
-     * @protected
-     */
+    
     massActionsDisabled = false
 
-    /**
-     * Disable a portal layout usage. Can be overridden by an option parameter.
-     *
-     * @protected
-     */
+    
     portalLayoutDisabled = false
 
-    /**
-     * Mandatory select attributes. Can be overridden by an option parameter.
-     * Attributes to be selected regardless being on a layout.
-     *
-     * @protected
-     * @type {string[]|null}
-     */
+    
     mandatorySelectAttributeList = null
 
-    /**
-     * A layout name. If null, a value from `type` property will be used.
-     * Can be overridden by an option parameter.
-     *
-     * @protected
-     * @type {string|null}
-     */
+    
     layoutName = null
 
-    /**
-     * A scope name for layout loading. If null, an entity type of collection will be used.
-     * Can be overridden by an option parameter.
-     *
-     * @protected
-     * @type {string|null}
-     */
+    
     layoutScope = null
 
-    /**
-     * To disable field-level access check for a layout.
-     * Can be overridden by an option parameter.
-     *
-     * @protected
-     */
+    
     layoutAclDisabled = false
 
-    /**
-     * A setup-handler type.
-     *
-     * @protected
-     */
+    
     setupHandlerType = 'record/list'
 
-    /**
-     * @internal
-     * @private
-     */
+    
     checkboxesDisabled = false
 
-    /**
-     * Force displaying the top bar even if empty. Can be overridden by an option parameter.
-     * @protected
-     */
+    
     forceDisplayTopBar = false
 
-    /**
-     * Where to display the pagination. Can be overridden by an option parameter.
-     *
-     * @protected
-     * @type {'top'|'bottom'|boolean|null}
-     */
+    
     pagination = false
 
-    /**
-     * To display a table header with column names. Can be overridden by an option parameter.
-     *
-     * @protected
-     * @type {boolean}
-     */
+    
     header = true
 
-    /**
-     * A show-more button. Can be overridden by an option parameter.
-     *
-     * @protected
-     */
+    
     showMore = true
 
-    /**
-     * A mass-action list.
-     *
-     * @protected
-     * @type {string[]}
-     */
+    
     massActionList = [
         'remove',
         'merge',
@@ -297,202 +121,87 @@ class ListRecordView extends View {
         'export',
     ]
 
-    /**
-     * A mass-action list available when selecting all results.
-     *
-     * @protected
-     * @type {string[]}
-     */
+    
     checkAllResultMassActionList = [
         'remove',
         'massUpdate',
         'export',
     ]
 
-    /**
-     * A forced mass-action list.
-     *
-     * @protected
-     * @type {?string[]}
-     */
+    
     forcedCheckAllResultMassActionList = null
 
-    /**
-     * Disable quick-detail (viewing a record in modal)
-     *
-     * @protected
-     */
+    
     quickDetailDisabled = false
 
-    /**
-     * Disable quick-edit (editing a record in modal)
-     *
-     * @protected
-     */
+    
     quickEditDisabled = false
 
-    /**
-     * Column definitions.
-     *
-     * @typedef module:views/record/list~columnDefs
-     * @type {Object}
-     * @property {string} name A name (usually a field name).
-     * @property {string} [view] An overridden field view name.
-     * @property {number} [width] A width in percents.
-     * @property {number} [widthPx] A width in pixels.
-     * @property {boolean} [link] To use `listLink` mode (link to the detail view).
-     * @property {'left'|'right'} [align] An alignment.
-     * @property {string} [type] An overridden field type.
-     * @property {Object.<string, *>} [params] Overridden field parameters.
-     * @property {Object.<string, *>} [options] Field view options.
-     * @property {string} [label] A label.
-     * @property {boolean} [notSortable] Not sortable.
-     * @property {boolean} [hidden] Hidden by default.
-     * @property {boolean} [noLabel] No label.
-     * @property {string} [customLabel] A custom label.
-     */
+    
 
-    /**
-     * A list layout. Can be overridden by an option parameter.
-     * If null, then will be loaded from the backend (using the `layoutName` value).
-     *
-     * @protected
-     * @type {module:views/record/list~columnDefs[]|null}
-     */
+    
     listLayout = null
 
-    /**
-     * @private
-     */
+    
     _internalLayout = null
 
-    /**
-     * A list of record IDs currently selected. Only for reading.
-     *
-     * @protected
-     * @type {string[]|null}
-     */
+    
     checkedList = null
 
-    /**
-     * Whether all results currently selected. Only for reading.
-     *
-     * @protected
-     */
+    
     allResultIsChecked = false
 
-    /**
-     * Disable the ability to select all results. Can be overridden by an option parameter.
-     *
-     * @protected
-     */
+    
     checkAllResultDisabled = false
 
-    /**
-     * Disable buttons. Can be overridden by an option parameter.
-     *
-     * @protected
-     */
+    
     buttonsDisabled = false
 
-    /**
-     * Disable edit. Can be overridden by an option parameter.
-     *
-     * @protected
-     */
+    
     editDisabled = false
 
-    /**
-     * Disable remove. Can be overridden by an option parameter.
-     *
-     * @protected
-     */
+    
     removeDisabled = false
 
-    /**
-     * Disable a stick-bar. Can be overridden by an option parameter.
-     *
-     * @protected
-     */
+    
     stickedBarDisabled = false
 
-    /**
-     * Disable the follow/unfollow mass action.
-     *
-     * @protected
-     */
+    
     massFollowDisabled = false
 
-    /**
-     * Disable the print-pdf mass action.
-     *
-     * @protected
-     */
+    
     massPrintPdfDisabled = false
 
-    /**
-     * Disable the convert-currency mass action.
-     *
-     * @protected
-     */
+    
     massConvertCurrencyDisabled = false
 
-    /**
-     * Disable mass-update.
-     *
-     * @protected
-     */
+    
     massUpdateDisabled = false
 
-    /**
-     * Disable export.
-     *
-     * @protected
-     */
+    
     exportDisabled = false
 
-    /**
-     * Disable merge.
-     *
-     * @protected
-     */
+    
     mergeDisabled = false
 
-    /**
-     * Disable a no-data label (when no result).
-     *
-     * @protected
-     */
+    
     noDataDisabled = false
 
-    /**
-     * @private
-     */
+    
     _$focusedCheckbox = null
 
-    /**
-     * @protected
-     * @type {?JQuery}
-     */
+    
     $selectAllCheckbox = null
 
-    /**
-     * @protected
-     * @type {?Object.<string, Object.<string, *>>}
-     */
+    
     massActionDefs = null
 
-    /**
-     * @private
-     */
+    
     _additionalRowActionList
 
-    /** @inheritDoc */
+    
     events = {
-        /**
-         * @param {JQueryKeyEventObject} e
-         * @this ListRecordView
-         */
+        
         'click a.link': function (e) {
             if (e.ctrlKey || e.metaKey || e.shiftKey) {
                 return;
@@ -522,10 +231,7 @@ class ListRecordView extends View {
             this.getRouter().navigate('#' + scope + '/view/' + id, {trigger: false});
             this.getRouter().dispatch(scope, 'view', options);
         },
-        /**
-         * @param {JQueryMouseEventObject} e
-         * @this ListRecordView
-         */
+        
         'auxclick a.link': function (e) {
             const isCombination = e.button === 1 && (e.ctrlKey || e.metaKey);
 
@@ -559,26 +265,20 @@ class ListRecordView extends View {
 
             this.actionQuickView({id: id});
         },
-        /** @this ListRecordView */
+        
         'click [data-action="showMore"]': function () {
             this.showMoreRecords();
         },
         'mousedown a.sort': function (e) {
             e.preventDefault();
         },
-        /**
-         * @param {JQueryKeyEventObject} e
-         * @this module:views/record/list
-         */
+        
         'click a.sort': function (e) {
             const field = $(e.currentTarget).data('name');
 
             this.toggleSort(field);
         },
-        /**
-         * @param {JQueryKeyEventObject} e
-         * @this ListRecordView
-         */
+        
         'click .pagination a': function (e) {
             const page = $(e.currentTarget).data('page');
 
@@ -602,7 +302,7 @@ class ListRecordView extends View {
 
             this.deactivate();
         },
-        /** @this ListRecordView */
+        
         'mousedown input.record-checkbox': function () {
             const $focused = $(document.activeElement);
 
@@ -616,10 +316,7 @@ class ListRecordView extends View {
                 this._$focusedCheckbox = $focused;
             }
         },
-        /**
-         * @param {JQueryKeyEventObject} e
-         * @this ListRecordView
-         */
+        
         'click input.record-checkbox': function (e) {
             const $target = $(e.currentTarget);
 
@@ -643,29 +340,23 @@ class ListRecordView extends View {
 
             this.checkboxClick($target, $target.is(':checked'));
         },
-        /**
-         * @param {JQueryKeyEventObject} e
-         * @this module:views/record/list
-         */
+        
         'click .select-all': function (e) {
-            // noinspection JSUnresolvedReference
+            
             this.selectAllHandler(e.currentTarget.checked);
         },
-        /** @this ListRecordView */
+        
         'click .action': function (e) {
             Espo.Utils.handleAction(this, e.originalEvent, e.currentTarget, {
                 actionItems: [...this.buttonList, ...this.dropdownItemList],
                 className: 'list-action-item',
             });
         },
-        /** @this ListRecordView */
+        
         'click .checkbox-dropdown [data-action="selectAllResult"]': function () {
             this.selectAllResult();
         },
-        /**
-         * @param {JQueryKeyEventObject} e
-         * @this ListRecordView
-         */
+        
         'click .actions-menu a.mass-action': function (e) {
             const $el = $(e.currentTarget);
 
@@ -677,7 +368,7 @@ class ListRecordView extends View {
 
             const $parent = $el.closest('.dropdown-menu').parent();
 
-            // noinspection JSUnresolvedReference
+            
             $parent.find('.actions-button[data-toggle="dropdown"]')
                 .dropdown('toggle')
                 .focus();
@@ -690,17 +381,13 @@ class ListRecordView extends View {
 
             this.massAction(action);
         },
-        /** @this ListRecordView */
+        
         'click a.reset-custom-order': function () {
             this.resetCustomOrder();
         },
     }
 
-    /**
-     * @param {JQuery} $checkbox
-     * @param {boolean} checked
-     * @private
-     */
+    
     checkboxClick($checkbox, checked) {
         const id = $checkbox.attr('data-id');
 
@@ -727,10 +414,7 @@ class ListRecordView extends View {
             })
     }
 
-    /**
-     * @param {string} orderBy
-     * @protected
-     */
+    
     toggleSort(orderBy) {
         let asc = true;
 
@@ -761,9 +445,7 @@ class ListRecordView extends View {
         this.deactivate();
     }
 
-    /**
-     * @protected
-     */
+    
     initStickedBar() {
         const controlSticking = () => {
             if (this.checkedList.length === 0 && !this.allResultIsChecked) {
@@ -849,7 +531,7 @@ class ListRecordView extends View {
         let buttonsTop =  getOffsetTop(this.$el.find('.list-buttons-container').get(0));
 
         if (!isModal) {
-            // padding
+            
             middleTop -= 5;
             buttonsTop -= 5;
         }
@@ -874,9 +556,7 @@ class ListRecordView extends View {
         });
     }
 
-    /**
-     * @protected
-     */
+    
     showActions() {
         this.$el.find('.actions-button').removeClass('hidden');
 
@@ -891,9 +571,7 @@ class ListRecordView extends View {
         }
     }
 
-    /**
-     * @protected
-     */
+    
     hideActions() {
         this.$el.find('.actions-button').addClass('hidden');
 
@@ -902,9 +580,7 @@ class ListRecordView extends View {
         }
     }
 
-    /**
-     * @protected
-     */
+    
     selectAllHandler(isChecked) {
         this.checkedList = [];
 
@@ -932,7 +608,7 @@ class ListRecordView extends View {
         this.trigger('check');
     }
 
-    /** @inheritDoc */
+    
     data() {
         const paginationTop = this.pagination === 'both' ||
             this.pagination === 'top';
@@ -992,7 +668,7 @@ class ListRecordView extends View {
         };
     }
 
-    /** @inheritDoc */
+    
     init() {
         this.type = this.options.type || this.type;
         this.listLayout = this.options.listLayout || this.listLayout;
@@ -1046,19 +722,12 @@ class ListRecordView extends View {
         }
     }
 
-    /**
-     * Get a record entity type (scope).
-     *
-     * @param {string} id A record ID.
-     * @return {string}
-     */
+    
     getModelScope(id) {
         return this.scope;
     }
 
-    /**
-     * Select all results.
-     */
+    
     selectAllResult() {
         this.allResultIsChecked = true;
 
@@ -1087,9 +756,7 @@ class ListRecordView extends View {
         this.trigger('select-all-results');
     }
 
-    /**
-     * Unselect all results.
-     */
+    
     unselectAllResult() {
         this.allResultIsChecked = false;
 
@@ -1107,9 +774,7 @@ class ListRecordView extends View {
         });
     }
 
-    /**
-     * @protected
-     */
+    
     deactivate() {
         if (this.$el) {
             this.$el.find(".pagination li").addClass('disabled');
@@ -1117,13 +782,7 @@ class ListRecordView extends View {
         }
     }
 
-    /**
-     * Process export.
-     *
-     * @param {Object<string,*>} [data]
-     * @param {string} [url='Export'] An API URL.
-     * @param {string[]} [fieldList] A field list.
-     */
+    
     export(data, url, fieldList) {
         if (!data) {
             data = {
@@ -1133,7 +792,7 @@ class ListRecordView extends View {
             if (this.allResultIsChecked) {
                 data.where = this.collection.getWhere();
                 data.searchParams = this.collection.data || null;
-                data.searchData = this.collection.data || {}; // for bc;
+                data.searchData = this.collection.data || {}; 
             }
             else {
                 data.ids = this.checkedList;
@@ -1185,7 +844,7 @@ class ListRecordView extends View {
 
                 Espo.Ajax
                     .postRequest(url, data, {timeout: 0})
-                    .then(/** Object.<string, *> */response => {
+                    .then(response => {
                         Espo.Ui.notify(false);
 
                         if (response.exportId) {
@@ -1212,11 +871,7 @@ class ListRecordView extends View {
         });
     }
 
-    /**
-     * Process a mass-action.
-     *
-     * @param {string} name An action.
-     */
+    
     massAction(name) {
         const defs = this.massActionDefs[name] || {};
 
@@ -1260,10 +915,10 @@ class ListRecordView extends View {
             if (this.allResultIsChecked) {
                 data.where = this.collection.getWhere();
                 data.searchParams = this.collection.data || {};
-                data.selectData = data.searchData; // for bc;
-                data.byWhere = true; // for bc
+                data.selectData = data.searchData; 
+                data.byWhere = true; 
             } else {
-                data.idList = idList; // for bc
+                data.idList = idList; 
                 data.ids = idList;
             }
 
@@ -1280,7 +935,7 @@ class ListRecordView extends View {
             const url = defs.url;
 
             Espo.Ajax.postRequest(url, data)
-                .then(/** Object.<string, *> */result => {
+                .then(result => {
                     const successMessage = result.successMessage || defs.successMessage || 'done';
 
                     this.collection
@@ -1311,8 +966,8 @@ class ListRecordView extends View {
         if (this.allResultIsChecked) {
             data.where = this.collection.getWhere();
             data.searchParams = this.collection.data || {};
-            data.selectData = this.collection.data || {}; // for bc;
-            data.byWhere = true; // for bc;
+            data.selectData = this.collection.data || {}; 
+            data.byWhere = true; 
         }
         else {
             data.ids = [];
@@ -1325,7 +980,7 @@ class ListRecordView extends View {
         return data;
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     massActionRecalculateFormula() {
         let ids = false;
 
@@ -1387,7 +1042,7 @@ class ListRecordView extends View {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     massActionRemove() {
         if (!this.getAcl().check(this.entityType, 'delete')) {
             Espo.Ui.error(this.translate('Access denied'));
@@ -1487,7 +1142,7 @@ class ListRecordView extends View {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     massActionPrintPdf() {
         const maxCount = this.getConfig().get('massPrintPdfMaxCount');
 
@@ -1535,7 +1190,7 @@ class ListRecordView extends View {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     massActionFollow() {
         const count = this.checkedList.length;
 
@@ -1578,7 +1233,7 @@ class ListRecordView extends View {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     massActionUnfollow() {
         const count = this.checkedList.length;
 
@@ -1636,7 +1291,7 @@ class ListRecordView extends View {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     massActionMerge() {
         if (!this.getAcl().check(this.entityType, 'edit')) {
             Espo.Ui.error(this.translate('Access denied'));
@@ -1667,7 +1322,7 @@ class ListRecordView extends View {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     massActionMassUpdate() {
         if (!this.getAcl().check(this.entityType, 'edit')) {
             Espo.Ui.error(this.translate('Access denied'));
@@ -1756,7 +1411,7 @@ class ListRecordView extends View {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     massActionExport() {
         if (this.getConfig().get('exportDisabled') && !this.getUser().isAdmin()) {
             return;
@@ -1765,7 +1420,7 @@ class ListRecordView extends View {
         this.export();
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     massActionUnlink() {
         this.confirm({
             message: this.translate('unlinkSelectedRecordsConfirmation', 'messages'),
@@ -1784,7 +1439,7 @@ class ListRecordView extends View {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     massActionConvertCurrency() {
         let ids = false;
 
@@ -1857,14 +1512,7 @@ class ListRecordView extends View {
         });
     }
 
-    /**
-     * Add a mass action.
-     *
-     * @protected
-     * @param {string} item An action.
-     * @param {boolean} [allResult] To make available for all-result.
-     * @param {boolean} [toBeginning] Add to the beginning of the list.
-     */
+    
     addMassAction(item, allResult, toBeginning) {
         toBeginning ?
             this.massActionList.unshift(item) :
@@ -1881,12 +1529,7 @@ class ListRecordView extends View {
         }
     }
 
-    /**
-     * Remove a mass action.
-     *
-     * @protected
-     * @param {string} item An action.
-     */
+    
     removeMassAction(item) {
         let index = this.massActionList.indexOf(item);
 
@@ -1901,12 +1544,7 @@ class ListRecordView extends View {
         }
     }
 
-    /**
-     * Remove an all-result mass action.
-     *
-     * @protected
-     * @param {string} item An action.
-     */
+    
     removeAllResultMassAction(item) {
         const index = this.checkAllResultMassActionList.indexOf(item);
 
@@ -1915,7 +1553,7 @@ class ListRecordView extends View {
         }
     }
 
-    /** @inheritDoc */
+    
     setup() {
         if (typeof this.collection === 'undefined') {
             throw new Error('Collection has not been injected into views/record/list view.');
@@ -2059,9 +1697,7 @@ class ListRecordView extends View {
         }
     }
 
-    /**
-     * @private
-     */
+    
     setupMassActions() {
         if (this.massActionsDisabled) {
             this.massActionList = [];
@@ -2110,7 +1746,7 @@ class ListRecordView extends View {
         ];
 
         metadataMassActionList.forEach(item => {
-            const defs = /** @type {Espo.Utils~ActionAccessDefs & Espo.Utils~ActionAvailabilityDefs} */
+            const defs = 
                 this.massActionDefs[item] || {};
 
             if (
@@ -2132,7 +1768,7 @@ class ListRecordView extends View {
             }
 
             if (~this.massActionList.indexOf(item)) {
-                const defs = /** @type {Espo.Utils~ActionAccessDefs & Espo.Utils~ActionAvailabilityDefs} */
+                const defs = 
                     this.massActionDefs[item] || {};
 
                 if (
@@ -2257,16 +1893,10 @@ class ListRecordView extends View {
         });
     }
 
-    /**
-     * @protected
-     */
+    
     setupMassActionItems() {}
 
-    /**
-     * @param {module:views/record/list~columnDefs[]} listLayout
-     * @return {module:views/record/list~columnDefs[]}
-     * @protected
-     */
+    
     filterListLayout(listLayout) {
         if (this._cachedFilteredListLayout) {
             return this._cachedFilteredListLayout;
@@ -2308,10 +1938,7 @@ class ListRecordView extends View {
         return this._cachedFilteredListLayout;
     }
 
-    /**
-     * @protected
-     * @param {function(module:views/record/list~columnDefs[]): void} callback A callback.
-     */
+    
     _loadListLayout(callback) {
         this.layoutLoadCallbackList.push(callback);
 
@@ -2336,11 +1963,7 @@ class ListRecordView extends View {
         });
     }
 
-    /**
-     * Get a select-attribute list.
-     *
-     * @param {function(string[]):void} callback A callback.
-     */
+    
     getSelectAttributeList(callback) {
         if (this.scope === null) {
             callback(null);
@@ -2369,10 +1992,7 @@ class ListRecordView extends View {
         });
     }
 
-    /**
-     * @protected
-     * @return {string[]}
-     */
+    
     fetchAttributeListFromLayout() {
         const selectProvider = new SelectProvider(
             this.getHelper().layoutManager,
@@ -2383,16 +2003,14 @@ class ListRecordView extends View {
         return selectProvider.getFromLayout(this.entityType, this.listLayout);
     }
 
-    /**
-     * @protected
-     */
+    
     _getHeaderDefs() {
         const defs = [];
 
         const hiddenMap = this._listSettingsHelper ?
             this._listSettingsHelper.getHiddenColumnMap() : {};
 
-        // noinspection JSIncompatibleTypesComparison
+        
         if (!this.listLayout || !Array.isArray(this.listLayout)) {
             return [];
         }
@@ -2485,9 +2103,7 @@ class ListRecordView extends View {
         return defs;
     }
 
-    /**
-     * @protected
-     */
+    
     _convertLayout(listLayout, model) {
         model = model || this.collection.prepareModel();
 
@@ -2571,13 +2187,7 @@ class ListRecordView extends View {
         return layout;
     }
 
-    /**
-     * Select a record.
-     *
-     * @param {string} id An ID.
-     * @param {JQuery} [$target]
-     * @param {boolean} [isSilent] Do not trigger the `check` event.
-     */
+    
     checkRecord(id, $target, isSilent) {
         if (!this.collection.get(id)) {
             return;
@@ -2599,13 +2209,7 @@ class ListRecordView extends View {
         this.handleAfterCheck(isSilent);
     }
 
-    /**
-     * Unselect a record.
-     *
-     * @param {string} id An ID.
-     * @param {JQuery} [$target]
-     * @param {boolean} [isSilent] Do not trigger the `check` event.
-     */
+    
     uncheckRecord(id, $target, isSilent) {
         $target = $target || this.$el.find('.record-checkbox[data-id="' + id + '"]');
 
@@ -2623,10 +2227,7 @@ class ListRecordView extends View {
         this.handleAfterCheck(isSilent);
     }
 
-    /**
-     * @protected
-     * @param {boolean} [isSilent]
-     */
+    
     handleAfterCheck(isSilent) {
         if (this.checkedList.length) {
             this.showActions();
@@ -2647,11 +2248,7 @@ class ListRecordView extends View {
         }
     }
 
-    /**
-     * Get row-actions defs.
-     *
-     * @return {Object}
-     */
+    
     getRowActionsDefs() {
         const options = {
             defs: {
@@ -2675,11 +2272,7 @@ class ListRecordView extends View {
         };
     }
 
-    /**
-     * Get selected models.
-     *
-     * @return {module:model[]}
-     */
+    
     getSelected() {
         const list = [];
 
@@ -2693,9 +2286,7 @@ class ListRecordView extends View {
         return list;
     }
 
-    /**
-     * @protected
-     */
+    
     getInternalLayoutForModel(callback, model) {
         const scope = model.entityType;
 
@@ -2710,9 +2301,7 @@ class ListRecordView extends View {
         callback(this._internalLayout[scope]);
     }
 
-    /**
-     * @protected
-     */
+    
     getInternalLayout(callback, model) {
         if (
             (this.scope === null) &&
@@ -2751,13 +2340,7 @@ class ListRecordView extends View {
         });
     }
 
-    /**
-     * Compose a cell selector for a layout item.
-     *
-     * @param {module:model} model A model.
-     * @param {Object} item An item.
-     * @return {string}
-     */
+    
     getItemEl(model, item) {
         return this.getSelector() +
             ' tr[data-id="' + model.id + '"]' +
@@ -2770,13 +2353,7 @@ class ListRecordView extends View {
         });
     }
 
-    /**
-     * Build a row.
-     *
-     * @param {number} i An index.
-     * @param {module:model} model A model.
-     * @param {function(module:view):void} [callback] A callback.
-     */
+    
     buildRow(i, model, callback) {
         const key = model.id;
 
@@ -2807,11 +2384,7 @@ class ListRecordView extends View {
         }, model);
     }
 
-    /**
-     * Build rows.
-     *
-     * @param {function():void} [callback] A callback.
-     */
+    
     buildRows(callback) {
         this.checkedList = [];
 
@@ -2867,15 +2440,7 @@ class ListRecordView extends View {
         }
     }
 
-    /**
-     * Show more records.
-     *
-     * @param {{skipNotify?: boolean}} [options]
-     * @param {module:collection} [collection]
-     * @param {JQuery} [$list]
-     * @param {JQuery} [$showMore]
-     * @param {function(): void} [callback] A callback.
-     */
+    
     showMoreRecords(options, collection, $list, $showMore, callback) {
         collection = collection || this.collection;
         $showMore =  $showMore || this.$el.find('.show-more');
@@ -2985,7 +2550,7 @@ class ListRecordView extends View {
             }
         });
 
-        // If using promise callback, then need to pass `noRebuild: true`.
+        
         collection.fetch({
             success: success,
             remove: false,
@@ -2997,12 +2562,7 @@ class ListRecordView extends View {
         return null;
     }
 
-    /**
-     * Compose a row-container HTML.
-     *
-     * @param {string} id A record ID.
-     * @return {string} HTML.
-     */
+    
     getRowContainerHtml(id) {
         return $('<tr>')
             .attr('data-id', id)
@@ -3071,10 +2631,8 @@ class ListRecordView extends View {
             });
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * @param {Object.<string, *>} data
-     */
+    
+    
     actionQuickEdit(data) {
         data = data || {};
 
@@ -3179,17 +2737,12 @@ class ListRecordView extends View {
         this.getRouter().dispatch(scope, 'edit', options);
     }
 
-    /**
-     * Compose a row selector.
-     *
-     * @param {string} id A record ID.
-     * @return {string}
-     */
+    
     getRowSelector(id) {
         return 'tr[data-id="' + id + '"]';
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionQuickRemove(data) {
         data = data || {};
 
@@ -3229,10 +2782,7 @@ class ListRecordView extends View {
         });
     }
 
-    /**
-     * @protected
-     * @param {string} id An ID.
-     */
+    
     removeRecordFromList(id) {
         this.collection.remove(id);
 
@@ -3261,10 +2811,7 @@ class ListRecordView extends View {
         this.removeRowHtml(id);
     }
 
-    /**
-     * @protected
-     * @param {string} id An ID.
-     */
+    
     removeRowHtml(id) {
         this.$el.find(this.getRowSelector(id)).remove();
 
@@ -3276,16 +2823,12 @@ class ListRecordView extends View {
         }
     }
 
-    /**
-     * @public
-     * @param {string} id An ID.
-     * @return {boolean}
-     */
+    
     isIdChecked(id) {
         return this.checkedList.indexOf(id) !== -1;
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     getTableMinWidth() {
         if (!this.listLayout) {
             return;
@@ -3349,7 +2892,7 @@ class ListRecordView extends View {
         const defs = this.getMetadata().get(`clientDefs.${this.scope}.rowActionDefs`) || {};
 
         const promiseList = list.map(action => {
-            /** @type {{handler: string, label?: string, labelTranslation?: string}} */
+            
             const itemDefs = defs[action] || {};
 
             if (!itemDefs.handler) {
@@ -3367,7 +2910,7 @@ class ListRecordView extends View {
         this.wait(Promise.all(promiseList));
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionRowAction(data) {
         const action = data.actualAction;
         const id = data.id;
@@ -3376,7 +2919,7 @@ class ListRecordView extends View {
             return;
         }
 
-        /** @type {{process: function(module:model, string)}} */
+        
         const handler = (this._rowActionHandlers || {})[action];
 
         if (!handler) {
@@ -3394,9 +2937,7 @@ class ListRecordView extends View {
         handler.process(model, action);
     }
 
-    /**
-     * @private
-     */
+    
     setupSettings() {
         if (!this.options.settingsEnabled || !this.collection.entityType || !this.layoutName) {
             return;

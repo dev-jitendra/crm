@@ -27,9 +27,7 @@ final class Driver extends AbstractDriverMiddleware
         $this->case = $case;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function connect(array $params)
     {
         $connection = parent::connect($params);

@@ -4,27 +4,13 @@ namespace GuzzleHttp\Psr7;
 
 final class MimeType
 {
-    /**
-     * Determines the mimetype of a file by looking at its extension.
-     *
-     * @param string $filename
-     *
-     * @return string|null
-     */
+    
     public static function fromFilename($filename)
     {
         return self::fromExtension(pathinfo($filename, PATHINFO_EXTENSION));
     }
 
-    /**
-     * Maps a file extensions to a mimetype.
-     *
-     * @param string $extension string The file extension.
-     *
-     * @return string|null
-     *
-     * @link http://svn.apache.org/repos/asf/httpd/httpd/branches/1.3.x/conf/mime.types
-     */
+    
     public static function fromExtension($extension)
     {
         static $mimetypes = [

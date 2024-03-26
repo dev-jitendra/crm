@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Entities;
 
@@ -67,9 +41,7 @@ class Email extends Entity
         $this->set('name', $value);
     }
 
-    /**
-     * @return bool
-     */
+    
     protected function _hasSubject(): bool
     {
         return $this->has('name');
@@ -166,9 +138,7 @@ class Email extends Entity
         $this->setInContainer('isUsers', false);
     }
 
-    /**
-     * @deprecated As of v7.4. As the system user ID may be not constant in the future.
-     */
+    
     public function isManuallyArchived(): bool
     {
         if ($this->getStatus() !== Email::STATUS_ARCHIVED) {
@@ -178,10 +148,7 @@ class Email extends Entity
         return true;
     }
 
-    /**
-     * @todo Revise.
-     * @deprecated
-     */
+    
     public function addAttachment(Attachment $attachment): void
     {
         if (!$this->id) {
@@ -214,7 +181,7 @@ class Email extends Entity
             return $this->getFromContainer('bodyPlain');
         }
 
-        /** @var string $body */
+        
         $body = $this->get('body') ?? '';
 
         $breaks = ["<br />", "<br>", "<br/>", "<br />", "&lt;br /&gt;", "&lt;br/&gt;", "&lt;br&gt;"];
@@ -249,7 +216,7 @@ class Email extends Entity
         ];
 
         foreach ($reList as $i => $re) {
-            /** @var string $body */
+            
             $body = mb_ereg_replace($re, $replaceList[$i], $body, 'i');
         }
 
@@ -286,9 +253,7 @@ class Email extends Entity
         );
     }
 
-    /**
-     * @return Attachment[]
-     */
+    
     public function getInlineAttachmentList(): array
     {
         $idList = [];
@@ -322,7 +287,7 @@ class Email extends Entity
                 throw new RuntimeException();
             }
 
-            /** @var Attachment|null $attachment */
+            
             $attachment = $this->entityManager->getEntityById(Attachment::ENTITY_TYPE, $id);
 
             if ($attachment) {
@@ -335,7 +300,7 @@ class Email extends Entity
 
     public function getDateSent(): ?DateTime
     {
-        /** @var ?DateTime */
+        
         return $this->getValueObject('dateSent');
     }
 
@@ -344,9 +309,7 @@ class Email extends Entity
         return $this->get('subject');
     }
 
-    /**
-     * @param Email::STATUS_* $status
-     */
+    
     public function setStatus(string $status): self
     {
         $this->set('status', $status);
@@ -361,9 +324,7 @@ class Email extends Entity
         return $this;
     }
 
-    /**
-     * @param string[] $idList
-     */
+    
     public function setAttachmentIdList(array $idList): self
     {
         $this->setLinkMultipleIdList('attachments', $idList);
@@ -421,9 +382,7 @@ class Email extends Entity
         return $this;
     }
 
-    /**
-     * @param string[] $addressList
-     */
+    
     public function setToAddressList(array $addressList): self
     {
         $this->set('to', implode(';', $addressList));
@@ -431,9 +390,7 @@ class Email extends Entity
         return $this;
     }
 
-    /**
-     * @param string[] $addressList
-     */
+    
     public function setCcAddressList(array $addressList): self
     {
         $this->set('cc', implode(';', $addressList));
@@ -441,9 +398,7 @@ class Email extends Entity
         return $this;
     }
 
-    /**
-     * @param string[] $addressList
-     */
+    
     public function setBccAddressList(array $addressList): self
     {
         $this->set('bcc', implode(';', $addressList));
@@ -451,9 +406,7 @@ class Email extends Entity
         return $this;
     }
 
-    /**
-     * @param string[] $addressList
-     */
+    
     public function setReplyToAddressList(array $addressList): self
     {
         $this->set('replyTo', implode(';', $addressList));
@@ -519,9 +472,7 @@ class Email extends Entity
         return $this->get('from');
     }
 
-    /**
-     * @return string[]
-     */
+    
     public function getToAddressList(): array
     {
         if (!$this->hasInContainer('to') && !$this->isNew()) {
@@ -537,9 +488,7 @@ class Email extends Entity
         return explode(';', $value);
     }
 
-    /**
-     * @return string[]
-     */
+    
     public function getCcAddressList(): array
     {
         if (!$this->hasInContainer('cc') && !$this->isNew()) {
@@ -555,9 +504,7 @@ class Email extends Entity
         return explode(';', $value);
     }
 
-    /**
-     * @return string[]
-     */
+    
     public function getBccAddressList(): array
     {
         if (!$this->hasInContainer('bcc') && !$this->isNew()) {
@@ -573,9 +520,7 @@ class Email extends Entity
         return explode(';', $value);
     }
 
-    /**
-     * @return string[]
-     */
+    
     public function getReplyToAddressList(): array
     {
         if (!$this->hasInContainer('replyTo') && !$this->isNew()) {
@@ -615,7 +560,7 @@ class Email extends Entity
 
     public function getParent(): ?LinkParent
     {
-        /** @var ?LinkParent */
+        
         return $this->getValueObject('parent');
     }
 
@@ -633,46 +578,44 @@ class Email extends Entity
 
     public function getAccount(): ?Link
     {
-        /** @var ?Link */
+        
         return $this->getValueObject('account');
     }
 
     public function getTeams(): LinkMultiple
     {
-        /** @var LinkMultiple */
+        
         return $this->getValueObject('teams');
     }
 
     public function getCreatedBy(): ?Link
     {
-        /** @var ?Link */
+        
         return $this->getValueObject('createdBy');
     }
 
     public function getSentBy(): ?Link
     {
-        /** @var ?Link */
+        
         return $this->getValueObject('sentBy');
     }
 
     public function getGroupFolder(): ?Link
     {
-        /** @var ?Link */
+        
         return $this->getValueObject('groupFolder');
     }
 
     public function getReplied(): ?Link
     {
-        /** @var ?Link */
+        
         return $this->getValueObject('replied');
     }
 
-    /**
-     * @return string[]
-     */
+    
     public function getAttachmentIdList(): array
     {
-        /** @var string[] */
+        
         return $this->getLinkMultipleIdList('attachments');
     }
 
@@ -682,7 +625,7 @@ class Email extends Entity
             throw new RuntimeException();
         }
 
-        /** @var EmailRepository */
+        
         return $this->entityManager->getRepository(Email::ENTITY_TYPE);
     }
 

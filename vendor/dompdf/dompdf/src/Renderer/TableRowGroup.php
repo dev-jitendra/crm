@@ -1,24 +1,14 @@
 <?php
-/**
- * @package dompdf
- * @link    https://github.com/dompdf/dompdf
- * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
- */
+
 namespace Dompdf\Renderer;
 
 use Dompdf\Frame;
 
-/**
- * Renders block frames
- *
- * @package dompdf
- */
+
 class TableRowGroup extends Block
 {
 
-    /**
-     * @param Frame $frame
-     */
+    
     function render(Frame $frame)
     {
         $style = $frame->get_style();

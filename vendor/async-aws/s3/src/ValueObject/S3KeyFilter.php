@@ -6,11 +6,7 @@ final class S3KeyFilter
 {
     private $filterRules;
 
-    /**
-     * @param array{
-     *   FilterRules?: null|FilterRule[],
-     * } $input
-     */
+    
     public function __construct(array $input)
     {
         $this->filterRules = isset($input['FilterRules']) ? array_map([FilterRule::class, 'create'], $input['FilterRules']) : null;
@@ -21,17 +17,13 @@ final class S3KeyFilter
         return $input instanceof self ? $input : new self($input);
     }
 
-    /**
-     * @return FilterRule[]
-     */
+    
     public function getFilterRules(): array
     {
         return $this->filterRules ?? [];
     }
 
-    /**
-     * @internal
-     */
+    
     public function requestBody(\DomElement $node, \DomDocument $document): void
     {
         if (null !== $v = $this->filterRules) {

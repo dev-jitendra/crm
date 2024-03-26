@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Record\Access;
 
@@ -50,15 +24,13 @@ use Espo\ORM\Entity;
 use Espo\ORM\EntityManager;
 use Espo\ORM\Type\RelationType;
 
-/**
- * Check access for record linking. When linking directly through relationships or via link fields.
- */
+
 class LinkCheck
 {
-    /** @var array<string, LinkChecker<Entity, Entity>>> */
+    
     private $linkCheckerCache = [];
 
-    /** @var string[] */
+    
     private array $oneFieldTypeList = [
         FieldType::LINK,
         FieldType::LINK_ONE,
@@ -66,15 +38,13 @@ class LinkCheck
         FieldType::IMAGE,
     ];
 
-    /** @var string[] */
+    
     private array $manyFieldTypeList = [
         FieldType::LINK_MULTIPLE,
         FieldType::ATTACHMENT_MULTIPLE,
     ];
 
-    /**
-     * @param string[] $noEditAccessRequiredLinkList
-     */
+    
     public function __construct(
         private Defs $ormDefs,
         private EntityManager $entityManager,
@@ -86,20 +56,14 @@ class LinkCheck
         private bool $noEditAccessRequiredForLink = false
     ) {}
 
-    /**
-     * Checks relation fields set in an entity (link-multiple, link and others).
-     *
-     * @throws Forbidden
-     */
+    
     public function processFields(Entity $entity): void
     {
         $this->processLinkMultipleFields($entity);
         $this->processLinkFields($entity);
     }
 
-    /**
-     * @throws Forbidden
-     */
+    
     private function processLinkMultipleFields(Entity $entity): void
     {
         $entityType = $entity->getEntityType();
@@ -130,9 +94,9 @@ class LinkCheck
                 continue;
             }
 
-            /** @var string[] $ids */
+            
             $ids = $entity->get($attribute) ?? [];
-            /** @var string[] $oldIds */
+            
             $oldIds = $entity->getFetched($attribute) ?? [];
 
             $ids = array_values(array_diff($ids, $oldIds));
@@ -154,10 +118,7 @@ class LinkCheck
         }
     }
 
-    /**
-     * @param string[] $fieldTypes
-     * @throws Forbidden
-     */
+    
     private function processCheckLinkWithoutField(EntityDefs $entityDefs, string $name, array $fieldTypes): void
     {
         $hasField =
@@ -182,9 +143,7 @@ class LinkCheck
         );
     }
 
-    /**
-     * @throws Forbidden
-     */
+    
     private function processLinkedRecordsCheckItem(
         Entity $entity,
         RelationDefs $defs,
@@ -232,9 +191,7 @@ class LinkCheck
         $this->linkEntityAccessCheck($entity, $foreignEntity, $link);
     }
 
-    /**
-     * @throws Forbidden
-     */
+    
     private function linkForeignAccessCheck(
         bool $isOne,
         string $entityType,
@@ -254,16 +211,12 @@ class LinkCheck
         return $this->metadata->get(['recordDefs', $entityType, 'relationships', $link, $param]);
     }
 
-    /**
-     * Check access to a specific link.
-     *
-     * @throws Forbidden
-     */
+    
     public function processLink(Entity $entity, string $link): void
     {
         $entityType = $entity->getEntityType();
 
-        /** @var AclTable::ACTION_*|null $action */
+        
         $action = $this->getParam($entityType, $link, 'linkRequiredAccess');
 
         if (!$action) {
@@ -282,21 +235,13 @@ class LinkCheck
         }
     }
 
-    /**
-     * Check unlink access to a specific link.
-     *
-     * @throws Forbidden
-     */
+    
     public function processUnlink(Entity $entity, string $link): void
     {
         $this->processLink($entity, $link);
     }
 
-    /**
-     * Check link access for a specific foreign entity.
-     *
-     * @throws Forbidden
-     */
+    
     public function processLinkForeign(Entity $entity, string $link, Entity $foreignEntity): void
     {
         $toSkip = $this->linkForeignAccessCheckMany($entity->getEntityType(), $link, $foreignEntity);
@@ -308,23 +253,14 @@ class LinkCheck
         $this->linkEntityAccessCheck($entity, $foreignEntity, $link);
     }
 
-    /**
-     * Check unlink access for a specific foreign entity.
-     *
-     * @throws Forbidden
-     */
+    
     public function processUnlinkForeign(Entity $entity, string $link, Entity $foreignEntity): void
     {
         $this->processLinkForeign($entity, $link, $foreignEntity);
         $this->processUnlinkForeignRequired($entity, $link, $foreignEntity);
     }
 
-    /**
-     * Check access to foreign record for has-many and many-many links.
-     *
-     * @return bool True indicates that the link checker should be bypassed.
-     * @throws Forbidden
-     */
+    
     private function linkForeignAccessCheckMany(
         string $entityType,
         string $link,
@@ -337,7 +273,7 @@ class LinkCheck
             null;
 
         if (!$action) {
-            /** @var AclTable::ACTION_* $action */
+            
             $action = $this->getParam($entityType, $link, 'linkRequiredForeignAccess') ?? AclTable::ACTION_EDIT;
         }
 
@@ -417,9 +353,7 @@ class LinkCheck
         return false;
     }
 
-    /**
-     * @throws Forbidden
-     */
+    
     private function linkEntityAccessCheck(Entity $entity, Entity $foreignEntity, string $link): void
     {
         $entityType = $entity->getEntityType();
@@ -444,9 +378,7 @@ class LinkCheck
         );
     }
 
-    /**
-     * @return ?LinkChecker<Entity, Entity>
-     */
+    
     private function getLinkChecker(string $entityType, string $link): ?LinkChecker
     {
         $key = $entityType . '_' . $link;
@@ -468,9 +400,7 @@ class LinkCheck
         return $checker;
     }
 
-    /**
-     * @throws Forbidden
-     */
+    
     private function processUnlinkForeignRequired(Entity $entity, string $link, Entity $foreignEntity): void
     {
         $relationDefs = $this->ormDefs
@@ -528,9 +458,7 @@ class LinkCheck
         );
     }
 
-    /**
-     * @throws Forbidden
-     */
+    
     private function processLinkFields(Entity $entity): void
     {
         $entityType = $entity->getEntityType();
@@ -566,12 +494,7 @@ class LinkCheck
         }
     }
 
-    /**
-     * Check access to foreign record for belongs-to, has-one and belongs-to-parent links.
-     *
-     * @return bool True indicates that the link checker should be bypassed.
-     * @throws Forbidden
-     */
+    
     private function linkForeignAccessCheckOne(string $entityType, string $link, Entity $foreignEntity): bool
     {
         if ($this->getParam($entityType, $link, 'linkForeignAccessCheckDisabled')) {
@@ -617,7 +540,7 @@ class LinkCheck
 
     private function checkInDefaults(FieldDefs $fieldDefs, string $link, Entity $foreignEntity): bool
     {
-        /** @var string[] $defaults */
+        
         $defaults = $this->getDefault($fieldDefs,  $link . 'Ids') ?? [];
 
         return in_array($foreignEntity->getId(), $defaults);

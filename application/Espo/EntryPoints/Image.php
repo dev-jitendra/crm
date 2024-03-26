@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\EntryPoints;
 
@@ -50,9 +24,9 @@ use Espo\Entities\Attachment;
 
 class Image implements EntryPoint
 {
-    /** @var ?string[] */
+    
     protected $allowedRelatedTypeList = null;
-    /** @var ?string[] */
+    
     protected $allowedFieldList = null;
 
     private FileStorageManager $fileStorageManager;
@@ -90,15 +64,10 @@ class Image implements EntryPoint
         $this->show($response, $id, $size, false);
     }
 
-    /**
-     * @throws Error
-     * @throws NotFoundSilent
-     * @throws NotFound
-     * @throws ForbiddenSilent
-     */
+    
     protected function show(Response $response, string $id, ?string $size, bool $disableAccessCheck = false): void
     {
-        /** @var ?Attachment $attachment */
+        
         $attachment = $this->entityManager->getEntityById(Attachment::ENTITY_TYPE, $id);
 
         if (!$attachment) {
@@ -160,10 +129,7 @@ class Image implements EntryPoint
             ->setHeader('Content-Security-Policy', "default-src 'self'");
     }
 
-    /**
-     * @throws Error
-     * @throws NotFound
-     */
+    
     private function getThumbContents(Attachment $attachment, string $size): string
     {
         if (!array_key_exists($size, $this->getSizes())) {
@@ -194,22 +160,22 @@ class Image implements EntryPoint
 
         switch ($fileType) {
             case 'image/jpeg':
-                imagejpeg($targetImage); /** @phpstan-ignore-line */
+                imagejpeg($targetImage); 
 
                 break;
 
             case 'image/png':
-                imagepng($targetImage); /** @phpstan-ignore-line */
+                imagepng($targetImage); 
 
                 break;
 
             case 'image/gif':
-                imagegif($targetImage); /** @phpstan-ignore-line */
+                imagegif($targetImage); 
 
                 break;
 
             case 'image/webp':
-                imagewebp($targetImage); /** @phpstan-ignore-line */
+                imagewebp($targetImage); 
 
                 break;
         }
@@ -218,7 +184,7 @@ class Image implements EntryPoint
 
         ob_end_clean();
 
-        imagedestroy($targetImage); /** @phpstan-ignore-line */
+        imagedestroy($targetImage); 
 
         if ($useCache) {
             $this->fileManager->putContents($cacheFilePath, $contents);
@@ -227,11 +193,7 @@ class Image implements EntryPoint
         return $contents;
     }
 
-    /**
-     * @return \GdImage
-     * @phpstan-ignore-next-line
-     * @throws Error
-     */
+    
     private function createThumbImage(string $filePath, string $fileType, string $size)
     {
         if (!is_array(getimagesize($filePath))) {
@@ -273,7 +235,7 @@ class Image implements EntryPoint
                 $sourceImage = imagecreatefromjpeg($filePath);
 
                 imagecopyresampled(
-                    $targetImage, $sourceImage, 0, 0, 0, 0, /** @phpstan-ignore-line */
+                    $targetImage, $sourceImage, 0, 0, 0, 0, 
                     $targetWidth, $targetHeight, $originalWidth, $originalHeight
                 );
                 break;
@@ -281,16 +243,16 @@ class Image implements EntryPoint
             case 'image/png':
                 $sourceImage = imagecreatefrompng($filePath);
 
-                imagealphablending($targetImage, false); /** @phpstan-ignore-line */
-                imagesavealpha($targetImage, true); /** @phpstan-ignore-line */
+                imagealphablending($targetImage, false); 
+                imagesavealpha($targetImage, true); 
 
-                $transparent = imagecolorallocatealpha($targetImage, 255, 255, 255, 127); /** @phpstan-ignore-line */
+                $transparent = imagecolorallocatealpha($targetImage, 255, 255, 255, 127); 
 
-                /** @phpstan-ignore-next-line */
+                
                 imagefilledrectangle($targetImage, 0, 0, $targetWidth, $targetHeight, $transparent);
 
                 imagecopyresampled(
-                    $targetImage, $sourceImage, 0, 0, 0, 0, /** @phpstan-ignore-line */
+                    $targetImage, $sourceImage, 0, 0, 0, 0, 
                     $targetWidth, $targetHeight, $originalWidth, $originalHeight
                 );
 
@@ -300,7 +262,7 @@ class Image implements EntryPoint
                 $sourceImage = imagecreatefromgif($filePath);
 
                 imagecopyresampled(
-                    $targetImage, $sourceImage, 0, 0, 0, 0, /** @phpstan-ignore-line */
+                    $targetImage, $sourceImage, 0, 0, 0, 0, 
                     $targetWidth, $targetHeight, $originalWidth, $originalHeight
                 );
 
@@ -310,7 +272,7 @@ class Image implements EntryPoint
                 $sourceImage = imagecreatefromwebp($filePath);
 
                 imagecopyresampled(
-                    $targetImage, $sourceImage, 0, 0, 0, 0, /** @phpstan-ignore-line */
+                    $targetImage, $sourceImage, 0, 0, 0, 0, 
                     $targetWidth, $targetHeight, $originalWidth, $originalHeight
                 );
 
@@ -318,16 +280,13 @@ class Image implements EntryPoint
         }
 
         if (in_array($fileType, $this->getFixOrientationFileTypeList())) {
-            $targetImage = $this->fixOrientation($targetImage, $filePath); /** @phpstan-ignore-line */
+            $targetImage = $this->fixOrientation($targetImage, $filePath); 
         }
 
-        return $targetImage; /** @phpstan-ignore-line */
+        return $targetImage; 
     }
 
-    /**
-     * @param string $filePath
-     * @return ?int
-     */
+    
     private function getOrientation(string $filePath)
     {
         if (!function_exists('exif_read_data')) {
@@ -339,11 +298,7 @@ class Image implements EntryPoint
         return $data['Orientation'] ?? null;
     }
 
-    /**
-     * @param \GdImage $targetImage
-     * @return \GdImage
-     * @phpstan-ignore-next-line
-     */
+    
     private function fixOrientation($targetImage, string $filePath)
     {
         $orientation = $this->getOrientation($filePath);
@@ -351,40 +306,32 @@ class Image implements EntryPoint
         if ($orientation) {
             $angle = array_values([0, 0, 0, 180, 0, 0, -90, 0, 90])[$orientation];
 
-            $targetImage = imagerotate($targetImage, $angle, 0) ?: $targetImage; /** @phpstan-ignore-line */
+            $targetImage = imagerotate($targetImage, $angle, 0) ?: $targetImage; 
         }
 
-        /** @phpstan-ignore-next-line */
+        
         return $targetImage;
     }
 
-    /**
-     * @return string[]
-     */
+    
     private function getAllowedFileTypeList(): array
     {
         return $this->metadata->get(['app', 'image', 'allowedFileTypeList']) ?? [];
     }
 
-    /**
-     * @return string[]
-     */
+    
     private function getResizableFileTypeList(): array
     {
         return $this->metadata->get(['app', 'image', 'resizableFileTypeList']) ?? [];
     }
 
-    /**
-     * @return string[]
-     */
+    
     private function getFixOrientationFileTypeList(): array
     {
         return $this->metadata->get(['app', 'image', 'fixOrientationFileTypeList']) ?? [];
     }
 
-    /**
-     * @return array<string, array{int, int}>
-     */
+    
     protected function getSizes(): array
     {
         return $this->metadata->get(['app', 'image', 'sizes']) ?? [];
@@ -392,7 +339,7 @@ class Image implements EntryPoint
 
     private function getAttachmentRepository(): AttachmentRepository
     {
-        /** @var AttachmentRepository */
+        
         return $this->entityManager->getRepository(Attachment::ENTITY_TYPE);
     }
 }

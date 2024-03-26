@@ -4,11 +4,7 @@ namespace Laminas\Mail;
 
 class ConfigProvider
 {
-    /**
-     * Retrieve configuration for laminas-mail package.
-     *
-     * @return array
-     */
+    
     public function __invoke()
     {
         return [
@@ -16,15 +12,11 @@ class ConfigProvider
         ];
     }
 
-    /**
-     * Retrieve dependency settings for laminas-mail package.
-     *
-     * @return array
-     */
+    
     public function getDependencyConfig()
     {
         return [
-            // Legacy Zend Framework aliases
+            
             'aliases'   => [
                 'Zend\Mail\Protocol\SmtpPluginManager' => Protocol\SmtpPluginManager::class,
             ],

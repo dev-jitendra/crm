@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Utils\Database\Schema;
 
@@ -53,9 +27,7 @@ use Espo\ORM\Type\AttributeType;
 
 use const E_USER_DEPRECATED;
 
-/**
- * Schema representation builder.
- */
+
 class Builder
 {
     private const ATTR_ID = 'id';
@@ -65,7 +37,7 @@ class Builder
     private string $idDbType;
 
     private string $tablesPath = 'Core/Utils/Database/Schema/tables';
-    /** @var string[] */
+    
     private $typeList;
     private ColumnPreparator $columnPreparator;
 
@@ -89,13 +61,7 @@ class Builder
         $this->idDbType = $metadataProvider->getIdDbType();
     }
 
-    /**
-     * Build a schema representation for an ORM metadata.
-     *
-     * @param array<string, mixed> $ormMeta Raw ORM metadata.
-     * @param ?string[] $entityTypeList Specific entity types.
-     * @throws SchemaException
-     */
+    
     public function build(array $ormMeta, ?array $entityTypeList = null): DbalSchema
     {
         $this->log->debug('Schema\Builder - Start');
@@ -128,10 +94,7 @@ class Builder
         return $schema;
     }
 
-    /**
-     * @param array<string, Table> $tables
-     * @throws SchemaException
-     */
+    
     private function buildEntity(EntityDefs $entityDefs, DbalSchema $schema, array &$tables): void
     {
         if ($entityDefs->getParam('skipRebuild')) {
@@ -164,7 +127,7 @@ class Builder
 
         $tables[$entityType] = $table;
 
-        /** @var array<string, mixed> $tableParams */
+        
         $tableParams = $entityDefs->getParam('params') ?? [];
 
         foreach ($tableParams as $paramName => $paramValue) {
@@ -210,7 +173,7 @@ class Builder
 
     private function getEntityDefsModifier(EntityDefs $entityDefs): ?EntityDefsModifier
     {
-        /** @var ?class-string<EntityDefsModifier> $modifierClassName */
+        
         $modifierClassName = $entityDefs->getParam('modifierClassName');
 
         if (!$modifierClassName) {
@@ -220,14 +183,10 @@ class Builder
         return $this->injectableFactory->create($modifierClassName);
     }
 
-    /**
-     * @param array<string, mixed> $ormMeta
-     * @param ?string[] $entityTypeList
-     * @return array<string, mixed>
-     */
+    
     private function amendMetadata(array $ormMeta, ?array $entityTypeList): array
     {
-        /** @var array<string, mixed> $ormMeta */
+        
         $ormMeta = Util::merge(
             $ormMeta,
             $this->getCustomTables()
@@ -246,16 +205,16 @@ class Builder
             unset($ormMeta['unsetIgnore']);
         }
 
-        // Unset some keys.
+        
         if (isset($ormMeta['unset'])) {
-            /** @var array<string, mixed> $ormMeta */
+            
             $ormMeta = Util::unsetInArray($ormMeta, $ormMeta['unset']);
 
             unset($ormMeta['unset']);
         }
 
         if (isset($protectedOrmMeta)) {
-            /** @var array<string, mixed> $ormMeta */
+            
             $ormMeta = Util::merge($ormMeta, $protectedOrmMeta);
         }
 
@@ -274,9 +233,7 @@ class Builder
         return $ormMeta;
     }
 
-    /**
-     * @throws SchemaException
-     */
+    
     private function addColumn(Table $table, Column $column): void
     {
         $table->addColumn(
@@ -286,13 +243,7 @@ class Builder
         );
     }
 
-    /**
-     * Prepare a relation table for the manyMany relation.
-     *
-     * @param string $entityType
-     * @param array<string, Table> $tables
-     * @throws SchemaException
-     */
+    
     private function buildManyMany(
         string $entityType,
         RelationDefs $relationDefs,
@@ -357,7 +308,7 @@ class Builder
             $this->addColumn($table, $column);
         }
 
-        /** @var array<string, array<string, mixed>> $additionalColumns */
+        
         $additionalColumns = $relationDefs->getParam('additionalColumns') ?? [];
 
         foreach ($additionalColumns as $fieldName => $fieldParams) {
@@ -389,10 +340,7 @@ class Builder
         $tables[$relationshipName] = $table;
     }
 
-    /**
-     * @param IndexDefs[] $indexDefsList
-     * @throws SchemaException
-     */
+    
     private function addIndexes(Table $table, array $indexDefsList): void
     {
         foreach ($indexDefsList as $indexDefs) {
@@ -411,10 +359,7 @@ class Builder
         }
     }
 
-    /**
-     * @todo Move to a class. Add unit test.
-     * @return array<string, mixed>
-     */
+    
     private static function convertColumn(Column $column): array
     {
         $result = [
@@ -449,7 +394,7 @@ class Builder
             $result['fixed'] = $column->getFixed();
         }
 
-        // Can't use customSchemaOptions as it causes unwanted ALTER TABLE.
+        
         $result['platformOptions'] = [];
 
         if ($column->getCollation()) {
@@ -463,12 +408,7 @@ class Builder
         return $result;
     }
 
-    /**
-     * Get custom table definition in `application/Espo/Core/Utils/Database/Schema/tables`.
-     * This logic can be removed in the future. Usage of table files in not recommended.
-     *
-     * @return array<string, array<string, mixed>>
-     */
+    
     private function getCustomTables(): array
     {
         $customTables = $this->loadData($this->pathProvider->getCore() . $this->tablesPath);
@@ -482,7 +422,7 @@ class Builder
             );
         }
 
-        /** @var array<string, mixed> $customTables */
+        
         $customTables = Util::merge(
             $customTables,
             $this->loadData($this->pathProvider->getCustom() . $this->tablesPath)
@@ -498,12 +438,7 @@ class Builder
         return $customTables;
     }
 
-    /**
-     * @param string[] $entityTypeList
-     * @param array<string, mixed> $ormMeta
-     * @param string[] $depList
-     * @return string[]
-     */
+    
     private function getDependentEntityTypeList(array $entityTypeList, array $ormMeta, array $depList = []): array
     {
         foreach ($entityTypeList as $entityType) {
@@ -533,10 +468,7 @@ class Builder
         return $depList;
     }
 
-    /**
-     * @param string $path
-     * @return array<string, array<string, mixed>>
-     */
+    
     private function loadData(string $path): array
     {
         $tables = [];
@@ -545,7 +477,7 @@ class Builder
             return $tables;
         }
 
-        /** @var string[] $fileList */
+        
         $fileList = $this->fileManager->getFileList($path, false, '\.php$', true);
 
         foreach ($fileList as $fileName) {
@@ -561,7 +493,7 @@ class Builder
                 continue;
             }
 
-            /** @var array<string, array<string, mixed>> $tables */
+            
             $tables = Util::merge($tables, $fileData);
         }
 

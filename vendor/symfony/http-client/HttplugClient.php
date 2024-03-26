@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpClient;
 
@@ -48,14 +41,7 @@ if (!interface_exists(RequestFactory::class)) {
     throw new \LogicException('You cannot use "Symfony\Component\HttpClient\HttplugClient" as the "php-http/message-factory" package is not installed. Try running "composer require nyholm/psr7".');
 }
 
-/**
- * An adapter to turn a Symfony HttpClientInterface into an Httplug client.
- *
- * Run "composer require nyholm/psr7" to install an efficient implementation of response
- * and stream factories with flex-provided autowiring aliases.
- *
- * @author Nicolas Grekas <p@tchwork.com>
- */
+
 final class HttplugClient implements HttplugInterface, HttpAsyncClient, RequestFactory, StreamFactory, UriFactory
 {
     private $client;
@@ -88,9 +74,7 @@ final class HttplugClient implements HttplugInterface, HttpAsyncClient, RequestF
         $this->waitLoop = new HttplugWaitLoop($this->client, $this->promisePool, $this->responseFactory, $this->streamFactory);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function sendRequest(RequestInterface $request): Psr7ResponseInterface
     {
         try {
@@ -100,11 +84,7 @@ final class HttplugClient implements HttplugInterface, HttpAsyncClient, RequestF
         }
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return HttplugPromise
-     */
+    
     public function sendAsyncRequest(RequestInterface $request): Promise
     {
         if (!$promisePool = $this->promisePool) {
@@ -131,21 +111,13 @@ final class HttplugClient implements HttplugInterface, HttpAsyncClient, RequestF
         return new HttplugPromise($promise);
     }
 
-    /**
-     * Resolves pending promises that complete before the timeouts are reached.
-     *
-     * When $maxDuration is null and $idleTimeout is reached, promises are rejected.
-     *
-     * @return int The number of remaining pending promises
-     */
+    
     public function wait(float $maxDuration = null, float $idleTimeout = null): int
     {
         return $this->waitLoop->wait(null, $maxDuration, $idleTimeout);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function createRequest($method, $uri, array $headers = [], $body = null, $protocolVersion = '1.1'): RequestInterface
     {
         if ($this->responseFactory instanceof RequestFactoryInterface) {
@@ -170,9 +142,7 @@ final class HttplugClient implements HttplugInterface, HttpAsyncClient, RequestF
         return $request;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function createStream($body = null): StreamInterface
     {
         if ($body instanceof StreamInterface) {
@@ -194,9 +164,7 @@ final class HttplugClient implements HttplugInterface, HttpAsyncClient, RequestF
         return $stream;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function createUri($uri): UriInterface
     {
         if ($uri instanceof UriInterface) {
@@ -218,9 +186,7 @@ final class HttplugClient implements HttplugInterface, HttpAsyncClient, RequestF
         throw new \LogicException(sprintf('You cannot use "%s()" as the "nyholm/psr7" package is not installed. Try running "composer require nyholm/psr7".', __METHOD__));
     }
 
-    /**
-     * @return array
-     */
+    
     public function __sleep()
     {
         throw new \BadMethodCallException('Cannot serialize '.__CLASS__);

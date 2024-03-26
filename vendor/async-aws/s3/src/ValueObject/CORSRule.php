@@ -4,48 +4,25 @@ namespace AsyncAws\S3\ValueObject;
 
 use AsyncAws\Core\Exception\InvalidArgument;
 
-/**
- * Specifies a cross-origin access rule for an Amazon S3 bucket.
- */
+
 final class CORSRule
 {
-    /**
-     * Headers that are specified in the `Access-Control-Request-Headers` header. These headers are allowed in a preflight
-     * OPTIONS request. In response to any preflight OPTIONS request, Amazon S3 returns any requested headers that are
-     * allowed.
-     */
+    
     private $allowedHeaders;
 
-    /**
-     * An HTTP method that you allow the origin to execute. Valid values are `GET`, `PUT`, `HEAD`, `POST`, and `DELETE`.
-     */
+    
     private $allowedMethods;
 
-    /**
-     * One or more origins you want customers to be able to access the bucket from.
-     */
+    
     private $allowedOrigins;
 
-    /**
-     * One or more headers in the response that you want customers to be able to access from their applications (for
-     * example, from a JavaScript `XMLHttpRequest` object).
-     */
+    
     private $exposeHeaders;
 
-    /**
-     * The time in seconds that your browser is to cache the preflight response for the specified resource.
-     */
+    
     private $maxAgeSeconds;
 
-    /**
-     * @param array{
-     *   AllowedHeaders?: null|string[],
-     *   AllowedMethods: string[],
-     *   AllowedOrigins: string[],
-     *   ExposeHeaders?: null|string[],
-     *   MaxAgeSeconds?: null|int,
-     * } $input
-     */
+    
     public function __construct(array $input)
     {
         $this->allowedHeaders = $input['AllowedHeaders'] ?? null;
@@ -60,33 +37,25 @@ final class CORSRule
         return $input instanceof self ? $input : new self($input);
     }
 
-    /**
-     * @return string[]
-     */
+    
     public function getAllowedHeaders(): array
     {
         return $this->allowedHeaders ?? [];
     }
 
-    /**
-     * @return string[]
-     */
+    
     public function getAllowedMethods(): array
     {
         return $this->allowedMethods ?? [];
     }
 
-    /**
-     * @return string[]
-     */
+    
     public function getAllowedOrigins(): array
     {
         return $this->allowedOrigins ?? [];
     }
 
-    /**
-     * @return string[]
-     */
+    
     public function getExposeHeaders(): array
     {
         return $this->exposeHeaders ?? [];
@@ -97,9 +66,7 @@ final class CORSRule
         return $this->maxAgeSeconds;
     }
 
-    /**
-     * @internal
-     */
+    
     public function requestBody(\DomElement $node, \DomDocument $document): void
     {
         if (null !== $v = $this->allowedHeaders) {

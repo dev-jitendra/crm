@@ -1,13 +1,6 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 return array_replace_recursive(require __DIR__.'/en.php', [
     'meridiem' => ['krn', 'koosk'],
@@ -25,7 +18,7 @@ return array_replace_recursive(require __DIR__.'/en.php', [
         'LLLL' => 'dddd, D MMMM YYYY HH:mm',
     ],
 
-    'year' => ':count maghatiat', // less reliable
-    'y' => ':count maghatiat', // less reliable
-    'a_year' => ':count maghatiat', // less reliable
+    'year' => ':count maghatiat', 
+    'y' => ':count maghatiat', 
+    'a_year' => ':count maghatiat', 
 ]);

@@ -6,9 +6,7 @@ namespace OpenSpout\Common;
 
 use OpenSpout\Common\Exception\InvalidArgumentException;
 
-/**
- * @internal
- */
+
 trait TempFolderOptionTrait
 {
     private string $tempFolder;

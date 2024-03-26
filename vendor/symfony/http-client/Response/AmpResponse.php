@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpClient\Response;
 
@@ -33,11 +26,7 @@ use Symfony\Component\HttpClient\Internal\Canary;
 use Symfony\Component\HttpClient\Internal\ClientState;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-/**
- * @author Nicolas Grekas <p@tchwork.com>
- *
- * @internal
- */
+
 final class AmpResponse implements ResponseInterface, StreamableInterface
 {
     use CommonResponseTrait;
@@ -52,9 +41,7 @@ final class AmpResponse implements ResponseInterface, StreamableInterface
 
     private static $delay;
 
-    /**
-     * @internal
-     */
+    
     public function __construct(AmpClientState $multi, Request $request, array $options, ?LoggerInterface $logger)
     {
         $this->multi = $multi;
@@ -134,17 +121,13 @@ final class AmpResponse implements ResponseInterface, StreamableInterface
         });
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getInfo(string $type = null)
     {
         return null !== $type ? $this->info[$type] ?? null : $this->info;
     }
 
-    /**
-     * @return array
-     */
+    
     public function __sleep()
     {
         throw new \BadMethodCallException('Cannot serialize '.__CLASS__);
@@ -160,7 +143,7 @@ final class AmpResponse implements ResponseInterface, StreamableInterface
         try {
             $this->doDestruct();
         } finally {
-            // Clear the DNS cache when all requests completed
+            
             if (0 >= --$this->multi->responseCount) {
                 $this->multi->responseCount = 0;
                 $this->multi->dnsCache = [];
@@ -168,9 +151,7 @@ final class AmpResponse implements ResponseInterface, StreamableInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     private static function schedule(self $response, array &$runningResponses): void
     {
         if (isset($runningResponses[0])) {
@@ -185,11 +166,7 @@ final class AmpResponse implements ResponseInterface, StreamableInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @param AmpClientState $multi
-     */
+    
     private static function perform(ClientState $multi, array &$responses = null): void
     {
         if ($responses) {
@@ -207,11 +184,7 @@ final class AmpResponse implements ResponseInterface, StreamableInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @param AmpClientState $multi
-     */
+    
     private static function select(ClientState $multi, float $timeout): int
     {
         $timeout += microtime(true);
@@ -237,7 +210,7 @@ final class AmpResponse implements ResponseInterface, StreamableInterface
         });
 
         try {
-            /* @var Response $response */
+            
             if (null === $response = yield from self::getPushedResponse($request, $multi, $info, $headers, $options, $logger)) {
                 $logger && $logger->info(sprintf('Request: "%s %s"', $info['http_method'], $info['url']));
 
@@ -326,11 +299,11 @@ final class AmpResponse implements ResponseInterface, StreamableInterface
             $logger && $logger->info(sprintf('Redirecting: "%s %s"', $status, $info['url']));
 
             try {
-                // Discard body of redirects
+                
                 while (null !== yield $response->getBody()->read()) {
                 }
             } catch (HttpException | StreamException $e) {
-                // Ignore streaming errors on previous responses
+                
             }
 
             ++$info['redirect_count'];
@@ -349,7 +322,7 @@ final class AmpResponse implements ResponseInterface, StreamableInterface
                 $originRequest->removeHeader('content-length');
                 $originRequest->removeHeader('content-type');
 
-                // Do like curl and browsers: turn POST to GET on 301, 302 and 303
+                
                 if ('POST' === $response->getRequest()->getMethod() || 303 === $status) {
                     $info['http_method'] = 'HEAD' === $response->getRequest()->getMethod() ? 'HEAD' : 'GET';
                     $request->setMethod($info['http_method']);
@@ -398,9 +371,7 @@ final class AmpResponse implements ResponseInterface, StreamableInterface
         $info['debug'] .= "< \r\n";
     }
 
-    /**
-     * Accepts pushed responses only if their headers related to authentication match the request.
-     */
+    
     private static function getPushedResponse(Request $request, AmpClientState $multi, array &$info, array &$headers, array $options, ?LoggerInterface $logger)
     {
         if ('' !== $options['body']) {

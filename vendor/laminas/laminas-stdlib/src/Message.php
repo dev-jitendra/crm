@@ -14,23 +14,13 @@ use function sprintf;
 
 class Message implements MessageInterface
 {
-    /** @var array */
+    
     protected $metadata = [];
 
-    /** @var mixed */
+    
     protected $content = '';
 
-    /**
-     * Set message metadata
-     *
-     * Non-destructive setting of message metadata; always adds to the metadata, never overwrites
-     * the entire metadata container.
-     *
-     * @param  string|int|array|Traversable $spec
-     * @param  mixed $value
-     * @throws Exception\InvalidArgumentException
-     * @return Message
-     */
+    
     public function setMetadata($spec, $value = null)
     {
         if (is_scalar($spec)) {
@@ -49,14 +39,7 @@ class Message implements MessageInterface
         return $this;
     }
 
-    /**
-     * Retrieve all metadata or a single metadatum as specified by key
-     *
-     * @param  null|string|int $key
-     * @param  null|mixed $default
-     * @throws Exception\InvalidArgumentException
-     * @return mixed
-     */
+    
     public function getMetadata($key = null, $default = null)
     {
         if (null === $key) {
@@ -74,31 +57,20 @@ class Message implements MessageInterface
         return $default;
     }
 
-    /**
-     * Set message content
-     *
-     * @param  mixed $value
-     * @return Message
-     */
+    
     public function setContent($value)
     {
         $this->content = $value;
         return $this;
     }
 
-    /**
-     * Get message content
-     *
-     * @return mixed
-     */
+    
     public function getContent()
     {
         return $this->content;
     }
 
-    /**
-     * @return string
-     */
+    
     public function toString()
     {
         $request = '';

@@ -10,11 +10,7 @@ use function db2_pconnect;
 
 final class Driver extends AbstractDB2Driver
 {
-    /**
-     * {@inheritdoc}
-     *
-     * @return Connection
-     */
+    
     public function connect(array $params)
     {
         $dataSourceName = DataSourceName::fromConnectionParameters($params)->toString();

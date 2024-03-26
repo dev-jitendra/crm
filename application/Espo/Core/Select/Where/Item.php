@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Select\Where;
 
@@ -35,11 +9,7 @@ use Espo\Core\Select\Where\Item\Data\DateTime as DateTimeData;
 use InvalidArgumentException;
 use RuntimeException;
 
-/**
- * A where item.
- *
- * @immutable
- */
+
 class Item
 {
     public const TYPE_AND = Item\Type::AND;
@@ -49,7 +19,7 @@ class Item
     private mixed $value = null;
     private ?Data $data = null;
 
-    /** @var string[] */
+    
     private $noAttributeTypeList = [
         Item\Type::AND,
         Item\Type::OR,
@@ -58,7 +28,7 @@ class Item
         Item\Type::SUBQUERY_NOT_IN,
     ];
 
-    /** @var string[] */
+    
     private $withNestedItemsTypeList = [
         Item\Type::AND,
         Item\Type::OR,
@@ -67,10 +37,7 @@ class Item
     private function __construct(private string $type)
     {}
 
-    /**
-     * @param array<string, mixed> $params
-     * {@internal}
-     */
+    
     public static function fromRaw(array $params): self
     {
         $type = $params['type'] ?? null;
@@ -121,10 +88,7 @@ class Item
         return $obj;
     }
 
-    /**
-     * @param array<array<int|string, mixed>> $paramList
-     * {@internal}
-     */
+    
     public static function fromRawAndGroup(array $paramList): self
     {
         return self::fromRaw([
@@ -133,16 +97,7 @@ class Item
         ]);
     }
 
-    /**
-     * @return array{
-     *   type: string,
-     *   value: mixed,
-     *   attribute?: string,
-     *   dateTime?: bool,
-     *   timeZone?: string,
-     * }
-     * {@internal}
-     */
+    
     public function getRaw(): array
     {
         $type = $this->type;
@@ -169,38 +124,25 @@ class Item
         return $raw;
     }
 
-    /**
-     * Get a type;
-     */
+    
     public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * Get an attribute.
-     */
+    
     public function getAttribute(): ?string
     {
         return $this->attribute;
     }
 
-    /**
-     * Get a value.
-     *
-     * @return mixed
-     */
+    
     public function getValue()
     {
         return $this->value;
     }
 
-    /**
-     * Get nested where items (for 'and', 'or' types).
-     *
-     * @return Item[]
-     * @throws RuntimeException If a type does not support nested items.
-     */
+    
     public function getItemList(): array
     {
         if (!in_array($this->type, $this->withNestedItemsTypeList)) {
@@ -216,27 +158,19 @@ class Item
         return $list;
     }
 
-    /**
-     * Get a data-object.
-     */
+    
     public function getData(): ?Data
     {
         return $this->data;
     }
 
-    /**
-     * Create a builder.
-     */
+    
     public static function createBuilder(): ItemBuilder
     {
         return new ItemBuilder();
     }
 
-    /**
-     * Clone with data.
-     *
-     * {@internal}
-     */
+    
     public function withData(?Data $data): self
     {
         $obj = clone $this;

@@ -8,39 +8,25 @@ class FileAttributes implements StorageAttributes
 {
     use ProxyArrayAccessToProperties;
 
-    /**
-     * @var string
-     */
+    
     private $type = StorageAttributes::TYPE_FILE;
 
-    /**
-     * @var string
-     */
+    
     private $path;
 
-    /**
-     * @var int|null
-     */
+    
     private $fileSize;
 
-    /**
-     * @var string|null
-     */
+    
     private $visibility;
 
-    /**
-     * @var int|null
-     */
+    
     private $lastModified;
 
-    /**
-     * @var string|null
-     */
+    
     private $mimeType;
 
-    /**
-     * @var array
-     */
+    
     private $extraMetadata;
 
     public function __construct(

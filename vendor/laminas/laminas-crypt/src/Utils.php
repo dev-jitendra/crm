@@ -8,24 +8,10 @@ use function mb_strlen;
 use function min;
 use function ord;
 
-/**
- * Tools for cryptography
- */
+
 class Utils
 {
-    /**
-     * Compare two strings to avoid timing attacks
-     *
-     * C function memcmp() internally used by PHP, exits as soon as a difference
-     * is found in the two buffers. That makes possible of leaking
-     * timing information useful to an attacker attempting to iteratively guess
-     * the unknown string (e.g. password).
-     * The length will leak.
-     *
-     * @param  string $expected
-     * @param  string $actual
-     * @return bool
-     */
+    
     public static function compareStrings($expected, $actual)
     {
         $expected = (string) $expected;

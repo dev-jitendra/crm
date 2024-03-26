@@ -12,27 +12,10 @@ use AsyncAws\Core\Waiter;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpClient\MockHttpClient;
 
-/**
- * An easy way to create Result objects for your tests.
- *
- * @author Tobias Nyholm <tobias.nyholm@gmail.com>
- */
+
 class ResultMockFactory
 {
-    /**
-     * Instantiate a Result class that throws exception.
-     *
-     * <code>
-     * ResultMockFactory::createFailing(SendEmailResponse::class, 400, 'invalid value');
-     * </code>
-     *
-     * @template T of Result
-     *
-     * @param class-string<T>      $class
-     * @param array<string, mixed> $additionalContent
-     *
-     * @return T
-     */
+    
     public static function createFailing(
         string $class,
         int $code,
@@ -48,28 +31,15 @@ class ResultMockFactory
 
         $httpResponse = new SimpleMockedResponse(json_encode(array_merge(['message' => $message], $additionalContent)), ['content-type' => 'application/json'], $code);
         $client = new MockHttpClient($httpResponse);
-        $response = new Response($client->request('POST', 'http://localhost'), $client, new NullLogger());
+        $response = new Response($client->request('POST', 'http:
 
-        /** @psalm-var \ReflectionClass<T> $reflectionClass */
+        
         $reflectionClass = new \ReflectionClass($class);
 
         return $reflectionClass->newInstance($response);
     }
 
-    /**
-     * Instantiate a Result class with some data.
-     *
-     * <code>
-     * ResultMockFactory::create(SendEmailResponse::class, ['MessageId'=>'foo123']);
-     * </code>
-     *
-     * @template T of Result
-     *
-     * @param class-string<T>      $class
-     * @param array<string, mixed> $data
-     *
-     * @return T
-     */
+    
     public static function create(string $class, array $data = [])
     {
         if (Result::class !== $class) {
@@ -81,12 +51,12 @@ class ResultMockFactory
 
         $response = self::getResponseObject();
 
-        // Make sure the Result is initialized
+        
         $reflectionClass = new \ReflectionClass(Result::class);
         $initializedProperty = $reflectionClass->getProperty('initialized');
         $initializedProperty->setAccessible(true);
 
-        /** @psalm-var \ReflectionClass<T> $reflectionClass */
+        
         $reflectionClass = new \ReflectionClass($class);
         $object = $reflectionClass->newInstance($response);
         if (Result::class !== $class) {
@@ -98,10 +68,10 @@ class ResultMockFactory
             if ($reflectionClass->hasProperty($propertyName)) {
                 $property = $reflectionClass->getProperty($propertyName);
             } elseif ($reflectionClass->hasProperty(lcfirst($propertyName))) {
-                // backward compatibility with `UpperCamelCase` naming (fast)
+                
                 $property = $reflectionClass->getProperty(lcfirst($propertyName));
             } else {
-                // compatibility with new `wordWithABREV` naming (slow)
+                
                 $lowerPropertyName = strtolower($propertyName);
                 $property = null;
                 foreach ($reflectionClass->getProperties() as $prop) {
@@ -112,7 +82,7 @@ class ResultMockFactory
                     }
                 }
                 if (null === $property) {
-                    // let bubble the original exception
+                    
                     $property = $reflectionClass->getProperty($propertyName);
                 }
             }
@@ -125,15 +95,7 @@ class ResultMockFactory
         return $object;
     }
 
-    /**
-     * Instantiate a Waiter class with a final state.
-     *
-     * @template T of Waiter
-     *
-     * @psalm-param class-string<T> $class
-     *
-     * @return T
-     */
+    
     public static function waiter(string $class, string $finalState)
     {
         if (Waiter::class !== $class) {
@@ -156,7 +118,7 @@ class ResultMockFactory
         $propertyState = $reflectionClass->getProperty('finalState');
         $propertyState->setAccessible(true);
 
-        /** @psalm-var \ReflectionClass<T> $reflectionClass */
+        
         $reflectionClass = new \ReflectionClass($class);
         $result = $reflectionClass->newInstanceWithoutConstructor();
         $propertyResponse->setValue($result, $response);
@@ -165,14 +127,7 @@ class ResultMockFactory
         return $result;
     }
 
-    /**
-     * Try to add some values to the properties not defined in $data.
-     *
-     * @param \ReflectionClass<object> $reflectionClass
-     * @param array<string, mixed>     $data
-     *
-     * @throws \ReflectionException
-     */
+    
     private static function addUndefinedProperties(\ReflectionClass $reflectionClass, object $object, array $data): void
     {
         foreach ($reflectionClass->getProperties(\ReflectionProperty::IS_PRIVATE) as $property) {
@@ -223,11 +178,7 @@ class ResultMockFactory
         }
     }
 
-    /**
-     * Set input and aws client to handle pagination.
-     *
-     * @param \ReflectionClass<object> $reflectionClass
-     */
+    
     private static function addPropertiesOnResult(\ReflectionClass $reflectionClass, object $object, string $class): void
     {
         if (false === $pos = strrpos($class, '\\')) {

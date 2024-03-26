@@ -6,62 +6,37 @@ use AsyncAws\Core\Exception\InvalidArgument;
 use AsyncAws\Core\Exception\LogicException;
 use AsyncAws\Core\Stream\RequestStream;
 
-/**
- * Representation of an HTTP Request.
- *
- * @author Jérémy Derussé <jeremy@derusse.com>
- */
+
 final class Request
 {
-    /**
-     * @var string
-     */
+    
     private $method;
 
-    /**
-     * @var string
-     */
+    
     private $uri;
 
-    /**
-     * @var array<string, string>
-     */
+    
     private $headers;
 
-    /**
-     * @var RequestStream
-     */
+    
     private $body;
 
-    /**
-     * @var string|null
-     */
+    
     private $queryString;
 
-    /**
-     * @var array<string, string>
-     */
+    
     private $query;
 
-    /**
-     * @var string
-     */
+    
     private $endpoint;
 
-    /**
-     * @var string
-     */
+    
     private $hostPrefix;
 
-    /**
-     * @var array{scheme: string, host: string, port: int|null}|null
-     */
+    
     private $parsed;
 
-    /**
-     * @param array<string, string> $query
-     * @param array<string, string> $headers
-     */
+    
     public function __construct(string $method, string $uri, array $query, array $headers, RequestStream $body, string $hostPrefix = '')
     {
         $this->method = $method;
@@ -101,9 +76,7 @@ final class Request
         $this->headers[strtolower($name)] = $value;
     }
 
-    /**
-     * @return array<string, string>
-     */
+    
     public function getHeaders(): array
     {
         return $this->headers;
@@ -153,9 +126,7 @@ final class Request
         return $this->query[$name] ?? null;
     }
 
-    /**
-     * @return array<string, string>
-     */
+    
     public function getQuery(): array
     {
         return $this->query;
@@ -179,7 +150,7 @@ final class Request
                 throw new LogicException('Request::$endpoint must be set before using it.');
             }
 
-            $this->endpoint = $this->parsed['scheme'] . '://' . $this->hostPrefix . $this->parsed['host'] . (isset($this->parsed['port']) ? ':' . $this->parsed['port'] : '') . $this->uri . ($this->query ? (false === strpos($this->uri, '?') ? '?' : '&') . $this->getQueryString() : '');
+            $this->endpoint = $this->parsed['scheme'] . ':
         }
 
         return $this->endpoint;

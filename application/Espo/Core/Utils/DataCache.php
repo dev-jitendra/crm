@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Utils;
 
@@ -42,9 +16,7 @@ class DataCache
     public function __construct(protected FileManager $fileManager)
     {}
 
-    /**
-     * Whether is cached.
-     */
+    
     public function has(string $key): bool
     {
         $cacheFile = $this->getCacheFile($key);
@@ -52,11 +24,7 @@ class DataCache
         return $this->fileManager->isFile($cacheFile);
     }
 
-    /**
-     * Get a stored value.
-     *
-     * @return array<int|string, mixed>|stdClass
-     */
+    
     public function get(string $key)
     {
         $cacheFile = $this->getCacheFile($key);
@@ -64,14 +32,10 @@ class DataCache
         return $this->fileManager->getPhpSafeContents($cacheFile);
     }
 
-    /**
-     * Store in cache.
-     *
-     * @param array<int|string, mixed>|stdClass $data
-     */
+    
     public function store(string $key, $data): void
     {
-        /** @phpstan-var mixed $data */
+        
 
         if (!$this->checkDataIsValid($data)) {
             throw new InvalidArgumentException("Bad cache data type.");
@@ -86,9 +50,7 @@ class DataCache
         }
     }
 
-    /**
-     * Removes in cache.
-     */
+    
     public function clear(string $key): void
     {
         $cacheFile = $this->getCacheFile($key);
@@ -96,10 +58,7 @@ class DataCache
         $this->fileManager->removeFile($cacheFile);
     }
 
-    /**
-     * @param mixed $data
-     * @return bool
-     */
+    
     private function checkDataIsValid($data)
     {
         $isInvalid =

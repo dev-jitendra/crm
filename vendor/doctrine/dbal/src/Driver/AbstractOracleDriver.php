@@ -14,29 +14,21 @@ use Doctrine\Deprecations\Deprecation;
 
 use function assert;
 
-/**
- * Abstract base implementation of the {@see Driver} interface for Oracle based drivers.
- */
+
 abstract class AbstractOracleDriver implements Driver
 {
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getDatabasePlatform()
     {
         return new OraclePlatform();
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated Use {@link OraclePlatform::createSchemaManager()} instead.
-     */
+    
     public function getSchemaManager(Connection $conn, AbstractPlatform $platform)
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5458',
+            'https:
             'AbstractOracleDriver::getSchemaManager() is deprecated.'
                 . ' Use OraclePlatform::createSchemaManager() instead.',
         );
@@ -51,13 +43,7 @@ abstract class AbstractOracleDriver implements Driver
         return new OCI\ExceptionConverter();
     }
 
-    /**
-     * Returns an appropriate Easy Connect String for the given parameters.
-     *
-     * @param mixed[] $params The connection parameters to return the Easy Connect String for.
-     *
-     * @return string
-     */
+    
     protected function getEasyConnectString(array $params)
     {
         return (string) EasyConnectString::fromConnectionParameters($params);

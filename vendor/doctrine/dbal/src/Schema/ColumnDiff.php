@@ -6,47 +6,22 @@ use Doctrine\Deprecations\Deprecation;
 
 use function in_array;
 
-/**
- * Represents the change of a column.
- */
+
 class ColumnDiff
 {
-    /**
-     * @deprecated Use {@see $fromColumn} and {@see Column::getName()} instead.
-     *
-     * @var string
-     */
+    
     public $oldColumnName;
 
-    /**
-     * @internal Use {@see getNewColumn()} instead.
-     *
-     * @var Column
-     */
+    
     public $column;
 
-    /**
-     * @deprecated Use {@see hasTypeChanged()}, {@see hasLengthChanged()}, {@see hasPrecisionChanged()},
-     * {@see hasScaleChanged()}, {@see hasUnsignedChanged()}, {@see hasFixedChanged()}, {@see hasNotNullChanged()},
-     * {@see hasDefaultChanged()}, {@see hasAutoIncrementChanged()} or {@see hasCommentChanged()} instead.
-     *
-     * @var string[]
-     */
+    
     public $changedProperties = [];
 
-    /**
-     * @internal Use {@see getOldColumn()} instead.
-     *
-     * @var Column|null
-     */
+    
     public $fromColumn;
 
-    /**
-     * @internal The diff can be only instantiated by a {@see Comparator}.
-     *
-     * @param string   $oldColumnName
-     * @param string[] $changedProperties
-     */
+    
     public function __construct(
         $oldColumnName,
         Column $column,
@@ -56,7 +31,7 @@ class ColumnDiff
         if ($fromColumn === null) {
             Deprecation::triggerIfCalledFromOutside(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/4785',
+                'https:
                 'Not passing the $fromColumn to %s is deprecated.',
                 __METHOD__,
             );
@@ -128,30 +103,18 @@ class ColumnDiff
         return $this->hasChanged('comment');
     }
 
-    /**
-     * @deprecated Use {@see hasTypeChanged()}, {@see hasLengthChanged()}, {@see hasPrecisionChanged()},
-     * {@see hasScaleChanged()}, {@see hasUnsignedChanged()}, {@see hasFixedChanged()}, {@see hasNotNullChanged()},
-     * {@see hasDefaultChanged()}, {@see hasAutoIncrementChanged()} or {@see hasCommentChanged()} instead.
-     *
-     * @param string $propertyName
-     *
-     * @return bool
-     */
+    
     public function hasChanged($propertyName)
     {
         return in_array($propertyName, $this->changedProperties, true);
     }
 
-    /**
-     * @deprecated Use {@see $fromColumn} instead.
-     *
-     * @return Identifier
-     */
+    
     public function getOldColumnName()
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5622',
+            'https:
             '%s is deprecated. Use $fromColumn instead.',
             __METHOD__,
         );

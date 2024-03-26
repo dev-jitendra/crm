@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\Import;
 
@@ -73,7 +47,7 @@ class Import
     private const DEFAULT_DATE_FORMAT = 'YYYY-MM-DD';
     private const DEFAULT_TIME_FORMAT = 'HH:mm';
 
-    /** @var string[] */
+    
     private $attributeList = [];
     private Params $params;
 
@@ -97,9 +71,7 @@ class Import
         $this->params = Params::create();
     }
 
-    /**
-     * Set a user. ACL restriction will be applied for that user.
-     */
+    
     public function setUser(User $user): self
     {
         $this->user = $user;
@@ -107,9 +79,7 @@ class Import
         return $this;
     }
 
-    /**
-     * Set an entity type.
-     */
+    
     public function setEntityType(string $entityType): self
     {
         $this->entityType = $entityType;
@@ -117,9 +87,7 @@ class Import
         return $this;
     }
 
-    /**
-     * Set an attachment ID. CSV attachment should be uploaded before import.
-     */
+    
     public function setAttachmentId(string $attachmentId): self
     {
         $this->attachmentId = $attachmentId;
@@ -127,9 +95,7 @@ class Import
         return $this;
     }
 
-    /**
-     * Set an ID of import record. If an import record already exists.
-     */
+    
     public function setId(string $id): self
     {
         $this->id = $id;
@@ -137,11 +103,7 @@ class Import
         return $this;
     }
 
-    /**
-     * Set an attribute list to parse from CSV rows.
-     *
-     * @param string[] $attributeList
-     */
+    
     public function setAttributeList(array $attributeList): self
     {
         $this->attributeList = $attributeList;
@@ -149,9 +111,7 @@ class Import
         return $this;
     }
 
-    /**
-     * Set import parameters.
-     */
+    
     public function setParams(Params $params): self
     {
         $this->params = $params;
@@ -159,9 +119,7 @@ class Import
         return $this;
     }
 
-    /**
-     * @throws Error
-     */
+    
     private function validate(): void
     {
         if (!$this->entityType) {
@@ -173,11 +131,7 @@ class Import
         }
     }
 
-    /**
-     * Run import.
-     * @throws Error
-     * @throws Forbidden
-     */
+    
     public function run(): Result
     {
         $this->validate();
@@ -212,7 +166,7 @@ class Import
             }
         }
 
-        /** @var ?Attachment $attachment */
+        
         $attachment = $this->entityManager->getEntityById(Attachment::ENTITY_TYPE, $this->attachmentId);
 
         if (!$attachment) {
@@ -228,7 +182,7 @@ class Import
         $startFromIndex = null;
 
         if ($this->id) {
-            /** @var ?ImportEntity $import */
+            
             $import = $this->entityManager->getEntityById(ImportEntity::ENTITY_TYPE, $this->id);
 
             if (!$import) {
@@ -242,7 +196,7 @@ class Import
             $import->set('status', ImportEntity::STATUS_IN_PROCESS);
         }
         else {
-            /** @var ImportEntity $import */
+            
             $import = $this->entityManager->getNewEntity(ImportEntity::ENTITY_TYPE);
 
             $import->set([
@@ -390,18 +344,7 @@ class Import
             ->withCountError(count($result->errorIndexes));
     }
 
-    /**
-     * @param string[] $attributeList
-     * @param string[] $row
-     * @throws Error
-     * @return array{
-     *   id?: string,
-     *   isError?: boolean,
-     *   isDuplicate?: boolean,
-     *   isImported?: boolean,
-     *   isUpdated?: boolean,
-     * }|null
-     */
+    
     private function importRow(
         array $attributeList,
         array $row,
@@ -593,7 +536,7 @@ class Import
             }
 
             if ($entity->hasId()) {
-                /** @noinspection PhpDeprecationInspection */
+                
                 $this->entityManager
                     ->getRDBRepository($entity->getEntityType())
                     ->deleteFromDb($entity->getId(), true);
@@ -709,17 +652,15 @@ class Import
             $entity->set($relation . 'Id', $found->getId());
             $entity->set($relation . 'Name', $found->get('name'));
 
-            //return;
+            
         }
 
-        //if (!in_array($foreignEntityType, ['User', 'Team'])) {
-            // @todo Create related record with name $name and relate.
-        //}
+        
+            
+        
     }
 
-    /**
-     * @throws ValidationError
-     */
+    
     private function processRowItem(
         CoreEntity $entity,
         string $attribute,
@@ -912,14 +853,12 @@ class Import
         }
     }
 
-    /**
-     * @throws ValidationError
-     */
+    
     private function parseValue(CoreEntity $entity, string $attribute, string $value): mixed
     {
         $params = $this->params;
 
-        /** @var non-empty-string $decimalMark */
+        
         $decimalMark = $params->getDecimalMark() ?? self::DEFAULT_DECIMAL_MARK;
 
         $dateFormat = DateTimeUtil::convertFormatToSystem(
@@ -977,7 +916,7 @@ class Import
                 return $dt->format(DateTimeUtil::SYSTEM_DATE_FORMAT);
 
             case Entity::DATETIME:
-                /** @noinspection PhpUnhandledExceptionInspection */
+                
                 $timezone = new DateTimeZone($timezone);
 
                 $dt = DateTime::createFromFormat($dateFormat . ' ' . $timeFormat, $value, $timezone);
@@ -1046,10 +985,7 @@ class Import
         return $this->prepareAttributeValue($entity, $attribute, $value);
     }
 
-    /**
-     * @param mixed $value
-     * @return mixed
-     */
+    
     private function prepareAttributeValue(CoreEntity $entity, string $attribute, $value)
     {
         if ($entity->getAttributeType($attribute) === $entity::VARCHAR) {
@@ -1063,13 +999,7 @@ class Import
         return $value;
     }
 
-    /**
-     * @return array{
-     *   firstName: ?string,
-     *   lastName: ?string,
-     *   middleName?: ?string,
-     * }
-     */
+    
     private function parsePersonName(string $value, string $format): array
     {
         $firstName = null;
@@ -1162,9 +1092,7 @@ class Import
         ];
     }
 
-    /**
-     * @return string[]
-     */
+    
     private function readCsvString(
         string &$string,
         string $separator = ';',
@@ -1196,7 +1124,7 @@ class Import
                 } else {
                     $num++;
 
-                    //$esc = false;
+                    
                     $escEsc = false;
                 }
             } else if ($s == $enclosure) {
@@ -1246,12 +1174,7 @@ class Import
         return $o;
     }
 
-    /**
-     * @param ImportError::TYPE_*|null $type
-     * @param string[] $row
-     * @param Failure[] $failureList
-     * @noinspection PhpDocSignatureInspection
-     */
+    
     private function createError(
         ?string $type,
         int $index,
@@ -1291,9 +1214,7 @@ class Import
         return $this->phoneNumberSanitizer->sanitize($value, $params->getPhoneNumberCountry());
     }
 
-    /**
-     * @param non-empty-string $decimalMark
-     */
+    
     private function transformFloatString(string $decimalMark, string $value): ?string
     {
         $a = explode($decimalMark, $value);

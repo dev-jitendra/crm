@@ -2,7 +2,7 @@
 
 $context = new ZMQContext();
 $rep = $context->getSocket(ZMQ::SOCKET_REP);
-$rep->connect('tcp://127.0.0.1:4444');
+$rep->connect('tcp:
 
 while (true) {
     $msg = $rep->recv();

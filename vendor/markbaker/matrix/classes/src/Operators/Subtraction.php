@@ -7,13 +7,7 @@ use Matrix\Exception;
 
 class Subtraction extends Operator
 {
-    /**
-     * Execute the subtraction
-     *
-     * @param mixed $value The matrix or numeric value to subtract from the current base value
-     * @throws Exception If the provided argument is not appropriate for the operation
-     * @return $this The operation object, allowing multiple subtractions to be chained
-     **/
+    
     public function execute($value): Operator
     {
         if (is_array($value)) {
@@ -29,12 +23,7 @@ class Subtraction extends Operator
         throw new Exception('Invalid argument for subtraction');
     }
 
-    /**
-     * Execute the subtraction for a scalar
-     *
-     * @param mixed $value The numeric value to subtracted from the current base value
-     * @return $this The operation object, allowing multiple additions to be chained
-     **/
+    
     protected function subtractScalar($value): Operator
     {
         for ($row = 0; $row < $this->rows; ++$row) {
@@ -46,13 +35,7 @@ class Subtraction extends Operator
         return $this;
     }
 
-    /**
-     * Execute the subtraction for a matrix
-     *
-     * @param Matrix $value The numeric value to subtract from the current base value
-     * @return $this The operation object, allowing multiple subtractions to be chained
-     * @throws Exception If the provided argument is not appropriate for the operation
-     **/
+    
     protected function subtractMatrix(Matrix $value): Operator
     {
         $this->validateMatchingDimensions($value);

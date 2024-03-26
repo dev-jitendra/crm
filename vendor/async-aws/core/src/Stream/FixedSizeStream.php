@@ -4,21 +4,13 @@ namespace AsyncAws\Core\Stream;
 
 use AsyncAws\Core\Exception\InvalidArgument;
 
-/**
- * A Stream decorator that return Chunk with the same exact size.
- *
- * @author Jérémy Derussé <jeremy@derusse.com>
- */
+
 final class FixedSizeStream implements RequestStream
 {
-    /**
-     * @var RequestStream
-     */
+    
     private $content;
 
-    /**
-     * @var int
-     */
+    
     private $chunkSize;
 
     private function __construct(RequestStream $content, int $chunkSize = 64 * 1024)
@@ -52,7 +44,7 @@ final class FixedSizeStream implements RequestStream
 
     public function getIterator(): \Traversable
     {
-        // This algorithm do not use string concatenation nor substr, to reuse the same ZVAL et reduce memory footprint.
+        
         $chunk = '';
         foreach ($this->content as $buffer) {
             if (!\is_string($buffer)) {
@@ -63,18 +55,18 @@ final class FixedSizeStream implements RequestStream
             $bufferPosition = \strlen($nextBytes);
 
             if (\strlen($chunk) < $this->chunkSize) {
-                // The chunk does not have yet the expected size. Let's fetching new data
+                
                 continue;
             }
 
             yield $chunk;
             while (\strlen($buffer) - $bufferPosition >= $this->chunkSize) {
-                // The buffer is bigger than the expected size. Let's flushing it.
+                
                 yield substr($buffer, $bufferPosition, $this->chunkSize);
                 $bufferPosition += $this->chunkSize;
             }
 
-            // Here we can substr the buffer because the remaining size is smaller that chunkSize
+            
             $chunk = substr($buffer, $bufferPosition);
         }
 

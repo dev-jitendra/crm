@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Console;
 
@@ -36,9 +10,7 @@ use Espo\Core\Console\Exceptions\CommandNotSpecified;
 use Espo\Core\Console\Exceptions\CommandNotFound;
 use Espo\Core\Console\Command\Params;
 
-/**
- * Processes console commands.
- */
+
 class CommandManager
 {
     private InjectableFactory $injectableFactory;
@@ -53,11 +25,7 @@ class CommandManager
         $this->metadata = $metadata;
     }
 
-    /**
-     * @param array<int, string> $argv
-     *
-     * @return int<0, 255> Exit-status.
-     */
+    
     public function run(array $argv): int
     {
         $command = $this->getCommandNameFromArgv($argv);
@@ -84,7 +52,7 @@ class CommandManager
         $commandObj = $this->createCommand($command);
 
         if (!$commandObj instanceof Command) {
-            // for backward compatibility
+            
             assert(method_exists($commandObj, 'run'));
 
             $commandObj->run($params->getOptions(), $params->getFlagList(), $params->getArgumentList());
@@ -97,9 +65,7 @@ class CommandManager
         return $io->getExitStatus();
     }
 
-    /**
-     * @param array<int, string> $argv
-     */
+    
     private function getCommandNameFromArgv(array $argv): ?string
     {
         $command = isset($argv[1]) ? trim($argv[1]) : null;
@@ -122,12 +88,10 @@ class CommandManager
         return $this->injectableFactory->create($className);
     }
 
-    /**
-     * @return class-string<Command>
-     */
+    
     private function getClassName(string $command): string
     {
-        /** @var ?class-string<Command> $className */
+        
         $className =
             $this->metadata->get(['app', 'consoleCommands', lcfirst($command), 'className']);
 
@@ -141,13 +105,11 @@ class CommandManager
             throw new CommandNotFound("Command '" . Util::camelCaseToHyphen($command) ."' does not exist.");
         }
 
-        /** @var class-string<Command> */
+        
         return $className;
     }
 
-    /**
-     * @param array<int, string> $argv
-     */
+    
     private function createParamsFromArgv(array $argv): Params
     {
         return Params::fromArgs(array_slice($argv, 1));

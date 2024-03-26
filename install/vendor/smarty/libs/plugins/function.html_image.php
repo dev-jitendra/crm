@@ -1,39 +1,7 @@
 <?php
-/**
- * Smarty plugin
- *
- * @package Smarty
- * @subpackage PluginsFunction
- */
 
-/**
- * Smarty {html_image} function plugin
- *
- * Type:     function<br>
- * Name:     html_image<br>
- * Date:     Feb 24, 2003<br>
- * Purpose:  format HTML tags for the image<br>
- * Examples: {html_image file="/images/masthead.gif"}<br>
- * Output:   <img src="/images/masthead.gif" width=400 height=23><br>
- * Params:
- * <pre>
- * - file        - (required) - file (and path) of image
- * - height      - (optional) - image height (default actual height)
- * - width       - (optional) - image width (default actual width)
- * - basedir     - (optional) - base directory for absolute paths, default is environment variable DOCUMENT_ROOT
- * - path_prefix - prefix for path output (optional, default empty)
- * </pre>
- *
- * @link http://www.smarty.net/manual/en/language.function.html.image.php {html_image}
- *      (Smarty online manual)
- * @author Monte Ohrt <monte at ohrt dot com>
- * @author credits to Duda <duda@big.hu>
- * @version 1.0
- * @param array                    $params   parameters
- * @param Smarty_Internal_Template $template template object
- * @return string
- * @uses smarty_function_escape_special_chars()
- */
+
+
 function smarty_function_html_image($params, $template)
 {
     require_once(SMARTY_PLUGINS_DIR . 'shared.escape_special_chars.php');
@@ -94,24 +62,24 @@ function smarty_function_html_image($params, $template)
         $_image_path = $file;
     }
 
-    // strip file protocol
-    if (stripos($params['file'], 'file://') === 0) {
+    
+    if (stripos($params['file'], 'file:
         $params['file'] = substr($params['file'], 7);
     }
 
-    $protocol = strpos($params['file'], '://');
+    $protocol = strpos($params['file'], ':
     if ($protocol !== false) {
         $protocol = strtolower(substr($params['file'], 0, $protocol));
     }
 
     if (isset($template->smarty->security_policy)) {
         if ($protocol) {
-            // remote resource (or php stream, …)
+            
             if (!$template->smarty->security_policy->isTrustedUri($params['file'])) {
                 return;
             }
         } else {
-            // local file
+            
             if (!$template->smarty->security_policy->isTrustedResourceDir($params['file'])) {
                 return;
             }
@@ -119,7 +87,7 @@ function smarty_function_html_image($params, $template)
     }
 
     if (!isset($params['width']) || !isset($params['height'])) {
-        // FIXME: (rodneyrehm) getimagesize() loads the complete file off a remote resource, use custom [jpg,png,gif]header reader!
+        
         if (!$_image_data = @getimagesize($_image_path)) {
             if (!file_exists($_image_path)) {
                 trigger_error("html_image: unable to find '$_image_path'", E_USER_NOTICE);
@@ -146,8 +114,8 @@ function smarty_function_html_image($params, $template)
 
     if (isset($params['dpi'])) {
         if (strstr($_SERVER['HTTP_USER_AGENT'], 'Mac')) {
-            // FIXME: (rodneyrehm) wrong dpi assumption
-            // don't know who thought this up… even if it was true in 1998, it's definitely wrong in 2011.
+            
+            
             $dpi_default = 72;
         } else {
             $dpi_default = 96;

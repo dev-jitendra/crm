@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\ORM;
 
@@ -40,17 +14,7 @@ use PDOStatement;
 use RuntimeException;
 use LogicException;
 
-/**
- * Reasonable to use when selecting a large number of records.
- * It doesn't allocate a memory for every entity.
- * Entities are fetched on each iteration while traversing a collection.
- *
- * STH stands for Statement Handle.
- *
- * @template TEntity of Entity
- * @implements IteratorAggregate<int,TEntity>
- * @implements Collection<TEntity>
- */
+
 class SthCollection implements Collection, IteratorAggregate, Countable
 {
     private string $entityType;
@@ -103,9 +67,7 @@ class SthCollection implements Collection, IteratorAggregate, Countable
         }
     }
 
-    /**
-     * @return array<string, mixed>
-     */
+    
     private function fetchRow()
     {
         $this->executeQueryIfNotExecuted();
@@ -115,9 +77,7 @@ class SthCollection implements Collection, IteratorAggregate, Countable
         return $this->sth->fetch(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Get count. Can be slow. Use EntityCollection if you need count.
-     */
+    
     public function count(): int
     {
         $this->executeQueryIfNotExecuted();
@@ -126,7 +86,7 @@ class SthCollection implements Collection, IteratorAggregate, Countable
 
         $rowCount = $this->sth->rowCount();
 
-        // MySQL may not return a row count for select queries.
+        
         if ($rowCount) {
             return $rowCount;
         }
@@ -137,11 +97,7 @@ class SthCollection implements Collection, IteratorAggregate, Countable
     protected function prepareEntity(Entity $entity): void
     {}
 
-    /**
-     * @deprecated As of v6.0. Use `getValueMapList`.
-     * @todo Remove in v9.0.
-     * @return array<int, array<string, mixed>>|stdClass[]
-     */
+    
     public function toArray(bool $itemsAsObjects = false): array
     {
         $arr = [];
@@ -159,39 +115,29 @@ class SthCollection implements Collection, IteratorAggregate, Countable
         return $arr;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getValueMapList(): array
     {
-        /** @var stdClass[] */
+        
         return $this->toArray(true);
     }
 
-    /**
-     * Whether is fetched from DB. SthCollection is always fetched.
-     */
+    
     public function isFetched(): bool
     {
         return true;
     }
 
-    /**
-     * Get an entity type.
-     */
+    
     public function getEntityType(): string
     {
         return $this->entityType;
     }
 
-    /**
-     * Create from a query.
-     *
-     * @return self<Entity>
-     */
+    
     public static function fromQuery(SelectQuery $query, EntityManager $entityManager): self
     {
-        /** @var self<Entity> $obj */
+        
         $obj = new self($entityManager);
 
         $entityType = $query->getFrom();
@@ -206,14 +152,10 @@ class SthCollection implements Collection, IteratorAggregate, Countable
         return $obj;
     }
 
-    /**
-     * Create from an SQL.
-     *
-     * @return self<Entity>
-     */
+    
     public static function fromSql(string $entityType, string $sql, EntityManager $entityManager): self
     {
-        /** @var self<Entity> $obj */
+        
         $obj = new self($entityManager);
 
         $obj->entityType = $entityType;

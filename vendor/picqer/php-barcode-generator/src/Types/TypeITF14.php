@@ -9,10 +9,7 @@ use Picqer\Barcode\Exceptions\InvalidLengthException;
 
 class TypeITF14 implements TypeInterface
 {
-    /**
-     * @throws InvalidLengthException
-     * @throws InvalidCharacterException
-     */
+    
     public function getBarcodeData(string $code): Barcode
     {
         $chr = [];
@@ -39,10 +36,10 @@ class TypeITF14 implements TypeInterface
 
         $barcode = new Barcode($code);
 
-        // Add start and stop codes
+        
         $code = 'AA' . strtolower($code) . 'ZA';
 
-        // Loop through 2 chars at once
+        
         for ($charIndex = 0; $charIndex < strlen($code); $charIndex += 2) {
             if (! isset($chr[$code[$charIndex]]) || ! isset($chr[$code[$charIndex + 1]])) {
                 throw new InvalidCharacterException();

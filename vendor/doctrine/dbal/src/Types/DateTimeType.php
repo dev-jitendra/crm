@@ -8,30 +8,22 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 use function date_create;
 
-/**
- * Type that maps an SQL DATETIME/TIMESTAMP to a PHP DateTime object.
- */
+
 class DateTimeType extends Type implements PhpDateTimeMappingType
 {
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getName()
     {
         return Types::DATETIME_MUTABLE;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {
         return $platform->getDateTimeTypeDeclarationSQL($column);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         if ($value === null) {
@@ -45,9 +37,7 @@ class DateTimeType extends Type implements PhpDateTimeMappingType
         throw ConversionException::conversionFailedInvalidType($value, $this->getName(), ['null', 'DateTime']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         if ($value === null || $value instanceof DateTimeInterface) {

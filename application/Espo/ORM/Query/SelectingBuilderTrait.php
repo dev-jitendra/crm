@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\ORM\Query;
 
@@ -42,17 +16,7 @@ trait SelectingBuilderTrait
 {
     use BaseBuilderTrait;
 
-    /**
-     * Add a WHERE clause.
-     *
-     * Usage options:
-     * * `where(WhereItem $clause)`
-     * * `where(array $clause)`
-     * * `where(string $key, string $value)`
-     *
-     * @param WhereItem|array<string|int, mixed>|string $clause A key or where clause.
-     * @param mixed[]|scalar|null $value A value. Omitted if the first argument is not string.
-     */
+    
     public function where($clause, $value = null): self
     {
         $this->applyWhereClause('whereClause', $clause, $value);
@@ -60,10 +24,7 @@ trait SelectingBuilderTrait
         return $this;
     }
 
-    /**
-     * @param WhereItem|array<string|int, mixed>|string $clause A key or where clause.
-     * @param mixed[]|scalar|null $value A value. Omitted if the first argument is not string.
-     */
+    
     private function applyWhereClause(string $type, $clause, $value): void
     {
         if ($clause instanceof WhereItem) {
@@ -102,20 +63,7 @@ trait SelectingBuilderTrait
         $this->params[$type] = $new + $original;
     }
 
-    /**
-     * Apply ORDER. Passing an array will override previously set items.
-     * Passing non-array will append an item,
-     *
-     * Usage options:
-     * * `order(OrderExpression $expression)
-     * * `order([$expr1, $expr2, ...])
-     * * `order(string $expression, string $direction)
-     *
-     * @param Order|Order[]|Expression|string|array<int, string[]>|string[] $orderBy
-     * An attribute to order by or an array or order items.
-     * Passing an array will reset a previously set order.
-     * @param (Order::ASC|Order::DESC)|bool|null $direction A direction. True for DESC.
-     */
+    
     public function order($orderBy, $direction = null): self
     {
         if (is_bool($direction)) {
@@ -154,14 +102,7 @@ trait SelectingBuilderTrait
         return $this;
     }
 
-    /**
-     * Add JOIN.
-     *
-     * @param Join|string|Select $target A relation name, table or sub-query. A relation name should be in camelCase,
-     *     a table in CamelCase.
-     * @param ?string $alias An alias.
-     * @param WhereItem|array<string|int, mixed>|null $conditions Join conditions.
-     */
+    
     public function join(
         $target,
         ?string $alias = null,
@@ -171,14 +112,7 @@ trait SelectingBuilderTrait
         return $this->joinInternal('joins', $target, $alias, $conditions);
     }
 
-    /**
-     * Add LEFT JOIN.
-     *
-     * @param Join|string|Select $target A relation name, table or sub-query. A relation name should be in camelCase,
-     *     a table in CamelCase.
-     * @param ?string $alias An alias.
-     * @param WhereItem|array<string|int, mixed>|null $conditions Join conditions.
-     */
+    
     public function leftJoin(
         $target,
         ?string $alias = null,
@@ -188,13 +122,7 @@ trait SelectingBuilderTrait
         return $this->joinInternal('leftJoins', $target, $alias, $conditions);
     }
 
-    /**
-     * @param 'leftJoins'|'joins' $type
-     * @todo Support USE INDEX in Join.
-     * $target can be an array for backward compatibility.
-     * @param Join|string|Select $target $target
-     * @param WhereItem|array<string|int, mixed>|null $conditions
-     */
+    
     private function joinInternal(
         string $type,
         $target,
@@ -204,7 +132,7 @@ trait SelectingBuilderTrait
 
         $onlyMiddle = false;
 
-        /** @var string|Join|array<int, mixed> $target */
+        
 
         if ($target instanceof Join) {
             $alias = $alias ?? $target->getAlias();
@@ -300,26 +228,19 @@ trait SelectingBuilderTrait
         return false;
     }
 
-    /**
-     * Whether an alias is in left joins.
-     */
+    
     public function hasLeftJoinAlias(string $alias): bool
     {
         return $this->hasJoinAliasInternal('leftJoins', $alias);
     }
 
-    /**
-     * Whether an alias is in joins.
-     */
+    
     public function hasJoinAlias(string $alias): bool
     {
         return $this->hasJoinAliasInternal('joins', $alias);
     }
 
-    /**
-     * @param array<Expression|mixed[]> $itemList
-     * @return array<array{0: string, 1?: string}|string>
-     */
+    
     private function normalizeExpressionItemArray(array $itemList): array
     {
         $resultList = [];
@@ -332,7 +253,7 @@ trait SelectingBuilderTrait
             }
 
             if (!is_array($item) || !count($item) || !$item[0] instanceof Expression) {
-                /** @var array{0:string, 1?:string} $item */
+                
                 $resultList[] = $item;
 
                 continue;
@@ -344,7 +265,7 @@ trait SelectingBuilderTrait
                 $newItem[] = $item[1];
             }
 
-            /** @var array{0:string,1?:string} $newItem */
+            
 
             $resultList[] = $newItem;
         }
@@ -352,11 +273,7 @@ trait SelectingBuilderTrait
         return $resultList;
     }
 
-    /**
-     * @param array<Order|mixed[]|string> $itemList
-     * @param string|bool|null $direction
-     * @return array<array{string, string|bool}>
-     */
+    
     private function normalizeOrderExpressionItemArray(array $itemList, $direction): array
     {
         $resultList = [];

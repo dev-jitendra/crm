@@ -23,41 +23,29 @@ class Timezone extends AbstractValidator
     public const ABBREVIATION = 0b10;
     public const ALL          = 0b11;
 
-    /** @var array */
+    
     protected $constants = [
         self::LOCATION     => 'location',
         self::ABBREVIATION => 'abbreviation',
     ];
 
-    /**
-     * Default value for types; value = 3
-     *
-     * @var array
-     */
+    
     protected $defaultType = [
         self::LOCATION,
         self::ABBREVIATION,
     ];
 
-    /** @var array */
+    
     protected $messageTemplates = [
         self::INVALID                       => 'Invalid timezone given.',
         self::INVALID_TIMEZONE_LOCATION     => 'Invalid timezone location given.',
         self::INVALID_TIMEZONE_ABBREVIATION => 'Invalid timezone abbreviation given.',
     ];
 
-    /**
-     * Options for this validator
-     *
-     * @var array
-     */
+    
     protected $options = [];
 
-    /**
-     * Constructor
-     *
-     * @param array|int $options OPTIONAL
-     */
+    
     public function __construct($options = [])
     {
         $opts['type'] = $this->defaultType;
@@ -70,17 +58,11 @@ class Timezone extends AbstractValidator
             $opts['type'] = $options;
         }
 
-        // setType called by parent constructor then setOptions method
+        
         parent::__construct($opts);
     }
 
-    /**
-     * Set the types
-     *
-     * @param int|array $type
-     * @return void
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public function setType($type = null)
     {
         $type = $this->calculateTypeValue($type);
@@ -96,12 +78,7 @@ class Timezone extends AbstractValidator
         $this->options['type'] = $type;
     }
 
-    /**
-     * Returns true if timezone location or timezone abbreviations is correct.
-     *
-     * @param mixed $value
-     * @return bool
-     */
+    
     public function isValid($value)
     {
         if ($value !== null && ! is_string($value)) {
@@ -113,7 +90,7 @@ class Timezone extends AbstractValidator
         $this->setValue($value);
 
         switch (true) {
-            // Check in locations and abbreviations
+            
             case ($type & self::LOCATION) && ($type & self::ABBREVIATION):
                 $abbrs     = DateTimeZone::listAbbreviations();
                 $locations = DateTimeZone::listIdentifiers();
@@ -124,7 +101,7 @@ class Timezone extends AbstractValidator
                 }
                 break;
 
-            // Check only in locations
+            
             case $type & self::LOCATION:
                 $locations = DateTimeZone::listIdentifiers();
 
@@ -134,7 +111,7 @@ class Timezone extends AbstractValidator
                 }
                 break;
 
-            // Check only in abbreviations
+            
             case $type & self::ABBREVIATION:
                 $abbrs = DateTimeZone::listAbbreviations();
 
@@ -148,10 +125,7 @@ class Timezone extends AbstractValidator
         return true;
     }
 
-    /**
-     * @param array|int|string $type
-     * @return float|int
-     */
+    
     protected function calculateTypeValue($type)
     {
         $types    = (array) $type;

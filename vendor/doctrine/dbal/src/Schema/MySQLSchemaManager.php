@@ -25,57 +25,27 @@ use function strtr;
 
 use const CASE_LOWER;
 
-/**
- * Schema manager for the MySQL RDBMS.
- *
- * @extends AbstractSchemaManager<AbstractMySQLPlatform>
- */
+
 class MySQLSchemaManager extends AbstractSchemaManager
 {
-    /** @see https://mariadb.com/kb/en/library/string-literals/#escape-sequences */
-    private const MARIADB_ESCAPE_SEQUENCES = [
-        '\\0' => "\0",
-        "\\'" => "'",
-        '\\"' => '"',
-        '\\b' => "\b",
-        '\\n' => "\n",
-        '\\r' => "\r",
-        '\\t' => "\t",
-        '\\Z' => "\x1a",
-        '\\\\' => '\\',
-        '\\%' => '%',
-        '\\_' => '_',
-
-        // Internally, MariaDB escapes single quotes using the standard syntax
-        "''" => "'",
-    ];
-
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listTableNames()
     {
         return $this->doListTableNames();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listTables()
     {
         return $this->doListTables();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @deprecated Use {@see introspectTable()} instead.
-     */
+    
     public function listTableDetails($name)
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5595',
+            'https:
             '%s is deprecated. Use introspectTable() instead.',
             __METHOD__,
         );
@@ -83,49 +53,37 @@ class MySQLSchemaManager extends AbstractSchemaManager
         return $this->doListTableDetails($name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listTableColumns($table, $database = null)
     {
         return $this->doListTableColumns($table, $database);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listTableIndexes($table)
     {
         return $this->doListTableIndexes($table);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listTableForeignKeys($table, $database = null)
     {
         return $this->doListTableForeignKeys($table, $database);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableViewDefinition($view)
     {
         return new View($view['TABLE_NAME'], $view['VIEW_DEFINITION']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableTableDefinition($table)
     {
         return array_shift($table);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableTableIndexesList($tableIndexes, $tableName = null)
     {
         foreach ($tableIndexes as $k => $v) {
@@ -142,7 +100,7 @@ class MySQLSchemaManager extends AbstractSchemaManager
                 $v['flags'] = ['SPATIAL'];
             }
 
-            // Ignore prohibited prefix `length` for spatial index
+            
             if (strpos($v['index_type'], 'SPATIAL') === false) {
                 $v['length'] = isset($v['sub_part']) ? (int) $v['sub_part'] : null;
             }
@@ -153,17 +111,13 @@ class MySQLSchemaManager extends AbstractSchemaManager
         return parent::_getPortableTableIndexesList($tableIndexes, $tableName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableDatabaseDefinition($database)
     {
         return $database['Database'];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableTableColumnDefinition($tableColumn)
     {
         $tableColumn = array_change_key_case($tableColumn, CASE_LOWER);
@@ -185,7 +139,7 @@ class MySQLSchemaManager extends AbstractSchemaManager
 
         $type = $this->_platform->getDoctrineTypeMapping($dbType);
 
-        // In cases where not connected to a database DESCRIBE $table does not return 'Comment'
+        
         if (isset($tableColumn['comment'])) {
             $type                   = $this->extractDoctrineTypeFromComment($tableColumn['comment'], $type);
             $tableColumn['comment'] = $this->removeDoctrineTypeFromComment($tableColumn['comment'], $type);
@@ -289,22 +243,7 @@ class MySQLSchemaManager extends AbstractSchemaManager
         return $column;
     }
 
-    /**
-     * Return Doctrine/Mysql-compatible column default values for MariaDB 10.2.7+ servers.
-     *
-     * - Since MariaDb 10.2.7 column defaults stored in information_schema are now quoted
-     *   to distinguish them from expressions (see MDEV-10134).
-     * - CURRENT_TIMESTAMP, CURRENT_TIME, CURRENT_DATE are stored in information_schema
-     *   as current_timestamp(), currdate(), currtime()
-     * - Quoted 'NULL' is not enforced by Maria, it is technically possible to have
-     *   null in some circumstances (see https://jira.mariadb.org/browse/MDEV-14053)
-     * - \' is always stored as '' in information_schema (normalized)
-     *
-     * @link https://mariadb.com/kb/en/library/information-schema-columns-table/
-     * @link https://jira.mariadb.org/browse/MDEV-13132
-     *
-     * @param string|null $columnDefault default value as stored in information_schema for MariaDB >= 10.2.7
-     */
+    
     private function getMariaDb1027ColumnDefault(MariaDb1027Platform $platform, ?string $columnDefault): ?string
     {
         if ($columnDefault === 'NULL' || $columnDefault === null) {
@@ -329,9 +268,7 @@ class MySQLSchemaManager extends AbstractSchemaManager
         return $columnDefault;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableTableForeignKeysList($tableForeignKeys)
     {
         $list = [];
@@ -363,9 +300,7 @@ class MySQLSchemaManager extends AbstractSchemaManager
         return parent::_getPortableTableForeignKeysList($list);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     protected function _getPortableTableForeignKeyDefinition($tableForeignKey): ForeignKeyConstraint
     {
         return new ForeignKeyConstraint(
@@ -426,9 +361,9 @@ FROM information_schema.COLUMNS c
         ON t.TABLE_NAME = c.TABLE_NAME
 SQL;
 
-        // The schema name is passed multiple times as a literal in the WHERE clause instead of using a JOIN condition
-        // in order to avoid performance issues on MySQL older than 8.0 and the corresponding MariaDB versions
-        // caused by https://bugs.mysql.com/bug.php?id=81347
+        
+        
+        
         $conditions = ['c.TABLE_SCHEMA = ?', 't.TABLE_SCHEMA = ?', "t.TABLE_TYPE = 'BASE TABLE'"];
         $params     = [$databaseName, $databaseName];
 
@@ -485,13 +420,8 @@ SQL;
             k.COLUMN_NAME,
             k.REFERENCED_TABLE_NAME,
             k.REFERENCED_COLUMN_NAME,
-            k.ORDINAL_POSITION /*!50116,
-            c.UPDATE_RULE,
-            c.DELETE_RULE */
-FROM information_schema.key_column_usage k /*!50116
-INNER JOIN information_schema.referential_constraints c
-ON c.CONSTRAINT_NAME = k.CONSTRAINT_NAME
-AND c.TABLE_NAME = k.TABLE_NAME */
+            k.ORDINAL_POSITION 
+FROM information_schema.key_column_usage k 
 SQL;
 
         $conditions = ['k.TABLE_SCHEMA = ?'];
@@ -505,20 +435,18 @@ SQL;
         $conditions[] = 'k.REFERENCED_COLUMN_NAME IS NOT NULL';
 
         $sql .= ' WHERE ' . implode(' AND ', $conditions)
-            // The schema name is passed multiple times in the WHERE clause instead of using a JOIN condition
-            // in order to avoid performance issues on MySQL older than 8.0 and the corresponding MariaDB versions
-            // caused by https://bugs.mysql.com/bug.php?id=81347.
-            // Use a string literal for the database name since the internal PDO SQL parser
-            // cannot recognize parameter placeholders inside conditional comments
-            . ' /*!50116 AND c.CONSTRAINT_SCHEMA = ' . $this->_conn->quote($databaseName) . ' */'
+            
+            
+            
+            
+            
+            . ' '
             . ' ORDER BY k.ORDINAL_POSITION';
 
         return $this->_conn->executeQuery($sql, $params);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     protected function fetchTableOptionsByTable(string $databaseName, ?string $tableName = null): array
     {
         $sql = <<<'SQL'
@@ -546,7 +474,7 @@ SQL;
 
         $sql .= ' WHERE ' . implode(' AND ', $conditions);
 
-        /** @var array<string,array<string,mixed>> $metadata */
+        
         $metadata = $this->_conn->executeQuery($sql, $params)
             ->fetchAllAssociativeIndexed();
 
@@ -567,7 +495,7 @@ SQL;
         return $tableOptions;
     }
 
-    /** @return string[]|true[] */
+    
     private function parseCreateOptions(?string $string): array
     {
         $options = [];

@@ -1,42 +1,9 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/**
- * Defaults populator.
- */
+
+
 class DefaultsPopulator {
 
-    /**
-     * @param {module:models/user} user
-     * @param {module:models/preferences} preferences
-     * @param {module:acl-manager} acl
-     * @param {module:models/settings} config
-     */
+    
     constructor(user, preferences, acl, config) {
         this.user = user;
         this.preferences = preferences;
@@ -44,11 +11,7 @@ class DefaultsPopulator {
         this.config = config;
     }
 
-    /**
-     * Populate default values.
-     *
-     * @param {module:model} model A model.
-     */
+    
     populate(model) {
         model.populateDefaults();
 
@@ -73,11 +36,7 @@ class DefaultsPopulator {
         model.set(defaultHash, {silent: true});
     }
 
-    /**
-     * @param {module:model} model
-     * @param {Object.<string, *>} defaultHash
-     * @private
-     */
+    
     prepare(model, defaultHash) {
         const hasAssignedUsers =
             model.hasField('assignedUsers') &&
@@ -142,11 +101,7 @@ class DefaultsPopulator {
         }
     }
 
-    /**
-     * @param {module:model} model
-     * @param {Object.<string, *>} defaultHash
-     * @private
-     */
+    
     prepareForPortal(model, defaultHash) {
         if (
             model.hasField('account') &&
@@ -218,11 +173,7 @@ class DefaultsPopulator {
         }
     }
 
-    /**
-     * @param {module:model} model
-     * @param {Object.<string, *>} defaultHash
-     * @private
-     */
+    
     prepareFields(model, defaultHash) {
         const set = (attribute, value) => {
             if (
@@ -250,7 +201,7 @@ class DefaultsPopulator {
             }
 
             if (type === 'enum') {
-                /** @type {string[]} */
+                
                 const options = model.getFieldParam(field, 'options') || [];
                 let value = options[0] || '';
                 value = value !== '' ? value : null;

@@ -2,12 +2,7 @@
 
 namespace PhpOffice\PhpSpreadsheet\Chart;
 
-/**
- * Created by PhpStorm.
- * User: nhw2h8s
- * Date: 7/2/14
- * Time: 5:45 PM.
- */
+
 abstract class Properties
 {
     const
@@ -110,21 +105,13 @@ abstract class Properties
     const SHADOW_PRESETS_PERSPECTIVE_LOWER_RIGHT = 22;
     const SHADOW_PRESETS_PERSPECTIVE_LOWER_LEFT = 23;
 
-    /**
-     * @param float $width
-     *
-     * @return float
-     */
+    
     protected function getExcelPointsWidth($width)
     {
         return $width * 12700;
     }
 
-    /**
-     * @param float $angle
-     *
-     * @return float
-     */
+    
     protected function getExcelPointsAngle($angle)
     {
         return $angle * 60000;
@@ -164,7 +151,7 @@ abstract class Properties
     protected function getShadowPresetsMap($shadow_presets_option)
     {
         $presets_options = [
-            //OUTER
+            
             1 => [
                 'effect' => 'outerShdw',
                 'blur' => '50800',
@@ -238,7 +225,7 @@ abstract class Properties
                 'algn' => 'br',
                 'rotWithShape' => '0',
             ],
-            //INNER
+            
             10 => [
                 'effect' => 'innerShdw',
                 'blur' => '63500',
@@ -290,7 +277,7 @@ abstract class Properties
                 'distance' => '50800',
                 'direction' => '13500000',
             ],
-            //perspective
+            
             19 => [
                 'effect' => 'outerShdw',
                 'blur' => '152400',

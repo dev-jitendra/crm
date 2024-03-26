@@ -1,47 +1,14 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Field;
 
 use RuntimeException;
 
-/**
- * A link-multiple value object. Immutable.
- *
- * @immutable
- */
+
 class LinkMultiple
 {
-    /**
-     * @param LinkMultipleItem[] $list
-     * @throws RuntimeException
-     */
+    
     public function __construct(private array $list = [])
     {
         $this->validateList();
@@ -58,19 +25,13 @@ class LinkMultiple
         $this->list = $newList;
     }
 
-    /**
-     * Whether contains a specific ID.
-     */
+    
     public function hasId(string $id): bool
     {
         return $this->searchIdInList($id) !== null;
     }
 
-    /**
-     * Get a list of IDs.
-     *
-     * @return string[]
-     */
+    
     public function getIdList(): array
     {
         $idList = [];
@@ -82,27 +43,19 @@ class LinkMultiple
         return $idList;
     }
 
-    /**
-     * Get a list of items.
-     *
-     * @return LinkMultipleItem[]
-     */
+    
     public function getList(): array
     {
         return $this->list;
     }
 
-    /**
-     * Get a number of items.
-     */
+    
     public function getCount(): int
     {
         return count($this->list);
     }
 
-    /**
-     * Get item by ID.
-     */
+    
     public function getById(string $id): ?LinkMultipleItem
     {
         foreach ($this->list as $item) {
@@ -114,19 +67,13 @@ class LinkMultiple
         return null;
     }
 
-    /**
-     * Clone with an added ID.
-     */
+    
     public function withAddedId(string $id): self
     {
         return $this->withAdded(LinkMultipleItem::create($id));
     }
 
-    /**
-     * Clone with an added IDs.
-     *
-     * @param string[] $idList IDs.
-     */
+    
     public function withAddedIdList(array $idList): self
     {
         $obj = $this;
@@ -138,21 +85,13 @@ class LinkMultiple
         return $obj;
     }
 
-    /**
-     * Clone with an added item.
-     */
+    
     public function withAdded(LinkMultipleItem $item): self
     {
         return $this->withAddedList([$item]);
     }
 
-    /**
-     * Clone with an added item list.
-     * .
-     * @param LinkMultipleItem[] $list
-     *
-     * @throws RuntimeException
-     */
+    
     public function withAddedList(array $list): self
     {
         $newList = $this->list;
@@ -172,17 +111,13 @@ class LinkMultiple
         return self::create($newList);
     }
 
-    /**
-     * Clone with removed item.
-     */
+    
     public function withRemoved(LinkMultipleItem $item): self
     {
         return $this->withRemovedById($item->getId());
     }
 
-    /**
-     * Clone with removed item by ID.
-     */
+    
     public function withRemovedById(string $id): self
     {
         $newList = $this->list;
@@ -198,13 +133,7 @@ class LinkMultiple
         return self::create($newList);
     }
 
-    /**
-     * Create with an optional item list.
-     *
-     * @param LinkMultipleItem[] $list
-     *
-     * @throws RuntimeException
-     */
+    
     public static function create(array $list = []): self
     {
         return new self($list);

@@ -13,31 +13,23 @@ use mysqli_sql_exception;
 
 final class Connection implements ServerInfoAwareConnection
 {
-    /**
-     * Name of the option to set connection flags
-     */
+    
     public const OPTION_FLAGS = 'flags';
 
     private mysqli $connection;
 
-    /** @internal The connection can be only instantiated by its driver. */
+    
     public function __construct(mysqli $connection)
     {
         $this->connection = $connection;
     }
 
-    /**
-     * Retrieves mysqli native resource handle.
-     *
-     * Could be used if part of your application is not using DBAL.
-     *
-     * @deprecated Call {@see getNativeConnection()} instead.
-     */
+    
     public function getWrappedResourceHandle(): mysqli
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5037',
+            'https:
             '%s is deprecated, call getNativeConnection() instead.',
             __METHOD__,
         );
@@ -70,9 +62,7 @@ final class Connection implements ServerInfoAwareConnection
         return $this->prepare($sql)->execute();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function quote($value, $type = ParameterType::STRING)
     {
         return "'" . $this->connection->escape_string($value) . "'";
@@ -93,15 +83,13 @@ final class Connection implements ServerInfoAwareConnection
         return $this->connection->affected_rows;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function lastInsertId($name = null)
     {
         if ($name !== null) {
             Deprecation::triggerIfCalledFromOutside(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/issues/4687',
+                'https:
                 'The usage of Connection::lastInsertId() with a sequence name is deprecated.',
             );
         }

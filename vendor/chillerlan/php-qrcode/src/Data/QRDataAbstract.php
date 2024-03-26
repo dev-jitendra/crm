@@ -1,14 +1,5 @@
 <?php
-/**
- * Class QRDataAbstract
- *
- * @filesource   QRDataAbstract.php
- * @created      25.11.2015
- * @package      chillerlan\QRCode\Data
- * @author       Smiley <smiley@chillerlan.net>
- * @copyright    2015 Smiley
- * @license      MIT
- */
+
 
 namespace chillerlan\QRCode\Data;
 
@@ -18,58 +9,34 @@ use chillerlan\Settings\SettingsContainerInterface;
 
 use function array_fill, array_merge, count, max, mb_convert_encoding, mb_detect_encoding, range, sprintf, strlen;
 
-/**
- * Processes the binary data and maps it on a matrix which is then being returned
- */
+
 abstract class QRDataAbstract implements QRDataInterface{
 
-	/**
-	 * the string byte count
-	 */
+	
 	protected ?int $strlen = null;
 
-	/**
-	 * the current data mode: Num, Alphanum, Kanji, Byte
-	 */
+	
 	protected int $datamode;
 
-	/**
-	 * mode length bits for the version breakpoints 1-9, 10-26 and 27-40
-	 *
-	 * ISO/IEC 18004:2000 Table 3 - Number of bits in Character Count Indicator
-	 */
+	
 	protected array $lengthBits = [0, 0, 0];
 
-	/**
-	 * current QR Code version
-	 */
+	
 	protected int $version;
 
-	/**
-	 * ECC temp data
-	 */
+	
 	protected array $ecdata;
 
-	/**
-	 * ECC temp data
-	 */
+	
 	protected array $dcdata;
 
-	/**
-	 * the options instance
-	 *
-	 * @var \chillerlan\Settings\SettingsContainerInterface|\chillerlan\QRCode\QROptions
-	 */
+	
 	protected SettingsContainerInterface $options;
 
-	/**
-	 * a BitBuffer instance
-	 */
+	
 	protected BitBuffer $bitBuffer;
 
-	/**
-	 * QRDataInterface constructor.
-	 */
+	
 	public function __construct(SettingsContainerInterface $options, string $data = null){
 		$this->options = $options;
 
@@ -78,9 +45,7 @@ abstract class QRDataAbstract implements QRDataInterface{
 		}
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	
 	public function setData(string $data):QRDataInterface{
 
 		if($this->datamode === QRCode::DATA_KANJI){
@@ -97,9 +62,7 @@ abstract class QRDataAbstract implements QRDataInterface{
 		return $this;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	
 	public function initMatrix(int $maskPattern, bool $test = null):QRMatrix{
 		return (new QRMatrix($this->version, $this->options->eccLevel))
 			->init($maskPattern, $test)
@@ -107,12 +70,7 @@ abstract class QRDataAbstract implements QRDataInterface{
 		;
 	}
 
-	/**
-	 * returns the length bits for the version breakpoints 1-9, 10-26 and 27-40
-	 *
-	 * @throws \chillerlan\QRCode\Data\QRCodeDataException
-	 * @codeCoverageIgnore
-	 */
+	
 	protected function getLengthBits():int{
 
 		 foreach([9, 26, 40] as $key => $breakpoint){
@@ -124,22 +82,16 @@ abstract class QRDataAbstract implements QRDataInterface{
 		throw new QRCodeDataException(sprintf('invalid version number: %d', $this->version));
 	}
 
-	/**
-	 * returns the byte count of the $data string
-	 */
+	
 	protected function getLength(string $data):int{
 		return strlen($data);
 	}
 
-	/**
-	 * returns the minimum version number for the given string
-	 *
-	 * @throws \chillerlan\QRCode\Data\QRCodeDataException
-	 */
+	
 	protected function getMinimumVersion():int{
 		$maxlength = 0;
 
-		// guess the version number within the given range
+		
 		$dataMode = QRCode::DATA_MODES[$this->datamode];
 		$eccMode  = QRCode::ECC_MODES[$this->options->eccLevel];
 
@@ -154,18 +106,10 @@ abstract class QRDataAbstract implements QRDataInterface{
 		throw new QRCodeDataException(sprintf('data exceeds %d characters', $maxlength));
 	}
 
-	/**
-	 * writes the actual data string to the BitBuffer
-	 *
-	 * @see \chillerlan\QRCode\Data\QRDataAbstract::writeBitBuffer()
-	 */
+	
 	abstract protected function write(string $data):void;
 
-	/**
-	 * creates a BitBuffer and writes the string data to it
-	 *
-	 * @throws \chillerlan\QRCode\QRCodeException on data overflow
-	 */
+	
 	protected function writeBitBuffer(string $data):void{
 		$this->bitBuffer = new BitBuffer;
 
@@ -178,22 +122,22 @@ abstract class QRDataAbstract implements QRDataInterface{
 
 		$this->write($data);
 
-		// overflow, likely caused due to invalid version setting
+		
 		if($this->bitBuffer->getLength() > $MAX_BITS){
 			throw new QRCodeDataException(sprintf('code length overflow. (%d > %d bit)', $this->bitBuffer->getLength(), $MAX_BITS));
 		}
 
-		// add terminator (ISO/IEC 18004:2000 Table 2)
+		
 		if($this->bitBuffer->getLength() + 4 <= $MAX_BITS){
 			$this->bitBuffer->put(0, 4);
 		}
 
-		// padding
+		
 		while($this->bitBuffer->getLength() % 8 !== 0){
 			$this->bitBuffer->putBit(false);
 		}
 
-		// padding
+		
 		while(true){
 
 			if($this->bitBuffer->getLength() >= $MAX_BITS){
@@ -211,13 +155,7 @@ abstract class QRDataAbstract implements QRDataInterface{
 
 	}
 
-	/**
-	 * ECC masking
-	 *
-	 * ISO/IEC 18004:2000 Section 8.5 ff
-	 *
-	 * @see http://www.thonky.com/qr-code-tutorial/error-correction-coding
-	 */
+	
 	protected function maskECC():array{
 		[$l1, $l2, $b1, $b2] = $this::RSBLOCKS[$this->version][QRCode::ECC_MODES[$this->options->eccLevel]];
 
@@ -280,9 +218,7 @@ abstract class QRDataAbstract implements QRDataInterface{
 		return $data;
 	}
 
-	/**
-	 * helper method for the polynomial operations
-	 */
+	
 	protected function poly(int $key, int $count):array{
 		$rsPoly  = new Polynomial;
 		$modPoly = new Polynomial;

@@ -19,13 +19,7 @@ class ColumnAndRowAttributes extends BaseParserClass
         $this->worksheetXml = $worksheetXml;
     }
 
-    /**
-     * Set Worksheet column attributes by attributes array passed.
-     *
-     * @param string $columnAddress A, B, ... DX, ...
-     * @param array $columnAttributes array of attributes (indexes are attribute name, values are value)
-     *                               'xfIndex', 'visible', 'collapsed', 'outlineLevel', 'width', ... ?
-     */
+    
     private function setColumnAttributes($columnAddress, array $columnAttributes): void
     {
         if (isset($columnAttributes['xfIndex'])) {
@@ -45,13 +39,7 @@ class ColumnAndRowAttributes extends BaseParserClass
         }
     }
 
-    /**
-     * Set Worksheet row attributes by attributes array passed.
-     *
-     * @param int $rowNumber 1, 2, 3, ... 99, ...
-     * @param array $rowAttributes array of attributes (indexes are attribute name, values are value)
-     *                               'xfIndex', 'visible', 'collapsed', 'outlineLevel', 'rowHeight', ... ?
-     */
+    
     private function setRowAttributes($rowNumber, array $rowAttributes): void
     {
         if (isset($rowAttributes['xfIndex'])) {
@@ -71,10 +59,7 @@ class ColumnAndRowAttributes extends BaseParserClass
         }
     }
 
-    /**
-     * @param IReadFilter $readFilter
-     * @param bool $readDataOnly
-     */
+    
     public function load(?IReadFilter $readFilter = null, $readDataOnly = false): void
     {
         if ($this->worksheetXml === null) {
@@ -91,7 +76,7 @@ class ColumnAndRowAttributes extends BaseParserClass
             $rowsAttributes = $this->readRowAttributes($this->worksheetXml->sheetData->row, $readDataOnly);
         }
 
-        // set columns/rows attributes
+        
         $columnsAttributesAreSet = [];
         foreach ($columnsAttributes as $columnCoordinate => $columnAttributes) {
             if (

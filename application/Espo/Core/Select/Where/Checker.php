@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Select\Where;
 
@@ -39,9 +13,7 @@ use Espo\ORM\EntityManager;
 use Espo\ORM\Entity;
 use Espo\ORM\BaseEntity;
 
-/**
- * Checks Where parameters. Throws an exception if anything not allowed is met.
- */
+
 class Checker
 {
     private ?Entity $seed = null;
@@ -49,7 +21,7 @@ class Checker
     private const TYPE_IN_CATEGORY = 'inCategory';
     private const TYPE_IS_USER_FROM_TEAMS = 'isUserFromTeams';
 
-    /** @var string[] */
+    
     private $nestingTypeList = [
         Type::OR,
         Type::AND,
@@ -58,14 +30,14 @@ class Checker
         Type::SUBQUERY_NOT_IN,
     ];
 
-    /** @var string[] */
+    
     private $subQueryTypeList = [
         Type::SUBQUERY_IN,
         Type::SUBQUERY_NOT_IN,
         Type::NOT,
     ];
 
-    /** @var string[] */
+    
     private $linkTypeList = [
         self::TYPE_IN_CATEGORY,
         self::TYPE_IS_USER_FROM_TEAMS,
@@ -82,21 +54,13 @@ class Checker
         private Acl $acl
     ) {}
 
-    /**
-     * Check.
-     *
-     * @throws Forbidden
-     * @throws BadRequest
-     */
+    
     public function check(Item $item, Params $params): void
     {
         $this->checkItem($item, $params);
     }
 
-    /**
-     * @throws BadRequest
-     * @throws Forbidden
-     */
+    
     private function checkItem(Item $item, Params $params): void
     {
         $type = $item->getType();
@@ -137,13 +101,11 @@ class Checker
         }
     }
 
-    /**
-     * @throws BadRequest
-     */
+    
     private function checkAttributeExistence(string $attribute, string $type): void
     {
         if (str_contains($attribute, '.')) {
-            // @todo Check existence of foreign attributes.
+            
             return;
         }
 
@@ -160,9 +122,7 @@ class Checker
         }
     }
 
-    /**
-     * @throws Forbidden
-     */
+    
     private function checkAttributePermission(string $attribute, string $type): void
     {
         $entityType = $this->entityType;
@@ -171,7 +131,7 @@ class Checker
             list($link, $attribute) = explode('.', $attribute);
 
             if (!$this->getSeed()->hasRelation($link)) {
-                // TODO allow alias
+                
                 throw new Forbidden("Bad relation '{$link}' in where.");
             }
 

@@ -14,123 +14,46 @@ use AsyncAws\S3\ValueObject\Owner;
 
 final class PutObjectAclRequest extends Input
 {
-    /**
-     * The canned ACL to apply to the object. For more information, see Canned ACL.
-     *
-     * @see https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL
-     *
-     * @var null|ObjectCannedACL::*
-     */
+    
     private $acl;
 
-    /**
-     * Contains the elements that set the ACL permissions for an object per grantee.
-     *
-     * @var AccessControlPolicy|null
-     */
+    
     private $accessControlPolicy;
 
-    /**
-     * The bucket name that contains the object to which you want to attach the ACL.
-     *
-     * @required
-     *
-     * @var string|null
-     */
+    
     private $bucket;
 
-    /**
-     * The base64-encoded 128-bit MD5 digest of the data. This header must be used as a message integrity check to verify
-     * that the request body was not corrupted in transit. For more information, go to RFC 1864.&gt;.
-     *
-     * @see http://www.ietf.org/rfc/rfc1864.txt
-     *
-     * @var string|null
-     */
+    
     private $contentMd5;
 
-    /**
-     * Allows grantee the read, write, read ACP, and write ACP permissions on the bucket.
-     *
-     * @var string|null
-     */
+    
     private $grantFullControl;
 
-    /**
-     * Allows grantee to list the objects in the bucket.
-     *
-     * @var string|null
-     */
+    
     private $grantRead;
 
-    /**
-     * Allows grantee to read the bucket ACL.
-     *
-     * @var string|null
-     */
+    
     private $grantReadAcp;
 
-    /**
-     * Allows grantee to create, overwrite, and delete any object in the bucket.
-     *
-     * @var string|null
-     */
+    
     private $grantWrite;
 
-    /**
-     * Allows grantee to write the ACL for the applicable bucket.
-     *
-     * @var string|null
-     */
+    
     private $grantWriteAcp;
 
-    /**
-     * Key for which the PUT operation was initiated.
-     *
-     * @required
-     *
-     * @var string|null
-     */
+    
     private $key;
 
-    /**
-     * @var null|RequestPayer::*
-     */
+    
     private $requestPayer;
 
-    /**
-     * VersionId used to reference a specific version of the object.
-     *
-     * @var string|null
-     */
+    
     private $versionId;
 
-    /**
-     * The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail
-     * with an HTTP `403 (Access Denied)` error.
-     *
-     * @var string|null
-     */
+    
     private $expectedBucketOwner;
 
-    /**
-     * @param array{
-     *   ACL?: ObjectCannedACL::*,
-     *   AccessControlPolicy?: AccessControlPolicy|array,
-     *   Bucket?: string,
-     *   ContentMD5?: string,
-     *   GrantFullControl?: string,
-     *   GrantRead?: string,
-     *   GrantReadACP?: string,
-     *   GrantWrite?: string,
-     *   GrantWriteACP?: string,
-     *   Key?: string,
-     *   RequestPayer?: RequestPayer::*,
-     *   VersionId?: string,
-     *   ExpectedBucketOwner?: string,
-     *   @region?: string,
-     * } $input
-     */
+    
     public function __construct(array $input = [])
     {
         $this->acl = $input['ACL'] ?? null;
@@ -159,9 +82,7 @@ final class PutObjectAclRequest extends Input
         return $this->accessControlPolicy;
     }
 
-    /**
-     * @return ObjectCannedACL::*|null
-     */
+    
     public function getAcl(): ?string
     {
         return $this->acl;
@@ -212,9 +133,7 @@ final class PutObjectAclRequest extends Input
         return $this->key;
     }
 
-    /**
-     * @return RequestPayer::*|null
-     */
+    
     public function getRequestPayer(): ?string
     {
         return $this->requestPayer;
@@ -225,12 +144,10 @@ final class PutObjectAclRequest extends Input
         return $this->versionId;
     }
 
-    /**
-     * @internal
-     */
+    
     public function request(): Request
     {
-        // Prepare headers
+        
         $headers = ['content-type' => 'application/xml'];
         if (null !== $this->acl) {
             if (!ObjectCannedACL::exists($this->acl)) {
@@ -266,13 +183,13 @@ final class PutObjectAclRequest extends Input
             $headers['x-amz-expected-bucket-owner'] = $this->expectedBucketOwner;
         }
 
-        // Prepare query
+        
         $query = [];
         if (null !== $this->versionId) {
             $query['versionId'] = $this->versionId;
         }
 
-        // Prepare URI
+        
         $uri = [];
         if (null === $v = $this->bucket) {
             throw new InvalidArgument(sprintf('Missing parameter "Bucket" for "%s". The value cannot be null.', __CLASS__));
@@ -284,14 +201,14 @@ final class PutObjectAclRequest extends Input
         $uri['Key'] = $v;
         $uriString = '/' . rawurlencode($uri['Bucket']) . '/' . str_replace('%2F', '/', rawurlencode($uri['Key'])) . '?acl';
 
-        // Prepare Body
+        
 
         $document = new \DOMDocument('1.0', 'UTF-8');
         $document->formatOutput = false;
         $this->requestBody($document, $document);
         $body = $document->hasChildNodes() ? $document->saveXML() : '';
 
-        // Return the Request
+        
         return new Request('PUT', $uriString, $query, $headers, StreamFactory::create($body));
     }
 
@@ -302,9 +219,7 @@ final class PutObjectAclRequest extends Input
         return $this;
     }
 
-    /**
-     * @param ObjectCannedACL::*|null $value
-     */
+    
     public function setAcl(?string $value): self
     {
         $this->acl = $value;
@@ -375,9 +290,7 @@ final class PutObjectAclRequest extends Input
         return $this;
     }
 
-    /**
-     * @param RequestPayer::*|null $value
-     */
+    
     public function setRequestPayer(?string $value): self
     {
         $this->requestPayer = $value;
@@ -396,7 +309,7 @@ final class PutObjectAclRequest extends Input
     {
         if (null !== $v = $this->accessControlPolicy) {
             $node->appendChild($child = $document->createElement('AccessControlPolicy'));
-            $child->setAttribute('xmlns', 'http://s3.amazonaws.com/doc/2006-03-01/');
+            $child->setAttribute('xmlns', 'http:
             $v->requestBody($child, $document);
         }
     }

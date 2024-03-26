@@ -4,31 +4,19 @@ namespace GuzzleHttp\Psr7;
 
 use Psr\Http\Message\StreamInterface;
 
-/**
- * Converts Guzzle streams into PHP stream resources.
- *
- * @final
- */
+
 class StreamWrapper
 {
-    /** @var resource */
+    
     public $context;
 
-    /** @var StreamInterface */
+    
     private $stream;
 
-    /** @var string r, r+, or w */
+    
     private $mode;
 
-    /**
-     * Returns a resource representing the stream.
-     *
-     * @param StreamInterface $stream The stream to get a resource for
-     *
-     * @return resource
-     *
-     * @throws \InvalidArgumentException if stream is not readable or writable
-     */
+    
     public static function getResource(StreamInterface $stream)
     {
         self::register();
@@ -42,16 +30,10 @@ class StreamWrapper
                 . 'writable, or both.');
         }
 
-        return fopen('guzzle://stream', $mode, null, self::createStreamContext($stream));
+        return fopen('guzzle:
     }
 
-    /**
-     * Creates a stream context that can be used to open a stream as a php stream resource.
-     *
-     * @param StreamInterface $stream
-     *
-     * @return resource
-     */
+    
     public static function createStreamContext(StreamInterface $stream)
     {
         return stream_context_create([
@@ -59,9 +41,7 @@ class StreamWrapper
         ]);
     }
 
-    /**
-     * Registers the stream wrapper if needed
-     */
+    
     public static function register()
     {
         if (!in_array('guzzle', stream_get_wrappers())) {

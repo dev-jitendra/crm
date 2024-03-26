@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace OpenSpout\Common\Entity\Comment;
 
-/**
- * This class defines rich text in a fluent interface that can be added to a comment.
- */
+
 final class TextRun
 {
     public string $text;

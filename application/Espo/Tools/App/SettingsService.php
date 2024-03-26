@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\App;
 
@@ -71,9 +45,7 @@ class SettingsService
         private ThemeManager $themeManager
     ) {}
 
-    /**
-     * Get config data.
-     */
+    
     public function getConfigData(): stdClass
     {
         $data = $this->config->getAllNonInternalData();
@@ -85,9 +57,7 @@ class SettingsService
         return $data;
     }
 
-    /**
-     * Get metadata to be used in config.
-     */
+    
     public function getMetadataConfigData(): stdClass
     {
         $data = (object) [];
@@ -109,22 +79,15 @@ class SettingsService
         return $data;
     }
 
-    /**
-     * @return ?array{
-     *     handler: string,
-     *     fallback: bool,
-     *     data: stdClass,
-     *     method: string,
-     * }
-     */
+    
     private function getLoginData(): ?array
     {
         $method = $this->authenticationMethodProvider->get();
 
-        /** @var array<string, mixed> $mData */
+        
         $mData = $this->metadata->get(['authenticationMethods', $method, 'login']) ?? [];
 
-        /** @var ?string $handler */
+        
         $handler = $mData['handler'] ?? null;
 
         if (!$handler) {
@@ -134,11 +97,11 @@ class SettingsService
         $isProvider = $this->isPortalWithAuthenticationProvider();
 
         if (!$isProvider && $this->applicationState->isPortal()) {
-            /** @var ?bool $portal */
+            
             $portal = $mData['portal'] ?? null;
 
             if ($portal === null) {
-                /** @var ?string $portalConfigParam */
+                
                 $portalConfigParam = $mData['portalConfigParam'] ?? null;
 
                 $portal = $portalConfigParam && $this->config->get($portalConfigParam);
@@ -149,13 +112,13 @@ class SettingsService
             }
         }
 
-        /** @var ?bool $fallback */
+        
         $fallback = !$this->applicationState->isPortal() ?
             ($mData['fallback'] ?? null) :
             false;
 
         if ($fallback === null) {
-            /** @var ?string $fallbackConfigParam */
+            
             $fallbackConfigParam = $mData['fallbackConfigParam'] ?? null;
 
             $fallback = $fallbackConfigParam && $this->config->get($fallbackConfigParam);
@@ -165,7 +128,7 @@ class SettingsService
             $fallback = false;
         }
 
-        /** @var stdClass $data */
+        
         $data = (object) ($mData['data'] ?? []);
 
         return [
@@ -187,13 +150,7 @@ class SettingsService
         return (bool) $this->authenticationMethodProvider->getForPortal($portal);
     }
 
-    /**
-     * Set config data.
-     *
-     * @throws BadRequest
-     * @throws Forbidden
-     * @throws Error
-     */
+    
     public function setConfigData(stdClass $data): void
     {
         $user = $this->applicationState->getUser();
@@ -280,7 +237,7 @@ class SettingsService
         }
 
         if ($this->isRestrictedMode() && !$user->isSuperAdmin()) {
-            // @todo Maybe add restriction level for non-super admins.
+            
         }
 
         foreach ($ignoreItemList as $item) {
@@ -302,7 +259,7 @@ class SettingsService
     {
         $entityTypeListParamList = $this->metadata->get(['app', 'config', 'entityTypeListParamList']) ?? [];
 
-        /** @var string[] $scopeList */
+        
         $scopeList = array_keys($this->metadata->get(['entityDefs'], []));
 
         foreach ($scopeList as $scope) {
@@ -376,9 +333,7 @@ class SettingsService
         return (bool) $this->config->get('restrictedMode');
     }
 
-    /**
-     * @throws BadRequest
-     */
+    
     private function processValidation(Entity $entity, stdClass $data): void
     {
         $this->fieldValidationManager->process($entity, $data);
@@ -386,7 +341,7 @@ class SettingsService
 
     private function getPortalRepository(): PortalRepository
     {
-        /** @var PortalRepository */
+        
         return $this->entityManager->getRepository(Portal::ENTITY_TYPE);
     }
 }

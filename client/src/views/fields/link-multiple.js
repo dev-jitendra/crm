@@ -1,39 +1,11 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/fields/link-multiple */
+
+
 
 import BaseFieldView from 'views/fields/base';
 import RecordModal from 'helpers/record-modal';
 
-/**
- * A link-multiple field (for has-many relations).
- */
+
 class LinkMultipleFieldView extends BaseFieldView {
 
     type = 'linkMultiple'
@@ -43,94 +15,40 @@ class LinkMultipleFieldView extends BaseFieldView {
     editTemplate = 'fields/link-multiple/edit'
     searchTemplate = 'fields/link-multiple/search'
 
-    /**
-     * A name-hash attribute name.
-     *
-     * @protected
-     * @type {string}
-     */
+    
     nameHashName
 
-    /**
-     * A IDs attribute name.
-     *
-     * @protected
-     * @type {string}
-     */
+    
     idsName
 
-    /**
-     * @protected
-     * @type {Object.<string,string>|null}
-     */
+    
     nameHash = null
 
-    /**
-     * @protected
-     * @type {string[]|null}
-     */
+    
     ids = null
 
-    /**
-     * A foreign entity type.
-     *
-     * @protected
-     * @type {string}
-     */
+    
     foreignScope
 
-    /**
-     * Autocomplete disabled.
-     *
-     * @protected
-     * @type {boolean}
-     */
+    
     autocompleteDisabled = false
 
-    /**
-     * A select-record view.
-     *
-     * @protected
-     * @type {string}
-     */
+    
     selectRecordsView = 'views/modals/select-records'
 
-    /**
-     * Create disabled.
-     *
-     * @protected
-     * @type {boolean}
-     */
+    
     createDisabled = false
 
-    /**
-     * Force create button even is disabled in clientDefs > relationshipPanels.
-     *
-     * @protected
-     * @type {boolean}
-     */
+    
     forceCreateButton = false
 
-    /**
-     * To display the create button.
-     *
-     * @protected
-     * @type {boolean}
-     */
+    
     createButton = false
 
-    /**
-     * @protected
-     * @type {boolean}
-     */
+    
     sortable = false
 
-    /**
-     * A search type list.
-     *
-     * @protected
-     * @type {string[]}
-     */
+    
     searchTypeList = [
         'anyOf',
         'isEmpty',
@@ -139,63 +57,30 @@ class LinkMultipleFieldView extends BaseFieldView {
         'allOf',
     ]
 
-    /**
-     * A primary filter list that will be available when selecting a record.
-     *
-     * @protected
-     * @type {string[]|null}
-     */
+    
     selectFilterList = null
 
-    /**
-     * A select bool filter list.
-     *
-     * @protected
-     * @type {string[]|null}
-     */
+    
     selectBoolFilterList = null
 
-    /**
-     * A select primary filter.
-     *
-     * @protected
-     * @type {string|null}
-     */
+    
     selectPrimaryFilterName = null
 
-    /**
-     * An autocomplete max record number.
-     *
-     * @protected
-     * @type {number|null}
-     */
+    
     autocompleteMaxCount = null
 
-    /**
-     * Trigger autocomplete on empty input.
-     *
-     * @protected
-     * @type {boolean}
-     */
+    
     autocompleteOnEmpty = false
 
-    /**
-     * Select all attributes.
-     *
-     * @protected
-     * @type {boolean}
-     */
+    
     forceSelectAllAttributes = false
 
-    /**
-     * @protected
-     * @type {string}
-     */
+    
     iconHtml = ''
 
-    /** @inheritDoc */
+    
     events = {
-        /** @this LinkMultipleFieldView */
+        
         'auxclick a[href]:not([role="button"])': function (e) {
             if (!this.isReadMode()) {
                 return;
@@ -220,13 +105,13 @@ class LinkMultipleFieldView extends BaseFieldView {
         },
     }
 
-    // noinspection JSCheckFunctionSignatures
-    /** @inheritDoc */
+    
+    
     data() {
         const ids = this.model.get(this.idsName);
         const createButton = this.createButton && (!this.createDisabled || this.forceCreateButton);
 
-        // noinspection JSValidateTypes
+        
         return {
             ...super.data(),
             idValues: this.model.get(this.idsName),
@@ -238,55 +123,27 @@ class LinkMultipleFieldView extends BaseFieldView {
         };
     }
 
-    /**
-     * Get advanced filters (field filters) to be applied when select a record.
-     * Can be extended.
-     *
-     * @protected
-     * @return {Object.<string, module:search-manager~advancedFilter>|null}
-     */
+    
     getSelectFilters() {
         return null;
     }
 
-    /**
-     * Get a select bool filter list. Applied when select a record.
-     * Can be extended.
-     *
-     * @protected
-     * @return {string[]|null}
-     */
+    
     getSelectBoolFilterList() {
         return this.selectBoolFilterList;
     }
 
-    /**
-     * Get a select primary filter. Applied when select a record.
-     * Can be extended.
-     *
-     * @protected
-     * @return {string|null}
-     */
+    
     getSelectPrimaryFilterName() {
         return this.selectPrimaryFilterName;
     }
 
-    /**
-     * Get a primary filter list that will be available when selecting a record.
-     * Can be extended.
-     *
-     * @return {string[]|null}
-     */
+    
     getSelectFilterList() {
         return this.selectFilterList;
     }
 
-    /**
-     * Attributes to pass to a model when creating a new record.
-     * Can be extended.
-     *
-     * @return {Object.<string, *>|null}
-     */
+    
     getCreateAttributes() {
         const attributeMap = this.getMetadata()
             .get(['clientDefs', this.entityType, 'relationshipPanels', this.name, 'createAttributeMap']) || {};
@@ -298,7 +155,7 @@ class LinkMultipleFieldView extends BaseFieldView {
         return attributes;
     }
 
-    /** @inheritDoc */
+    
     setup() {
         this.nameHashName = this.name + 'Names';
         this.idsName = this.name + 'Ids';
@@ -339,7 +196,7 @@ class LinkMultipleFieldView extends BaseFieldView {
 
                 this.deleteLink(id);
 
-                // noinspection JSUnresolvedReference
+                
                 this.$element.get(0).focus({preventScroll: true});
             };
         }
@@ -356,25 +213,18 @@ class LinkMultipleFieldView extends BaseFieldView {
             this.addActionHandler('createLink', () => this.actionCreateLink());
         }
 
-        /** @type {Object.<string, *>} */
+        
         this.panelDefs = this.getMetadata()
             .get(['clientDefs', this.entityType, 'relationshipPanels', this.name]) || {};
     }
 
-    /**
-     * Copy values from a model to view properties.
-     */
+    
     copyValuesFromModel() {
         this.ids = Espo.Utils.clone(this.model.get(this.idsName) || []);
         this.nameHash = Espo.Utils.clone(this.model.get(this.nameHashName) || {});
     }
 
-    /**
-     * Handle a search type.
-     *
-     * @protected
-     * @param {string} type A type.
-     */
+    
     handleSearchType(type) {
         if (~['anyOf', 'noneOf', 'allOf'].indexOf(type)) {
             this.$el.find('div.link-group-container').removeClass('hidden');
@@ -384,7 +234,7 @@ class LinkMultipleFieldView extends BaseFieldView {
         }
     }
 
-    /** @inheritDoc */
+    
     setupSearch() {
         this.events = _.extend({
             'change select.search-type': (e) => {
@@ -395,12 +245,7 @@ class LinkMultipleFieldView extends BaseFieldView {
         }, this.events || {});
     }
 
-    /**
-     * Get an autocomplete max record number. Can be extended.
-     *
-     * @protected
-     * @return {number}
-     */
+    
     getAutocompleteMaxCount() {
         if (this.autocompleteMaxCount) {
             return this.autocompleteMaxCount;
@@ -409,19 +254,13 @@ class LinkMultipleFieldView extends BaseFieldView {
         return this.getConfig().get('recordsPerPage');
     }
 
-    // noinspection JSUnusedLocalSymbols
-    /**
-     * Compose an autocomplete URL. Can be extended.
-     *
-     * @protected
-     * @param {string} [q] A query.
-     * @return {string|Promise<string>}
-     */
+    
+    
     getAutocompleteUrl(q) {
         let url = this.foreignScope + '?&maxSize=' + this.getAutocompleteMaxCount();
 
         if (!this.forceSelectAllAttributes) {
-            /** @var {Object.<string, *>} */
+            
             const panelDefs = this.getMetadata()
                 .get(['clientDefs', this.entityType, 'relationshipPanels', this.name]) || {};
 
@@ -494,7 +333,7 @@ class LinkMultipleFieldView extends BaseFieldView {
         return url;
     }
 
-    /** @inheritDoc */
+    
     afterRender() {
         if (this.isEditMode() || this.isSearchMode()) {
             this.$element = this.$el.find('input.main-element');
@@ -502,10 +341,8 @@ class LinkMultipleFieldView extends BaseFieldView {
             const $element = this.$element;
 
             if (!this.autocompleteDisabled) {
-                // Does not work well with autocompleteOnEmpty.
-                /*this.$element.on('blur', () => {
-                    setTimeout(() => this.$element.autocomplete('clear'), 300);
-                });*/
+                
+                
 
                 const minChar = this.autocompleteOnEmpty ? 0 : 1;
 
@@ -530,14 +367,14 @@ class LinkMultipleFieldView extends BaseFieldView {
                             $c.addClass('small');
                         }
 
-                        // Prevent an issue that suggestions are shown and not hidden
-                        // when clicking outside the window and then focusing back on the document.
+                        
+                        
                         if (this.$element.get(0) !== document.activeElement) {
                             setTimeout(() => this.$element.autocomplete('hide'), 30);
                         }
                     },
                     formatResult: suggestion => {
-                        // noinspection JSUnresolvedReference
+                        
                         return this.getHelper().escapeString(suggestion.name);
                     },
                     transformResult: response => {
@@ -560,7 +397,7 @@ class LinkMultipleFieldView extends BaseFieldView {
                     },
                     onSelect: s => {
                         this.getModelFactory().create(this.foreignScope, model => {
-                            // noinspection JSUnresolvedReference
+                            
                             model.set(s.attributes);
 
                             this.select([model])
@@ -590,7 +427,7 @@ class LinkMultipleFieldView extends BaseFieldView {
 
             if (this.isEditMode()) {
                 if (this.sortable) {
-                    // noinspection JSUnresolvedReference
+                    
                     this.$el.find('.link-container').sortable({
                         stop: () => {
                             this.fetchFromDom();
@@ -612,23 +449,14 @@ class LinkMultipleFieldView extends BaseFieldView {
         }
     }
 
-    /**
-     * Render items.
-     *
-     * @protected
-     */
+    
     renderLinks() {
         this.ids.forEach(id => {
             this.addLinkHtml(id, this.nameHash[id]);
         });
     }
 
-    /**
-     * Delete an item.
-     *
-     * @protected
-     * @param {string} id An ID.
-     */
+    
     deleteLink(id) {
         this.trigger('delete-link', id);
         this.trigger('delete-link:' + id);
@@ -647,13 +475,7 @@ class LinkMultipleFieldView extends BaseFieldView {
         this.trigger('change');
     }
 
-    /**
-     * Add an item.
-     *
-     * @protected
-     * @param {string} id An ID.
-     * @param {string} name A name.
-     */
+    
     addLink(id, name) {
         if (!~this.ids.indexOf(id)) {
             this.ids.push(id);
@@ -670,36 +492,20 @@ class LinkMultipleFieldView extends BaseFieldView {
         this.trigger('change');
     }
 
-    /**
-     * @protected
-     * @param {string} id An ID.
-     */
+    
     afterDeleteLink(id) {}
 
-    /**
-     * @protected
-     * @param {string} id An ID.
-     */
+    
     afterAddLink(id) {}
 
-    /**
-     * @protected
-     * @param {string} id An ID.
-     */
+    
     deleteLinkHtml(id) {
         this.$el.find('.link-' + id).remove();
     }
 
-    /**
-     * Add an item for edit mode.
-     *
-     * @protected
-     * @param {string} id An ID.
-     * @param {string} name A name.
-     * @return {JQuery|null}
-     */
+    
     addLinkHtml(id, name) {
-        // Do not use the `html` method to avoid XSS.
+        
 
         name = name || id;
 
@@ -729,24 +535,15 @@ class LinkMultipleFieldView extends BaseFieldView {
         return $el;
     }
 
-    // noinspection JSUnusedLocalSymbols
-    /**
-     * @param {string} id An ID.
-     * @return {string}
-     */
+    
+    
     getIconHtml(id) {
         return this.iconHtml;
     }
 
-    /**
-     * Get an item HTML for detail mode.
-     *
-     * @param {string} id An ID.
-     * @param {string} [name] A name.
-     * @return {string}
-     */
+    
     getDetailLinkHtml(id, name) {
-        // Do not use the `html` method to avoid XSS.
+        
 
         name = name || this.nameHash[id] || id;
 
@@ -769,16 +566,12 @@ class LinkMultipleFieldView extends BaseFieldView {
         return $a.get(0).outerHTML;
     }
 
-    /**
-     * @protected
-     * @param {string} id An ID.
-     * @return {string}
-     */
+    
     getUrl(id) {
         return '#' + this.foreignScope + '/view/' + id;
     }
 
-    /** @inheritDoc */
+    
     getValueForDisplay() {
         if (!this.isDetailMode() && !this.isListMode()) {
             return null;
@@ -803,7 +596,7 @@ class LinkMultipleFieldView extends BaseFieldView {
             .join('');
     }
 
-    /** @inheritDoc */
+    
     validateRequired() {
         if (!this.isRequired()) {
             return false;
@@ -823,7 +616,7 @@ class LinkMultipleFieldView extends BaseFieldView {
         return false;
     }
 
-    /** @inheritDoc */
+    
     fetch() {
         const data = {};
 
@@ -833,7 +626,7 @@ class LinkMultipleFieldView extends BaseFieldView {
         return data;
     }
 
-    /** @inheritDoc */
+    
     fetchFromDom() {
         this.ids = [];
 
@@ -848,7 +641,7 @@ class LinkMultipleFieldView extends BaseFieldView {
         });
     }
 
-    /** @inheritDoc */
+    
     fetchSearch() {
         const type = this.$el.find('select.search-type').val();
         const idList = this.ids || [];
@@ -931,17 +724,14 @@ class LinkMultipleFieldView extends BaseFieldView {
         }
     }
 
-    /** @inheritDoc */
+    
     getSearchType() {
         return this.getSearchParamsData().type ||
             this.searchParams.typeFront ||
             this.searchParams.type || 'anyOf';
     }
 
-    /**
-     * @protected
-     * @param {string} id
-     */
+    
     quickView(id) {
         const entityType = this.foreignScope;
 
@@ -953,9 +743,7 @@ class LinkMultipleFieldView extends BaseFieldView {
         });
     }
 
-    /**
-     * @protected
-     */
+    
     actionSelect() {
         Espo.Ui.notify(' ... ');
 
@@ -1006,10 +794,7 @@ class LinkMultipleFieldView extends BaseFieldView {
         });
     }
 
-    /**
-     * @protected
-     * @return {function(): Promise<Object.<string, *>>}
-     */
+    
     getCreateAttributesProvider() {
         return () => {
             const attributes = this.getCreateAttributes() || {};
@@ -1034,23 +819,14 @@ class LinkMultipleFieldView extends BaseFieldView {
         };
     }
 
-    /**
-     * On records select.
-     *
-     * @protected
-     * @param {module:model[]} models
-     * @since 8.0.4
-     */
+    
     select(models) {
         models.forEach(model => {
             this.addLink(model.id, model.get('name'));
         });
     }
 
-    /**
-     * @private
-     * @return {Promise<{bool?: string[], advanced?: Object, primary?: string}>}
-     */
+    
     _getSelectFilters() {
         const handler = this.panelDefs.selectHandler;
 
@@ -1074,7 +850,7 @@ class LinkMultipleFieldView extends BaseFieldView {
         return new Promise(resolve => {
             Espo.loader.requirePromise(handler)
                 .then(Handler => new Handler(this.getHelper()))
-                .then(/** module:handlers/select-related */handler => {
+                .then(handler => {
                     return handler.getFilters(this.model);
                 })
                 .then(filters => {
@@ -1099,9 +875,7 @@ class LinkMultipleFieldView extends BaseFieldView {
         });
     }
 
-    /**
-     * @private
-     */
+    
     _transformAutocompleteResult(response) {
         const list = [];
 

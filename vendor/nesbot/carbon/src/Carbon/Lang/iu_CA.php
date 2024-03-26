@@ -1,18 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Pablo Saratxaga pablo@mandriva.com
- */
+
+
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [
         'L' => 'MM/DD/YY',
@@ -44,11 +34,11 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'h' => ':count ikarraq',
     'a_hour' => ':count ikarraq',
 
-    'minute' => ':count titiqqaralaaq', // less reliable
-    'min' => ':count titiqqaralaaq', // less reliable
-    'a_minute' => ':count titiqqaralaaq', // less reliable
+    'minute' => ':count titiqqaralaaq', 
+    'min' => ':count titiqqaralaaq', 
+    'a_minute' => ':count titiqqaralaaq', 
 
-    'second' => ':count marluk', // less reliable
-    's' => ':count marluk', // less reliable
-    'a_second' => ':count marluk', // less reliable
+    'second' => ':count marluk', 
+    's' => ':count marluk', 
+    'a_second' => ':count marluk', 
 ]);

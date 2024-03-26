@@ -15,24 +15,14 @@ final class GpsPoint extends AbstractValidator
     public const CONVERT_ERROR         = 'gpsPointConvertError';
     public const INCOMPLETE_COORDINATE = 'gpsPointIncompleteCoordinate';
 
-    /** @var array */
+    
     protected $messageTemplates = [
         'gpsPointOutOfBounds'          => '%value% is out of Bounds.',
         'gpsPointConvertError'         => '%value% can not converted into a Decimal Degree Value.',
         'gpsPointIncompleteCoordinate' => '%value% did not provided a complete Coordinate',
     ];
 
-    /**
-     * Returns true if and only if $value meets the validation requirements
-     *
-     * If $value fails validation, then this method returns false, and
-     * getMessages() will return an array of messages that explain why the
-     * validation failed.
-     *
-     * @param  mixed $value
-     * @return bool
-     * @throws Exception\RuntimeException If validation of $value is impossible.
-     */
+    
     public function isValid($value)
     {
         if (! str_contains($value, ',')) {
@@ -49,9 +39,7 @@ final class GpsPoint extends AbstractValidator
         return false;
     }
 
-    /**
-     * @param string $value
-     */
+    
     private function isValidCoordinate($value, float $maxBoundary): bool
     {
         $this->value = $value;
@@ -78,18 +66,13 @@ final class GpsPoint extends AbstractValidator
         return false;
     }
 
-    /**
-     * Determines if the give value is a Degrees Minutes Second Definition
-     */
+    
     private function isDMSValue(string $value): bool
     {
         return preg_match('/([°\'"]+[NESW])/', $value) > 0;
     }
 
-    /**
-     * @param string $value
-     * @return false|float
-     */
+    
     private function convertValue($value)
     {
         $matches = [];
@@ -102,19 +85,13 @@ final class GpsPoint extends AbstractValidator
         return $matches[1][0] + $matches[2][0] / 60 + ((double) $matches[3][0]) / 3600;
     }
 
-    /**
-     * @param string $value
-     * @return string
-     */
+    
     private function removeWhiteSpace($value)
     {
         return preg_replace('/\s/', '', $value);
     }
 
-    /**
-     * @param string $value
-     * @return string
-     */
+    
     private function removeDegreeSign($value)
     {
         return str_replace('°', '', $value);

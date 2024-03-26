@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\LeadCapture;
 
@@ -72,18 +46,10 @@ class CaptureService
         private ServiceContainer $serviceContainer
     ) {}
 
-    /**
-     * Capture a lead. A main entry method.
-     *
-     * @param string $apiKey An API key.
-     * @param stdClass $data A payload.
-     * @throws BadRequest
-     * @throws Error
-     * @throws NotFound
-     */
+    
     public function capture(string $apiKey, stdClass $data): void
     {
-        /** @var ?LeadCaptureEntity $leadCapture */
+        
         $leadCapture = $this->entityManager
             ->getRDBRepositoryByClass(LeadCaptureEntity::class)
             ->where([
@@ -149,7 +115,7 @@ class CaptureService
         if ($leadCapture->createLeadBeforeOptInConfirmation() && !$hasDuplicate) {
             $this->entityManager->saveEntity($lead);
 
-            /** @noinspection PhpRedundantOptionalArgumentInspection */
+            
             $this->log($leadCapture, $target, $data, true);
 
             $isLogged = true;
@@ -167,7 +133,7 @@ class CaptureService
 
         $terminateAt = $dt->format(DateTimeUtil::SYSTEM_DATE_TIME_FORMAT);
 
-        /** @var UniqueId $uniqueId */
+        
         $uniqueId = $this->entityManager->getNewEntity(UniqueId::ENTITY_TYPE);
 
         $uniqueId->set([
@@ -192,11 +158,7 @@ class CaptureService
             ->schedule();
     }
 
-    /**
-     * @throws BadRequest
-     * @throws NotFound
-     * @throws Error
-     */
+    
     private function proceed(
         LeadCaptureEntity $leadCapture,
         stdClass $data,
@@ -205,7 +167,7 @@ class CaptureService
     ): void {
 
         if ($leadId) {
-            /** @var ?Lead $lead */
+            
             $lead = $this->entityManager->getEntityById(Lead::ENTITY_TYPE, $leadId);
 
             if (!$lead) {
@@ -218,7 +180,7 @@ class CaptureService
 
         $campaign = null;
 
-        /** @var ?string $campaignId */
+        
         $campaignId = $leadCapture->getCampaignId();
 
         if ($campaignId) {
@@ -384,17 +346,10 @@ class CaptureService
         }
     }
 
-    /**
-     * Confirm opt-in.
-     *
-     * @throws BadRequest
-     * @throws Error
-     * @throws NotFound
-     * @param string $id A unique ID.
-     */
+    
     public function confirmOptIn(string $id): ConfirmResult
     {
-        /** @var ?UniqueId $uniqueId */
+        
         $uniqueId = $this->entityManager
             ->getRDBRepository(UniqueId::ENTITY_TYPE)
             ->where(['name' => $id])
@@ -429,7 +384,7 @@ class CaptureService
             );
         }
 
-        /** @var ?LeadCaptureEntity $leadCapture */
+        
         $leadCapture = $this->entityManager->getEntityById(LeadCaptureEntity::ENTITY_TYPE, $leadCaptureId);
 
         if (!$leadCapture) {
@@ -454,13 +409,10 @@ class CaptureService
         );
     }
 
-    /**
-     * @throws BadRequest
-     * @throws Error
-     */
+    
     private function getLeadWithPopulatedData(LeadCaptureEntity $leadCapture, stdClass $data): Lead
     {
-        /** @var Lead $lead */
+        
         $lead = $this->entityManager->getNewEntity(Lead::ENTITY_TYPE);
 
         $fieldList = $leadCapture->getFieldList();
@@ -493,12 +445,7 @@ class CaptureService
         return $lead;
     }
 
-    /**
-     * @return array{
-     *   contact: ?Contact,
-     *   lead: ?Lead,
-     * }
-     */
+    
     private function findLeadDuplicates(LeadCaptureEntity $leadCapture, Lead $lead): array
     {
         $duplicate = null;
@@ -609,10 +556,7 @@ class CaptureService
         $this->entityManager->saveEntity($logRecord);
     }
 
-    /**
-     * @param string[] $fieldList
-     * @throws BadRequest
-     */
+    
     private function setFields(array $fieldList, stdClass $data, Lead $lead): void
     {
         $isEmpty = true;
@@ -660,9 +604,7 @@ class CaptureService
         }
     }
 
-    /**
-     * @param string[] $fieldList
-     */
+    
     private function sanitizePhoneNumber(
         array $fieldList,
         stdClass $data,

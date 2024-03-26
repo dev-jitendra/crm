@@ -1,100 +1,26 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module router */
+
+
 
 import Backbone from 'backbone';
 
-/**
- * On route.
- *
- * @event Backbone.Router#route
- * @param {string} name A route name.
- * @param {any[]} args Arguments.
- */
 
-/**
- * After dispatch.
- *
- * @event module:router#routed
- * @param {{
- *   controller: string,
- *   action:string,
- *   options: Object.<string,*>,
- * }} data A route data.
- */
 
-/**
- * Subscribe.
- *
- * @function on
- * @memberof module:router#
- * @param {string} event An event.
- * @param {function(*): void} callback A callback.
- */
 
-/**
- * Subscribe once.
- *
- * @function once
- * @memberof module:router#
- * @param {string} event An event.
- * @param {function(): void} callback A callback.
- */
 
-/**
- * Unsubscribe.
- *
- * @function off
- * @memberof module:router#
- * @param {string} event An event.
- */
 
-/**
- * Trigger an event.
- *
- * @function trigger
- * @memberof module:router#
- * @param {string} event An event.
- */
 
-// noinspection JSUnusedGlobalSymbols
-/**
- * A router.
- *
- * @class
- * @mixes Espo.Events
- */
-const Router = Backbone.Router.extend(/** @lends Router# */ {
 
-    /**
-     * @private
-     */
+
+
+
+
+
+
+
+const Router = Backbone.Router.extend( {
+
+    
     routeList: [
         {
             route: "clearCache",
@@ -146,14 +72,10 @@ const Router = Backbone.Router.extend(/** @lends Router# */ {
         },
     ],
 
-    /**
-     * @private
-     */
+    
     _bindRoutes: function() {},
 
-    /**
-     * @private
-     */
+    
     setupRoutes: function () {
         this.routeParams = {};
 
@@ -188,48 +110,25 @@ const Router = Backbone.Router.extend(/** @lends Router# */ {
         });
     },
 
-    /**
-     * @private
-     */
+    
     _last: null,
 
-    /**
-     * Whether a confirm-leave-out was set.
-     *
-     * @public
-     * @type {boolean}
-     */
+    
     confirmLeaveOut: false,
 
-    /**
-     * Whether back has been processed.
-     *
-     * @public
-     * @type {boolean}
-     */
+    
     backProcessed: false,
 
-    /**
-     * @type {string}
-     * @internal
-     */
+    
     confirmLeaveOutMessage: 'Are you sure?',
 
-    /**
-     * @type {string}
-     * @internal
-     */
+    
     confirmLeaveOutConfirmText: 'Yes',
 
-    /**
-     * @type {string}
-     * @internal
-     */
+    
     confirmLeaveOutCancelText: 'No',
 
-    /**
-     * @private
-     */
+    
     initialize: function (options) {
         this.options = options || {};
         this.setupRoutes();
@@ -273,26 +172,14 @@ const Router = Backbone.Router.extend(/** @lends Router# */ {
         });
     },
 
-    /**
-     * Get a current URL.
-     *
-     * @returns {string}
-     */
+    
     getCurrentUrl: function () {
         return '#' + Backbone.history.fragment;
     },
 
-    /**
-     * @callback module:router~checkConfirmLeaveOutCallback
-     */
+    
 
-    /**
-     * Process confirm-leave-out.
-     *
-     * @param {module:router~checkConfirmLeaveOutCallback} callback Proceed if confirmed.
-     * @param {Object|null} [context] A context.
-     * @param {boolean} [navigateBack] To navigate back if not confirmed.
-     */
+    
     checkConfirmLeaveOut: function (callback, context, navigateBack) {
         if (this.confirmLeaveOutDisplayed) {
             this.navigateBack({trigger: false});
@@ -338,10 +225,8 @@ const Router = Backbone.Router.extend(/** @lends Router# */ {
         callback.call(context);
     },
 
-    /**
-     * @private
-     */
-    route: function (route, name/*, callback*/) {
+    
+    route: function (route, name) {
         const routeOriginal = route;
 
         if (!_.isRegExp(route)) {
@@ -350,15 +235,10 @@ const Router = Backbone.Router.extend(/** @lends Router# */ {
 
         let callback;
 
-        // @todo Revise.
-        /*if (_.isFunction(name)) {
-            callback = name;
-            name = '';
-        }*/
+        
+        
 
-        /*if (!callback) {
-            callback = this['_' + name];
-        }*/
+        
         callback = this['_' + name];
 
         const router = this;
@@ -382,21 +262,19 @@ const Router = Backbone.Router.extend(/** @lends Router# */ {
                 });
             }
 
-            // @todo Revise.
+            
             router.execute(callback, args, name, routeOriginal, options);
-            //if (router.execute(callback, args, name, routeOriginal, options) !== false) {
+            
                 router.trigger.apply(router, ['route:' + name].concat(args));
                 router.trigger('route', name, args);
                 Backbone.history.trigger('route', router, name, args);
-            //}
+            
         });
 
         return this;
     },
 
-    /**
-     * @private
-     */
+    
     execute: function (callback, args, name, routeOriginal, options) {
         this.checkConfirmLeaveOut(() => {
             if (name === 'defaultRoute') {
@@ -409,23 +287,14 @@ const Router = Backbone.Router.extend(/** @lends Router# */ {
         }, null, true);
     },
 
-    /**
-     * Navigate.
-     *
-     * @param {string} fragment An URL fragment.
-     * @param {{trigger?: boolean, replace?: boolean}} [options] Options: trigger, replace.
-     */
+    
     navigate: function (fragment, options) {
         this.history.push(fragment);
 
         return Backbone.Router.prototype.navigate.call(this, fragment, options);
     },
 
-    /**
-     * Navigate back.
-     *
-     * @param {Object} [options] Options: trigger, replace.
-     */
+    
     navigateBack: function (options) {
         let url;
 
@@ -439,9 +308,7 @@ const Router = Backbone.Router.extend(/** @lends Router# */ {
         this.navigate(url, options);
     },
 
-    /**
-     * @private
-     */
+    
     _parseOptionsParams: function (string) {
         if (!string) {
             return {};
@@ -468,9 +335,7 @@ const Router = Backbone.Router.extend(/** @lends Router# */ {
         return options;
     },
 
-    /**
-     * @private
-     */
+    
     _defaultRoute: function (params, options) {
         const controller = params.controller || options.controller;
         const action = params.action || options.action;
@@ -478,9 +343,7 @@ const Router = Backbone.Router.extend(/** @lends Router# */ {
         this.dispatch(controller, action, options);
     },
 
-    /**
-     * @private
-     */
+    
     _record: function (controller, action, id, options) {
         options = this._parseOptionsParams(options);
 
@@ -489,23 +352,17 @@ const Router = Backbone.Router.extend(/** @lends Router# */ {
         this.dispatch(controller, action, options);
     },
 
-    /**
-     * @private
-     */
+    
     _view: function (controller, id, options) {
         this._record(controller, 'view', id, options);
     },
 
-    /**
-     * @private
-     */
+    
     _edit: function (controller, id, options) {
         this._record(controller, 'edit', id, options);
     },
 
-    /**
-     * @private
-     */
+    
     _related: function (controller, id, link, options) {
         options = this._parseOptionsParams(options);
 
@@ -515,58 +372,39 @@ const Router = Backbone.Router.extend(/** @lends Router# */ {
         this.dispatch(controller, 'related', options);
     },
 
-    /**
-     * @private
-     */
+    
     _create: function (controller, options) {
         this._record(controller, 'create', null, options);
     },
 
-    /**
-     * @private
-     */
+    
     _action: function (controller, action, options) {
         this.dispatch(controller, action, this._parseOptionsParams(options));
     },
 
-    /**
-     * @private
-     */
+    
     _defaultAction: function (controller) {
         this.dispatch(controller, null);
     },
 
-    /**
-     * @private
-     */
+    
     _home: function () {
         this.dispatch('Home', null);
     },
 
-    /**
-     * @private
-     */
+    
     _clearCache: function () {
         this.dispatch(null, 'clearCache');
     },
 
-    /**
-     * Process `logout` route.
-     */
+    
     logout: function () {
         this.dispatch(null, 'logout');
 
         this.navigate('', {trigger: false});
     },
 
-    /**
-     * Dispatch a controller action.
-     *
-     * @param {string|null} [controller] A controller.
-     * @param {string|null} [action] An action.
-     * @param {Object} [options] Options.
-     * @fires module:router#routed
-     */
+    
     dispatch: function (controller, action, options) {
         const o = {
             controller: controller,
@@ -579,11 +417,7 @@ const Router = Backbone.Router.extend(/** @lends Router# */ {
         this.trigger('routed', o);
     },
 
-    /**
-     * Get the last route data.
-     *
-     * @returns {Object}
-     */
+    
     getLast: function () {
         return this._last;
     },
@@ -597,16 +431,16 @@ function isIOS9UIWebView() {
     return /(iPhone|iPad|iPod).* OS 9_\d/.test(userAgent) && !/Version\/9\./.test(userAgent);
 }
 
-// Fixes issue that navigate with {trigger: false} fired
-// route change if there's a whitespace character.
+
+
 Backbone.history.getHash = function (window) {
     const match = (window || this).location.href.match(/#(.*)$/);
 
     return match ? this.decodeFragment(match[1]) : '';
 };
 
-// Override `backbone.history.loadUrl()` and `backbone.history.navigate()`
-// to fix the navigation issue (`location.hash` not changed immediately) on iOS9.
+
+
 if (isIOS9UIWebView()) {
     Backbone.history.loadUrl = function (fragment, oldHash) {
         fragment = this.fragment = this.getFragment(fragment);

@@ -25,11 +25,11 @@ final class SecureConnector implements ConnectorInterface
     public function connect($uri)
     {
         if (!\function_exists('stream_socket_enable_crypto')) {
-            return Promise\reject(new \BadMethodCallException('Encryption not supported on your platform (HHVM < 3.8?)')); // @codeCoverageIgnore
+            return Promise\reject(new \BadMethodCallException('Encryption not supported on your platform (HHVM < 3.8?)')); 
         }
 
-        if (\strpos($uri, '://') === false) {
-            $uri = 'tls://' . $uri;
+        if (\strpos($uri, ':
+            $uri = 'tls:
         }
 
         $parts = \parse_url($uri);
@@ -43,11 +43,11 @@ final class SecureConnector implements ConnectorInterface
         $context = $this->context;
         $encryption = $this->streamEncryption;
         $connected = false;
-        /** @var \React\Promise\PromiseInterface $promise */
+        
         $promise = $this->connector->connect(
-            \str_replace('tls://', '', $uri)
+            \str_replace('tls:
         )->then(function (ConnectionInterface $connection) use ($context, $encryption, $uri, &$promise, &$connected) {
-            // (unencrypted) TCP/IP connection succeeded
+            
             $connected = true;
 
             if (!$connection instanceof Connection) {
@@ -55,14 +55,14 @@ final class SecureConnector implements ConnectorInterface
                 throw new \UnexpectedValueException('Base connector does not use internal Connection class exposing stream resource');
             }
 
-            // set required SSL/TLS context options
+            
             foreach ($context as $name => $value) {
                 \stream_context_set_option($connection->stream, 'ssl', $name, $value);
             }
 
-            // try to enable encryption
+            
             return $promise = $encryption->enable($connection)->then(null, function ($error) use ($connection, $uri) {
-                // establishing encryption failed => close invalid connection and return error
+                
                 $connection->close();
 
                 throw new \RuntimeException(
@@ -79,14 +79,14 @@ final class SecureConnector implements ConnectorInterface
                     $e
                 );
 
-                // avoid garbage references by replacing all closures in call stack.
-                // what a lovely piece of code!
+                
+                
                 $r = new \ReflectionProperty('Exception', 'trace');
                 $r->setAccessible(true);
                 $trace = $r->getValue($e);
 
-                // Exception trace arguments are not available on some PHP 7.4 installs
-                // @codeCoverageIgnoreStart
+                
+                
                 foreach ($trace as $ti => $one) {
                     if (isset($one['args'])) {
                         foreach ($one['args'] as $ai => $arg) {
@@ -96,7 +96,7 @@ final class SecureConnector implements ConnectorInterface
                         }
                     }
                 }
-                // @codeCoverageIgnoreEnd
+                
                 $r->setValue($e, $trace);
             }
 

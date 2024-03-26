@@ -1,20 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - François B
- * - Serhan Apaydın
- * - JD Isaacks
- */
+
+
 return [
     'year' => '{1}:count bloaz|{3,4,5,9}:count bloaz|[0,Inf[:count vloaz',
     'a_year' => '{1}ur bloaz|{3,4,5,9}:count bloaz|[0,Inf[:count vloaz',

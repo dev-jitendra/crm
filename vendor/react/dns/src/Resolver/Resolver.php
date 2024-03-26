@@ -7,9 +7,7 @@ use React\Dns\Query\ExecutorInterface;
 use React\Dns\Query\Query;
 use React\Dns\RecordNotFoundException;
 
-/**
- * @see ResolverInterface for the base interface
- */
+
 final class Resolver implements ResolverInterface
 {
     private $executor;
@@ -38,18 +36,10 @@ final class Resolver implements ResolverInterface
         });
     }
 
-    /**
-     * [Internal] extract all resource record values from response for this query
-     *
-     * @param Query   $query
-     * @param Message $response
-     * @return array
-     * @throws RecordNotFoundException when response indicates an error or contains no data
-     * @internal
-     */
+    
     public function extractValues(Query $query, Message $response)
     {
-        // reject if response code indicates this is an error response message
+        
         $code = $response->rcode;
         if ($code !== Message::RCODE_OK) {
             switch ($code) {
@@ -80,7 +70,7 @@ final class Resolver implements ResolverInterface
         $answers = $response->answers;
         $addresses = $this->valuesByNameAndType($answers, $query->name, $query->type);
 
-        // reject if we did not receive a valid answer (domain is valid, but no record for this type could be found)
+        
         if (0 === count($addresses)) {
             throw new RecordNotFoundException(
                 'DNS query for ' . $query->describe() . ' did not return a valid answer (NOERROR / NODATA)'
@@ -90,22 +80,17 @@ final class Resolver implements ResolverInterface
         return array_values($addresses);
     }
 
-    /**
-     * @param \React\Dns\Model\Record[] $answers
-     * @param string                    $name
-     * @param int                       $type
-     * @return array
-     */
+    
     private function valuesByNameAndType(array $answers, $name, $type)
     {
-        // return all record values for this name and type (if any)
+        
         $named = $this->filterByName($answers, $name);
         $records = $this->filterByType($named, $type);
         if ($records) {
             return $this->mapRecordData($records);
         }
 
-        // no matching records found? check if there are any matching CNAMEs instead
+        
         $cnameRecords = $this->filterByType($named, Message::TYPE_CNAME);
         if ($cnameRecords) {
             $cnames = $this->mapRecordData($cnameRecords);

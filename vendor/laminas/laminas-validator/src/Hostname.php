@@ -1,4 +1,4 @@
-<?php // phpcs:disable Generic.Files.LineLength.TooLong
+<?php 
 
 namespace Laminas\Validator;
 
@@ -30,23 +30,7 @@ use function strtolower;
 use function strtoupper;
 use function substr;
 
-/**
- * Please note there are two standalone test scripts for testing IDN characters due to problems
- * with file encoding.
- *
- * The first is tests/Laminas/Validator/HostnameTestStandalone.php which is designed to be run on
- * the command line.
- *
- * The second is tests/Laminas/Validator/HostnameTestForm.php which is designed to be run via HTML
- * to allow users to test entering UTF-8 characters in a form.
- *
- * @psalm-type Options = array{
- *    allow?: int-mask-of<self::ALLOW_*>,
- *    useIdnCheck?: bool,
- *    useTldCheck?: bool,
- *    ipValidator?: null|ValidatorInterface,
- * }
- */
+
 class Hostname extends AbstractValidator
 {
     public const CANNOT_DECODE_PUNYCODE  = 'hostnameCannotDecodePunycode';
@@ -61,7 +45,7 @@ class Hostname extends AbstractValidator
     public const UNDECIPHERABLE_TLD      = 'hostnameUndecipherableTld';
     public const UNKNOWN_TLD             = 'hostnameUnknownTld';
 
-    /** @var array */
+    
     protected $messageTemplates = [
         self::CANNOT_DECODE_PUNYCODE  => "The input appears to be a DNS hostname but the given punycode notation cannot be decoded",
         self::INVALID                 => "Invalid type given. String expected",
@@ -76,25 +60,18 @@ class Hostname extends AbstractValidator
         self::UNKNOWN_TLD             => "The input appears to be a DNS hostname but cannot match TLD against known list",
     ];
 
-    /** @var array */
+    
     protected $messageVariables = [
         'tld' => 'tld',
     ];
 
-    public const ALLOW_DNS   = 1;  // Allows Internet domain names (e.g., example.com)
-    public const ALLOW_IP    = 2;  // Allows IP addresses
-    public const ALLOW_LOCAL = 4;  // Allows local network names (e.g., localhost, www.localdomain)
-    public const ALLOW_URI   = 8;  // Allows URI hostnames
-    public const ALLOW_ALL   = 15;  // Allows all types of hostnames
+    public const ALLOW_DNS   = 1;  
+    public const ALLOW_IP    = 2;  
+    public const ALLOW_LOCAL = 4;  
+    public const ALLOW_URI   = 8;  
+    public const ALLOW_ALL   = 15;  
 
-    /**
-     * Array of valid top-level-domains
-     *
-     * @see ftp://data.iana.org/TLD/tlds-alpha-by-domain.txt  List of all TLDs by domain
-     * @see http://www.iana.org/domains/root/db/ Official list of supported TLDs
-     *
-     * @var string[]
-     */
+    
     protected $validTlds = [
         'aaa',
         'aarp',
@@ -1554,61 +1531,7 @@ class Hostname extends AbstractValidator
         'zw',
     ];
 
-    /**
-     * Array for valid Idns
-     *
-     * @see http://www.iana.org/domains/idn-tables/ Official list of supported IDN Chars
-     * (.AC) Ascension Island http://www.nic.ac/pdf/AC-IDN-Policy.pdf
-     * (.AR) Argentina http://www.nic.ar/faqidn.html
-     * (.AS) American Samoa http://www.nic.as/idn/chars.cfm
-     * (.AT) Austria http://www.nic.at/en/service/technical_information/idn/charset_converter/
-     * (.BIZ) International http://www.iana.org/domains/idn-tables/
-     * (.BR) Brazil http://registro.br/faq/faq6.html
-     * (.BV) Bouvett Island http://www.norid.no/domeneregistrering/idn/idn_nyetegn.en.html
-     * (.CAT) Catalan http://www.iana.org/domains/idn-tables/tables/cat_ca_1.0.html
-     * (.CH) Switzerland https://nic.switch.ch/reg/ocView.action?res=EF6GW2JBPVTG67DLNIQXU234MN6SC33JNQQGI7L6#anhang1
-     * (.CL) Chile http://www.iana.org/domains/idn-tables/tables/cl_latn_1.0.html
-     * (.COM) International http://www.verisign.com/information-services/naming-services/internationalized-domain-names/index.html
-     * (.DE) Germany https://www.denic.de/en/know-how/idn-domains/idn-character-list/
-     * (.DK) Danmark http://www.dk-hostmaster.dk/index.php?id=151
-     * (.EE) Estonia https://www.iana.org/domains/idn-tables/tables/pl_et-pl_1.0.html
-     * (.ES) Spain https://www.nic.es/media/2008-05/1210147705287.pdf
-     * (.FI) Finland http://www.ficora.fi/en/index/palvelut/fiverkkotunnukset/aakkostenkaytto.html
-     * (.GR) Greece https://grweb.ics.forth.gr/CharacterTable1_en.jsp
-     * (.HR) Croatia https://www.dns.hr/en/portal/files/Odluka-1,2alfanum-dijak.pdf
-     * (.HU) Hungary http://www.domain.hu/domain/English/szabalyzat/szabalyzat.html
-     * (.IL) Israel http://www.isoc.org.il/domains/il-domain-rules.html
-     * (.INFO) International http://www.nic.info/info/idn
-     * (.IO) British Indian Ocean Territory http://www.nic.io/IO-IDN-Policy.pdf
-     * (.IR) Iran http://www.nic.ir/Allowable_Characters_dot-iran
-     * (.IS) Iceland https://www.isnic.is/en/domain/rules#2
-     * (.KR) Korea http://www.iana.org/domains/idn-tables/tables/kr_ko-kr_1.0.html
-     * (.LI) Liechtenstein https://nic.switch.ch/reg/ocView.action?res=EF6GW2JBPVTG67DLNIQXU234MN6SC33JNQQGI7L6#anhang1
-     * (.LT) Lithuania http://www.domreg.lt/static/doc/public/idn_symbols-en.pdf
-     * (.MD) Moldova http://www.register.md/
-     * (.MUSEUM) International http://www.iana.org/domains/idn-tables/tables/museum_latn_1.0.html
-     * (.NET) International http://www.verisign.com/information-services/naming-services/internationalized-domain-names/index.html
-     * (.NO) Norway http://www.norid.no/domeneregistrering/idn/idn_nyetegn.en.html
-     * (.NU) Niue http://www.worldnames.net/
-     * (.ORG) International http://www.pir.org/index.php?db=content/FAQs&tbl=FAQs_Registrant&id=2
-     * (.PE) Peru https://www.nic.pe/nuevas_politicas_faq_2.php
-     * (.PL) Poland http://www.dns.pl/IDN/allowed_character_sets.pdf
-     * (.PR) Puerto Rico http://www.nic.pr/idn_rules.asp
-     * (.PT) Portugal https://online.dns.pt/dns_2008/do?com=DS;8216320233;111;+PAGE(4000058)+K-CAT-CODIGO(C.125)+RCNT(100);
-     * (.RU) Russia http://www.iana.org/domains/idn-tables/tables/ru_ru-ru_1.0.html
-     * (.SA) Saudi Arabia http://www.iana.org/domains/idn-tables/tables/sa_ar_1.0.html
-     * (.SE) Sweden http://www.iis.se/english/IDN_campaignsite.shtml?lang=en
-     * (.SH) Saint Helena http://www.nic.sh/SH-IDN-Policy.pdf
-     * (.SJ) Svalbard and Jan Mayen http://www.norid.no/domeneregistrering/idn/idn_nyetegn.en.html
-     * (.TH) Thailand http://www.iana.org/domains/idn-tables/tables/th_th-th_1.0.html
-     * (.TM) Turkmenistan http://www.nic.tm/TM-IDN-Policy.pdf
-     * (.TR) Turkey https://www.nic.tr/index.php
-     * (.UA) Ukraine http://www.iana.org/domains/idn-tables/tables/ua_cyrl_1.2.html
-     * (.VE) Venice http://www.iana.org/domains/idn-tables/tables/ve_es_1.0.html
-     * (.VN) Vietnam http://www.vnnic.vn/english/5-6-300-2-2-04-20071115.htm#1.%20Introduction
-     *
-     * @var array<string, string|array<int, string>>
-     */
+    
     protected $validIdns = [
         'AC'       => [1 => '/^[\x{002d}0-9a-zà-öø-ÿāăąćĉċčďđēėęěĝġģĥħīįĵķĺļľŀłńņňŋőœŕŗřśŝşšţťŧūŭůűųŵŷźżž]{1,63}$/iu'],
         'AR'       => [1 => '/^[\x{002d}0-9a-zà-ãç-êìíñ-õü]{1,63}$/iu'],
@@ -1752,7 +1675,7 @@ class Hostname extends AbstractValidator
         'شبكة'     => [1 => '/^[\x{0621}-\x{0624}\x{0626}-\x{063A}\x{0641}\x{0642}\x{0644}-\x{0648}\x{067E}\x{0686}\x{0698}\x{06A9}\x{06AF}\x{06CC}\x{06F0}-\x{06F9}]{1,30}$/iu'],
     ];
 
-    /** @var array<string, array<int, int>> */
+    
     protected $idnLength = [
         'BIZ'      => [5 => 17, 11 => 15, 12 => 20],
         'CN'       => [1 => 20],
@@ -1777,40 +1700,20 @@ class Hostname extends AbstractValidator
         '台灣'       => [1 => 20],
     ];
 
-    /** @var null|false|string */
+    
     protected $tld;
 
-    /**
-     * Options for the hostname validator
-     *
-     * @var Options
-     */
+    
     protected $options = [
-        'allow'       => self::ALLOW_DNS, // Allow these hostnames
-        'useIdnCheck' => true, // Check IDN domains
-        'useTldCheck' => true, // Check TLD elements
-        'ipValidator' => null, // IP validator to use
+        'allow'       => self::ALLOW_DNS, 
+        'useIdnCheck' => true, 
+        'useTldCheck' => true, 
+        'ipValidator' => null, 
     ];
 
-    // phpcs:disable Squiz.Commenting.FunctionComment.ExtraParamComment
+    
 
-    /**
-     * Sets validator options.
-     *
-     * @see http://www.iana.org/cctld/specifications-policies-cctlds-01apr02.htm  Technical Specifications for ccTLDs
-     *
-     * Options Parameters should be passed as an array in the following format:
-     * $options = [
-     *      'allow' => ALLOW_DNS, // OPTIONAL Set what types of hostname to allow (default ALLOW_DNS)
-     *      'useIdnCheck' => true, // OPTIONAL Set whether IDN domains are validated (default true)
-     *      'useTldCheck' => true, // Set whether the TLD element of a hostname is validated (default true)
-     *      'ipValidator' => null, // An IP validator instance or null @link Ip
-     * ];
-     *
-     * For backwards compatibility, options can also be passed as variables in the order stated above.
-     *
-     * @param Options $options OPTIONAL Array of validator options; see Hostname::$options
-     */
+    
     public function __construct($options = [])
     {
         if (! is_array($options)) {
@@ -1838,20 +1741,13 @@ class Hostname extends AbstractValidator
         parent::__construct($options);
     }
 
-    /**
-     * Returns the set ip validator
-     *
-     * @return Ip
-     */
+    
     public function getIpValidator()
     {
         return $this->options['ipValidator'];
     }
 
-    /**
-     * @param Ip $ipValidator OPTIONAL
-     * @return self
-     */
+    
     public function setIpValidator(?Ip $ipValidator = null)
     {
         if ($ipValidator === null) {
@@ -1862,84 +1758,46 @@ class Hostname extends AbstractValidator
         return $this;
     }
 
-    /**
-     * Returns the allow option
-     *
-     * @return int
-     */
+    
     public function getAllow()
     {
         return $this->options['allow'];
     }
 
-    /**
-     * Sets the allow option
-     *
-     * @param  int $allow
-     * @return $this Provides a fluent interface
-     */
+    
     public function setAllow($allow)
     {
         $this->options['allow'] = $allow;
         return $this;
     }
 
-    /**
-     * Returns the set idn option
-     *
-     * @return bool
-     */
+    
     public function getIdnCheck()
     {
         return $this->options['useIdnCheck'];
     }
 
-    /**
-     * Set whether IDN domains are validated
-     *
-     * This only applies when DNS hostnames are validated
-     *
-     * @param  bool $useIdnCheck Set to true to validate IDN domains
-     * @return $this
-     */
+    
     public function useIdnCheck($useIdnCheck)
     {
         $this->options['useIdnCheck'] = (bool) $useIdnCheck;
         return $this;
     }
 
-    /**
-     * Returns the set tld option
-     *
-     * @return bool
-     */
+    
     public function getTldCheck()
     {
         return $this->options['useTldCheck'];
     }
 
-    /**
-     * Set whether the TLD element of a hostname is validated
-     *
-     * This only applies when DNS hostnames are validated
-     *
-     * @param  bool $useTldCheck Set to true to validate TLD elements
-     * @return $this
-     */
+    
     public function useTldCheck($useTldCheck)
     {
         $this->options['useTldCheck'] = (bool) $useTldCheck;
         return $this;
     }
 
-    /**
-     * Defined by Interface
-     *
-     * Returns true if and only if the $value is a valid hostname with respect to the current allow option
-     *
-     * @param  string $value
-     * @return bool
-     */
+    
     public function isValid($value)
     {
         if (! is_string($value)) {
@@ -1948,7 +1806,7 @@ class Hostname extends AbstractValidator
         }
 
         $this->setValue($value);
-        // Check input against IP address schema
+        
         if (
             ((preg_match('/^[0-9.]*$/', $value) && str_contains($value, '.'))
                 || (preg_match('/^[0-9a-f:.]*$/i', $value) && str_contains($value, ':')))
@@ -1962,20 +1820,20 @@ class Hostname extends AbstractValidator
             return true;
         }
 
-        // Handle Regex compilation failure that may happen on .biz domain with has @ character, eg: tapi4457@hsoqvf.biz
-        // Technically, hostname with '@' character is invalid, so mark as invalid immediately
-        // @see https://github.com/laminas/laminas-validator/issues/8
+        
+        
+        
         if (str_contains($value, '@')) {
             $this->error(self::INVALID_HOSTNAME);
             return false;
         }
 
-        // Local hostnames are allowed to be partial (ending '.')
+        
         if ($this->getAllow() & self::ALLOW_LOCAL) {
             if (str_ends_with($value, '.')) {
                 $value = substr($value, 0, -1);
                 if (str_ends_with($value, '.')) {
-                    // Empty hostnames (ending '..') are not allowed
+                    
                     $this->error(self::INVALID_LOCAL_NAME);
                     return false;
                 }
@@ -1984,7 +1842,7 @@ class Hostname extends AbstractValidator
 
         $domainParts = explode('.', $value);
 
-        // Prevent partial IP V4 addresses (ending '.')
+        
         if (
             count($domainParts) === 4 && preg_match('/^[0-9.a-e:.]*$/i', $value)
             && $this->getIpValidator()->setTranslator($this->getTranslator())->isValid($value)
@@ -1994,7 +1852,7 @@ class Hostname extends AbstractValidator
 
         $utf8StrWrapper = StringUtils::getWrapper('UTF-8');
 
-        // Check input against DNS hostname schema
+        
         if (
             count($domainParts) > 1
             && $utf8StrWrapper->strlen($value) >= 4
@@ -2003,7 +1861,7 @@ class Hostname extends AbstractValidator
             $status = false;
 
             do {
-                // First check TLD
+                
                 $matches = [];
                 if (
                     preg_match('/([^.]{2,63})$/u', end($domainParts), $matches)
@@ -2011,13 +1869,13 @@ class Hostname extends AbstractValidator
                 ) {
                     reset($domainParts);
 
-                    // Hostname characters are: *(label dot)(label dot label); max 254 chars
-                    // label: id-prefix [*ldh{61} id-prefix]; max 63 chars
-                    // id-prefix: alpha / digit
-                    // ldh: alpha / digit / dash
+                    
+                    
+                    
+                    
 
                     $this->tld = $matches[1];
-                    // Decode Punycode TLD to IDN
+                    
                     if (str_starts_with($this->tld, 'xn--')) {
                         $this->tld = $this->decodePunycode(substr($this->tld, 4));
                         if ($this->tld === false) {
@@ -2027,7 +1885,7 @@ class Hostname extends AbstractValidator
                         $this->tld = strtoupper($this->tld);
                     }
 
-                    // Match TLD against known list
+                    
                     $removedTld = false;
                     if ($this->getTldCheck()) {
                         if (
@@ -2038,18 +1896,13 @@ class Hostname extends AbstractValidator
                             $status = false;
                             break;
                         }
-                        // We have already validated that the TLD is fine. We don't want it to go through the below
-                        // checks as new UTF-8 TLDs will incorrectly fail if there is no IDN regex for it.
+                        
+                        
                         array_pop($domainParts);
                         $removedTld = true;
                     }
 
-                    /**
-                     * Match against IDN hostnames
-                     * Note: Keep label regex short to avoid issues with long patterns when matching IDN hostnames
-                     *
-                     * @see Hostname\Interface
-                     */
+                    
                     $regexChars = [0 => '/^[a-z0-9\x2d]{1,63}$/i'];
                     if ($this->getIdnCheck() && isset($this->validIdns[$this->tld])) {
                         if (is_string($this->validIdns[$this->tld])) {
@@ -2059,14 +1912,14 @@ class Hostname extends AbstractValidator
                         }
                     }
 
-                    // Check each hostname part
+                    
                     $check          = 0;
                     $lastDomainPart = end($domainParts);
                     if (! $removedTld) {
                         $lastDomainPart = prev($domainParts);
                     }
                     foreach ($domainParts as $domainPart) {
-                        // Decode Punycode domain names to IDN
+                        
                         if (str_starts_with($domainPart, 'xn--')) {
                             $domainPart = $this->decodePunycode(substr($domainPart, 4));
                             if ($domainPart === false) {
@@ -2074,14 +1927,14 @@ class Hostname extends AbstractValidator
                             }
                         }
 
-                        // Skip following checks if domain part is empty, as it definitely is not a valid hostname then
+                        
                         if ($domainPart === '') {
                             $this->error(self::INVALID_HOSTNAME);
                             $status = false;
                             break 2;
                         }
 
-                        // Check dash (-) does not start, end or appear in 3rd and 4th positions
+                        
                         if (
                             $utf8StrWrapper->strpos($domainPart, '-') === 0
                             || ($utf8StrWrapper->strlen($domainPart) > 2
@@ -2095,7 +1948,7 @@ class Hostname extends AbstractValidator
                             break 2;
                         }
 
-                        // Check each domain part
+                        
                         $checked        = false;
                         $isSubDomain    = $domainPart !== $lastDomainPart;
                         $partRegexChars = $isSubDomain ? ['/^[a-z0-9_\x2d]{1,63}$/i'] + $regexChars : $regexChars;
@@ -2125,20 +1978,20 @@ class Hostname extends AbstractValidator
                         }
                     }
 
-                    // If one of the labels doesn't match, the hostname is invalid
+                    
                     if ($check !== count($domainParts)) {
                         $this->error(self::INVALID_HOSTNAME_SCHEMA);
                         $status = false;
                     }
                 } else {
-                    // Hostname not long enough
+                    
                     $this->error(self::UNDECIPHERABLE_TLD);
                     $status = false;
                 }
             } while (false);
 
-            // If the input passes as an Internet domain name, and domain names are allowed, then the hostname
-            // passes validation
+            
+            
             if ($status && ($this->getAllow() & self::ALLOW_DNS)) {
                 return true;
             }
@@ -2146,7 +1999,7 @@ class Hostname extends AbstractValidator
             $this->error(self::INVALID_HOSTNAME);
         }
 
-        // Check for URI Syntax (RFC3986)
+        
         if ($this->getAllow() & self::ALLOW_URI) {
             if (preg_match("/^([a-zA-Z0-9-._~!$&\'()*+,;=]|%[[:xdigit:]]{2}){1,254}$/i", $value)) {
                 return true;
@@ -2155,23 +2008,23 @@ class Hostname extends AbstractValidator
             $this->error(self::INVALID_URI);
         }
 
-        // Check input against local network name schema; last chance to pass validation
+        
         $regexLocal = '/^(([a-zA-Z0-9\x2d]{1,63}\x2e)*[a-zA-Z0-9\x2d]{1,63}[\x2e]{0,1}){1,254}$/';
         $status     = preg_match($regexLocal, $value);
 
-        // If the input passes as a local network name, and local network names are allowed, then the
-        // hostname passes validation
+        
+        
         $allowLocal = $this->getAllow() & self::ALLOW_LOCAL;
         if ($status && $allowLocal) {
             return true;
         }
 
-        // If the input does not pass as a local network name, add a message
+        
         if (! $status) {
             $this->error(self::INVALID_LOCAL_NAME);
         }
 
-        // If local network names are not allowed, add a message
+        
         if ($status && ! $allowLocal) {
             $this->error(self::LOCAL_NAME_NOT_ALLOWED);
         }
@@ -2179,17 +2032,11 @@ class Hostname extends AbstractValidator
         return false;
     }
 
-    /**
-     * Decodes a punycode encoded string to it's original utf8 string
-     * Returns false in case of a decoding failure.
-     *
-     * @param  string $encoded Punycode encoded string to decode
-     * @return string|false
-     */
+    
     protected function decodePunycode($encoded)
     {
         if (! preg_match('/^[a-z0-9-]+$/i', $encoded)) {
-            // no punycode encoded string
+            
             $this->error(self::CANNOT_DECODE_PUNYCODE);
             return false;
         }
@@ -2198,7 +2045,7 @@ class Hostname extends AbstractValidator
         $separator = strrpos($encoded, '-');
         if ($separator > 0) {
             for ($x = 0; $x < $separator; ++$x) {
-                // prepare decoding matrix
+                
                 $decoded[] = ord($encoded[$x]);
             }
         }
@@ -2206,7 +2053,7 @@ class Hostname extends AbstractValidator
         $lengthd = count($decoded);
         $lengthe = strlen($encoded);
 
-        // decoding
+        
         $init  = true;
         $base  = 72;
         $index = 0;
@@ -2248,7 +2095,7 @@ class Hostname extends AbstractValidator
             $decoded[$index++] = $char;
         }
 
-        // convert decoded ucs4 to utf8 string
+        
         foreach ($decoded as $key => $value) {
             if ($value < 128) {
                 $decoded[$key] = chr($value);

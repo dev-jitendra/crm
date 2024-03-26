@@ -5,11 +5,7 @@ namespace FastRoute\RouteParser;
 use FastRoute\BadRouteException;
 use FastRoute\RouteParser;
 
-/**
- * Parses route strings of the following form:
- *
- * "/user/{name}[/{id:[0-9]+}]"
- */
+
 class Std implements RouteParser
 {
     const VARIABLE_REGEX = <<<'REGEX'
@@ -27,10 +23,10 @@ REGEX;
         $routeWithoutClosingOptionals = rtrim($route, ']');
         $numOptionals = strlen($route) - strlen($routeWithoutClosingOptionals);
 
-        // Split on [ while skipping placeholders
+        
         $segments = preg_split('~' . self::VARIABLE_REGEX . '(*SKIP)(*F) | \[~x', $routeWithoutClosingOptionals);
         if ($numOptionals !== count($segments) - 1) {
-            // If there are any ] in the middle of the route, throw a more specific error message
+            
             if (preg_match('~' . self::VARIABLE_REGEX . '(*SKIP)(*F) | \]~x', $routeWithoutClosingOptionals)) {
                 throw new BadRouteException('Optional segments can only occur at the end of a route');
             }
@@ -50,12 +46,7 @@ REGEX;
         return $routeDatas;
     }
 
-    /**
-     * Parses a route string that does not contain optional segments.
-     *
-     * @param string
-     * @return mixed[]
-     */
+    
     private function parsePlaceholders($route)
     {
         if (!preg_match_all(

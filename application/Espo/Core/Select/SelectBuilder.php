@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Select;
 
@@ -54,10 +28,7 @@ use Espo\Entities\User;
 
 use LogicException;
 
-/**
- * Builds select queries for ORM. Applies search parameters(passed from front-end),
- * ACL restrictions, filters, etc.
- */
+
 class SelectBuilder
 {
     private ?string $entityType = null;
@@ -68,13 +39,13 @@ class SelectBuilder
     private bool $applyDefaultOrder = false;
     private ?string $textFilter = null;
     private ?string $primaryFilter = null;
-    /** @var string[] */
+    
     private array $boolFilterList = [];
-    /** @var WhereItem[] */
+    
     private array $whereItemList = [];
     private bool $applyWherePermissionCheck = false;
     private bool $applyComplexExpressionsForbidden = false;
-    /** @var class-string<Applier\AdditionalApplier>[]  */
+    
     private array $additionalApplierClassNameList = [];
 
     public function __construct(
@@ -82,9 +53,7 @@ class SelectBuilder
         private ApplierFactory $applierFactory
     ) {}
 
-    /**
-     * Specify an entity type to select from.
-     */
+    
     public function from(string $entityType): self
     {
         if ($this->sourceQuery) {
@@ -96,9 +65,7 @@ class SelectBuilder
         return $this;
     }
 
-    /**
-     * Start building from an existing select query.
-     */
+    
     public function clone(Query $query): self
     {
         if ($this->entityType && $this->entityType !== $query->getFrom()) {
@@ -111,25 +78,13 @@ class SelectBuilder
         return $this;
     }
 
-    /**
-     * Build a result query.
-     *
-     * @throws Error
-     * @throws Forbidden
-     * @throws BadRequest
-     */
+    
     public function build(): Query
     {
         return $this->buildQueryBuilder()->build();
     }
 
-    /**
-     * Build an ORM query builder. Used to continue building but by means of ORM.
-     *
-     * @throws Error
-     * @throws Forbidden
-     * @throws BadRequest
-     */
+    
     public function buildQueryBuilder(): QueryBuilder
     {
         $this->queryBuilder = new OrmSelectBuilder();
@@ -173,13 +128,11 @@ class SelectBuilder
 
         $this->applyAdditional();
 
-        /** @var QueryBuilder */
+        
         return $this->queryBuilder;
     }
 
-    /**
-     * Switch a user for whom a select query will be built.
-     */
+    
     public function forUser(User $user): self
     {
         $this->user = $user;
@@ -187,11 +140,7 @@ class SelectBuilder
         return $this;
     }
 
-    /**
-     * Apply search parameters.
-     *
-     * Note: If there's no order set in the search parameters then a default order will be applied.
-     */
+    
     public function withSearchParams(SearchParams $searchParams): self
     {
         $this->searchParams = $searchParams;
@@ -215,9 +164,7 @@ class SelectBuilder
         return $this;
     }
 
-    /**
-     * Apply maximum restrictions for a user.
-     */
+    
     public function withStrictAccessControl(): self
     {
         $this->withAccessControlFilter();
@@ -227,9 +174,7 @@ class SelectBuilder
         return $this;
     }
 
-    /**
-     * Apply an access control filter.
-     */
+    
     public function withAccessControlFilter(): self
     {
         $this->applyAccessControlFilter = true;
@@ -237,9 +182,7 @@ class SelectBuilder
         return $this;
     }
 
-    /**
-     * Apply a default order.
-     */
+    
     public function withDefaultOrder(): self
     {
         $this->applyDefaultOrder = true;
@@ -247,9 +190,7 @@ class SelectBuilder
         return $this;
     }
 
-    /**
-     * Check permissions to where items.
-     */
+    
     public function withWherePermissionCheck(): self
     {
         $this->applyWherePermissionCheck = true;
@@ -257,9 +198,7 @@ class SelectBuilder
         return $this;
     }
 
-    /**
-     * Forbid complex expression usage.
-     */
+    
     public function withComplexExpressionsForbidden(): self
     {
         $this->applyComplexExpressionsForbidden = true;
@@ -267,9 +206,7 @@ class SelectBuilder
         return $this;
     }
 
-    /**
-     * Apply a text filter.
-     */
+    
     public function withTextFilter(string $textFilter): self
     {
         $this->textFilter = $textFilter;
@@ -277,9 +214,7 @@ class SelectBuilder
         return $this;
     }
 
-    /**
-     * Apply a primary filter.
-     */
+    
     public function withPrimaryFilter(string $primaryFilter): self
     {
         $this->primaryFilter = $primaryFilter;
@@ -287,9 +222,7 @@ class SelectBuilder
         return $this;
     }
 
-    /**
-     * Apply a bool filter.
-     */
+    
     public function withBoolFilter(string $boolFilter): self
     {
         $this->boolFilterList[] = $boolFilter;
@@ -297,11 +230,7 @@ class SelectBuilder
         return $this;
     }
 
-    /**
-     * Apply a list of bool filters.
-     *
-     * @param string[] $boolFilterList
-     */
+    
     public function withBoolFilterList(array $boolFilterList): self
     {
         $this->boolFilterList = array_merge($this->boolFilterList, $boolFilterList);
@@ -309,9 +238,7 @@ class SelectBuilder
         return $this;
     }
 
-    /**
-     * Apply a Where Item.
-     */
+    
     public function withWhere(WhereItem $whereItem): self
     {
         $this->whereItemList[] = $whereItem;
@@ -319,11 +246,7 @@ class SelectBuilder
         return $this;
     }
 
-    /**
-     * Apply a list of additional applier class names.
-     *
-     * @param class-string<Applier\AdditionalApplier>[] $additionalApplierClassNameList
-     */
+    
     public function withAdditionalApplierClassNameList(array $additionalApplierClassNameList): self
     {
         $this->additionalApplierClassNameList = array_merge(
@@ -334,9 +257,7 @@ class SelectBuilder
         return $this;
     }
 
-    /**
-     * @throws Error
-     */
+    
     private function applyPrimaryFilter(): void
     {
         assert($this->queryBuilder !== null);
@@ -349,9 +270,7 @@ class SelectBuilder
             );
     }
 
-    /**
-     * @throws Error
-     */
+    
     private function applyBoolFilterList(): void
     {
         assert($this->queryBuilder !== null);
@@ -386,10 +305,7 @@ class SelectBuilder
             );
     }
 
-    /**
-     * @throws Forbidden
-     * @throws Error
-     */
+    
     private function applyDefaultOrder(): void
     {
         assert($this->queryBuilder !== null);
@@ -408,11 +324,7 @@ class SelectBuilder
             );
     }
 
-    /**
-     * @throws BadRequest
-     * @throws Forbidden
-     * @throws Error
-     */
+    
     private function applyWhereItemList(): void
     {
         foreach ($this->whereItemList as $whereItem) {
@@ -420,11 +332,7 @@ class SelectBuilder
         }
     }
 
-    /**
-     * @throws BadRequest
-     * @throws Forbidden
-     * @throws Error
-     */
+    
     private function applyWhereItem(WhereItem $whereItem): void
     {
         assert($this->queryBuilder !== null);
@@ -442,10 +350,7 @@ class SelectBuilder
             );
     }
 
-    /**
-     * @throws Forbidden
-     * @throws Error
-     */
+    
     private function applyFromSearchParams(): void
     {
         if (!$this->searchParams) {
@@ -459,7 +364,7 @@ class SelectBuilder
             ($this->searchParams->getOrderBy() || $this->searchParams->getOrder())
         ) {
             $params = OrderParams::fromAssoc([
-                //'forbidComplexExpressions' => $this->applyComplexExpressionsForbidden,
+                
                 'orderBy' => $this->searchParams->getOrderBy(),
                 'order' => $this->searchParams->getOrder(),
             ]);

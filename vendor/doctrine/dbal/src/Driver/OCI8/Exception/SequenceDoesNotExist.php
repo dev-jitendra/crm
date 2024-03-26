@@ -6,11 +6,7 @@ namespace Doctrine\DBAL\Driver\OCI8\Exception;
 
 use Doctrine\DBAL\Driver\AbstractException;
 
-/**
- * @internal
- *
- * @psalm-immutable
- */
+
 final class SequenceDoesNotExist extends AbstractException
 {
     public static function new(): self

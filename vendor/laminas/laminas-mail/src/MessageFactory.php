@@ -15,10 +15,7 @@ use function ucwords;
 
 class MessageFactory
 {
-    /**
-     * @param array|Traversable $options
-     * @return Message
-     */
+    
     public static function getInstance($options = [])
     {
         if (! is_array($options) && ! $options instanceof Traversable) {
@@ -41,12 +38,7 @@ class MessageFactory
         return $message;
     }
 
-    /**
-     * Generate a setter method name based on a provided key.
-     *
-     * @param string $key
-     * @return string
-     */
+    
     private static function getSetterMethod($key)
     {
         return 'set'

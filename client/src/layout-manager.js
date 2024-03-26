@@ -1,94 +1,37 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module layout-manager */
+
+
 
 import {Events} from 'bullbone';
 
-/**
- * A layout manager.
- *
- * @mixes Bull.Events
- */
+
 class LayoutManager {
 
-    /**
-     * @param {module:cache|null} [cache] A cache.
-     * @param {string} [applicationId] An application ID.
-     * @param {string} [userId] A user ID.
-     */
+    
     constructor(cache, applicationId, userId) {
 
-        /**
-         * @private
-         * @type {module:cache|null}
-         */
+        
         this.cache = cache || null;
 
-        /**
-         * @private
-         * @type {string}
-         */
+        
         this.applicationId = applicationId || 'default-id';
 
-        /**
-         * @private
-         * @type {string|null}
-         */
+        
         this.userId = userId || null;
 
-        /**
-         * @private
-         * @type {Object}
-         */
+        
         this.data = {};
 
-        /** @private */
+        
         this.ajax = Espo.Ajax;
     }
 
-    /**
-     * Set a user ID. To be used for the cache purpose.
-     *
-     * @param {string} userId A user ID.
-     *
-     * @todo Throw an exception if already set.
-     */
+    
     setUserId(userId) {
         this.userId = userId
     }
 
-    /**
-     * @private
-     * @param {string} scope
-     * @param {string} type
-     * @returns {string}
-     */
+    
     getKey(scope, type) {
         if (this.userId) {
             return this.applicationId + '-' + this.userId + '-' + scope + '-' + type;
@@ -97,13 +40,7 @@ class LayoutManager {
         return this.applicationId + '-' + scope + '-' + type;
     }
 
-    /**
-     * @private
-     * @param {string} scope
-     * @param {string} type
-     * @param {string} [setId]
-     * @returns {string}
-     */
+    
     getUrl(scope, type, setId) {
         let url = scope + '/layout/' + type;
 
@@ -114,20 +51,9 @@ class LayoutManager {
         return url;
     }
 
-    /**
-     * @callback module:layout-manager~getCallback
-     *
-     * @param {*} layout A layout.
-     */
+    
 
-    /**
-     * Get a layout.
-     *
-     * @param {string} scope A scope (entity type).
-     * @param {string} type A layout type (name).
-     * @param {module:layout-manager~getCallback} callback
-     * @param {boolean} [cache=true] Use cache.
-     */
+    
     get(scope, type, callback, cache) {
         if (typeof cache === 'undefined') {
             cache = true;
@@ -176,14 +102,7 @@ class LayoutManager {
             );
     }
 
-    /**
-     * Get an original layout.
-     *
-     * @param {string} scope A scope (entity type).
-     * @param {string} type A layout type (name).
-     * @param {string} [setId]
-     * @param {module:layout-manager~getCallback} callback
-     */
+    
     getOriginal(scope, type, setId, callback) {
         let url = 'Layout/action/getOriginal?scope='+scope+'&name='+type;
 
@@ -202,16 +121,7 @@ class LayoutManager {
             );
     }
 
-    /**
-     * Store and set a layout.
-     *
-     * @param {string} scope A scope (entity type).
-     * @param {string} type A type (name).
-     * @param {*} layout A layout.
-     * @param {Function} callback A callback.
-     * @param {string} [setId] A set ID.
-     * @returns {Promise}
-     */
+    
     set(scope, type, layout, callback, setId) {
         return Espo.Ajax
             .putRequest(this.getUrl(scope, type, setId), layout)
@@ -234,14 +144,7 @@ class LayoutManager {
             );
     }
 
-    /**
-     * Reset a layout to default.
-     *
-     * @param {string} scope A scope (entity type).
-     * @param {string} type A type (name).
-     * @param {Function} callback A callback.
-     * @param {string} [setId] A set ID.
-     */
+    
     resetToDefault(scope, type, callback, setId) {
         Espo.Ajax
             .postRequest('Layout/action/resetToDefault', {
@@ -268,9 +171,7 @@ class LayoutManager {
             );
     }
 
-    /**
-     * Clear loaded data.
-     */
+    
     clearLoadedData() {
         this.data = {};
     }

@@ -21,15 +21,15 @@ class DataValidations
     public function load(): void
     {
         foreach ($this->worksheetXml->dataValidations->dataValidation as $dataValidation) {
-            // Uppercase coordinate
+            
             $range = strtoupper($dataValidation['sqref']);
             $rangeSet = explode(' ', $range);
             foreach ($rangeSet as $range) {
                 $stRange = $this->worksheet->shrinkRangeToFit($range);
 
-                // Extract all cell references in $range
+                
                 foreach (Coordinate::extractAllCellReferencesInRange($stRange) as $reference) {
-                    // Create validation
+                    
                     $docValidation = $this->worksheet->getCell($reference)->getDataValidation();
                     $docValidation->setType((string) $dataValidation['type']);
                     $docValidation->setErrorStyle((string) $dataValidation['errorStyle']);

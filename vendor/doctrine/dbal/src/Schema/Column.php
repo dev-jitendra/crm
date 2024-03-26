@@ -10,62 +10,49 @@ use function array_merge;
 use function is_numeric;
 use function method_exists;
 
-/**
- * Object representation of a database column.
- */
+
 class Column extends AbstractAsset
 {
-    /** @var Type */
+    
     protected $_type;
 
-    /** @var int|null */
+    
     protected $_length;
 
-    /** @var int */
+    
     protected $_precision = 10;
 
-    /** @var int */
+    
     protected $_scale = 0;
 
-    /** @var bool */
+    
     protected $_unsigned = false;
 
-    /** @var bool */
+    
     protected $_fixed = false;
 
-    /** @var bool */
+    
     protected $_notnull = true;
 
-    /** @var string|null */
+    
     protected $_default;
 
-    /** @var bool */
+    
     protected $_autoincrement = false;
 
-    /** @var mixed[] */
+    
     protected $_platformOptions = [];
 
-    /** @var string|null */
+    
     protected $_columnDefinition;
 
-    /** @var string|null */
+    
     protected $_comment;
 
-    /**
-     * @deprecated Use {@link $_platformOptions instead}
-     *
-     * @var mixed[]
-     */
+    
     protected $_customSchemaOptions = [];
 
-    /**
-     * Creates a new Column.
-     *
-     * @param string  $name
-     * @param mixed[] $options
-     *
-     * @throws SchemaException
-     */
+    
     public function __construct($name, Type $type, array $options = [])
     {
         $this->_setName($name);
@@ -73,13 +60,7 @@ class Column extends AbstractAsset
         $this->setOptions($options);
     }
 
-    /**
-     * @param mixed[] $options
-     *
-     * @return Column
-     *
-     * @throws SchemaException
-     */
+    
     public function setOptions(array $options)
     {
         foreach ($options as $name => $value) {
@@ -95,7 +76,7 @@ class Column extends AbstractAsset
         return $this;
     }
 
-    /** @return Column */
+    
     public function setType(Type $type)
     {
         $this->_type = $type;
@@ -103,11 +84,7 @@ class Column extends AbstractAsset
         return $this;
     }
 
-    /**
-     * @param int|null $length
-     *
-     * @return Column
-     */
+    
     public function setLength($length)
     {
         if ($length !== null) {
@@ -119,15 +96,11 @@ class Column extends AbstractAsset
         return $this;
     }
 
-    /**
-     * @param int $precision
-     *
-     * @return Column
-     */
+    
     public function setPrecision($precision)
     {
         if (! is_numeric($precision)) {
-            $precision = 10; // defaults to 10 when no valid precision is given.
+            $precision = 10; 
         }
 
         $this->_precision = (int) $precision;
@@ -135,11 +108,7 @@ class Column extends AbstractAsset
         return $this;
     }
 
-    /**
-     * @param int $scale
-     *
-     * @return Column
-     */
+    
     public function setScale($scale)
     {
         if (! is_numeric($scale)) {
@@ -151,11 +120,7 @@ class Column extends AbstractAsset
         return $this;
     }
 
-    /**
-     * @param bool $unsigned
-     *
-     * @return Column
-     */
+    
     public function setUnsigned($unsigned)
     {
         $this->_unsigned = (bool) $unsigned;
@@ -163,11 +128,7 @@ class Column extends AbstractAsset
         return $this;
     }
 
-    /**
-     * @param bool $fixed
-     *
-     * @return Column
-     */
+    
     public function setFixed($fixed)
     {
         $this->_fixed = (bool) $fixed;
@@ -175,11 +136,7 @@ class Column extends AbstractAsset
         return $this;
     }
 
-    /**
-     * @param bool $notnull
-     *
-     * @return Column
-     */
+    
     public function setNotnull($notnull)
     {
         $this->_notnull = (bool) $notnull;
@@ -187,11 +144,7 @@ class Column extends AbstractAsset
         return $this;
     }
 
-    /**
-     * @param mixed $default
-     *
-     * @return Column
-     */
+    
     public function setDefault($default)
     {
         $this->_default = $default;
@@ -199,11 +152,7 @@ class Column extends AbstractAsset
         return $this;
     }
 
-    /**
-     * @param mixed[] $platformOptions
-     *
-     * @return Column
-     */
+    
     public function setPlatformOptions(array $platformOptions)
     {
         $this->_platformOptions = $platformOptions;
@@ -211,12 +160,7 @@ class Column extends AbstractAsset
         return $this;
     }
 
-    /**
-     * @param string $name
-     * @param mixed  $value
-     *
-     * @return Column
-     */
+    
     public function setPlatformOption($name, $value)
     {
         $this->_platformOptions[$name] = $value;
@@ -224,11 +168,7 @@ class Column extends AbstractAsset
         return $this;
     }
 
-    /**
-     * @param string|null $value
-     *
-     * @return Column
-     */
+    
     public function setColumnDefinition($value)
     {
         $this->_columnDefinition = $value;
@@ -236,97 +176,85 @@ class Column extends AbstractAsset
         return $this;
     }
 
-    /** @return Type */
+    
     public function getType()
     {
         return $this->_type;
     }
 
-    /** @return int|null */
+    
     public function getLength()
     {
         return $this->_length;
     }
 
-    /** @return int */
+    
     public function getPrecision()
     {
         return $this->_precision;
     }
 
-    /** @return int */
+    
     public function getScale()
     {
         return $this->_scale;
     }
 
-    /** @return bool */
+    
     public function getUnsigned()
     {
         return $this->_unsigned;
     }
 
-    /** @return bool */
+    
     public function getFixed()
     {
         return $this->_fixed;
     }
 
-    /** @return bool */
+    
     public function getNotnull()
     {
         return $this->_notnull;
     }
 
-    /** @return string|null */
+    
     public function getDefault()
     {
         return $this->_default;
     }
 
-    /** @return mixed[] */
+    
     public function getPlatformOptions()
     {
         return $this->_platformOptions;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
+    
     public function hasPlatformOption($name)
     {
         return isset($this->_platformOptions[$name]);
     }
 
-    /**
-     * @param string $name
-     *
-     * @return mixed
-     */
+    
     public function getPlatformOption($name)
     {
         return $this->_platformOptions[$name];
     }
 
-    /** @return string|null */
+    
     public function getColumnDefinition()
     {
         return $this->_columnDefinition;
     }
 
-    /** @return bool */
+    
     public function getAutoincrement()
     {
         return $this->_autoincrement;
     }
 
-    /**
-     * @param bool $flag
-     *
-     * @return Column
-     */
+    
     public function setAutoincrement($flag)
     {
         $this->_autoincrement = $flag;
@@ -334,11 +262,7 @@ class Column extends AbstractAsset
         return $this;
     }
 
-    /**
-     * @param string|null $comment
-     *
-     * @return Column
-     */
+    
     public function setComment($comment)
     {
         $this->_comment = $comment;
@@ -346,25 +270,18 @@ class Column extends AbstractAsset
         return $this;
     }
 
-    /** @return string|null */
+    
     public function getComment()
     {
         return $this->_comment;
     }
 
-    /**
-     * @deprecated Use {@link setPlatformOption() instead}
-     *
-     * @param string $name
-     * @param mixed  $value
-     *
-     * @return Column
-     */
+    
     public function setCustomSchemaOption($name, $value)
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5476',
+            'https:
             'Column::setCustomSchemaOption() is deprecated. Use setPlatformOption() instead.',
         );
 
@@ -373,54 +290,36 @@ class Column extends AbstractAsset
         return $this;
     }
 
-    /**
-     * @deprecated Use {@link hasPlatformOption() instead}
-     *
-     * @param string $name
-     *
-     * @return bool
-     */
+    
     public function hasCustomSchemaOption($name)
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5476',
+            'https:
             'Column::hasCustomSchemaOption() is deprecated. Use hasPlatformOption() instead.',
         );
 
         return isset($this->_customSchemaOptions[$name]);
     }
 
-    /**
-     * @deprecated Use {@link getPlatformOption() instead}
-     *
-     * @param string $name
-     *
-     * @return mixed
-     */
+    
     public function getCustomSchemaOption($name)
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5476',
+            'https:
             'Column::getCustomSchemaOption() is deprecated. Use getPlatformOption() instead.',
         );
 
         return $this->_customSchemaOptions[$name];
     }
 
-    /**
-     * @deprecated Use {@link setPlatformOptions() instead}
-     *
-     * @param mixed[] $customSchemaOptions
-     *
-     * @return Column
-     */
+    
     public function setCustomSchemaOptions(array $customSchemaOptions)
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5476',
+            'https:
             'Column::setCustomSchemaOptions() is deprecated. Use setPlatformOptions() instead.',
         );
 
@@ -429,23 +328,19 @@ class Column extends AbstractAsset
         return $this;
     }
 
-    /**
-     * @deprecated Use {@link getPlatformOptions() instead}
-     *
-     * @return mixed[]
-     */
+    
     public function getCustomSchemaOptions()
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5476',
+            'https:
             'Column::getCustomSchemaOptions() is deprecated. Use getPlatformOptions() instead.',
         );
 
         return $this->_customSchemaOptions;
     }
 
-    /** @return mixed[] */
+    
     public function toArray()
     {
         return array_merge([

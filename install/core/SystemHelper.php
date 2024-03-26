@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 class SystemHelper extends \Espo\Core\Utils\System
 {
@@ -82,18 +56,18 @@ class SystemHelper extends \Espo\Core\Utils\System
 
     public function getBaseUrl()
     {
-        $pageUrl = 'http://';
+        $pageUrl = 'http:
 
         if (isset($_SERVER['REQUEST_SCHEME']) && $_SERVER['REQUEST_SCHEME'] == 'https') {
-            $pageUrl = 'https://';
+            $pageUrl = 'https:
         }
 
         if (isset($_SERVER['HTTPS']) && $_SERVER["HTTPS"] == 'on') {
-            $pageUrl = 'https://';
+            $pageUrl = 'https:
         }
 
         if ($_SERVER["SERVER_PORT"] == '443') {
-            $pageUrl = 'https://';
+            $pageUrl = 'https:
         }
 
         if (in_array($_SERVER["SERVER_PORT"], ['80', '443'])) {
@@ -200,15 +174,7 @@ class SystemHelper extends \Espo\Core\Utils\System
         return $this->getRootDir() . $path;
     }
 
-    /**
-     * Get permission commands
-     *
-     * @param  string | array  $path
-     * @param  string | array  $permissions
-     * @param  boolean $isSudo
-     * @param  bool  $isFile
-     * @return string
-     */
+    
     public function getPermissionCommands($path, $permissions = ['644', '755'], $isSudo = false, $isFile = null, $changeOwner = true, $isCd = true)
     {
         if (is_string($path)) {

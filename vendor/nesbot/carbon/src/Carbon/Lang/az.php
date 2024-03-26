@@ -1,24 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Josh Soref
- * - Kunal Marwaha
- * - François B
- * - JD Isaacks
- * - Orxan
- * - Şəhriyar İmanov
- * - Baran Şengül
- */
+
+
 return [
     'year' => ':count il',
     'a_year' => '{1}bir il|]1,Inf[:count il',
@@ -74,7 +58,7 @@ return [
         'sameElse' => 'L',
     ],
     'ordinal' => function ($number) {
-        if ($number === 0) { // special case for zero
+        if ($number === 0) { 
             return "$number-ıncı";
         }
 

@@ -8,24 +8,13 @@ use Doctrine\DBAL\Query;
 
 use function assert;
 
-/**
- * Base class for all errors detected in the driver.
- *
- * @psalm-immutable
- */
+
 class DriverException extends Exception implements TheDriverException
 {
-    /**
-     * The query that triggered the exception, if any.
-     */
+    
     private ?Query $query;
 
-    /**
-     * @internal
-     *
-     * @param TheDriverException $driverException The DBAL driver exception to chain.
-     * @param Query|null         $query           The SQL query that triggered the exception, if any.
-     */
+    
     public function __construct(TheDriverException $driverException, ?Query $query)
     {
         if ($query !== null) {
@@ -39,9 +28,7 @@ class DriverException extends Exception implements TheDriverException
         $this->query = $query;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getSQLState()
     {
         $previous = $this->getPrevious();

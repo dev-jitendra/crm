@@ -1,10 +1,5 @@
 <?php
-/**
- * @package php-svg-lib
- * @link    http://github.com/PhenX/php-svg-lib
- * @author  Fabien Ménager <fabien.menager@gmail.com>
- * @license GNU LGPLv3+ http://www.gnu.org/copyleft/lesser.html
- */
+
 
 namespace Svg\Tag;
 
@@ -14,19 +9,19 @@ use Svg\Style;
 
 abstract class AbstractTag
 {
-    /** @var Document */
+    
     protected $document;
 
     public $tagName;
 
-    /** @var Style */
+    
     protected $style;
 
     protected $attributes = array();
 
     protected $hasShape = true;
 
-    /** @var self[] */
+    
     protected $children = array();
 
     public function __construct(Document $document, $tagName)
@@ -39,9 +34,7 @@ abstract class AbstractTag
         return $this->document;
     }
 
-    /**
-     * @return Group|null
-     */
+    
     public function getParentGroup() {
         $stack = $this->getDocument()->getStack();
         for ($i = count($stack)-2; $i >= 0; $i--) {
@@ -103,21 +96,13 @@ abstract class AbstractTag
         }
     }
 
-    /**
-     * @return Style
-     */
+    
     public function getStyle()
     {
         return $this->style;
     }
 
-    /**
-     * Make a style object from the tag and its attributes
-     *
-     * @param array $attributes
-     *
-     * @return Style
-     */
+    
     protected function makeStyle($attributes) {
         $style = new Style();
         $style->inherit($this);
@@ -189,16 +174,7 @@ abstract class AbstractTag
         }
     }
 
-    /**
-     * Convert the given size for the context of this current tag.
-     * Takes a pixel-based reference, which is usually specific to the context of the size,
-     * but the actual reference size will be decided based upon the unit used.
-     *
-     * @param string $size
-     * @param float $pxReference
-     *
-     * @return float
-     */
+    
     protected function convertSize(string $size, float $pxReference): float
     {
         $length = new CssLength($size);

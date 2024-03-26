@@ -1,21 +1,10 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Routing;
 
-/**
- * CompiledRoutes are returned by the RouteCompiler class.
- *
- * @author Fabien Potencier <fabien@symfony.com>
- */
+
 class CompiledRoute implements \Serializable
 {
     private array $variables;
@@ -27,16 +16,7 @@ class CompiledRoute implements \Serializable
     private ?string $hostRegex;
     private array $hostTokens;
 
-    /**
-     * @param string      $staticPrefix  The static prefix of the compiled route
-     * @param string      $regex         The regular expression to use to match this route
-     * @param array       $tokens        An array of tokens to use to generate URL for this route
-     * @param array       $pathVariables An array of path variables
-     * @param string|null $hostRegex     Host regex
-     * @param array       $hostTokens    Host tokens
-     * @param array       $hostVariables An array of host variables
-     * @param array       $variables     An array of variables (variables defined in the path and in the host patterns)
-     */
+    
     public function __construct(string $staticPrefix, string $regex, array $tokens, array $pathVariables, string $hostRegex = null, array $hostTokens = [], array $hostVariables = [], array $variables = [])
     {
         $this->staticPrefix = $staticPrefix;
@@ -63,9 +43,7 @@ class CompiledRoute implements \Serializable
         ];
     }
 
-    /**
-     * @internal
-     */
+    
     final public function serialize(): string
     {
         throw new \BadMethodCallException('Cannot serialize '.__CLASS__);
@@ -83,73 +61,55 @@ class CompiledRoute implements \Serializable
         $this->hostVariables = $data['host_vars'];
     }
 
-    /**
-     * @internal
-     */
+    
     final public function unserialize(string $serialized)
     {
         $this->__unserialize(unserialize($serialized, ['allowed_classes' => false]));
     }
 
-    /**
-     * Returns the static prefix.
-     */
+    
     public function getStaticPrefix(): string
     {
         return $this->staticPrefix;
     }
 
-    /**
-     * Returns the regex.
-     */
+    
     public function getRegex(): string
     {
         return $this->regex;
     }
 
-    /**
-     * Returns the host regex.
-     */
+    
     public function getHostRegex(): ?string
     {
         return $this->hostRegex;
     }
 
-    /**
-     * Returns the tokens.
-     */
+    
     public function getTokens(): array
     {
         return $this->tokens;
     }
 
-    /**
-     * Returns the host tokens.
-     */
+    
     public function getHostTokens(): array
     {
         return $this->hostTokens;
     }
 
-    /**
-     * Returns the variables.
-     */
+    
     public function getVariables(): array
     {
         return $this->variables;
     }
 
-    /**
-     * Returns the path variables.
-     */
+    
     public function getPathVariables(): array
     {
         return $this->pathVariables;
     }
 
-    /**
-     * Returns the host variables.
-     */
+    
     public function getHostVariables(): array
     {
         return $this->hostVariables;

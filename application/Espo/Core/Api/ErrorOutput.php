@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Api;
 
@@ -42,12 +16,10 @@ use Espo\Core\Utils\Log;
 
 use Throwable;
 
-/**
- * Processes an error output. If an exception occurred, it will be passed to here.
- */
+
 class ErrorOutput
 {
-    /** @var array<int, string> */
+    
     private $errorDescriptions = [
         400 => 'Bad Request',
         401 => 'Unauthorized',
@@ -58,7 +30,7 @@ class ErrorOutput
         503 => 'Service Unavailable',
     ];
 
-    /** @var int[] */
+    
     private $allowedStatusCodeList = [
         200,
         201,
@@ -71,7 +43,7 @@ class ErrorOutput
         503,
     ];
 
-    /** @var class-string<Throwable>[] */
+    
     private array $printStatusReasonExceptionClassNameList = [
         Error::class,
         Forbidden::class,
@@ -215,7 +187,7 @@ class ErrorOutput
     {
         $pattern = "/[^ \t\x21-\x7E\x80-\xFF]/";
 
-        /** @var string */
+        
         return preg_replace($pattern, ' ', $value);
     }
 

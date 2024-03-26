@@ -18,15 +18,13 @@ abstract class AbstractStatementMiddleware implements Statement
         $this->wrappedStatement = $wrappedStatement;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function bindValue($param, $value, $type = ParameterType::STRING)
     {
         if (func_num_args() < 3) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5558',
+                'https:
                 'Not passing $type to Statement::bindValue() is deprecated.'
                     . ' Pass the type corresponding to the parameter being bound.',
             );
@@ -35,16 +33,12 @@ abstract class AbstractStatementMiddleware implements Statement
         return $this->wrappedStatement->bindValue($param, $value, $type);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated Use {@see bindValue()} instead.
-     */
+    
     public function bindParam($param, &$variable, $type = ParameterType::STRING, $length = null)
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5563',
+            'https:
             '%s is deprecated. Use bindValue() instead.',
             __METHOD__,
         );
@@ -52,7 +46,7 @@ abstract class AbstractStatementMiddleware implements Statement
         if (func_num_args() < 3) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5558',
+                'https:
                 'Not passing $type to Statement::bindParam() is deprecated.'
                     . ' Pass the type corresponding to the parameter being bound.',
             );
@@ -61,9 +55,7 @@ abstract class AbstractStatementMiddleware implements Statement
         return $this->wrappedStatement->bindParam($param, $variable, $type, $length);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function execute($params = null): Result
     {
         return $this->wrappedStatement->execute($params);

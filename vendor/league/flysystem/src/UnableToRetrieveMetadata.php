@@ -9,19 +9,13 @@ use Throwable;
 
 final class UnableToRetrieveMetadata extends RuntimeException implements FilesystemOperationFailed
 {
-    /**
-     * @var string
-     */
+    
     private $location;
 
-    /**
-     * @var string
-     */
+    
     private $metadataType;
 
-    /**
-     * @var string
-     */
+    
     private $reason;
 
     public static function lastModified(string $location, string $reason = '', Throwable $previous = null): self

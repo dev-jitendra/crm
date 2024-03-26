@@ -10,56 +10,22 @@ use AsyncAws\S3\Enum\RequestPayer;
 
 final class AbortMultipartUploadRequest extends Input
 {
-    /**
-     * The bucket name to which the upload was taking place.
-     *
-     * @required
-     *
-     * @var string|null
-     */
+    
     private $bucket;
 
-    /**
-     * Key of the object for which the multipart upload was initiated.
-     *
-     * @required
-     *
-     * @var string|null
-     */
+    
     private $key;
 
-    /**
-     * Upload ID that identifies the multipart upload.
-     *
-     * @required
-     *
-     * @var string|null
-     */
+    
     private $uploadId;
 
-    /**
-     * @var null|RequestPayer::*
-     */
+    
     private $requestPayer;
 
-    /**
-     * The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail
-     * with an HTTP `403 (Access Denied)` error.
-     *
-     * @var string|null
-     */
+    
     private $expectedBucketOwner;
 
-    /**
-     * @param array{
-     *   Bucket?: string,
-     *   Key?: string,
-     *   UploadId?: string,
-     *   RequestPayer?: RequestPayer::*,
-     *   ExpectedBucketOwner?: string,
-     *   @region?: string,
-     * } $input
-     */
+    
     public function __construct(array $input = [])
     {
         $this->bucket = $input['Bucket'] ?? null;
@@ -90,9 +56,7 @@ final class AbortMultipartUploadRequest extends Input
         return $this->key;
     }
 
-    /**
-     * @return RequestPayer::*|null
-     */
+    
     public function getRequestPayer(): ?string
     {
         return $this->requestPayer;
@@ -103,12 +67,10 @@ final class AbortMultipartUploadRequest extends Input
         return $this->uploadId;
     }
 
-    /**
-     * @internal
-     */
+    
     public function request(): Request
     {
-        // Prepare headers
+        
         $headers = ['content-type' => 'application/xml'];
         if (null !== $this->requestPayer) {
             if (!RequestPayer::exists($this->requestPayer)) {
@@ -120,14 +82,14 @@ final class AbortMultipartUploadRequest extends Input
             $headers['x-amz-expected-bucket-owner'] = $this->expectedBucketOwner;
         }
 
-        // Prepare query
+        
         $query = [];
         if (null === $v = $this->uploadId) {
             throw new InvalidArgument(sprintf('Missing parameter "UploadId" for "%s". The value cannot be null.', __CLASS__));
         }
         $query['uploadId'] = $v;
 
-        // Prepare URI
+        
         $uri = [];
         if (null === $v = $this->bucket) {
             throw new InvalidArgument(sprintf('Missing parameter "Bucket" for "%s". The value cannot be null.', __CLASS__));
@@ -139,10 +101,10 @@ final class AbortMultipartUploadRequest extends Input
         $uri['Key'] = $v;
         $uriString = '/' . rawurlencode($uri['Bucket']) . '/' . str_replace('%2F', '/', rawurlencode($uri['Key']));
 
-        // Prepare Body
+        
         $body = '';
 
-        // Return the Request
+        
         return new Request('DELETE', $uriString, $query, $headers, StreamFactory::create($body));
     }
 
@@ -167,9 +129,7 @@ final class AbortMultipartUploadRequest extends Input
         return $this;
     }
 
-    /**
-     * @param RequestPayer::*|null $value
-     */
+    
     public function setRequestPayer(?string $value): self
     {
         $this->requestPayer = $value;

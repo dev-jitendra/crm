@@ -21,13 +21,9 @@ class ConvertUOM
     public const CATEGORY_INFORMATION = 'Information';
     public const CATEGORY_SPEED = 'Speed';
 
-    /**
-     * Details of the Units of measure that can be used in CONVERTUOM().
-     *
-     * @var mixed[]
-     */
+    
     private static $conversionUnits = [
-        // Weight and Mass
+        
         'g' => ['Group' => self::CATEGORY_WEIGHT_AND_MASS, 'Unit Name' => 'Gram', 'AllowPrefix' => true],
         'sg' => ['Group' => self::CATEGORY_WEIGHT_AND_MASS, 'Unit Name' => 'Slug', 'AllowPrefix' => false],
         'lbm' => ['Group' => self::CATEGORY_WEIGHT_AND_MASS, 'Unit Name' => 'Pound mass (avoirdupois)', 'AllowPrefix' => false],
@@ -44,7 +40,7 @@ class ConvertUOM
         'uk_ton' => ['Group' => self::CATEGORY_WEIGHT_AND_MASS, 'Unit Name' => 'Imperial ton', 'AllowPrefix' => false],
         'LTON' => ['Group' => self::CATEGORY_WEIGHT_AND_MASS, 'Unit Name' => 'Imperial ton', 'AllowPrefix' => false],
         'brton' => ['Group' => self::CATEGORY_WEIGHT_AND_MASS, 'Unit Name' => 'Imperial ton', 'AllowPrefix' => false],
-        // Distance
+        
         'm' => ['Group' => self::CATEGORY_DISTANCE, 'Unit Name' => 'Meter', 'AllowPrefix' => true],
         'mi' => ['Group' => self::CATEGORY_DISTANCE, 'Unit Name' => 'Statute mile', 'AllowPrefix' => false],
         'Nmi' => ['Group' => self::CATEGORY_DISTANCE, 'Unit Name' => 'Nautical mile', 'AllowPrefix' => false],
@@ -60,7 +56,7 @@ class ConvertUOM
         'Picapt' => ['Group' => self::CATEGORY_DISTANCE, 'Unit Name' => 'Pica (1/72 in)', 'AllowPrefix' => false],
         'pica' => ['Group' => self::CATEGORY_DISTANCE, 'Unit Name' => 'Pica (1/6 in)', 'AllowPrefix' => false],
         'survey_mi' => ['Group' => self::CATEGORY_DISTANCE, 'Unit Name' => 'U.S survey mile (statute mile)', 'AllowPrefix' => false],
-        // Time
+        
         'yr' => ['Group' => self::CATEGORY_TIME, 'Unit Name' => 'Year', 'AllowPrefix' => false],
         'day' => ['Group' => self::CATEGORY_TIME, 'Unit Name' => 'Day', 'AllowPrefix' => false],
         'd' => ['Group' => self::CATEGORY_TIME, 'Unit Name' => 'Day', 'AllowPrefix' => false],
@@ -69,7 +65,7 @@ class ConvertUOM
         'min' => ['Group' => self::CATEGORY_TIME, 'Unit Name' => 'Minute', 'AllowPrefix' => false],
         'sec' => ['Group' => self::CATEGORY_TIME, 'Unit Name' => 'Second', 'AllowPrefix' => true],
         's' => ['Group' => self::CATEGORY_TIME, 'Unit Name' => 'Second', 'AllowPrefix' => true],
-        // Pressure
+        
         'Pa' => ['Group' => self::CATEGORY_PRESSURE, 'Unit Name' => 'Pascal', 'AllowPrefix' => true],
         'p' => ['Group' => self::CATEGORY_PRESSURE, 'Unit Name' => 'Pascal', 'AllowPrefix' => true],
         'atm' => ['Group' => self::CATEGORY_PRESSURE, 'Unit Name' => 'Atmosphere', 'AllowPrefix' => true],
@@ -77,13 +73,13 @@ class ConvertUOM
         'mmHg' => ['Group' => self::CATEGORY_PRESSURE, 'Unit Name' => 'mm of Mercury', 'AllowPrefix' => true],
         'psi' => ['Group' => self::CATEGORY_PRESSURE, 'Unit Name' => 'PSI', 'AllowPrefix' => true],
         'Torr' => ['Group' => self::CATEGORY_PRESSURE, 'Unit Name' => 'Torr', 'AllowPrefix' => true],
-        // Force
+        
         'N' => ['Group' => self::CATEGORY_FORCE, 'Unit Name' => 'Newton', 'AllowPrefix' => true],
         'dyn' => ['Group' => self::CATEGORY_FORCE, 'Unit Name' => 'Dyne', 'AllowPrefix' => true],
         'dy' => ['Group' => self::CATEGORY_FORCE, 'Unit Name' => 'Dyne', 'AllowPrefix' => true],
         'lbf' => ['Group' => self::CATEGORY_FORCE, 'Unit Name' => 'Pound force', 'AllowPrefix' => false],
         'pond' => ['Group' => self::CATEGORY_FORCE, 'Unit Name' => 'Pond', 'AllowPrefix' => true],
-        // Energy
+        
         'J' => ['Group' => self::CATEGORY_ENERGY, 'Unit Name' => 'Joule', 'AllowPrefix' => true],
         'e' => ['Group' => self::CATEGORY_ENERGY, 'Unit Name' => 'Erg', 'AllowPrefix' => true],
         'c' => ['Group' => self::CATEGORY_ENERGY, 'Unit Name' => 'Thermodynamic calorie', 'AllowPrefix' => true],
@@ -97,7 +93,7 @@ class ConvertUOM
         'flb' => ['Group' => self::CATEGORY_ENERGY, 'Unit Name' => 'Foot-pound', 'AllowPrefix' => false],
         'BTU' => ['Group' => self::CATEGORY_ENERGY, 'Unit Name' => 'BTU', 'AllowPrefix' => false],
         'btu' => ['Group' => self::CATEGORY_ENERGY, 'Unit Name' => 'BTU', 'AllowPrefix' => false],
-        // Power
+        
         'HP' => ['Group' => self::CATEGORY_POWER, 'Unit Name' => 'Horsepower', 'AllowPrefix' => false],
         'h' => ['Group' => self::CATEGORY_POWER, 'Unit Name' => 'Horsepower', 'AllowPrefix' => false],
         'W' => ['Group' => self::CATEGORY_POWER, 'Unit Name' => 'Watt', 'AllowPrefix' => true],
@@ -105,7 +101,7 @@ class ConvertUOM
         'PS' => ['Group' => self::CATEGORY_POWER, 'Unit Name' => 'Pferdestärke', 'AllowPrefix' => false],
         'T' => ['Group' => self::CATEGORY_MAGNETISM, 'Unit Name' => 'Tesla', 'AllowPrefix' => true],
         'ga' => ['Group' => self::CATEGORY_MAGNETISM, 'Unit Name' => 'Gauss', 'AllowPrefix' => true],
-        // Temperature
+        
         'C' => ['Group' => self::CATEGORY_TEMPERATURE, 'Unit Name' => 'Degrees Celsius', 'AllowPrefix' => false],
         'cel' => ['Group' => self::CATEGORY_TEMPERATURE, 'Unit Name' => 'Degrees Celsius', 'AllowPrefix' => false],
         'F' => ['Group' => self::CATEGORY_TEMPERATURE, 'Unit Name' => 'Degrees Fahrenheit', 'AllowPrefix' => false],
@@ -114,7 +110,7 @@ class ConvertUOM
         'kel' => ['Group' => self::CATEGORY_TEMPERATURE, 'Unit Name' => 'Kelvin', 'AllowPrefix' => false],
         'Rank' => ['Group' => self::CATEGORY_TEMPERATURE, 'Unit Name' => 'Degrees Rankine', 'AllowPrefix' => false],
         'Reau' => ['Group' => self::CATEGORY_TEMPERATURE, 'Unit Name' => 'Degrees Réaumur', 'AllowPrefix' => false],
-        // Volume
+        
         'l' => ['Group' => self::CATEGORY_VOLUME, 'Unit Name' => 'Litre', 'AllowPrefix' => true],
         'L' => ['Group' => self::CATEGORY_VOLUME, 'Unit Name' => 'Litre', 'AllowPrefix' => true],
         'lt' => ['Group' => self::CATEGORY_VOLUME, 'Unit Name' => 'Litre', 'AllowPrefix' => true],
@@ -155,7 +151,7 @@ class ConvertUOM
         'GRT' => ['Group' => self::CATEGORY_VOLUME, 'Unit Name' => 'Gross Registered Ton', 'AllowPrefix' => false],
         'regton' => ['Group' => self::CATEGORY_VOLUME, 'Unit Name' => 'Gross Registered Ton', 'AllowPrefix' => false],
         'MTON' => ['Group' => self::CATEGORY_VOLUME, 'Unit Name' => 'Measurement Ton (Freight Ton)', 'AllowPrefix' => false],
-        // Area
+        
         'ha' => ['Group' => self::CATEGORY_AREA, 'Unit Name' => 'Hectare', 'AllowPrefix' => true],
         'uk_acre' => ['Group' => self::CATEGORY_AREA, 'Unit Name' => 'International Acre', 'AllowPrefix' => false],
         'us_acre' => ['Group' => self::CATEGORY_AREA, 'Unit Name' => 'US Survey/Statute Acre', 'AllowPrefix' => false],
@@ -181,10 +177,10 @@ class ConvertUOM
         'Picapt^2' => ['Group' => self::CATEGORY_AREA, 'Unit Name' => 'Square Pica', 'AllowPrefix' => false],
         'yd2' => ['Group' => self::CATEGORY_AREA, 'Unit Name' => 'Square Yards', 'AllowPrefix' => false],
         'yd^2' => ['Group' => self::CATEGORY_AREA, 'Unit Name' => 'Square Yards', 'AllowPrefix' => false],
-        // Information
+        
         'byte' => ['Group' => self::CATEGORY_INFORMATION, 'Unit Name' => 'Byte', 'AllowPrefix' => true],
         'bit' => ['Group' => self::CATEGORY_INFORMATION, 'Unit Name' => 'Bit', 'AllowPrefix' => true],
-        // Speed
+        
         'm/s' => ['Group' => self::CATEGORY_SPEED, 'Unit Name' => 'Meters per second', 'AllowPrefix' => true],
         'm/sec' => ['Group' => self::CATEGORY_SPEED, 'Unit Name' => 'Meters per second', 'AllowPrefix' => true],
         'm/h' => ['Group' => self::CATEGORY_SPEED, 'Unit Name' => 'Meters per hour', 'AllowPrefix' => true],
@@ -194,11 +190,7 @@ class ConvertUOM
         'kn' => ['Group' => self::CATEGORY_SPEED, 'Unit Name' => 'Knot', 'AllowPrefix' => false],
     ];
 
-    /**
-     * Details of the Multiplier prefixes that can be used with Units of Measure in CONVERTUOM().
-     *
-     * @var mixed[]
-     */
+    
     private static $conversionMultipliers = [
         'Y' => ['multiplier' => 1E24, 'name' => 'yotta'],
         'Z' => ['multiplier' => 1E21, 'name' => 'zetta'],
@@ -223,11 +215,7 @@ class ConvertUOM
         'y' => ['multiplier' => 1E-24, 'name' => 'yocto'],
     ];
 
-    /**
-     * Details of the Multiplier prefixes that can be used with Units of Measure in CONVERTUOM().
-     *
-     * @var mixed[]
-     */
+    
     private static $binaryConversionMultipliers = [
         'Yi' => ['multiplier' => 2 ** 80, 'name' => 'yobi'],
         'Zi' => ['multiplier' => 2 ** 70, 'name' => 'zebi'],
@@ -239,13 +227,9 @@ class ConvertUOM
         'ki' => ['multiplier' => 2 ** 10, 'name' => 'kibi'],
     ];
 
-    /**
-     * Details of the Units of measure conversion factors, organised by group.
-     *
-     * @var mixed[]
-     */
+    
     private static $unitConversions = [
-        // Conversion uses gram (g) as an intermediate unit
+        
         self::CATEGORY_WEIGHT_AND_MASS => [
             'g' => 1.0,
             'sg' => 6.85217658567918E-05,
@@ -264,7 +248,7 @@ class ConvertUOM
             'LTON' => 9.84206527611061E-07,
             'brton' => 9.84206527611061E-07,
         ],
-        // Conversion uses meter (m) as an intermediate unit
+        
         self::CATEGORY_DISTANCE => [
             'm' => 1.0,
             'mi' => 6.21371192237334E-04,
@@ -282,7 +266,7 @@ class ConvertUOM
             'pica' => 2.36220472440945E+02,
             'survey_mi' => 6.21369949494950E-04,
         ],
-        // Conversion uses second (s) as an intermediate unit
+        
         self::CATEGORY_TIME => [
             'yr' => 3.16880878140289E-08,
             'day' => 1.15740740740741E-05,
@@ -293,7 +277,7 @@ class ConvertUOM
             'sec' => 1.0,
             's' => 1.0,
         ],
-        // Conversion uses Pascal (Pa) as an intermediate unit
+        
         self::CATEGORY_PRESSURE => [
             'Pa' => 1.0,
             'p' => 1.0,
@@ -303,7 +287,7 @@ class ConvertUOM
             'psi' => 1.45037737730209E-04,
             'Torr' => 7.50061682704170E-03,
         ],
-        // Conversion uses Newton (N) as an intermediate unit
+        
         self::CATEGORY_FORCE => [
             'N' => 1.0,
             'dyn' => 1.0E+5,
@@ -311,7 +295,7 @@ class ConvertUOM
             'lbf' => 2.24808923655339E-01,
             'pond' => 1.01971621297793E+02,
         ],
-        // Conversion uses Joule (J) as an intermediate unit
+        
         self::CATEGORY_ENERGY => [
             'J' => 1.0,
             'e' => 9.99999519343231E+06,
@@ -327,7 +311,7 @@ class ConvertUOM
             'BTU' => 9.47815067349015E-04,
             'btu' => 9.47815067349015E-04,
         ],
-        // Conversion uses Horsepower (HP) as an intermediate unit
+        
         self::CATEGORY_POWER => [
             'HP' => 1.0,
             'h' => 1.0,
@@ -335,12 +319,12 @@ class ConvertUOM
             'w' => 7.45699871582270E+02,
             'PS' => 1.01386966542400E+00,
         ],
-        // Conversion uses Tesla (T) as an intermediate unit
+        
         self::CATEGORY_MAGNETISM => [
             'T' => 1.0,
             'ga' => 10000.0,
         ],
-        // Conversion uses litre (l) as an intermediate unit
+        
         self::CATEGORY_VOLUME => [
             'l' => 1.0,
             'L' => 1.0,
@@ -383,7 +367,7 @@ class ConvertUOM
             'regton' => 3.53146667214886E-04,
             'MTON' => 8.82866668037215E-04,
         ],
-        // Conversion uses hectare (ha) as an intermediate unit
+        
         self::CATEGORY_AREA => [
             'ha' => 1.0,
             'uk_acre' => 2.47105381467165E+00,
@@ -411,12 +395,12 @@ class ConvertUOM
             'yd2' => 1.19599004630108E+04,
             'yd^2' => 1.19599004630108E+04,
         ],
-        // Conversion uses bit (bit) as an intermediate unit
+        
         self::CATEGORY_INFORMATION => [
             'bit' => 1.0,
             'byte' => 0.125,
         ],
-        // Conversion uses Meters per Second (m/s) as an intermediate unit
+        
         self::CATEGORY_SPEED => [
             'm/s' => 1.0,
             'm/sec' => 1.0,
@@ -428,12 +412,7 @@ class ConvertUOM
         ],
     ];
 
-    /**
-     *    getConversionGroups
-     * Returns a list of the different conversion groups for UOM conversions.
-     *
-     * @return array
-     */
+    
     public static function getConversionCategories()
     {
         $conversionGroups = [];
@@ -444,14 +423,7 @@ class ConvertUOM
         return array_merge(array_unique($conversionGroups));
     }
 
-    /**
-     *    getConversionGroupUnits
-     * Returns an array of units of measure, for a specified conversion group, or for all groups.
-     *
-     * @param string $category The group whose units of measure you want to retrieve
-     *
-     * @return array
-     */
+    
     public static function getConversionCategoryUnits($category = null)
     {
         $conversionGroups = [];
@@ -464,13 +436,7 @@ class ConvertUOM
         return $conversionGroups;
     }
 
-    /**
-     * getConversionGroupUnitDetails.
-     *
-     * @param string $category The group whose units of measure you want to retrieve
-     *
-     * @return array
-     */
+    
     public static function getConversionCategoryUnitDetails($category = null)
     {
         $conversionGroups = [];
@@ -486,44 +452,19 @@ class ConvertUOM
         return $conversionGroups;
     }
 
-    /**
-     *    getConversionMultipliers
-     * Returns an array of the Multiplier prefixes that can be used with Units of Measure in CONVERTUOM().
-     *
-     * @return array of mixed
-     */
+    
     public static function getConversionMultipliers()
     {
         return self::$conversionMultipliers;
     }
 
-    /**
-     *    getBinaryConversionMultipliers
-     * Returns an array of the additional Multiplier prefixes that can be used with Information Units of Measure in CONVERTUOM().
-     *
-     * @return array of mixed
-     */
+    
     public static function getBinaryConversionMultipliers()
     {
         return self::$binaryConversionMultipliers;
     }
 
-    /**
-     * CONVERT.
-     *
-     * Converts a number from one measurement system to another.
-     *    For example, CONVERT can translate a table of distances in miles to a table of distances
-     * in kilometers.
-     *
-     *    Excel Function:
-     *        CONVERT(value,fromUOM,toUOM)
-     *
-     * @param float|int $value the value in fromUOM to convert
-     * @param string $fromUOM the units for value
-     * @param string $toUOM the units for the result
-     *
-     * @return float|string
-     */
+    
     public static function CONVERT($value, $fromUOM, $toUOM)
     {
         $value = Functions::flattenSingleValue($value);
@@ -548,8 +489,8 @@ class ConvertUOM
         $value *= $fromMultiplier;
 
         if (($fromUOM === $toUOM) && ($fromMultiplier === $toMultiplier)) {
-            //    We've already factored $fromMultiplier into the value, so we need
-            //        to reverse it again
+            
+            
             return $value / $fromMultiplier;
         } elseif ($fromUOM === $toUOM) {
             return $value / $toMultiplier;
@@ -570,7 +511,7 @@ class ConvertUOM
             return [$uom, $unitCategory, 1.0];
         }
 
-        // Check 1-character standard metric multiplier prefixes
+        
         $multiplierType = substr($uom, 0, 1);
         $uom = substr($uom, 1);
         if (isset(self::$conversionUnits[$uom], self::$conversionMultipliers[$multiplierType])) {
@@ -585,7 +526,7 @@ class ConvertUOM
         $multiplierType .= substr($uom, 0, 1);
         $uom = substr($uom, 1);
 
-        // Check 2-character standard metric multiplier prefixes
+        
         if (isset(self::$conversionUnits[$uom], self::$conversionMultipliers[$multiplierType])) {
             if (self::$conversionUnits[$uom]['AllowPrefix'] === false) {
                 throw new Exception('Prefix not allowed for UoM');
@@ -595,7 +536,7 @@ class ConvertUOM
             return [$uom, $unitCategory, self::$conversionMultipliers[$multiplierType]['multiplier']];
         }
 
-        // Check 2-character binary multiplier prefixes
+        
         if (isset(self::$conversionUnits[$uom], self::$binaryConversionMultipliers[$multiplierType])) {
             if (self::$conversionUnits[$uom]['AllowPrefix'] === false) {
                 throw new Exception('Prefix not allowed for UoM');
@@ -611,11 +552,7 @@ class ConvertUOM
         throw new Exception('UoM Not Found');
     }
 
-    /**
-     * @param float|int $value
-     *
-     * @return float|int
-     */
+    
     protected static function convertTemperature(string $fromUOM, string $toUOM, $value)
     {
         $fromUOM = self::resolveTemperatureSynonyms($fromUOM);
@@ -625,7 +562,7 @@ class ConvertUOM
             return $value;
         }
 
-        // Convert to Kelvin
+        
         switch ($fromUOM) {
             case 'F':
                 $value = ($value - 32) / 1.8 + 273.15;
@@ -645,7 +582,7 @@ class ConvertUOM
                 break;
         }
 
-        // Convert from Kelvin
+        
         switch ($toUOM) {
             case 'F':
                 $value = ($value - 273.15) * 1.8 + 32.00;

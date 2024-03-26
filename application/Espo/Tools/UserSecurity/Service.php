@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\UserSecurity;
 
@@ -58,17 +32,14 @@ class Service
         private Log $log
     ) {}
 
-    /**
-     * @throws Forbidden
-     * @throws NotFound
-     */
+    
     public function read(string $id): stdClass
     {
         if (!$this->user->isAdmin() && $id !== $this->user->getId()) {
             throw new Forbidden();
         }
 
-        /** @var ?User $user */
+        
         $user = $this->entityManager->getEntityById(User::ENTITY_TYPE, $id);
 
         if (!$user) {
@@ -96,11 +67,7 @@ class Service
         ];
     }
 
-    /**
-     * @throws BadRequest
-     * @throws Forbidden
-     * @throws NotFound
-     */
+    
     public function getTwoFactorUserSetupData(string $id, stdClass $data): stdClass
     {
         if (
@@ -112,7 +79,7 @@ class Service
 
         $isReset = $data->reset ?? false;
 
-        /** @var ?User $user */
+        
         $user = $this->entityManager->getEntityById(User::ENTITY_TYPE, $id);
 
         if (!$user) {
@@ -173,7 +140,7 @@ class Service
             }
 
             $userData->set('auth2FA', false);
-            /** @noinspection PhpRedundantOptionalArgumentInspection */
+            
             $userData->set('auth2FAMethod', null);
 
             $this->entityManager->saveEntity($userData);
@@ -182,18 +149,14 @@ class Service
         return $clientData;
     }
 
-    /**
-     * @throws Forbidden
-     * @throws NotFound
-     * @throws BadRequest
-     */
+    
     public function update(string $id, stdClass $data): stdClass
     {
         if (!$this->user->isAdmin() && $id !== $this->user->getId()) {
             throw new Forbidden();
         }
 
-        /** @var ?User $user */
+        
         $user = $this->entityManager->getEntityById(User::ENTITY_TYPE, $id);
 
         if (!$user) {
@@ -234,7 +197,7 @@ class Service
         }
 
         if (!$userData->get('auth2FA')) {
-            /** @noinspection PhpRedundantOptionalArgumentInspection */
+            
             $userData->set('auth2FAMethod', null);
         }
 
@@ -276,9 +239,7 @@ class Service
         ];
     }
 
-    /**
-     * @throws Forbidden
-     */
+    
     private function checkPassword(string $id, string $password): void
     {
         $user = $this->entityManager
@@ -308,7 +269,7 @@ class Service
 
     private function getUserDataRepository(): UserDataRepository
     {
-        /** @var UserDataRepository */
+        
         return $this->entityManager->getRepository(UserData::ENTITY_TYPE);
     }
 }

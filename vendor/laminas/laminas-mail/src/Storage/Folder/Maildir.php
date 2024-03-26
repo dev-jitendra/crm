@@ -29,46 +29,19 @@ use const E_WARNING;
 
 class Maildir extends Storage\Maildir implements FolderInterface
 {
-    /**
-     * root folder for folder structure
-     *
-     * @var Storage\Folder
-     */
+    
     protected $rootFolder;
 
-    /**
-     * rootdir of folder structure
-     *
-     * @var string
-     */
+    
     protected $rootdir;
 
-    /**
-     * name of current folder
-     *
-     * @var string
-     */
+    
     protected $currentFolder;
 
-    /**
-     * delim char for subfolders
-     *
-     * @var string
-     */
+    
     protected $delim;
 
-    /**
-     * Create instance with parameters
-     *
-     * Supported parameters are:
-     *
-     * - dirname rootdir of maildir structure
-     * - delim   delim char for folder structure, default is '.'
-     * - folder initial selected folder, default is 'INBOX'
-     *
-     * @param  object|array $params mail reader specific parameters
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public function __construct($params)
     {
         $params = ParamsNormalizer::normalizeParams($params);
@@ -96,14 +69,7 @@ class Maildir extends Storage\Maildir implements FolderInterface
         $this->has['flags'] = true;
     }
 
-    /**
-     * find all subfolders and mbox files for folder structure
-     *
-     * Result is save in Storage\Folder instances with the root in $this->rootFolder.
-     * $parentFolder and $parentGlobalName are only used internally for recursion.
-     *
-     * @throws Exception\RuntimeException
-     */
+    
     protected function buildFolderTree()
     {
         $this->rootFolder        = new Storage\Folder('/', '/', false);
@@ -118,7 +84,7 @@ class Maildir extends Storage\Maildir implements FolderInterface
         $dirs = [];
 
         while (($entry = readdir($dh)) !== false) {
-            // maildir++ defines folders must start with .
+            
             if ($entry[0] != '.' || $entry == '.' || $entry == '..') {
                 continue;
             }
@@ -160,20 +126,14 @@ class Maildir extends Storage\Maildir implements FolderInterface
         }
     }
 
-    /**
-     * get root folder or given folder
-     *
-     * @param string $rootFolder get folder structure for given folder, else root
-     * @throws InvalidArgumentException
-     * @return Folder root or wanted folder
-     */
+    
     public function getFolders($rootFolder = null)
     {
         if (! $rootFolder || $rootFolder == 'INBOX') {
             return $this->rootFolder;
         }
 
-        // rootdir is same as INBOX in maildir
+        
         if (str_starts_with($rootFolder, 'INBOX' . $this->delim)) {
             $rootFolder = substr($rootFolder, 6);
         }
@@ -201,30 +161,22 @@ class Maildir extends Storage\Maildir implements FolderInterface
         return $currentFolder;
     }
 
-    /**
-     * select given folder
-     *
-     * folder must be selectable!
-     *
-     * @param Storage\Folder|string $globalName global name of folder or
-     *     instance for subfolder
-     * @throws Exception\RuntimeException
-     */
+    
     public function selectFolder($globalName)
     {
         $this->currentFolder = (string) $globalName;
 
-        // getting folder from folder tree for validation
+        
         $folder = $this->getFolders($this->currentFolder);
 
         try {
             $this->openMaildir($this->rootdir . '.' . $folder->getGlobalName());
         } catch (Exception\ExceptionInterface $e) {
-            // check what went wrong
+            
             if (! $folder->isSelectable()) {
                 throw new Exception\RuntimeException("{$this->currentFolder} is not selectable", 0, $e);
             }
-            // seems like file has vanished; rebuilding folder tree - but it's still an exception
+            
             $this->buildFolderTree();
             throw new Exception\RuntimeException(
                 'seems like the maildir has vanished; I have rebuilt the folder tree; '
@@ -235,11 +187,7 @@ class Maildir extends Storage\Maildir implements FolderInterface
         }
     }
 
-    /**
-     * get Storage\Folder instance for current folder
-     *
-     * @return string instance of current folder
-     */
+    
     public function getCurrentFolder()
     {
         return $this->currentFolder;

@@ -1,21 +1,10 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpFoundation\Session\Storage\Handler;
 
-/**
- * Adds basic `SessionUpdateTimestampHandlerInterface` behaviors to another `SessionHandlerInterface`.
- *
- * @author Nicolas Grekas <p@tchwork.com>
- */
+
 class StrictSessionHandler extends AbstractSessionHandler
 {
     private \SessionHandlerInterface $handler;
@@ -30,11 +19,7 @@ class StrictSessionHandler extends AbstractSessionHandler
         $this->handler = $handler;
     }
 
-    /**
-     * Returns true if this handler wraps an internal PHP session save handler using \SessionHandler.
-     *
-     * @internal
-     */
+    
     public function isWrapper(): bool
     {
         return $this->handler instanceof \SessionHandler;
@@ -47,9 +32,7 @@ class StrictSessionHandler extends AbstractSessionHandler
         return $this->handler->open($savePath, $sessionName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function doRead(string $sessionId): string
     {
         return $this->handler->read($sessionId);
@@ -60,9 +43,7 @@ class StrictSessionHandler extends AbstractSessionHandler
         return $this->write($sessionId, $data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function doWrite(string $sessionId, string $data): bool
     {
         return $this->handler->write($sessionId, $data);
@@ -76,9 +57,7 @@ class StrictSessionHandler extends AbstractSessionHandler
         return $this->doDestroy ? $this->doDestroy($sessionId) : $destroyed;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function doDestroy(string $sessionId): bool
     {
         $this->doDestroy = false;

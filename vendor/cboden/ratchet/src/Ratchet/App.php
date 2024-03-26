@@ -19,50 +19,27 @@ use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 
-/**
- * An opinionated facade class to quickly and easily create a WebSocket server.
- * A few configuration assumptions are made and some best-practice security conventions are applied by default.
- */
+
 class App {
-    /**
-     * @var \Symfony\Component\Routing\RouteCollection
-     */
+    
     public $routes;
 
-    /**
-     * @var \Ratchet\Server\IoServer
-     */
+    
     public $flashServer;
 
-    /**
-     * @var \Ratchet\Server\IoServer
-     */
+    
     protected $_server;
 
-    /**
-     * The Host passed in construct used for same origin policy
-     * @var string
-     */
+    
     protected $httpHost;
 
-    /***
-     * The port the socket is listening
-     * @var int
-     */
+    
     protected $port;
 
-    /**
-     * @var int
-     */
+    
     protected $_routeCounter = 0;
 
-    /**
-     * @param string        $httpHost   HTTP hostname clients intend to connect to. MUST match JS `new WebSocket('ws://$httpHost');`
-     * @param int           $port       Port to listen on. If 80, assuming production, Flash on 843 otherwise expecting Flash to be proxied through 8843
-     * @param string        $address    IP address to bind to. Default is localhost/proxy only. '0.0.0.0' for any machine.
-     * @param LoopInterface $loop       Specific React\EventLoop to bind the application to. null will create one for you.
-     * @param array         $context
-     */
+    
     public function __construct($httpHost = 'localhost', $port = 8080, $address = '127.0.0.1', LoopInterface $loop = null, $context = array()) {
         if (extension_loaded('xdebug') && getenv('RATCHET_DISABLE_XDEBUG_WARN') === false) {
             trigger_error('XDebug extension detected. Remember to disable this if performance testing or going live!', E_USER_WARNING);
@@ -93,14 +70,7 @@ class App {
         $this->flashServer = new IoServer($policy, $flashSock);
     }
 
-    /**
-     * Add an endpoint/application to the server
-     * @param string             $path The URI the client will connect to
-     * @param ComponentInterface $controller Your application to server for the route. If not specified, assumed to be for a WebSocket
-     * @param array              $allowedOrigins An array of hosts allowed to connect (same host by default), ['*'] for any
-     * @param string             $httpHost Override the $httpHost variable provided in the __construct
-     * @return ComponentInterface|WsServer
-     */
+    
     public function route($path, ComponentInterface $controller, array $allowedOrigins = array(), $httpHost = null) {
         if ($controller instanceof HttpServerInterface || $controller instanceof WsServer) {
             $decorated = $controller;
@@ -126,7 +96,7 @@ class App {
             $decorated = new OriginCheck($decorated, $allowedOrigins);
         }
 
-        //allow origins in flash policy server
+        
         if(empty($this->flashServer) === false) {
             foreach($allowedOrigins as $allowedOrgin) {
                 $this->flashServer->app->addAllowedAccess($allowedOrgin, $this->port);
@@ -138,9 +108,7 @@ class App {
         return $decorated;
     }
 
-    /**
-     * Run the server by entering the event loop
-     */
+    
     public function run() {
         $this->_server->run();
     }

@@ -1,36 +1,8 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 import View from 'view';
 
-/**
- * Row actions.
- */
+
 class DefaultRowActionsView extends View {
 
     template = 'record/row-actions/default'
@@ -39,10 +11,10 @@ class DefaultRowActionsView extends View {
         this.options.acl = this.options.acl || {};
         this.scope = this.options.scope || this.model.entityType;
 
-        /** @type {Object.<string, {isAvailable: function(module:model, string)}>} */
+        
         this.handlers = this.options.rowActionHandlers || {};
 
-        /** @type {{name: string, acl: string, text: string}[]} */
+        
         this.additionalActionDataList = [];
 
         this.setupAdditionalActions();
@@ -72,13 +44,9 @@ class DefaultRowActionsView extends View {
         });
     }
 
-    /**
-     * Get an action list.
-     *
-     * @return {module:views/record/list~rowAction[]}
-     */
+    
     getActionList() {
-        /** @type {module:views/record/list~rowAction[]} */
+        
         const list = [{
             action: 'quickView',
             label: 'View',
@@ -150,7 +118,7 @@ class DefaultRowActionsView extends View {
     }
 
     setupAdditionalActions() {
-        /** @type {string[]} */
+        
         const list = this.options.additionalActionList;
 
         if (!list) {
@@ -160,7 +128,7 @@ class DefaultRowActionsView extends View {
         const defs = this.getMetadata().get(`clientDefs.${this.scope}.rowActionDefs`) || {};
 
         list.forEach(action => {
-            /** @type {{label?: string, labelTranslation?: string, acl?: string}} */
+            
             const itemDefs = defs[action] || {};
 
             const text = itemDefs.labelTranslation ?

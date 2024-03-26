@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Authentication\TwoFactor\Email;
 
@@ -51,29 +25,19 @@ use const STR_PAD_LEFT;
 
 class Util
 {
-    /**
-     * A lifetime of a code.
-     */
+    
     private const CODE_LIFETIME_PERIOD = '10 minutes';
 
-    /**
-     * A max number of attempts to try a single code.
-     */
+    
     private const CODE_ATTEMPTS_COUNT = 5;
 
-    /**
-     * A length of a code.
-     */
+    
     private const CODE_LENGTH = 7;
 
-    /**
-     * A max number of codes tried by a user in a period defined by `CODE_LIMIT_PERIOD`.
-     */
+    
     private const CODE_LIMIT = 5;
 
-    /**
-     * A period for limiting trying to too many codes.
-     */
+    
     private const CODE_LIMIT_PERIOD = '10 minutes';
 
     public function __construct(
@@ -85,9 +49,7 @@ class Util
         private EmailFactory $emailFactory
     ) {}
 
-    /**
-     * @throws Forbidden
-     */
+    
     public function storeEmailAddress(User $user, string $emailAddress): void
     {
         $this->checkEmailAddressIsUsers($user, $emailAddress);
@@ -135,10 +97,7 @@ class Util
         return true;
     }
 
-    /**
-     * @throws SendingError
-     * @throws Forbidden
-     */
+    
     public function sendCode(User $user, ?string $emailAddress = null): void
     {
         if ($emailAddress === null) {
@@ -173,7 +132,7 @@ class Util
 
     private function findCodeEntity(User $user): ?TwoFactorCode
     {
-        /** @var ?TwoFactorCode */
+        
         return $this->entityManager
             ->getRDBRepository(TwoFactorCode::ENTITY_TYPE)
             ->where([
@@ -184,9 +143,7 @@ class Util
             ->findOne();
     }
 
-    /**
-     * @throws Forbidden
-     */
+    
     private function getEmailAddress(User $user): string
     {
         $userData = $this->getUserDataRepository()->getByUserId($user->getId());
@@ -205,13 +162,11 @@ class Util
             throw new Forbidden("User does not have email address.");
         }
 
-        /** @var string */
+        
         return $user->getEmailAddressGroup()->getPrimaryAddress();
     }
 
-    /**
-     * @throws Forbidden
-     */
+    
     private function checkEmailAddressIsUsers(User $user, string $emailAddress): void
     {
         $userAddressList = array_map(
@@ -226,9 +181,7 @@ class Util
         }
     }
 
-    /**
-     * @throws Forbidden
-     */
+    
     private function checkCodeLimit(User $user): void
     {
         $limit = $this->config->get('auth2FAEmailCodeLimit') ?? self::CODE_LIMIT;
@@ -261,7 +214,7 @@ class Util
 
         $max = pow(10, $codeLength) - 1;
 
-        /** @noinspection PhpUnhandledExceptionInspection */
+        
         return str_pad(
             (string) random_int(0, $max),
             $codeLength,
@@ -325,7 +278,7 @@ class Util
 
     private function getUserDataRepository(): UserDataRepository
     {
-        /** @var UserDataRepository */
+        
         return $this->entityManager->getRepository(UserData::ENTITY_TYPE);
     }
 

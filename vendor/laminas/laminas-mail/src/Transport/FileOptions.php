@@ -16,24 +16,16 @@ use function sprintf;
 use function sys_get_temp_dir;
 use function time;
 
-/**
- * @extends AbstractOptions<string|callable>
- */
+
 class FileOptions extends AbstractOptions
 {
-    /** @var string Path to stored mail files */
+    
     protected $path;
 
-    /** @var callable */
+    
     protected $callback;
 
-    /**
-     * Set path to stored mail files
-     *
-     * @param  string $path
-     * @throws InvalidArgumentException
-     * @return FileOptions
-     */
+    
     public function setPath($path)
     {
         if (! is_dir($path) || ! is_writable($path)) {
@@ -47,13 +39,7 @@ class FileOptions extends AbstractOptions
         return $this;
     }
 
-    /**
-     * Get path
-     *
-     * If none is set, uses value from sys_get_temp_dir()
-     *
-     * @return string
-     */
+    
     public function getPath()
     {
         if (null === $this->path) {
@@ -62,13 +48,7 @@ class FileOptions extends AbstractOptions
         return $this->path;
     }
 
-    /**
-     * Set callback used to generate a file name
-     *
-     * @param  callable $callback
-     * @throws InvalidArgumentException
-     * @return FileOptions
-     */
+    
     public function setCallback($callback)
     {
         if (! is_callable($callback)) {
@@ -82,11 +62,7 @@ class FileOptions extends AbstractOptions
         return $this;
     }
 
-    /**
-     * Get callback used to generate a file name
-     *
-     * @return callable
-     */
+    
     public function getCallback()
     {
         if (null === $this->callback) {

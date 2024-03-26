@@ -8,7 +8,7 @@ var DocCommentHighlightRules = function() {
     this.$rules = {
         "start" : [ {
             token : "comment.doc.tag",
-            regex : "@[\\w\\d_]+" // TODO: fix email addresses
+            regex : "@[\\w\\d_]+" 
         }, 
         DocCommentHighlightRules.getTagRule(),
         {
@@ -29,7 +29,7 @@ DocCommentHighlightRules.getTagRule = function(start) {
 
 DocCommentHighlightRules.getStartRule = function(start) {
     return {
-        token : "comment.doc", // doc comment
+        token : "comment.doc", 
         regex : "\\/\\*(?=\\*)",
         next  : start
     };
@@ -37,7 +37,7 @@ DocCommentHighlightRules.getStartRule = function(start) {
 
 DocCommentHighlightRules.getEndRule = function (start) {
     return {
-        token : "comment.doc", // closing comment
+        token : "comment.doc", 
         regex : "\\*\\/",
         next  : start
     };
@@ -59,16 +59,16 @@ var identifierRe = "[a-zA-Z\\$_\u00a1-\uffff][a-zA-Z\\d\\$_\u00a1-\uffff]*";
 var JavaScriptHighlightRules = function(options) {
     var keywordMapper = this.createKeywordMapper({
         "variable.language":
-            "Array|Boolean|Date|Function|Iterator|Number|Object|RegExp|String|Proxy|"  + // Constructors
-            "Namespace|QName|XML|XMLList|"                                             + // E4X
+            "Array|Boolean|Date|Function|Iterator|Number|Object|RegExp|String|Proxy|"  + 
+            "Namespace|QName|XML|XMLList|"                                             + 
             "ArrayBuffer|Float32Array|Float64Array|Int16Array|Int32Array|Int8Array|"   +
             "Uint16Array|Uint32Array|Uint8Array|Uint8ClampedArray|"                    +
-            "Error|EvalError|InternalError|RangeError|ReferenceError|StopIteration|"   + // Errors
+            "Error|EvalError|InternalError|RangeError|ReferenceError|StopIteration|"   + 
             "SyntaxError|TypeError|URIError|"                                          +
-            "decodeURI|decodeURIComponent|encodeURI|encodeURIComponent|eval|isFinite|" + // Non-constructor functions
+            "decodeURI|decodeURIComponent|encodeURI|encodeURIComponent|eval|isFinite|" + 
             "isNaN|parseFloat|parseInt|"                                               +
-            "JSON|Math|"                                                               + // Other
-            "this|arguments|prototype|window|document"                                 , // Pseudo
+            "JSON|Math|"                                                               + 
+            "this|arguments|prototype|window|document"                                 , 
         "keyword":
             "const|yield|import|get|set|async|await|" +
             "break|case|catch|continue|default|delete|do|else|finally|for|function|" +
@@ -85,12 +85,12 @@ var JavaScriptHighlightRules = function(options) {
     }, "identifier");
     var kwBeforeRe = "case|do|else|finally|in|instanceof|return|throw|try|typeof|yield|void";
 
-    var escapedRe = "\\\\(?:x[0-9a-fA-F]{2}|" + // hex
-        "u[0-9a-fA-F]{4}|" + // unicode
-        "u{[0-9a-fA-F]{1,6}}|" + // es6 unicode
-        "[0-2][0-7]{0,2}|" + // oct
-        "3[0-7][0-7]?|" + // oct
-        "[4-7][0-7]?|" + //oct
+    var escapedRe = "\\\\(?:x[0-9a-fA-F]{2}|" + 
+        "u[0-9a-fA-F]{4}|" + 
+        "u{[0-9a-fA-F]{1,6}}|" + 
+        "[0-2][0-7]{0,2}|" + 
+        "3[0-7][0-7]?|" + 
+        "[4-7][0-7]?|" + 
         ".)";
 
     this.$rules = {
@@ -106,10 +106,10 @@ var JavaScriptHighlightRules = function(options) {
                 regex : '"(?=.)',
                 next  : "qqstring"
             }, {
-                token : "constant.numeric", // hexadecimal, octal and binary
+                token : "constant.numeric", 
                 regex : /0(?:[xX][0-9a-fA-F]+|[oO][0-7]+|[bB][01]+)\b/
             }, {
-                token : "constant.numeric", // decimal integers and floats
+                token : "constant.numeric", 
                 regex : /(?:\d\d*(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+\b)?/
             }, {
                 token : [
@@ -501,7 +501,7 @@ function JSX() {
 function comments(next) {
     return [
         {
-            token : "comment", // multi line comment
+            token : "comment", 
             regex : /\/\*/,
             next: [
                 DocCommentHighlightRules.getTagRule(),
@@ -600,7 +600,7 @@ oop.inherits(FoldMode, BaseFoldMode);
         var fw = this._getFoldWidgetBase(session, foldStyle, row);
     
         if (!fw && this.startRegionRe.test(line))
-            return "start"; // lineCommentRegionStart
+            return "start"; 
     
         return fw;
     };
@@ -724,8 +724,8 @@ oop.inherits(Mode, TextMode);
 
 (function() {
 
-    this.lineCommentStart = "//";
-    this.blockComment = {start: "/*", end: "*/"};
+    this.lineCommentStart = "
+    this.blockComment = {start: ""};
     this.$quotes = {'"': '"', "'": "'", "`": "`"};
 
     this.getNextLineIndent = function(state, line, tab) {

@@ -21,14 +21,10 @@ use const UPLOAD_ERR_NO_TMP_DIR;
 use const UPLOAD_ERR_OK;
 use const UPLOAD_ERR_PARTIAL;
 
-/**
- * Validator for the maximum size of a file up to a max of 2GB
- */
+
 class UploadFile extends AbstractValidator
 {
-    /**
-     * @const string Error constants
-     */
+    
     public const INI_SIZE       = 'fileUploadFileErrorIniSize';
     public const FORM_SIZE      = 'fileUploadFileErrorFormSize';
     public const PARTIAL        = 'fileUploadFileErrorPartial';
@@ -40,7 +36,7 @@ class UploadFile extends AbstractValidator
     public const FILE_NOT_FOUND = 'fileUploadFileErrorFileNotFound';
     public const UNKNOWN        = 'fileUploadFileErrorUnknown';
 
-    /** @var array Error message templates */
+    
     protected $messageTemplates = [
         self::INI_SIZE       => 'The uploaded file exceeds the upload_max_filesize directive in php.ini',
         self::FORM_SIZE      => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was '
@@ -55,13 +51,7 @@ class UploadFile extends AbstractValidator
         self::UNKNOWN        => 'Unknown error while uploading file',
     ];
 
-    /**
-     * Returns true if and only if the file was uploaded without errors
-     *
-     * @param  string|array|UploadedFileInterface $value File to check for upload errors
-     * @return bool
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public function isValid($value)
     {
         if (is_array($value)) {
@@ -90,10 +80,7 @@ class UploadFile extends AbstractValidator
         return false;
     }
 
-    /**
-     * @param int $error UPLOAD_ERR_* constant value
-     * @return bool
-     */
+    
     private function validateFileFromErrorCode($error)
     {
         switch ($error) {
@@ -134,28 +121,23 @@ class UploadFile extends AbstractValidator
         }
     }
 
-    /**
-     * @param  int $error UPLOAD_ERR_* constant
-     * @param  string $filename
-     * @param  string $uploadedFile Name of uploaded file (gen tmp_name)
-     * @return bool
-     */
+    
     private function validateUploadedFile($error, $filename, $uploadedFile)
     {
         $this->setValue($filename);
 
-        // Normal errors can be validated normally
+        
         if ($error !== UPLOAD_ERR_OK) {
             return $this->validateFileFromErrorCode($error);
         }
 
-        // Did we get no name? Is the file missing?
+        
         if (empty($uploadedFile) || false === is_file($uploadedFile)) {
             $this->error(self::FILE_NOT_FOUND);
             return false;
         }
 
-        // Do we have an invalid upload?
+        
         if (! is_uploaded_file($uploadedFile)) {
             $this->error(self::ATTACK);
             return false;
@@ -164,9 +146,7 @@ class UploadFile extends AbstractValidator
         return true;
     }
 
-    /**
-     * @return bool
-     */
+    
     private function validatePsr7UploadedFile(UploadedFileInterface $uploadedFile)
     {
         $this->setValue($uploadedFile);

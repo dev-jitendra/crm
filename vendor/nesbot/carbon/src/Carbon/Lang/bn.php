@@ -1,24 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Josh Soref
- * - Shakib Hossain
- * - Raju
- * - Aniruddha Adhikary
- * - JD Isaacks
- * - Saiful Islam
- * - Faisal Islam
- */
+
+
 return [
     'year' => ':count বছর',
     'a_year' => 'এক বছর|:count বছর',

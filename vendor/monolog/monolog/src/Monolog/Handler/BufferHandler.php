@@ -1,13 +1,6 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Monolog package.
- *
- * (c) Jordi Boggiano <j.boggiano@seld.be>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Monolog\Handler;
 
@@ -16,14 +9,7 @@ use Monolog\ResettableInterface;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\LogRecord;
 
-/**
- * Buffers all records until closing the handler and then pass them as batch.
- *
- * This is useful for a MailHandler to send only one mail per request instead of
- * sending one per log message.
- *
- * @author Christophe Coevoet <stof@notk.org>
- */
+
 class BufferHandler extends AbstractHandler implements ProcessableHandlerInterface, FormattableHandlerInterface
 {
     use ProcessableHandlerTrait;
@@ -36,16 +22,12 @@ class BufferHandler extends AbstractHandler implements ProcessableHandlerInterfa
 
     protected bool $flushOnOverflow;
 
-    /** @var LogRecord[] */
+    
     protected array $buffer = [];
 
     protected bool $initialized = false;
 
-    /**
-     * @param HandlerInterface $handler         Handler.
-     * @param int              $bufferLimit     How many entries should be buffered at most, beyond that the oldest items are removed from the buffer.
-     * @param bool             $flushOnOverflow If true, the buffer is flushed when the max size has been reached, by default oldest entries are discarded
-     */
+    
     public function __construct(HandlerInterface $handler, int $bufferLimit = 0, int|string|Level $level = Level::Debug, bool $bubble = true, bool $flushOnOverflow = false)
     {
         parent::__construct($level, $bubble);
@@ -54,9 +36,7 @@ class BufferHandler extends AbstractHandler implements ProcessableHandlerInterfa
         $this->flushOnOverflow = $flushOnOverflow;
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function handle(LogRecord $record): bool
     {
         if ($record->level->isLowerThan($this->level)) {
@@ -64,7 +44,7 @@ class BufferHandler extends AbstractHandler implements ProcessableHandlerInterfa
         }
 
         if (!$this->initialized) {
-            // __destructor() doesn't get called on Fatal errors
+            
             register_shutdown_function([$this, 'close']);
             $this->initialized = true;
         }
@@ -100,14 +80,12 @@ class BufferHandler extends AbstractHandler implements ProcessableHandlerInterfa
 
     public function __destruct()
     {
-        // suppress the parent behavior since we already have register_shutdown_function()
-        // to call close(), and the reference contained there will prevent this from being
-        // GC'd until the end of the request
+        
+        
+        
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function close(): void
     {
         $this->flush();
@@ -115,9 +93,7 @@ class BufferHandler extends AbstractHandler implements ProcessableHandlerInterfa
         $this->handler->close();
     }
 
-    /**
-     * Clears the buffer without flushing any messages down to the wrapped handler.
-     */
+    
     public function clear(): void
     {
         $this->bufferSize = 0;
@@ -137,9 +113,7 @@ class BufferHandler extends AbstractHandler implements ProcessableHandlerInterfa
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function setFormatter(FormatterInterface $formatter): HandlerInterface
     {
         if ($this->handler instanceof FormattableHandlerInterface) {
@@ -151,9 +125,7 @@ class BufferHandler extends AbstractHandler implements ProcessableHandlerInterfa
         throw new \UnexpectedValueException('The nested handler of type '.get_class($this->handler).' does not support formatters.');
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function getFormatter(): FormatterInterface
     {
         if ($this->handler instanceof FormattableHandlerInterface) {

@@ -26,33 +26,18 @@ class Gnumeric extends BaseReader
 {
     private const UOM_CONVERSION_POINTS_TO_CENTIMETERS = 0.03527777778;
 
-    /**
-     * Shared Expressions.
-     *
-     * @var array
-     */
+    
     private $expressions = [];
 
-    /**
-     * Spreadsheet shared across all functions.
-     *
-     * @var Spreadsheet
-     */
+    
     private $spreadsheet;
 
     private $referenceHelper;
 
-    /**
-     * Namespace shared across all functions.
-     * It is 'gnm', except for really old sheets which use 'gmr'.
-     *
-     * @var string
-     */
+    
     private $gnm = 'gnm';
 
-    /**
-     * Create a new Gnumeric.
-     */
+    
     public function __construct()
     {
         parent::__construct();
@@ -60,21 +45,15 @@ class Gnumeric extends BaseReader
         $this->securityScanner = XmlScanner::getInstance($this);
     }
 
-    /**
-     * Can the current IReader read the file?
-     *
-     * @param string $pFilename
-     *
-     * @return bool
-     */
+    
     public function canRead($pFilename)
     {
         File::assertFile($pFilename);
 
-        // Check if gzlib functions are available
+        
         $data = '';
         if (function_exists('gzread')) {
-            // Read signature data (first 3 bytes)
+            
             $fh = fopen($pFilename, 'rb');
             $data = fread($fh, 2);
             fclose($fh);
@@ -88,28 +67,22 @@ class Gnumeric extends BaseReader
         return 1 === preg_match("/^(gnm|gmr):$field$/", $name);
     }
 
-    /**
-     * Reads names of the worksheets from a file, without parsing the whole file to a Spreadsheet object.
-     *
-     * @param string $pFilename
-     *
-     * @return array
-     */
+    
     public function listWorksheetNames($pFilename)
     {
         File::assertFile($pFilename);
 
         $xml = new XMLReader();
-        $xml->xml($this->securityScanner->scanFile('compress.zlib://' . realpath($pFilename)), null, Settings::getLibXmlLoaderOptions());
+        $xml->xml($this->securityScanner->scanFile('compress.zlib:
         $xml->setParserProperty(2, true);
 
         $worksheetNames = [];
         while ($xml->read()) {
             if (self::matchXml($xml->name, 'SheetName') && $xml->nodeType == XMLReader::ELEMENT) {
-                $xml->read(); //    Move onto the value node
+                $xml->read(); 
                 $worksheetNames[] = (string) $xml->value;
             } elseif (self::matchXml($xml->name, 'Sheets')) {
-                //    break out of the loop once we've got our sheet names rather than parse the entire file
+                
                 break;
             }
         }
@@ -117,19 +90,13 @@ class Gnumeric extends BaseReader
         return $worksheetNames;
     }
 
-    /**
-     * Return worksheet info (Name, Last Column Letter, Last Column Index, Total Rows, Total Columns).
-     *
-     * @param string $pFilename
-     *
-     * @return array
-     */
+    
     public function listWorksheetInfo($pFilename)
     {
         File::assertFile($pFilename);
 
         $xml = new XMLReader();
-        $xml->xml($this->securityScanner->scanFile('compress.zlib://' . realpath($pFilename)), null, Settings::getLibXmlLoaderOptions());
+        $xml->xml($this->securityScanner->scanFile('compress.zlib:
         $xml->setParserProperty(2, true);
 
         $worksheetInfo = [];
@@ -146,14 +113,14 @@ class Gnumeric extends BaseReader
                 while ($xml->read()) {
                     if ($xml->nodeType == XMLReader::ELEMENT) {
                         if (self::matchXml($xml->name, 'Name')) {
-                            $xml->read(); //    Move onto the value node
+                            $xml->read(); 
                             $tmpInfo['worksheetName'] = (string) $xml->value;
                         } elseif (self::matchXml($xml->name, 'MaxCol')) {
-                            $xml->read(); //    Move onto the value node
+                            $xml->read(); 
                             $tmpInfo['lastColumnIndex'] = (int) $xml->value;
                             $tmpInfo['totalColumns'] = (int) $xml->value + 1;
                         } elseif (self::matchXml($xml->name, 'MaxRow')) {
-                            $xml->read(); //    Move onto the value node
+                            $xml->read(); 
                             $tmpInfo['totalRows'] = (int) $xml->value + 1;
 
                             break;
@@ -168,11 +135,7 @@ class Gnumeric extends BaseReader
         return $worksheetInfo;
     }
 
-    /**
-     * @param string $filename
-     *
-     * @return string
-     */
+    
     private function gzfileGetContents($filename)
     {
         $file = @gzopen($filename, 'rb');
@@ -207,12 +170,12 @@ class Gnumeric extends BaseReader
         'dataType' => [
             '10' => DataType::TYPE_NULL,
             '20' => DataType::TYPE_BOOL,
-            '30' => DataType::TYPE_NUMERIC, // Integer doesn't exist in Excel
-            '40' => DataType::TYPE_NUMERIC, // Float
+            '30' => DataType::TYPE_NUMERIC, 
+            '40' => DataType::TYPE_NUMERIC, 
             '50' => DataType::TYPE_ERROR,
             '60' => DataType::TYPE_STRING,
-            //'70':        //    Cell Range
-            //'80':        //    Array
+            
+            
         ],
         'fillType' => [
             '1' => Fill::FILL_SOLID,
@@ -221,18 +184,18 @@ class Gnumeric extends BaseReader
             '4' => Fill::FILL_PATTERN_LIGHTGRAY,
             '5' => Fill::FILL_PATTERN_GRAY125,
             '6' => Fill::FILL_PATTERN_GRAY0625,
-            '7' => Fill::FILL_PATTERN_DARKHORIZONTAL, // horizontal stripe
-            '8' => Fill::FILL_PATTERN_DARKVERTICAL, // vertical stripe
-            '9' => Fill::FILL_PATTERN_DARKDOWN, // diagonal stripe
-            '10' => Fill::FILL_PATTERN_DARKUP, // reverse diagonal stripe
-            '11' => Fill::FILL_PATTERN_DARKGRID, // diagoanl crosshatch
-            '12' => Fill::FILL_PATTERN_DARKTRELLIS, // thick diagonal crosshatch
+            '7' => Fill::FILL_PATTERN_DARKHORIZONTAL, 
+            '8' => Fill::FILL_PATTERN_DARKVERTICAL, 
+            '9' => Fill::FILL_PATTERN_DARKDOWN, 
+            '10' => Fill::FILL_PATTERN_DARKUP, 
+            '11' => Fill::FILL_PATTERN_DARKGRID, 
+            '12' => Fill::FILL_PATTERN_DARKTRELLIS, 
             '13' => Fill::FILL_PATTERN_LIGHTHORIZONTAL,
             '14' => Fill::FILL_PATTERN_LIGHTVERTICAL,
             '15' => Fill::FILL_PATTERN_LIGHTUP,
             '16' => Fill::FILL_PATTERN_LIGHTDOWN,
-            '17' => Fill::FILL_PATTERN_LIGHTGRID, // thin horizontal crosshatch
-            '18' => Fill::FILL_PATTERN_LIGHTTRELLIS, // thin diagonal crosshatch
+            '17' => Fill::FILL_PATTERN_LIGHTGRID, 
+            '18' => Fill::FILL_PATTERN_LIGHTTRELLIS, 
         ],
         'horizontal' => [
             '1' => Alignment::HORIZONTAL_GENERAL,
@@ -409,7 +372,7 @@ class Gnumeric extends BaseReader
         if ((!$this->readDataOnly) && (isset($sheet->Objects))) {
             foreach ($sheet->Objects->children($this->gnm, true) as $key => $comment) {
                 $commentAttributes = $comment->attributes();
-                //    Only comment objects are handled at the moment
+                
                 if ($commentAttributes->Text) {
                     $this->spreadsheet->getActiveSheet()->getComment((string) $commentAttributes->ObjectBound)->setAuthor((string) $commentAttributes->Author)->setText($this->parseRichText((string) $commentAttributes->Text));
                 }
@@ -417,26 +380,18 @@ class Gnumeric extends BaseReader
         }
     }
 
-    /**
-     * Loads Spreadsheet from file.
-     *
-     * @param string $pFilename
-     *
-     * @return Spreadsheet
-     */
+    
     public function load($pFilename)
     {
-        // Create new Spreadsheet
+        
         $spreadsheet = new Spreadsheet();
         $spreadsheet->removeSheetByIndex(0);
 
-        // Load into this instance
+        
         return $this->loadIntoExisting($pFilename, $spreadsheet);
     }
 
-    /**
-     * Loads from file into Spreadsheet instance.
-     */
+    
     public function loadIntoExisting(string $pFilename, Spreadsheet $spreadsheet): Spreadsheet
     {
         $this->spreadsheet = $spreadsheet;
@@ -461,12 +416,12 @@ class Gnumeric extends BaseReader
 
             $maxRow = $maxCol = 0;
 
-            // Create new Worksheet
+            
             $this->spreadsheet->createSheet();
             $this->spreadsheet->setActiveSheetIndex($worksheetID);
-            //    Use false for $updateFormulaCellReferences to prevent adjustment of worksheet references in formula
-            //        cells... during the load, all formulae should be correct, and we're simply bringing the worksheet
-            //        name in line with the formula, not the reverse
+            
+            
+            
             $this->spreadsheet->getActiveSheet()->setTitle($worksheetName, false, false);
 
             if (!$this->readDataOnly) {
@@ -489,7 +444,7 @@ class Gnumeric extends BaseReader
 
                 $column = Coordinate::stringFromColumnIndex($column + 1);
 
-                // Read cell?
+                
                 if ($this->getReadFilter() !== null) {
                     if (!$this->getReadFilter()->readCell($column, $row, $worksheetName)) {
                         continue;
@@ -523,7 +478,7 @@ class Gnumeric extends BaseReader
                     if (array_key_exists($vtype, self::$mappings['dataType'])) {
                         $type = self::$mappings['dataType'][$vtype];
                     }
-                    if ($vtype == '20') {        //    Boolean
+                    if ($vtype == '20') {        
                         $cell = $cell == 'TRUE';
                     }
                 }
@@ -550,13 +505,13 @@ class Gnumeric extends BaseReader
                     $styleAttributes = $styleRegion->Style->attributes();
 
                     $styleArray = [];
-                    //    We still set the number format mask for date/time values, even if readDataOnly is true
+                    
                     $formatCode = (string) $styleAttributes['Format'];
                     if (Date::isDateTimeFormatCode($formatCode)) {
                         $styleArray['numberFormat']['formatCode'] = $formatCode;
                     }
                     if (!$this->readDataOnly) {
-                        //    If readDataOnly is false, we set all formatting information
+                        
                         $styleArray['numberFormat']['formatCode'] = $formatCode;
 
                         self::addStyle2($styleArray, 'alignment', 'horizontal', $styleAttributes['HAlign']);
@@ -596,7 +551,7 @@ class Gnumeric extends BaseReader
                             $this->addBorderDiagonal($srssb, $styleArray);
                         }
                         if (isset($styleRegion->Style->HyperLink)) {
-                            //    TO DO
+                            
                             $hyperlink = $styleRegion->Style->HyperLink->attributes();
                         }
                     }
@@ -613,7 +568,7 @@ class Gnumeric extends BaseReader
 
         $this->processDefinedNames($gnmXML);
 
-        // Return
+        
         return $this->spreadsheet;
     }
 
@@ -641,7 +596,7 @@ class Gnumeric extends BaseReader
 
     private function processMergedCells(SimpleXMLElement $sheet): void
     {
-        //    Handle Merged Cells in this worksheet
+        
         if (isset($sheet->MergedRegions)) {
             foreach ($sheet->MergedRegions->Merge as $mergeCells) {
                 if (strpos($mergeCells, ':') !== false) {
@@ -676,7 +631,7 @@ class Gnumeric extends BaseReader
     private function processColumnWidths(SimpleXMLElement $sheet, int $maxCol): void
     {
         if ((!$this->readDataOnly) && (isset($sheet->Cols))) {
-            //    Column Widths
+            
             $columnAttributes = $sheet->Cols->attributes();
             $defaultWidth = $columnAttributes['DefaultSizePts'] / 5.4;
             $c = 0;
@@ -715,7 +670,7 @@ class Gnumeric extends BaseReader
     private function processRowHeights(SimpleXMLElement $sheet, int $maxRow): void
     {
         if ((!$this->readDataOnly) && (isset($sheet->Rows))) {
-            //    Row Heights
+            
             $rowAttributes = $sheet->Rows->attributes();
             $defaultHeight = (float) $rowAttributes['DefaultSizePts'];
             $r = 0;
@@ -723,19 +678,19 @@ class Gnumeric extends BaseReader
             foreach ($sheet->Rows->RowInfo as $rowOverride) {
                 $r = $this->processRowLoop($r, $maxRow, $rowOverride, $defaultHeight);
             }
-            // never executed, I can't figure out any circumstances
-            // under which it would be executed, and, even if
-            // such exist, I'm not convinced this is needed.
-            //while ($r < $maxRow) {
-            //    ++$r;
-            //    $this->spreadsheet->getActiveSheet()->getRowDimension($r)->setRowHeight($defaultHeight);
-            //}
+            
+            
+            
+            
+            
+            
+            
         }
     }
 
     private function processDefinedNames(SimpleXMLElement $gnmXML): void
     {
-        //    Loop through definedNames (global named ranges)
+        
         if (isset($gnmXML->Names)) {
             foreach ($gnmXML->Names->Name as $definedName) {
                 $name = (string) $definedName->name;
@@ -747,7 +702,7 @@ class Gnumeric extends BaseReader
                 [$worksheetName] = Worksheet::extractSheetTitle($value, true);
                 $worksheetName = trim($worksheetName, "'");
                 $worksheet = $this->spreadsheet->getSheetByName($worksheetName);
-                // Worksheet might still be null if we're only loading selected sheets rather than the full spreadsheet
+                
                 if ($worksheet !== null) {
                     $this->spreadsheet->addDefinedName(DefinedName::createInstance($name, $worksheet, $value));
                 }

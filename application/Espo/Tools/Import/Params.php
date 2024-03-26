@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\Import;
 
@@ -33,9 +7,7 @@ use Espo\Core\Utils\ObjectUtil;
 use stdClass;
 use TypeError;
 
-/**
- * @immutable
- */
+
 class Params
 {
     public const ACTION_CREATE = 'create';
@@ -52,9 +24,7 @@ class Params
     private bool $headerRow = false;
     private bool $skipDuplicateChecking = false;
     private bool $startFromLastIndex = false;
-    /**
-     * @var int[]
-     */
+    
     private $updateBy = [];
     private stdClass $defaultValues;
     private ?string $dateFormat = null;
@@ -124,9 +94,7 @@ class Params
         return $this->startFromLastIndex;
     }
 
-    /**
-     * @return int[]
-     */
+    
     public function getUpdateBy(): array
     {
         return $this->updateBy;
@@ -255,9 +223,7 @@ class Params
         return $obj;
     }
 
-    /**
-     * @param int[] $updateBy
-     */
+    
     public function withUpdateBy(array $updateBy): self
     {
         $obj = clone $this;
@@ -266,9 +232,7 @@ class Params
         return $obj;
     }
 
-    /**
-     * @param stdClass|array<string, mixed>|null $defaultValues
-     */
+    
     public function withDefaultValues($defaultValues): self
     {
         if (is_array($defaultValues)) {
@@ -279,7 +243,7 @@ class Params
             $defaultValues = (object) [];
         }
 
-        /** @var stdClass|scalar $defaultValues */
+        
 
         if (!is_object($defaultValues)) {
             throw new TypeError();
@@ -331,9 +295,7 @@ class Params
         return $obj;
     }
 
-    /**
-     * @param stdClass|array<string, mixed>|null $params
-     */
+    
     public static function fromRaw($params): self
     {
         if ($params === null) {
@@ -363,9 +325,7 @@ class Params
             ->withUpdateBy($raw->updateBy ?? []);
     }
 
-    /**
-     * @return array<string, mixed>
-     */
+    
     public function getRaw(): array
     {
         return [

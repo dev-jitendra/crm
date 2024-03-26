@@ -41,26 +41,26 @@ final class TimeoutExecutor implements ExecutorInterface
                 $reject($v);
             });
 
-            // promise already resolved => no need to start timer
+            
             if ($timer === false) {
                 return;
             }
 
-            // start timeout timer which will cancel the pending promise
+            
             $timer = $loop->addTimer($time, function () use ($time, &$promise, $reject, $query) {
                 $reject(new TimeoutException(
                     'DNS query for ' . $query->describe() . ' timed out'
                 ));
 
-                // Cancel pending query to clean up any underlying resources and references.
-                // Avoid garbage references in call stack by passing pending promise by reference.
+                
+                
                 assert(\method_exists($promise, 'cancel'));
                 $promise->cancel();
                 $promise = null;
             });
         }, function () use (&$promise) {
-            // Cancelling this promise will cancel the pending query, thus triggering the rejection logic above.
-            // Avoid garbage references in call stack by passing pending promise by reference.
+            
+            
             assert(\method_exists($promise, 'cancel'));
             $promise->cancel();
             $promise = null;

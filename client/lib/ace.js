@@ -1,45 +1,13 @@
-/* ***** BEGIN LICENSE BLOCK *****
- * Distributed under the BSD license:
- *
- * Copyright (c) 2010, Ajax.org B.V.
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *     * Redistributions of source code must retain the above copyright
- *       notice, this list of conditions and the following disclaimer.
- *     * Redistributions in binary form must reproduce the above copyright
- *       notice, this list of conditions and the following disclaimer in the
- *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of Ajax.org B.V. nor the
- *       names of its contributors may be used to endorse or promote products
- *       derived from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL AJAX.ORG B.V. BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * ***** END LICENSE BLOCK ***** */
 
-/**
- * Define a module along with a payload
- * @param module a name for the payload
- * @param payload a function to call with (require, exports, module) params
- */
+
+
 
 (function() {
 
 var ACE_NAMESPACE = "ace";
 
 var global = (function() { return this; })();
-if (!global && typeof window != "undefined") global = window; // strict mode
+if (!global && typeof window != "undefined") global = window; 
 
 
 if (!ACE_NAMESPACE && typeof requirejs !== "undefined")
@@ -67,9 +35,7 @@ var define = function(module, deps, payload) {
 define.modules = {};
 define.payloads = {};
 
-/**
- * Get at functionality define()ed using the function above
- */
+
 var _require = function(parentId, module, callback) {
     if (typeof module === "string") {
         var payload = lookup(parentId, module);
@@ -97,28 +63,25 @@ var require = function(module, callback) {
 };
 
 var normalizeModule = function(parentId, moduleName) {
-    // normalize plugin requires
+    
     if (moduleName.indexOf("!") !== -1) {
         var chunks = moduleName.split("!");
         return normalizeModule(parentId, chunks[0]) + "!" + normalizeModule(parentId, chunks[1]);
     }
-    // normalize relative requires
+    
     if (moduleName.charAt(0) == ".") {
         var base = parentId.split("/").slice(0, -1).join("/");
         moduleName = base + "/" + moduleName;
 
         while(moduleName.indexOf(".") !== -1 && previous != moduleName) {
             var previous = moduleName;
-            moduleName = moduleName.replace(/\/\.\//, "/").replace(/[^\/]+\/\.\.\//, "");
+            moduleName = moduleName.replace(/\/\.\
         }
     }
     return moduleName;
 };
 
-/**
- * Internal function to lookup moduleNames and resolve them by calling the
- * definition function if needed.
- */
+
 var lookup = function(parentId, moduleName) {
     moduleName = normalizeModule(parentId, moduleName);
 
@@ -214,7 +177,7 @@ exports.isLinux = (os == "linux");
 exports.isIE = 
     (appName == "Microsoft Internet Explorer" || appName.indexOf("MSAppHost") >= 0)
     ? parseFloat((ua.match(/(?:MSIE |Trident\/[0-9]+[\.0-9]+;.*rv:)([0-9]+[\.0-9]+)/)||[])[1])
-    : parseFloat((ua.match(/(?:Trident\/[0-9]+[\.0-9]+;.*rv:)([0-9]+[\.0-9]+)/)||[])[1]); // for ie
+    : parseFloat((ua.match(/(?:Trident\/[0-9]+[\.0-9]+;.*rv:)([0-9]+[\.0-9]+)/)||[])[1]); 
     
 exports.isOldIE = exports.isIE && exports.isIE < 9;
 exports.isGecko = exports.isMozilla = ua.match(/ Gecko\/\d+/);
@@ -243,7 +206,7 @@ ace.define("ace/lib/dom",["require","exports","module","ace/lib/useragent"], fun
 "use strict";
 
 var useragent = require("./useragent"); 
-var XHTML_NS = "http://www.w3.org/1999/xhtml";
+var XHTML_NS = "http:
 
 exports.buildDom = function buildDom(arr, parent, refs) {
     if (typeof arr == "string" && arr) {
@@ -389,7 +352,7 @@ exports.importCssString = function importCssString(cssText, id, target) {
         return null;
     
     if (id)
-        cssText += "\n/*# sourceURL=ace/css/" + id + " */";
+        cssText += "\n";
     
     var style = exports.createElement("style");
     style.appendChild(doc.createTextNode(cssText));
@@ -1616,7 +1579,7 @@ var TextInput = function(parentNode, host) {
         if (
             lastSelectionEnd != selectionEnd 
             || lastSelectionStart != selectionStart 
-            || text.selectionEnd != lastSelectionEnd // on ie edge selectionEnd changes silently after the initialization
+            || text.selectionEnd != lastSelectionEnd 
         ) {
             try {
                 text.setSelectionRange(selectionStart, selectionEnd);
@@ -2104,8 +2067,8 @@ ace.define("ace/mouse/default_handlers",["require","exports","module","ace/lib/u
 
 var useragent = require("../lib/useragent");
 
-var DRAG_OFFSET = 0; // pixels
-var SCROLL_COOLDOWN_T = 550; // milliseconds
+var DRAG_OFFSET = 0; 
+var SCROLL_COOLDOWN_T = 550; 
 
 function DefaultHandlers(mouseHandler) {
     mouseHandler.$clickSelection = null;
@@ -3808,7 +3771,7 @@ init(true);function init(packaged) {
 
     var scriptOptions = {};
     var scriptUrl = "";
-    var currentScript = (document.currentScript || document._currentScript ); // native or polyfill
+    var currentScript = (document.currentScript || document._currentScript ); 
     var currentDocument = currentScript && currentScript.ownerDocument || document;
     
     var scripts = currentDocument.getElementsByTagName("script");
@@ -4525,7 +4488,7 @@ exports.doBidiReorder = function(text, textCharTypes, isRtl) {
 	_invertLevel(2, levels, logicalFromVisual);
 	_invertLevel(1, levels, logicalFromVisual);
 
-	for (var i = 0; i < logicalFromVisual.length - 1; i++) { //fix levels to reflect character width
+	for (var i = 0; i < logicalFromVisual.length - 1; i++) { 
 		if (textCharTypes[i] === AN) {
 			levels[i] = exports.AN;
 		} else if (levels[i] === R && ((textCharTypes[i] > AL && textCharTypes[i] < LRE) 
@@ -5549,7 +5512,7 @@ var Tokenizer = function(rules) {
                     adjustedregex = this.removeCapturingGroups(rule.regex);
                 }
                 if (!rule.splitRegex && typeof rule.token != "string")
-                    splitterRurles.push(rule); // flag will be known only at the very end
+                    splitterRurles.push(rule); 
             }
 
             mapping[matchTotal] = i;
@@ -6400,18 +6363,18 @@ var CstyleBehaviour = function(options) {
                         pair = false;
                 } else {
                     if (stringBefore && !stringAfter)
-                        return null; // wrap string with different quote
+                        return null; 
                     if (stringBefore && stringAfter)
-                        return null; // do not pair quotes inside strings
+                        return null; 
                     var wordRe = session.$mode.tokenRe;
                     wordRe.lastIndex = 0;
                     var isWordBefore = wordRe.test(leftChar);
                     wordRe.lastIndex = 0;
                     var isWordAfter = wordRe.test(leftChar);
                     if (isWordBefore || isWordAfter)
-                        return null; // before or after alphanumeric
+                        return null; 
                     if (rightChar && !/[\s;,.})\]\\]/.test(rightChar))
-                        return null; // there is rightChar and it isn't closing
+                        return null; 
                     var charBefore = line[cursor.column - 2];
                     if (leftChar == quote &&  (charBefore == quote || wordRe.test(charBefore)))
                         return null;
@@ -7002,7 +6965,7 @@ var Anchor = exports.Anchor = function(doc, row, column) {
         var deltaRowShift = (deltaIsInsert ? 1 : -1) * (delta.end.row    - delta.start.row);
         var deltaColShift = (deltaIsInsert ? 1 : -1) * (delta.end.column - delta.start.column);
         var deltaStart = delta.start;
-        var deltaEnd = deltaIsInsert ? deltaStart : delta.end; // Collapse insert range.
+        var deltaEnd = deltaIsInsert ? deltaStart : delta.end; 
         if ($pointsInOrder(point, deltaStart, moveIfEqual)) {
             return {
                 row: point.row,
@@ -8398,11 +8361,11 @@ function Folding() {
                     if (start >= first)
                         rowCount -= last-start;
                     else
-                        rowCount = 0; // in one fold
+                        rowCount = 0; 
                 }
                 break;
             } else if (end >= first){
-                if (start >= first) // fold inside range
+                if (start >= first) 
                     rowCount -=  end-start;
                 else
                     rowCount -=  end-first+1;
@@ -8764,10 +8727,10 @@ function Folding() {
 
     this.foldAll = function(startRow, endRow, depth, test) {
         if (depth == undefined)
-            depth = 100000; // JSON.stringify doesn't hanle Infinity
+            depth = 100000; 
         var foldWidgets = this.foldWidgets;
         if (!foldWidgets)
-            return; // mode doesn't support folding
+            return; 
         endRow = endRow || this.getLength();
         startRow = startRow || 0;
         for (var row = startRow; row < endRow; row++) {
@@ -9890,7 +9853,7 @@ EditSession.$uid = 0;
 
         for (var i = 0; i < deltas.length; i++) {
             var delta = deltas[i];
-            if (!delta.start) continue; // skip folds
+            if (!delta.start) continue; 
             if (!range) {
                 if (isInsert(delta)) {
                     range = Range.fromPoints(delta.start, delta.end);
@@ -10394,7 +10357,7 @@ EditSession.$uid = 0;
                     }
                 }
                 if (split == tokens.length) {
-                    break;  // Breaks the while-loop.
+                    break;  
                 }
                 addSplit(split);
                 continue;
@@ -11450,9 +11413,9 @@ MultiHashHandler.prototype = HashHandler.prototype;
         
         if (data.$keyChain) {
             if ((!hashId || hashId == 4) && keyString.length == 1)
-                data.$keyChain = data.$keyChain.slice(0, -key.length - 1); // wait for input
+                data.$keyChain = data.$keyChain.slice(0, -key.length - 1); 
             else if (hashId == -1 || keyCode > 0)
-                data.$keyChain = ""; // reset keyChain
+                data.$keyChain = ""; 
         }
         return {command: command};
     };
@@ -12609,20 +12572,20 @@ Editor.$uid = 0;
                 this.mergeNextCommand = true;
 
             shouldMerge = shouldMerge
-                && this.mergeNextCommand // previous command allows to coalesce with
-                && (!/\s/.test(text) || /\s/.test(prev.args)); // previous insertion was of same type
+                && this.mergeNextCommand 
+                && (!/\s/.test(text) || /\s/.test(prev.args)); 
 
             this.mergeNextCommand = true;
         } else {
             shouldMerge = shouldMerge
-                && mergeableCommands.indexOf(e.command.name) !== -1; // the command is mergeable
+                && mergeableCommands.indexOf(e.command.name) !== -1; 
         }
 
         if (
             this.$mergeUndoDeltas != "always"
             && Date.now() - this.sequenceStartTime > 2000
         ) {
-            shouldMerge = false; // the sequence is too long
+            shouldMerge = false; 
         }
 
         if (shouldMerge)
@@ -12892,7 +12855,7 @@ Editor.$uid = 0;
                                     depth--;
                                 }
                             }
-                        } else if (tag === currentTag && token.value === '/>') { // self closing tag
+                        } else if (tag === currentTag && token.value === '/>') { 
                             depth--;
                         }
                     }
@@ -12912,7 +12875,7 @@ Editor.$uid = 0;
                                     depth--;
                                 }
                             }
-                        } else if (token.value === '/>') { // self closing tag
+                        } else if (token.value === '/>') { 
                             var stepCount = 0;
                             var tmpToken = prevToken;
                             while (tmpToken) {
@@ -13252,11 +13215,11 @@ Editor.$uid = 0;
         session.insert(cursor, text);
 
         if (transform && transform.selection) {
-            if (transform.selection.length == 2) { // Transform relative to the current column
+            if (transform.selection.length == 2) { 
                 this.selection.setSelectionRange(
                     new Range(cursor.row, start + transform.selection[0],
                               cursor.row, start + transform.selection[1]));
-            } else { // Transform relative to the current row.
+            } else { 
                 this.selection.setSelectionRange(
                     new Range(cursor.row + transform.selection[0],
                               transform.selection[1],
@@ -14849,7 +14812,7 @@ function $updateMarkers(delta) {
         var point = this.marks[i];
         var cmp = comparePoints(point, start);
         if (cmp < 0) {
-            continue; // delta starts after the range
+            continue; 
         }
         if (cmp === 0) {
             if (isInsert) {
@@ -15320,7 +15283,7 @@ var Gutter = function(parentEl) {
         
         var session = this.session;
         var firstRow = config.firstRow;
-        var lastRow = Math.min(config.lastRow + config.gutterOffset,  // needed to compensate for hor scollbar
+        var lastRow = Math.min(config.lastRow + config.gutterOffset,  
             session.getLength() - 1);
             
         this.oldLastRow = lastRow;
@@ -15440,7 +15403,7 @@ var Gutter = function(parentEl) {
         
         this.$lines.moveContainer(config);
 
-        var lastRow = Math.min(config.lastRow + config.gutterOffset,  // needed to compensate for hor scollbar
+        var lastRow = Math.min(config.lastRow + config.gutterOffset,  
             this.session.getLength() - 1);
         var oldLastRow = this.oldLastRow;
         this.oldLastRow = lastRow;
@@ -15897,7 +15860,7 @@ var Text = function(parentEl) {
     this.EOL_CHAR_LF = "\xAC";
     this.EOL_CHAR_CRLF = "\xa4";
     this.EOL_CHAR = this.EOL_CHAR_LF;
-    this.TAB_CHAR = "\u2014"; //"\u21E5";
+    this.TAB_CHAR = "\u2014"; 
     this.SPACE_CHAR = "\xB7";
     this.$padding = 0;
     this.MAX_LINE_LENGTH = 10000;
@@ -16841,9 +16804,9 @@ oop.inherits(HScrollBar, ScrollBar);
 }).call(HScrollBar.prototype);
 
 
-exports.ScrollBar = VScrollBar; // backward compatibility
-exports.ScrollBarV = VScrollBar; // backward compatibility
-exports.ScrollBarH = HScrollBar; // backward compatibility
+exports.ScrollBar = VScrollBar; 
+exports.ScrollBarV = VScrollBar; 
+exports.ScrollBarH = HScrollBar; 
 
 exports.VScrollBar = VScrollBar;
 exports.HScrollBar = HScrollBar;
@@ -17206,12 +17169,12 @@ padding-right: 6px;\
 background-repeat: no-repeat;\
 }\
 .ace_gutter-cell.ace_error {\
-background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAABOFBMVEX/////////QRswFAb/Ui4wFAYwFAYwFAaWGAfDRymzOSH/PxswFAb/SiUwFAYwFAbUPRvjQiDllog5HhHdRybsTi3/Tyv9Tir+Syj/UC3////XurebMBIwFAb/RSHbPx/gUzfdwL3kzMivKBAwFAbbvbnhPx66NhowFAYwFAaZJg8wFAaxKBDZurf/RB6mMxb/SCMwFAYwFAbxQB3+RB4wFAb/Qhy4Oh+4QifbNRcwFAYwFAYwFAb/QRzdNhgwFAYwFAbav7v/Uy7oaE68MBK5LxLewr/r2NXewLswFAaxJw4wFAbkPRy2PyYwFAaxKhLm1tMwFAazPiQwFAaUGAb/QBrfOx3bvrv/VC/maE4wFAbRPBq6MRO8Qynew8Dp2tjfwb0wFAbx6eju5+by6uns4uH9/f36+vr/GkHjAAAAYnRSTlMAGt+64rnWu/bo8eAA4InH3+DwoN7j4eLi4xP99Nfg4+b+/u9B/eDs1MD1mO7+4PHg2MXa347g7vDizMLN4eG+Pv7i5evs/v79yu7S3/DV7/498Yv24eH+4ufQ3Ozu/v7+y13sRqwAAADLSURBVHjaZc/XDsFgGIBhtDrshlitmk2IrbHFqL2pvXf/+78DPokj7+Fz9qpU/9UXJIlhmPaTaQ6QPaz0mm+5gwkgovcV6GZzd5JtCQwgsxoHOvJO15kleRLAnMgHFIESUEPmawB9ngmelTtipwwfASilxOLyiV5UVUyVAfbG0cCPHig+GBkzAENHS0AstVF6bacZIOzgLmxsHbt2OecNgJC83JERmePUYq8ARGkJx6XtFsdddBQgZE2nPR6CICZhawjA4Fb/chv+399kfR+MMMDGOQAAAABJRU5ErkJggg==\");\
+background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAABOFBMVEX
 background-repeat: no-repeat;\
 background-position: 2px center;\
 }\
 .ace_gutter-cell.ace_warning {\
-background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAmVBMVEX///8AAAD///8AAAAAAABPSzb/5sAAAAB/blH/73z/ulkAAAAAAAD85pkAAAAAAAACAgP/vGz/rkDerGbGrV7/pkQICAf////e0IsAAAD/oED/qTvhrnUAAAD/yHD/njcAAADuv2r/nz//oTj/p064oGf/zHAAAAA9Nir/tFIAAAD/tlTiuWf/tkIAAACynXEAAAAAAAAtIRW7zBpBAAAAM3RSTlMAABR1m7RXO8Ln31Z36zT+neXe5OzooRDfn+TZ4p3h2hTf4t3k3ucyrN1K5+Xaks52Sfs9CXgrAAAAjklEQVR42o3PbQ+CIBQFYEwboPhSYgoYunIqqLn6/z8uYdH8Vmdnu9vz4WwXgN/xTPRD2+sgOcZjsge/whXZgUaYYvT8QnuJaUrjrHUQreGczuEafQCO/SJTufTbroWsPgsllVhq3wJEk2jUSzX3CUEDJC84707djRc5MTAQxoLgupWRwW6UB5fS++NV8AbOZgnsC7BpEAAAAABJRU5ErkJggg==\");\
+background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAmVBMVEX
 background-position: 2px center;\
 }\
 .ace_gutter-cell.ace_info {\
@@ -17425,8 +17388,8 @@ height: 11px;\
 margin-top: -2px;\
 vertical-align: middle;\
 background-image:\
-url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAJCAYAAADU6McMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJpJREFUeNpi/P//PwOlgAXGYGRklAVSokD8GmjwY1wasKljQpYACtpCFeADcHVQfQyMQAwzwAZI3wJKvCLkfKBaMSClBlR7BOQikCFGQEErIH0VqkabiGCAqwUadAzZJRxQr/0gwiXIal8zQQPnNVTgJ1TdawL0T5gBIP1MUJNhBv2HKoQHHjqNrA4WO4zY0glyNKLT2KIfIMAAQsdgGiXvgnYAAAAASUVORK5CYII=\"),\
-url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAA3CAYAAADNNiA5AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAACJJREFUeNpi+P//fxgTAwPDBxDxD078RSX+YeEyDFMCIMAAI3INmXiwf2YAAAAASUVORK5CYII=\");\
+url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAJCAYAAADU6McMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJpJREFUeNpi/P
+url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAA3CAYAAADNNiA5AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAACJJREFUeNpi+P
 background-repeat: no-repeat, repeat-x;\
 background-position: center center, top left;\
 color: transparent;\
@@ -17439,8 +17402,8 @@ pointer-events: auto;\
 }\
 .ace_fold:hover{\
 background-image:\
-url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAJCAYAAADU6McMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJpJREFUeNpi/P//PwOlgAXGYGRklAVSokD8GmjwY1wasKljQpYACtpCFeADcHVQfQyMQAwzwAZI3wJKvCLkfKBaMSClBlR7BOQikCFGQEErIH0VqkabiGCAqwUadAzZJRxQr/0gwiXIal8zQQPnNVTgJ1TdawL0T5gBIP1MUJNhBv2HKoQHHjqNrA4WO4zY0glyNKLT2KIfIMAAQsdgGiXvgnYAAAAASUVORK5CYII=\"),\
-url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAA3CAYAAADNNiA5AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAACBJREFUeNpi+P//fz4TAwPDZxDxD5X4i5fLMEwJgAADAEPVDbjNw87ZAAAAAElFTkSuQmCC\");\
+url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAJCAYAAADU6McMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJpJREFUeNpi/P
+url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAA3CAYAAADNNiA5AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAACBJREFUeNpi+P
 }\
 .ace_tooltip {\
 background-color: #FFF;\
@@ -17499,13 +17462,13 @@ background-color: rgba(0, 0, 0, 0.05);\
 box-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);\
 }\
 .ace_dark .ace_fold-widget {\
-background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHklEQVQIW2P4//8/AzoGEQ7oGCaLLAhWiSwB146BAQCSTPYocqT0AAAAAElFTkSuQmCC\");\
+background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHklEQVQIW2P4
 }\
 .ace_dark .ace_fold-widget.ace_end {\
-background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAH0lEQVQIW2P4//8/AxQ7wNjIAjDMgC4AxjCVKBirIAAF0kz2rlhxpAAAAABJRU5ErkJggg==\");\
+background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAH0lEQVQIW2P4
 }\
 .ace_dark .ace_fold-widget.ace_closed {\
-background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAFCAYAAACAcVaiAAAAHElEQVQIW2P4//+/AxAzgDADlOOAznHAKgPWAwARji8UIDTfQQAAAABJRU5ErkJggg==\");\
+background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAFCAYAAACAcVaiAAAAHElEQVQIW2P4
 }\
 .ace_dark .ace_fold-widget:hover {\
 box-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);\
@@ -18342,7 +18305,7 @@ var VirtualRenderer = function(container, theme) {
             this.$horizScroll = horizScroll;
             this.scrollBarH.setVisible(horizScroll);
         }
-        var vScrollBefore = this.$vScroll; // autosize can change vscroll value in which case we need to update longestLine
+        var vScrollBefore = this.$vScroll; 
         if (this.$maxLines && this.lineHeight > 1)
             this.$autosize();
 
@@ -19009,7 +18972,7 @@ function $workerBlob(workerUrl) {
     var script = "importScripts('" + net.qualifyURL(workerUrl) + "');";
     try {
         return new Blob([script], {"type": "application/javascript"});
-    } catch (e) { // Backwards-compatibility
+    } catch (e) { 
         var BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
         var blobBuilder = new BlobBuilder();
         blobBuilder.append(script);
@@ -19469,7 +19432,7 @@ function onMouseDown(e) {
 
     if (selectionMode == "add") {
         if (!isMultiSelect && inSelection)
-            return; // dragging
+            return; 
 
         if (!isMultiSelect) {
             var range = selection.toOrientedRange();
@@ -20685,7 +20648,7 @@ background: rgb(250, 250, 255);\
 border: 1px solid rgb(200, 200, 250);\
 }\
 .ace-tm .ace_indent-guide {\
-background: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4////f4bLly//BwAmVgd1/w11/gAAAABJRU5ErkJggg==\") right repeat-y;\
+background: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4
 }\
 ";
 exports.$id = "ace/theme/textmate";
@@ -21303,7 +21266,7 @@ exports.edit = function(el, options) {
     event.addListener(window, "resize", env.onResize);
     editor.on("destroy", function() {
         event.removeListener(window, "resize", env.onResize);
-        env.editor.container.env = null; // prevent memory leak on old ie
+        env.editor.container.env = null; 
     });
     editor.container.env = editor.env = env;
     return editor;

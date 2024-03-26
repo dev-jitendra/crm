@@ -10,119 +10,43 @@ use AsyncAws\S3\Enum\RequestPayer;
 
 final class UploadPartRequest extends Input
 {
-    /**
-     * Object data.
-     *
-     * @var string|resource|callable|iterable|null
-     */
+    
     private $body;
 
-    /**
-     * The name of the bucket to which the multipart upload was initiated.
-     *
-     * @required
-     *
-     * @var string|null
-     */
+    
     private $bucket;
 
-    /**
-     * Size of the body in bytes. This parameter is useful when the size of the body cannot be determined automatically.
-     *
-     * @var string|null
-     */
+    
     private $contentLength;
 
-    /**
-     * The base64-encoded 128-bit MD5 digest of the part data. This parameter is auto-populated when using the command from
-     * the CLI. This parameter is required if object lock parameters are specified.
-     *
-     * @var string|null
-     */
+    
     private $contentMd5;
 
-    /**
-     * Object key for which the multipart upload was initiated.
-     *
-     * @required
-     *
-     * @var string|null
-     */
+    
     private $key;
 
-    /**
-     * Part number of part being uploaded. This is a positive integer between 1 and 10,000.
-     *
-     * @required
-     *
-     * @var int|null
-     */
+    
     private $partNumber;
 
-    /**
-     * Upload ID identifying the multipart upload whose part is being uploaded.
-     *
-     * @required
-     *
-     * @var string|null
-     */
+    
     private $uploadId;
 
-    /**
-     * Specifies the algorithm to use to when encrypting the object (for example, AES256).
-     *
-     * @var string|null
-     */
+    
     private $sseCustomerAlgorithm;
 
-    /**
-     * Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store
-     * the object and then it is discarded; Amazon S3 does not store the encryption key. The key must be appropriate for use
-     * with the algorithm specified in the `x-amz-server-side-encryption-customer-algorithm header`. This must be the same
-     * encryption key specified in the initiate multipart upload request.
-     *
-     * @var string|null
-     */
+    
     private $sseCustomerKey;
 
-    /**
-     * Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a
-     * message integrity check to ensure that the encryption key was transmitted without error.
-     *
-     * @var string|null
-     */
+    
     private $sseCustomerKeyMd5;
 
-    /**
-     * @var null|RequestPayer::*
-     */
+    
     private $requestPayer;
 
-    /**
-     * The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail
-     * with an HTTP `403 (Access Denied)` error.
-     *
-     * @var string|null
-     */
+    
     private $expectedBucketOwner;
 
-    /**
-     * @param array{
-     *   Body?: string|resource|callable|iterable,
-     *   Bucket?: string,
-     *   ContentLength?: string,
-     *   ContentMD5?: string,
-     *   Key?: string,
-     *   PartNumber?: int,
-     *   UploadId?: string,
-     *   SSECustomerAlgorithm?: string,
-     *   SSECustomerKey?: string,
-     *   SSECustomerKeyMD5?: string,
-     *   RequestPayer?: RequestPayer::*,
-     *   ExpectedBucketOwner?: string,
-     *   @region?: string,
-     * } $input
-     */
+    
     public function __construct(array $input = [])
     {
         $this->body = $input['Body'] ?? null;
@@ -145,9 +69,7 @@ final class UploadPartRequest extends Input
         return $input instanceof self ? $input : new self($input);
     }
 
-    /**
-     * @return string|resource|callable|iterable|null
-     */
+    
     public function getBody()
     {
         return $this->body;
@@ -183,9 +105,7 @@ final class UploadPartRequest extends Input
         return $this->partNumber;
     }
 
-    /**
-     * @return RequestPayer::*|null
-     */
+    
     public function getRequestPayer(): ?string
     {
         return $this->requestPayer;
@@ -211,12 +131,10 @@ final class UploadPartRequest extends Input
         return $this->uploadId;
     }
 
-    /**
-     * @internal
-     */
+    
     public function request(): Request
     {
-        // Prepare headers
+        
         $headers = [];
         if (null !== $this->contentLength) {
             $headers['Content-Length'] = $this->contentLength;
@@ -243,7 +161,7 @@ final class UploadPartRequest extends Input
             $headers['x-amz-expected-bucket-owner'] = $this->expectedBucketOwner;
         }
 
-        // Prepare query
+        
         $query = [];
         if (null === $v = $this->partNumber) {
             throw new InvalidArgument(sprintf('Missing parameter "PartNumber" for "%s". The value cannot be null.', __CLASS__));
@@ -254,7 +172,7 @@ final class UploadPartRequest extends Input
         }
         $query['uploadId'] = $v;
 
-        // Prepare URI
+        
         $uri = [];
         if (null === $v = $this->bucket) {
             throw new InvalidArgument(sprintf('Missing parameter "Bucket" for "%s". The value cannot be null.', __CLASS__));
@@ -266,16 +184,14 @@ final class UploadPartRequest extends Input
         $uri['Key'] = $v;
         $uriString = '/' . rawurlencode($uri['Bucket']) . '/' . str_replace('%2F', '/', rawurlencode($uri['Key']));
 
-        // Prepare Body
+        
         $body = $this->body ?? '';
 
-        // Return the Request
+        
         return new Request('PUT', $uriString, $query, $headers, StreamFactory::create($body));
     }
 
-    /**
-     * @param string|resource|callable|iterable|null $value
-     */
+    
     public function setBody($value): self
     {
         $this->body = $value;
@@ -325,9 +241,7 @@ final class UploadPartRequest extends Input
         return $this;
     }
 
-    /**
-     * @param RequestPayer::*|null $value
-     */
+    
     public function setRequestPayer(?string $value): self
     {
         $this->requestPayer = $value;

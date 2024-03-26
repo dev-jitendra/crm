@@ -1,37 +1,11 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 import LoginHandler from 'handlers/login';
 import Base64 from 'js-base64';
 
 class OidcLoginHandler extends LoginHandler {
 
-    /** @inheritDoc */
+    
     process() {
         const proxy = window.open(
             'about:blank',
@@ -75,20 +49,7 @@ class OidcLoginHandler extends LoginHandler {
         });
     }
 
-    /**
-     * @private
-     * @param {{
-     *  endpoint: string,
-     *  clientId: string,
-     *  redirectUri: string,
-     *  scopes: string[],
-     *  claims: ?string,
-     *  prompt: 'login'|'consent'|'select_account',
-     *  maxAge: ?Number,
-     * }} data
-     * @param {WindowProxy} proxy
-     * @return {Promise<{code: string, nonce: string}>}
-     */
+    
     processWithData(data, proxy) {
         const state = (Math.random() + 1).toString(36).substring(7);
         const nonce = (Math.random() + 1).toString(36).substring(7);
@@ -121,14 +82,7 @@ class OidcLoginHandler extends LoginHandler {
         return this.processWindow(url, state, nonce, proxy);
     }
 
-    /**
-     * @private
-     * @param {string} url
-     * @param {string} state
-     * @param {string} nonce
-     * @param {WindowProxy} proxy
-     * @return {Promise<{code: string, nonce: string}>}
-     */
+    
     processWindow(url, state, nonce, proxy) {
         proxy.location.href = url;
 
@@ -199,15 +153,7 @@ class OidcLoginHandler extends LoginHandler {
         });
     }
 
-    /**
-     * @param {string} url
-     * @return {?{
-     *     code: ?string,
-     *     state: ?string,
-     *     error: ?string,
-     *     errorDescription: ?string,
-     * }}
-     */
+    
     parseWindowUrl(url) {
         try {
             const params = new URL(url).searchParams;

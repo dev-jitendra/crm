@@ -12,14 +12,10 @@ use function is_object;
 use function iterator_to_array;
 use function sprintf;
 
-/**
- * @internal
- */
+
 final class ParamsNormalizer
 {
-    /**
-     * @return array<string, mixed>
-     */
+    
     public static function normalizeParams(mixed $params): array
     {
         if ($params instanceof Traversable) {

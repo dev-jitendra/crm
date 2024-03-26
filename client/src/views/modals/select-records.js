@@ -1,39 +1,11 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/modals/select-records */
+
+
 
 import ModalView from 'views/modal';
 import SearchManager from 'search-manager';
 
-/**
- * A select-records modal.
- */
+
 class SelectRecordsModalView extends ModalView {
 
     template = 'modals/select-records'
@@ -47,36 +19,36 @@ class SelectRecordsModalView extends ModalView {
     noCreateScopeList = ['User', 'Team', 'Role', 'Portal']
     layoutName = 'listSmall'
 
-    /** @inheritDoc */
+    
     shortcutKeys = {
-        /** @this SelectRecordsModalView */
+        
         'Control+Enter': function (e) {
             this.handleShortcutKeyCtrlEnter(e);
         },
-        /** @this SelectRecordsModalView */
+        
         'Control+Space': function (e) {
             this.handleShortcutKeyCtrlSpace(e);
         },
-        /** @this SelectRecordsModalView */
+        
         'Control+Slash': function (e) {
             this.handleShortcutKeyCtrlSlash(e);
         },
-        /** @this SelectRecordsModalView */
+        
         'Control+Comma': function (e) {
             this.handleShortcutKeyCtrlComma(e);
         },
-        /** @this SelectRecordsModalView */
+        
         'Control+Period': function (e) {
             this.handleShortcutKeyCtrlPeriod(e);
         },
     }
 
     events = {
-        /** @this SelectRecordsModalView */
+        
         'click button[data-action="create"]': function () {
             this.create();
         },
-        /** @this SelectRecordsModalView */
+        
         'click .list a': function (e) {
             e.preventDefault();
         },
@@ -90,7 +62,7 @@ class SelectRecordsModalView extends ModalView {
     }
 
     setup() {
-        /** @type {Object.<string, module:search-manager~advancedFilter>} */
+        
         this.filters = this.options.filters || {};
         this.boolFilterList = this.options.boolFilterList;
         this.primaryFilterName = this.options.primaryFilterName || null;
@@ -202,7 +174,7 @@ class SelectRecordsModalView extends ModalView {
             this.setupList();
         });
 
-        // If the list not yet loaded.
+        
         this.once('close', () => {
             if (
                 this.collection.lastSyncPromise &&
@@ -308,13 +280,8 @@ class SelectRecordsModalView extends ModalView {
                     this.collection.fetch()
                         .then(() => Espo.Ui.notify(false));
                 });
-                // Timeout to make notify work.
-                /*setTimeout(() => {
-                    Espo.Ui.notify(' ... ');
-
-                    this.collection.fetch()
-                        .then(() => Espo.Ui.notify(false));
-                }, 1);*/
+                
+                
             };
 
             if (this.options.forceSelectAllAttributes || this.forceSelectAllAttributes) {
@@ -425,26 +392,17 @@ class SelectRecordsModalView extends ModalView {
         this.close();
     }
 
-    /**
-     * @protected
-     * @return {?module:views/record/search}
-     */
+    
     getSearchView() {
         return this.getView('search');
     }
 
-    /**
-     * @protected
-     * @return {module:views/record/list}
-     */
+    
     getRecordView() {
         return this.getView('list');
     }
 
-    /**
-     * @protected
-     * @param {JQueryKeyEventObject} e
-     */
+    
     handleShortcutKeyCtrlSlash(e) {
         if (!this.searchPanel) {
             return;
@@ -462,10 +420,7 @@ class SelectRecordsModalView extends ModalView {
         $search.focus();
     }
 
-    /**
-     * @protected
-     * @param {JQueryKeyEventObject} e
-     */
+    
     handleShortcutKeyCtrlEnter(e) {
         if (!this.multiple) {
             return;
@@ -481,10 +436,7 @@ class SelectRecordsModalView extends ModalView {
         this.actionSelect();
     }
 
-    /**
-     * @protected
-     * @param {JQueryKeyEventObject} e
-     */
+    
     handleShortcutKeyCtrlSpace(e) {
         if (!this.createButton) {
             return;
@@ -496,9 +448,7 @@ class SelectRecordsModalView extends ModalView {
         this.create();
     }
 
-    /**
-     * @protected
-     */
+    
     handleShortcutKeyCtrlComma() {
         if (!this.getSearchView()) {
             return;
@@ -507,9 +457,7 @@ class SelectRecordsModalView extends ModalView {
         this.getSearchView().selectPreviousPreset();
     }
 
-    /**
-     * @protected
-     */
+    
     handleShortcutKeyCtrlPeriod() {
         if (!this.getSearchView()) {
             return;

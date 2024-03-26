@@ -1,4 +1,4 @@
-<?php // phpcs:disable WebimpressCodingStandard.NamingConventions.AbstractClass.Prefix
+<?php 
 
 
 declare(strict_types=1);
@@ -14,45 +14,25 @@ use function set_error_handler;
 
 use const E_WARNING;
 
-/**
- * ErrorHandler that can be used to catch internal PHP errors
- * and convert to an ErrorException instance.
- */
+
 abstract class ErrorHandler
 {
-    /**
-     * Active stack
-     *
-     * @var list<ErrorException|null>
-     */
+    
     protected static $stack = [];
 
-    /**
-     * Check if this error handler is active
-     *
-     * @return bool
-     */
+    
     public static function started()
     {
         return (bool) static::getNestedLevel();
     }
 
-    /**
-     * Get the current nested level
-     *
-     * @return int
-     */
+    
     public static function getNestedLevel()
     {
         return count(static::$stack);
     }
 
-    /**
-     * Starting the error handler
-     *
-     * @param int $errorLevel
-     * @return void
-     */
+    
     public static function start($errorLevel = E_WARNING)
     {
         if (! static::$stack) {
@@ -62,13 +42,7 @@ abstract class ErrorHandler
         static::$stack[] = null;
     }
 
-    /**
-     * Stopping the error handler
-     *
-     * @param  bool $throw Throw the ErrorException if any
-     * @return null|ErrorException
-     * @throws ErrorException If an error has been caught and $throw is true.
-     */
+    
     public static function stop($throw = false)
     {
         $errorException = null;
@@ -88,11 +62,7 @@ abstract class ErrorHandler
         return $errorException;
     }
 
-    /**
-     * Stop all active handler
-     *
-     * @return void
-     */
+    
     public static function clean()
     {
         if (static::$stack) {
@@ -102,15 +72,7 @@ abstract class ErrorHandler
         static::$stack = [];
     }
 
-    /**
-     * Add an error to the stack
-     *
-     * @param int    $errno
-     * @param string $errstr
-     * @param string $errfile
-     * @param int    $errline
-     * @return void
-     */
+    
     public static function addError($errno, $errstr = '', $errfile = '', $errline = 0)
     {
         $stack = &static::$stack[count(static::$stack) - 1];

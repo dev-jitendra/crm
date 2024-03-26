@@ -15,17 +15,15 @@ use OpenSpout\Reader\XLSX\Manager\SheetManager;
 use OpenSpout\Reader\XLSX\Manager\WorkbookRelationshipsManager;
 use ZipArchive;
 
-/**
- * @extends AbstractReader<SheetIterator>
- */
+
 final class Reader extends AbstractReader
 {
     private ZipArchive $zip;
 
-    /** @var SharedStringsManager Manages shared strings */
+    
     private SharedStringsManager $sharedStringsManager;
 
-    /** @var SheetIterator To iterator over the XLSX sheets */
+    
     private SheetIterator $sheetIterator;
 
     private readonly Options $options;
@@ -51,24 +49,13 @@ final class Reader extends AbstractReader
         return $this->sheetIterator;
     }
 
-    /**
-     * Returns whether stream wrappers are supported.
-     */
+    
     protected function doesSupportStreamWrapper(): bool
     {
         return false;
     }
 
-    /**
-     * Opens the file at the given file path to make it ready to be read.
-     * It also parses the sharedStrings.xml file to get all the shared strings available in memory
-     * and fetches all the available sheets.
-     *
-     * @param string $filePath Path of the file to be read
-     *
-     * @throws \OpenSpout\Common\Exception\IOException            If the file at the given path or its content cannot be read
-     * @throws \OpenSpout\Reader\Exception\NoSheetsFoundException If there are no sheets in the file
-     */
+    
     protected function openReader(string $filePath): void
     {
         $this->zip = new ZipArchive();
@@ -85,7 +72,7 @@ final class Reader extends AbstractReader
         );
 
         if ($this->sharedStringsManager->hasSharedStrings()) {
-            // Extracts all the strings from the sheets for easy access in the future
+            
             $this->sharedStringsManager->extractSharedStrings();
         }
 
@@ -99,9 +86,7 @@ final class Reader extends AbstractReader
         );
     }
 
-    /**
-     * Closes the reader. To be used after reading the file.
-     */
+    
     protected function closeReader(): void
     {
         $this->zip->close();

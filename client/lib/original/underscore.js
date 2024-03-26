@@ -8,60 +8,60 @@ Espo.loader.setContextId('lib!underscore');
     exports.noConflict = function () { global._ = current; return exports; };
   }()));
 }(this, (function () {
-  //     Underscore.js 1.13.1
-  //     https://underscorejs.org
-  //     (c) 2009-2021 Jeremy Ashkenas, Julian Gonggrijp, and DocumentCloud and Investigative Reporters & Editors
-  //     Underscore may be freely distributed under the MIT license.
+  
+  
+  
+  
 
-  // Current version.
+  
   var VERSION = '1.13.1';
 
-  // Establish the root object, `window` (`self`) in the browser, `global`
-  // on the server, or `this` in some virtual machines. We use `self`
-  // instead of `window` for `WebWorker` support.
+  
+  
+  
   var root = typeof self == 'object' && self.self === self && self ||
             typeof global == 'object' && global.global === global && global ||
             Function('return this')() ||
             {};
 
-  // Save bytes in the minified (but not gzipped) version:
+  
   var ArrayProto = Array.prototype, ObjProto = Object.prototype;
   var SymbolProto = typeof Symbol !== 'undefined' ? Symbol.prototype : null;
 
-  // Create quick reference variables for speed access to core prototypes.
+  
   var push = ArrayProto.push,
       slice = ArrayProto.slice,
       toString = ObjProto.toString,
       hasOwnProperty = ObjProto.hasOwnProperty;
 
-  // Modern feature detection.
+  
   var supportsArrayBuffer = typeof ArrayBuffer !== 'undefined',
       supportsDataView = typeof DataView !== 'undefined';
 
-  // All **ECMAScript 5+** native function implementations that we hope to use
-  // are declared here.
+  
+  
   var nativeIsArray = Array.isArray,
       nativeKeys = Object.keys,
       nativeCreate = Object.create,
       nativeIsView = supportsArrayBuffer && ArrayBuffer.isView;
 
-  // Create references to these builtin functions because we override them.
+  
   var _isNaN = isNaN,
       _isFinite = isFinite;
 
-  // Keys in IE < 9 that won't be iterated by `for key in ...` and thus missed.
+  
   var hasEnumBug = !{toString: null}.propertyIsEnumerable('toString');
   var nonEnumerableProps = ['valueOf', 'isPrototypeOf', 'toString',
     'propertyIsEnumerable', 'hasOwnProperty', 'toLocaleString'];
 
-  // The largest integer that can be represented exactly.
+  
   var MAX_ARRAY_INDEX = Math.pow(2, 53) - 1;
 
-  // Some functions take a variable number of arguments, or a few expected
-  // arguments at the beginning and then a variable number of values to operate
-  // on. This helper accumulates all remaining arguments past the function’s
-  // argument length (or an explicit `startIndex`), into an array that becomes
-  // the last argument. Similar to ES6’s "rest parameter".
+  
+  
+  
+  
+  
   function restArguments(func, startIndex) {
     startIndex = startIndex == null ? func.length - 1 : +startIndex;
     return function() {
@@ -85,33 +85,33 @@ Espo.loader.setContextId('lib!underscore');
     };
   }
 
-  // Is a given variable an object?
+  
   function isObject(obj) {
     var type = typeof obj;
     return type === 'function' || type === 'object' && !!obj;
   }
 
-  // Is a given value equal to null?
+  
   function isNull(obj) {
     return obj === null;
   }
 
-  // Is a given variable undefined?
+  
   function isUndefined(obj) {
     return obj === void 0;
   }
 
-  // Is a given value a boolean?
+  
   function isBoolean(obj) {
     return obj === true || obj === false || toString.call(obj) === '[object Boolean]';
   }
 
-  // Is a given value a DOM element?
+  
   function isElement(obj) {
     return !!(obj && obj.nodeType === 1);
   }
 
-  // Internal function for creating a `toString`-based type tester.
+  
   function tagTester(name) {
     var tag = '[object ' + name + ']';
     return function(obj) {
@@ -135,8 +135,8 @@ Espo.loader.setContextId('lib!underscore');
 
   var isFunction = tagTester('Function');
 
-  // Optimize `isFunction` if appropriate. Work around some `typeof` bugs in old
-  // v8, IE 11 (#1621), Safari 8 (#1929), and PhantomJS (#2236).
+  
+  
   var nodelist = root.document && root.document.childNodes;
   if (typeof /./ != 'function' && typeof Int8Array != 'object' && typeof nodelist != 'function') {
     isFunction = function(obj) {
@@ -148,9 +148,9 @@ Espo.loader.setContextId('lib!underscore');
 
   var hasObjectTag = tagTester('Object');
 
-  // In IE 10 - Edge 13, `DataView` has string tag `'[object Object]'`.
-  // In IE 11, the most common among them, this problem also applies to
-  // `Map`, `WeakMap` and `Set`.
+  
+  
+  
   var hasStringTagBug = (
         supportsDataView && hasObjectTag(new DataView(new ArrayBuffer(8)))
       ),
@@ -158,27 +158,27 @@ Espo.loader.setContextId('lib!underscore');
 
   var isDataView = tagTester('DataView');
 
-  // In IE 10 - Edge 13, we need a different heuristic
-  // to determine whether an object is a `DataView`.
+  
+  
   function ie10IsDataView(obj) {
     return obj != null && isFunction$1(obj.getInt8) && isArrayBuffer(obj.buffer);
   }
 
   var isDataView$1 = (hasStringTagBug ? ie10IsDataView : isDataView);
 
-  // Is a given value an array?
-  // Delegates to ECMA5's native `Array.isArray`.
+  
+  
   var isArray = nativeIsArray || tagTester('Array');
 
-  // Internal function to check whether `key` is an own property name of `obj`.
+  
   function has$1(obj, key) {
     return obj != null && hasOwnProperty.call(obj, key);
   }
 
   var isArguments = tagTester('Arguments');
 
-  // Define a fallback version of the method in browsers (ahem, IE < 9), where
-  // there isn't any inspectable "Arguments" type.
+  
+  
   (function() {
     if (!isArguments(arguments)) {
       isArguments = function(obj) {
@@ -189,24 +189,24 @@ Espo.loader.setContextId('lib!underscore');
 
   var isArguments$1 = isArguments;
 
-  // Is a given object a finite number?
+  
   function isFinite$1(obj) {
     return !isSymbol(obj) && _isFinite(obj) && !isNaN(parseFloat(obj));
   }
 
-  // Is the given value `NaN`?
+  
   function isNaN$1(obj) {
     return isNumber(obj) && _isNaN(obj);
   }
 
-  // Predicate-generating function. Often useful outside of Underscore.
+  
   function constant(value) {
     return function() {
       return value;
     };
   }
 
-  // Common internal logic for `isArrayLike` and `isBufferLike`.
+  
   function createSizePropertyCheck(getSizeProperty) {
     return function(collection) {
       var sizeProperty = getSizeProperty(collection);
@@ -214,38 +214,38 @@ Espo.loader.setContextId('lib!underscore');
     }
   }
 
-  // Internal helper to generate a function to obtain property `key` from `obj`.
+  
   function shallowProperty(key) {
     return function(obj) {
       return obj == null ? void 0 : obj[key];
     };
   }
 
-  // Internal helper to obtain the `byteLength` property of an object.
+  
   var getByteLength = shallowProperty('byteLength');
 
-  // Internal helper to determine whether we should spend extensive checks against
-  // `ArrayBuffer` et al.
+  
+  
   var isBufferLike = createSizePropertyCheck(getByteLength);
 
-  // Is a given value a typed array?
+  
   var typedArrayPattern = /\[object ((I|Ui)nt(8|16|32)|Float(32|64)|Uint8Clamped|Big(I|Ui)nt64)Array\]/;
   function isTypedArray(obj) {
-    // `ArrayBuffer.isView` is the most future-proof, so use it when available.
-    // Otherwise, fall back on the above regular expression.
+    
+    
     return nativeIsView ? (nativeIsView(obj) && !isDataView$1(obj)) :
                   isBufferLike(obj) && typedArrayPattern.test(toString.call(obj));
   }
 
   var isTypedArray$1 = supportsArrayBuffer ? isTypedArray : constant(false);
 
-  // Internal helper to obtain the `length` property of an object.
+  
   var getLength = shallowProperty('length');
 
-  // Internal helper to create a simple lookup structure.
-  // `collectNonEnumProps` used to depend on `_.contains`, but this led to
-  // circular imports. `emulatedSet` is a one-off solution that only works for
-  // arrays of strings.
+  
+  
+  
+  
   function emulatedSet(keys) {
     var hash = {};
     for (var l = keys.length, i = 0; i < l; ++i) hash[keys[i]] = true;
@@ -258,16 +258,16 @@ Espo.loader.setContextId('lib!underscore');
     };
   }
 
-  // Internal helper. Checks `keys` for the presence of keys in IE < 9 that won't
-  // be iterated by `for key in ...` and thus missed. Extends `keys` in place if
-  // needed.
+  
+  
+  
   function collectNonEnumProps(obj, keys) {
     keys = emulatedSet(keys);
     var nonEnumIdx = nonEnumerableProps.length;
     var constructor = obj.constructor;
     var proto = isFunction$1(constructor) && constructor.prototype || ObjProto;
 
-    // Constructor is a special case.
+    
     var prop = 'constructor';
     if (has$1(obj, prop) && !keys.contains(prop)) keys.push(prop);
 
@@ -279,24 +279,24 @@ Espo.loader.setContextId('lib!underscore');
     }
   }
 
-  // Retrieve the names of an object's own properties.
-  // Delegates to **ECMAScript 5**'s native `Object.keys`.
+  
+  
   function keys(obj) {
     if (!isObject(obj)) return [];
     if (nativeKeys) return nativeKeys(obj);
     var keys = [];
     for (var key in obj) if (has$1(obj, key)) keys.push(key);
-    // Ahem, IE < 9.
+    
     if (hasEnumBug) collectNonEnumProps(obj, keys);
     return keys;
   }
 
-  // Is a given array, string, or object empty?
-  // An "empty" object has no enumerable own-properties.
+  
+  
   function isEmpty(obj) {
     if (obj == null) return true;
-    // Skip the more expensive `toString`-based type checks if `obj` has no
-    // `.length`.
+    
+    
     var length = getLength(obj);
     if (typeof length == 'number' && (
       isArray(obj) || isString(obj) || isArguments$1(obj)
@@ -304,7 +304,7 @@ Espo.loader.setContextId('lib!underscore');
     return getLength(keys(obj)) === 0;
   }
 
-  // Returns whether an object has a given set of `key:value` pairs.
+  
   function isMatch(object, attrs) {
     var _keys = keys(attrs), length = _keys.length;
     if (object == null) return !length;
@@ -316,9 +316,9 @@ Espo.loader.setContextId('lib!underscore');
     return true;
   }
 
-  // If Underscore is called as a function, it returns a wrapped object that can
-  // be used OO-style. This wrapper holds altered versions of all functions added
-  // through `_.mixin`. Wrapped objects may be chained.
+  
+  
+  
   function _$1(obj) {
     if (obj instanceof _$1) return obj;
     if (!(this instanceof _$1)) return new _$1(obj);
@@ -327,21 +327,21 @@ Espo.loader.setContextId('lib!underscore');
 
   _$1.VERSION = VERSION;
 
-  // Extracts the result from a wrapped and chained object.
+  
   _$1.prototype.value = function() {
     return this._wrapped;
   };
 
-  // Provide unwrapping proxies for some methods used in engine operations
-  // such as arithmetic and JSON stringification.
+  
+  
   _$1.prototype.valueOf = _$1.prototype.toJSON = _$1.prototype.value;
 
   _$1.prototype.toString = function() {
     return String(this._wrapped);
   };
 
-  // Internal function to wrap or shallow-copy an ArrayBuffer,
-  // typed array or DataView to a new view, reusing the buffer.
+  
+  
   function toBufferView(bufferSource) {
     return new Uint8Array(
       bufferSource.buffer || bufferSource,
@@ -350,62 +350,62 @@ Espo.loader.setContextId('lib!underscore');
     );
   }
 
-  // We use this string twice, so give it a name for minification.
+  
   var tagDataView = '[object DataView]';
 
-  // Internal recursive comparison function for `_.isEqual`.
+  
   function eq(a, b, aStack, bStack) {
-    // Identical objects are equal. `0 === -0`, but they aren't identical.
-    // See the [Harmony `egal` proposal](https://wiki.ecmascript.org/doku.php?id=harmony:egal).
+    
+    
     if (a === b) return a !== 0 || 1 / a === 1 / b;
-    // `null` or `undefined` only equal to itself (strict comparison).
+    
     if (a == null || b == null) return false;
-    // `NaN`s are equivalent, but non-reflexive.
+    
     if (a !== a) return b !== b;
-    // Exhaust primitive checks
+    
     var type = typeof a;
     if (type !== 'function' && type !== 'object' && typeof b != 'object') return false;
     return deepEq(a, b, aStack, bStack);
   }
 
-  // Internal recursive comparison function for `_.isEqual`.
+  
   function deepEq(a, b, aStack, bStack) {
-    // Unwrap any wrapped objects.
+    
     if (a instanceof _$1) a = a._wrapped;
     if (b instanceof _$1) b = b._wrapped;
-    // Compare `[[Class]]` names.
+    
     var className = toString.call(a);
     if (className !== toString.call(b)) return false;
-    // Work around a bug in IE 10 - Edge 13.
+    
     if (hasStringTagBug && className == '[object Object]' && isDataView$1(a)) {
       if (!isDataView$1(b)) return false;
       className = tagDataView;
     }
     switch (className) {
-      // These types are compared by value.
+      
       case '[object RegExp]':
-        // RegExps are coerced to strings for comparison (Note: '' + /a/i === '/a/i')
+        
       case '[object String]':
-        // Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is
-        // equivalent to `new String("5")`.
+        
+        
         return '' + a === '' + b;
       case '[object Number]':
-        // `NaN`s are equivalent, but non-reflexive.
-        // Object(NaN) is equivalent to NaN.
+        
+        
         if (+a !== +a) return +b !== +b;
-        // An `egal` comparison is performed for other numeric values.
+        
         return +a === 0 ? 1 / +a === 1 / b : +a === +b;
       case '[object Date]':
       case '[object Boolean]':
-        // Coerce dates and booleans to numeric primitive values. Dates are compared by their
-        // millisecond representations. Note that invalid dates with millisecond representations
-        // of `NaN` are not equivalent.
+        
+        
+        
         return +a === +b;
       case '[object Symbol]':
         return SymbolProto.valueOf.call(a) === SymbolProto.valueOf.call(b);
       case '[object ArrayBuffer]':
       case tagDataView:
-        // Coerce to typed array so we can fall through.
+        
         return deepEq(toBufferView(a), toBufferView(b), aStack, bStack);
     }
 
@@ -419,8 +419,8 @@ Espo.loader.setContextId('lib!underscore');
     if (!areArrays) {
       if (typeof a != 'object' || typeof b != 'object') return false;
 
-      // Objects with different constructors are not equivalent, but `Object`s or `Array`s
-      // from different frames are.
+      
+      
       var aCtor = a.constructor, bCtor = b.constructor;
       if (aCtor !== bCtor && !(isFunction$1(aCtor) && aCtor instanceof aCtor &&
                                isFunction$1(bCtor) && bCtor instanceof bCtor)
@@ -428,96 +428,96 @@ Espo.loader.setContextId('lib!underscore');
         return false;
       }
     }
-    // Assume equality for cyclic structures. The algorithm for detecting cyclic
-    // structures is adapted from ES 5.1 section 15.12.3, abstract operation `JO`.
+    
+    
 
-    // Initializing stack of traversed objects.
-    // It's done here since we only need them for objects and arrays comparison.
+    
+    
     aStack = aStack || [];
     bStack = bStack || [];
     var length = aStack.length;
     while (length--) {
-      // Linear search. Performance is inversely proportional to the number of
-      // unique nested structures.
+      
+      
       if (aStack[length] === a) return bStack[length] === b;
     }
 
-    // Add the first object to the stack of traversed objects.
+    
     aStack.push(a);
     bStack.push(b);
 
-    // Recursively compare objects and arrays.
+    
     if (areArrays) {
-      // Compare array lengths to determine if a deep comparison is necessary.
+      
       length = a.length;
       if (length !== b.length) return false;
-      // Deep compare the contents, ignoring non-numeric properties.
+      
       while (length--) {
         if (!eq(a[length], b[length], aStack, bStack)) return false;
       }
     } else {
-      // Deep compare objects.
+      
       var _keys = keys(a), key;
       length = _keys.length;
-      // Ensure that both objects contain the same number of properties before comparing deep equality.
+      
       if (keys(b).length !== length) return false;
       while (length--) {
-        // Deep compare each member
+        
         key = _keys[length];
         if (!(has$1(b, key) && eq(a[key], b[key], aStack, bStack))) return false;
       }
     }
-    // Remove the first object from the stack of traversed objects.
+    
     aStack.pop();
     bStack.pop();
     return true;
   }
 
-  // Perform a deep comparison to check if two objects are equal.
+  
   function isEqual(a, b) {
     return eq(a, b);
   }
 
-  // Retrieve all the enumerable property names of an object.
+  
   function allKeys(obj) {
     if (!isObject(obj)) return [];
     var keys = [];
     for (var key in obj) keys.push(key);
-    // Ahem, IE < 9.
+    
     if (hasEnumBug) collectNonEnumProps(obj, keys);
     return keys;
   }
 
-  // Since the regular `Object.prototype.toString` type tests don't work for
-  // some types in IE 11, we use a fingerprinting heuristic instead, based
-  // on the methods. It's not great, but it's the best we got.
-  // The fingerprint method lists are defined below.
+  
+  
+  
+  
   function ie11fingerprint(methods) {
     var length = getLength(methods);
     return function(obj) {
       if (obj == null) return false;
-      // `Map`, `WeakMap` and `Set` have no enumerable keys.
+      
       var keys = allKeys(obj);
       if (getLength(keys)) return false;
       for (var i = 0; i < length; i++) {
         if (!isFunction$1(obj[methods[i]])) return false;
       }
-      // If we are testing against `WeakMap`, we need to ensure that
-      // `obj` doesn't have a `forEach` method in order to distinguish
-      // it from a regular `Map`.
+      
+      
+      
       return methods !== weakMapMethods || !isFunction$1(obj[forEachName]);
     };
   }
 
-  // In the interest of compact minification, we write
-  // each string in the fingerprints only once.
+  
+  
   var forEachName = 'forEach',
       hasName = 'has',
       commonInit = ['clear', 'delete'],
       mapTail = ['get', hasName, 'set'];
 
-  // `Map`, `WeakMap` and `Set` each have slightly different
-  // combinations of the above sublists.
+  
+  
   var mapMethods = commonInit.concat(forEachName, mapTail),
       weakMapMethods = commonInit.concat(mapTail),
       setMethods = ['add'].concat(commonInit, forEachName, hasName);
@@ -530,7 +530,7 @@ Espo.loader.setContextId('lib!underscore');
 
   var isWeakSet = tagTester('WeakSet');
 
-  // Retrieve the values of an object's properties.
+  
   function values(obj) {
     var _keys = keys(obj);
     var length = _keys.length;
@@ -541,8 +541,8 @@ Espo.loader.setContextId('lib!underscore');
     return values;
   }
 
-  // Convert an object into a list of `[key, value]` pairs.
-  // The opposite of `_.object` with one argument.
+  
+  
   function pairs(obj) {
     var _keys = keys(obj);
     var length = _keys.length;
@@ -553,7 +553,7 @@ Espo.loader.setContextId('lib!underscore');
     return pairs;
   }
 
-  // Invert the keys and values of an object. The values must be serializable.
+  
   function invert(obj) {
     var result = {};
     var _keys = keys(obj);
@@ -563,7 +563,7 @@ Espo.loader.setContextId('lib!underscore');
     return result;
   }
 
-  // Return a sorted list of the function names available on the object.
+  
   function functions(obj) {
     var names = [];
     for (var key in obj) {
@@ -572,7 +572,7 @@ Espo.loader.setContextId('lib!underscore');
     return names.sort();
   }
 
-  // An internal function for creating assigner functions.
+  
   function createAssigner(keysFunc, defaults) {
     return function(obj) {
       var length = arguments.length;
@@ -591,23 +591,23 @@ Espo.loader.setContextId('lib!underscore');
     };
   }
 
-  // Extend a given object with all the properties in passed-in object(s).
+  
   var extend = createAssigner(allKeys);
 
-  // Assigns a given object with all the own properties in the passed-in
-  // object(s).
-  // (https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
+  
+  
+  
   var extendOwn = createAssigner(keys);
 
-  // Fill in a given object with default properties.
+  
   var defaults = createAssigner(allKeys, true);
 
-  // Create a naked function reference for surrogate-prototype-swapping.
+  
   function ctor() {
     return function(){};
   }
 
-  // An internal function for creating a new object that inherits from another.
+  
   function baseCreate(prototype) {
     if (!isObject(prototype)) return {};
     if (nativeCreate) return nativeCreate(prototype);
@@ -618,43 +618,43 @@ Espo.loader.setContextId('lib!underscore');
     return result;
   }
 
-  // Creates an object that inherits from the given prototype object.
-  // If additional properties are provided then they will be added to the
-  // created object.
+  
+  
+  
   function create(prototype, props) {
     var result = baseCreate(prototype);
     if (props) extendOwn(result, props);
     return result;
   }
 
-  // Create a (shallow-cloned) duplicate of an object.
+  
   function clone(obj) {
     if (!isObject(obj)) return obj;
     return isArray(obj) ? obj.slice() : extend({}, obj);
   }
 
-  // Invokes `interceptor` with the `obj` and then returns `obj`.
-  // The primary purpose of this method is to "tap into" a method chain, in
-  // order to perform operations on intermediate results within the chain.
+  
+  
+  
   function tap(obj, interceptor) {
     interceptor(obj);
     return obj;
   }
 
-  // Normalize a (deep) property `path` to array.
-  // Like `_.iteratee`, this function can be customized.
+  
+  
   function toPath$1(path) {
     return isArray(path) ? path : [path];
   }
   _$1.toPath = toPath$1;
 
-  // Internal wrapper for `_.toPath` to enable minification.
-  // Similar to `cb` for `_.iteratee`.
+  
+  
   function toPath(path) {
     return _$1.toPath(path);
   }
 
-  // Internal function to obtain a nested property in `obj` along `path`.
+  
   function deepGet(obj, path) {
     var length = path.length;
     for (var i = 0; i < length; i++) {
@@ -664,18 +664,18 @@ Espo.loader.setContextId('lib!underscore');
     return length ? obj : void 0;
   }
 
-  // Get the value of the (deep) property on `path` from `object`.
-  // If any property in `path` does not exist or if the value is
-  // `undefined`, return `defaultValue` instead.
-  // The `path` is normalized through `_.toPath`.
+  
+  
+  
+  
   function get(object, path, defaultValue) {
     var value = deepGet(object, toPath(path));
     return isUndefined(value) ? defaultValue : value;
   }
 
-  // Shortcut function for checking if an object has a given property directly on
-  // itself (in other words, not on a prototype). Unlike the internal `has`
-  // function, this public version can also traverse nested properties.
+  
+  
+  
   function has(obj, path) {
     path = toPath(path);
     var length = path.length;
@@ -687,13 +687,13 @@ Espo.loader.setContextId('lib!underscore');
     return !!length;
   }
 
-  // Keep the identity function around for default iteratees.
+  
   function identity(value) {
     return value;
   }
 
-  // Returns a predicate for checking whether an object has a given set of
-  // `key:value` pairs.
+  
+  
   function matcher(attrs) {
     attrs = extendOwn({}, attrs);
     return function(obj) {
@@ -701,8 +701,8 @@ Espo.loader.setContextId('lib!underscore');
     };
   }
 
-  // Creates a function that, when passed an object, will traverse that object’s
-  // properties down the given `path`, specified as an array of keys or indices.
+  
+  
   function property(path) {
     path = toPath(path);
     return function(obj) {
@@ -710,16 +710,16 @@ Espo.loader.setContextId('lib!underscore');
     };
   }
 
-  // Internal function that returns an efficient (for current engines) version
-  // of the passed-in callback, to be repeatedly applied in other Underscore
-  // functions.
+  
+  
+  
   function optimizeCb(func, context, argCount) {
     if (context === void 0) return func;
     switch (argCount == null ? 3 : argCount) {
       case 1: return function(value) {
         return func.call(context, value);
       };
-      // The 2-argument case is omitted because we’re not using it.
+      
       case 3: return function(value, index, collection) {
         return func.call(context, value, index, collection);
       };
@@ -732,9 +732,9 @@ Espo.loader.setContextId('lib!underscore');
     };
   }
 
-  // An internal function to generate callbacks that can be applied to each
-  // element in a collection, returning the desired result — either `_.identity`,
-  // an arbitrary callback, a property matcher, or a property accessor.
+  
+  
+  
   function baseIteratee(value, context, argCount) {
     if (value == null) return identity;
     if (isFunction$1(value)) return optimizeCb(value, context, argCount);
@@ -742,23 +742,23 @@ Espo.loader.setContextId('lib!underscore');
     return property(value);
   }
 
-  // External wrapper for our callback generator. Users may customize
-  // `_.iteratee` if they want additional predicate/iteratee shorthand styles.
-  // This abstraction hides the internal-only `argCount` argument.
+  
+  
+  
   function iteratee(value, context) {
     return baseIteratee(value, context, Infinity);
   }
   _$1.iteratee = iteratee;
 
-  // The function we call internally to generate a callback. It invokes
-  // `_.iteratee` if overridden, otherwise `baseIteratee`.
+  
+  
   function cb(value, context, argCount) {
     if (_$1.iteratee !== iteratee) return _$1.iteratee(value, context);
     return baseIteratee(value, context, argCount);
   }
 
-  // Returns the results of applying the `iteratee` to each element of `obj`.
-  // In contrast to `_.map` it returns an object.
+  
+  
   function mapObject(obj, iteratee, context) {
     iteratee = cb(iteratee, context);
     var _keys = keys(obj),
@@ -771,10 +771,10 @@ Espo.loader.setContextId('lib!underscore');
     return results;
   }
 
-  // Predicate-generating function. Often useful outside of Underscore.
+  
   function noop(){}
 
-  // Generates a function for a given object that returns a given property.
+  
   function propertyOf(obj) {
     if (obj == null) return noop;
     return function(path) {
@@ -782,7 +782,7 @@ Espo.loader.setContextId('lib!underscore');
     };
   }
 
-  // Run a function **n** times.
+  
   function times(n, iteratee, context) {
     var accum = Array(Math.max(0, n));
     iteratee = optimizeCb(iteratee, context, 1);
@@ -790,7 +790,7 @@ Espo.loader.setContextId('lib!underscore');
     return accum;
   }
 
-  // Return a random integer between `min` and `max` (inclusive).
+  
   function random(min, max) {
     if (max == null) {
       max = min;
@@ -799,18 +799,18 @@ Espo.loader.setContextId('lib!underscore');
     return min + Math.floor(Math.random() * (max - min + 1));
   }
 
-  // A (possibly faster) way to get the current timestamp as an integer.
+  
   var now = Date.now || function() {
     return new Date().getTime();
   };
 
-  // Internal helper to generate functions for escaping and unescaping strings
-  // to/from HTML interpolation.
+  
+  
   function createEscaper(map) {
     var escaper = function(match) {
       return map[match];
     };
-    // Regexes for identifying a key that needs to be escaped.
+    
     var source = '(?:' + keys(map).join('|') + ')';
     var testRegexp = RegExp(source);
     var replaceRegexp = RegExp(source, 'g');
@@ -820,7 +820,7 @@ Espo.loader.setContextId('lib!underscore');
     };
   }
 
-  // Internal list of HTML entities for escaping.
+  
   var escapeMap = {
     '&': '&amp;',
     '<': '&lt;',
@@ -830,30 +830,30 @@ Espo.loader.setContextId('lib!underscore');
     '`': '&#x60;'
   };
 
-  // Function for escaping strings to HTML interpolation.
+  
   var _escape = createEscaper(escapeMap);
 
-  // Internal list of HTML entities for unescaping.
+  
   var unescapeMap = invert(escapeMap);
 
-  // Function for unescaping strings from HTML interpolation.
+  
   var _unescape = createEscaper(unescapeMap);
 
-  // By default, Underscore uses ERB-style template delimiters. Change the
-  // following template settings to use alternative delimiters.
+  
+  
   var templateSettings = _$1.templateSettings = {
     evaluate: /<%([\s\S]+?)%>/g,
     interpolate: /<%=([\s\S]+?)%>/g,
     escape: /<%-([\s\S]+?)%>/g
   };
 
-  // When customizing `_.templateSettings`, if you don't want to define an
-  // interpolation, evaluation or escaping regex, we need one that is
-  // guaranteed not to match.
+  
+  
+  
   var noMatch = /(.)^/;
 
-  // Certain characters need to be escaped so that they can be put into a
-  // string literal.
+  
+  
   var escapes = {
     "'": "'",
     '\\': '\\',
@@ -869,29 +869,29 @@ Espo.loader.setContextId('lib!underscore');
     return '\\' + escapes[match];
   }
 
-  // In order to prevent third-party code injection through
-  // `_.templateSettings.variable`, we test it against the following regular
-  // expression. It is intentionally a bit more liberal than just matching valid
-  // identifiers, but still prevents possible loopholes through defaults or
-  // destructuring assignment.
+  
+  
+  
+  
+  
   var bareIdentifier = /^\s*(\w|\$)+\s*$/;
 
-  // JavaScript micro-templating, similar to John Resig's implementation.
-  // Underscore templating handles arbitrary delimiters, preserves whitespace,
-  // and correctly escapes quotes within interpolated code.
-  // NB: `oldSettings` only exists for backwards compatibility.
+  
+  
+  
+  
   function template(text, settings, oldSettings) {
     if (!settings && oldSettings) settings = oldSettings;
     settings = defaults({}, settings, _$1.templateSettings);
 
-    // Combine delimiters into one regular expression via alternation.
+    
     var matcher = RegExp([
       (settings.escape || noMatch).source,
       (settings.interpolate || noMatch).source,
       (settings.evaluate || noMatch).source
     ].join('|') + '|$', 'g');
 
-    // Compile the template source, escaping string literals appropriately.
+    
     var index = 0;
     var source = "__p+='";
     text.replace(matcher, function(match, escape, interpolate, evaluate, offset) {
@@ -906,19 +906,19 @@ Espo.loader.setContextId('lib!underscore');
         source += "';\n" + evaluate + "\n__p+='";
       }
 
-      // Adobe VMs need the match returned to produce the correct offset.
+      
       return match;
     });
     source += "';\n";
 
     var argument = settings.variable;
     if (argument) {
-      // Insure against third-party code injection. (CVE-2021-23358)
+      
       if (!bareIdentifier.test(argument)) throw new Error(
         'variable is not a bare identifier: ' + argument
       );
     } else {
-      // If a variable is not specified, place data values in local scope.
+      
       source = 'with(obj||{}){\n' + source + '}\n';
       argument = 'obj';
     }
@@ -939,15 +939,15 @@ Espo.loader.setContextId('lib!underscore');
       return render.call(this, data, _$1);
     };
 
-    // Provide the compiled source as a convenience for precompilation.
+    
     template.source = 'function(' + argument + '){\n' + source + '}';
 
     return template;
   }
 
-  // Traverses the children of `obj` along `path`. If a child is a function, it
-  // is invoked with its parent as context. Returns the value of the final
-  // child, or `fallback` if any child is undefined.
+  
+  
+  
   function result(obj, path, fallback) {
     path = toPath(path);
     var length = path.length;
@@ -958,31 +958,31 @@ Espo.loader.setContextId('lib!underscore');
       var prop = obj == null ? void 0 : obj[path[i]];
       if (prop === void 0) {
         prop = fallback;
-        i = length; // Ensure we don't continue iterating.
+        i = length; 
       }
       obj = isFunction$1(prop) ? prop.call(obj) : prop;
     }
     return obj;
   }
 
-  // Generate a unique integer id (unique within the entire client session).
-  // Useful for temporary DOM ids.
+  
+  
   var idCounter = 0;
   function uniqueId(prefix) {
     var id = ++idCounter + '';
     return prefix ? prefix + id : id;
   }
 
-  // Start chaining a wrapped Underscore object.
+  
   function chain(obj) {
     var instance = _$1(obj);
     instance._chain = true;
     return instance;
   }
 
-  // Internal function to execute `sourceFunc` bound to `context` with optional
-  // `args`. Determines whether to execute a function as a constructor or as a
-  // normal function.
+  
+  
+  
   function executeBound(sourceFunc, boundFunc, context, callingContext, args) {
     if (!(callingContext instanceof boundFunc)) return sourceFunc.apply(context, args);
     var self = baseCreate(sourceFunc.prototype);
@@ -991,10 +991,10 @@ Espo.loader.setContextId('lib!underscore');
     return self;
   }
 
-  // Partially apply a function by creating a version that has had some of its
-  // arguments pre-filled, without changing its dynamic `this` context. `_` acts
-  // as a placeholder by default, allowing any combination of arguments to be
-  // pre-filled. Set `_.partial.placeholder` for a custom placeholder argument.
+  
+  
+  
+  
   var partial = restArguments(function(func, boundArgs) {
     var placeholder = partial.placeholder;
     var bound = function() {
@@ -1011,8 +1011,8 @@ Espo.loader.setContextId('lib!underscore');
 
   partial.placeholder = _$1;
 
-  // Create a function bound to a given object (assigning `this`, and arguments,
-  // optionally).
+  
+  
   var bind = restArguments(function(func, context, args) {
     if (!isFunction$1(func)) throw new TypeError('Bind must be called on a function');
     var bound = restArguments(function(callArgs) {
@@ -1021,13 +1021,13 @@ Espo.loader.setContextId('lib!underscore');
     return bound;
   });
 
-  // Internal helper for collection methods to determine whether a collection
-  // should be iterated as an array or as an object.
-  // Related: https://people.mozilla.org/~jorendorff/es6-draft.html#sec-tolength
-  // Avoids a very nasty iOS 8 JIT bug on ARM-64. #2094
+  
+  
+  
+  
   var isArrayLike = createSizePropertyCheck(getLength);
 
-  // Internal implementation of a recursive `flatten` function.
+  
   function flatten$1(input, depth, strict, output) {
     output = output || [];
     if (!depth && depth !== 0) {
@@ -1039,7 +1039,7 @@ Espo.loader.setContextId('lib!underscore');
     for (var i = 0, length = getLength(input); i < length; i++) {
       var value = input[i];
       if (isArrayLike(value) && (isArray(value) || isArguments$1(value))) {
-        // Flatten current level of array or arguments object.
+        
         if (depth > 1) {
           flatten$1(value, depth - 1, strict, output);
           idx = output.length;
@@ -1054,9 +1054,9 @@ Espo.loader.setContextId('lib!underscore');
     return output;
   }
 
-  // Bind a number of an object's methods to that object. Remaining arguments
-  // are the method names to be bound. Useful for ensuring that all callbacks
-  // defined on an object belong to it.
+  
+  
+  
   var bindAll = restArguments(function(obj, keys) {
     keys = flatten$1(keys, false, false);
     var index = keys.length;
@@ -1068,7 +1068,7 @@ Espo.loader.setContextId('lib!underscore');
     return obj;
   });
 
-  // Memoize an expensive function by storing its results.
+  
   function memoize(func, hasher) {
     var memoize = function(key) {
       var cache = memoize.cache;
@@ -1080,23 +1080,23 @@ Espo.loader.setContextId('lib!underscore');
     return memoize;
   }
 
-  // Delays a function for the given number of milliseconds, and then calls
-  // it with the arguments supplied.
+  
+  
   var delay = restArguments(function(func, wait, args) {
     return setTimeout(function() {
       return func.apply(null, args);
     }, wait);
   });
 
-  // Defers a function, scheduling it to run after the current call stack has
-  // cleared.
+  
+  
   var defer = partial(delay, _$1, 1);
 
-  // Returns a function, that, when invoked, will only be triggered at most once
-  // during a given window of time. Normally, the throttled function will run
-  // as much as it can, without ever going more than once per `wait` duration;
-  // but if you'd like to disable the execution on the leading edge, pass
-  // `{leading: false}`. To disable execution on the trailing edge, ditto.
+  
+  
+  
+  
+  
   function throttle(func, wait, options) {
     var timeout, context, args, result;
     var previous = 0;
@@ -1138,10 +1138,10 @@ Espo.loader.setContextId('lib!underscore');
     return throttled;
   }
 
-  // When a sequence of calls of the returned function ends, the argument
-  // function is triggered. The end of a sequence is defined by the `wait`
-  // parameter. If `immediate` is passed, the argument function will be
-  // triggered at the beginning of the sequence instead of at the end.
+  
+  
+  
+  
   function debounce(func, wait, immediate) {
     var timeout, previous, args, result, context;
 
@@ -1152,7 +1152,7 @@ Espo.loader.setContextId('lib!underscore');
       } else {
         timeout = null;
         if (!immediate) result = func.apply(context, args);
-        // This check is needed because `func` can recursively invoke `debounced`.
+        
         if (!timeout) args = context = null;
       }
     };
@@ -1176,22 +1176,22 @@ Espo.loader.setContextId('lib!underscore');
     return debounced;
   }
 
-  // Returns the first function passed as an argument to the second,
-  // allowing you to adjust arguments, run code before and after, and
-  // conditionally execute the original function.
+  
+  
+  
   function wrap(func, wrapper) {
     return partial(wrapper, func);
   }
 
-  // Returns a negated version of the passed-in predicate.
+  
   function negate(predicate) {
     return function() {
       return !predicate.apply(this, arguments);
     };
   }
 
-  // Returns a function that is the composition of a list of functions, each
-  // consuming the return value of the function that follows.
+  
+  
   function compose() {
     var args = arguments;
     var start = args.length - 1;
@@ -1203,7 +1203,7 @@ Espo.loader.setContextId('lib!underscore');
     };
   }
 
-  // Returns a function that will only be executed on and after the Nth call.
+  
   function after(times, func) {
     return function() {
       if (--times < 1) {
@@ -1212,8 +1212,8 @@ Espo.loader.setContextId('lib!underscore');
     };
   }
 
-  // Returns a function that will only be executed up to (but not including) the
-  // Nth call.
+  
+  
   function before(times, func) {
     var memo;
     return function() {
@@ -1225,11 +1225,11 @@ Espo.loader.setContextId('lib!underscore');
     };
   }
 
-  // Returns a function that will be executed at most one time, no matter how
-  // often you call it. Useful for lazy initialization.
+  
+  
   var once = partial(before, 2);
 
-  // Returns the first key on an object that passes a truth test.
+  
   function findKey(obj, predicate, context) {
     predicate = cb(predicate, context);
     var _keys = keys(obj), key;
@@ -1239,7 +1239,7 @@ Espo.loader.setContextId('lib!underscore');
     }
   }
 
-  // Internal function to generate `_.findIndex` and `_.findLastIndex`.
+  
   function createPredicateIndexFinder(dir) {
     return function(array, predicate, context) {
       predicate = cb(predicate, context);
@@ -1252,14 +1252,14 @@ Espo.loader.setContextId('lib!underscore');
     };
   }
 
-  // Returns the first index on an array-like that passes a truth test.
+  
   var findIndex = createPredicateIndexFinder(1);
 
-  // Returns the last index on an array-like that passes a truth test.
+  
   var findLastIndex = createPredicateIndexFinder(-1);
 
-  // Use a comparator function to figure out the smallest index at which
-  // an object should be inserted so as to maintain order. Uses binary search.
+  
+  
   function sortedIndex(array, obj, iteratee, context) {
     iteratee = cb(iteratee, context, 1);
     var value = iteratee(obj);
@@ -1271,7 +1271,7 @@ Espo.loader.setContextId('lib!underscore');
     return low;
   }
 
-  // Internal function to generate the `_.indexOf` and `_.lastIndexOf` functions.
+  
   function createIndexFinder(dir, predicateFind, sortedIndex) {
     return function(array, item, idx) {
       var i = 0, length = getLength(array);
@@ -1296,33 +1296,33 @@ Espo.loader.setContextId('lib!underscore');
     };
   }
 
-  // Return the position of the first occurrence of an item in an array,
-  // or -1 if the item is not included in the array.
-  // If the array is large and already in sort order, pass `true`
-  // for **isSorted** to use binary search.
+  
+  
+  
+  
   var indexOf = createIndexFinder(1, findIndex, sortedIndex);
 
-  // Return the position of the last occurrence of an item in an array,
-  // or -1 if the item is not included in the array.
+  
+  
   var lastIndexOf = createIndexFinder(-1, findLastIndex);
 
-  // Return the first value which passes a truth test.
+  
   function find(obj, predicate, context) {
     var keyFinder = isArrayLike(obj) ? findIndex : findKey;
     var key = keyFinder(obj, predicate, context);
     if (key !== void 0 && key !== -1) return obj[key];
   }
 
-  // Convenience version of a common use case of `_.find`: getting the first
-  // object containing specific `key:value` pairs.
+  
+  
   function findWhere(obj, attrs) {
     return find(obj, matcher(attrs));
   }
 
-  // The cornerstone for collection functions, an `each`
-  // implementation, aka `forEach`.
-  // Handles raw objects in addition to array-likes. Treats all
-  // sparse array-likes as if they were dense.
+  
+  
+  
+  
   function each(obj, iteratee, context) {
     iteratee = optimizeCb(iteratee, context);
     var i, length;
@@ -1339,7 +1339,7 @@ Espo.loader.setContextId('lib!underscore');
     return obj;
   }
 
-  // Return the results of applying the iteratee to each element.
+  
   function map(obj, iteratee, context) {
     iteratee = cb(iteratee, context);
     var _keys = !isArrayLike(obj) && keys(obj),
@@ -1352,10 +1352,10 @@ Espo.loader.setContextId('lib!underscore');
     return results;
   }
 
-  // Internal helper to create a reducing function, iterating left or right.
+  
   function createReduce(dir) {
-    // Wrap code that reassigns argument variables in a separate function than
-    // the one that accesses `arguments.length` to avoid a perf hit. (#1991)
+    
+    
     var reducer = function(obj, iteratee, memo, initial) {
       var _keys = !isArrayLike(obj) && keys(obj),
           length = (_keys || obj).length,
@@ -1377,14 +1377,14 @@ Espo.loader.setContextId('lib!underscore');
     };
   }
 
-  // **Reduce** builds up a single result from a list of values, aka `inject`,
-  // or `foldl`.
+  
+  
   var reduce = createReduce(1);
 
-  // The right-associative version of reduce, also known as `foldr`.
+  
   var reduceRight = createReduce(-1);
 
-  // Return all the elements that pass a truth test.
+  
   function filter(obj, predicate, context) {
     var results = [];
     predicate = cb(predicate, context);
@@ -1394,12 +1394,12 @@ Espo.loader.setContextId('lib!underscore');
     return results;
   }
 
-  // Return all the elements for which a truth test fails.
+  
   function reject(obj, predicate, context) {
     return filter(obj, negate(cb(predicate)), context);
   }
 
-  // Determine whether all of the elements pass a truth test.
+  
   function every(obj, predicate, context) {
     predicate = cb(predicate, context);
     var _keys = !isArrayLike(obj) && keys(obj),
@@ -1411,7 +1411,7 @@ Espo.loader.setContextId('lib!underscore');
     return true;
   }
 
-  // Determine if at least one element in the object passes a truth test.
+  
   function some(obj, predicate, context) {
     predicate = cb(predicate, context);
     var _keys = !isArrayLike(obj) && keys(obj),
@@ -1423,14 +1423,14 @@ Espo.loader.setContextId('lib!underscore');
     return false;
   }
 
-  // Determine if the array or object contains a given item (using `===`).
+  
   function contains(obj, item, fromIndex, guard) {
     if (!isArrayLike(obj)) obj = values(obj);
     if (typeof fromIndex != 'number' || guard) fromIndex = 0;
     return indexOf(obj, item, fromIndex) >= 0;
   }
 
-  // Invoke a method (with arguments) on every item in a collection.
+  
   var invoke = restArguments(function(obj, path, args) {
     var contextPath, func;
     if (isFunction$1(path)) {
@@ -1453,18 +1453,18 @@ Espo.loader.setContextId('lib!underscore');
     });
   });
 
-  // Convenience version of a common use case of `_.map`: fetching a property.
+  
   function pluck(obj, key) {
     return map(obj, property(key));
   }
 
-  // Convenience version of a common use case of `_.filter`: selecting only
-  // objects containing specific `key:value` pairs.
+  
+  
   function where(obj, attrs) {
     return filter(obj, matcher(attrs));
   }
 
-  // Return the maximum element (or element-based computation).
+  
   function max(obj, iteratee, context) {
     var result = -Infinity, lastComputed = -Infinity,
         value, computed;
@@ -1489,7 +1489,7 @@ Espo.loader.setContextId('lib!underscore');
     return result;
   }
 
-  // Return the minimum element (or element-based computation).
+  
   function min(obj, iteratee, context) {
     var result = Infinity, lastComputed = Infinity,
         value, computed;
@@ -1514,10 +1514,10 @@ Espo.loader.setContextId('lib!underscore');
     return result;
   }
 
-  // Sample **n** random values from a collection using the modern version of the
-  // [Fisher-Yates shuffle](https://en.wikipedia.org/wiki/Fisher–Yates_shuffle).
-  // If **n** is not specified, returns a single random element.
-  // The internal `guard` argument allows it to work with `_.map`.
+  
+  
+  
+  
   function sample(obj, n, guard) {
     if (n == null || guard) {
       if (!isArrayLike(obj)) obj = values(obj);
@@ -1536,12 +1536,12 @@ Espo.loader.setContextId('lib!underscore');
     return sample.slice(0, n);
   }
 
-  // Shuffle a collection.
+  
   function shuffle(obj) {
     return sample(obj, Infinity);
   }
 
-  // Sort the object's values by a criterion produced by an iteratee.
+  
   function sortBy(obj, iteratee, context) {
     var index = 0;
     iteratee = cb(iteratee, context);
@@ -1562,7 +1562,7 @@ Espo.loader.setContextId('lib!underscore');
     }), 'value');
   }
 
-  // An internal function used for aggregate "group by" operations.
+  
   function group(behavior, partition) {
     return function(obj, iteratee, context) {
       var result = partition ? [[], []] : {};
@@ -1575,57 +1575,57 @@ Espo.loader.setContextId('lib!underscore');
     };
   }
 
-  // Groups the object's values by a criterion. Pass either a string attribute
-  // to group by, or a function that returns the criterion.
+  
+  
   var groupBy = group(function(result, value, key) {
     if (has$1(result, key)) result[key].push(value); else result[key] = [value];
   });
 
-  // Indexes the object's values by a criterion, similar to `_.groupBy`, but for
-  // when you know that your index values will be unique.
+  
+  
   var indexBy = group(function(result, value, key) {
     result[key] = value;
   });
 
-  // Counts instances of an object that group by a certain criterion. Pass
-  // either a string attribute to count by, or a function that returns the
-  // criterion.
+  
+  
+  
   var countBy = group(function(result, value, key) {
     if (has$1(result, key)) result[key]++; else result[key] = 1;
   });
 
-  // Split a collection into two arrays: one whose elements all pass the given
-  // truth test, and one whose elements all do not pass the truth test.
+  
+  
   var partition = group(function(result, value, pass) {
     result[pass ? 0 : 1].push(value);
   }, true);
 
-  // Safely create a real, live array from anything iterable.
+  
   var reStrSymbol = /[^\ud800-\udfff]|[\ud800-\udbff][\udc00-\udfff]|[\ud800-\udfff]/g;
   function toArray(obj) {
     if (!obj) return [];
     if (isArray(obj)) return slice.call(obj);
     if (isString(obj)) {
-      // Keep surrogate pair characters together.
+      
       return obj.match(reStrSymbol);
     }
     if (isArrayLike(obj)) return map(obj, identity);
     return values(obj);
   }
 
-  // Return the number of elements in a collection.
+  
   function size(obj) {
     if (obj == null) return 0;
     return isArrayLike(obj) ? obj.length : keys(obj).length;
   }
 
-  // Internal `_.pick` helper function to determine whether `key` is an enumerable
-  // property name of `obj`.
+  
+  
   function keyInObj(value, key, obj) {
     return key in obj;
   }
 
-  // Return a copy of the object only containing the allowed properties.
+  
   var pick = restArguments(function(obj, keys) {
     var result = {}, iteratee = keys[0];
     if (obj == null) return result;
@@ -1645,7 +1645,7 @@ Espo.loader.setContextId('lib!underscore');
     return result;
   });
 
-  // Return a copy of the object without the disallowed properties.
+  
   var omit = restArguments(function(obj, keys) {
     var iteratee = keys[0], context;
     if (isFunction$1(iteratee)) {
@@ -1660,49 +1660,49 @@ Espo.loader.setContextId('lib!underscore');
     return pick(obj, iteratee, context);
   });
 
-  // Returns everything but the last entry of the array. Especially useful on
-  // the arguments object. Passing **n** will return all the values in
-  // the array, excluding the last N.
+  
+  
+  
   function initial(array, n, guard) {
     return slice.call(array, 0, Math.max(0, array.length - (n == null || guard ? 1 : n)));
   }
 
-  // Get the first element of an array. Passing **n** will return the first N
-  // values in the array. The **guard** check allows it to work with `_.map`.
+  
+  
   function first(array, n, guard) {
     if (array == null || array.length < 1) return n == null || guard ? void 0 : [];
     if (n == null || guard) return array[0];
     return initial(array, array.length - n);
   }
 
-  // Returns everything but the first entry of the `array`. Especially useful on
-  // the `arguments` object. Passing an **n** will return the rest N values in the
-  // `array`.
+  
+  
+  
   function rest(array, n, guard) {
     return slice.call(array, n == null || guard ? 1 : n);
   }
 
-  // Get the last element of an array. Passing **n** will return the last N
-  // values in the array.
+  
+  
   function last(array, n, guard) {
     if (array == null || array.length < 1) return n == null || guard ? void 0 : [];
     if (n == null || guard) return array[array.length - 1];
     return rest(array, Math.max(0, array.length - n));
   }
 
-  // Trim out all falsy values from an array.
+  
   function compact(array) {
     return filter(array, Boolean);
   }
 
-  // Flatten out an array, either recursively (by default), or up to `depth`.
-  // Passing `true` or `false` as `depth` means `1` or `Infinity`, respectively.
+  
+  
   function flatten(array, depth) {
     return flatten$1(array, depth, false);
   }
 
-  // Take the difference between one array and a number of other arrays.
-  // Only the elements present in just the first array will remain.
+  
+  
   var difference = restArguments(function(array, rest) {
     rest = flatten$1(rest, true, true);
     return filter(array, function(value){
@@ -1710,16 +1710,16 @@ Espo.loader.setContextId('lib!underscore');
     });
   });
 
-  // Return a version of the array that does not contain the specified value(s).
+  
   var without = restArguments(function(array, otherArrays) {
     return difference(array, otherArrays);
   });
 
-  // Produce a duplicate-free version of the array. If the array has already
-  // been sorted, you have the option of using a faster algorithm.
-  // The faster algorithm will not work with an iteratee if the iteratee
-  // is not a one-to-one function, so providing an iteratee will disable
-  // the faster algorithm.
+  
+  
+  
+  
+  
   function uniq(array, isSorted, iteratee, context) {
     if (!isBoolean(isSorted)) {
       context = iteratee;
@@ -1747,14 +1747,14 @@ Espo.loader.setContextId('lib!underscore');
     return result;
   }
 
-  // Produce an array that contains the union: each distinct element from all of
-  // the passed-in arrays.
+  
+  
   var union = restArguments(function(arrays) {
     return uniq(flatten$1(arrays, true, true));
   });
 
-  // Produce an array that contains every item shared between all the
-  // passed-in arrays.
+  
+  
   function intersection(array) {
     var result = [];
     var argsLength = arguments.length;
@@ -1770,8 +1770,8 @@ Espo.loader.setContextId('lib!underscore');
     return result;
   }
 
-  // Complement of zip. Unzip accepts an array of arrays and groups
-  // each array's elements on shared indices.
+  
+  
   function unzip(array) {
     var length = array && max(array, getLength).length || 0;
     var result = Array(length);
@@ -1782,13 +1782,13 @@ Espo.loader.setContextId('lib!underscore');
     return result;
   }
 
-  // Zip together multiple lists into a single array -- elements that share
-  // an index go together.
+  
+  
   var zip = restArguments(unzip);
 
-  // Converts lists into objects. Pass either a single array of `[key, value]`
-  // pairs, or two parallel arrays of the same length -- one of keys, and one of
-  // the corresponding values. Passing by pairs is the reverse of `_.pairs`.
+  
+  
+  
   function object(list, values) {
     var result = {};
     for (var i = 0, length = getLength(list); i < length; i++) {
@@ -1801,9 +1801,9 @@ Espo.loader.setContextId('lib!underscore');
     return result;
   }
 
-  // Generate an integer Array containing an arithmetic progression. A port of
-  // the native Python `range()` function. See
-  // [the Python documentation](https://docs.python.org/library/functions.html#range).
+  
+  
+  
   function range(start, stop, step) {
     if (stop == null) {
       stop = start || 0;
@@ -1823,8 +1823,8 @@ Espo.loader.setContextId('lib!underscore');
     return range;
   }
 
-  // Chunk a single array into multiple arrays, each containing `count` or fewer
-  // items.
+  
+  
   function chunk(array, count) {
     if (count == null || count < 1) return [];
     var result = [];
@@ -1835,12 +1835,12 @@ Espo.loader.setContextId('lib!underscore');
     return result;
   }
 
-  // Helper function to continue chaining intermediate results.
+  
   function chainResult(instance, obj) {
     return instance._chain ? _$1(obj).chain() : obj;
   }
 
-  // Add your own custom functions to the Underscore object.
+  
   function mixin(obj) {
     each(functions(obj), function(name) {
       var func = _$1[name] = obj[name];
@@ -1853,7 +1853,7 @@ Espo.loader.setContextId('lib!underscore');
     return _$1;
   }
 
-  // Add all mutator `Array` functions to the wrapper.
+  
   each(['pop', 'push', 'reverse', 'shift', 'sort', 'splice', 'unshift'], function(name) {
     var method = ArrayProto[name];
     _$1.prototype[name] = function() {
@@ -1868,7 +1868,7 @@ Espo.loader.setContextId('lib!underscore');
     };
   });
 
-  // Add all accessor `Array` functions to the wrapper.
+  
   each(['concat', 'join', 'slice'], function(name) {
     var method = ArrayProto[name];
     _$1.prototype[name] = function() {
@@ -1878,7 +1878,7 @@ Espo.loader.setContextId('lib!underscore');
     };
   });
 
-  // Named Exports
+  
 
   var allExports = {
     __proto__: null,
@@ -2030,11 +2030,11 @@ Espo.loader.setContextId('lib!underscore');
     'default': _$1
   };
 
-  // Default Export
+  
 
-  // Add all of the Underscore functions to the wrapper object.
+  
   var _ = mixin(allExports);
-  // Legacy Node.js API.
+  
   _._ = _;
 
   return _;

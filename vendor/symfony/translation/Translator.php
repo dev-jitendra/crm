@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation;
 
@@ -25,29 +18,21 @@ use Symfony\Contracts\Translation\LocaleAwareInterface;
 use Symfony\Contracts\Translation\TranslatableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-// Help opcache.preload discover always-needed symbols
+
 class_exists(MessageCatalogue::class);
 
-/**
- * @author Fabien Potencier <fabien@symfony.com>
- */
+
 class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleAwareInterface
 {
-    /**
-     * @var MessageCatalogueInterface[]
-     */
+    
     protected $catalogues = [];
 
     private string $locale;
 
-    /**
-     * @var string[]
-     */
+    
     private array $fallbackLocales = [];
 
-    /**
-     * @var LoaderInterface[]
-     */
+    
     private array $loaders = [];
 
     private array $resources = [];
@@ -66,9 +51,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
 
     private bool $hasIntlFormatter;
 
-    /**
-     * @throws InvalidArgumentException If a locale contains invalid characters
-     */
+    
     public function __construct(string $locale, MessageFormatterInterface $formatter = null, string $cacheDir = null, bool $debug = false, array $cacheVary = [])
     {
         $this->setLocale($locale);
@@ -85,24 +68,13 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         $this->configCacheFactory = $configCacheFactory;
     }
 
-    /**
-     * Adds a Loader.
-     *
-     * @param string $format The name of the loader (@see addResource())
-     */
+    
     public function addLoader(string $format, LoaderInterface $loader)
     {
         $this->loaders[$format] = $loader;
     }
 
-    /**
-     * Adds a Resource.
-     *
-     * @param string $format   The name of the loader (@see addLoader())
-     * @param mixed  $resource The resource name
-     *
-     * @throws InvalidArgumentException If the locale contains invalid characters
-     */
+    
     public function addResource(string $format, mixed $resource, string $locale, string $domain = null)
     {
         $domain ??= 'messages';
@@ -130,16 +102,10 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         return $this->locale ?: (class_exists(\Locale::class) ? \Locale::getDefault() : 'en');
     }
 
-    /**
-     * Sets the fallback locales.
-     *
-     * @param string[] $locales
-     *
-     * @throws InvalidArgumentException If a locale contains invalid characters
-     */
+    
     public function setFallbackLocales(array $locales)
     {
-        // needed as the fallback locales are linked to the already loaded catalogues
+        
         $this->catalogues = [];
 
         foreach ($locales as $locale) {
@@ -149,11 +115,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         $this->fallbackLocales = $this->cacheVary['fallback_locales'] = $locales;
     }
 
-    /**
-     * Gets the fallback locales.
-     *
-     * @internal
-     */
+    
     public function getFallbackLocales(): array
     {
         return $this->fallbackLocales;
@@ -213,11 +175,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         return array_values($this->catalogues);
     }
 
-    /**
-     * Gets the loaders.
-     *
-     * @return LoaderInterface[]
-     */
+    
     protected function getLoaders(): array
     {
         return $this->loaders;
@@ -249,7 +207,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
     private function initializeCacheCatalogue(string $locale): void
     {
         if (isset($this->catalogues[$locale])) {
-            /* Catalogue already initialized. */
+            
             return;
         }
 
@@ -261,11 +219,11 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
         );
 
         if (isset($this->catalogues[$locale])) {
-            /* Catalogue has been initialized as it was written out to cache. */
+            
             return;
         }
 
-        /* Read catalogue from cache. */
+        
         $this->catalogues[$locale] = include $cache->getPath();
     }
 
@@ -329,9 +287,7 @@ EOF
         return $this->cacheDir.'/catalogue.'.$locale.'.'.strtr(substr(base64_encode(hash('sha256', serialize($this->cacheVary), true)), 0, 7), '/', '_').'.php';
     }
 
-    /**
-     * @internal
-     */
+    
     protected function doLoadCatalogue(string $locale): void
     {
         $this->catalogues[$locale] = new MessageCatalogue($locale);
@@ -409,11 +365,7 @@ EOF
         return array_unique($locales);
     }
 
-    /**
-     * Asserts that the locale is valid, throws an Exception if not.
-     *
-     * @throws InvalidArgumentException If the locale contains invalid characters
-     */
+    
     protected function assertValidLocale(string $locale)
     {
         if (!preg_match('/^[a-z0-9@_\\.\\-]*$/i', $locale)) {
@@ -421,10 +373,7 @@ EOF
         }
     }
 
-    /**
-     * Provides the ConfigCache factory implementation, falling back to a
-     * default implementation if necessary.
-     */
+    
     private function getConfigCacheFactory(): ConfigCacheFactoryInterface
     {
         $this->configCacheFactory ??= new ConfigCacheFactory($this->debug);

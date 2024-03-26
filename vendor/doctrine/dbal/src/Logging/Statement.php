@@ -20,13 +20,13 @@ final class Statement extends AbstractStatementMiddleware
     private LoggerInterface $logger;
     private string $sql;
 
-    /** @var array<int,mixed>|array<string,mixed> */
+    
     private array $params = [];
 
-    /** @var array<int,int>|array<string,int> */
+    
     private array $types = [];
 
-    /** @internal This statement can be only instantiated by its connection. */
+    
     public function __construct(StatementInterface $statement, LoggerInterface $logger, string $sql)
     {
         parent::__construct($statement);
@@ -35,16 +35,12 @@ final class Statement extends AbstractStatementMiddleware
         $this->sql    = $sql;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated Use {@see bindValue()} instead.
-     */
+    
     public function bindParam($param, &$variable, $type = ParameterType::STRING, $length = null)
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5563',
+            'https:
             '%s is deprecated. Use bindValue() instead.',
             __METHOD__,
         );
@@ -52,7 +48,7 @@ final class Statement extends AbstractStatementMiddleware
         if (func_num_args() < 3) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5558',
+                'https:
                 'Not passing $type to Statement::bindParam() is deprecated.'
                     . ' Pass the type corresponding to the parameter being bound.',
             );
@@ -64,15 +60,13 @@ final class Statement extends AbstractStatementMiddleware
         return parent::bindParam($param, $variable, $type, ...array_slice(func_get_args(), 3));
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function bindValue($param, $value, $type = ParameterType::STRING)
     {
         if (func_num_args() < 3) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5558',
+                'https:
                 'Not passing $type to Statement::bindValue() is deprecated.'
                     . ' Pass the type corresponding to the parameter being bound.',
             );
@@ -84,9 +78,7 @@ final class Statement extends AbstractStatementMiddleware
         return parent::bindValue($param, $value, $type);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function execute($params = null): ResultInterface
     {
         $this->logger->debug('Executing statement: {sql} (parameters: {params}, types: {types})', [

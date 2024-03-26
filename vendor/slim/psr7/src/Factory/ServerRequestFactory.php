@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim-Psr7/blob/master/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -34,19 +30,14 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
 
     protected UriFactoryInterface $uriFactory;
 
-    /**
-     * @param StreamFactoryInterface|null $streamFactory
-     * @param UriFactoryInterface|null    $uriFactory
-     */
+    
     public function __construct(?StreamFactoryInterface $streamFactory = null, ?UriFactoryInterface $uriFactory = null)
     {
         $this->streamFactory = $streamFactory ?? new StreamFactory();
         $this->uriFactory = $uriFactory ?? new UriFactory();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function createServerRequest(string $method, $uri, array $serverParams = []): ServerRequestInterface
     {
         if (is_string($uri)) {
@@ -69,13 +60,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         return new Request($method, $uri, $headers, $cookies, $serverParams, $body);
     }
 
-    /**
-     * Create new ServerRequest from environment.
-     *
-     * @internal This method is not part of PSR-17
-     *
-     * @return Request
-     */
+    
     public static function createFromGlobals(): Request
     {
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
@@ -84,11 +69,11 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $headers = Headers::createFromGlobals();
         $cookies = Cookies::parseHeader($headers->getHeader('Cookie', []));
 
-        // Cache the php://input stream as it cannot be re-read
-        $cacheResource = fopen('php://temp', 'wb+');
+        
+        $cacheResource = fopen('php:
         $cache = $cacheResource ? new Stream($cacheResource) : null;
 
-        $body = (new StreamFactory())->createStreamFromFile('php://input', 'r', $cache);
+        $body = (new StreamFactory())->createStreamFromFile('php:
         $uploadedFiles = UploadedFile::createFromGlobals($_SERVER);
 
         $request = new Request($method, $uri, $headers, $cookies, $_SERVER, $body, $uploadedFiles);

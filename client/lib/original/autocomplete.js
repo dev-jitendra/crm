@@ -1,26 +1,20 @@
 var _previousDefineAmd = define.amd; define.amd = false;
-/**
-*  Ajax Autocomplete for jQuery, version 1.4.11
-*  (c) 2017 Tomas Kirda
-*
-*  Ajax Autocomplete for jQuery is freely distributable under the terms of an MIT-style license.
-*  For details, see the web site: https://github.com/devbridge/jQuery-Autocomplete
-*/
 
-/*jslint  browser: true, white: true, single: true, this: true, multivar: true */
-/*global define, window, document, jQuery, exports, require */
 
-// Expose plugin as an AMD module if AMD loader is present:
+
+
+
+
 (function (factory) {
     "use strict";
     if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
+        
         define(['jquery'], factory);
     } else if (typeof exports === 'object' && typeof require === 'function') {
-        // Browserify
+        
         factory(require('jquery'));
     } else {
-        // Browser globals
+        
         factory(jQuery);
     }
 }(function ($) {
@@ -57,7 +51,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
     function Autocomplete(el, options) {
         var that = this;
 
-        // Shared variables:
+        
         that.element = el;
         that.el = $(el);
         that.suggestions = [];
@@ -80,7 +74,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
         that.hintValue = '';
         that.selection = null;
 
-        // Initialize and set options:
+        
         that.initialize();
         that.setOptions(options);
     }
@@ -135,7 +129,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
     };
 
     function _formatResult(suggestion, currentValue) {
-        // Do not replace anything if the current value is empty
+        
         if (!currentValue) {
             return suggestion.value;
         }
@@ -166,7 +160,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 
             that.element.setAttribute('autocomplete', 'off');
 
-            // html() deals with many types: htmlString or Element or Array or jQuery
+            
             that.noSuggestionsContainer = $('<div class="autocomplete-no-suggestion"></div>')
                                           .html(this.options.noSuggestionNotice).get(0);
 
@@ -176,23 +170,23 @@ var _previousDefineAmd = define.amd; define.amd = false;
 
             container.appendTo(options.appendTo || 'body');
 
-            // Only set width if it was provided:
+            
             if (options.width !== 'auto') {
                 container.css('width', options.width);
             }
 
-            // Listen for mouse over event on suggestions list:
+            
             container.on('mouseover.autocomplete', suggestionSelector, function () {
                 that.activate($(this).data('index'));
             });
 
-            // Deselect active element when mouse leaves suggestions container:
+            
             container.on('mouseout.autocomplete', function () {
                 that.selectedIndex = -1;
                 container.children('.' + selected).removeClass(selected);
             });
 
-            // Listen for click event on suggestions list:
+            
             container.on('click.autocomplete', suggestionSelector, function () {
                 that.select($(this).data('index'));
             });
@@ -237,8 +231,8 @@ var _previousDefineAmd = define.amd; define.amd = false;
                 value = that.el.val(),
                 query = that.getQuery(value);
 
-            // If user clicked on a suggestion, hide() will
-            // be canceled, otherwise close suggestions
+            
+            
             that.blurTimeoutId = setTimeout(function () {
                 that.hide();
 
@@ -268,7 +262,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 
             options.orientation = that.validateOrientation(options.orientation, 'bottom');
 
-            // Adjust height, width and z-index:
+            
             $(that.suggestionsContainer).css({
                 'max-height': options.maxHeight + 'px',
                 'width': options.width + 'px',
@@ -302,18 +296,18 @@ var _previousDefineAmd = define.amd; define.amd = false;
         },
 
         fixPosition: function () {
-            // Use only when container has already its content
+            
 
             var that = this,
                 $container = $(that.suggestionsContainer),
                 containerParent = $container.parent().get(0);
-            // Fix position automatically when appended to body.
-            // In other cases force parameter must be given.
+            
+            
             if (containerParent !== document.body && !that.options.forceFixPosition) {
                 return;
             }
 
-            // Choose orientation
+            
             var orientation = that.options.orientation,
                 containerHeight = $container.outerHeight(),
                 height = that.el.outerHeight(),
@@ -335,8 +329,8 @@ var _previousDefineAmd = define.amd; define.amd = false;
                 styles.top += height;
             }
 
-            // If container is not positioned to body,
-            // correct its position using offset parent offset
+            
+            
             if(containerParent !== document.body) {
                 var opacity = $container.css('opacity'),
                     parentOffsetDiff;
@@ -382,7 +376,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
         onKeyPress: function (e) {
             var that = this;
 
-            // If suggestions are hidden and user presses arrow down, display suggestions:
+            
             if (!that.disabled && !that.visible && e.which === keys.DOWN && that.currentValue) {
                 that.suggest();
                 return;
@@ -434,7 +428,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
                     return;
             }
 
-            // Cancel event if function did not return:
+            
             e.stopImmediatePropagation();
             e.preventDefault();
         },
@@ -457,7 +451,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
             if (that.currentValue !== that.el.val()) {
                 that.findBestHint();
                 if (that.options.deferRequestBy > 0) {
-                    // Defer lookup in case when value changes very quickly:
+                    
                     that.onChangeTimeout = setTimeout(function () {
                         that.onValueChange();
                     }, that.options.deferRequestBy);
@@ -487,7 +481,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
             that.currentValue = value;
             that.selectedIndex = -1;
 
-            // Check existing suggestion for the match before proceeding:
+            
             if (options.triggerSelectOnValidInput && that.isExactMatch(query)) {
                 that.select(0);
                 return;
@@ -675,7 +669,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
                 return;
             }
 
-            // Build suggestions inner HTML:
+            
             $.each(that.suggestions, function (i, suggestion) {
                 if (groupBy){
                     html += formatGroup(suggestion, value, i);
@@ -696,7 +690,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
             that.fixPosition();
             container.show();
 
-            // Select first value by default:
+            
             if (options.autoSelectFirst) {
                 that.selectedIndex = 0;
                 container.scrollTop(0);
@@ -715,11 +709,11 @@ var _previousDefineAmd = define.amd; define.amd = false;
 
             this.adjustContainerWidth();
 
-            // Some explicit steps. Be careful here as it easy to get
-            // noSuggestionsContainer removed from DOM if not detached properly.
+            
+            
             noSuggestionsContainer.detach();
 
-            // clean suggestions if any
+            
             container.empty();
             container.append(noSuggestionsContainer);
 
@@ -739,15 +733,15 @@ var _previousDefineAmd = define.amd; define.amd = false;
                 width,
                 container = $(that.suggestionsContainer);
 
-            // If width is auto, adjust width before displaying suggestions,
-            // because if instance was created before input had width, it will be zero.
-            // Also it adjusts if input width has changed.
+            
+            
+            
             if (options.width === 'auto') {
                 width = that.el.outerWidth();
                 container.css('width', width > 0 ? width : 300);
             } else if(options.width === 'flex') {
-                // Trust the source! Unset the width property so it will be the max length
-                // the containing elements.
+                
+                
                 container.css('width', '');
             }
         },
@@ -786,7 +780,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
         },
 
         verifySuggestionsFormat: function (suggestions) {
-            // If suggestions is string array, convert them to supported format:
+            
             if (suggestions.length && typeof suggestions[0] === 'string') {
                 return $.map(suggestions, function (value) {
                     return { value: value, data: null };
@@ -812,7 +806,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 
             result.suggestions = that.verifySuggestionsFormat(result.suggestions);
 
-            // Cache results if cache is not disabled:
+            
             if (!options.noCache) {
                 that.cachedResponse[cacheKey] = result;
                 if (options.preventBadQueries && !result.suggestions.length) {
@@ -820,7 +814,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
                 }
             }
 
-            // Return if originalQuery is not matching current query:
+            
             if (originalQuery !== that.getQuery(that.currentValue)) {
                 return;
             }
@@ -915,10 +909,10 @@ var _previousDefineAmd = define.amd; define.amd = false;
             }
 
             if (!that.options.preserveInput) {
-                // During onBlur event, browser will trigger "change" event,
-                // because value has changed, to avoid side effect ignore,
-                // that event, so that correct suggestion can be selected
-                // when clicking on suggestion with a mouse
+                
+                
+                
+                
                 that.ignoreValueChange = true;
                 that.el.val(that.getValue(that.suggestions[index].value));
             }
@@ -974,11 +968,11 @@ var _previousDefineAmd = define.amd; define.amd = false;
         }
     };
 
-    // Create chainable jQuery plugin:
+    
     $.fn.devbridgeAutocomplete = function (options, args) {
         var dataKey = 'autocomplete';
-        // If function invoked without argument return
-        // instance of the first matched element:
+        
+        
         if (!arguments.length) {
             return this.first().data(dataKey);
         }
@@ -992,7 +986,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
                     instance[options](args);
                 }
             } else {
-                // If instance already exists, destroy it:
+                
                 if (instance && instance.dispose) {
                     instance.dispose();
                 }
@@ -1002,7 +996,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
         });
     };
 
-    // Don't overwrite if it already exists
+    
     if (!$.fn.autocomplete) {
         $.fn.autocomplete = $.fn.devbridgeAutocomplete;
     }

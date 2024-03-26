@@ -1,40 +1,12 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/fields/link-parent */
+
+
 
 import BaseFieldView from 'views/fields/base';
 import RecordModal from 'helpers/record-modal';
 import Select from 'ui/select';
 
-/**
- * A link-parent field (belongs-to-parent relation).
- */
+
 class LinkParentFieldView extends BaseFieldView {
 
     type = 'linkParent'
@@ -45,123 +17,58 @@ class LinkParentFieldView extends BaseFieldView {
     searchTemplate = 'fields/link-parent/search'
     listLinkTemplate = 'fields/link-parent/list-link'
 
-    /**
-     * A name attribute name.
-     *
-     * @type {string}
-     */
+    
     nameName = null
 
-    /**
-     * An ID attribute name.
-     *
-     * @type {string}
-     */
+    
     idName = null
 
-    /**
-     * A type attribute name.
-     *
-     * @type {string}
-     */
+    
     typeName = null
 
-    /**
-     * A current foreign entity type.
-     *
-     * @type {string|null}
-     */
+    
     foreignScope = null
 
-    /**
-     * A foreign entity type list.
-     *
-     * @type {string[]}
-     */
+    
     foreignScopeList = null
 
-    /**
-     * Autocomplete disabled.
-     *
-     * @protected
-     * @type {boolean}
-     */
+    
     autocompleteDisabled = false
 
-    /**
-     * A select-record view.
-     *
-     * @protected
-     * @type {string}
-     */
+    
     selectRecordsView = 'views/modals/select-records'
 
-    /**
-     * Create disabled.
-     *
-     * @protected
-     * @type {boolean}
-     */
+    
     createDisabled = false
 
-    /**
-     * A search type list.
-     *
-     * @protected
-     * @type {string[]}
-     */
+    
     searchTypeList = [
         'is',
         'isEmpty',
         'isNotEmpty',
     ]
 
-    /**
-     * A select primary filter.
-     *
-     * @protected
-     * @type {string|null}
-     */
+    
     selectPrimaryFilterName = null
 
-    /**
-     * A select bool filter list.
-     *
-     * @protected
-     * @type {string[]|null}
-     */
+    
     selectBoolFilterList = null
 
-    /**
-     * An autocomplete max record number.
-     *
-     * @protected
-     * @type {number|null}
-     */
+    
     autocompleteMaxCount = null
 
-    /**
-     * Select all attributes.
-     *
-     * @protected
-     * @type {boolean}
-     */
+    
     forceSelectAllAttributes = false
 
-    /**
-     * Mandatory select attributes.
-     *
-     * @protected
-     * @type {string[]|null}
-     */
+    
     mandatorySelectAttributeList = null
 
-    /** @inheritDoc */
+    
     initialSearchIsNotIdle = true
 
-    /** @inheritDoc */
+    
     events = {
-        /** @this LinkParentFieldView */
+        
         'auxclick a[href]:not([role="button"])': function (e) {
             if (!this.isReadMode()) {
                 return;
@@ -215,50 +122,27 @@ class LinkParentFieldView extends BaseFieldView {
         };
     }
 
-    /**
-     * Get advanced filters (field filters) to be applied when select a record.
-     * Can be extended.
-     *
-     * @protected
-     * @return {Object.<string,module:search-manager~advancedFilter>|null}
-     */
+    
     getSelectFilters() {
         return null;
     }
 
-    /**
-     * Get a select bool filter list. Applied when select a record.
-     * Can be extended.
-     *
-     * @protected
-     * @return {string[]|null}
-     */
+    
     getSelectBoolFilterList() {
         return this.selectBoolFilterList;
     }
 
-    /**
-     * Get a select primary filter. Applied when select a record.
-     * Can be extended.
-     *
-     * @protected
-     * @return {string|null}
-     */
+    
     getSelectPrimaryFilterName() {
         return this.selectPrimaryFilterName;
     }
 
-    /**
-     * Attributes to pass to a model when creating a new record.
-     * Can be extended.
-     *
-     * @return {Object.<string,*>|null}
-     */
+    
     getCreateAttributes() {
         return null;
     }
 
-    /** @inheritDoc */
+    
     setup() {
         this.nameName = this.name + 'Name';
         this.typeName = this.name + 'Type';
@@ -341,7 +225,7 @@ class LinkParentFieldView extends BaseFieldView {
         }
     }
 
-    /** @inheritDoc */
+    
     setupSearch() {
         let type = this.getSearchParamsData().type;
 
@@ -361,12 +245,7 @@ class LinkParentFieldView extends BaseFieldView {
         };
     }
 
-    /**
-     * Handle a search type.
-     *
-     * @protected
-     * @param {string} type A type.
-     */
+    
     handleSearchType(type) {
         if (~['is'].indexOf(type)) {
             this.$el.find('div.primary').removeClass('hidden');
@@ -375,12 +254,7 @@ class LinkParentFieldView extends BaseFieldView {
         }
     }
 
-    /**
-     * Select.
-     *
-     * @param {module:model} model A model.
-     * @protected
-     */
+    
     select(model) {
         this.$elementName.val(model.get('name') || model.id);
         this.$elementId.val(model.get('id'));
@@ -388,33 +262,17 @@ class LinkParentFieldView extends BaseFieldView {
         this.trigger('change');
     }
 
-    /**
-     * Attributes to select regardless availability on a list layout.
-     * Can be extended.
-     *
-     * @protected
-     * @return {string[]|null}
-     */
+    
     getMandatorySelectAttributeList() {
         return this.mandatorySelectAttributeList;
     }
 
-    /**
-     * Select all attributes. Can be extended.
-     *
-     * @protected
-     * @return {boolean}
-     */
+    
     isForceSelectAllAttributes() {
         return this.forceSelectAllAttributes;
     }
 
-    /**
-     * Get an autocomplete max record number. Can be extended.
-     *
-     * @protected
-     * @return {number}
-     */
+    
     getAutocompleteMaxCount() {
         if (this.autocompleteMaxCount) {
             return this.autocompleteMaxCount;
@@ -423,12 +281,7 @@ class LinkParentFieldView extends BaseFieldView {
         return this.getConfig().get('recordsPerPage');
     }
 
-    /**
-     * Compose an autocomplete URL. Can be extended.
-     *
-     * @protected
-     * @return {string}
-     */
+    
     getAutocompleteUrl() {
         let url = this.foreignScope + '?maxSize=' + this.getAutocompleteMaxCount();
 
@@ -565,12 +418,12 @@ class LinkParentFieldView extends BaseFieldView {
         }
     }
 
-    /** @inheritDoc */
+    
     getValueForDisplay() {
         return this.model.get(this.nameName);
     }
 
-    /** @inheritDoc */
+    
     validateRequired() {
         if (this.isRequired()) {
             if (this.model.get(this.idName) === null || !this.model.get(this.typeName)) {
@@ -584,7 +437,7 @@ class LinkParentFieldView extends BaseFieldView {
         }
     }
 
-    /** @inheritDoc */
+    
     fetch() {
         let data = {};
 
@@ -599,7 +452,7 @@ class LinkParentFieldView extends BaseFieldView {
         return data;
     }
 
-    /** @inheritDoc */
+    
     fetchSearch() {
         let type = this.$el.find('select.search-type').val();
 
@@ -677,14 +530,12 @@ class LinkParentFieldView extends BaseFieldView {
         };
     }
 
-    /** @inheritDoc */
+    
     getSearchType() {
         return this.getSearchParamsData().type || this.searchParams.typeFront;
     }
 
-    /**
-     * @protected
-     */
+    
     quickView() {
         let id = this.model.get(this.idName);
         let entityType = this.model.get(this.typeName);

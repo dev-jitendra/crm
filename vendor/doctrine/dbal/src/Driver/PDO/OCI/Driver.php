@@ -10,11 +10,7 @@ use PDOException;
 
 final class Driver extends AbstractOracleDriver
 {
-    /**
-     * {@inheritdoc}
-     *
-     * @return Connection
-     */
+    
     public function connect(array $params)
     {
         $driverOptions = $params['driverOptions'] ?? [];
@@ -37,11 +33,7 @@ final class Driver extends AbstractOracleDriver
         return new Connection($pdo);
     }
 
-    /**
-     * Constructs the Oracle PDO DSN.
-     *
-     * @param mixed[] $params
-     */
+    
     private function constructPdoDsn(array $params): string
     {
         $dsn = 'oci:dbname=' . $this->getEasyConnectString($params);

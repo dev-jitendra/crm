@@ -13,17 +13,11 @@ class BuiltIn
         0x05 => 'FFFF00',
         0x06 => 'FF00FF',
         0x07 => '00FFFF',
-        0x40 => '000000', // system window text color
-        0x41 => 'FFFFFF', // system window background color
+        0x40 => '000000', 
+        0x41 => 'FFFFFF', 
     ];
 
-    /**
-     * Map built-in color to RGB value.
-     *
-     * @param int $color Indexed color
-     *
-     * @return array
-     */
+    
     public static function lookup($color)
     {
         if (isset(self::$map[$color])) {

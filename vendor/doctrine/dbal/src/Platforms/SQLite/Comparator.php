@@ -9,14 +9,10 @@ use Doctrine\DBAL\Schema\TableDiff;
 
 use function strcasecmp;
 
-/**
- * Compares schemas in the context of SQLite platform.
- *
- * BINARY is the default column collation and should be ignored if specified explicitly.
- */
+
 class Comparator extends BaseComparator
 {
-    /** @internal The comparator can be only instantiated by a schema manager. */
+    
     public function __construct(SqlitePlatform $platform)
     {
         parent::__construct($platform);
@@ -30,9 +26,7 @@ class Comparator extends BaseComparator
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function diffTable(Table $fromTable, Table $toTable)
     {
         return parent::diffTable(

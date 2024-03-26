@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\Stream;
 
@@ -67,11 +41,11 @@ use LogicException;
 
 class Service
 {
-    /** @var ?array<string, string> */
+    
     private $statusStyles = null;
-    /** @var ?array<string, string> */
+    
     private $statusFields = null;
-    /** @var string[] */
+    
     private $successDefaultStyleList = [
         'Held',
         'Closed Won',
@@ -80,37 +54,20 @@ class Service
         'Complete',
         'Sold',
     ];
-    /** @var string[] */
+    
     private $dangerDefaultStyleList = [
         'Not Held',
         'Closed Lost',
         'Dead',
     ];
 
-    /**
-     * @var array<
-     *   string,
-     *   array<
-     *     string,
-     *     array{
-     *       actualList: string[],
-     *       notActualList: string[],
-     *       fieldType: string,
-     *     }
-     *   >
-     * >
-     */
+    
     private $auditedFieldsCache = [];
 
-    /**
-     * When a record is re-assigned, ACL will be recalculated for related notes
-     * created within the period.
-     */
+    
     private const NOTE_ACL_PERIOD = '3 days';
     private const NOTE_ACL_LIMIT = 50;
-    /**
-     * Not used currently.
-     */
+    
     private const NOTE_NOTIFICATION_PERIOD = '1 hour';
 
     private EntityManager $entityManager;
@@ -146,9 +103,7 @@ class Service
         $this->recordServiceContainer = $recordServiceContainer;
     }
 
-    /**
-     * @return array<string, string>
-     */
+    
     private function getStatusStyles(): array
     {
         if (empty($this->statusStyles)) {
@@ -158,19 +113,17 @@ class Service
         return $this->statusStyles;
     }
 
-    /**
-     * @return array<string, string>
-     */
+    
     private function getStatusFields(): array
     {
         if (is_null($this->statusFields)) {
             $this->statusFields = [];
 
-            /** @var array<string, array<string, mixed>> $scopes */
+            
             $scopes = $this->metadata->get('scopes', []);
 
             foreach ($scopes as $scope => $data) {
-                /** @var ?string $statusField */
+                
                 $statusField = $data['statusField'] ?? null;
 
                 if (!$statusField) {
@@ -201,11 +154,7 @@ class Service
             ->findOne();
     }
 
-    /**
-     * @param string[] $sourceUserIdList
-     *
-     * @internal Must be left for bc.
-     */
+    
     public function followEntityMass(Entity $entity, array $sourceUserIdList, bool $skipAclCheck = false): void
     {
         if (!$this->metadata->get(['scopes', $entity->getEntityType(), 'stream'])) {
@@ -395,13 +344,7 @@ class Service
         }
     }
 
-    /**
-     * Notes having `related` or `superParent` are subjects to access control
-     * through `users` and `teams` fields.
-     *
-     * When users or teams of `related` or `parent` record are changed
-     * the note record will be changed too.
-     */
+    
     private function processNoteTeamsUsers(Note $note, Entity $entity): void
     {
         if (!$entity instanceof CoreEntity) {
@@ -484,7 +427,7 @@ class Service
             return;
         }
 
-        /** @var Note $note */
+        
         $note = $this->entityManager->getNewEntity(Note::ENTITY_TYPE);
 
         $note->set('type', Note::TYPE_EMAIL_RECEIVED);
@@ -537,7 +480,7 @@ class Service
     {
         $entityType = $entity->getEntityType();
 
-        /** @var Note $note */
+        
         $note = $this->entityManager->getNewEntity(Note::ENTITY_TYPE);
 
         $note->set('type', Note::TYPE_EMAIL_SENT);
@@ -596,14 +539,12 @@ class Service
         $this->entityManager->saveEntity($note);
     }
 
-    /**
-     * @param array<string, mixed> $options
-     */
+    
     public function noteCreate(Entity $entity, array $options = []): void
     {
         $entityType = $entity->getEntityType();
 
-        /** @var Note $note */
+        
         $note = $this->entityManager->getNewEntity(Note::ENTITY_TYPE);
 
         $note->set('type', Note::TYPE_CREATE);
@@ -614,7 +555,7 @@ class Service
             $note->set('superParentId', $entity->get('accountId'));
             $note->set('superParentType', Account::ENTITY_TYPE);
 
-            // only if has super parent
+            
             $this->processNoteTeamsUsers($note, $entity);
         }
 
@@ -653,9 +594,7 @@ class Service
         $this->entityManager->saveEntity($note, $o);
     }
 
-    /**
-     * @param mixed $value
-     */
+    
     private function getStatusStyle(string $entityType, string $field, $value): string
     {
         $style = $this->metadata->get(['entityDefs', $entityType, 'fields', $field, 'style', $value]);
@@ -681,9 +620,7 @@ class Service
         return 'default';
     }
 
-    /**
-     * @param array<string, mixed> $options
-     */
+    
     public function noteCreateRelated(
         Entity $entity,
         string $parentType,
@@ -691,7 +628,7 @@ class Service
         array $options = []
     ): void {
 
-        /** @var Note $note */
+        
         $note = $this->entityManager->getNewEntity(Note::ENTITY_TYPE);
 
         $entityType = $entity->getEntityType();
@@ -720,9 +657,7 @@ class Service
         $this->entityManager->saveEntity($note, $o);
     }
 
-    /**
-     * @param array<string, mixed> $options
-     */
+    
     public function noteRelate(Entity $entity, string $parentType, string $parentId, array $options = []): void
     {
         $entityType = $entity->getEntityType();
@@ -743,7 +678,7 @@ class Service
             return;
         }
 
-        /** @var Note $note */
+        
         $note = $this->entityManager->getNewEntity(Note::ENTITY_TYPE);
 
         $note->set([
@@ -765,9 +700,7 @@ class Service
         $this->entityManager->saveEntity($note, $o);
     }
 
-    /**
-     * @param array<string, mixed> $options
-     */
+    
     public function noteUnrelate(Entity $entity, string $parentType, string $parentId, array $options = []): void
     {
         $entityType = $entity->getEntityType();
@@ -788,7 +721,7 @@ class Service
             return;
         }
 
-        /** @var Note $note */
+        
         $note = $this->entityManager->getNewEntity(Note::ENTITY_TYPE);
 
         $note->set([
@@ -810,12 +743,10 @@ class Service
         $this->entityManager->saveEntity($note, $o);
     }
 
-    /**
-     * @param array<string, mixed> $options
-     */
+    
     public function noteAssign(Entity $entity, array $options = []): void
     {
-        /** @var Note $note */
+        
         $note = $this->entityManager->getNewEntity(Note::ENTITY_TYPE);
 
         $note->set('type', Note::TYPE_ASSIGN);
@@ -826,7 +757,7 @@ class Service
             $note->set('superParentId', $entity->get('accountId'));
             $note->set('superParentType', Account::ENTITY_TYPE);
 
-            // only if has super parent
+            
             $this->processNoteTeamsUsers($note, $entity);
         }
 
@@ -858,12 +789,10 @@ class Service
         $this->entityManager->saveEntity($note, $o);
     }
 
-    /**
-     * @param array<string, mixed> $options
-     */
+    
     public function noteStatus(Entity $entity, string $field, array $options = []): void
     {
-        /** @var Note $note */
+        
         $note = $this->entityManager->getNewEntity(Note::ENTITY_TYPE);
 
         $note->set('type', Note::TYPE_STATUS);
@@ -902,16 +831,7 @@ class Service
         $this->entityManager->saveEntity($note, $o);
     }
 
-    /**
-     * @return array<
-     *   string,
-     *   array{
-     *     actualList: string[],
-     *     notActualList: string[],
-     *     fieldType: string,
-     *   }
-     * >
-     */
+    
     private function getAuditedFieldsData(Entity $entity): array
     {
         $entityType = $entity->getEntityType();
@@ -922,7 +842,7 @@ class Service
             return $this->auditedFieldsCache[$entityType];
         }
 
-        /** @var array<string, array<string, mixed>> $fields */
+        
         $fields = $this->metadata->get(['entityDefs', $entityType, 'fields']);
 
         $auditedFields = [];
@@ -936,7 +856,7 @@ class Service
                 continue;
             }
 
-            /** @var ?string $type */
+            
             $type = $defs['type'] ?? null;
 
             if (!$type) {
@@ -959,9 +879,7 @@ class Service
         return $this->auditedFieldsCache[$entityType];
     }
 
-    /**
-     * @param array<string, mixed> $options
-     */
+    
     public function handleAudited(Entity $entity, array $options = []): void
     {
         $auditedFields = $this->getAuditedFieldsData($entity);
@@ -1029,7 +947,7 @@ class Service
             return;
         }
 
-        /** @var Note $note */
+        
         $note = $this->entityManager->getNewEntity(Note::ENTITY_TYPE);
 
         $note->set('type', Note::TYPE_UPDATE);
@@ -1053,19 +971,13 @@ class Service
         $this->entityManager->saveEntity($note, $o);
     }
 
-    /**
-     * @return string[]
-     * @deprecated Use `getEntityFollowerIdList`.
-     */
+    
     public function getEntityFolowerIdList(Entity $entity): array
     {
         return $this->getEntityFollowerIdList($entity);
     }
 
-    /**
-     * @return string[]
-     * @internal Must be left for backward compatibility.
-     */
+    
     public function getEntityFollowerIdList(Entity $entity): array
     {
         $userList = $this->entityManager
@@ -1092,9 +1004,7 @@ class Service
         return $idList;
     }
 
-    /**
-     * @return RecordCollection<User>
-     */
+    
     public function findEntityFollowers(Entity $entity, SearchParams $searchParams): RecordCollection
     {
         $builder = $this->selectBuilderFactory
@@ -1124,7 +1034,7 @@ class Service
 
         $query = $builder->build();
 
-        /** @var \Espo\ORM\Collection<User> $collection */
+        
         $collection = $this->entityManager
             ->getRDBRepositoryByClass(User::class)
             ->clone($query)
@@ -1141,16 +1051,11 @@ class Service
             $userService->prepareEntityForOutput($e);
         }
 
-        /** @var RecordCollection<User> */
+        
         return new RecordCollection($collection, $total);
     }
 
-    /**
-     * @return array{
-     *   idList: string[],
-     *   nameMap: stdClass,
-     * }
-     */
+    
     public function getEntityFollowers(Entity $entity, int $offset = 0, ?int $limit = null): array
     {
         if (!$limit) {
@@ -1185,7 +1090,7 @@ class Service
         ];
 
         foreach ($userList as $user) {
-            /** @var string $id */
+            
             $id = $user->getId();
 
             $data['idList'][] = $id;
@@ -1205,13 +1110,11 @@ class Service
         }
     }
 
-    /**
-     * @return Collection<User>
-     */
+    
     public function getSubscriberList(string $parentType, string $parentId, bool $isInternal = false): Collection
     {
         if (!$this->metadata->get(['scopes', $parentType, 'stream'])) {
-            /** @var Collection<User> */
+            
             return $this->entityManager->getCollectionFactory()->create(User::ENTITY_TYPE, []);
         }
 
@@ -1235,7 +1138,7 @@ class Service
 
         $subQuery = $builder->build();
 
-        /** @var Collection<User> */
+        
         return $this->entityManager
             ->getRDBRepository(User::ENTITY_TYPE)
             ->where([
@@ -1246,15 +1149,7 @@ class Service
             ->find();
     }
 
-    /**
-     * Changes users and teams of notes related to an entity according users and teams of the entity.
-     *
-     * Notes having `related` or `superParent` are subjects to access control
-     * through `users` and `teams` fields.
-     *
-     * When users or teams of `related` or `parent` record are changed
-     * the note record will be changed too.
-     */
+    
     public function processNoteAcl(Entity $entity, bool $forceProcessNoteNotifications = false): void
     {
         if (!$entity instanceof CoreEntity) {
@@ -1280,7 +1175,7 @@ class Service
 
         $ownerUserField = $this->aclManager->getReadOwnerUserField($entityType);
 
-        /* @var \Espo\ORM\Defs\EntityDefs $defs */
+        
         $defs = $this->entityManager->getDefs()->getEntity($entity->getEntityType());
 
         $userIdList = [];
@@ -1385,18 +1280,7 @@ class Service
         }
     }
 
-    /**
-     * @param array{
-     *   teamsAttributeIsChanged: bool,
-     *   usersAttributeIsChanged: bool,
-     *   forceProcessNoteNotifications: bool,
-     *   teamIdList: string[],
-     *   userIdList: string[],
-     *   notificationThreshold: \DateTimeInterface,
-     *   aclThreshold: \DateTimeInterface,
-     * } $params
-     * @return void
-     */
+    
     private function processNoteAclItem(Entity $entity, Note $note, array $params): void
     {
         $teamsAttributeIsChanged = $params['teamsAttributeIsChanged'];
@@ -1440,7 +1324,7 @@ class Service
 
     private function getEmailAddressRepository(): EmailAddressRepository
     {
-        /** @var EmailAddressRepository */
+        
         return $this->entityManager->getRepository(EmailAddress::ENTITY_TYPE);
     }
 }

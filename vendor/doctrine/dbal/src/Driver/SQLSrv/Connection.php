@@ -22,22 +22,16 @@ use function str_replace;
 
 final class Connection implements ServerInfoAwareConnection
 {
-    /** @var resource */
+    
     private $connection;
 
-    /**
-     * @internal The connection can be only instantiated by its driver.
-     *
-     * @param resource $connection
-     */
+    
     public function __construct($connection)
     {
         $this->connection = $connection;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getServerVersion()
     {
         $serverInfo = sqlsrv_server_info($this->connection);
@@ -55,9 +49,7 @@ final class Connection implements ServerInfoAwareConnection
         return $this->prepare($sql)->execute();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function quote($value, $type = ParameterType::STRING)
     {
         if (is_int($value)) {
@@ -88,15 +80,13 @@ final class Connection implements ServerInfoAwareConnection
         return $rowsAffected;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function lastInsertId($name = null)
     {
         if ($name !== null) {
             Deprecation::triggerIfCalledFromOutside(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/issues/4687',
+                'https:
                 'The usage of Connection::lastInsertId() with a sequence name is deprecated.',
             );
 
@@ -136,7 +126,7 @@ final class Connection implements ServerInfoAwareConnection
         return true;
     }
 
-    /** @return resource */
+    
     public function getNativeConnection()
     {
         return $this->connection;

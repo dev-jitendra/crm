@@ -15,11 +15,7 @@ use SimpleXMLElement;
 
 class Styles extends BaseParserClass
 {
-    /**
-     * Theme instance.
-     *
-     * @var Theme
-     */
+    
     private static $theme = null;
 
     private $styles = [];
@@ -87,13 +83,13 @@ class Styles extends BaseParserClass
     private static function readFillStyle(Fill $fillStyle, SimpleXMLElement $fillStyleXml): void
     {
         if ($fillStyleXml->gradientFill) {
-            /** @var SimpleXMLElement $gradientFill */
+            
             $gradientFill = $fillStyleXml->gradientFill[0];
             if (!empty($gradientFill['type'])) {
                 $fillStyle->setFillType((string) $gradientFill['type']);
             }
             $fillStyle->setRotation((float) ($gradientFill['degree']));
-            $gradientFill->registerXPathNamespace('sml', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main');
+            $gradientFill->registerXPathNamespace('sml', 'http:
             $fillStyle->getStartColor()->setARGB(self::readColor(self::getArrayItem($gradientFill->xpath('sml:stop[@position=0]'))->color));
             $fillStyle->getEndColor()->setARGB(self::readColor(self::getArrayItem($gradientFill->xpath('sml:stop[@position=1]'))->color));
         } elseif ($fillStyleXml->patternFill) {
@@ -184,13 +180,13 @@ class Styles extends BaseParserClass
             self::readAlignmentStyle($docStyle->getAlignment(), $style->alignment);
         }
 
-        // protection
+        
         if (isset($style->protection)) {
             $this->readProtectionLocked($docStyle, $style);
             $this->readProtectionHidden($docStyle, $style);
         }
 
-        // top-level style settings
+        
         if (isset($style->quotePrefix)) {
             $docStyle->setQuotePrefix(true);
         }
@@ -243,7 +239,7 @@ class Styles extends BaseParserClass
     {
         $dxfs = [];
         if (!$readDataOnly && $this->styleXml) {
-            //    Conditional Styles
+            
             if ($this->styleXml->dxfs) {
                 foreach ($this->styleXml->dxfs->dxf as $dxf) {
                     $style = new Style(false, true);
@@ -251,16 +247,16 @@ class Styles extends BaseParserClass
                     $dxfs[] = $style;
                 }
             }
-            //    Cell Styles
+            
             if ($this->styleXml->cellStyles) {
                 foreach ($this->styleXml->cellStyles->cellStyle as $cellStyle) {
                     if ((int) ($cellStyle['builtinId']) == 0) {
                         if (isset($this->cellStyles[(int) ($cellStyle['xfId'])])) {
-                            // Set default style
+                            
                             $style = new Style();
                             $this->readStyle($style, $this->cellStyles[(int) ($cellStyle['xfId'])]);
 
-                            // normal style, currently not using it for anything
+                            
                         }
                     }
                 }

@@ -1,39 +1,11 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/fields/int */
+
+
 
 import BaseFieldView from 'views/fields/base';
 import AutoNumeric from 'autonumeric';
 
-/**
- * An integer field.
- */
+
 class IntFieldView extends BaseFieldView {
 
     type = 'int'
@@ -58,16 +30,10 @@ class IntFieldView extends BaseFieldView {
         'between',
     ]
 
-    /**
-     * @type {import('autonumeric').Options}
-     * @protected
-     */
+    
     autoNumericOptions
 
-    /**
-     * @type {?AutoNumeric}
-     * @protected
-     */
+    
     autoNumericInstance = null
 
     setup() {
@@ -93,9 +59,7 @@ class IntFieldView extends BaseFieldView {
         this.setupAutoNumericOptions();
     }
 
-    /**
-     * @protected
-     */
+    
     setupAutoNumericOptions() {
         const separator = (!this.disableFormatting ? this.thousandSeparator : null) || '';
         let decimalCharacter = '.';
@@ -104,7 +68,7 @@ class IntFieldView extends BaseFieldView {
             decimalCharacter = ',';
         }
 
-        // noinspection JSValidateTypes
+        
         this.autoNumericOptions = {
             digitGroupSeparator: separator,
             decimalCharacter: decimalCharacter,
@@ -120,7 +84,7 @@ class IntFieldView extends BaseFieldView {
 
         if (this.mode === this.MODE_EDIT) {
             if (this.autoNumericOptions) {
-                /** @type {HTMLInputElement} */
+                
                 const element = this.$element.get(0);
 
                 this.autoNumericInstance = new AutoNumeric(element, this.autoNumericOptions);
@@ -147,9 +111,9 @@ class IntFieldView extends BaseFieldView {
             });
 
             if (this.autoNumericOptions) {
-                /** @type {HTMLInputElement} */
+                
                 const element1 = this.$element.get(0);
-                /** @type {HTMLInputElement} */
+                
                 const element2 = $inputAdditional.get(0);
 
                 new AutoNumeric(element1, this.autoNumericOptions);
@@ -158,7 +122,7 @@ class IntFieldView extends BaseFieldView {
         }
     }
 
-    // noinspection JSCheckFunctionSignatures
+    
     data() {
         const data = super.data();
 
@@ -181,7 +145,7 @@ class IntFieldView extends BaseFieldView {
             data.value = this.model.get(this.name);
         }
 
-        // noinspection JSValidateTypes
+        
         return data;
     }
 
@@ -213,7 +177,7 @@ class IntFieldView extends BaseFieldView {
 
     setupSearch() {
         this.events['change select.search-type'] = e => {
-            // noinspection JSUnresolvedReference
+            
             this.handleSearchType($(e.currentTarget).val());
         };
     }
@@ -275,7 +239,7 @@ class IntFieldView extends BaseFieldView {
         }
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     validateInt() {
         const value = this.model.get(this.name);
 
@@ -288,7 +252,7 @@ class IntFieldView extends BaseFieldView {
         }
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     validateRange() {
         const value = this.model.get(this.name);
 

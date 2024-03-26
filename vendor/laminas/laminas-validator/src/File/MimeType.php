@@ -32,49 +32,36 @@ use const E_NOTICE;
 use const E_WARNING;
 use const FILEINFO_MIME_TYPE;
 
-/**
- * Validator for the mime type of a file
- */
+
 class MimeType extends AbstractValidator
 {
     use FileInformationTrait;
 
-    /**#@+
-     *
-     * @const Error type constants
-     */
+    
     public const FALSE_TYPE   = 'fileMimeTypeFalse';
     public const NOT_DETECTED = 'fileMimeTypeNotDetected';
     public const NOT_READABLE = 'fileMimeTypeNotReadable';
-    /**#@-*/
+    
 
-    /** @var array Error message templates */
+    
     protected $messageTemplates = [
         self::FALSE_TYPE   => "File has an incorrect mimetype of '%type%'",
         self::NOT_DETECTED => 'The mimetype could not be detected from the file',
         self::NOT_READABLE => 'File is not readable or does not exist',
     ];
 
-    /** @var array */
+    
     protected $messageVariables = [
         'type' => 'type',
     ];
 
-    /** @var string */
+    
     protected $type;
 
-    /**
-     * Finfo object to use
-     *
-     * @var finfo|null
-     */
+    
     protected $finfo;
 
-    /**
-     * If no environment variable 'MAGIC' is set, try and autodiscover it based on common locations
-     *
-     * @var array
-     */
+    
     protected $magicFiles = [
         '/usr/share/misc/magic',
         '/usr/share/misc/magic.mime',
@@ -87,28 +74,15 @@ class MimeType extends AbstractValidator
         '/usr/share/file/magic.mgc',
     ];
 
-    /**
-     * Options for this validator
-     *
-     * @var array
-     */
+    
     protected $options = [
-        'enableHeaderCheck' => false, // Allow header check
-        'disableMagicFile'  => false, // Disable usage of magicfile
-        'magicFile'         => null, // Magicfile to use
-        'mimeType'          => null, // Mimetype to allow
+        'enableHeaderCheck' => false, 
+        'disableMagicFile'  => false, 
+        'magicFile'         => null, 
+        'mimeType'          => null, 
     ];
 
-    /**
-     * Sets validator options
-     *
-     * Mimetype to accept
-     * - NULL means default PHP usage by using the environment variable 'magic'
-     * - FALSE means disabling searching for mimetype, should be used for PHP 5.3
-     * - A string is the mimetype file to use
-     *
-     * @param  string|array|Traversable $options
-     */
+    
     public function __construct($options = null)
     {
         if ($options instanceof Traversable) {
@@ -132,8 +106,8 @@ class MimeType extends AbstractValidator
                 unset($options['mimeType']);
             }
 
-            // Handle cases where mimetypes are interspersed with options, or
-            // options are simply an array of mime types
+            
+            
             foreach (array_keys($options) as $key) {
                 if (! is_int($key)) {
                     continue;
@@ -146,11 +120,7 @@ class MimeType extends AbstractValidator
         parent::__construct($options);
     }
 
-    /**
-     * Returns the actual set magicfile
-     *
-     * @return string
-     */
+    
     public function getMagicFile()
     {
         if (null === $this->options['magicFile']) {
@@ -167,7 +137,7 @@ class MimeType extends AbstractValidator
                 try {
                     $this->setMagicFile($file);
                 } catch (Exception\ExceptionInterface) {
-                    // suppressing errors which are thrown due to open_basedir restrictions
+                    
                     continue;
                 }
 
@@ -184,18 +154,7 @@ class MimeType extends AbstractValidator
         return $this->options['magicFile'];
     }
 
-    /**
-     * Sets the magicfile to use
-     * if null, the MAGIC constant from php is used
-     * if the MAGIC file is erroneous, no file will be set
-     * if false, the default MAGIC file from PHP will be used
-     *
-     * @param  string $file
-     * @throws Exception\RuntimeException When finfo can not read the magicfile.
-     * @throws Exception\InvalidArgumentException
-     * @throws Exception\InvalidMagicMimeFileException
-     * @return $this Provides fluid interface
-     */
+    
     public function setMagicFile($file)
     {
         if ($file === false) {
@@ -227,58 +186,33 @@ class MimeType extends AbstractValidator
         return $this;
     }
 
-    /**
-     * Disables usage of MagicFile
-     *
-     * @param bool $disable False disables usage of magic file; true enables it.
-     * @return self Provides fluid interface
-     */
+    
     public function disableMagicFile($disable)
     {
         $this->options['disableMagicFile'] = (bool) $disable;
         return $this;
     }
 
-    /**
-     * Is usage of MagicFile disabled?
-     *
-     * @return bool
-     */
+    
     public function isMagicFileDisabled()
     {
         return $this->options['disableMagicFile'];
     }
 
-    /**
-     * Returns the Header Check option
-     *
-     * @return bool
-     */
+    
     public function getHeaderCheck()
     {
         return $this->options['enableHeaderCheck'];
     }
 
-    /**
-     * Defines if the http header should be used
-     * Note that this is unsafe and therefor the default value is false
-     *
-     * @param  bool $headerCheck
-     * @return $this Provides fluid interface
-     */
+    
     public function enableHeaderCheck($headerCheck = true)
     {
         $this->options['enableHeaderCheck'] = (bool) $headerCheck;
         return $this;
     }
 
-    /**
-     * Returns the set mimetypes
-     *
-     * @param  bool $asArray Returns the values as array, when false a concatenated string is returned
-     * @return string|array
-     * @psalm-return ($asArray is true ? list<string> : string)
-     */
+    
     public function getMimeType($asArray = false)
     {
         $asArray  = (bool) $asArray;
@@ -290,12 +224,7 @@ class MimeType extends AbstractValidator
         return $mimetype;
     }
 
-    /**
-     * Sets the mimetypes
-     *
-     * @param  string|array $mimetype The mimetypes to validate
-     * @return $this Provides a fluent interface
-     */
+    
     public function setMimeType($mimetype)
     {
         $this->options['mimeType'] = null;
@@ -303,13 +232,7 @@ class MimeType extends AbstractValidator
         return $this;
     }
 
-    /**
-     * Adds the mimetypes
-     *
-     * @param  string|array $mimetype The mimetypes to add for validation
-     * @throws Exception\InvalidArgumentException
-     * @return $this Provides a fluent interface
-     */
+    
     public function addMimeType($mimetype)
     {
         $mimetypes = $this->getMimeType(true);
@@ -332,7 +255,7 @@ class MimeType extends AbstractValidator
         }
         $mimetypes = array_unique($mimetypes);
 
-        // Sanity check to ensure no empty values
+        
         foreach ($mimetypes as $key => $mt) {
             if (empty($mt)) {
                 unset($mimetypes[$key]);
@@ -344,24 +267,14 @@ class MimeType extends AbstractValidator
         return $this;
     }
 
-    /**
-     * Defined by Laminas\Validator\ValidatorInterface
-     *
-     * Returns true if the mimetype of the file matches the given ones. Also parts
-     * of mimetypes can be checked. If you give for example "image" all image
-     * mime types will be accepted like "image/gif", "image/jpeg" and so on.
-     *
-     * @param  string|array $value Real file to check for mimetype
-     * @param  array        $file  File data from \Laminas\File\Transfer\Transfer (optional)
-     * @return bool
-     */
+    
     public function isValid($value, $file = null)
     {
         $fileInfo = $this->getFileInfo($value, $file, true);
 
         $this->setValue($fileInfo['filename']);
 
-        // Is file readable ?
+        
         if (empty($fileInfo['file']) || false === is_readable($fileInfo['file'])) {
             $this->error(static::NOT_READABLE);
             return false;

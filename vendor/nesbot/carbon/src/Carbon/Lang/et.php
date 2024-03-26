@@ -1,38 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Philippe Vaucher
- * - Andres Ivanov
- * - Tsutomu Kuroda
- * - tjku
- * - Max Melentiev
- * - Juanito Fatas
- * - RM87
- * - Akira Matsuda
- * - Christopher Dell
- * - Enrique Vidal
- * - Simone Carletti
- * - Aaron Patterson
- * - Esko Lehtme
- * - Mart Karu
- * - Nicolás Hock Isaza
- * - Kevin Valdek
- * - Zahhar Kirillov
- * - João Magalhães
- * - Ingmar
- * - Illimar Tambek
- * - Mihkel
- */
+
+
 return [
     'year' => ':count aasta|:count aastat',
     'y' => ':count a',

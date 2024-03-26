@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Services;
 
@@ -56,23 +30,21 @@ use Espo\Tools\UserSecurity\Password\Service as PasswordService;
 use stdClass;
 use Exception;
 
-/**
- * @extends Record<UserEntity>
- */
+
 class User extends Record implements
 
     Di\DataManagerAware
 {
     use Di\DataManagerSetter;
 
-    /** @var string[] */
+    
     protected $mandatorySelectAttributeList = [
         'isActive',
         'userName',
         'type',
     ];
 
-    /** @var string[] */
+    
     private $allowedUserTypeList = [
         UserEntity::TYPE_REGULAR,
         UserEntity::TYPE_ADMIN,
@@ -80,12 +52,10 @@ class User extends Record implements
         UserEntity::TYPE_API,
     ];
 
-    /**
-     * @throws Forbidden
-     */
+    
     public function getEntity(string $id): ?Entity
     {
-        /** @var ?UserEntity $entity */
+        
         $entity = parent::getEntity($id);
 
         if (!$entity) {
@@ -125,9 +95,7 @@ class User extends Record implements
         }
     }
 
-    /**
-     * @throws BadRequest
-     */
+    
     private function fetchPassword(stdClass $data): ?string
     {
         $password = $data->password ?? null;
@@ -157,14 +125,14 @@ class User extends Record implements
         }
 
         if (!$newPassword) {
-            // Generate a password as authentication implementations may require user records
-            // to have passwords for auth token mechanism functioning.
+            
+            
             $newPassword = $this->createPasswordGenerator()->generate();
         }
 
         $data->password = $this->hashPassword($newPassword);
 
-        /** @var UserEntity $user */
+        
         $user = parent::create($data, $params);
 
         $sendAccessInfo = !empty($data->sendAccessInfo);
@@ -209,7 +177,7 @@ class User extends Record implements
             unset($data->type);
         }
 
-        /** @var UserEntity $user */
+        
         $user = parent::update($id, $data, $params);
 
         if (!is_null($newPassword)) {
@@ -229,10 +197,7 @@ class User extends Record implements
         return $this->injectableFactory->create(PasswordService::class);
     }
 
-    /**
-     * @throws SendingError
-     * @throws Error
-     */
+    
     private function sendPassword(UserEntity $user, string $password): void
     {
         $this->injectableFactory
@@ -293,9 +258,7 @@ class User extends Record implements
             ->count();
     }
 
-    /**
-     * @throws Conflict
-     */
+    
     private function processUserExistsChecking(UserEntity $user): void
     {
         $existing = $this->getRepository()
@@ -308,11 +271,7 @@ class User extends Record implements
         }
     }
 
-    /**
-     * @param UserEntity $entity
-     * @throws Forbidden
-     * @throws Conflict
-     */
+    
     protected function beforeCreateEntity(Entity $entity, $data)
     {
         $userLimit = $this->config->get('userLimit');
@@ -364,11 +323,7 @@ class User extends Record implements
         }
     }
 
-    /**
-     * @param UserEntity $entity
-     * @throws Forbidden
-     * @throws Conflict
-     */
+    
     protected function beforeUpdateEntity(Entity $entity, $data)
     {
         $userLimit = $this->config->get('userLimit');
@@ -516,11 +471,7 @@ class User extends Record implements
         }
     }
 
-    /**
-     * @throws Forbidden
-     * @throws NotFound
-     * @throws Conflict
-     */
+    
     public function restoreDeleted(string $id): void
     {
         $entity = $this->getRepository()

@@ -1,40 +1,12 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/fields/array */
+
+
 
 import BaseFieldView from 'views/fields/base';
 import RegExpPattern from 'helpers/reg-exp-pattern';
 import MultiSelect from 'ui/multi-select';
 
-/**
- * An array field.
- */
+
 class ArrayFieldView extends BaseFieldView {
 
     type = 'array'
@@ -50,31 +22,17 @@ class ArrayFieldView extends BaseFieldView {
     validations = ['required', 'maxCount']
     MAX_ITEM_LENGTH = 100
 
-    /**
-     * An add-item model view.
-     *
-     * @protected
-     * @type {string}
-     */
+    
     addItemModalView = 'views/modals/array-field-add'
-    /**
-     * @protected
-     * @type {string}
-     */
+    
     itemDelimiter = ':,:'
-    /**
-     * @protected
-     * @type {boolean}
-     */
+    
     matchAnyWord = true
-    /**
-     * @protected
-     * @type {Object|null}
-     */
+    
     translatedOptions = null
 
 
-    /** @inheritDoc */
+    
     data() {
         const itemHtmlList = [];
 
@@ -82,7 +40,7 @@ class ArrayFieldView extends BaseFieldView {
             itemHtmlList.push(this.getItemHtml(value));
         });
 
-        // noinspection JSValidateTypes
+        
         return {
             ...super.data(),
             selected: this.selected,
@@ -96,16 +54,16 @@ class ArrayFieldView extends BaseFieldView {
         };
     }
 
-    /** @inheritDoc */
+    
     events = {
-        /** @this ArrayFieldView */
+        
         'click [data-action="removeValue"]': function (e) {
             const value = $(e.currentTarget).attr('data-value').toString();
 
             this.removeValue(value);
             this.focusOnElement();
         },
-        /** @this ArrayFieldView */
+        
         'click [data-action="showAddModal"]': function () {
             this.actionAddItem();
         },
@@ -127,7 +85,7 @@ class ArrayFieldView extends BaseFieldView {
         }
 
         let optionsPath = this.params.optionsPath;
-        /** @type {?string} */
+        
         const optionsReference = this.params.optionsReference;
 
         if (!optionsPath && optionsReference) {
@@ -179,7 +137,7 @@ class ArrayFieldView extends BaseFieldView {
         const $button = this.$el.find('button[data-action="showAddModal"]');
 
         if ($button[0]) {
-            // noinspection JSUnresolvedReference
+            
             $button[0].focus({preventScroll: true});
 
             return;
@@ -188,7 +146,7 @@ class ArrayFieldView extends BaseFieldView {
         const $input = this.$el.find('input');
 
         if ($input[0]) {
-            // noinspection JSUnresolvedReference
+            
             $input[0].focus({preventScroll: true});
         }
     }
@@ -213,7 +171,7 @@ class ArrayFieldView extends BaseFieldView {
         let obj = {};
 
         let translation = this.params.translation;
-        /** @type {?string} */
+        
         const optionsReference = this.params.optionsReference;
 
         if (!translation && optionsReference) {
@@ -377,9 +335,7 @@ class ArrayFieldView extends BaseFieldView {
         }
     }
 
-    /**
-     * @param {string} value
-     */
+    
     addValueFromUi(value) {
         value = value.trim();
 
@@ -443,7 +399,7 @@ class ArrayFieldView extends BaseFieldView {
                 });
             });
 
-        /** @type {module:ui/multi-select~Options} */
+        
         const multiSelectOptions = {
             items: items,
             delimiter: this.itemDelimiter,
@@ -487,9 +443,9 @@ class ArrayFieldView extends BaseFieldView {
     }
 
     getValueForDisplay() {
-        // Do not use the `html` method to avoid XSS.
+        
 
-        /** @var {string[]} */
+        
         const list = this.selected.map(item => {
             let label = null;
 
@@ -558,7 +514,7 @@ class ArrayFieldView extends BaseFieldView {
     }
 
     getItemHtml(value) {
-        // Do not use the `html` method to avoid XSS.
+        
 
         if (this.translatedOptions !== null) {
             for (const item in this.translatedOptions) {
@@ -767,7 +723,7 @@ class ArrayFieldView extends BaseFieldView {
         return false;
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     validateMaxCount() {
         if (this.params.maxCount) {
             const itemList = this.model.get(this.name) || [];
@@ -791,12 +747,7 @@ class ArrayFieldView extends BaseFieldView {
         return this.getSearchParamsData().type || 'anyOf';
     }
 
-    /**
-     * @return {{
-     *    translatedOptions: Object.<string, *>|null,
-     *    options: string[],
-     * } | Object.<string, *>}
-     */
+    
     getAddItemModalOptions() {
         const options = [];
 

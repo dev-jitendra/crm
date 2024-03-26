@@ -9,20 +9,14 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Sequence;
 use Doctrine\DBAL\Schema\Table;
 
-/**
- * Abstract Visitor with empty methods for easy extension.
- *
- * @deprecated
- */
+
 class AbstractVisitor implements Visitor, NamespaceVisitor
 {
     public function acceptSchema(Schema $schema)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function acceptNamespace($namespaceName)
     {
     }

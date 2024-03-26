@@ -2,7 +2,7 @@
 
 namespace RobThree\Auth\Providers\Qr;
 
-// https://image-charts.com
+
 class ImageChartsQRCodeProvider extends BaseHTTPQRCodeProvider 
 {
     public $errorcorrectionlevel;
@@ -31,7 +31,7 @@ class ImageChartsQRCodeProvider extends BaseHTTPQRCodeProvider
     
     public function getUrl($qrtext, $size) 
     {
-        return 'https://image-charts.com/chart?cht=qr'
+        return 'https:
             . '&chs=' . ceil($size/2) . 'x' . ceil($size/2)
             . '&chld=' . $this->errorcorrectionlevel . '|' . $this->margin
             . '&chl=' . rawurlencode($qrtext);

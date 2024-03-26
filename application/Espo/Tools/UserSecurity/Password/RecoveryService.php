@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\UserSecurity\Password;
 
@@ -60,7 +34,7 @@ use Espo\Tools\UserSecurity\Password\Recovery\UrlValidator;
 
 class RecoveryService
 {
-    /** Milliseconds. */
+    
     private const REQUEST_DELAY = 3000;
     private const REQUEST_LIFETIME = '3 hours';
     private const NEW_USER_REQUEST_LIFETIME = '2 days';
@@ -80,11 +54,7 @@ class RecoveryService
         private UrlValidator $urlValidator
     ) {}
 
-    /**
-     * @throws Forbidden
-     * @throws Error
-     * @throws NotFound
-     */
+    
     public function getRequest(string $id): PasswordChangeRequest
     {
         $config = $this->config;
@@ -127,11 +97,7 @@ class RecoveryService
         }
     }
 
-    /**
-     * @throws Forbidden
-     * @throws NotFound
-     * @throws Error
-     */
+    
     public function request(string $emailAddress, string $userName, ?string $url): bool
     {
         $config = $this->config;
@@ -146,7 +112,7 @@ class RecoveryService
             $this->urlValidator->validate($url);
         }
 
-        /** @var ?User $user */
+        
         $user = $this->entityManager
             ->getRDBRepository(User::ENTITY_TYPE)
             ->where([
@@ -263,14 +229,12 @@ class RecoveryService
         return true;
     }
 
-    /**
-     * @throws Error
-     */
+    
     private function createRequestNoSave(User $user, ?string $url = null): PasswordChangeRequest
     {
         $this->checkUser($user);
 
-        /** @var PasswordChangeRequest $entity */
+        
         $entity = $this->entityManager->getNewEntity(PasswordChangeRequest::ENTITY_TYPE);
 
         $entity->set([
@@ -297,10 +261,7 @@ class RecoveryService
         return $entity;
     }
 
-    /**
-     * @throws Error
-     * @throws Forbidden
-     */
+    
     public function createAndSendRequestForExistingUser(User $user, ?string $url = null): PasswordChangeRequest
     {
         $this->checkUser($user);
@@ -333,9 +294,7 @@ class RecoveryService
         return $entity;
     }
 
-    /**
-     * @throws Error
-     */
+    
     private function checkUser(User $user): void
     {
         if (
@@ -379,18 +338,14 @@ class RecoveryService
         usleep($delay * 1000);
     }
 
-    /**
-     * @throws Error
-     * @throws SendingError
-     * @throws Forbidden
-     */
+    
     private function send(string $requestId, string $emailAddress, User $user): void
     {
         if (!$emailAddress) {
             return;
         }
 
-        /** @var Email $email */
+        
         $email = $this->entityManager->getNewEntity(Email::ENTITY_TYPE);
 
         if (!$this->emailSender->hasSystemSmtp() && !$this->config->get('internalSmtpServer')) {
@@ -409,7 +364,7 @@ class RecoveryService
         $siteUrl = $this->config->getSiteUrl();
 
         if ($user->isPortal()) {
-            /** @var ?Portal $portal */
+            
             $portal = $this->entityManager
                 ->getRDBRepository(Portal::ENTITY_TYPE)
                 ->distinct()
@@ -479,11 +434,7 @@ class RecoveryService
         $this->lastPasswordRecoveryDate();
     }
 
-    /**
-     * @throws Forbidden
-     * @throws Error
-     * @throws NotFound
-     */
+    
     private function fail(?string $msg = null, int $errorCode = 403): void
     {
         $noExposure = $this->config->get('passwordRecoveryNoExposure') ?? false;
@@ -511,16 +462,14 @@ class RecoveryService
 
     private function getPortalRepository(): PortalRepository
     {
-        /** @var PortalRepository */
+        
         return $this->entityManager->getRDBRepository(Portal::ENTITY_TYPE);
     }
 
-    /**
-     * @throws Forbidden
-     */
+    
     private function checkIntervalForInternalSmtp(): void
     {
-        /** @var string $period */
+        
         $period = $this->config->get('passwordRecoveryInternalIntervalPeriod') ??
             self::INTERNAL_SMTP_INTERVAL_PERIOD;
 
@@ -530,7 +479,7 @@ class RecoveryService
             return;
         }
 
-        /** @var ?string $lastPasswordRecoveryDate */
+        
         $lastPasswordRecoveryDate = $data->get('lastPasswordRecoveryDate');
 
         if (!$lastPasswordRecoveryDate) {

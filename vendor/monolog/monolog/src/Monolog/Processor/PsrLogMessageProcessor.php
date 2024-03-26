@@ -1,26 +1,13 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Monolog package.
- *
- * (c) Jordi Boggiano <j.boggiano@seld.be>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Monolog\Processor;
 
 use Monolog\Utils;
 use Monolog\LogRecord;
 
-/**
- * Processes a record's message according to PSR-3 rules
- *
- * It replaces {foo} with the value from $context['foo']
- *
- * @author Jordi Boggiano <j.boggiano@seld.be>
- */
+
 class PsrLogMessageProcessor implements ProcessorInterface
 {
     public const SIMPLE_DATE = "Y-m-d\TH:i:s.uP";
@@ -29,19 +16,14 @@ class PsrLogMessageProcessor implements ProcessorInterface
 
     private bool $removeUsedContextFields;
 
-    /**
-     * @param string|null $dateFormat              The format of the timestamp: one supported by DateTime::format
-     * @param bool        $removeUsedContextFields If set to true the fields interpolated into message gets unset
-     */
+    
     public function __construct(?string $dateFormat = null, bool $removeUsedContextFields = false)
     {
         $this->dateFormat = $dateFormat;
         $this->removeUsedContextFields = $removeUsedContextFields;
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function __invoke(LogRecord $record): LogRecord
     {
         if (false === strpos($record->message, '{')) {
@@ -61,8 +43,8 @@ class PsrLogMessageProcessor implements ProcessorInterface
                 $replacements[$placeholder] = $val;
             } elseif ($val instanceof \DateTimeInterface) {
                 if (null === $this->dateFormat && $val instanceof \Monolog\DateTimeImmutable) {
-                    // handle monolog dates using __toString if no specific dateFormat was asked for
-                    // so that it follows the useMicroseconds flag
+                    
+                    
                     $replacements[$placeholder] = (string) $val;
                 } else {
                     $replacements[$placeholder] = $val->format($this->dateFormat ?? static::SIMPLE_DATE);

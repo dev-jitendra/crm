@@ -1,23 +1,12 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation\Loader;
 
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
-/**
- * CsvFileLoader loads translations from CSV files.
- *
- * @author Saša Stamenković <umpirsky@gmail.com>
- */
+
 class CsvFileLoader extends FileLoader
 {
     private string $delimiter = ';';
@@ -50,9 +39,7 @@ class CsvFileLoader extends FileLoader
         return $messages;
     }
 
-    /**
-     * Sets the delimiter, enclosure, and escape character for CSV.
-     */
+    
     public function setCsvControl(string $delimiter = ';', string $enclosure = '"', string $escape = '\\')
     {
         $this->delimiter = $delimiter;

@@ -4,53 +4,31 @@ namespace Identicon\Generator;
 
 use Exception;
 
-/**
- * @author Benjamin Laugueux <benjamin@yzalis.com>
- */
+
 class BaseGenerator
 {
-    /**
-     * @var mixed
-     */
+    
     protected $generatedImage;
 
-    /**
-     * @var array
-     */
+    
     protected $color;
 
-    /**
-     * @var array
-     */
+    
     protected $backgroundColor;
 
-    /**
-     * @var int
-     */
+    
     protected $size;
 
-    /**
-     * @var int
-     */
+    
     protected $pixelRatio;
 
-    /**
-     * @var string
-     */
+    
     private $hash;
 
-    /**
-     * @var array
-     */
+    
     private $arrayOfSquare = [];
 
-    /**
-     * Set the image color.
-     *
-     * @param string|array $color The color in hexa (3 or 6 chars) or rgb array
-     *
-     * @return $this
-     */
+    
     public function setColor($color)
     {
         if (null === $color) {
@@ -62,13 +40,7 @@ class BaseGenerator
         return $this;
     }
 
-    /**
-     * Set the image background color.
-     *
-     * @param string|array $backgroundColor The color in hexa (3 or 6 chars) or rgb array
-     *
-     * @return $this
-     */
+    
     public function setBackgroundColor($backgroundColor)
     {
         if (null === $backgroundColor) {
@@ -80,11 +52,7 @@ class BaseGenerator
         return $this;
     }
 
-    /**
-     * @param array|string $color
-     *
-     * @return array
-     */
+    
     private function convertColor($color)
     {
         if (is_array($color)) {
@@ -104,31 +72,19 @@ class BaseGenerator
         }, array_slice($matches, 1, 3));
     }
 
-    /**
-     * Get the color.
-     *
-     * @return array
-     */
+    
     public function getColor()
     {
         return $this->color;
     }
 
-    /**
-     * Get the background color.
-     *
-     * @return array
-     */
+    
     public function getBackgroundColor()
     {
         return $this->backgroundColor;
     }
 
-    /**
-     * Convert the hash into an multidimensional array of boolean.
-     *
-     * @return $this
-     */
+    
     private function convertHashToArrayOfBoolean()
     {
         preg_match_all('/(\w)(\w)/', $this->hash, $chars);
@@ -157,45 +113,25 @@ class BaseGenerator
         return $this;
     }
 
-    /**
-     * Convert an hexadecimal number into a boolean.
-     *
-     * @param string $hexa
-     *
-     * @return bool
-     */
+    
     private function convertHexaToBoolean($hexa)
     {
         return (bool) round(hexdec($hexa) / 10);
     }
 
-    /**
-     * @return array
-     */
+    
     public function getArrayOfSquare()
     {
         return $this->arrayOfSquare;
     }
 
-    /**
-     * Get the identicon string hash.
-     *
-     * @return string
-     */
+    
     public function getHash()
     {
         return $this->hash;
     }
 
-    /**
-     * Generate a hash from the original string.
-     *
-     * @param string $string
-     *
-     * @throws \Exception
-     *
-     * @return $this
-     */
+    
     public function setString($string)
     {
         if (null === $string) {
@@ -209,13 +145,7 @@ class BaseGenerator
         return $this;
     }
 
-    /**
-     * Set the image size.
-     *
-     * @param int $size
-     *
-     * @return $this
-     */
+    
     public function setSize($size)
     {
         if (null === $size) {
@@ -228,21 +158,13 @@ class BaseGenerator
         return $this;
     }
 
-    /**
-     * Get the image size.
-     *
-     * @return int
-     */
+    
     public function getSize()
     {
         return $this->size;
     }
 
-    /**
-     * Get the pixel ratio.
-     *
-     * @return int
-     */
+    
     public function getPixelRatio()
     {
         return $this->pixelRatio;

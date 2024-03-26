@@ -1,45 +1,31 @@
 <?php
 
-/*
- * This file is part of composer/semver.
- *
- * (c) Composer <https://github.com/composer>
- *
- * For the full copyright and license information, please view
- * the LICENSE file that was distributed with this source code.
- */
+
 
 namespace Composer\Semver\Constraint;
 
-/**
- * Defines a conjunctive or disjunctive set of constraints.
- */
+
 class MultiConstraint implements ConstraintInterface
 {
-    /** @var ConstraintInterface[] */
+    
     protected $constraints;
 
-    /** @var string|null */
+    
     protected $prettyString;
 
-    /** @var string|null */
+    
     protected $string;
 
-    /** @var bool */
+    
     protected $conjunctive;
 
-    /** @var Bound|null */
+    
     protected $lowerBound;
 
-    /** @var Bound|null */
+    
     protected $upperBound;
 
-    /**
-     * @param ConstraintInterface[] $constraints A set of constraints
-     * @param bool                  $conjunctive Whether the constraints should be treated as conjunctive or disjunctive
-     *
-     * @throws \InvalidArgumentException If less than 2 constraints are passed
-     */
+    
     public function __construct(array $constraints, $conjunctive = true)
     {
         if (\count($constraints) < 2) {
@@ -54,25 +40,19 @@ class MultiConstraint implements ConstraintInterface
         $this->conjunctive = $conjunctive;
     }
 
-    /**
-     * @return ConstraintInterface[]
-     */
+    
     public function getConstraints()
     {
         return $this->constraints;
     }
 
-    /**
-     * @return bool
-     */
+    
     public function isConjunctive()
     {
         return $this->conjunctive;
     }
 
-    /**
-     * @return bool
-     */
+    
     public function isDisjunctive()
     {
         return !$this->conjunctive;
@@ -103,11 +83,7 @@ class MultiConstraint implements ConstraintInterface
         return $this->conjunctive ? implode('&&', $parts) : implode('||', $parts);
     }
 
-    /**
-     * @param ConstraintInterface $provider
-     *
-     * @return bool
-     */
+    
     public function matches(ConstraintInterface $provider)
     {
         if (false === $this->conjunctive) {
@@ -129,17 +105,13 @@ class MultiConstraint implements ConstraintInterface
         return true;
     }
 
-    /**
-     * @param string|null $prettyString
-     */
+    
     public function setPrettyString($prettyString)
     {
         $this->prettyString = $prettyString;
     }
 
-    /**
-     * @return string
-     */
+    
     public function getPrettyString()
     {
         if ($this->prettyString) {
@@ -149,9 +121,7 @@ class MultiConstraint implements ConstraintInterface
         return (string) $this;
     }
 
-    /**
-     * @return string
-     */
+    
     public function __toString()
     {
         if ($this->string !== null) {
@@ -166,9 +136,7 @@ class MultiConstraint implements ConstraintInterface
         return $this->string = '[' . implode($this->conjunctive ? ' ' : ' || ', $constraints) . ']';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getLowerBound()
     {
         $this->extractBounds();
@@ -176,9 +144,7 @@ class MultiConstraint implements ConstraintInterface
         return $this->lowerBound;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getUpperBound()
     {
         $this->extractBounds();
@@ -186,17 +152,7 @@ class MultiConstraint implements ConstraintInterface
         return $this->upperBound;
     }
 
-    /**
-     * Tries to optimize the constraints as much as possible, meaning
-     * reducing/collapsing congruent constraints etc.
-     * Does not necessarily return a MultiConstraint instance if
-     * things can be reduced to a simple constraint
-     *
-     * @param ConstraintInterface[] $constraints A set of constraints
-     * @param bool                  $conjunctive Whether the constraints should be treated as conjunctive or disjunctive
-     *
-     * @return ConstraintInterface
-     */
+    
     public static function create(array $constraints, $conjunctive = true)
     {
         if (0 === \count($constraints)) {
@@ -218,14 +174,12 @@ class MultiConstraint implements ConstraintInterface
         return new self($constraints, $conjunctive);
     }
 
-    /**
-     * @return array|null
-     */
+    
     private static function optimizeConstraints(array $constraints, $conjunctive)
     {
-        // parse the two OR groups and if they are contiguous we collapse
-        // them into one constraint
-        // [>= 1 < 2] || [>= 2 < 3] || [>= 3 < 4] => [>= 1 < 4]
+        
+        
+        
         if (!$conjunctive) {
             $left = $constraints[0];
             $mergedConstraints = array();
@@ -269,7 +223,7 @@ class MultiConstraint implements ConstraintInterface
             }
         }
 
-        // TODO: Here's the place to put more optimizations
+        
 
         return null;
     }

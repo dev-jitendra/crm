@@ -1,71 +1,37 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Monolog package.
- *
- * (c) Jordi Boggiano <j.boggiano@seld.be>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Monolog\Handler;
 
 use Monolog\Level;
 use Monolog\Formatter\LineFormatter;
 
-/**
- * NativeMailerHandler uses the mail() function to send the emails
- *
- * @author Christophe Coevoet <stof@notk.org>
- * @author Mark Garrett <mark@moderndeveloperllc.com>
- */
+
 class NativeMailerHandler extends MailHandler
 {
-    /**
-     * The email addresses to which the message will be sent
-     * @var string[]
-     */
+    
     protected array $to;
 
-    /**
-     * The subject of the email
-     */
+    
     protected string $subject;
 
-    /**
-     * Optional headers for the message
-     * @var string[]
-     */
+    
     protected array $headers = [];
 
-    /**
-     * Optional parameters for the message
-     * @var string[]
-     */
+    
     protected array $parameters = [];
 
-    /**
-     * The wordwrap length for the message
-     */
+    
     protected int $maxColumnWidth;
 
-    /**
-     * The Content-type for the message
-     */
+    
     protected string|null $contentType = null;
 
-    /**
-     * The encoding for the message
-     */
+    
     protected string $encoding = 'utf-8';
 
-    /**
-     * @param string|string[] $to             The receiver of the mail
-     * @param string          $subject        The subject of the mail
-     * @param string          $from           The sender of the mail
-     * @param int             $maxColumnWidth The maximum column width that the message lines will have
-     */
+    
     public function __construct(string|array $to, string $subject, string $from, int|string|Level $level = Level::Error, bool $bubble = true, int $maxColumnWidth = 70)
     {
         parent::__construct($level, $bubble);
@@ -75,12 +41,7 @@ class NativeMailerHandler extends MailHandler
         $this->maxColumnWidth = $maxColumnWidth;
     }
 
-    /**
-     * Add headers to the message
-     *
-     * @param string|string[] $headers Custom added headers
-     * @return $this
-     */
+    
     public function addHeader($headers): self
     {
         foreach ((array) $headers as $header) {
@@ -93,12 +54,7 @@ class NativeMailerHandler extends MailHandler
         return $this;
     }
 
-    /**
-     * Add parameters to the message
-     *
-     * @param string|string[] $parameters Custom added parameters
-     * @return $this
-     */
+    
     public function addParameter($parameters): self
     {
         $this->parameters = array_merge($this->parameters, (array) $parameters);
@@ -106,9 +62,7 @@ class NativeMailerHandler extends MailHandler
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     protected function send(string $content, array $records): void
     {
         $contentType = $this->getContentType() ?? ($this->isHtmlBody($content) ? 'text/html' : 'text/plain');
@@ -142,10 +96,7 @@ class NativeMailerHandler extends MailHandler
         return $this->encoding;
     }
 
-    /**
-     * @param string $contentType The content type of the email - Defaults to text/plain. Use text/html for HTML messages.
-     * @return $this
-     */
+    
     public function setContentType(string $contentType): self
     {
         if (strpos($contentType, "\n") !== false || strpos($contentType, "\r") !== false) {
@@ -157,9 +108,7 @@ class NativeMailerHandler extends MailHandler
         return $this;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setEncoding(string $encoding): self
     {
         if (strpos($encoding, "\n") !== false || strpos($encoding, "\r") !== false) {

@@ -1,11 +1,5 @@
 <?php
-/**
- * @filesource   qrcode.php
- * @created      18.11.2017
- * @author       Smiley <smiley@chillerlan.net>
- * @copyright    2017 Smiley
- * @license      MIT
- */
+
 
 namespace chillerlan\QRCodePublic;
 
@@ -17,29 +11,29 @@ require_once '../vendor/autoload.php';
 try{
 
 	$moduleValues = [
-		// finder
+		
 		1536 => $_POST['m_finder_dark'],
 		6    => $_POST['m_finder_light'],
-		// alignment
+		
 		2560 => $_POST['m_alignment_dark'],
 		10   => $_POST['m_alignment_light'],
-		// timing
+		
 		3072 => $_POST['m_timing_dark'],
 		12   => $_POST['m_timing_light'],
-		// format
+		
 		3584 => $_POST['m_format_dark'],
 		14   => $_POST['m_format_light'],
-		// version
+		
 		4096 => $_POST['m_version_dark'],
 		16   => $_POST['m_version_light'],
-		// data
+		
 		1024 => $_POST['m_data_dark'],
 		4    => $_POST['m_data_light'],
-		// darkmodule
+		
 		512  => $_POST['m_darkmodule_dark'],
-		// separator
+		
 		8    => $_POST['m_separator_light'],
-		// quietzone
+		
 		18   => $_POST['m_quietzone_light'],
 	];
 
@@ -81,15 +75,13 @@ try{
 
 	send_response(['qrcode' => $qrcode]);
 }
-// Pokémon exception handler
+
 catch(\Exception $e){
 	header('HTTP/1.1 500 Internal Server Error');
 	send_response(['error' => $e->getMessage()]);
 }
 
-/**
- * @param array $response
- */
+
 function send_response(array $response){
 	header('Content-type: application/json;charset=utf-8;');
 	echo json_encode($response);

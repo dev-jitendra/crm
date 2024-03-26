@@ -13,25 +13,17 @@ class BusinessIdentifierCode extends AbstractValidator
     public const NOT_STRING        = 'valueNotString';
     public const NOT_VALID_COUNTRY = 'valueNotCountry';
 
-    /** @var string[] */
+    
     protected $messageTemplates = [
         self::NOT_STRING        => 'Invalid type given; string expected',
         self::INVALID           => 'Invalid BIC format',
         self::NOT_VALID_COUNTRY => 'Invalid country code',
     ];
 
-    /**
-     * @see https://www.bundesbank.de/resource/blob/749660/d2c6e00664251b4d83483c229e084e44/mL/technische-spezifikationen-scc-anhang-112018-data.pdf (page 39)
-     */
+    
     private const REGEX_BIC = '/^[a-z]{4}(?<country>[a-z]{2})[a-z2-9][a-np-z0-9]([0-9a-z]{3})?$/i';
 
-    /**
-     * List of all country codes defined by ISO 3166-1 alpha-2
-     *
-     * @see https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Current_codes
-     *
-     * @var string[]
-     */
+    
     private const ISO_COUNTRIES = [
         'AD',
         'AE',
@@ -285,16 +277,10 @@ class BusinessIdentifierCode extends AbstractValidator
         'ZW',
     ];
 
-    /**
-     * This code is the only one used by SWIFT that is not defined by ISO 3166-1 alpha-2
-     *
-     * @see https://en.wikipedia.org/wiki/ISO_9362
-     *
-     * @var string
-     */
+    
     private const KOSOVO_EXCEPTION = 'XK';
 
-    /** {@inheritDoc} */
+    
     public function isValid($value): bool
     {
         if (! is_string($value)) {

@@ -1,13 +1,6 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 return array_replace_recursive(require __DIR__.'/en.php', [
     'weekdays' => ['ꕞꕌꔵ', 'ꗳꗡꘉ', 'ꕚꕞꕚ', 'ꕉꕞꕒ', 'ꕉꔤꕆꕢ', 'ꕉꔤꕀꕮ', 'ꔻꔬꔳ'],
@@ -25,11 +18,11 @@ return array_replace_recursive(require __DIR__.'/en.php', [
         'LLLL' => 'dddd, D MMMM YYYY h:mm a',
     ],
 
-    'year' => ':count ꕀ', // less reliable
-    'y' => ':count ꕀ', // less reliable
-    'a_year' => ':count ꕀ', // less reliable
+    'year' => ':count ꕀ', 
+    'y' => ':count ꕀ', 
+    'a_year' => ':count ꕀ', 
 
-    'second' => ':count ꗱꕞꕯꕊ', // less reliable
-    's' => ':count ꗱꕞꕯꕊ', // less reliable
-    'a_second' => ':count ꗱꕞꕯꕊ', // less reliable
+    'second' => ':count ꗱꕞꕯꕊ', 
+    's' => ':count ꗱꕞꕯꕊ', 
+    'a_second' => ':count ꗱꕞꕯꕊ', 
 ]);

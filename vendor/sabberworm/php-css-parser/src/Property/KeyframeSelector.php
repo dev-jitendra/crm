@@ -4,11 +4,7 @@ namespace Sabberworm\CSS\Property;
 
 class KeyframeSelector extends Selector
 {
-    /**
-     * regexp for specificity calculations
-     *
-     * @var string
-     */
+    
     const SELECTOR_VALIDATION_RX = '/
     ^(
         (?:

@@ -7,12 +7,7 @@ namespace AsyncAws\Core;
 use AsyncAws\Core\Credentials\IniFileLoader;
 use AsyncAws\Core\Exception\InvalidArgument;
 
-/**
- * Helper object that holds all configuration to the API.
- *
- * @author Tobias Nyholm <tobias.nyholm@gmail.com>
- * @author Jérémy Derussé <jeremy@derusse.com>
- */
+
 final class Configuration
 {
     public const DEFAULT_REGION = 'us-east-1';
@@ -32,7 +27,7 @@ final class Configuration
     public const OPTION_CONTAINER_CREDENTIALS_RELATIVE_URI = 'containerCredentialsRelativeUri';
     public const OPTION_ENDPOINT_DISCOVERY_ENABLED = 'endpointDiscoveryEnabled';
 
-    // S3 specific option
+    
     public const OPTION_PATH_STYLE_ENDPOINT = 'pathStyleEndpoint';
     public const OPTION_SEND_CHUNKED_BODY = 'sendChunkedBody';
 
@@ -55,7 +50,7 @@ final class Configuration
         self::OPTION_SEND_CHUNKED_BODY => true,
     ];
 
-    // Put fallback options into groups to avoid mixing of provided config and environment variables
+    
     private const FALLBACK_OPTIONS = [
         [self::OPTION_REGION => ['AWS_REGION', 'AWS_DEFAULT_REGION']],
         [self::OPTION_PROFILE => ['AWS_PROFILE', 'AWS_DEFAULT_PROFILE']],
@@ -81,33 +76,27 @@ final class Configuration
         self::OPTION_PROFILE => 'default',
         self::OPTION_SHARED_CREDENTIALS_FILE => '~/.aws/credentials',
         self::OPTION_SHARED_CONFIG_FILE => '~/.aws/config',
-        // https://docs.aws.amazon.com/general/latest/gr/rande.html
-        self::OPTION_ENDPOINT => 'https://%service%.%region%.amazonaws.com',
+        
+        self::OPTION_ENDPOINT => 'https:
         self::OPTION_PATH_STYLE_ENDPOINT => 'false',
         self::OPTION_SEND_CHUNKED_BODY => 'false',
         self::OPTION_ENDPOINT_DISCOVERY_ENABLED => 'false',
     ];
 
-    /**
-     * @var array<self::OPTION_*, string|null>
-     */
+    
     private $data = [];
 
-    /**
-     * @var array<self::OPTION_*, bool>
-     */
+    
     private $userData = [];
 
-    /**
-     * @param array<self::OPTION_*, string|null> $options
-     */
+    
     public static function create(array $options): self
     {
         if (0 < \count($invalidOptions = array_diff_key($options, self::AVAILABLE_OPTIONS))) {
             throw new InvalidArgument(sprintf('Invalid option(s) "%s" passed to "%s::%s". ', implode('", "', array_keys($invalidOptions)), __CLASS__, __METHOD__));
         }
 
-        // Force each option to be string or null
+        
         $options = array_map(static function ($value) {
             return null !== $value ? (string) $value : $value;
         }, $options);
@@ -126,23 +115,7 @@ final class Configuration
         return isset(self::AVAILABLE_OPTIONS[$optionName]);
     }
 
-    /**
-     * @param self::OPTION_* $name
-     *
-     * @psalm-return (
-     *     $name is
-     *       self::OPTION_REGION
-     *       |self::OPTION_DEBUG
-     *       |self::OPTION_PROFILE
-     *       |self::OPTION_SHARED_CREDENTIALS_FILE
-     *       |self::OPTION_SHARED_CONFIG_FILE
-     *       |self::OPTION_ENDPOINT
-     *       |self::OPTION_PATH_STYLE_ENDPOINT
-     *       |self::OPTION_SEND_CHUNKED_BODY
-     *     ? string
-     *     : ?string
-     * )
-     */
+    
     public function get(string $name): ?string
     {
         if (!isset(self::AVAILABLE_OPTIONS[$name])) {
@@ -152,9 +125,7 @@ final class Configuration
         return $this->data[$name] ?? null;
     }
 
-    /**
-     * @param self::OPTION_* $name
-     */
+    
     public function has(string $name): bool
     {
         if (!isset(self::AVAILABLE_OPTIONS[$name])) {
@@ -164,9 +135,7 @@ final class Configuration
         return isset($this->data[$name]);
     }
 
-    /**
-     * @param self::OPTION_* $name
-     */
+    
     public function isDefault(string $name): bool
     {
         if (!isset(self::AVAILABLE_OPTIONS[$name])) {
@@ -176,15 +145,11 @@ final class Configuration
         return empty($this->userData[$name]);
     }
 
-    /**
-     * @param array<self::OPTION_*, string|null> $options
-     *
-     * @return array<self::OPTION_*, string|null>
-     */
+    
     private static function parseEnvironmentVariables(array $options): array
     {
         foreach (self::FALLBACK_OPTIONS as $fallbackGroup) {
-            // prevent mixing env variables with config keys
+            
             foreach ($fallbackGroup as $option => $envVariableNames) {
                 if (isset($options[$option])) {
                     continue 2;
@@ -192,7 +157,7 @@ final class Configuration
             }
 
             foreach ($fallbackGroup as $option => $envVariableNames) {
-                // Read environment files
+                
                 $envVariableNames = (array) $envVariableNames;
                 foreach ($envVariableNames as $envVariableName) {
                     if (null !== $envVariableValue = EnvVar::get($envVariableName)) {
@@ -207,11 +172,7 @@ final class Configuration
         return $options;
     }
 
-    /**
-     * Look for "region" in the configured ini files.
-     *
-     * @return array<self::OPTION_*, string|null>
-     */
+    
     private static function parseIniFiles(Configuration $configuration): array
     {
         $options = [];
@@ -228,7 +189,7 @@ final class Configuration
             return $options;
         }
 
-        /** @var string $profile */
+        
         $profile = $configuration->get(Configuration::OPTION_PROFILE);
         if (isset($profilesData[$profile]['region'])) {
             $options[self::OPTION_REGION] = $profilesData[$profile]['region'];
@@ -237,11 +198,7 @@ final class Configuration
         return $options;
     }
 
-    /**
-     * Add array options to the configuration object.
-     *
-     * @param array<self::OPTION_*, string|null> $options
-     */
+    
     private static function populateConfiguration(Configuration $configuration, array $options): void
     {
         foreach ($options as $key => $value) {
@@ -250,7 +207,7 @@ final class Configuration
             }
         }
 
-        // If we have not applied default before
+        
         if (empty($configuration->data)) {
             foreach (self::DEFAULT_OPTIONS as $optionTrigger => $defaultValue) {
                 if (isset($options[$optionTrigger])) {

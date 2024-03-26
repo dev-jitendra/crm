@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace OpenSpout\Common\Entity\Style;
 
-/**
- * This class provides constants to work with text vertical alignment.
- */
+
 final class CellVerticalAlignment
 {
     public const AUTO = 'auto';
@@ -27,9 +25,7 @@ final class CellVerticalAlignment
         self::TOP => 1,
     ];
 
-    /**
-     * @return bool Whether the given cell vertical alignment is valid
-     */
+    
     public static function isValid(string $cellVerticalAlignment): bool
     {
         return isset(self::VALID_ALIGNMENTS[$cellVerticalAlignment]);

@@ -9,14 +9,10 @@ use SimpleXMLElement;
 
 class PageSetup
 {
-    /**
-     * @var Spreadsheet
-     */
+    
     private $spreadsheet;
 
-    /**
-     * @var string
-     */
+    
     private $gnm;
 
     public function __construct(Spreadsheet $spreadsheet, string $gnm)
@@ -50,7 +46,7 @@ class PageSetup
     {
         if (isset($sheet->PrintInformation, $sheet->PrintInformation->Margins)) {
             $marginSet = [
-                // Default Settings
+                
                 'top' => 0.75,
                 'header' => 0.3,
                 'left' => 0.7,
@@ -70,8 +66,8 @@ class PageSetup
     {
         foreach ($sheet->PrintInformation->Margins->children($this->gnm, true) as $key => $margin) {
             $marginAttributes = $margin->attributes();
-            $marginSize = ($marginAttributes['Points']) ?? 72; //    Default is 72pt
-            // Convert value in points to inches
+            $marginSize = ($marginAttributes['Points']) ?? 72; 
+            
             $marginSize = PageMargins::fromPoints((float) $marginSize);
             $marginSet[$key] = $marginSize;
         }
@@ -82,9 +78,9 @@ class PageSetup
     private function adjustMargins(array $marginSet): void
     {
         foreach ($marginSet as $key => $marginSize) {
-            // Gnumeric is quirky in the way it displays the header/footer values:
-            //    header is actually the sum of top and header; footer is actually the sum of bottom and footer
-            //    then top is actually the header value, and bottom is actually the footer value
+            
+            
+            
             switch ($key) {
                 case 'left':
                 case 'right':

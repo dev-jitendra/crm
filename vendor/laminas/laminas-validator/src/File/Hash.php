@@ -20,42 +20,30 @@ use function is_scalar;
 use function is_string;
 use function sprintf;
 
-/**
- * Validator for the hash of given files
- */
+
 class Hash extends AbstractValidator
 {
     use FileInformationTrait;
 
-    /**
-     * @const string Error constants
-     */
+    
     public const DOES_NOT_MATCH = 'fileHashDoesNotMatch';
     public const NOT_DETECTED   = 'fileHashHashNotDetected';
     public const NOT_FOUND      = 'fileHashNotFound';
 
-    /** @var array Error message templates */
+    
     protected $messageTemplates = [
         self::DOES_NOT_MATCH => 'File does not match the given hashes',
         self::NOT_DETECTED   => 'A hash could not be evaluated for the given file',
         self::NOT_FOUND      => 'File is not readable or does not exist',
     ];
 
-    /**
-     * Options for this validator
-     *
-     * @var string
-     */
+    
     protected $options = [
         'algorithm' => 'crc32',
         'hash'      => null,
     ];
 
-    /**
-     * Sets validator options
-     *
-     * @param string|array $options
-     */
+    
     public function __construct($options = null)
     {
         if (
@@ -72,22 +60,13 @@ class Hash extends AbstractValidator
         parent::__construct($options);
     }
 
-    /**
-     * Returns the set hash values as array, the hash as key and the algorithm the value
-     *
-     * @return array
-     */
+    
     public function getHash()
     {
         return $this->options['hash'];
     }
 
-    /**
-     * Sets the hash for one or multiple files
-     *
-     * @param  string|array $options
-     * @return $this Provides a fluent interface
-     */
+    
     public function setHash($options)
     {
         $this->options['hash'] = null;
@@ -96,13 +75,7 @@ class Hash extends AbstractValidator
         return $this;
     }
 
-    /**
-     * Adds the hash for one or multiple files
-     *
-     * @param  string|array $options
-     * @throws Exception\InvalidArgumentException
-     * @return $this Provides a fluent interface
-     */
+    
     public function addHash($options)
     {
         if (is_string($options)) {
@@ -136,20 +109,14 @@ class Hash extends AbstractValidator
         return $this;
     }
 
-    /**
-     * Returns true if and only if the given file confirms the set hash
-     *
-     * @param  string|array $value File to check for hash
-     * @param  array        $file  File data from \Laminas\File\Transfer\Transfer (optional)
-     * @return bool
-     */
+    
     public function isValid($value, $file = null)
     {
         $fileInfo = $this->getFileInfo($value, $file);
 
         $this->setValue($fileInfo['filename']);
 
-        // Is file readable ?
+        
         if (empty($fileInfo['file']) || false === is_readable($fileInfo['file'])) {
             $this->error(self::NOT_FOUND);
             return false;

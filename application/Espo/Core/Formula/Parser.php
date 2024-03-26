@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Formula;
 
@@ -40,12 +14,10 @@ use Espo\Core\Formula\Parser\Statement\StatementRef;
 use Espo\Core\Formula\Parser\Statement\WhileRef;
 use LogicException;
 
-/**
- * Parses a formula-script into AST.
- */
+
 class Parser
 {
-    /** @var array<int, string[]> */
+    
     private $priorityList = [
         ['='],
         ['??'],
@@ -56,7 +28,7 @@ class Parser
         ['*', '/', '%'],
     ];
 
-    /** @var array<string, string> */
+    
     private $operatorMap = [
         '=' => 'assign',
         '??' => 'comparison\\nullCoalescing',
@@ -75,7 +47,7 @@ class Parser
         '<=' => 'comparison\\lessThanOrEquals',
     ];
 
-    /** @var string[] */
+    
     private array $whiteSpaceCharList = [
         "\r",
         "\n",
@@ -87,17 +59,13 @@ class Parser
     private string $functionNameRegExp = "/^[a-zA-Z0-9_\\\\]+$/";
     private string $attributeNameRegExp = "/^[a-zA-Z0-9.]+$/";
 
-    /**
-     * @throws SyntaxError
-     */
+    
     public function parse(string $expression): Node|Attribute|Variable|Value
     {
         return $this->split($expression, true);
     }
 
-    /**
-     * @throws SyntaxError
-     */
+    
     private function applyOperator(string $operator, string $firstPart, string $secondPart): Node
     {
         if ($operator === '=') {
@@ -140,12 +108,7 @@ class Parser
         ]);
     }
 
-    /**
-     * @param string $string An expression. Comments will be stripped by the method.
-     * @param string $modifiedString A modified expression with removed parentheses and braces inside strings.
-     * @param ?((StatementRef|IfRef|WhileRef)[]) $statementList Statements will be added if there are multiple.
-     * @throws SyntaxError
-     */
+    
     private function processString(
         string &$string,
         string &$modifiedString,
@@ -276,17 +239,7 @@ class Parser
                 $isComment = false;
             }
 
-            /*if ($isLineComment) {
-                if ($string[$i] === "\n") {
-                    $isLineComment = false;
-                }
-            }
-
-            if ($isComment) {
-                if ($string[$i - 1] === "*" && $string[$i] === "/") {
-                    $isComment = false;
-                }
-            }*/
+            
         }
 
         if ($statementList !== null) {
@@ -309,10 +262,7 @@ class Parser
         return $isString;
     }
 
-    /**
-     * @param (StatementRef|IfRef|WhileRef)[] $statementList
-     * @throws SyntaxError
-     */
+    
     private function processStringIteration(
         string $string,
         int &$i,
@@ -381,7 +331,7 @@ class Parser
             );
 
             if ($toContinue === null) {
-                // Not a `while` statement, but likely a `while` function.
+                
                 array_pop($statementList);
 
                 $lastStatement = new StatementRef($lastStatement->getStart());
@@ -519,7 +469,7 @@ class Parser
         ) {
             $statement->setReady();
 
-            // No need to call continue.
+            
             return false;
         }
 
@@ -530,7 +480,7 @@ class Parser
         ) {
             $statement->setReady();
 
-            // No need to call continue.
+            
             return false;
         }
 
@@ -774,9 +724,7 @@ class Parser
         return in_array($char, $this->whiteSpaceCharList);
     }
 
-    /**
-     * @throws SyntaxError
-     */
+    
     private function split(string $expression, bool $isRoot = false): Node|Attribute|Variable|Value
     {
         $expression = trim($expression);
@@ -941,7 +889,7 @@ class Parser
         }
 
         if ($firstOperator) {
-            /** @var int $minIndex */
+            
 
             $firstPart = substr($expression, 0, $minIndex);
             $secondPart = substr($expression, $minIndex + strlen($firstOperator));
@@ -1059,10 +1007,7 @@ class Parser
         return new Attribute($expression);
     }
 
-    /**
-     * @param (StatementRef|IfRef|WhileRef)[] $statementList
-     * @throws SyntaxError
-     */
+    
     private function processStatementList(
         string $expression,
         array $statementList,
@@ -1185,9 +1130,7 @@ class Parser
         );
     }
 
-    /**
-     * @return string[]
-     */
+    
     private function parseArgumentListFromFunctionContent(string $functionContent): array
     {
         $functionContent = trim($functionContent);

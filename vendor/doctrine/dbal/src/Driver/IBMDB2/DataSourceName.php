@@ -8,9 +8,7 @@ use function implode;
 use function sprintf;
 use function strpos;
 
-/**
- * IBM DB2 DSN
- */
+
 final class DataSourceName
 {
     private string $string;
@@ -25,11 +23,7 @@ final class DataSourceName
         return $this->string;
     }
 
-    /**
-     * Creates the object from an array representation
-     *
-     * @param array<string,mixed> $params
-     */
+    
     public static function fromArray(array $params): self
     {
         $chunks = [];
@@ -41,11 +35,7 @@ final class DataSourceName
         return new self(implode(';', $chunks));
     }
 
-    /**
-     * Creates the object from the given DBAL connection parameters.
-     *
-     * @param array<string,mixed> $params
-     */
+    
     public static function fromConnectionParameters(array $params): self
     {
         if (isset($params['dbname']) && strpos($params['dbname'], '=') !== false) {

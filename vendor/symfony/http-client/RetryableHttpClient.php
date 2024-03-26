@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpClient;
 
@@ -22,11 +15,7 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-/**
- * Automatically retries failing HTTP requests.
- *
- * @author Jérémy Derussé <jeremy@derusse.com>
- */
+
 class RetryableHttpClient implements HttpClientInterface
 {
     use AsyncDecoratorTrait;
@@ -35,9 +24,7 @@ class RetryableHttpClient implements HttpClientInterface
     private $maxRetries;
     private $logger;
 
-    /**
-     * @param int $maxRetries The maximum number of times to retry
-     */
+    
     public function __construct(HttpClientInterface $client, RetryStrategyInterface $strategy = null, int $maxRetries = 3, LoggerInterface $logger = null)
     {
         $this->client = $client;
@@ -65,10 +52,10 @@ class RetryableHttpClient implements HttpClientInterface
                     return;
                 }
             } catch (TransportExceptionInterface $exception) {
-                // catch TransportExceptionInterface to send it to the strategy
+                
             }
             if (null !== $exception) {
-                // always retry request that fail to resolve DNS
+                
                 if ('' !== $context->getInfo('primary_ip')) {
                     $shouldRetry = $this->strategy->shouldRetry($context, null, $exception);
                     if (null === $shouldRetry) {
@@ -97,7 +84,7 @@ class RetryableHttpClient implements HttpClientInterface
                     return;
                 }
 
-                // Body is needed to decide
+                
                 if (null === $shouldRetry) {
                     $firstChunk = $chunk;
                     $content = '';

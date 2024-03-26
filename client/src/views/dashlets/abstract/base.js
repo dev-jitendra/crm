@@ -1,41 +1,13 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/dashlets/abstract/base */
+
+
 
 import View from 'view';
 
-/**
- * A base dashlet view. All dashlets should extend it.
- */
+
 class BaseDashletView extends View {
 
-    /** @type {Object.<string, *>|null}*/
+    
     optionsData = null
 
     optionsFields = {
@@ -54,48 +26,14 @@ class BaseDashletView extends View {
 
     noPadding = false
 
-    /**
-     * A button. Handled by an `action{Name}` method or a click handler.
-     *
-     * @typedef module:views/dashlets/abstract/base~button
-     *
-     * @property {string} name A name.
-     * @property {string} [label] A label.
-     * @property {string} [html] An HTML.
-     * @property {string} [text] A text.
-     * @property {string} [title] A title (not translatable).
-     * @property {function()} [onClick] A click handler.
-     */
+    
 
-    /**
-     * A dropdown action. Handled by an `action{Name}` method or a click handler.
-     *
-     * @typedef module:views/dashlets/abstract/base~action
-     *
-     * @property {string} name A name.
-     * @property {string} [label] A label.
-     * @property {string} [html] An HTML.
-     * @property {string} [text] A text.
-     * @property {string} [title] A title (not translatable).
-     * @property {string} [iconHtml] An icon HTML.
-     * @property {string} [url] A link URL.
-     * @property {function()} [onClick] A click handler.
-     */
+    
 
-    /**
-     * Buttons.
-     *
-     * @protected
-     * @type {Array<module:views/dashlets/abstract/base~button>}
-     */
+    
     buttonList = []
 
-    /**
-     * Dropdown actions.
-     *
-     * @protected
-     * @type {Array<module:views/dashlets/abstract/base~action>}
-     */
+    
     actionList = [
         {
             name: 'refresh',
@@ -114,16 +52,12 @@ class BaseDashletView extends View {
         },
     ]
 
-    /**
-     * Refresh.
-     */
+    
     actionRefresh() {
         this.render();
     }
 
-    /**
-     * Show options.
-     */
+    
     actionOptions() {}
 
     init() {
@@ -211,45 +145,26 @@ class BaseDashletView extends View {
         this.setupButtonList();
     }
 
-    /**
-     * Set up default options.
-     */
+    
     setupDefaultOptions() {}
 
-    /**
-     * Set up actions.
-     */
+    
     setupActionList() {}
 
-    /**
-     * Set up buttons.
-     */
+    
     setupButtonList() {}
 
-    /**
-     * Has an option.
-     *
-     * @param {string} key
-     * @return {boolean}
-     */
+    
     hasOption(key) {
         return key in this.optionsData;
     }
 
-    /**
-     * Get an option value.
-     *
-     * @param {string} key
-     * @return {*}
-     */
+    
     getOption(key) {
         return this.optionsData[key];
     }
 
-    /**
-     * Get a title.
-     * @return {string|null}
-     */
+    
     getTitle() {
         let title = this.getOption('title');
 
@@ -260,18 +175,12 @@ class BaseDashletView extends View {
         return title;
     }
 
-    /**
-     * @return {module:views/dashlet}
-     */
+    
     getContainerView() {
-        return /** @type module:views/dashlet */this.getParentView();
+        return this.getParentView();
     }
 
-    /**
-     * @internal
-     * @param {MouseEvent} event
-     * @param {HTMLElement} element
-     */
+    
     handleAction(event, element) {
         Espo.Utils.handleAction(this, event, element, {
             actionItems: [...this.buttonList, ...this.actionList],

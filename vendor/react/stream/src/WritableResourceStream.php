@@ -10,17 +10,13 @@ final class WritableResourceStream extends EventEmitter implements WritableStrea
 {
     private $stream;
 
-    /** @var LoopInterface */
+    
     private $loop;
 
-    /**
-     * @var int
-     */
+    
     private $softLimit;
 
-    /**
-     * @var int
-     */
+    
     private $writeChunkSize;
 
     private $listening = false;
@@ -34,14 +30,14 @@ final class WritableResourceStream extends EventEmitter implements WritableStrea
             throw new \InvalidArgumentException('First parameter must be a valid stream resource');
         }
 
-        // ensure resource is opened for writing (fopen mode must contain either of "waxc+")
+        
         $meta = \stream_get_meta_data($stream);
         if (isset($meta['mode']) && $meta['mode'] !== '' && \strtr($meta['mode'], 'waxc+', '.....') === $meta['mode']) {
             throw new \InvalidArgumentException('Given stream resource is not opened in write mode');
         }
 
-        // this class relies on non-blocking I/O in order to not interrupt the event loop
-        // e.g. pipes on Windows do not support this: https://bugs.php.net/bug.php?id=47918
+        
+        
         if (\stream_set_blocking($stream, false) !== true) {
             throw new \RuntimeException('Unable to set stream resource to non-blocking mode');
         }
@@ -82,8 +78,8 @@ final class WritableResourceStream extends EventEmitter implements WritableStrea
 
         $this->writable = false;
 
-        // close immediately if buffer is already empty
-        // otherwise wait for buffer to flush first
+        
+        
         if ($this->data === '') {
             $this->close();
         }
@@ -112,7 +108,7 @@ final class WritableResourceStream extends EventEmitter implements WritableStrea
         }
     }
 
-    /** @internal */
+    
     public function handleWrite()
     {
         $error = null;
@@ -128,14 +124,14 @@ final class WritableResourceStream extends EventEmitter implements WritableStrea
 
         \restore_error_handler();
 
-        // Only report errors if *nothing* could be sent and an error has been raised.
-        // Ignore non-fatal warnings if *some* data could be sent.
-        // Any hard (permanent) error will fail to send any data at all.
-        // Sending excessive amounts of data will only flush *some* data and then
-        // report a temporary error (EAGAIN) which we do not raise here in order
-        // to keep the stream open for further tries to write.
-        // Should this turn out to be a permanent error later, it will eventually
-        // send *nothing* and we can detect this.
+        
+        
+        
+        
+        
+        
+        
+        
         if (($sent === 0 || $sent === false) && $error !== null) {
             $this->emit('error', array(new \RuntimeException('Unable to write to stream: ' . $error)));
             $this->close();
@@ -146,20 +142,20 @@ final class WritableResourceStream extends EventEmitter implements WritableStrea
         $exceeded = isset($this->data[$this->softLimit - 1]);
         $this->data = (string) \substr($this->data, $sent);
 
-        // buffer has been above limit and is now below limit
+        
         if ($exceeded && !isset($this->data[$this->softLimit - 1])) {
             $this->emit('drain');
         }
 
-        // buffer is now completely empty => stop trying to write
+        
         if ($this->data === '') {
-            // stop waiting for resource to be writable
+            
             if ($this->listening) {
                 $this->loop->removeWriteStream($this->stream);
                 $this->listening = false;
             }
 
-            // buffer is end()ing and now completely empty => close buffer
+            
             if (!$this->writable) {
                 $this->close();
             }

@@ -1,13 +1,6 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Monolog package.
- *
- * (c) Jordi Boggiano <j.boggiano@seld.be>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Monolog\Handler;
 
@@ -19,49 +12,21 @@ use Monolog\Formatter\FormatterInterface;
 use Psr\Log\LogLevel;
 use Monolog\LogRecord;
 
-/**
- * Simple handler wrapper that filters records based on a list of levels
- *
- * It can be configured with an exact list of levels to allow, or a min/max level.
- *
- * @author Hennadiy Verkh
- * @author Jordi Boggiano <j.boggiano@seld.be>
- */
+
 class FilterHandler extends Handler implements ProcessableHandlerInterface, ResettableInterface, FormattableHandlerInterface
 {
     use ProcessableHandlerTrait;
 
-    /**
-     * Handler or factory Closure($record, $this)
-     *
-     * @phpstan-var (Closure(LogRecord|null, HandlerInterface): HandlerInterface)|HandlerInterface
-     */
+    
     protected Closure|HandlerInterface $handler;
 
-    /**
-     * Minimum level for logs that are passed to handler
-     *
-     * @var bool[] Map of Level value => true
-     * @phpstan-var array<value-of<Level::VALUES>, true>
-     */
+    
     protected array $acceptedLevels;
 
-    /**
-     * Whether the messages that are handled can bubble up the stack or not
-     */
+    
     protected bool $bubble;
 
-    /**
-     * @phpstan-param (Closure(LogRecord|null, HandlerInterface): HandlerInterface)|HandlerInterface $handler
-     *
-     * @param Closure|HandlerInterface                                                 $handler        Handler or factory Closure($record|null, $filterHandler).
-     * @param int|string|Level|array<int|string|Level|LogLevel::*> $minLevelOrList A list of levels to accept or a minimum level if maxLevel is provided
-     * @param int|string|Level|LogLevel::*                                   $maxLevel       Maximum level to accept, only used if $minLevelOrList is not an array
-     * @param bool                                                                     $bubble         Whether the messages that are handled can bubble up the stack or not
-     *
-     * @phpstan-param value-of<Level::VALUES>|value-of<Level::NAMES>|Level|LogLevel::*|array<value-of<Level::VALUES>|value-of<Level::NAMES>|Level|LogLevel::*> $minLevelOrList
-     * @phpstan-param value-of<Level::VALUES>|value-of<Level::NAMES>|Level|LogLevel::* $maxLevel
-     */
+    
     public function __construct(Closure|HandlerInterface $handler, int|string|Level|array $minLevelOrList = Level::Debug, int|string|Level $maxLevel = Level::Emergency, bool $bubble = true)
     {
         $this->handler  = $handler;
@@ -69,22 +34,13 @@ class FilterHandler extends Handler implements ProcessableHandlerInterface, Rese
         $this->setAcceptedLevels($minLevelOrList, $maxLevel);
     }
 
-    /**
-     * @phpstan-return list<Level> List of levels
-     */
+    
     public function getAcceptedLevels(): array
     {
         return array_map(fn (int $level) => Level::from($level), array_keys($this->acceptedLevels));
     }
 
-    /**
-     * @param int|string|Level|LogLevel::*|array<int|string|Level|LogLevel::*> $minLevelOrList A list of levels to accept or a minimum level or level name if maxLevel is provided
-     * @param int|string|Level|LogLevel::*                                               $maxLevel       Maximum level or level name to accept, only used if $minLevelOrList is not an array
-     * @return $this
-     *
-     * @phpstan-param value-of<Level::VALUES>|value-of<Level::NAMES>|Level|LogLevel::*|array<value-of<Level::VALUES>|value-of<Level::NAMES>|Level|LogLevel::*> $minLevelOrList
-     * @phpstan-param value-of<Level::VALUES>|value-of<Level::NAMES>|Level|LogLevel::* $maxLevel
-     */
+    
     public function setAcceptedLevels(int|string|Level|array $minLevelOrList = Level::Debug, int|string|Level $maxLevel = Level::Emergency): self
     {
         if (is_array($minLevelOrList)) {
@@ -102,17 +58,13 @@ class FilterHandler extends Handler implements ProcessableHandlerInterface, Rese
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function isHandling(LogRecord $record): bool
     {
         return isset($this->acceptedLevels[$record->level->value]);
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function handle(LogRecord $record): bool
     {
         if (!$this->isHandling($record)) {
@@ -128,9 +80,7 @@ class FilterHandler extends Handler implements ProcessableHandlerInterface, Rese
         return false === $this->bubble;
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function handleBatch(array $records): void
     {
         $filtered = [];
@@ -145,11 +95,7 @@ class FilterHandler extends Handler implements ProcessableHandlerInterface, Rese
         }
     }
 
-    /**
-     * Return the nested handler
-     *
-     * If the handler was provided as a factory, this will trigger the handler's instantiation.
-     */
+    
     public function getHandler(LogRecord $record = null): HandlerInterface
     {
         if (!$this->handler instanceof HandlerInterface) {
@@ -163,9 +109,7 @@ class FilterHandler extends Handler implements ProcessableHandlerInterface, Rese
         return $this->handler;
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function setFormatter(FormatterInterface $formatter): HandlerInterface
     {
         $handler = $this->getHandler();
@@ -178,9 +122,7 @@ class FilterHandler extends Handler implements ProcessableHandlerInterface, Rese
         throw new \UnexpectedValueException('The nested handler of type '.get_class($handler).' does not support formatters.');
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function getFormatter(): FormatterInterface
     {
         $handler = $this->getHandler();

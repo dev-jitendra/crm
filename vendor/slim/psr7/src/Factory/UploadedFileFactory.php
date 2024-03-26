@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim-Psr7/blob/master/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -22,9 +18,7 @@ use const UPLOAD_ERR_OK;
 
 class UploadedFileFactory implements UploadedFileFactoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    
     public function createUploadedFile(
         StreamInterface $stream,
         ?int $size = null,

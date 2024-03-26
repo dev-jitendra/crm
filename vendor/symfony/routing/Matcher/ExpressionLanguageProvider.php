@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Routing\Matcher;
 
@@ -15,11 +8,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionFunction;
 use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 use Symfony\Contracts\Service\ServiceProviderInterface;
 
-/**
- * Exposes functions defined in the request context to route conditions.
- *
- * @author Ahmed TAILOULOUTE <ahmed.tailouloute@gmail.com>
- */
+
 class ExpressionLanguageProvider implements ExpressionFunctionProviderInterface
 {
     private $functions;
@@ -29,9 +18,7 @@ class ExpressionLanguageProvider implements ExpressionFunctionProviderInterface
         $this->functions = $functions;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getFunctions(): array
     {
         $functions = [];

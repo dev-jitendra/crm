@@ -2,21 +2,13 @@
 
 namespace AsyncAws\S3\ValueObject;
 
-/**
- * The container for the multipart upload request information.
- */
+
 final class CompletedMultipartUpload
 {
-    /**
-     * Array of CompletedPart data types.
-     */
+    
     private $parts;
 
-    /**
-     * @param array{
-     *   Parts?: null|CompletedPart[],
-     * } $input
-     */
+    
     public function __construct(array $input)
     {
         $this->parts = isset($input['Parts']) ? array_map([CompletedPart::class, 'create'], $input['Parts']) : null;
@@ -27,17 +19,13 @@ final class CompletedMultipartUpload
         return $input instanceof self ? $input : new self($input);
     }
 
-    /**
-     * @return CompletedPart[]
-     */
+    
     public function getParts(): array
     {
         return $this->parts ?? [];
     }
 
-    /**
-     * @internal
-     */
+    
     public function requestBody(\DomElement $node, \DomDocument $document): void
     {
         if (null !== $v = $this->parts) {

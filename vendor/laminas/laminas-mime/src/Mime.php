@@ -23,12 +23,10 @@ use function substr;
 use function substr_replace;
 use function trim;
 
-/**
- * Support class for MultiPart Mime Messages
- */
+
 class Mime
 {
-    // phpcs:disable Generic.Files.LineLength.TooLong
+    
     public const TYPE_OCTETSTREAM         = 'application/octet-stream';
     public const TYPE_TEXT                = 'text/plain';
     public const TYPE_HTML                = 'text/html';
@@ -50,19 +48,15 @@ class Mime
     public const MESSAGE_RFC822           = 'message/rfc822';
     public const MESSAGE_DELIVERY_STATUS  = 'message/delivery-status';
     public const CHARSET_REGEX            = '#=\?(?P<charset>[\x21\x23-\x26\x2a\x2b\x2d\x5e\5f\60\x7b-\x7ea-zA-Z0-9]+)\?(?P<encoding>[\x21\x23-\x26\x2a\x2b\x2d\x5e\5f\60\x7b-\x7ea-zA-Z0-9]+)\?(?P<text>[\x21-\x3e\x40-\x7e]+)#';
-    // phpcs:enable
+    
 
-    /** @var null|string */
+    
     protected $boundary;
 
-    /** @var int */
+    
     protected static $makeUnique = 0;
 
-    /**
-     * Lookup-tables for QuotedPrintable
-     *
-     * @var string[]
-     */
+    
     public static $qpKeys = [
         "\x00",
         "\x01",
@@ -227,7 +221,7 @@ class Mime
         "\xFF",
     ];
 
-    /** @var string[] */
+    
     public static $qpReplaceValues = [
         "=00",
         "=01",
@@ -391,33 +385,18 @@ class Mime
         "=FE",
         "=FF",
     ];
-    // @codingStandardsIgnoreStart
+    
     public static $qpKeysString =
          "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F\x7F\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8A\x8B\x8C\x8D\x8E\x8F\x90\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9A\x9B\x9C\x9D\x9E\x9F\xA0\xA1\xA2\xA3\xA4\xA5\xA6\xA7\xA8\xA9\xAA\xAB\xAC\xAD\xAE\xAF\xB0\xB1\xB2\xB3\xB4\xB5\xB6\xB7\xB8\xB9\xBA\xBB\xBC\xBD\xBE\xBF\xC0\xC1\xC2\xC3\xC4\xC5\xC6\xC7\xC8\xC9\xCA\xCB\xCC\xCD\xCE\xCF\xD0\xD1\xD2\xD3\xD4\xD5\xD6\xD7\xD8\xD9\xDA\xDB\xDC\xDD\xDE\xDF\xE0\xE1\xE2\xE3\xE4\xE5\xE6\xE7\xE8\xE9\xEA\xEB\xEC\xED\xEE\xEF\xF0\xF1\xF2\xF3\xF4\xF5\xF6\xF7\xF8\xF9\xFA\xFB\xFC\xFD\xFE\xFF";
-    // @codingStandardsIgnoreEnd
+    
 
-    /**
-     * Check if the given string is "printable"
-     *
-     * Checks that a string contains no unprintable characters. If this returns
-     * false, encode the string for secure delivery.
-     *
-     * @param string $str
-     * @return bool
-     */
+    
     public static function isPrintable($str)
     {
         return strcspn($str, static::$qpKeysString) === strlen($str);
     }
 
-    /**
-     * Encode a given string with the QUOTED_PRINTABLE mechanism and wrap the lines.
-     *
-     * @param string $str
-     * @param int $lineLength Defaults to {@link LINELENGTH}
-     * @param string $lineEnd Defaults to {@link LINEEND}
-     * @return string
-     */
+    
     public static function encodeQuotedPrintable(
         $str,
         $lineLength = self::LINELENGTH,
@@ -426,7 +405,7 @@ class Mime
         $out = '';
         $str = self::_encodeQuotedPrintable($str);
 
-        // Split encoded text into separate lines
+        
         $initialPtr = 0;
         $strLength  = strlen($str);
         while ($initialPtr < $strLength) {
@@ -438,28 +417,28 @@ class Mime
 
             $chunk = substr($str, $initialPtr, $continueAt);
 
-            // Ensure we are not splitting across an encoded character
+            
             $endingMarkerPos = strrpos($chunk, '=');
             if ($endingMarkerPos !== false && $endingMarkerPos >= strlen($chunk) - 2) {
                 $chunk      = substr($chunk, 0, $endingMarkerPos);
                 $continueAt = $endingMarkerPos;
             }
 
-            if (ord($chunk[0]) === 0x2E) { // 0x2E is a dot
+            if (ord($chunk[0]) === 0x2E) { 
                 $chunk = '=2E' . substr($chunk, 1);
             }
 
-            // copied from swiftmailer https://git.io/vAXU1
+            
             switch (ord(substr($chunk, strlen($chunk) - 1))) {
-                case 0x09: // Horizontal Tab
+                case 0x09: 
                     $chunk = substr_replace($chunk, '=09', strlen($chunk) - 1, 1);
                     break;
-                case 0x20: // Space
+                case 0x20: 
                     $chunk = substr_replace($chunk, '=20', strlen($chunk) - 1, 1);
                     break;
             }
 
-            // Add string and continue
+            
             $out        .= $chunk . '=' . $lineEnd;
             $initialPtr += $continueAt;
         }
@@ -469,38 +448,18 @@ class Mime
         return $out;
     }
 
-    /**
-     * Converts a string into quoted printable format.
-     *
-     * @param  string $str
-     * @return string
-     */
-    // @codingStandardsIgnoreStart
+    
+    
     private static function _encodeQuotedPrintable($str)
     {
-        // @codingStandardsIgnoreEnd
+        
         $str = str_replace('=', '=3D', $str);
         $str = str_replace(static::$qpKeys, static::$qpReplaceValues, $str);
         $str = rtrim($str);
         return $str;
     }
 
-    /**
-     * Encode a given string with the QUOTED_PRINTABLE mechanism for Mail Headers.
-     *
-     * Mail headers depend on an extended quoted printable algorithm otherwise
-     * a range of bugs can occur.
-     *
-     * @param string            $str
-     * @param string            $charset
-     * @param int               $lineLength       Defaults to {@link LINELENGTH}
-     * @param string            $lineEnd          Defaults to {@link LINEEND}
-     * @param positive-int|0    $headerNameSize   When folding a line, it is necessary to calculate
-     *                                            the length of the entire line (together with the header name).
-     *                                            Therefore, you can specify the header name and colon length
-     *                                            in this argument to fold the string properly.
-     * @return string
-     */
+    
     public static function encodeQuotedPrintableHeader(
         $str,
         $charset,
@@ -508,19 +467,19 @@ class Mime
         $lineEnd = self::LINEEND,
         $headerNameSize = 0
     ) {
-        // Reduce line-length by the length of the required delimiter, charsets and encoding
+        
         $prefix     = sprintf('=?%s?Q?', $charset);
         $lineLength = $lineLength - strlen($prefix) - 3;
 
         $str = self::_encodeQuotedPrintable($str);
 
-        // Mail-Header required chars have to be encoded also:
+        
         $str = str_replace(['?', ',', ' ', '_'], ['=3F', '=2C', '=20', '=5F'], $str);
 
-        // initialize first line, we need it anyways
+        
         $lines = [0 => ''];
 
-        // Split encoded text into separate lines
+        
         $tmp = '';
         while (strlen($str) > 0) {
             $currentLine = max(count($lines) - 1, 0);
@@ -530,10 +489,10 @@ class Mime
 
             $tmp .= $token;
             if ($token === '=20') {
-                // only if we have a single char token or space, we can append the
-                // tempstring it to the current line or start a new line if necessary.
+                
+                
                 if ($currentLine === 0) {
-                    // The size of the first line should be calculated with the header name.
+                    
                     $currentLineLength = strlen($lines[$currentLine] . $tmp) + $headerNameSize;
                 } else {
                     $currentLineLength = strlen($lines[$currentLine] . $tmp);
@@ -551,13 +510,13 @@ class Mime
                 }
                 $tmp = '';
             }
-            // don't forget to append the rest to the last line
+            
             if (strlen($str) === 0) {
                 $lines[$currentLine] .= $tmp;
             }
         }
 
-        // assemble the lines together by pre- and appending delimiters, charset, encoding.
+        
         for ($i = 0, $count = count($lines); $i < $count; $i++) {
             $lines[$i] = " " . $prefix . $lines[$i] . "?=";
         }
@@ -565,12 +524,7 @@ class Mime
         return $str;
     }
 
-    /**
-     * Retrieves the first token from a quoted printable string.
-     *
-     * @param  string $str
-     * @return string
-     */
+    
     private static function getNextQuotedPrintableToken($str)
     {
         if (0 === strpos($str, '=')) {
@@ -581,15 +535,7 @@ class Mime
         return $token;
     }
 
-    /**
-     * Encode a given string in mail header compatible base64 encoding.
-     *
-     * @param string $str
-     * @param string $charset
-     * @param int $lineLength Defaults to {@link LINELENGTH}
-     * @param string $lineEnd Defaults to {@link LINEEND}
-     * @return string
-     */
+    
     public static function encodeBase64Header(
         $str,
         $charset,
@@ -606,15 +552,7 @@ class Mime
         return $encodedValue;
     }
 
-    /**
-     * Encode a given string in base64 encoding and break lines
-     * according to the maximum linelength.
-     *
-     * @param string $str
-     * @param int $lineLength Defaults to {@link LINELENGTH}
-     * @param string $lineEnd Defaults to {@link LINEEND}
-     * @return string
-     */
+    
     public static function encodeBase64(
         $str,
         $lineLength = self::LINELENGTH,
@@ -624,15 +562,10 @@ class Mime
         return rtrim(chunk_split(base64_encode($str), $lineLength, $lineEnd));
     }
 
-    /**
-     * Constructor
-     *
-     * @param null|string $boundary
-     * @access public
-     */
+    
     public function __construct($boundary = null)
     {
-        // This string needs to be somewhat unique
+        
         if ($boundary === null) {
             $this->boundary = '=_' . md5(microtime(1) . static::$makeUnique++);
         } else {
@@ -640,16 +573,9 @@ class Mime
         }
     }
 
-    // phpcs:disable WebimpressCodingStandard.NamingConventions.ValidVariableName.NotCamelCaps
+    
 
-    /**
-     * Encode the given string with the given encoding.
-     *
-     * @param string $str
-     * @param string $encoding
-     * @param string $EOL EOL string; defaults to {@link LINEEND}
-     * @return string
-     */
+    
     public static function encode($str, $encoding, $EOL = self::LINEEND)
     {
         switch ($encoding) {
@@ -660,56 +586,30 @@ class Mime
                 return static::encodeQuotedPrintable($str, self::LINELENGTH, $EOL);
 
             default:
-                /**
-                 * @todo 7Bit and 8Bit is currently handled the same way.
-                 */
+                
                 return $str;
         }
     }
 
-    /**
-     * Return a MIME boundary
-     *
-     * @access public
-     * @return string
-     */
+    
     public function boundary()
     {
         return $this->boundary;
     }
 
-    /**
-     * Return a MIME boundary line
-     *
-     * @param string $EOL Defaults to {@link LINEEND}
-     * @access public
-     * @return string
-     */
+    
     public function boundaryLine($EOL = self::LINEEND)
     {
         return $EOL . '--' . $this->boundary . $EOL;
     }
 
-    /**
-     * Return MIME ending
-     *
-     * @param string $EOL Defaults to {@link LINEEND}
-     * @access public
-     * @return string
-     */
+    
     public function mimeEnd($EOL = self::LINEEND)
     {
         return $EOL . '--' . $this->boundary . '--' . $EOL;
     }
 
-    /**
-     * Detect MIME charset
-     *
-     * Extract parts according to https://tools.ietf.org/html/rfc2047#section-2
-     *
-     * @param string $str
-     * @return string
-     */
+    
     public static function mimeDetectCharset($str)
     {
         if (preg_match(self::CHARSET_REGEX, $str, $matches)) {

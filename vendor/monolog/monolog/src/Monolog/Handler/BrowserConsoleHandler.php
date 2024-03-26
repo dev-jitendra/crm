@@ -1,13 +1,6 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Monolog package.
- *
- * (c) Jordi Boggiano <j.boggiano@seld.be>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Monolog\Handler;
 
@@ -21,55 +14,38 @@ use function count;
 use function headers_list;
 use function stripos;
 
-/**
- * Handler sending logs to browser's javascript console with no browser extension required
- *
- * @author Olivier Poitrey <rs@dailymotion.com>
- */
+
 class BrowserConsoleHandler extends AbstractProcessingHandler
 {
     protected static bool $initialized = false;
 
-    /** @var LogRecord[] */
+    
     protected static array $records = [];
 
     protected const FORMAT_HTML = 'html';
     protected const FORMAT_JS = 'js';
     protected const FORMAT_UNKNOWN = 'unknown';
 
-    /**
-     * @inheritDoc
-     *
-     * Formatted output may contain some formatting markers to be transferred to `console.log` using the %c format.
-     *
-     * Example of formatted string:
-     *
-     *     You can do [[blue text]]{color: blue} or [[green background]]{background-color: green; color: white}
-     */
+    
     protected function getDefaultFormatter(): FormatterInterface
     {
         return new LineFormatter('[[%channel%]]{macro: autolabel} [[%level_name%]]{font-weight: bold} %message%');
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     protected function write(LogRecord $record): void
     {
-        // Accumulate records
+        
         static::$records[] = $record;
 
-        // Register shutdown handler if not already done
+        
         if (!static::$initialized) {
             static::$initialized = true;
             $this->registerShutdownFunction();
         }
     }
 
-    /**
-     * Convert records to javascript console commands and send it to the browser.
-     * This method is automatically called on PHP shutdown if output is HTML or Javascript.
-     */
+    
     public static function send(): void
     {
         $format = static::getResponseFormat();
@@ -80,7 +56,7 @@ class BrowserConsoleHandler extends AbstractProcessingHandler
         if (count(static::$records) > 0) {
             if ($format === self::FORMAT_HTML) {
                 static::writeOutput('<script>' . self::generateScript() . '</script>');
-            } else { // js format
+            } else { 
                 static::writeOutput(self::generateScript());
             }
             static::resetStatic();
@@ -99,17 +75,13 @@ class BrowserConsoleHandler extends AbstractProcessingHandler
         self::resetStatic();
     }
 
-    /**
-     * Forget all logged records
-     */
+    
     public static function resetStatic(): void
     {
         static::$records = [];
     }
 
-    /**
-     * Wrapper for register_shutdown_function to allow overriding
-     */
+    
     protected function registerShutdownFunction(): void
     {
         if (PHP_SAPI !== 'cli') {
@@ -117,27 +89,16 @@ class BrowserConsoleHandler extends AbstractProcessingHandler
         }
     }
 
-    /**
-     * Wrapper for echo to allow overriding
-     */
+    
     protected static function writeOutput(string $str): void
     {
         echo $str;
     }
 
-    /**
-     * Checks the format of the response
-     *
-     * If Content-Type is set to application/javascript or text/javascript -> js
-     * If Content-Type is set to text/html, or is unset -> html
-     * If Content-Type is anything else -> unknown
-     *
-     * @return string One of 'js', 'html' or 'unknown'
-     * @phpstan-return self::FORMAT_*
-     */
+    
     protected static function getResponseFormat(): string
     {
-        // Check content type
+        
         foreach (headers_list() as $header) {
             if (stripos($header, 'content-type:') === 0) {
                 return static::getResponseFormatFromContentType($header);
@@ -147,14 +108,11 @@ class BrowserConsoleHandler extends AbstractProcessingHandler
         return self::FORMAT_HTML;
     }
 
-    /**
-     * @return string One of 'js', 'html' or 'unknown'
-     * @phpstan-return self::FORMAT_*
-     */
+    
     protected static function getResponseFormatFromContentType(string $contentType): string
     {
-        // This handler only works with HTML and javascript outputs
-        // text/javascript is obsolete in favour of application/javascript, but still used
+        
+        
         if (stripos($contentType, 'application/javascript') !== false || stripos($contentType, 'text/javascript') !== false) {
             return self::FORMAT_JS;
         }
@@ -199,9 +157,7 @@ class BrowserConsoleHandler extends AbstractProcessingHandler
         };
     }
 
-    /**
-     * @return string[]
-     */
+    
     private static function handleStyles(string $formatted): array
     {
         $args = [];
@@ -229,7 +185,7 @@ class BrowserConsoleHandler extends AbstractProcessingHandler
 
         $style = preg_replace_callback('/macro\s*:(.*?)(?:;|$)/', function (array $m) use ($string, &$colors, &$labels) {
             if (trim($m[1]) === 'autolabel') {
-                // Format the string as a label with consistent auto assigned background color
+                
                 if (!isset($labels[$string])) {
                     $labels[$string] = $colors[count($labels) % count($colors)];
                 }
@@ -250,10 +206,7 @@ class BrowserConsoleHandler extends AbstractProcessingHandler
         return $style;
     }
 
-    /**
-     * @param  mixed[] $dict
-     * @return mixed[]
-     */
+    
     private static function dump(string $title, array $dict): array
     {
         $script = [];
@@ -278,9 +231,7 @@ class BrowserConsoleHandler extends AbstractProcessingHandler
         return '"' . addcslashes($arg, "\"\n\\") . '"';
     }
 
-    /**
-     * @param mixed $args
-     */
+    
     private static function call(...$args): string
     {
         $method = array_shift($args);
@@ -291,9 +242,7 @@ class BrowserConsoleHandler extends AbstractProcessingHandler
         return self::call_array($method, $args);
     }
 
-    /**
-     * @param mixed[] $args
-     */
+    
     private static function call_array(string $method, array $args): string
     {
         return 'c.' . $method . '(' . implode(', ', $args) . ');';

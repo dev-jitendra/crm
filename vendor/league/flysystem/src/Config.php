@@ -11,9 +11,7 @@ class Config
     public const OPTION_VISIBILITY = 'visibility';
     public const OPTION_DIRECTORY_VISIBILITY = 'directory_visibility';
 
-    /**
-     * @var array
-     */
+    
     private $options;
 
     public function __construct(array $options = [])
@@ -21,11 +19,7 @@ class Config
         $this->options = $options;
     }
 
-    /**
-     * @param mixed $default
-     *
-     * @return mixed
-     */
+    
     public function get(string $property, $default = null)
     {
         return $this->options[$property] ?? $default;

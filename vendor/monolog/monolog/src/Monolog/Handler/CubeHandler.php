@@ -1,13 +1,6 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Monolog package.
- *
- * (c) Jordi Boggiano <j.boggiano@seld.be>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Monolog\Handler;
 
@@ -15,13 +8,7 @@ use Monolog\Level;
 use Monolog\Utils;
 use Monolog\LogRecord;
 
-/**
- * Logs to Cube.
- *
- * @link https://github.com/square/cube/wiki
- * @author Wan Chen <kami@kamisama.me>
- * @deprecated Since 2.8.0 and 3.2.0, Cube appears abandoned and thus we will drop this handler in Monolog 4
- */
+
 class CubeHandler extends AbstractProcessingHandler
 {
     private ?\Socket $udpConnection = null;
@@ -29,16 +16,10 @@ class CubeHandler extends AbstractProcessingHandler
     private string $scheme;
     private string $host;
     private int $port;
-    /** @var string[] */
+    
     private array $acceptedSchemes = ['http', 'udp'];
 
-    /**
-     * Create a Cube handler
-     *
-     * @throws \UnexpectedValueException when given url is not a valid url.
-     *                                   A valid url must consist of three parts : protocol://host:port
-     *                                   Only valid protocols used by Cube are http and udp
-     */
+    
     public function __construct(string $url, int|string|Level $level = Level::Debug, bool $bubble = true)
     {
         $urlInfo = parse_url($url);
@@ -61,12 +42,7 @@ class CubeHandler extends AbstractProcessingHandler
         parent::__construct($level, $bubble);
     }
 
-    /**
-     * Establish a connection to an UDP socket
-     *
-     * @throws \LogicException           when unable to connect to the socket
-     * @throws MissingExtensionException when there is no socket extension
-     */
+    
     protected function connectUdp(): void
     {
         if (!extension_loaded('sockets')) {
@@ -84,19 +60,14 @@ class CubeHandler extends AbstractProcessingHandler
         }
     }
 
-    /**
-     * Establish a connection to an http server
-     *
-     * @throws \LogicException           when unable to connect to the socket
-     * @throws MissingExtensionException when no curl extension
-     */
+    
     protected function connectHttp(): void
     {
         if (!extension_loaded('curl')) {
             throw new MissingExtensionException('The curl extension is required to use http URLs with the CubeHandler');
         }
 
-        $httpConnection = curl_init('http://'.$this->host.':'.$this->port.'/1.0/event/put');
+        $httpConnection = curl_init('http:
         if (false === $httpConnection) {
             throw new \LogicException('Unable to connect to ' . $this->host . ':' . $this->port);
         }
@@ -106,9 +77,7 @@ class CubeHandler extends AbstractProcessingHandler
         curl_setopt($this->httpConnection, CURLOPT_RETURNTRANSFER, true);
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     protected function write(LogRecord $record): void
     {
         $date = $record->datetime;

@@ -1,60 +1,13 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module utils */
+
+
 
 const IS_MAC = /Mac/.test(navigator.userAgent);
 
-/**
- * Utility functions.
- */
+
 Espo.Utils = {
 
-    /**
-     * Handle a click event action.
-     *
-     * @param {module:view} view A view.
-     * @param {MouseEvent} event An event.
-     * @param {HTMLElement} element An  element.
-     * @param {{
-     *     action?: string,
-     *     handler?: string,
-     *     actionFunction?: string,
-     *     actionItems?: Array<{
-     *         onClick?: function(),
-     *         name?: string,
-     *         handler?: string,
-     *         actionFunction?: string,
-     *     }>,
-     *     className?: string,
-     * }} [actionData] Data. If an action is not specified, it will be fetched from a target element.
-     * @return {boolean} True if handled.
-     */
+    
     handleAction: function (view, event, element, actionData) {
         actionData = actionData || {};
 
@@ -138,10 +91,7 @@ Espo.Utils = {
         return true;
     },
 
-    /**
-     * @private
-     * @param {JQuery} $target
-     */
+    
     _processAfterActionDropdown: function ($target) {
         const $dropdown = $target.closest('.dropdown-menu');
 
@@ -163,7 +113,7 @@ Espo.Utils = {
             $dropdownToggle.removeAttr('disabled').removeClass('disabled');
         }
 
-        // noinspection JSUnresolvedReference
+        
         $dropdownToggle.dropdown('toggle');
 
         $dropdownToggle.focus();
@@ -173,21 +123,9 @@ Espo.Utils = {
         }
     },
 
-    /**
-     * @typedef {Object} Espo.Utils~ActionAvailabilityDefs
-     *
-     * @property {string|null} [configCheck] A config path to check. Path items are separated
-     *   by the dot. If a config value is not empty, then the action is allowed.
-     *   The `!` prefix reverses the check.
-     */
+    
 
-    /**
-     * Check action availability.
-     *
-     * @param {module:view-helper} helper A view helper.
-     * @param {Espo.Utils~ActionAvailabilityDefs} item Definitions.
-     * @returns {boolean}
-     */
+    
     checkActionAvailability: function (helper, item) {
         const config = helper.config;
 
@@ -216,24 +154,9 @@ Espo.Utils = {
         return true;
     },
 
-    /**
-     * @typedef {Object} Espo.Utils~ActionAccessDefs
-     *
-     * @property {'create'|'read'|'edit'|'stream'|'delete'|null} acl An ACL action to check.
-     * @property {string|null} [aclScope] A scope to check.
-     * @property {string|null} [scope] Deprecated. Use `aclScope`.
-     */
+    
 
-    /**
-     * Check access to an action.
-     *
-     * @param {module:acl-manager} acl An ACL manager.
-     * @param {string|module:model|null} [obj] A scope or a model.
-     * @param {Espo.Utils~ActionAccessDefs} item Definitions.
-     * @param {boolean} [isPrecise=false] To return `null` if not enough data is set in a model.
-     *   E.g. the `teams` field is not yet loaded.
-     * @returns {boolean|null}
-     */
+    
     checkActionAccess: function (acl, obj, item, isPrecise) {
         let hasAccess = true;
 
@@ -262,28 +185,9 @@ Espo.Utils = {
         return hasAccess;
     },
 
-    /**
-     * @typedef {Object} Espo.Utils~AccessDefs
-     *
-     * @property {'create'|'read'|'edit'|'stream'|'delete'|null} action An ACL action to check.
-     * @property {string|null} [scope] A scope to check.
-     * @property {string[]} [portalIdList] A portal ID list. To check whether a user in one of portals.
-     * @property {string[]} [teamIdList] A team ID list. To check whether a user in one of teams.
-     * @property {boolean} [isPortalOnly=false] Allow for portal users only.
-     * @property {boolean} [inPortalDisabled=false] Disable for portal users.
-     * @property {boolean} [isAdminOnly=false] Allow for admin users only.
-     */
+    
 
-    /**
-     * Check access to an action.
-     *
-     * @param {module:utils~AccessDefs[]} dataList List of definitions.
-     * @param {module:acl-manager} acl An ACL manager.
-     * @param {module:models/user} user A user.
-     * @param {module:model|null} [entity] A model.
-     * @param {boolean} [allowAllForAdmin=false] Allow all for an admin.
-     * @returns {boolean}
-     */
+    
     checkAccessDataList: function (dataList, acl, user, entity, allowAllForAdmin) {
         if (!dataList || !dataList.length) {
             return true;
@@ -369,12 +273,7 @@ Espo.Utils = {
         return true;
     },
 
-    /**
-     * @private
-     * @param {string} string
-     * @param {string} p
-     * @returns {string}
-     */
+    
     convert: function (string, p) {
         if (string === null) {
             return string;
@@ -403,12 +302,7 @@ Espo.Utils = {
         return result;
     },
 
-    /**
-     * Is object.
-     *
-     * @param {*} obj What to check.
-     * @returns {boolean}
-     */
+    
     isObject: function (obj) {
         if (obj === null) {
             return false;
@@ -417,12 +311,7 @@ Espo.Utils = {
         return typeof obj === 'object';
     },
 
-    /**
-     * A shallow clone.
-     *
-     * @param {*} obj An object.
-     * @returns {*}
-     */
+    
     clone: function (obj) {
         if (!Espo.Utils.isObject(obj)) {
             return obj;
@@ -431,12 +320,7 @@ Espo.Utils = {
         return _.isArray(obj) ? obj.slice() : _.extend({}, obj);
     },
 
-    /**
-     * A deep clone.
-     *
-     * @param {*} data An object.
-     * @returns {*}
-     */
+    
     cloneDeep: function (data) {
         data = Espo.Utils.clone(data);
 
@@ -449,14 +333,7 @@ Espo.Utils = {
         return data;
     },
 
-    /**
-     * Compose a class name.
-     *
-     * @param {string} module A module.
-     * @param {string} name A name.
-     * @param {string} [location=''] A location.
-     * @return {string}
-     */
+    
     composeClassName: function (module, name, location) {
         if (module) {
             module = this.camelCaseToHyphen(module);
@@ -472,12 +349,7 @@ Espo.Utils = {
         }
     },
 
-    /**
-     * Compose a view class name.
-     *
-     * @param {string} name A name.
-     * @returns {string}
-     */
+    
     composeViewClassName: function (name) {
         if (name && name[0] === name[0].toLowerCase()) {
             return name;
@@ -500,25 +372,14 @@ Espo.Utils = {
         }
     },
 
-    /**
-     * Convert a string from camelCase to hyphen and replace dots with hyphens.
-     * Useful for setting to DOM attributes.
-     *
-     * @param {string} string A string.
-     * @returns {string}
-     */
+    
     toDom: function (string) {
         return Espo.Utils.convert(string, 'c-h')
             .split('.')
             .join('-');
     },
 
-    /**
-     * Lower-case a first character.
-     *
-     * @param  {string} string A string.
-     * @returns {string}
-     */
+    
     lowerCaseFirst: function (string) {
         if (string === null) {
             return string;
@@ -527,12 +388,7 @@ Espo.Utils = {
         return string.charAt(0).toLowerCase() + string.slice(1);
     },
 
-    /**
-     * Upper-case a first character.
-     *
-     * @param  {string} string A string.
-     * @returns {string}
-     */
+    
     upperCaseFirst: function (string) {
         if (string === null) {
             return string;
@@ -541,12 +397,7 @@ Espo.Utils = {
         return string.charAt(0).toUpperCase() + string.slice(1);
     },
 
-    /**
-     * Hyphen to UpperCamelCase.
-     *
-     * @param {string} string A string.
-     * @returns {string}
-     */
+    
     hyphenToUpperCamelCase: function (string) {
         if (string === null) {
             return string;
@@ -562,12 +413,7 @@ Espo.Utils = {
         );
     },
 
-    /**
-     * Hyphen to camelCase.
-     *
-     * @param {string} string A string.
-     * @returns {string}
-     */
+    
     hyphenToCamelCase: function (string) {
         if (string === null) {
             return string;
@@ -581,12 +427,7 @@ Espo.Utils = {
         );
     },
 
-    /**
-     * CamelCase to hyphen.
-     *
-     * @param {string} string A string.
-     * @returns {string}
-     */
+    
     camelCaseToHyphen: function (string) {
         if (string === null) {
             return string;
@@ -595,12 +436,7 @@ Espo.Utils = {
         return string.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
     },
 
-    /**
-     * Trim an ending slash.
-     *
-     * @param {String} str A string.
-     * @returns {string}
-     */
+    
     trimSlash: function (str) {
         if (str.slice(-1) === '/') {
             return str.slice(0, -1);
@@ -609,12 +445,7 @@ Espo.Utils = {
         return str;
     },
 
-    /**
-     * Parse params in string URL options.
-     *
-     * @param {string} string An URL part.
-     * @returns {Object.<string,string>}
-     */
+    
     parseUrlOptionsParam: function (string) {
         if (!string) {
             return {};
@@ -641,12 +472,7 @@ Espo.Utils = {
         return options;
     },
 
-    /**
-     * Key a key from a key-event.
-     *
-     * @param {JQueryKeyEventObject|KeyboardEvent} e A key event.
-     * @return {string}
-     */
+    
     getKeyFromKeyEvent: function (e) {
         let key = e.code;
 
@@ -667,21 +493,12 @@ Espo.Utils = {
         return key;
     },
 
-    /**
-     * Generate an ID. Not to be used by 3rd party code.
-     *
-     * @internal
-     * @return {string}
-     */
+    
     generateId: function () {
         return (Math.floor(Math.random() * 10000001)).toString()
     },
 
-    /**
-     * Not to be used in custom code. Can be removed in future versions.
-     * @internal
-     * @return {string}
-     */
+    
     obtainBaseUrl: function () {
         let baseUrl = window.location.origin + window.location.pathname;
 
@@ -699,9 +516,7 @@ const keyMap = {
     'NumpadEnter': 'Enter',
 };
 
-/**
- * @deprecated Use `Espo.Utils`.
- */
+
 Espo.utils = Espo.Utils;
 
 export default Espo.Utils;

@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation;
 
@@ -16,9 +9,7 @@ use Symfony\Component\Translation\Exception\InvalidArgumentException;
 use Symfony\Contracts\Translation\LocaleAwareInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
- */
+
 class DataCollectorTranslator implements TranslatorInterface, TranslatorBagInterface, LocaleAwareInterface, WarmableInterface
 {
     public const MESSAGE_DEFINED = 0;
@@ -28,9 +19,7 @@ class DataCollectorTranslator implements TranslatorInterface, TranslatorBagInter
     private TranslatorInterface $translator;
     private array $messages = [];
 
-    /**
-     * @param TranslatorInterface&TranslatorBagInterface&LocaleAwareInterface $translator
-     */
+    
     public function __construct(TranslatorInterface $translator)
     {
         if (!$translator instanceof TranslatorBagInterface || !$translator instanceof LocaleAwareInterface) {
@@ -68,9 +57,7 @@ class DataCollectorTranslator implements TranslatorInterface, TranslatorBagInter
         return $this->translator->getCatalogues();
     }
 
-    /**
-     * @return string[]
-     */
+    
     public function warmUp(string $cacheDir): array
     {
         if ($this->translator instanceof WarmableInterface) {
@@ -80,9 +67,7 @@ class DataCollectorTranslator implements TranslatorInterface, TranslatorBagInter
         return [];
     }
 
-    /**
-     * Gets the fallback locales.
-     */
+    
     public function getFallbackLocales(): array
     {
         if ($this->translator instanceof Translator || method_exists($this->translator, 'getFallbackLocales')) {
@@ -92,9 +77,7 @@ class DataCollectorTranslator implements TranslatorInterface, TranslatorBagInter
         return [];
     }
 
-    /**
-     * Passes through all unknown calls onto the translator object.
-     */
+    
     public function __call(string $method, array $args)
     {
         return $this->translator->{$method}(...$args);

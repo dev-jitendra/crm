@@ -20,8 +20,8 @@ final class DnsConnector implements ConnectorInterface
     public function connect($uri)
     {
         $original = $uri;
-        if (\strpos($uri, '://') === false) {
-            $uri = 'tcp://' . $uri;
+        if (\strpos($uri, ':
+            $uri = 'tcp:
             $parts = \parse_url($uri);
             if (isset($parts['scheme'])) {
                 unset($parts['scheme']);
@@ -40,7 +40,7 @@ final class DnsConnector implements ConnectorInterface
         $host = \trim($parts['host'], '[]');
         $connector = $this->connector;
 
-        // skip DNS lookup / URI manipulation if this URI already contains an IP
+        
         if (@\inet_pton($host) !== false) {
             return $connector->connect($original);
         }
@@ -50,7 +50,7 @@ final class DnsConnector implements ConnectorInterface
 
         return new Promise\Promise(
             function ($resolve, $reject) use (&$promise, &$resolved, $uri, $connector, $host, $parts) {
-                // resolve/reject with result of DNS lookup
+                
                 $promise->then(function ($ip) use (&$promise, &$resolved, $uri, $connector, $host, $parts) {
                     $resolved = $ip;
 
@@ -65,14 +65,14 @@ final class DnsConnector implements ConnectorInterface
                                 $e
                             );
 
-                            // avoid garbage references by replacing all closures in call stack.
-                            // what a lovely piece of code!
+                            
+                            
                             $r = new \ReflectionProperty('Exception', 'trace');
                             $r->setAccessible(true);
                             $trace = $r->getValue($e);
 
-                            // Exception trace arguments are not available on some PHP 7.4 installs
-                            // @codeCoverageIgnoreStart
+                            
+                            
                             foreach ($trace as $ti => $one) {
                                 if (isset($one['args'])) {
                                     foreach ($one['args'] as $ai => $arg) {
@@ -82,7 +82,7 @@ final class DnsConnector implements ConnectorInterface
                                     }
                                 }
                             }
-                            // @codeCoverageIgnoreEnd
+                            
                             $r->setValue($e, $trace);
                         }
 
@@ -93,8 +93,8 @@ final class DnsConnector implements ConnectorInterface
                 })->then($resolve, $reject);
             },
             function ($_, $reject) use (&$promise, &$resolved, $uri) {
-                // cancellation should reject connection attempt
-                // reject DNS resolution with custom reason, otherwise rely on connection cancellation below
+                
+                
                 if ($resolved === null) {
                     $reject(new \RuntimeException(
                         'Connection to ' . $uri . ' cancelled during DNS lookup (ECONNABORTED)',
@@ -102,10 +102,10 @@ final class DnsConnector implements ConnectorInterface
                     ));
                 }
 
-                // (try to) cancel pending DNS lookup / connection attempt
+                
                 if ($promise instanceof PromiseInterface && \method_exists($promise, 'cancel')) {
-                    // overwrite callback arguments for PHP7+ only, so they do not show
-                    // up in the Exception trace and do not cause a possible cyclic reference.
+                    
+                    
                     $_ = $reject = null;
 
                     $promise->cancel();

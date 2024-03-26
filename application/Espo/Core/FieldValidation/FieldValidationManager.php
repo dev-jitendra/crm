@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\FieldValidation;
 
@@ -40,14 +14,12 @@ use LogicException;
 use stdClass;
 use ReflectionClass;
 
-/**
- * A field validation manager.
- */
+
 class FieldValidationManager
 {
-    /** @var array<string, ?object> */
+    
     private array $checkerCache = [];
-    /** @var array<string, ?Validator<Entity>> */
+    
     private array $validatorCache = [];
 
     private CheckerFactory $checkerFactory;
@@ -61,28 +33,13 @@ class FieldValidationManager
         $this->checkerFactory = $factory;
     }
 
-    /**
-     * Process validation.
-     *
-     * @param Entity $entity An entity.
-     * @param ?stdClass $data Raw request payload data.
-     * @param ?FieldValidationParams $params Validation additional parameters.
-     *
-     * @throws ValidationError On the first invalid check.
-     */
+    
     public function process(Entity $entity, ?stdClass $data = null, ?FieldValidationParams $params = null): void
     {
         $this->processInternal($entity, $data, $params, true);
     }
 
-    /**
-     * Process validation w/o exception throwing.
-     *
-     * @param Entity $entity An entity.
-     * @param ?stdClass $data Raw request payload data.
-     * @param ?FieldValidationParams $params Validation additional parameters.
-     * @return Failure[] A list of validation failures.
-     */
+    
     public function processAll(Entity $entity, ?stdClass $data = null, ?FieldValidationParams $params = null): array
     {
         try {
@@ -93,10 +50,7 @@ class FieldValidationManager
         }
     }
 
-    /**
-     * @return Failure[]
-     * @throws ValidationError On the first invalid check.
-     */
+    
     private function processInternal(
         Entity $entity,
         ?stdClass $data,
@@ -133,12 +87,10 @@ class FieldValidationManager
         return $failureList;
     }
 
-    /**
-     * @return string[]
-     */
+    
     private function getMandatoryValidationList(string $entityType, string $field): array
     {
-        /** @var ?string $fieldType */
+        
         $fieldType = $this->fieldUtil->getEntityTypeFieldParam($entityType, $field, 'type');
 
         return
@@ -146,12 +98,10 @@ class FieldValidationManager
             $this->metadata->get(['fields', $fieldType ?? '', 'mandatoryValidationList']) ?? [];
     }
 
-    /**
-     * @return string[]
-     */
+    
     private function getValidationList(string $entityType, string $field): array
     {
-        /** @var ?string $fieldType */
+        
         $fieldType = $this->fieldUtil->getEntityTypeFieldParam($entityType, $field, 'type');
 
         return
@@ -159,9 +109,7 @@ class FieldValidationManager
             $this->metadata->get(['fields', $fieldType ?? '', 'validationList']) ?? [];
     }
 
-    /**
-     * Check a specific field for a specific validation type.
-     */
+    
     public function check(Entity $entity, string $field, string $type, ?stdClass $data = null): bool
     {
         $data ??= (object) [];
@@ -214,9 +162,7 @@ class FieldValidationManager
         return true;
     }
 
-    /**
-     * @return ?Validator<Entity>
-     */
+    
     private function getValidator(string $entityType, string $field, string $type): ?Validator
     {
         $key = $entityType . '_' . $field . '_' . $type;
@@ -238,10 +184,7 @@ class FieldValidationManager
         return $validator;
     }
 
-    /**
-     * @return Failure[]
-     * @throws ValidationError
-     */
+    
     private function processField(
         Entity $entity,
         string $field,
@@ -281,9 +224,7 @@ class FieldValidationManager
         return [$failure];
     }
 
-    /**
-     * @return string[]
-     */
+    
     private function getAllValidationList(string $entityType, string $field, FieldValidationParams $params): array
     {
         $validationList = array_unique(array_merge(
@@ -291,7 +232,7 @@ class FieldValidationManager
             $this->getMandatoryValidationList($entityType, $field)
         ));
 
-        /** @var string[] $suppressList */
+        
         $suppressList = $this->metadata->get("entityDefs.$entityType.fields.$field.suppressValidationList") ?? [];
 
         $validationList = array_filter(
@@ -307,9 +248,7 @@ class FieldValidationManager
         return array_values($validationList);
     }
 
-    /**
-     * @param mixed $validationValue
-     */
+    
     private function processFieldCheck(
         string $entityType,
         string $type,
@@ -333,9 +272,7 @@ class FieldValidationManager
         return $checker->$methodName($entity, $field, $validationValue);
     }
 
-    /**
-     * @param mixed $validationValue
-     */
+    
     private function processFieldRawCheck(
         string $entityType,
         string $type,

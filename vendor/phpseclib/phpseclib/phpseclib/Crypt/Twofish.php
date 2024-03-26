@@ -1,72 +1,22 @@
 <?php
 
-/**
- * Pure-PHP implementation of Twofish.
- *
- * Uses mcrypt, if available, and an internal implementation, otherwise.
- *
- * PHP version 5
- *
- * Useful resources are as follows:
- *
- *  - {@link http://en.wikipedia.org/wiki/Twofish Wikipedia description of Twofish}
- *
- * Here's a short example of how to use this library:
- * <code>
- * <?php
- *    include 'vendor/autoload.php';
- *
- *    $twofish = new \phpseclib3\Crypt\Twofish('ctr');
- *
- *    $twofish->setKey('12345678901234567890123456789012');
- *
- *    $plaintext = str_repeat('a', 1024);
- *
- *    echo $twofish->decrypt($twofish->encrypt($plaintext));
- * ?>
- * </code>
- *
- * @author    Jim Wigginton <terrafrost@php.net>
- * @author    Hans-Juergen Petrich <petrich@tronic-media.com>
- * @copyright 2007 Jim Wigginton
- * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
- * @link      http://phpseclib.sourceforge.net
- */
+
 
 namespace phpseclib3\Crypt;
 
 use phpseclib3\Crypt\Common\BlockCipher;
 use phpseclib3\Exception\BadModeException;
 
-/**
- * Pure-PHP implementation of Twofish.
- *
- * @author  Jim Wigginton <terrafrost@php.net>
- * @author  Hans-Juergen Petrich <petrich@tronic-media.com>
- */
+
 class Twofish extends BlockCipher
 {
-    /**
-     * The mcrypt specific name of the cipher
-     *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::cipher_name_mcrypt
-     * @var string
-     */
+    
     protected $cipher_name_mcrypt = 'twofish';
 
-    /**
-     * Optimizing value while CFB-encrypting
-     *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::cfb_init_len
-     * @var int
-     */
+    
     protected $cfb_init_len = 800;
 
-    /**
-     * Q-Table
-     *
-     * @var array
-     */
+    
     private static $q0 = [
         0xA9, 0x67, 0xB3, 0xE8, 0x04, 0xFD, 0xA3, 0x76,
         0x9A, 0x92, 0x80, 0x78, 0xE4, 0xDD, 0xD1, 0x38,
@@ -102,11 +52,7 @@ class Twofish extends BlockCipher
         0x6F, 0x9D, 0x36, 0x42, 0x4A, 0x5E, 0xC1, 0xE0
     ];
 
-    /**
-     * Q-Table
-     *
-     * @var array
-     */
+    
     private static $q1 = [
         0x75, 0xF3, 0xC6, 0xF4, 0xDB, 0x7B, 0xFB, 0xC8,
         0x4A, 0xD3, 0xE6, 0x6B, 0x45, 0x7D, 0xE8, 0x4B,
@@ -142,11 +88,7 @@ class Twofish extends BlockCipher
         0x16, 0x25, 0x86, 0x56, 0x55, 0x09, 0xBE, 0x91
     ];
 
-    /**
-     * M-Table
-     *
-     * @var array
-     */
+    
     private static $m0 = [
         0xBCBC3275, 0xECEC21F3, 0x202043C6, 0xB3B3C9F4, 0xDADA03DB, 0x02028B7B, 0xE2E22BFB, 0x9E9EFAC8,
         0xC9C9EC4A, 0xD4D409D3, 0x18186BE6, 0x1E1E9F6B, 0x98980E45, 0xB2B2387D, 0xA6A6D2E8, 0x2626B74B,
@@ -182,11 +124,7 @@ class Twofish extends BlockCipher
         0xACACA716, 0xD0D07625, 0x50501386, 0xDCDCF756, 0x84841A55, 0xE1E15109, 0x7A7A25BE, 0x1313EF91
     ];
 
-    /**
-     * M-Table
-     *
-     * @var array
-     */
+    
     private static $m1 = [
         0xA9D93939, 0x67901717, 0xB3719C9C, 0xE8D2A6A6, 0x04050707, 0xFD985252, 0xA3658080, 0x76DFE4E4,
         0x9A084545, 0x92024B4B, 0x80A0E0E0, 0x78665A5A, 0xE4DDAFAF, 0xDDB06A6A, 0xD1BF6363, 0x38362A2A,
@@ -222,11 +160,7 @@ class Twofish extends BlockCipher
         0x6F9A1919, 0x9DE01A1A, 0x368F9494, 0x42E6C7C7, 0x4AECC9C9, 0x5EFDD2D2, 0xC1AB7F7F, 0xE0D8A8A8
     ];
 
-    /**
-     * M-Table
-     *
-     * @var array
-     */
+    
     private static $m2 = [
         0xBC75BC32, 0xECF3EC21, 0x20C62043, 0xB3F4B3C9, 0xDADBDA03, 0x027B028B, 0xE2FBE22B, 0x9EC89EFA,
         0xC94AC9EC, 0xD4D3D409, 0x18E6186B, 0x1E6B1E9F, 0x9845980E, 0xB27DB238, 0xA6E8A6D2, 0x264B26B7,
@@ -262,11 +196,7 @@ class Twofish extends BlockCipher
         0xAC16ACA7, 0xD025D076, 0x50865013, 0xDC56DCF7, 0x8455841A, 0xE109E151, 0x7ABE7A25, 0x139113EF
     ];
 
-    /**
-     * M-Table
-     *
-     * @var array
-     */
+    
     private static $m3 = [
         0xD939A9D9, 0x90176790, 0x719CB371, 0xD2A6E8D2, 0x05070405, 0x9852FD98, 0x6580A365, 0xDFE476DF,
         0x08459A08, 0x024B9202, 0xA0E080A0, 0x665A7866, 0xDDAFE4DD, 0xB06ADDB0, 0xBF63D1BF, 0x362A3836,
@@ -302,62 +232,28 @@ class Twofish extends BlockCipher
         0x9A196F9A, 0xE01A9DE0, 0x8F94368F, 0xE6C742E6, 0xECC94AEC, 0xFDD25EFD, 0xAB7FC1AB, 0xD8A8E0D8
     ];
 
-    /**
-     * The Key Schedule Array
-     *
-     * @var array
-     */
+    
     private $K = [];
 
-    /**
-     * The Key depended S-Table 0
-     *
-     * @var array
-     */
+    
     private $S0 = [];
 
-    /**
-     * The Key depended S-Table 1
-     *
-     * @var array
-     */
+    
     private $S1 = [];
 
-    /**
-     * The Key depended S-Table 2
-     *
-     * @var array
-     */
+    
     private $S2 = [];
 
-    /**
-     * The Key depended S-Table 3
-     *
-     * @var array
-     */
+    
     private $S3 = [];
 
-    /**
-     * Holds the last used key
-     *
-     * @var array
-     */
+    
     private $kl;
 
-    /**
-     * The Key Length (in bytes)
-     *
-     * @see Crypt_Twofish::setKeyLength()
-     * @var int
-     */
+    
     protected $key_length = 16;
 
-    /**
-     * Default Constructor.
-     *
-     * @param string $mode
-     * @throws BadModeException if an invalid / unsupported mode is provided
-     */
+    
     public function __construct($mode)
     {
         parent::__construct($mode);
@@ -367,9 +263,7 @@ class Twofish extends BlockCipher
         }
     }
 
-    /**
-     * Initialize Static Variables
-     */
+    
     protected static function initialize_static_variables()
     {
         if (is_float(self::$m3[0])) {
@@ -384,13 +278,7 @@ class Twofish extends BlockCipher
         parent::initialize_static_variables();
     }
 
-    /**
-     * Sets the key length.
-     *
-     * Valid key lengths are 128, 192 or 256 bits
-     *
-     * @param int $length
-     */
+    
     public function setKeyLength($length)
     {
         switch ($length) {
@@ -405,15 +293,7 @@ class Twofish extends BlockCipher
         parent::setKeyLength($length);
     }
 
-    /**
-     * Sets the key.
-     *
-     * Rijndael supports five different key lengths
-     *
-     * @see setKeyLength()
-     * @param string $key
-     * @throws \LengthException if the key length isn't supported
-     */
+    
     public function setKey($key)
     {
         switch (strlen($key)) {
@@ -428,20 +308,16 @@ class Twofish extends BlockCipher
         parent::setKey($key);
     }
 
-    /**
-     * Setup the key (expansion)
-     *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::_setupKey()
-     */
+    
     protected function setupKey()
     {
         if (isset($this->kl['key']) && $this->key === $this->kl['key']) {
-            // already expanded
+            
             return;
         }
         $this->kl = ['key' => $this->key];
 
-        /* Key expanding and generating the key-depended s-boxes */
+        
         $le_longs = unpack('V*', $this->key);
         $key = unpack('C*', $this->key);
         $m0 = self::$m0;
@@ -505,7 +381,7 @@ class Twofish extends BlockCipher
                     $S3[$i] = $m3[$q1[$q1[$q0[$i] ^ $sb] ^ $s7] ^ $s3];
                 }
                 break;
-            default: // 32
+            default: 
                 list($sf, $se, $sd, $sc) = $this->mdsrem($le_longs[1], $le_longs[2]);
                 list($sb, $sa, $s9, $s8) = $this->mdsrem($le_longs[3], $le_longs[4]);
                 list($s7, $s6, $s5, $s4) = $this->mdsrem($le_longs[5], $le_longs[6]);
@@ -540,43 +416,37 @@ class Twofish extends BlockCipher
         $this->S3 = $S3;
     }
 
-    /**
-     * _mdsrem function using by the twofish cipher algorithm
-     *
-     * @param string $A
-     * @param string $B
-     * @return array
-     */
+    
     private function mdsrem($A, $B)
     {
-        // No gain by unrolling this loop.
+        
         for ($i = 0; $i < 8; ++$i) {
-            // Get most significant coefficient.
+            
             $t = 0xff & ($B >> 24);
 
-            // Shift the others up.
+            
             $B = ($B << 8) | (0xff & ($A >> 24));
             $A <<= 8;
 
             $u = $t << 1;
 
-            // Subtract the modular polynomial on overflow.
+            
             if ($t & 0x80) {
                 $u ^= 0x14d;
             }
 
-            // Remove t * (a * x^2 + 1).
+            
             $B ^= $t ^ ($u << 16);
 
-            // Form u = a*t + t/a = t*(a + 1/a).
+            
             $u ^= 0x7fffffff & ($t >> 1);
 
-            // Add the modular polynomial on underflow.
+            
             if ($t & 0x01) {
                 $u ^= 0xa6 ;
             }
 
-            // Remove t * (a + 1/a) * (x^3 + x).
+            
             $B ^= ($u << 24) | ($u << 8);
         }
 
@@ -587,12 +457,7 @@ class Twofish extends BlockCipher
             0xff & $B];
     }
 
-    /**
-     * Encrypts a block
-     *
-     * @param string $in
-     * @return string
-     */
+    
     protected function encryptBlock($in)
     {
         $S0 = $this->S0;
@@ -634,20 +499,15 @@ class Twofish extends BlockCipher
             $R1 = ((($R1 >> 31) & 1) | ($R1 << 1)) ^ self::safe_intval($t0 + ($t1 << 1) + $K[++$ki]);
         }
 
-        // @codingStandardsIgnoreStart
+        
         return pack("V4", $K[4] ^ $R2,
                           $K[5] ^ $R3,
                           $K[6] ^ $R0,
                           $K[7] ^ $R1);
-        // @codingStandardsIgnoreEnd
+        
     }
 
-    /**
-     * Decrypts a block
-     *
-     * @param string $in
-     * @return string
-     */
+    
     protected function decryptBlock($in)
     {
         $S0 = $this->S0;
@@ -689,19 +549,15 @@ class Twofish extends BlockCipher
             $R0 = ($R0 >> 31 & 0x1 | $R0 << 1) ^ self::safe_intval($t0 + $t1 + $K[--$ki]);
         }
 
-        // @codingStandardsIgnoreStart
+        
         return pack("V4", $K[0] ^ $R2,
                           $K[1] ^ $R3,
                           $K[2] ^ $R0,
                           $K[3] ^ $R1);
-        // @codingStandardsIgnoreEnd
+        
     }
 
-    /**
-     * Setup the performance-optimized function for de/encrypt()
-     *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::_setupInlineCrypt()
-     */
+    
     protected function setupInlineCrypt()
     {
         $K = $this->K;
@@ -719,7 +575,7 @@ class Twofish extends BlockCipher
 
         $safeint = self::safe_intval_inline();
 
-        // Generating encrypt code:
+        
         $encrypt_block = '
             $in = unpack("V4", $in);
             $R0 = ' . $K[0] . ' ^ $in[1];
@@ -761,7 +617,7 @@ class Twofish extends BlockCipher
                              ' . $K[7] . ' ^ $R1);
         ';
 
-        // Generating decrypt code:
+        
         $decrypt_block = '
             $in = unpack("V4", $in);
             $R0 = ' . $K[4] . ' ^ $in[1];

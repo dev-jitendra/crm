@@ -5,38 +5,20 @@ namespace AsyncAws\S3\ValueObject;
 use AsyncAws\Core\Exception\InvalidArgument;
 use AsyncAws\S3\Enum\Event;
 
-/**
- * A container for specifying the configuration for publication of messages to an Amazon Simple Notification Service
- * (Amazon SNS) topic when Amazon S3 detects specified events.
- */
+
 final class TopicConfiguration
 {
     private $id;
 
-    /**
-     * The Amazon Resource Name (ARN) of the Amazon SNS topic to which Amazon S3 publishes a message when it detects events
-     * of the specified type.
-     */
+    
     private $topicArn;
 
-    /**
-     * The Amazon S3 bucket event about which to send notifications. For more information, see Supported Event Types in the
-     * *Amazon Simple Storage Service Developer Guide*.
-     *
-     * @see https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html
-     */
+    
     private $events;
 
     private $filter;
 
-    /**
-     * @param array{
-     *   Id?: null|string,
-     *   TopicArn: string,
-     *   Events: list<Event::*>,
-     *   Filter?: null|NotificationConfigurationFilter|array,
-     * } $input
-     */
+    
     public function __construct(array $input)
     {
         $this->id = $input['Id'] ?? null;
@@ -50,9 +32,7 @@ final class TopicConfiguration
         return $input instanceof self ? $input : new self($input);
     }
 
-    /**
-     * @return list<Event::*>
-     */
+    
     public function getEvents(): array
     {
         return $this->events ?? [];
@@ -73,9 +53,7 @@ final class TopicConfiguration
         return $this->topicArn;
     }
 
-    /**
-     * @internal
-     */
+    
     public function requestBody(\DomElement $node, \DomDocument $document): void
     {
         if (null !== $v = $this->id) {

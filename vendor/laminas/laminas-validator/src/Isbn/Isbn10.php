@@ -4,22 +4,14 @@ namespace Laminas\Validator\Isbn;
 
 class Isbn10
 {
-    /**
-     * @param string $value
-     * @return int|string
-     */
+    
     public function getChecksum($value)
     {
         $sum = $this->sum($value);
         return $this->checksum($sum);
     }
 
-    /**
-     * Calculate the value sum.
-     *
-     * @param string $value
-     * @return int
-     */
+    
     private function sum($value)
     {
         $sum = 0;
@@ -31,12 +23,7 @@ class Isbn10
         return $sum;
     }
 
-    /**
-     * Calculate the checksum for the value's sum.
-     *
-     * @param int $sum
-     * @return int|string
-     */
+    
     private function checksum($sum)
     {
         $checksum = 11 - ($sum % 11);

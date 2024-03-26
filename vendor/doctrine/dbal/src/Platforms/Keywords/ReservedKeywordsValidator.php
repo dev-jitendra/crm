@@ -15,38 +15,34 @@ use function count;
 use function implode;
 use function str_replace;
 
-/** @deprecated Use database documentation instead. */
+
 class ReservedKeywordsValidator implements Visitor
 {
-    /** @var KeywordList[] */
+    
     private array $keywordLists;
 
-    /** @var string[] */
+    
     private array $violations = [];
 
-    /** @param KeywordList[] $keywordLists */
+    
     public function __construct(array $keywordLists)
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5431',
+            'https:
             'ReservedKeywordsValidator is deprecated. Use database documentation instead.',
         );
 
         $this->keywordLists = $keywordLists;
     }
 
-    /** @return string[] */
+    
     public function getViolations()
     {
         return $this->violations;
     }
 
-    /**
-     * @param string $word
-     *
-     * @return string[]
-     */
+    
     private function isReservedWord($word): array
     {
         if ($word[0] === '`') {
@@ -65,10 +61,7 @@ class ReservedKeywordsValidator implements Visitor
         return $keywordLists;
     }
 
-    /**
-     * @param string   $asset
-     * @param string[] $violatedPlatforms
-     */
+    
     private function addViolation($asset, $violatedPlatforms): void
     {
         if (count($violatedPlatforms) === 0) {
@@ -78,9 +71,7 @@ class ReservedKeywordsValidator implements Visitor
         $this->violations[] = $asset . ' keyword violations: ' . implode(', ', $violatedPlatforms);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function acceptColumn(Table $table, Column $column)
     {
         $this->addViolation(
@@ -89,37 +80,27 @@ class ReservedKeywordsValidator implements Visitor
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function acceptForeignKey(Table $localTable, ForeignKeyConstraint $fkConstraint)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function acceptIndex(Table $table, Index $index)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function acceptSchema(Schema $schema)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function acceptSequence(Sequence $sequence)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function acceptTable(Table $table)
     {
         $this->addViolation(

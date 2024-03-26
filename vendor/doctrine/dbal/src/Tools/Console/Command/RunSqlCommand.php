@@ -20,10 +20,7 @@ use function is_string;
 use function sprintf;
 use function stripos;
 
-/**
- * Task for executing arbitrary SQL that can come from a file or directly from
- * the command line.
- */
+
 class RunSqlCommand extends Command
 {
     private ConnectionProvider $connectionProvider;
@@ -35,7 +32,7 @@ class RunSqlCommand extends Command
         $this->connectionProvider = $connectionProvider;
     }
 
-    /** @return void */
+    
     protected function configure()
     {
         $this
@@ -55,13 +52,7 @@ outputs the results:
 EOT);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return int
-     *
-     * @throws Exception
-     */
+    
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $conn = $this->getConnection($input);
@@ -103,7 +94,7 @@ EOT);
         return $this->connectionProvider->getDefaultConnection();
     }
 
-    /** @throws Exception */
+    
     private function runQuery(SymfonyStyle $io, Connection $conn, string $sql): void
     {
         $resultSet = $conn->fetchAllAssociative($sql);
@@ -116,7 +107,7 @@ EOT);
         $io->table(array_keys($resultSet[0]), $resultSet);
     }
 
-    /** @throws Exception */
+    
     private function runStatement(SymfonyStyle $io, Connection $conn, string $sql): void
     {
         $io->success(sprintf('%d rows affected.', $conn->executeStatement($sql)));

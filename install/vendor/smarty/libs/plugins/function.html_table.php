@@ -1,52 +1,7 @@
 <?php
-/**
- * Smarty plugin
- *
- * @package Smarty
- * @subpackage PluginsFunction
- */
 
-/**
- * Smarty {html_table} function plugin
- *
- * Type:     function<br>
- * Name:     html_table<br>
- * Date:     Feb 17, 2003<br>
- * Purpose:  make an html table from an array of data<br>
- * Params:
- * <pre>
- * - loop       - array to loop through
- * - cols       - number of columns, comma separated list of column names
- *                or array of column names
- * - rows       - number of rows
- * - table_attr - table attributes
- * - th_attr    - table heading attributes (arrays are cycled)
- * - tr_attr    - table row attributes (arrays are cycled)
- * - td_attr    - table cell attributes (arrays are cycled)
- * - trailpad   - value to pad trailing cells with
- * - caption    - text for caption element
- * - vdir       - vertical direction (default: "down", means top-to-bottom)
- * - hdir       - horizontal direction (default: "right", means left-to-right)
- * - inner      - inner loop (default "cols": print $loop line by line,
- *                $loop will be printed column by column otherwise)
- * </pre>
- * Examples:
- * <pre>
- * {table loop=$data}
- * {table loop=$data cols=4 tr_attr='"bgcolor=red"'}
- * {table loop=$data cols="first,second,third" tr_attr=$colors}
- * </pre>
- *
- * @author Monte Ohrt <monte at ohrt dot com>
- * @author credit to Messju Mohr <messju at lammfellpuschen dot de>
- * @author credit to boots <boots dot smarty at yahoo dot com>
- * @version 1.1
- * @link http://www.smarty.net/manual/en/language.function.html.table.php {html_table}
- *          (Smarty online manual)
- * @param array                    $params   parameters
- * @param Smarty_Internal_Template $template template object
- * @return string
- */
+
+
 function smarty_function_html_table($params, $template)
 {
     $table_attr = 'border="1"';
@@ -111,11 +66,11 @@ function smarty_function_html_table($params, $template)
 
     $loop_count = count($loop);
     if (empty($params['rows'])) {
-        /* no rows specified */
+        
         $rows = ceil($loop_count / $cols_count);
     } elseif (empty($params['cols'])) {
         if (!empty($params['rows'])) {
-            /* no cols specified, but rows */
+            
             $cols_count = ceil($loop_count / $rows);
         }
     }
@@ -146,7 +101,7 @@ function smarty_function_html_table($params, $template)
         for ($c = 0; $c < $cols_count; $c++) {
             $x = ($hdir == 'right') ? $rx + $c : $rx + $cols_count-1 - $c;
             if ($inner != 'cols') {
-                /* shuffle x to loop over rows*/
+                
                 $x = floor($x / $cols_count) + ($x % $cols_count) * $rows;
             }
 

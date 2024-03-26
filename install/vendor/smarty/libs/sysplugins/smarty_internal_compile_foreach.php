@@ -1,56 +1,21 @@
 <?php
-/**
- * Smarty Internal Plugin Compile Foreach
- *
- * Compiles the {foreach} {foreachelse} {/foreach} tags
- *
- * @package Smarty
- * @subpackage Compiler
- * @author Uwe Tews
- */
 
-/**
- * Smarty Internal Plugin Compile Foreach Class
- *
- * @package Smarty
- * @subpackage Compiler
- */
+
+
 class Smarty_Internal_Compile_Foreach extends Smarty_Internal_CompileBase
 {
-    /**
-     * Attribute definition: Overwrites base class.
-     *
-     * @var array
-     * @see Smarty_Internal_CompileBase
-     */
+    
     public $required_attributes = array('from', 'item');
-    /**
-     * Attribute definition: Overwrites base class.
-     *
-     * @var array
-     * @see Smarty_Internal_CompileBase
-     */
+    
     public $optional_attributes = array('name', 'key');
-    /**
-     * Attribute definition: Overwrites base class.
-     *
-     * @var array
-     * @see Smarty_Internal_CompileBase
-     */
+    
     public $shorttag_order = array('from','item','key','name');
 
-    /**
-     * Compiles code for the {foreach} tag
-     *
-     * @param  array  $args      array with attributes from parser
-     * @param  object $compiler  compiler object
-     * @param  array  $parameter array with compilation parameter
-     * @return string compiled code
-     */
+    
     public function compile($args, $compiler, $parameter)
     {
         $tpl = $compiler->template;
-        // check and get attributes
+        
         $_attr = $this->getAttributes($compiler, $args);
 
         $from = $_attr['from'];
@@ -66,7 +31,7 @@ class Smarty_Internal_Compile_Foreach extends Smarty_Internal_CompileBase
         }
 
         $this->openTag($compiler, 'foreach', array('foreach', $compiler->nocache, $item, $key));
-        // maybe nocache because of nocache variables
+        
         $compiler->nocache = $compiler->nocache | $compiler->tag_nocache;
 
         if (isset($_attr['name'])) {
@@ -78,7 +43,7 @@ class Smarty_Internal_Compile_Foreach extends Smarty_Internal_CompileBase
             $has_name = false;
         }
         $ItemVarName = '$' . trim($item, '\'"') . '@';
-        // evaluates which Smarty variables and properties have to be computed
+        
         if ($has_name) {
             $usesSmartyFirst = strpos($tpl->source->content, $SmartyVarName . 'first') !== false;
             $usesSmartyLast = strpos($tpl->source->content, $SmartyVarName . 'last') !== false;
@@ -99,7 +64,7 @@ class Smarty_Internal_Compile_Foreach extends Smarty_Internal_CompileBase
         $usesPropIteration = $usesPropLast || strpos($tpl->source->content, $ItemVarName . 'iteration') !== false;
         $usesPropShow = strpos($tpl->source->content, $ItemVarName . 'show') !== false;
         $usesPropTotal = $usesSmartyTotal || $usesSmartyShow || $usesPropShow || $usesPropLast || strpos($tpl->source->content, $ItemVarName . 'total') !== false;
-        // generate output code
+        
         $output = "<?php ";
         $output .= " \$_smarty_tpl->tpl_vars[$item] = new Smarty_Variable; \$_smarty_tpl->tpl_vars[$item]->_loop = false;\n";
         if ($key != null) {
@@ -168,25 +133,13 @@ class Smarty_Internal_Compile_Foreach extends Smarty_Internal_CompileBase
     }
 }
 
-/**
- * Smarty Internal Plugin Compile Foreachelse Class
- *
- * @package Smarty
- * @subpackage Compiler
- */
+
 class Smarty_Internal_Compile_Foreachelse extends Smarty_Internal_CompileBase
 {
-    /**
-     * Compiles code for the {foreachelse} tag
-     *
-     * @param  array  $args      array with attributes from parser
-     * @param  object $compiler  compiler object
-     * @param  array  $parameter array with compilation parameter
-     * @return string compiled code
-     */
+    
     public function compile($args, $compiler, $parameter)
     {
-        // check and get attributes
+        
         $_attr = $this->getAttributes($compiler, $args);
 
         list($openTag, $nocache, $item, $key) = $this->closeTag($compiler, array('foreach'));
@@ -197,27 +150,15 @@ class Smarty_Internal_Compile_Foreachelse extends Smarty_Internal_CompileBase
 
 }
 
-/**
- * Smarty Internal Plugin Compile Foreachclose Class
- *
- * @package Smarty
- * @subpackage Compiler
- */
+
 class Smarty_Internal_Compile_Foreachclose extends Smarty_Internal_CompileBase
 {
-    /**
-     * Compiles code for the {/foreach} tag
-     *
-     * @param  array  $args      array with attributes from parser
-     * @param  object $compiler  compiler object
-     * @param  array  $parameter array with compilation parameter
-     * @return string compiled code
-     */
+    
     public function compile($args, $compiler, $parameter)
     {
-        // check and get attributes
+        
         $_attr = $this->getAttributes($compiler, $args);
-        // must endblock be nocache?
+        
         if ($compiler->nocache) {
             $compiler->tag_nocache = true;
         }

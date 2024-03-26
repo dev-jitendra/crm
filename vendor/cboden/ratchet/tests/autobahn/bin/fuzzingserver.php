@@ -25,9 +25,9 @@ class BinaryEcho implements \Ratchet\WebSocket\MessageComponentInterface {
     $sock = new React\Socket\Server('0.0.0.0:' . $port, $loop);
 
     $wsServer = new Ratchet\WebSocket\WsServer(new BinaryEcho);
-    // This is enabled to test https://github.com/ratchetphp/Ratchet/issues/430
-    // The time is left at 10 minutes so that it will not try to every ping anything
-    // This causes the Ratchet server to crash on test 2.7
+    
+    
+    
     $wsServer->enableKeepAlive($loop, 600);
 
     $app = new Ratchet\Http\HttpServer($wsServer);

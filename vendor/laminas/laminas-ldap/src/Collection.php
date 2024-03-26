@@ -8,33 +8,16 @@ use ReturnTypeWillChange;
 
 use function array_key_exists;
 
-/**
- * Laminas\Ldap\Collection wraps a list of LDAP entries.
- *
- * @template TItem
- * @template-implements Iterator<int, TItem>
- */
+
 class Collection implements Iterator, Countable
 {
-    /**
-     * Iterator
-     *
-     * @var Collection\DefaultIterator
-     */
+    
     protected $iterator;
 
-    /**
-     * Current item number
-     *
-     * @var int
-     */
+    
     protected $current = -1;
 
-    /**
-     * Container for item caching to speed up multiple iterations
-     *
-     * @var array<int, TItem>
-     */
+    
     protected $cache = [];
 
     public function __construct(Collection\DefaultIterator $iterator)
@@ -47,21 +30,13 @@ class Collection implements Iterator, Countable
         $this->close();
     }
 
-    /**
-     * Closes the current result set
-     *
-     * @return bool
-     */
+    
     public function close()
     {
         return $this->iterator->close();
     }
 
-    /**
-     * Get all entries as an array
-     *
-     * @return list<TItem>
-     */
+    
     public function toArray()
     {
         $data = [];
@@ -71,11 +46,7 @@ class Collection implements Iterator, Countable
         return $data;
     }
 
-    /**
-     * Get first entry
-     *
-     * @return TItem|null
-     */
+    
     public function getFirst()
     {
         if ($this->count() < 1) {
@@ -86,27 +57,20 @@ class Collection implements Iterator, Countable
         return $this->current();
     }
 
-    /**
-     * Returns the underlying iterator
-     *
-     * @return Collection\DefaultIterator
-     */
+    
     public function getInnerIterator()
     {
         return $this->iterator;
     }
 
-    /** @inheritDoc */
+    
     #[ReturnTypeWillChange]
     public function count()
     {
         return $this->iterator->count();
     }
 
-    /**
-     * @inheritDoc
-     * @throws Exception\LdapException
-     */
+    
     #[ReturnTypeWillChange]
     public function current()
     {
@@ -129,23 +93,13 @@ class Collection implements Iterator, Countable
         return $this->cache[$this->current];
     }
 
-    /**
-     * Creates the data structure for the given entry data
-     *
-     * @param array $data
-     * @psalm-param array{dn: string, ...} $data
-     * @return TItem
-     */
+    
     protected function createEntry(array $data)
     {
         return $data;
     }
 
-    /**
-     * Return the current result item DN
-     *
-     * @return string|null
-     */
+    
     public function dn()
     {
         if ($this->count() > 0) {
@@ -157,7 +111,7 @@ class Collection implements Iterator, Countable
         return null;
     }
 
-    /** @inheritDoc */
+    
     #[ReturnTypeWillChange]
     public function key()
     {
@@ -170,10 +124,7 @@ class Collection implements Iterator, Countable
         return null;
     }
 
-    /**
-     * @inheritDoc
-     * @throws Exception\LdapException
-     */
+    
     #[ReturnTypeWillChange]
     public function next()
     {
@@ -181,10 +132,7 @@ class Collection implements Iterator, Countable
         $this->current++;
     }
 
-    /**
-     * @inheritDoc
-     * @throws Exception\LdapException
-     */
+    
     #[ReturnTypeWillChange]
     public function rewind()
     {
@@ -192,7 +140,7 @@ class Collection implements Iterator, Countable
         $this->current = 0;
     }
 
-    /** @inheritDoc */
+    
     #[ReturnTypeWillChange]
     public function valid()
     {

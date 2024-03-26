@@ -10,38 +10,16 @@ use AsyncAws\S3\ValueObject\NotificationConfiguration;
 
 final class PutBucketNotificationConfigurationRequest extends Input
 {
-    /**
-     * The name of the bucket.
-     *
-     * @required
-     *
-     * @var string|null
-     */
+    
     private $bucket;
 
-    /**
-     * @required
-     *
-     * @var NotificationConfiguration|null
-     */
+    
     private $notificationConfiguration;
 
-    /**
-     * The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail
-     * with an HTTP `403 (Access Denied)` error.
-     *
-     * @var string|null
-     */
+    
     private $expectedBucketOwner;
 
-    /**
-     * @param array{
-     *   Bucket?: string,
-     *   NotificationConfiguration?: NotificationConfiguration|array,
-     *   ExpectedBucketOwner?: string,
-     *   @region?: string,
-     * } $input
-     */
+    
     public function __construct(array $input = [])
     {
         $this->bucket = $input['Bucket'] ?? null;
@@ -70,21 +48,19 @@ final class PutBucketNotificationConfigurationRequest extends Input
         return $this->notificationConfiguration;
     }
 
-    /**
-     * @internal
-     */
+    
     public function request(): Request
     {
-        // Prepare headers
+        
         $headers = ['content-type' => 'application/xml'];
         if (null !== $this->expectedBucketOwner) {
             $headers['x-amz-expected-bucket-owner'] = $this->expectedBucketOwner;
         }
 
-        // Prepare query
+        
         $query = [];
 
-        // Prepare URI
+        
         $uri = [];
         if (null === $v = $this->bucket) {
             throw new InvalidArgument(sprintf('Missing parameter "Bucket" for "%s". The value cannot be null.', __CLASS__));
@@ -92,14 +68,14 @@ final class PutBucketNotificationConfigurationRequest extends Input
         $uri['Bucket'] = $v;
         $uriString = '/' . rawurlencode($uri['Bucket']) . '?notification';
 
-        // Prepare Body
+        
 
         $document = new \DOMDocument('1.0', 'UTF-8');
         $document->formatOutput = false;
         $this->requestBody($document, $document);
         $body = $document->hasChildNodes() ? $document->saveXML() : '';
 
-        // Return the Request
+        
         return new Request('PUT', $uriString, $query, $headers, StreamFactory::create($body));
     }
 
@@ -131,7 +107,7 @@ final class PutBucketNotificationConfigurationRequest extends Input
         }
 
         $node->appendChild($child = $document->createElement('NotificationConfiguration'));
-        $child->setAttribute('xmlns', 'http://s3.amazonaws.com/doc/2006-03-01/');
+        $child->setAttribute('xmlns', 'http:
         $v->requestBody($child, $document);
     }
 }

@@ -4,14 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 class MarkdownTestHelper
 {
-	/**
-	 * Takes an input directory containing .text and .(x)html files, and returns an array
-	 * of .text files and the corresponding output xhtml or html file. Can be used in a unit test data provider.
-	 *
-	 * @param string $directory Input directory
-	 *
-	 * @return array
-	 */
+	
 	public static function getInputOutputPaths($directory) {
 		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory));
 		$regexIterator = new RegexIterator(
@@ -22,7 +15,7 @@ class MarkdownTestHelper
 
 		$dataValues = [];
 
-		/** @var SplFileInfo $inputFile */
+		
 		foreach ($regexIterator as $inputFiles) {
 			foreach ($inputFiles as $inputMarkdownPath) {
 				$xhtml = true;
@@ -38,30 +31,22 @@ class MarkdownTestHelper
 		return $dataValues;
 	}
 
-	/**
-	 * Applies PHPUnit's assertSame after normalizing both strings (e.g. ignoring whitespace differences).
-	 * Uses logic found originally in MDTest.
-	 *
-	 * @param string $string1
-	 * @param string $string2
-	 * @param string $message Positive message to print when test fails (e.g. "String1 matches String2")
-	 * @param bool $xhtml
-	 */
+	
 	public static function assertSameNormalized($string1, $string2, $message, $xhtml = true) {
 
 		$t_result = $string1;
 		$t_output = $string2;
 
-		// DOMDocuments
+		
 		if ($xhtml) {
 			$document = new DOMDocument();
 			$doc_result = $document->loadXML('<!DOCTYPE html>' .
-				"<html xmlns='http://www.w3.org/1999/xhtml'>" .
+				"<html xmlns='http:
 				"<body>$t_result</body></html>");
 
 			$document2 = new DOMDocument();
 			$doc_output = $document2->loadXML('<!DOCTYPE html>' .
-				"<html xmlns='http://www.w3.org/1999/xhtml'>" .
+				"<html xmlns='http:
 				"<body>$t_output</body></html>");
 
 			if ($doc_result) {
@@ -78,8 +63,8 @@ class MarkdownTestHelper
 			}
 		} else {
 
-			// '@' suppressors used because some tests have invalid HTML (multiple elements with the same id attribute)
-			// Perhaps isolate to a separate test and remove this?
+			
+			
 
 			$document = new DOMDocument();
 			$doc_result = @$document->loadHTML($t_result);
@@ -111,15 +96,11 @@ class MarkdownTestHelper
 		$c_result = trim($c_result) . "\n";
 		$c_output = trim($c_output) . "\n";
 
-		// This will throw a test exception if the strings don't exactly match
+		
 		TestCase::assertSame($c_result, $c_output, $message);
 	}
 
-	/**
-	 * @param DOMElement $element Modifies this element by reference
-	 * @param bool $whitespace_preserve Preserve Whitespace
-	 * @return void
-	 */
+	
 	protected static function normalizeElementContent($element, $whitespace_preserve) {
 		#
 		# Normalize content of HTML DOM $element. The $whitespace_preserve
@@ -241,24 +222,22 @@ class MarkdownTestHelper
 		}
 	}
 
-	/**
-	 * @param DOMElement $element Modifies this element by reference
-	 */
+	
 	protected static function normalizeElementAttributes (DOMElement $element)
 	{
 		#
 		# Sort attributes by name.
 		#
-		// Gather the list of attributes as an array.
+		
 		$attr_list = array();
 		foreach ($element->attributes as $attr_node) {
 			$attr_list[$attr_node->name] = $attr_node;
 		}
 
-		// Sort attribute list by name.
+		
 		ksort($attr_list);
 
-		// Remove then put back each attribute following sort order.
+		
 		foreach ($attr_list as $attr_node) {
 			$element->removeAttributeNode($attr_node);
 			$element->setAttributeNode($attr_node);

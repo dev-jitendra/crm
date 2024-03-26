@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Routing\Loader;
 
@@ -16,12 +9,7 @@ use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Routing\RouteCollection;
 
-/**
- * AnnotationFileLoader loads routing information from annotations set
- * on a PHP class and its methods.
- *
- * @author Fabien Potencier <fabien@symfony.com>
- */
+
 class AnnotationFileLoader extends FileLoader
 {
     protected $loader;
@@ -37,11 +25,7 @@ class AnnotationFileLoader extends FileLoader
         $this->loader = $loader;
     }
 
-    /**
-     * Loads from annotations from a file.
-     *
-     * @throws \InvalidArgumentException When the file does not exist or its routes cannot be parsed
-     */
+    
     public function load(mixed $file, string $type = null): ?RouteCollection
     {
         $path = $this->locator->locate($file);
@@ -62,17 +46,13 @@ class AnnotationFileLoader extends FileLoader
         return $collection;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function supports(mixed $resource, string $type = null): bool
     {
         return \is_string($resource) && 'php' === pathinfo($resource, \PATHINFO_EXTENSION) && (!$type || 'annotation' === $type);
     }
 
-    /**
-     * Returns the full class name for the first class in the file.
-     */
+    
     protected function findClass(string $file): string|false
     {
         $class = false;
@@ -106,7 +86,7 @@ class AnnotationFileLoader extends FileLoader
             }
 
             if (\T_CLASS === $token[0]) {
-                // Skip usage of ::class constant and anonymous classes
+                
                 $skipClassToken = false;
                 for ($j = $i - 1; $j > 0; --$j) {
                     if (!isset($tokens[$j][1])) {

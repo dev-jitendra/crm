@@ -1,38 +1,10 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/record/detail-middle */
+
+
 
 import View from 'view';
 
-/**
- * A detail-middle record view.
- */
+
 class DetailMiddleRecordView extends View {
 
     init() {
@@ -47,11 +19,7 @@ class DetailMiddleRecordView extends View {
         };
     }
 
-    /**
-     * Show a panel.
-     *
-     * @param {string} name
-     */
+    
     showPanel(name) {
         if (this.recordHelper.getPanelStateParam(name, 'hiddenLocked')) {
             return;
@@ -62,9 +30,7 @@ class DetailMiddleRecordView extends View {
         this.recordHelper.setPanelStateParam(name, 'hidden', false);
     }
 
-    /**
-     * @param {string} name
-     */
+    
     showPanelInternal(name) {
         if (this.isRendered()) {
             this.$el.find('.panel[data-name="'+name+'"]').removeClass('hidden');
@@ -89,32 +55,21 @@ class DetailMiddleRecordView extends View {
         }
     }
 
-    /**
-     * Hide a panel.
-     *
-     * @param {string} name
-     */
+    
     hidePanel(name) {
         this.hidePanelInternal(name);
 
         this.recordHelper.setPanelStateParam(name, 'hidden', true);
     }
 
-    /**
-     * @public
-     * @param {string} name A name.
-     */
+    
     hidePanelInternal(name) {
         if (this.isRendered()) {
             this.$el.find('.panel[data-name="'+name+'"]').addClass('hidden');
         }
     }
 
-    /**
-     * Hide a field.
-     *
-     * @param {string} name A name.
-     */
+    
     hideField(name) {
         this.recordHelper.setFieldStateParam(name, 'hidden', true);
 
@@ -153,11 +108,7 @@ class DetailMiddleRecordView extends View {
         }
     }
 
-    /**
-     * Show a field.
-     *
-     * @param {string} name A name.
-     */
+    
     showField(name) {
         if (this.recordHelper.getFieldStateParam(name, 'hiddenLocked')) {
             return;
@@ -202,23 +153,17 @@ class DetailMiddleRecordView extends View {
         }
     }
 
-    /**
-     * @deprecated Use `getFieldViews`.
-     */
+    
     getFields() {
         return this.getFieldViews();
     }
 
-    /**
-     * Get field views.
-     *
-     * @return {Object.<string, module:views/fields/base>}
-     */
+    
     getFieldViews() {
         const fieldViews = {};
 
         for (const viewKey in this.nestedViews) {
-            // noinspection JSUnresolvedReference
+            
             const name = this.nestedViews[viewKey].name;
 
             fieldViews[name] = this.nestedViews[viewKey];
@@ -227,21 +172,12 @@ class DetailMiddleRecordView extends View {
         return fieldViews;
     }
 
-    /**
-     * Get a field view.
-     *
-     * @param {string} name A field name.
-     * @return {module:views/fields/base}
-     */
+    
     getFieldView(name) {
         return (this.getFieldViews() || {})[name];
     }
 
-    /**
-     * For backward compatibility.
-     *
-     * @todo Remove.
-     */
+    
     getView(name) {
         let view = super.getView(name);
 
@@ -253,5 +189,5 @@ class DetailMiddleRecordView extends View {
     }
 }
 
-// noinspection JSUnusedGlobalSymbols
+
 export default DetailMiddleRecordView;

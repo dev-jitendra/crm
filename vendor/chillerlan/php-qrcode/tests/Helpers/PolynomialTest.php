@@ -1,14 +1,5 @@
 <?php
-/**
- * Class PolynomialTest
- *
- * @filesource   PolynomialTest.php
- * @created      09.02.2016
- * @package      chillerlan\QRCodeTest\Helpers
- * @author       Smiley <smiley@chillerlan.net>
- * @copyright    2015 Smiley
- * @license      MIT
- */
+
 
 namespace chillerlan\QRCodeTest\Helpers;
 
@@ -16,9 +7,7 @@ use chillerlan\QRCode\Helpers\Polynomial;
 use chillerlan\QRCode\QRCodeException;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Polynomial coverage test
- */
+
 final class PolynomialTest extends TestCase{
 
 	protected Polynomial $polynomial;

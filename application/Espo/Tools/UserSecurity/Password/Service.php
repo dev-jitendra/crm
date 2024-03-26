@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\UserSecurity\Password;
 
@@ -61,20 +35,14 @@ class Service
         private AuthenticationMethodProvider $authenticationMethodProvider
     ) {}
 
-    /**
-     * Create and send a password recovery link in an email. Only for admin.
-     *
-     * @throws Forbidden
-     * @throws NotFound
-     * @throws Error
-     */
+    
     public function createAndSendPasswordRecovery(string $id): void
     {
         if (!$this->user->isAdmin()) {
             throw new Forbidden();
         }
 
-        /** @var ?User $user */
+        
         $user = $this->entityManager->getEntityById(User::ENTITY_TYPE, $id);
 
         if (!$user) {
@@ -96,17 +64,7 @@ class Service
         $this->recovery->createAndSendRequestForExistingUser($user);
     }
 
-    /**
-     * Change a password by a recovery request.
-     *
-     * @param string $requestId A request ID.
-     * @param string $password A new password.
-     *
-     * @return ?string A URL to suggest to a user.
-     * @throws Error
-     * @throws Forbidden
-     * @throws NotFound
-     */
+    
     public function changePasswordByRecovery(string $requestId, string $password): ?string
     {
         $request = $this->recovery->getRequest($requestId);
@@ -117,35 +75,19 @@ class Service
         return $request->getUrl();
     }
 
-    /**
-     * Change a password with a current password check.
-     *
-     * @throws Forbidden
-     * @throws NotFound
-     * @throws Error
-     */
+    
     public function changePasswordWithCheck(string $userId, string $password, string $currentPassword): void
     {
         $this->changePasswordInternal($userId, $password, true, $currentPassword);
     }
 
-    /**
-     * Change a password.
-     *
-     * @throws Forbidden
-     * @throws NotFound
-     * @throws Error
-     */
+    
     private function changePassword(string $userId, string $password): void
     {
         $this->changePasswordInternal($userId, $password);
     }
 
-    /**
-     * @throws Forbidden
-     * @throws Error
-     * @throws NotFound
-     */
+    
     private function changePasswordInternal(
         string $userId,
         string $password,
@@ -153,7 +95,7 @@ class Service
         ?string $currentPassword = null
     ): void {
 
-        /** @var ?User $user */
+        
         $user = $this->entityManager->getEntityById(User::ENTITY_TYPE, $userId);
 
         if (!$user) {
@@ -211,12 +153,7 @@ class Service
         $this->entityManager->saveEntity($user);
     }
 
-    /**
-     * Send access info for a new user.
-     *
-     * @throws Error
-     * @throws SendingError
-     */
+    
     public function sendAccessInfoForNewUser(User $user): void
     {
         $emailAddress = $user->getEmailAddress();
@@ -238,20 +175,14 @@ class Service
         $this->sender->sendAccessInfo($user, $request);
     }
 
-    /**
-     * Generate a new password and send it in an email. Only for admin.
-     *
-     * @throws Forbidden
-     * @throws NotFound
-     * @throws Error
-     */
+    
     public function generateAndSendNewPasswordForUser(string $id): void
     {
         if (!$this->user->isAdmin()) {
             throw new Forbidden();
         }
 
-        /** @var ?User $user */
+        
         $user = $this->serviceContainer
             ->get(User::ENTITY_TYPE)
             ->getEntity($id);

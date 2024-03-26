@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpClient;
 
@@ -19,11 +12,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Contracts\HttpClient\ResponseStreamInterface;
 use Symfony\Contracts\Service\ResetInterface;
 
-/**
- * Auto-configure the default options based on the requested URL.
- *
- * @author Anthony Martin <anthony.martin@sensiolabs.com>
- */
+
 class ScopingHttpClient implements HttpClientInterface, ResetInterface, LoggerAwareInterface
 {
     use HttpClientTrait;
@@ -54,9 +43,7 @@ class ScopingHttpClient implements HttpClientInterface, ResetInterface, LoggerAw
         return new self($client, [$regexp => $defaultOptions], $regexp);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function request(string $method, string $url, array $options = []): ResponseInterface
     {
         $e = null;
@@ -93,9 +80,7 @@ class ScopingHttpClient implements HttpClientInterface, ResetInterface, LoggerAw
         return $this->client->request($method, $url, $options);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function stream($responses, float $timeout = null): ResponseStreamInterface
     {
         return $this->client->stream($responses, $timeout);
@@ -108,9 +93,7 @@ class ScopingHttpClient implements HttpClientInterface, ResetInterface, LoggerAw
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function setLogger(LoggerInterface $logger): void
     {
         if ($this->client instanceof LoggerAwareInterface) {

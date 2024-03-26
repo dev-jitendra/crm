@@ -25,60 +25,46 @@ use function strpos;
 
 class DB2Platform extends AbstractPlatform
 {
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated
-     */
+    
     public function getCharMaxLength(): int
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/issues/3263',
+            'https:
             'DB2Platform::getCharMaxLength() is deprecated.',
         );
 
         return 254;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated
-     */
+    
     public function getBinaryMaxLength()
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/issues/3263',
+            'https:
             'DB2Platform::getBinaryMaxLength() is deprecated.',
         );
 
         return 32704;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated
-     */
+    
     public function getBinaryDefaultLength()
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/issues/3263',
+            'https:
             'Relying on the default binary column length is deprecated, specify the length explicitly.',
         );
 
         return 1;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getVarcharTypeDeclarationSQL(array $column)
     {
-        // for IBM DB2, the CHAR max length is less than VARCHAR default length
+        
         if (! isset($column['length']) && ! empty($column['fixed'])) {
             $column['length'] = $this->getCharMaxLength();
         }
@@ -86,18 +72,14 @@ class DB2Platform extends AbstractPlatform
         return parent::getVarcharTypeDeclarationSQL($column);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getBlobTypeDeclarationSQL(array $column)
     {
-        // todo blob(n) with $column['length'];
+        
         return 'BLOB(1M)';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     protected function initializeDoctrineTypeMappings()
     {
         $this->doctrineTypeMapping = [
@@ -119,36 +101,32 @@ class DB2Platform extends AbstractPlatform
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function isCommentedDoctrineType(Type $doctrineType)
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5058',
+            'https:
             '%s is deprecated and will be removed in Doctrine DBAL 4.0. Use Type::requiresSQLCommentHint() instead.',
             __METHOD__,
         );
 
         if ($doctrineType->getName() === Types::BOOLEAN) {
-            // We require a commented boolean type in order to distinguish between boolean and smallint
-            // as both (have to) map to the same native type.
+            
+            
             return true;
         }
 
         return parent::isCommentedDoctrineType($doctrineType);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected function getVarcharTypeDeclarationSQLSnippet($length, $fixed/*, $lengthOmitted = false*/)
+    
+    protected function getVarcharTypeDeclarationSQLSnippet($length, $fixed)
     {
         if ($length <= 0 || (func_num_args() > 2 && func_get_arg(2))) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/issues/3263',
+                'https:
                 'Relying on the default string column length on IBM DB2 is deprecated'
                     . ', specify the length explicitly.',
             );
@@ -158,15 +136,13 @@ class DB2Platform extends AbstractPlatform
                 : ($length > 0 ? 'VARCHAR(' . $length . ')' : 'VARCHAR(255)');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function getBinaryTypeDeclarationSQLSnippet($length, $fixed/*, $lengthOmitted = false*/)
+    
+    protected function getBinaryTypeDeclarationSQLSnippet($length, $fixed)
     {
         if ($length <= 0 || (func_num_args() > 2 && func_get_arg(2))) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/issues/3263',
+                'https:
                 'Relying on the default binary column length on IBM DB2 is deprecated'
                 . ', specify the length explicitly.',
             );
@@ -175,64 +151,50 @@ class DB2Platform extends AbstractPlatform
         return $this->getVarcharTypeDeclarationSQLSnippet($length, $fixed) . ' FOR BIT DATA';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getClobTypeDeclarationSQL(array $column)
     {
-        // todo clob(n) with $column['length'];
+        
         return 'CLOB(1M)';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getName()
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/issues/4749',
+            'https:
             'DB2Platform::getName() is deprecated. Identify platforms by their class.',
         );
 
         return 'db2';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getBooleanTypeDeclarationSQL(array $column)
     {
         return 'SMALLINT';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getIntegerTypeDeclarationSQL(array $column)
     {
         return 'INTEGER' . $this->_getCommonIntegerTypeDeclarationSQL($column);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getBigIntTypeDeclarationSQL(array $column)
     {
         return 'BIGINT' . $this->_getCommonIntegerTypeDeclarationSQL($column);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getSmallIntTypeDeclarationSQL(array $column)
     {
         return 'SMALLINT' . $this->_getCommonIntegerTypeDeclarationSQL($column);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     protected function _getCommonIntegerTypeDeclarationSQL(array $column)
     {
         $autoinc = '';
@@ -243,25 +205,19 @@ class DB2Platform extends AbstractPlatform
         return $autoinc;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getBitAndComparisonExpression($value1, $value2)
     {
         return 'BITAND(' . $value1 . ', ' . $value2 . ')';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getBitOrComparisonExpression($value1, $value2)
     {
         return 'BITOR(' . $value1 . ', ' . $value2 . ')';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function getDateArithmeticIntervalExpression($date, $operator, $interval, $unit)
     {
         switch ($unit) {
@@ -279,17 +235,13 @@ class DB2Platform extends AbstractPlatform
         return $date . ' ' . $operator . ' ' . $interval . ' ' . $unit;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getDateDiffExpression($date1, $date2)
     {
         return 'DAYS(' . $date1 . ') - DAYS(' . $date2 . ')';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getDateTimeTypeDeclarationSQL(array $column)
     {
         if (isset($column['version']) && $column['version'] === true) {
@@ -299,25 +251,19 @@ class DB2Platform extends AbstractPlatform
         return 'TIMESTAMP(0)';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getDateTypeDeclarationSQL(array $column)
     {
         return 'DATE';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getTimeTypeDeclarationSQL(array $column)
     {
         return 'TIME';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getTruncateTableSQL($tableName, $cascade = false)
     {
         $tableIdentifier = new Identifier($tableName);
@@ -325,23 +271,14 @@ class DB2Platform extends AbstractPlatform
         return 'TRUNCATE ' . $tableIdentifier->getQuotedName($this) . ' IMMEDIATE';
     }
 
-    /**
-     * @deprecated The SQL used for schema introspection is an implementation detail and should not be relied upon.
-     *
-     * This code fragment is originally from the Zend_Db_Adapter_Db2 class, but has been edited.
-     *
-     * @param string $table
-     * @param string $database
-     *
-     * @return string
-     */
+    
     public function getListTableColumnsSQL($table, $database = null)
     {
         $table = $this->quoteStringLiteral($table);
 
-        // We do the funky subquery and join syscat.columns.default this crazy way because
-        // as of db2 v10, the column is CLOB(64k) and the distinct operator won't allow a CLOB,
-        // it wants shorter stuff like a varchar.
+        
+        
+        
         return "
         SELECT
           cols.default,
@@ -384,31 +321,19 @@ class DB2Platform extends AbstractPlatform
         ';
     }
 
-    /**
-     * @deprecated The SQL used for schema introspection is an implementation detail and should not be relied upon.
-     *
-     * {@inheritDoc}
-     */
+    
     public function getListTablesSQL()
     {
         return "SELECT NAME FROM SYSIBM.SYSTABLES WHERE TYPE = 'T' AND CREATOR = CURRENT_USER";
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @internal The method should be only used from within the {@see AbstractSchemaManager} class hierarchy.
-     */
+    
     public function getListViewsSQL($database)
     {
         return 'SELECT NAME, TEXT FROM SYSIBM.SYSVIEWS';
     }
 
-    /**
-     * @deprecated The SQL used for schema introspection is an implementation detail and should not be relied upon.
-     *
-     * {@inheritDoc}
-     */
+    
     public function getListTableIndexesSQL($table, $database = null)
     {
         $table = $this->quoteStringLiteral($table);
@@ -430,11 +355,7 @@ class DB2Platform extends AbstractPlatform
                 ORDER BY idxcol.COLSEQ ASC';
     }
 
-    /**
-     * @deprecated The SQL used for schema introspection is an implementation detail and should not be relied upon.
-     *
-     * {@inheritDoc}
-     */
+    
     public function getListTableForeignKeysSQL($table)
     {
         $table = $this->quoteStringLiteral($table);
@@ -466,16 +387,12 @@ class DB2Platform extends AbstractPlatform
                 ORDER BY fkcol.COLSEQ ASC';
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @deprecated
-     */
+    
     public function supportsCreateDropDatabase()
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5513',
+            'https:
             '%s is deprecated.',
             __METHOD__,
         );
@@ -483,54 +400,38 @@ class DB2Platform extends AbstractPlatform
         return false;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @internal The method should be only used from within the {@see AbstractPlatform} class hierarchy.
-     */
+    
     public function supportsCommentOnStatement()
     {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getCurrentDateSQL()
     {
         return 'CURRENT DATE';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getCurrentTimeSQL()
     {
         return 'CURRENT TIME';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getCurrentTimestampSQL()
     {
         return 'CURRENT TIMESTAMP';
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @internal The method should be only used from within the {@see AbstractPlatform} class hierarchy.
-     */
+    
     public function getIndexDeclarationSQL($name, Index $index)
     {
-        // Index declaration in statements like CREATE TABLE is not supported.
+        
         throw Exception::notSupported(__METHOD__);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     protected function _getCreateTableSQL($name, array $columns, array $options = [])
     {
         $indexes = [];
@@ -549,9 +450,7 @@ class DB2Platform extends AbstractPlatform
         return $sqls;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getAlterTableSQL(TableDiff $diff)
     {
         $sql         = [];
@@ -569,7 +468,7 @@ class DB2Platform extends AbstractPlatform
             $columnDef = $column->toArray();
             $queryPart = 'ADD COLUMN ' . $this->getColumnDeclarationSQL($column->getQuotedName($this), $columnDef);
 
-            // Adding non-nullable columns to a table requires a default value to be specified.
+            
             if (
                 ! empty($columnDef['notnull']) &&
                 ! isset($columnDef['default']) &&
@@ -640,7 +539,7 @@ class DB2Platform extends AbstractPlatform
                 $sql[] = 'ALTER TABLE ' . $tableNameSQL . ' ' . implode(' ', $queryParts);
             }
 
-            // Some table alteration operations require a table reorganization.
+            
             if (count($diff->getDroppedColumns()) > 0 || count($diff->getModifiedColumns()) > 0) {
                 $sql[] = "CALL SYSPROC.ADMIN_CMD ('REORG TABLE " . $tableNameSQL . "')";
             }
@@ -652,7 +551,7 @@ class DB2Platform extends AbstractPlatform
             if ($newName !== false) {
                 Deprecation::trigger(
                     'doctrine/dbal',
-                    'https://github.com/doctrine/dbal/pull/5663',
+                    'https:
                     'Generation of "rename table" SQL using %s is deprecated. Use getRenameTableSQL() instead.',
                     __METHOD__,
                 );
@@ -674,9 +573,7 @@ class DB2Platform extends AbstractPlatform
         return array_merge($sql, $tableSql, $columnSql);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getRenameTableSQL(string $oldName, string $newName): array
     {
         return [
@@ -684,14 +581,7 @@ class DB2Platform extends AbstractPlatform
         ];
     }
 
-    /**
-     * Gathers the table alteration SQL for a given column diff.
-     *
-     * @param string     $table      The table to gather the SQL for.
-     * @param ColumnDiff $columnDiff The column diff to evaluate.
-     * @param string[]   $sql        The sequence of table alteration statements to fill.
-     * @param mixed[]    $queryParts The sequence of column alteration clauses to fill.
-     */
+    
     private function gatherAlterColumnSQL(
         string $table,
         ColumnDiff $columnDiff,
@@ -704,26 +594,22 @@ class DB2Platform extends AbstractPlatform
             return;
         }
 
-        // If we have a single column alteration, we can append the clause to the main query.
+        
         if (count($alterColumnClauses) === 1) {
             $queryParts[] = current($alterColumnClauses);
 
             return;
         }
 
-        // We have multiple alterations for the same column,
-        // so we need to trigger a complete ALTER TABLE statement
-        // for each ALTER COLUMN clause.
+        
+        
+        
         foreach ($alterColumnClauses as $alterColumnClause) {
             $sql[] = 'ALTER TABLE ' . $table . ' ' . $alterColumnClause;
         }
     }
 
-    /**
-     * Returns the ALTER COLUMN SQL clauses for altering a column described by the given column diff.
-     *
-     * @return string[]
-     */
+    
     private function getAlterColumnClausesSQL(ColumnDiff $columnDiff): array
     {
         $newColumn = $columnDiff->getNewColumn()->toArray();
@@ -765,9 +651,7 @@ class DB2Platform extends AbstractPlatform
         return $clauses;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     protected function getPreAlterTableIndexForeignKeySQL(TableDiff $diff)
     {
         $sql = [];
@@ -800,9 +684,7 @@ class DB2Platform extends AbstractPlatform
         return array_merge($sql, parent::getPreAlterTableIndexForeignKeySQL($diff));
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function getRenameIndexSQL($oldIndexName, Index $index, $tableName)
     {
         if (strpos($tableName, '.') !== false) {
@@ -813,11 +695,7 @@ class DB2Platform extends AbstractPlatform
         return ['RENAME INDEX ' . $oldIndexName . ' TO ' . $index->getQuotedName($this)];
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @internal The method should be only used from within the {@see AbstractPlatform} class hierarchy.
-     */
+    
     public function getDefaultValueDeclarationSQL($column)
     {
         if (! empty($column['autoincrement'])) {
@@ -833,33 +711,25 @@ class DB2Platform extends AbstractPlatform
         return parent::getDefaultValueDeclarationSQL($column);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getEmptyIdentityInsertSQL($quotedTableName, $quotedIdentifierColumnName)
     {
         return 'INSERT INTO ' . $quotedTableName . ' (' . $quotedIdentifierColumnName . ') VALUES (DEFAULT)';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getCreateTemporaryTableSnippetSQL()
     {
         return 'DECLARE GLOBAL TEMPORARY TABLE';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getTemporaryTableName($tableName)
     {
         return 'SESSION.' . $tableName;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     protected function doModifyLimitQuery($query, $limit, $offset)
     {
         $where = [];
@@ -876,7 +746,7 @@ class DB2Platform extends AbstractPlatform
             return $query;
         }
 
-        // Todo OVER() needs ORDER BY data!
+        
         return sprintf(
             'SELECT db22.* FROM (SELECT db21.*, ROW_NUMBER() OVER() AS DC_ROWNUM FROM (%s) db21) db22 WHERE %s',
             $query,
@@ -884,9 +754,7 @@ class DB2Platform extends AbstractPlatform
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getLocateExpression($str, $substr, $startPos = false)
     {
         if ($startPos === false) {
@@ -896,9 +764,7 @@ class DB2Platform extends AbstractPlatform
         return 'LOCATE(' . $substr . ', ' . $str . ', ' . $startPos . ')';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getSubstringExpression($string, $start, $length = null)
     {
         if ($length === null) {
@@ -908,9 +774,7 @@ class DB2Platform extends AbstractPlatform
         return 'SUBSTR(' . $string . ', ' . $start . ', ' . $length . ')';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getLengthExpression($column)
     {
         return 'LENGTH(' . $column . ', CODEUNITS32)';
@@ -921,41 +785,31 @@ class DB2Platform extends AbstractPlatform
         return 'CURRENT_USER';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function supportsIdentityColumns()
     {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @deprecated
-     */
+    
     public function prefersIdentityColumns()
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/1519',
+            'https:
             'DB2Platform::prefersIdentityColumns() is deprecated.',
         );
 
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getForUpdateSQL()
     {
         return ' WITH RR USE AND KEEP UPDATE LOCKS';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getDummySelectSQL()
     {
         $expression = func_num_args() > 0 ? func_get_arg(0) : '1';
@@ -963,28 +817,18 @@ class DB2Platform extends AbstractPlatform
         return sprintf('SELECT %s FROM sysibm.sysdummy1', $expression);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * DB2 supports savepoints, but they work semantically different than on other vendor platforms.
-     *
-     * TODO: We have to investigate how to get DB2 up and running with savepoints.
-     */
+    
     public function supportsSavepoints()
     {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @deprecated Implement {@see createReservedKeywordsList()} instead.
-     */
+    
     protected function getReservedKeywordsClass()
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/issues/4510',
+            'https:
             'DB2Platform::getReservedKeywordsClass() is deprecated,'
                 . ' use DB2Platform::createReservedKeywordsList() instead.',
         );
@@ -992,7 +836,7 @@ class DB2Platform extends AbstractPlatform
         return Keywords\DB2Keywords::class;
     }
 
-    /** @deprecated The SQL used for schema introspection is an implementation detail and should not be relied upon. */
+    
     public function getListTableCommentsSQL(string $table): string
     {
         return sprintf(

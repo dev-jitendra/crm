@@ -6,10 +6,7 @@ use Picqer\Barcode\Barcode;
 use Picqer\Barcode\BarcodeBar;
 use Picqer\Barcode\Exceptions\InvalidCharacterException;
 
-/*
- * CODE11 barcodes.
- * Used primarily for labeling telecommunications equipment
- */
+
 
 class TypeCode11 implements TypeInterface
 {

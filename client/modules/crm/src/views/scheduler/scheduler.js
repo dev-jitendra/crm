@@ -1,30 +1,4 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 import View from 'view';
 import {DataSet} from 'vis-data';
@@ -34,7 +8,7 @@ import $ from 'jquery';
 
 class SchedulerView extends View {
 
-    // language=Handlebars
+    
     templateContent = `
         <div class="timeline"></div>
         <link href="{{basePath}}client/modules/crm/css/vis.css" rel="stylesheet">
@@ -181,13 +155,13 @@ class SchedulerView extends View {
         this.fetch(this.start, this.end, eventList => {
             let itemsDataSet = new DataSet(eventList);
 
-            // noinspection SpellCheckingInspection
+            
             this.timeline = new Timeline($timeline.get(0), itemsDataSet, this.groupsDataSet, {
                 dataAttributes: 'all',
                 start: this.start.toDate(),
                 end: this.end.toDate(),
                 rollingMode: {
-                    follow: false, // fixes slow render
+                    follow: false, 
                 },
                 moment: date => {
                     let m = moment(date);
@@ -232,7 +206,7 @@ class SchedulerView extends View {
 
             $timeline.css('min-height', '');
 
-            // noinspection SpellCheckingInspection
+            
             this.timeline.on('rangechanged', (e) => {
                 e.skipClick = true;
 
@@ -353,7 +327,7 @@ class SchedulerView extends View {
             let eventList = [];
 
             for (let userId in data) {
-                let itemList = /** @type {Object.<string, *>} */data[userId]
+                let itemList = data[userId]
                     .filter(item => !item.isBusyRange)
                     .concat(
                         data[userId].filter(item => item.isBusyRange)
@@ -430,10 +404,7 @@ class SchedulerView extends View {
         return resultList;
     }
 
-    /**
-     * @param {Object.<string, *>} o
-     * @return {Object}
-     */
+    
     convertEvent(o) {
         let event;
 
@@ -558,7 +529,7 @@ class SchedulerView extends View {
             t = Date.now();
         }
 
-        // noinspection HtmlRequiredAltAttribute,RequiredAttributes
+        
         return $('<img>')
             .addClass('avatar avatar-link')
             .attr('width', '14')

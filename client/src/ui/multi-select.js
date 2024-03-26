@@ -1,57 +1,14 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module module:ui/multi-select */
+
+
 
 import Selectize from 'lib!selectize';
 
-/**
- * @typedef module:ui/multi-select~Options
- * @type {Object}
- * @property {{value: string, text: string}[]} items
- * @property {string} [delimiter=':,:']
- * @property {boolean} [restoreOnBackspace=false]
- * @property {boolean} [removeButton=true]
- * @property {boolean} [draggable=false]
- * @property {boolean} [selectOnTab=false]
- * @property {boolean} [matchAnyWord=false]
- * @property {boolean} [allowCustomOptions=false]
- * @property {function (string): {value: string, text: string}|null} [create]
- */
 
-/**
- * @module ui/multi-select
- */
+
+
 const MultiSelect = {
-    /**
-     * @param {Element|JQuery} element An element.
-     * @param {module:ui/multi-select~Options} options Options.
-     */
+    
     init: function (element, options) {
         const $el = $(element);
 
@@ -87,10 +44,10 @@ const MultiSelect = {
         };
 
         if (!options.matchAnyWord) {
-            // noinspection JSUnresolvedReference
-            /** @this Selectize */
+            
+            
             selectizeOptions.score = function (search) {
-                // noinspection JSUnresolvedReference
+                
                 const score = this.getScoreFunction(search);
 
                 search = search.toLowerCase();
@@ -106,9 +63,9 @@ const MultiSelect = {
         }
 
         if (options.matchAnyWord) {
-            /** @this Selectize */
+            
             selectizeOptions.score = function (search) {
-                // noinspection JSUnresolvedReference
+                
                 const score = this.getScoreFunction(search);
 
                 search = search.toLowerCase();
@@ -131,7 +88,7 @@ const MultiSelect = {
         if (options.allowCustomOptions) {
             selectizeOptions.persist = false;
             selectizeOptions.create = options.create;
-            // noinspection JSUnusedGlobalSymbols
+            
             selectizeOptions.render = {
                 option_create: data => {
                     return $('<div>')
@@ -150,11 +107,7 @@ const MultiSelect = {
         $el.selectize(selectizeOptions);
     },
 
-    /**
-     * Focus.
-     *
-     * @param {Element|JQuery} element An element.
-     */
+    
     focus: function (element) {
         const $el = $(element);
 
@@ -170,11 +123,7 @@ const MultiSelect = {
         selectize.focus();
     },
 
-    /**
-     * @private
-     * @param {module:ui/multi-select~Options} options
-     * @return {module:ui/multi-select~Options}
-     */
+    
     applyDefaultOptions: function (options) {
         options = Espo.Utils.clone(options);
 
@@ -198,9 +147,7 @@ const MultiSelect = {
         return options;
     },
 
-    /**
-     * @private
-     */
+    
     loadBypassCtrlEnterPlugin: function () {
         if ('bypass_ctrl_enter' in Selectize.plugins) {
             return;
@@ -225,9 +172,7 @@ const MultiSelect = {
         });
     },
 
-    /**
-     * @private
-     */
+    
     loadRestoreOnBackspacePlugin: function () {
         if ('restore_on_backspace_espo' in Selectize.plugins) {
             return;
@@ -262,9 +207,9 @@ const MultiSelect = {
                                 text: option.value,
                             };
 
-                            // noinspection JSUnresolvedReference
+                            
                             if (this.deleteSelection(e)) {
-                                // noinspection JSUnresolvedReference
+                                
                                 this.setTextboxValue(options.text.apply(this, [option]));
                                 this.refreshOptions(true);
                             }

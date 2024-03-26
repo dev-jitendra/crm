@@ -7,16 +7,12 @@ use Doctrine\DBAL\Schema\Comparator as BaseComparator;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Schema\TableDiff;
 
-/**
- * Compares schemas in the context of SQL Server platform.
- *
- * @link https://docs.microsoft.com/en-us/sql/t-sql/statements/collations?view=sql-server-ver15
- */
+
 class Comparator extends BaseComparator
 {
     private string $databaseCollation;
 
-    /** @internal The comparator can be only instantiated by a schema manager. */
+    
     public function __construct(SQLServerPlatform $platform, string $databaseCollation)
     {
         parent::__construct($platform);
@@ -32,9 +28,7 @@ class Comparator extends BaseComparator
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function diffTable(Table $fromTable, Table $toTable)
     {
         return parent::diffTable(

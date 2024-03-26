@@ -1,18 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - IBM AP Linux Technology Center, Yamato Software Laboratory    bug-glibc@gnu.org
- */
+
+
 return [
     'diff_now' => 'ବର୍ତ୍ତମାନ',
     'diff_yesterday' => 'ଗତକାଲି',

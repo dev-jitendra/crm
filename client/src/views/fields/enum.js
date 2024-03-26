@@ -1,70 +1,19 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/fields/enumeration */
+
+
 
 import BaseFieldView from 'views/fields/base';
 import MultiSelect from 'ui/multi-select';
 import Select from 'ui/select'
 
-/**
- * An enum field (select-box).
- */
+
 class EnumFieldView extends BaseFieldView {
 
-    /**
-     * @typedef {Object} module:views/fields/enumeration~options
-     * @property {
-     *     module:views/fields/enumeration~params &
-     *     module:views/fields/base~params &
-     *     Object.<string, *>
-     * } [params] Parameters.
-     */
+    
 
-    /**
-     * @typedef {Object} module:views/fields/enumeration~params
-     * @property {string[]} [options] Select options.
-     * @property {boolean} [required] Required.
-     * @property {string} [translation] A translation string. E.g. `Global.scopeNames`.
-     * @property {boolean} [displayAsLabel] Display as label.
-     * @property {string} [optionsReference] A reference to options. E.g. `Account.industry`.
-     * @property {string} [optionsPath] An options metadata path.
-     * @property {boolean} [isSorted] To sort options.
-     * @property {Object.<string, 'warning'|'danger'|'success'|'info'|'primary'>} [style] A style map.
-     * @property {Object.<string, string>} [translatedOptions] Option translations.
-     */
+    
 
-    /**
-     * @param {
-     *     module:views/fields/enumeration~options &
-     *     module:views/fields/base~options
-     * } options Options.
-     */
+    
     constructor(options) {
         super(options);
     }
@@ -79,9 +28,7 @@ class EnumFieldView extends BaseFieldView {
 
     translatedOptions = null
 
-    /**
-     * @todo Remove? Always treat as true.
-     */
+    
     fetchEmptyValueAsNull = true
 
     searchTypeList = [
@@ -93,7 +40,7 @@ class EnumFieldView extends BaseFieldView {
 
     validationElementSelector = '.selectize-control'
 
-    /** @inheritDoc */
+    
     data() {
         let data = super.data();
 
@@ -149,7 +96,7 @@ class EnumFieldView extends BaseFieldView {
         }
 
         let optionsPath = this.params.optionsPath;
-        /** @type {?string} */
+        
         let optionsReference = this.params.optionsReference;
 
         if (!optionsPath && optionsReference) {
@@ -201,7 +148,7 @@ class EnumFieldView extends BaseFieldView {
 
     setupTranslation() {
         let translation = this.params.translation;
-        /** @type {?string} */
+        
         let optionsReference = this.params.optionsReference;
 
         if (!translation && optionsReference) {
@@ -255,16 +202,10 @@ class EnumFieldView extends BaseFieldView {
         this.translatedOptions = map;
     }
 
-    /**
-     * Set up options.
-     */
+    
     setupOptions() {}
 
-    /**
-     * Set an option list.
-     *
-     * @param {string[]} optionList An option list.
-     */
+    
     setOptionList(optionList) {
         let previousOptions = this.params.options;
 
@@ -299,9 +240,7 @@ class EnumFieldView extends BaseFieldView {
             });
     }
 
-    /**
-     * Reset a previously set option list.
-     */
+    
     resetOptionList() {
         if (!this.originalOptionList) {
             return;
@@ -375,7 +314,7 @@ class EnumFieldView extends BaseFieldView {
                 });
             });
 
-            /** @type {module:ui/multi-select~Options} */
+            
             let multiSelectOptions = {
                 items: items,
                 delimiter: ':,:',
@@ -477,7 +416,7 @@ class EnumFieldView extends BaseFieldView {
             return {
                 type: 'or',
                 value: [
-                    // Don't change order.
+                    
                     {
                         type: 'notIn',
                         value: list,

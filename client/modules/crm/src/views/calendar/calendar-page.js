@@ -1,30 +1,4 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 import View from 'view';
 
@@ -44,88 +18,83 @@ class CalendarPage extends View {
     ]
 
     events = {
-        /** @this CalendarPage */
+        
         'click [data-action="createCustomView"]': function () {
             this.createCustomView();
         },
-        /** @this CalendarPage */
+        
         'click [data-action="editCustomView"]': function () {
             this.editCustomView();
         },
     }
 
-    /**
-     * A shortcut-key => action map.
-     *
-     * @protected
-     * @type {?Object.<string,function (JQueryKeyEventObject): void>}
-     */
+    
     shortcutKeys = {
-        /** @this CalendarPage */
+        
         'Home': function (e) {
             this.handleShortcutKeyHome(e);
         },
-        /** @this CalendarPage */
+        
         'Numpad7': function (e) {
             this.handleShortcutKeyHome(e);
         },
-        /** @this CalendarPage */
+        
         'Numpad4': function (e) {
             this.handleShortcutKeyArrowLeft(e);
         },
-        /** @this CalendarPage */
+        
         'Numpad6': function (e) {
             this.handleShortcutKeyArrowRight(e);
         },
-        /** @this CalendarPage */
+        
         'ArrowLeft': function (e) {
             this.handleShortcutKeyArrowLeft(e);
         },
-        /** @this CalendarPage */
+        
         'ArrowRight': function (e) {
             this.handleShortcutKeyArrowRight(e);
         },
-        /** @this CalendarPage */
+        
         'Minus': function (e) {
             this.handleShortcutKeyMinus(e);
         },
-        /** @this CalendarPage */
+        
         'Equal': function (e) {
             this.handleShortcutKeyPlus(e);
         },
-        /** @this CalendarPage */
+        
         'NumpadSubtract': function (e) {
             this.handleShortcutKeyMinus(e);
         },
-        /** @this CalendarPage */
+        
         'NumpadAdd': function (e) {
             this.handleShortcutKeyPlus(e);
         },
-        /** @this CalendarPage */
+        
         'Digit1': function (e) {
             this.handleShortcutKeyDigit(e, 1);
         },
-        /** @this CalendarPage */
+        
         'Digit2': function (e) {
             this.handleShortcutKeyDigit(e, 2);
         },
-        /** @this CalendarPage */
+        
         'Digit3': function (e) {
             this.handleShortcutKeyDigit(e, 3);
         },
-        /** @this CalendarPage */
+        
         'Digit4': function (e) {
             this.handleShortcutKeyDigit(e, 4);
         },
-        /** @this CalendarPage */
+        
         'Digit5': function (e) {
             this.handleShortcutKeyDigit(e, 5);
         },
-        /** @this CalendarPage */
+        
         'Digit6': function (e) {
             this.handleShortcutKeyDigit(e, 6);
         },
-        /** @this CalendarPage */
+        
         'Control+Space': function (e) {
             this.handleShortcutKeyControlSpace(e);
         },
@@ -338,48 +307,33 @@ class CalendarPage extends View {
         });
     }
 
-    /**
-     * @private
-     * @return {module:modules/crm/views/calendar/calendar | module:modules/crm/views/calendar/timeline}
-     */
+    
     getCalendarView() {
         return this.getView('calendar');
     }
 
-    /**
-     * @private
-     * @param {JQueryKeyEventObject} e
-     */
+    
     handleShortcutKeyHome(e) {
         e.preventDefault();
 
         this.getCalendarView().actionToday();
     }
 
-    /**
-     * @private
-     * @param {JQueryKeyEventObject} e
-     */
+    
     handleShortcutKeyArrowLeft(e) {
         e.preventDefault();
 
         this.getCalendarView().actionPrevious();
     }
 
-    /**
-     * @private
-     * @param {JQueryKeyEventObject} e
-     */
+    
     handleShortcutKeyArrowRight(e) {
         e.preventDefault();
 
         this.getCalendarView().actionNext();
     }
 
-    /**
-     * @private
-     * @param {JQueryKeyEventObject} e
-     */
+    
     handleShortcutKeyMinus(e) {
         if (!this.getCalendarView().actionZoomOut) {
             return;
@@ -390,10 +344,7 @@ class CalendarPage extends View {
         this.getCalendarView().actionZoomOut();
     }
 
-    /**
-     * @private
-     * @param {JQueryKeyEventObject} e
-     */
+    
     handleShortcutKeyPlus(e) {
         if (!this.getCalendarView().actionZoomIn) {
             return;
@@ -404,11 +355,7 @@ class CalendarPage extends View {
         this.getCalendarView().actionZoomIn();
     }
 
-    /**
-     * @private
-     * @param {JQueryKeyEventObject} e
-     * @param {Number} digit
-     */
+    
     handleShortcutKeyDigit(e, digit) {
         let modeList = this.getCalendarView().hasView('modeButtons') ?
             this.getCalendarView()
@@ -434,10 +381,7 @@ class CalendarPage extends View {
         this.getCalendarView().selectMode(mode);
     }
 
-    /**
-     * @private
-     * @param {JQueryKeyEventObject} e
-     */
+    
     handleShortcutKeyControlSpace(e) {
         if (!this.getCalendarView().createEvent) {
             return;
@@ -449,5 +393,5 @@ class CalendarPage extends View {
     }
 }
 
-// noinspection JSUnusedGlobalSymbols
+
 export default CalendarPage;

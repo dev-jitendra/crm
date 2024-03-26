@@ -6,11 +6,7 @@ namespace Doctrine\DBAL\Driver\Mysqli\Exception;
 
 use Doctrine\DBAL\Driver\AbstractException;
 
-/**
- * @internal
- *
- * @psalm-immutable
- */
+
 final class HostRequired extends AbstractException
 {
     public static function forPersistentConnection(): self

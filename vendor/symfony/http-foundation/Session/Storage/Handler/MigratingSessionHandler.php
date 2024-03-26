@@ -1,35 +1,16 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpFoundation\Session\Storage\Handler;
 
-/**
- * Migrating session handler for migrating from one handler to another. It reads
- * from the current handler and writes both the current and new ones.
- *
- * It ignores errors from the new handler.
- *
- * @author Ross Motley <ross.motley@amara.com>
- * @author Oliver Radwell <oliver.radwell@amara.com>
- */
+
 class MigratingSessionHandler implements \SessionHandlerInterface, \SessionUpdateTimestampHandlerInterface
 {
-    /**
-     * @var \SessionHandlerInterface&\SessionUpdateTimestampHandlerInterface
-     */
+    
     private \SessionHandlerInterface $currentHandler;
 
-    /**
-     * @var \SessionHandlerInterface&\SessionUpdateTimestampHandlerInterface
-     */
+    
     private \SessionHandlerInterface $writeOnlyHandler;
 
     public function __construct(\SessionHandlerInterface $currentHandler, \SessionHandlerInterface $writeOnlyHandler)
@@ -79,7 +60,7 @@ class MigratingSessionHandler implements \SessionHandlerInterface, \SessionUpdat
 
     public function read(string $sessionId): string
     {
-        // No reading from new handler until switch-over
+        
         return $this->currentHandler->read($sessionId);
     }
 
@@ -93,7 +74,7 @@ class MigratingSessionHandler implements \SessionHandlerInterface, \SessionUpdat
 
     public function validateId(string $sessionId): bool
     {
-        // No reading from new handler until switch-over
+        
         return $this->currentHandler->validateId($sessionId);
     }
 

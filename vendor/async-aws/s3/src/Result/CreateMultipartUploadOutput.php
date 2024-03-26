@@ -9,69 +9,37 @@ use AsyncAws\S3\Enum\ServerSideEncryption;
 
 class CreateMultipartUploadOutput extends Result
 {
-    /**
-     * If the bucket has a lifecycle rule configured with an action to abort incomplete multipart uploads and the prefix in
-     * the lifecycle rule matches the object name in the request, the response includes this header. The header indicates
-     * when the initiated multipart upload becomes eligible for an abort operation. For more information, see  Aborting
-     * Incomplete Multipart Uploads Using a Bucket Lifecycle Policy.
-     *
-     * @see https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html#mpu-abort-incomplete-mpu-lifecycle-config
-     */
+    
     private $abortDate;
 
-    /**
-     * This header is returned along with the `x-amz-abort-date` header. It identifies the applicable lifecycle
-     * configuration rule that defines the action to abort incomplete multipart uploads.
-     */
+    
     private $abortRuleId;
 
-    /**
-     * The name of the bucket to which the multipart upload was initiated.
-     */
+    
     private $bucket;
 
-    /**
-     * Object key for which the multipart upload was initiated.
-     */
+    
     private $key;
 
-    /**
-     * ID for the initiated multipart upload.
-     */
+    
     private $uploadId;
 
-    /**
-     * The server-side encryption algorithm used when storing this object in Amazon S3 (for example, AES256, aws:kms).
-     */
+    
     private $serverSideEncryption;
 
-    /**
-     * If server-side encryption with a customer-provided encryption key was requested, the response will include this
-     * header confirming the encryption algorithm used.
-     */
+    
     private $sseCustomerAlgorithm;
 
-    /**
-     * If server-side encryption with a customer-provided encryption key was requested, the response will include this
-     * header to provide round-trip message integrity verification of the customer-provided encryption key.
-     */
+    
     private $sseCustomerKeyMd5;
 
-    /**
-     * If present, specifies the ID of the AWS Key Management Service (AWS KMS) symmetric customer managed customer master
-     * key (CMK) that was used for the object.
-     */
+    
     private $sseKmsKeyId;
 
-    /**
-     * If present, specifies the AWS KMS Encryption Context to use for object encryption. The value of this header is a
-     * base64-encoded UTF-8 string holding JSON with the encryption context key-value pairs.
-     */
+    
     private $sseKmsEncryptionContext;
 
-    /**
-     * Indicates whether the multipart upload uses an S3 Bucket Key for server-side encryption with AWS KMS (SSE-KMS).
-     */
+    
     private $bucketKeyEnabled;
 
     private $requestCharged;
@@ -111,9 +79,7 @@ class CreateMultipartUploadOutput extends Result
         return $this->key;
     }
 
-    /**
-     * @return RequestCharged::*|null
-     */
+    
     public function getRequestCharged(): ?string
     {
         $this->initialize();
@@ -121,9 +87,7 @@ class CreateMultipartUploadOutput extends Result
         return $this->requestCharged;
     }
 
-    /**
-     * @return ServerSideEncryption::*|null
-     */
+    
     public function getServerSideEncryption(): ?string
     {
         $this->initialize();

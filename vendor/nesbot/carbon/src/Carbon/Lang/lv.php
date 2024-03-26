@@ -1,55 +1,18 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 use Carbon\CarbonInterface;
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Philippe Vaucher
- * - pirminis
- * - Tsutomu Kuroda
- * - tjku
- * - Andris Zāģeris
- * - Max Melentiev
- * - Edgars Beigarts
- * - Juanito Fatas
- * - Vitauts Stočka
- * - Akira Matsuda
- * - Christopher Dell
- * - Enrique Vidal
- * - Simone Carletti
- * - Aaron Patterson
- * - Kaspars Bankovskis
- * - Nicolás Hock Isaza
- * - Viesturs Kavacs (Kavacky)
- * - zakse
- * - Janis Eglitis (janiseglitis)
- * - Guntars
- * - Juris Sudmalis
- */
+
+
 $daysOfWeek = ['svētdiena', 'pirmdiena', 'otrdiena', 'trešdiena', 'ceturtdiena', 'piektdiena', 'sestdiena'];
 $daysOfWeekLocativum = ['svētdien', 'pirmdien', 'otrdien', 'trešdien', 'ceturtdien', 'piektdien', 'sestdien'];
 
 $transformDiff = function ($input) {
     return strtr($input, [
-        // Nominative => "pirms/pēc" Dative
+        
         'gads' => 'gada',
         'gadi' => 'gadiem',
         'gadu' => 'gadiem',

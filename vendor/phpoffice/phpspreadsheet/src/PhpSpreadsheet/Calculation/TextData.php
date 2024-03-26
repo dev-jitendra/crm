@@ -16,13 +16,7 @@ class TextData
         return unpack('V', iconv('UTF-8', 'UCS-4LE', $character))[1];
     }
 
-    /**
-     * CHARACTER.
-     *
-     * @param string $character Value
-     *
-     * @return string
-     */
+    
     public static function CHARACTER($character)
     {
         $character = Functions::flattenSingleValue($character);
@@ -38,13 +32,7 @@ class TextData
         return iconv('UCS-4LE', 'UTF-8', pack('V', $character));
     }
 
-    /**
-     * TRIMNONPRINTABLE.
-     *
-     * @param mixed $stringValue Value to check
-     *
-     * @return string
-     */
+    
     public static function TRIMNONPRINTABLE($stringValue = '')
     {
         $stringValue = Functions::flattenSingleValue($stringValue);
@@ -64,13 +52,7 @@ class TextData
         return null;
     }
 
-    /**
-     * TRIMSPACES.
-     *
-     * @param mixed $stringValue Value to check
-     *
-     * @return string
-     */
+    
     public static function TRIMSPACES($stringValue = '')
     {
         $stringValue = Functions::flattenSingleValue($stringValue);
@@ -94,13 +76,7 @@ class TextData
         return ($value) ? Calculation::getTRUE() : Calculation::getFALSE();
     }
 
-    /**
-     * ASCIICODE.
-     *
-     * @param string $characters Value
-     *
-     * @return int|string A string if arguments are invalid
-     */
+    
     public static function ASCIICODE($characters)
     {
         if (($characters === null) || ($characters === '')) {
@@ -119,16 +95,12 @@ class TextData
         return self::unicodeToOrd($character);
     }
 
-    /**
-     * CONCATENATE.
-     *
-     * @return string
-     */
+    
     public static function CONCATENATE(...$args)
     {
         $returnValue = '';
 
-        // Loop through arguments
+        
         $aArgs = Functions::flattenArray($args);
         foreach ($aArgs as $arg) {
             if (is_bool($arg)) {
@@ -140,25 +112,13 @@ class TextData
         return $returnValue;
     }
 
-    /**
-     * DOLLAR.
-     *
-     * This function converts a number to text using currency format, with the decimals rounded to the specified place.
-     * The format used is $#,##0.00_);($#,##0.00)..
-     *
-     * @param float $value The value to format
-     * @param int $decimals The number of digits to display to the right of the decimal point.
-     *                                    If decimals is negative, number is rounded to the left of the decimal point.
-     *                                    If you omit decimals, it is assumed to be 2
-     *
-     * @return string
-     */
+    
     public static function DOLLAR($value = 0, $decimals = 2)
     {
         $value = Functions::flattenSingleValue($value);
         $decimals = $decimals === null ? 0 : Functions::flattenSingleValue($decimals);
 
-        // Validate parameters
+        
         if (!is_numeric($value) || !is_numeric($decimals)) {
             return Functions::VALUE();
         }
@@ -179,15 +139,7 @@ class TextData
         return NumberFormat::toFormattedString($value, $mask);
     }
 
-    /**
-     * SEARCHSENSITIVE.
-     *
-     * @param string $needle The string to look for
-     * @param string $haystack The string in which to look
-     * @param int $offset Offset within $haystack
-     *
-     * @return string
-     */
+    
     public static function SEARCHSENSITIVE($needle, $haystack, $offset = 1)
     {
         $needle = Functions::flattenSingleValue($needle);
@@ -214,15 +166,7 @@ class TextData
         return Functions::VALUE();
     }
 
-    /**
-     * SEARCHINSENSITIVE.
-     *
-     * @param string $needle The string to look for
-     * @param string $haystack The string in which to look
-     * @param int $offset Offset within $haystack
-     *
-     * @return string
-     */
+    
     public static function SEARCHINSENSITIVE($needle, $haystack, $offset = 1)
     {
         $needle = Functions::flattenSingleValue($needle);
@@ -249,22 +193,14 @@ class TextData
         return Functions::VALUE();
     }
 
-    /**
-     * FIXEDFORMAT.
-     *
-     * @param mixed $value Value to check
-     * @param int $decimals
-     * @param bool $no_commas
-     *
-     * @return string
-     */
+    
     public static function FIXEDFORMAT($value, $decimals = 2, $no_commas = false)
     {
         $value = Functions::flattenSingleValue($value);
         $decimals = Functions::flattenSingleValue($decimals);
         $no_commas = Functions::flattenSingleValue($no_commas);
 
-        // Validate parameters
+        
         if (!is_numeric($value) || !is_numeric($decimals)) {
             return Functions::VALUE();
         }
@@ -286,14 +222,7 @@ class TextData
         return (string) $valueResult;
     }
 
-    /**
-     * LEFT.
-     *
-     * @param string $value Value
-     * @param int $chars Number of characters
-     *
-     * @return string
-     */
+    
     public static function LEFT($value = '', $chars = 1)
     {
         $value = Functions::flattenSingleValue($value);
@@ -310,15 +239,7 @@ class TextData
         return mb_substr($value, 0, $chars, 'UTF-8');
     }
 
-    /**
-     * MID.
-     *
-     * @param string $value Value
-     * @param int $start Start character
-     * @param int $chars Number of characters
-     *
-     * @return string
-     */
+    
     public static function MID($value = '', $start = 1, $chars = null)
     {
         $value = Functions::flattenSingleValue($value);
@@ -340,14 +261,7 @@ class TextData
         return mb_substr($value, --$start, $chars, 'UTF-8');
     }
 
-    /**
-     * RIGHT.
-     *
-     * @param string $value Value
-     * @param int $chars Number of characters
-     *
-     * @return string
-     */
+    
     public static function RIGHT($value = '', $chars = 1)
     {
         $value = Functions::flattenSingleValue($value);
@@ -364,13 +278,7 @@ class TextData
         return mb_substr($value, mb_strlen($value, 'UTF-8') - $chars, $chars, 'UTF-8');
     }
 
-    /**
-     * STRINGLENGTH.
-     *
-     * @param string $value Value
-     *
-     * @return int
-     */
+    
     public static function STRINGLENGTH($value = '')
     {
         $value = Functions::flattenSingleValue($value);
@@ -382,15 +290,7 @@ class TextData
         return mb_strlen($value, 'UTF-8');
     }
 
-    /**
-     * LOWERCASE.
-     *
-     * Converts a string value to upper case.
-     *
-     * @param string $mixedCaseString
-     *
-     * @return string
-     */
+    
     public static function LOWERCASE($mixedCaseString)
     {
         $mixedCaseString = Functions::flattenSingleValue($mixedCaseString);
@@ -402,15 +302,7 @@ class TextData
         return StringHelper::strToLower($mixedCaseString);
     }
 
-    /**
-     * UPPERCASE.
-     *
-     * Converts a string value to upper case.
-     *
-     * @param string $mixedCaseString
-     *
-     * @return string
-     */
+    
     public static function UPPERCASE($mixedCaseString)
     {
         $mixedCaseString = Functions::flattenSingleValue($mixedCaseString);
@@ -422,15 +314,7 @@ class TextData
         return StringHelper::strToUpper($mixedCaseString);
     }
 
-    /**
-     * PROPERCASE.
-     *
-     * Converts a string value to upper case.
-     *
-     * @param string $mixedCaseString
-     *
-     * @return string
-     */
+    
     public static function PROPERCASE($mixedCaseString)
     {
         $mixedCaseString = Functions::flattenSingleValue($mixedCaseString);
@@ -442,16 +326,7 @@ class TextData
         return StringHelper::strToTitle($mixedCaseString);
     }
 
-    /**
-     * REPLACE.
-     *
-     * @param string $oldText String to modify
-     * @param int $start Start character
-     * @param int $chars Number of characters
-     * @param string $newText String to replace in defined position
-     *
-     * @return string
-     */
+    
     public static function REPLACE($oldText, $start, $chars, $newText)
     {
         $oldText = Functions::flattenSingleValue($oldText);
@@ -465,16 +340,7 @@ class TextData
         return $left . $newText . $right;
     }
 
-    /**
-     * SUBSTITUTE.
-     *
-     * @param string $text Value
-     * @param string $fromText From Value
-     * @param string $toText To Value
-     * @param int $instance Instance Number
-     *
-     * @return string
-     */
+    
     public static function SUBSTITUTE($text = '', $fromText = '', $toText = '', $instance = 0)
     {
         $text = Functions::flattenSingleValue($text);
@@ -502,13 +368,7 @@ class TextData
         return $text;
     }
 
-    /**
-     * RETURNSTRING.
-     *
-     * @param mixed $testValue Value to check
-     *
-     * @return null|string
-     */
+    
     public static function RETURNSTRING($testValue = '')
     {
         $testValue = Functions::flattenSingleValue($testValue);
@@ -520,14 +380,7 @@ class TextData
         return null;
     }
 
-    /**
-     * TEXTFORMAT.
-     *
-     * @param mixed $value Value to check
-     * @param string $format Format mask to use
-     *
-     * @return string
-     */
+    
     public static function TEXTFORMAT($value, $format)
     {
         $value = Functions::flattenSingleValue($value);
@@ -540,13 +393,7 @@ class TextData
         return (string) NumberFormat::toFormattedString($value, $format);
     }
 
-    /**
-     * VALUE.
-     *
-     * @param mixed $value Value to check
-     *
-     * @return DateTimeInterface|float|int|string A string if arguments are invalid
-     */
+    
     public static function VALUE($value = '')
     {
         $value = Functions::flattenSingleValue($value);
@@ -586,15 +433,7 @@ class TextData
         return (float) $value;
     }
 
-    /**
-     * NUMBERVALUE.
-     *
-     * @param mixed $value Value to check
-     * @param string $decimalSeparator decimal separator, defaults to locale defined value
-     * @param string $groupSeparator group/thosands separator, defaults to locale defined value
-     *
-     * @return float|string
-     */
+    
     public static function NUMBERVALUE($value = '', $decimalSeparator = null, $groupSeparator = null)
     {
         $value = Functions::flattenSingleValue($value);
@@ -616,7 +455,7 @@ class TextData
 
             $value = str_replace([$groupSeparator, $decimalSeparator], ['', '.'], $value);
 
-            // Handle the special case of trailing % signs
+            
             $percentageString = rtrim($value, '%');
             if (!is_numeric($percentageString)) {
                 return Functions::VALUE();
@@ -632,16 +471,7 @@ class TextData
         return (float) $value;
     }
 
-    /**
-     * Compares two text strings and returns TRUE if they are exactly the same, FALSE otherwise.
-     * EXACT is case-sensitive but ignores formatting differences.
-     * Use EXACT to test text being entered into a document.
-     *
-     * @param $value1
-     * @param $value2
-     *
-     * @return bool
-     */
+    
     public static function EXACT($value1, $value2)
     {
         $value1 = Functions::flattenSingleValue($value1);
@@ -650,18 +480,10 @@ class TextData
         return (string) $value2 === (string) $value1;
     }
 
-    /**
-     * TEXTJOIN.
-     *
-     * @param mixed $delimiter
-     * @param mixed $ignoreEmpty
-     * @param mixed $args
-     *
-     * @return string
-     */
+    
     public static function TEXTJOIN($delimiter, $ignoreEmpty, ...$args)
     {
-        // Loop through arguments
+        
         $aArgs = Functions::flattenArray($args);
         foreach ($aArgs as $key => &$arg) {
             if ($ignoreEmpty && trim($arg) == '') {

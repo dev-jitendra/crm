@@ -7,13 +7,7 @@ use Matrix\Exception;
 
 class DirectSum extends Operator
 {
-    /**
-     * Execute the addition
-     *
-     * @param mixed $value The matrix or numeric value to add to the current base value
-     * @return $this The operation object, allowing multiple additions to be chained
-     * @throws Exception If the provided argument is not appropriate for the operation
-     */
+    
     public function execute($value): Operator
     {
         if (is_array($value)) {
@@ -27,12 +21,7 @@ class DirectSum extends Operator
         throw new Exception('Invalid argument for addition');
     }
 
-    /**
-     * Execute the direct sum for a matrix
-     *
-     * @param Matrix $value The numeric value to concatenate/direct sum with the current base value
-     * @return $this The operation object, allowing multiple additions to be chained
-     **/
+    
     private function directSumMatrix($value): Operator
     {
         $originalColumnCount = count($this->matrix[0]);

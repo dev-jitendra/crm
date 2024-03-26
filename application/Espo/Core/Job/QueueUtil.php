@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Job;
 
@@ -55,7 +29,7 @@ class QueueUtil
 
     public function isJobPending(string $id): bool
     {
-        /** @var ?JobEntity $job */
+        
         $job = $this->entityManager
             ->getRDBRepositoryByClass(JobEntity::class)
             ->select(['id', 'status'])
@@ -70,9 +44,7 @@ class QueueUtil
         return $job->getStatus() === Status::PENDING;
     }
 
-    /**
-     * @return Collection<JobEntity>
-     */
+    
     public function getPendingJobList(?string $queue = null, ?string $group = null, int $limit = 0): Collection
     {
         $builder = $this->entityManager
@@ -137,9 +109,7 @@ class QueueUtil
             ->findOne();
     }
 
-    /**
-     * @return string[]
-     */
+    
     public function getRunningScheduledJobIdList(): array
     {
         $list = [];
@@ -189,7 +159,7 @@ class QueueUtil
             ->select(['id'])
             ->where([
                 'scheduledJobId' => $scheduledJobId,
-                'status' => [ // This forces usage of an appropriate index.
+                'status' => [ 
                     Status::PENDING,
                     Status::READY,
                     Status::RUNNING,
@@ -336,9 +306,7 @@ class QueueUtil
         $this->markJobListFailed($failedJobList);
     }
 
-    /**
-     * @param iterable<JobEntity> $jobList
-     */
+    
     protected function markJobListFailed(iterable $jobList): void
     {
         if (is_countable($jobList) && !count($jobList)) {
@@ -383,9 +351,7 @@ class QueueUtil
         }
     }
 
-    /**
-     * Remove pending duplicate jobs, no need to run twice the same job.
-     */
+    
     public function removePendingJobDuplicates(): void
     {
         $duplicateJobList = $this->entityManager
@@ -451,9 +417,7 @@ class QueueUtil
         }
     }
 
-    /**
-     * Handle job attempts. Change failed to pending if attempts left.
-     */
+    
     public function updateFailedJobAttempts(): void
     {
         $jobCollection = $this->entityManager

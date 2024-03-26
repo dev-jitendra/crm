@@ -1,50 +1,22 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/fields/link-multiple-with-columns */
+
+
 
 import LinkMultipleFieldView from 'views/fields/link-multiple';
 import RegExpPattern from 'helpers/reg-exp-pattern';
 import Select from 'ui/select';
 
-/**
- * A link-multiple field with relation column(s).
- */
+
 class LinkMultipleWithColumnsFieldView extends LinkMultipleFieldView {
 
-    /** @const */
+    
     COLUMN_TYPE_VARCHAR = 'varchar'
-     /** @const */
+     
     COLUMN_TYPE_ENUM = 'enum'
-     /** @const */
+     
     COLUMN_TYPE_BOOL = 'bool'
 
-    /** @inheritDoc */
+    
     setup() {
         super.setup();
 
@@ -52,9 +24,7 @@ class LinkMultipleWithColumnsFieldView extends LinkMultipleFieldView {
 
         this.validations.push('columnPattern');
 
-        /**
-         * @type {Object.<string,*>}
-         */
+        
         this.columnsDefs = {};
         this.columnsName = this.name + 'Columns';
         this.columns = Espo.Utils.cloneDeep(this.model.get(this.columnsName) || {});
@@ -66,7 +36,7 @@ class LinkMultipleWithColumnsFieldView extends LinkMultipleFieldView {
         let columns = this.getMetadata()
             .get(['entityDefs', this.model.entityType, 'fields', this.name, 'columns']) || {};
 
-        /** @type {string[]} */
+        
         this.columnList = this.columnList || Object.keys(columns);
 
         this.columnList.forEach(column => {
@@ -134,7 +104,7 @@ class LinkMultipleWithColumnsFieldView extends LinkMultipleFieldView {
         this.reRender();
     }
 
-    /** @inheritDoc */
+    
     getAttributeList() {
         return [
             ...super.getAttributeList(),
@@ -142,15 +112,9 @@ class LinkMultipleWithColumnsFieldView extends LinkMultipleFieldView {
         ];
     }
 
-    /**
-     * Get an item HTML for detail mode.
-     *
-     * @param {string} id An ID.
-     * @param {string} [name] An name.
-     * @return {string}
-     */
+    
     getDetailLinkHtml(id, name) {
-        // Do not use the `html` method to avoid XSS.
+        
 
         name = name || this.nameHash[id] || id;
 
@@ -199,7 +163,7 @@ class LinkMultipleWithColumnsFieldView extends LinkMultipleFieldView {
         return $el.get(0).outerHTML;
     }
 
-    /** @inheritDoc */
+    
     getValueForDisplay() {
         if (this.isDetailMode() || this.isListMode()) {
             let itemList = [];
@@ -214,7 +178,7 @@ class LinkMultipleWithColumnsFieldView extends LinkMultipleFieldView {
         }
     }
 
-    /** @inheritDoc */
+    
     deleteLink(id) {
         this.trigger('delete-link', id);
         this.trigger('delete-link:' + id);
@@ -235,13 +199,7 @@ class LinkMultipleWithColumnsFieldView extends LinkMultipleFieldView {
         this.trigger('change');
     }
 
-    /**
-     * Get a column values.
-     *
-     * @param {string} id An ID.
-     * @param {string} column A column.
-     * @return {*}
-     */
+    
     getColumnValue(id, column) {
         return (this.columns[id] || {})[column];
     }
@@ -271,14 +229,9 @@ class LinkMultipleWithColumnsFieldView extends LinkMultipleFieldView {
         this.trigger('change');
     }
 
-    /**
-     * @param {string} column
-     * @param {string} id
-     * @param {*} value
-     * @return {JQuery}
-     */
+    
     getJQSelect(column, id, value) {
-        // Do not use the `html` method to avoid XSS.
+        
 
         let field = this.columnsDefs[column].field;
         let scope = this.columnsDefs[column].scope;
@@ -306,14 +259,9 @@ class LinkMultipleWithColumnsFieldView extends LinkMultipleFieldView {
         return $select;
     }
 
-    /**
-     * @param {string} column
-     * @param {string} id
-     * @param {*} value
-     * @return {JQuery}
-     */
+    
     getJQInput(column, id, value) {
-        // Do not use the `html` method to avoid XSS.
+        
 
         let field = this.columnsDefs[column].field;
         let scope = this.columnsDefs[column].scope;
@@ -335,14 +283,9 @@ class LinkMultipleWithColumnsFieldView extends LinkMultipleFieldView {
         return $input;
     }
 
-    /**
-     * @param {string} column
-     * @param {string} id
-     * @param {*} value
-     * @return {JQuery}
-     */
+    
     getJQLi(column, id, value) {
-        // Do not use the `html` method to avoid XSS.
+        
 
         let field = this.columnsDefs[column].field;
         let scope = this.columnsDefs[column].scope;
@@ -368,13 +311,13 @@ class LinkMultipleWithColumnsFieldView extends LinkMultipleFieldView {
             );
     }
 
-    /** @inheritDoc */
+    
     addLinkHtml(id, name) {
         if (this.isSearchMode()) {
             return super.addLinkHtml(id, name);
         }
 
-        // Do not use the `html` method to avoid XSS.
+        
 
         let $container = this.$el.find('.link-container');
 
@@ -584,7 +527,7 @@ class LinkMultipleWithColumnsFieldView extends LinkMultipleFieldView {
         }
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     validateColumnPattern() {
         let result = false;
 
@@ -632,7 +575,7 @@ class LinkMultipleWithColumnsFieldView extends LinkMultipleFieldView {
 
         data[this.columnsName] = Espo.Utils.cloneDeep(this.columns);
 
-        // noinspection JSValidateTypes
+        
         return data;
     }
 }

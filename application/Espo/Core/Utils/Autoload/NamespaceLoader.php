@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Utils\Autoload;
 
@@ -41,24 +15,18 @@ use Throwable;
 
 class NamespaceLoader
 {
-    /**
-     * @var ?array{
-     *   psr-4?: array<string, mixed>,
-     *   psr-0?: array<string, mixed>,
-     *   classmap?: array<string, mixed>,
-     * }
-     */
+    
     private $namespaces = null;
-    /** @var ?array<string, mixed> */
+    
     private $vendorNamespaces = null;
     private string $autoloadFilePath = 'vendor/autoload.php';
-    /** @var array<'psr-4'|'psr-0'|'classmap', string> */
+    
     private $namespacesPaths = [
         'psr-4' => 'vendor/composer/autoload_psr4.php',
         'psr-0' => 'vendor/composer/autoload_namespaces.php',
         'classmap' => 'vendor/composer/autoload_classmap.php',
     ];
-    /** @var array<'psr-4'|'psr-0', string> */
+    
     private $methodNameMap = [
         'psr-4' => 'addPsr4',
         'psr-0' => 'add',
@@ -77,12 +45,7 @@ class NamespaceLoader
         $this->classLoader = new ClassLoader();
     }
 
-    /**
-     * @param array{
-     *   psr-4?: array<string, mixed>,
-     *   psr-0?: array<string, mixed>
-     * } $data
-     */
+    
     public function register(array $data): void
     {
         $this->addListToClassLoader($data);
@@ -90,13 +53,7 @@ class NamespaceLoader
         $this->classLoader->register(true);
     }
 
-    /**
-     * @return array{
-     *   psr-4?: array<string, mixed>,
-     *   psr-0?: array<string, mixed>,
-     *   classmap?: array<string, mixed>,
-     * }
-     */
+    
     private function loadNamespaces(string $basePath = ''): array
     {
         $namespaces = [];
@@ -118,14 +75,7 @@ class NamespaceLoader
         return $namespaces;
     }
 
-    /**
-     *
-     * @return array{
-     *   psr-4?: array<string, mixed>,
-     *   psr-0?: array<string, mixed>,
-     *   classmap?: array<string, mixed>,
-     * }
-     */
+    
     private function getNamespaces(): array
     {
         if (!$this->namespaces) {
@@ -135,10 +85,7 @@ class NamespaceLoader
         return $this->namespaces;
     }
 
-    /**
-     * @param 'psr-4'|'psr-0'|'classmap' $type
-     * @return string[]
-     */
+    
     private function getNamespaceList(string $type): array
     {
         $namespaces = $this->getNamespaces();
@@ -146,10 +93,7 @@ class NamespaceLoader
         return array_keys($namespaces[$type] ?? []);
     }
 
-    /**
-     * @param 'psr-4'|'psr-0'|'classmap' $type
-     * @param string|array<string, string> $path
-     */
+    
     private function addNamespace(string $type, string $name, $path): void
     {
         if (!$this->namespaces) {
@@ -159,9 +103,7 @@ class NamespaceLoader
         $this->namespaces[$type][$name] = (array) $path;
     }
 
-    /**
-     * @param 'psr-4'|'psr-0'|'classmap' $type
-     */
+    
     private function hasNamespace(string $type, string $name): bool
     {
         if (in_array($name, $this->getNamespaceList($type))) {
@@ -179,9 +121,7 @@ class NamespaceLoader
         return false;
     }
 
-    /**
-     * @param array<string, mixed> $data
-     */
+    
     private function addListToClassLoader(array $data, bool $skipVendorNamespaces = false): void
     {
         foreach ($this->methodNameMap as $type => $methodName) {
@@ -227,9 +167,7 @@ class NamespaceLoader
         }
     }
 
-    /**
-     * @return array<string, mixed>
-     */
+    
     private function getVendorNamespaces(string $path): array
     {
         $useCache = $this->config->get('useCache');
@@ -238,7 +176,7 @@ class NamespaceLoader
             $this->vendorNamespaces = [];
 
             if ($useCache && $this->dataCache->has($this->cacheKey)) {
-                /** @var ?array<string, mixed> $cachedData */
+                
                 $cachedData = $this->dataCache->get($this->cacheKey);
 
                 $this->vendorNamespaces = $cachedData;

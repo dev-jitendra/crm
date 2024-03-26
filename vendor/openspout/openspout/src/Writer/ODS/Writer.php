@@ -17,7 +17,7 @@ use OpenSpout\Writer\ODS\Manager\WorksheetManager;
 
 final class Writer extends AbstractWriterMultiSheets
 {
-    /** @var string Content-Type value for the header */
+    
     protected static string $headerContentType = 'application/vnd.oasis.opendocument.spreadsheet';
     private readonly Options $options;
 

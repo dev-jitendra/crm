@@ -10,16 +10,10 @@ use function oci_pconnect;
 
 use const OCI_NO_AUTO_COMMIT;
 
-/**
- * A Doctrine DBAL driver for the Oracle OCI8 PHP extensions.
- */
+
 final class Driver extends AbstractOracleDriver
 {
-    /**
-     * {@inheritdoc}
-     *
-     * @return Connection
-     */
+    
     public function connect(array $params)
     {
         $username    = $params['user'] ?? '';

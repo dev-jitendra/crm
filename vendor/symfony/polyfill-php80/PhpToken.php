@@ -1,41 +1,22 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Polyfill\Php80;
 
-/**
- * @author Fedonyuk Anton <info@ensostudio.ru>
- *
- * @internal
- */
+
 class PhpToken implements \Stringable
 {
-    /**
-     * @var int
-     */
+    
     public $id;
 
-    /**
-     * @var string
-     */
+    
     public $text;
 
-    /**
-     * @var int
-     */
+    
     public $line;
 
-    /**
-     * @var int
-     */
+    
     public $pos;
 
     public function __construct(int $id, string $text, int $line = -1, int $position = -1)
@@ -55,9 +36,7 @@ class PhpToken implements \Stringable
         return $name;
     }
 
-    /**
-     * @param int|string|array $kind
-     */
+    
     public function is($kind): bool
     {
         foreach ((array) $kind as $value) {
@@ -79,9 +58,7 @@ class PhpToken implements \Stringable
         return (string) $this->text;
     }
 
-    /**
-     * @return static[]
-     */
+    
     public static function tokenize(string $code, int $flags = 0): array
     {
         $line = 1;

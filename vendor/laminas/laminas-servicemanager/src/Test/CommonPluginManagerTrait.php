@@ -12,13 +12,7 @@ use stdClass;
 
 use function method_exists;
 
-/**
- * Trait for testing plugin managers for v2-v3 compatibility
- *
- * To use this trait:
- *   * implement the `getPluginManager()` method to return your plugin manager
- *   * implement the `getV2InvalidPluginException()` method to return the class `validatePlugin()` throws under v2
- */
+
 trait CommonPluginManagerTrait
 {
     public function testInstanceOfMatches()
@@ -64,19 +58,13 @@ trait CommonPluginManagerTrait
         $manager->get('test');
     }
 
-    /**
-     * @dataProvider aliasProvider
-     * @param string $alias
-     * @param string $expected
-     */
+    
     public function testPluginAliasesResolve($alias, $expected)
     {
         $this->assertInstanceOf($expected, $this->getPluginManager()->get($alias), "Alias '$alias' does not resolve'");
     }
 
-    /**
-     * @return array
-     */
+    
     public static function aliasProvider(): array
     {
         $manager    = self::getPluginManager();
@@ -97,24 +85,12 @@ trait CommonPluginManagerTrait
         return $this->getV2InvalidPluginException();
     }
 
-    /**
-     * Returns the plugin manager to test
-     *
-     * @return AbstractPluginManager
-     */
+    
     abstract protected static function getPluginManager();
 
-    /**
-     * Returns the FQCN of the exception thrown under v2 by `validatePlugin()`
-     *
-     * @return mixed
-     */
+    
     abstract protected function getV2InvalidPluginException();
 
-    /**
-     * Returns the value the instanceOf property has been set to
-     *
-     * @return string
-     */
+    
     abstract protected function getInstanceOf();
 }

@@ -1,13 +1,6 @@
 <?php
 
-/**
- * EC Public Key
- *
- * @author    Jim Wigginton <terrafrost@php.net>
- * @copyright 2015 Jim Wigginton
- * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
- * @link      http://phpseclib.sourceforge.net
- */
+
 
 namespace phpseclib3\Crypt\EC;
 
@@ -23,23 +16,12 @@ use phpseclib3\Crypt\Hash;
 use phpseclib3\Exception\UnsupportedOperationException;
 use phpseclib3\Math\BigInteger;
 
-/**
- * EC Public Key
- *
- * @author  Jim Wigginton <terrafrost@php.net>
- */
+
 final class PublicKey extends EC implements Common\PublicKey
 {
     use Common\Traits\Fingerprint;
 
-    /**
-     * Verify a signature
-     *
-     * @see self::verify()
-     * @param string $message
-     * @param string $signature
-     * @return mixed
-     */
+    
     public function verify($message, $signature)
     {
         if ($this->curve instanceof MontgomeryCurve) {
@@ -156,13 +138,7 @@ final class PublicKey extends EC implements Common\PublicKey
         return $x1->equals($r);
     }
 
-    /**
-     * Returns the public key
-     *
-     * @param string $type
-     * @param array $options optional
-     * @return string
-     */
+    
     public function toString($type, array $options = [])
     {
         $type = self::validatePlugin('Keys', $type, 'savePublicKey');

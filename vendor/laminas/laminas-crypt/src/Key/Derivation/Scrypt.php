@@ -12,26 +12,11 @@ use function unpack;
 use const PHP_INT_MAX;
 use const PHP_INT_SIZE;
 
-/**
- * Scrypt key derivation function
- *
- * @see      http://www.tarsnap.com/scrypt.html
- * @see      https://tools.ietf.org/html/draft-josefsson-scrypt-kdf-01
- */
-// phpcs:ignore WebimpressCodingStandard.NamingConventions.AbstractClass.Prefix
+
+
 abstract class Scrypt
 {
-    /**
-     * Execute the scrypt algorithm
-     *
-     * @param  string $password
-     * @param  string $salt
-     * @param  int $n CPU cost
-     * @param  int $r Memory cost
-     * @param  int $p parallelization cost
-     * @param  int $length size of the output key
-     * @return string
-     */
+    
     public static function calc($password, $salt, $n, $r, $p, $length)
     {
         if ($n === 0 || ($n & ($n - 1)) !== 0) {
@@ -61,16 +46,7 @@ abstract class Scrypt
         return Pbkdf2::calc('sha256', $password, $s, 1, $length);
     }
 
-   /**
-    * scryptROMix
-    *
-    * @see    https://tools.ietf.org/html/draft-josefsson-scrypt-kdf-01#section-4
-    *
-    * @param  string $b
-    * @param  int $n
-    * @param  int $r
-    * @return string
-    */
+   
     protected static function scryptROMix($b, $n, $r)
     {
         $x = $b;
@@ -87,15 +63,7 @@ abstract class Scrypt
         return $x;
     }
 
-    /**
-     * scryptBlockMix
-     *
-     * @see    https://tools.ietf.org/html/draft-josefsson-scrypt-kdf-01#section-3
-     *
-     * @param  string $b
-     * @param  int $r
-     * @return string
-     */
+    
     protected static function scryptBlockMix($b, $r)
     {
         $x    = mb_substr($b, -64, null, '8bit');
@@ -118,15 +86,7 @@ abstract class Scrypt
         return $even . $odd;
     }
 
-    /**
-     * Salsa 20/8 core (32 bit version)
-     *
-     * @see    https://tools.ietf.org/html/draft-josefsson-scrypt-kdf-01#section-2
-     * @see    http://cr.yp.to/salsa20.html
-     *
-     * @param  string $b
-     * @return string
-     */
+    
     protected static function salsa208Core32($b)
     {
         $b32 = [];
@@ -212,15 +172,7 @@ abstract class Scrypt
         return $result;
     }
 
-    /**
-     * Salsa 20/8 core (64 bit version)
-     *
-     * @see    https://tools.ietf.org/html/draft-josefsson-scrypt-kdf-01#section-2
-     * @see    http://cr.yp.to/salsa20.html
-     *
-     * @param  string $b
-     * @return string
-     */
+    
     protected static function salsa208Core64($b)
     {
         $b32 = [];
@@ -306,18 +258,7 @@ abstract class Scrypt
         return $result;
     }
 
-    /**
-     * Integerify
-     *
-     * Integerify (B[0] ... B[2 * r - 1]) is defined as the result
-     * of interpreting B[2 * r - 1] as a little-endian integer.
-     * Each block B is a string of 64 bytes.
-     *
-     * @see    https://tools.ietf.org/html/draft-josefsson-scrypt-kdf-01#section-4
-     *
-     * @param  string $b
-     * @return int
-     */
+    
     protected static function integerify($b)
     {
         $v = 'v';

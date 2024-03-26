@@ -4,23 +4,13 @@ namespace AsyncAws\Core\Stream;
 
 use AsyncAws\Core\Exception\InvalidArgument;
 
-/**
- * Convert a string into a Stream.
- *
- * @author Jérémy Derussé <jeremy@derusse.com>
- *
- * @internal
- */
+
 final class StringStream implements RequestStream
 {
-    /**
-     * @var string
-     */
+    
     private $content;
 
-    /**
-     * @var int|null
-     */
+    
     private $lengthCache;
 
     private function __construct(string $content)
@@ -28,9 +18,7 @@ final class StringStream implements RequestStream
         $this->content = $content;
     }
 
-    /**
-     * @param RequestStream|string $content
-     */
+    
     public static function create($content): StringStream
     {
         if ($content instanceof self) {

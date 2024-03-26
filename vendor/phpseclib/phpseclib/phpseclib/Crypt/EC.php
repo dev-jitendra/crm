@@ -1,31 +1,6 @@
 <?php
 
-/**
- * Pure-PHP implementation of EC.
- *
- * PHP version 5
- *
- * Here's an example of how to create signatures and verify signatures with this library:
- * <code>
- * <?php
- * include 'vendor/autoload.php';
- *
- * $private = \phpseclib3\Crypt\EC::createKey('secp256k1');
- * $public = $private->getPublicKey();
- *
- * $plaintext = 'terrafrost';
- *
- * $signature = $private->sign($plaintext);
- *
- * echo $public->verify($plaintext, $signature) ? 'verified' : 'unverified';
- * ?>
- * </code>
- *
- * @author    Jim Wigginton <terrafrost@php.net>
- * @copyright 2016 Jim Wigginton
- * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
- * @link      http://phpseclib.sourceforge.net
- */
+
 
 namespace phpseclib3\Crypt;
 
@@ -46,96 +21,40 @@ use phpseclib3\File\ASN1;
 use phpseclib3\File\ASN1\Maps\ECParameters;
 use phpseclib3\Math\BigInteger;
 
-/**
- * Pure-PHP implementation of EC.
- *
- * @author  Jim Wigginton <terrafrost@php.net>
- */
+
 abstract class EC extends AsymmetricKey
 {
-    /**
-     * Algorithm Name
-     *
-     * @var string
-     */
+    
     const ALGORITHM = 'EC';
 
-    /**
-     * Public Key QA
-     *
-     * @var object[]
-     */
+    
     protected $QA;
 
-    /**
-     * Curve
-     *
-     * @var \phpseclib3\Crypt\EC\BaseCurves\Base
-     */
+    
     protected $curve;
 
-    /**
-     * Signature Format
-     *
-     * @var string
-     */
+    
     protected $format;
 
-    /**
-     * Signature Format (Short)
-     *
-     * @var string
-     */
+    
     protected $shortFormat;
 
-    /**
-     * Curve Name
-     *
-     * @var string
-     */
+    
     private $curveName;
 
-    /**
-     * Curve Order
-     *
-     * Used for deterministic ECDSA
-     *
-     * @var \phpseclib3\Math\BigInteger
-     */
+    
     protected $q;
 
-    /**
-     * Alias for the private key
-     *
-     * Used for deterministic ECDSA. AsymmetricKey expects $x. I don't like x because
-     * with x you have x * the base point yielding an (x, y)-coordinate that is the
-     * public key. But the x is different depending on which side of the equal sign
-     * you're on. It's less ambiguous if you do dA * base point = (x, y)-coordinate.
-     *
-     * @var \phpseclib3\Math\BigInteger
-     */
+    
     protected $x;
 
-    /**
-     * Context
-     *
-     * @var string
-     */
+    
     protected $context;
 
-    /**
-     * Signature Format
-     *
-     * @var string
-     */
+    
     protected $sigFormat;
 
-    /**
-     * Create public / private key pair.
-     *
-     * @param string $curve
-     * @return \phpseclib3\Crypt\EC\PrivateKey
-     */
+    
     public static function createKey($curve)
     {
         self::initialize_static_variables();
@@ -154,10 +73,10 @@ abstract class EC extends AsymmetricKey
             $kp = sodium_crypto_sign_keypair();
 
             $privatekey = EC::loadFormat('libsodium', sodium_crypto_sign_secretkey($kp));
-            //$publickey = EC::loadFormat('libsodium', sodium_crypto_sign_publickey($kp));
+            
 
             $privatekey->curveName = 'Ed25519';
-            //$publickey->curveName = $curve;
+            
 
             return $privatekey;
         }
@@ -190,8 +109,8 @@ abstract class EC extends AsymmetricKey
             $privatekey->dA = $dA = $curve->createRandomMultiplier();
         }
         if ($curve instanceof Curve25519 && self::$engines['libsodium']) {
-            //$r = pack('H*', '0900000000000000000000000000000000000000000000000000000000000000');
-            //$QA = sodium_crypto_scalarmult($dA->toBytes(), $r);
+            
+            
             $QA = sodium_crypto_box_publickey_from_secretkey($dA->toBytes());
             $privatekey->QA = [$curve->convertInteger(new BigInteger(strrev($QA), 256))];
         } else {
@@ -199,12 +118,12 @@ abstract class EC extends AsymmetricKey
         }
         $privatekey->curve = $curve;
 
-        //$publickey = clone $privatekey;
-        //unset($publickey->dA);
-        //unset($publickey->x);
+        
+        
+        
 
         $privatekey->curveName = $curveName;
-        //$publickey->curveName = $curveName;
+        
 
         if ($privatekey->curve instanceof TwistedEdwardsCurve) {
             return $privatekey->withHash($curve::HASH);
@@ -213,11 +132,7 @@ abstract class EC extends AsymmetricKey
         return $privatekey;
     }
 
-    /**
-     * OnLoad Handler
-     *
-     * @return bool
-     */
+    
     protected static function onLoad(array $components)
     {
         if (!isset(self::$engines['PHP'])) {
@@ -248,11 +163,7 @@ abstract class EC extends AsymmetricKey
         return $new;
     }
 
-    /**
-     * Constructor
-     *
-     * PublicKey and PrivateKey objects can only be created from abstract RSA class
-     */
+    
     protected function __construct()
     {
         $this->sigFormat = self::validatePlugin('Signature', 'ASN1');
@@ -261,13 +172,7 @@ abstract class EC extends AsymmetricKey
         parent::__construct();
     }
 
-    /**
-     * Returns the curve
-     *
-     * Returns a string if it's a named curve, an array if not
-     *
-     * @return string|array
-     */
+    
     public function getCurve()
     {
         if ($this->curveName) {
@@ -300,33 +205,13 @@ abstract class EC extends AsymmetricKey
         return $decoded;
     }
 
-    /**
-     * Returns the key size
-     *
-     * Quoting https://tools.ietf.org/html/rfc5656#section-2,
-     *
-     * "The size of a set of elliptic curve domain parameters on a prime
-     *  curve is defined as the number of bits in the binary representation
-     *  of the field order, commonly denoted by p.  Size on a
-     *  characteristic-2 curve is defined as the number of bits in the binary
-     *  representation of the field, commonly denoted by m.  A set of
-     *  elliptic curve domain parameters defines a group of order n generated
-     *  by a base point P"
-     *
-     * @return int
-     */
+    
     public function getLength()
     {
         return $this->curve->getLength();
     }
 
-    /**
-     * Returns the current engine being used
-     *
-     * @see self::useInternalEngine()
-     * @see self::useBestEngine()
-     * @return string
-     */
+    
     public function getEngine()
     {
         if (!isset(self::$engines['PHP'])) {
@@ -341,13 +226,7 @@ abstract class EC extends AsymmetricKey
             'OpenSSL' : 'PHP';
     }
 
-    /**
-     * Returns the public key coordinates as a string
-     *
-     * Used by ECDH
-     *
-     * @return string
-     */
+    
     public function getEncodedCoordinates()
     {
         if ($this->curve instanceof MontgomeryCurve) {
@@ -359,13 +238,7 @@ abstract class EC extends AsymmetricKey
         return "\4" . $this->QA[0]->toBytes(true) . $this->QA[1]->toBytes(true);
     }
 
-    /**
-     * Returns the parameters
-     *
-     * @see self::getPublicKey()
-     * @param string $type optional
-     * @return mixed
-     */
+    
     public function getParameters($type = 'PKCS1')
     {
         $type = self::validatePlugin('Keys', $type, 'saveParameters');
@@ -377,13 +250,7 @@ abstract class EC extends AsymmetricKey
             ->withSignatureFormat($this->shortFormat);
     }
 
-    /**
-     * Determines the signature padding mode
-     *
-     * Valid values are: ASN1, SSH2, Raw
-     *
-     * @param string $format
-     */
+    
     public function withSignatureFormat($format)
     {
         if ($this->curve instanceof MontgomeryCurve) {
@@ -396,24 +263,13 @@ abstract class EC extends AsymmetricKey
         return $new;
     }
 
-    /**
-     * Returns the signature format currently being used
-     *
-     */
+    
     public function getSignatureFormat()
     {
         return $this->shortFormat;
     }
 
-    /**
-     * Sets the context
-     *
-     * Used by Ed25519 / Ed448.
-     *
-     * @see self::sign()
-     * @see self::verify()
-     * @param string $context optional
-     */
+    
     public function withContext($context = null)
     {
         if (!$this->curve instanceof TwistedEdwardsCurve) {
@@ -435,20 +291,13 @@ abstract class EC extends AsymmetricKey
         return $new;
     }
 
-    /**
-     * Returns the signature format currently being used
-     *
-     */
+    
     public function getContext()
     {
         return $this->context;
     }
 
-    /**
-     * Determines which hashing function should be used
-     *
-     * @param string $hash
-     */
+    
     public function withHash($hash)
     {
         if ($this->curve instanceof MontgomeryCurve) {
@@ -464,11 +313,7 @@ abstract class EC extends AsymmetricKey
         return parent::withHash($hash);
     }
 
-    /**
-     * __toString() magic method
-     *
-     * @return string
-     */
+    
     public function __toString()
     {
         if ($this->curve instanceof MontgomeryCurve) {

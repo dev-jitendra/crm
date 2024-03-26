@@ -2,9 +2,7 @@
 namespace Ratchet\Session\Serialize;
 use Ratchet\Session\Serialize\PhpHandler;
 
-/**
- * @covers Ratchet\Session\Serialize\PhpHandler
- */
+
 class PhpHandlerTest extends \PHPUnit_Framework_TestCase {
     protected $_handler;
 
@@ -27,16 +25,12 @@ class PhpHandlerTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
-    /**
-     * @dataProvider serializedProvider
-     */
+    
     public function testUnserialize($in, $expected) {
         $this->assertEquals($expected, $this->_handler->unserialize($in));
     }
 
-    /**
-     * @dataProvider serializedProvider
-     */
+    
     public function testSerialize($serialized, $original) {
         $this->assertEquals($serialized, $this->_handler->serialize($original));
     }

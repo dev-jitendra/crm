@@ -11,21 +11,7 @@ use React\EventLoop\Tick\FutureTickQueue;
 use React\EventLoop\Timer\Timer;
 use SplObjectStorage;
 
-/**
- * [Deprecated] An `ext-libev` based event loop.
- *
- * This uses an [unofficial `libev` extension](https://github.com/m4rw3r/php-libev),
- * that provides an interface to `libev` library.
- * `libev` itself supports a number of system-specific backends (epoll, kqueue).
- *
- * This loop does only work with PHP 5.
- * An update for PHP 7 is [unlikely](https://github.com/m4rw3r/php-libev/issues/8)
- * to happen any time soon.
- *
- * @see https://github.com/m4rw3r/php-libev
- * @see https://gist.github.com/1688204
- * @deprecated 1.2.0, use [`ExtEvLoop`](#extevloop) instead.
- */
+
 final class ExtLibevLoop implements LoopInterface
 {
     private $loop;

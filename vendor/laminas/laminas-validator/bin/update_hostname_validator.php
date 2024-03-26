@@ -6,7 +6,7 @@ use Laminas\Validator\Hostname;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-const IANA_URL                        = 'https://data.iana.org/TLD/tlds-alpha-by-domain.txt';
+const IANA_URL                        = 'https:
 const LAMINAS_HOSTNAME_VALIDATOR_FILE = __DIR__ . '/../src/Hostname.php';
 
 if (! file_exists(LAMINAS_HOSTNAME_VALIDATOR_FILE) || ! is_readable(LAMINAS_HOSTNAME_VALIDATOR_FILE)) {
@@ -19,10 +19,10 @@ if (! is_writable(LAMINAS_HOSTNAME_VALIDATOR_FILE)) {
     exit(1);
 }
 
-/** @psalm-var list<string> $newFileContent */
-$newFileContent = [];    // new file content
-$insertDone     = false; // becomes 'true' when we find start of $validTlds declaration
-$insertFinish   = false; // becomes 'true' when we find end of $validTlds declaration
+
+$newFileContent = [];    
+$insertDone     = false; 
+$insertFinish   = false; 
 $checkOnly      = isset($argv[1]) ? $argv[1] === '--check-only' : false;
 $response       = getOfficialTLDs();
 
@@ -30,7 +30,7 @@ $currentFileContent = file(LAMINAS_HOSTNAME_VALIDATOR_FILE);
 
 foreach ($currentFileContent as $line) {
     if ($insertDone === $insertFinish) {
-        // Outside of $validTlds definition; keep line as-is
+        
         $newFileContent[] = $line;
     }
 
@@ -39,7 +39,7 @@ foreach ($currentFileContent as $line) {
     }
 
     if ($insertDone) {
-        // Detect where the $validTlds declaration ends
+        
         if (preg_match('/^\s+\];\s*$/', $line)) {
             $newFileContent[] = $line;
             $insertFinish     = true;
@@ -48,7 +48,7 @@ foreach ($currentFileContent as $line) {
         continue;
     }
 
-    // Detect where the $validTlds declaration begins
+    
     if (preg_match('/^\s+protected\s+\$validTlds\s+=\s+\[\s*$/', $line)) {
         $newFileContent = array_merge($newFileContent, getNewValidTlds($response));
         $insertDone     = true;
@@ -86,9 +86,7 @@ if (false === @file_put_contents(LAMINAS_HOSTNAME_VALIDATOR_FILE, $newFileConten
 printf('Validator TLD file updated.%s', PHP_EOL);
 exit(0);
 
-/**
- * Get Official TLDs
- */
+
 function getOfficialTLDs(): string
 {
     try {
@@ -103,16 +101,12 @@ function getOfficialTLDs(): string
     }
 }
 
-/**
- * Extract new Valid TLDs from a string containing one per line.
- *
- * @return list<string>
- */
+
 function getNewValidTlds(string $string): array
 {
     $decodePunycode = getPunycodeDecoder();
 
-    // Get new TLDs from the list previously fetched
+    
     $newValidTlds = [];
     foreach (preg_grep('/^[^#]/', preg_split("#\r?\n#", $string)) as $line) {
         $newValidTlds [] = sprintf(
@@ -125,18 +119,7 @@ function getNewValidTlds(string $string): array
     return $newValidTlds;
 }
 
-/**
- * Retrieve and return a punycode decoder.
- *
- * TLDs are puny encoded.
- *
- * We need a decodePunycode function to translate TLDs to UTF-8:
- *
- * - use idn_to_utf8 if available
- * - otherwise, use Hostname::decodePunycode()
- *
- * @return callable
- */
+
 function getPunycodeDecoder()
 {
     if (function_exists('idn_to_utf8')) {

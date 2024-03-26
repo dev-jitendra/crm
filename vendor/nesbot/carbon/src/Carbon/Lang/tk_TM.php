@@ -1,20 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/**
- * Authors:
- * - Ghorban M. Tavakoly Pablo Saratxaga & Ghorban M. Tavakoly pablo@walon.org & gmt314@yahoo.com
- * - SuperManPHP
- * - Maksat Meredow (isadma)
- */
+
+
 $transformDiff = function ($input) {
     return strtr($input, [
         'sekunt' => 'sekunt',

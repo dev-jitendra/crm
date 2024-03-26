@@ -1,28 +1,15 @@
 <?php
-/**
- * @package php-font-lib
- * @link    https://github.com/PhenX/php-font-lib
- * @author  Fabien Ménager <fabien.menager@gmail.com>
- * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
- */
+
 
 namespace FontLib;
 
 use FontLib\Exception\FontNotFoundException;
 
-/**
- * Generic font file.
- *
- * @package php-font-lib
- */
+
 class Font {
   static $debug = false;
 
-  /**
-   * @param string $file The font file
-   *
-   * @return TrueType\File|null $file
-   */
+  
   public static function load($file) {
       if(!file_exists($file)){
           throw new FontNotFoundException($file);
@@ -50,7 +37,7 @@ class Font {
         $class = "TrueType\\Collection";
         break;
 
-      // Unknown type or EOT
+      
       default:
         $magicNumber = file_get_contents($file, false, null, 34, 2);
 
@@ -62,7 +49,7 @@ class Font {
     if ($class) {
       $class = "FontLib\\$class";
 
-      /** @var TrueType\File $obj */
+      
       $obj = new $class;
       $obj->load($file);
 

@@ -1,15 +1,6 @@
 <?php
 
-/**
- * PuTTY Formatted RSA Key Handler
- *
- * PHP version 5
- *
- * @author    Jim Wigginton <terrafrost@php.net>
- * @copyright 2015 Jim Wigginton
- * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
- * @link      http://phpseclib.sourceforge.net
- */
+
 
 namespace phpseclib3\Crypt\RSA\Formats\Keys;
 
@@ -17,34 +8,16 @@ use phpseclib3\Common\Functions\Strings;
 use phpseclib3\Crypt\Common\Formats\Keys\PuTTY as Progenitor;
 use phpseclib3\Math\BigInteger;
 
-/**
- * PuTTY Formatted RSA Key Handler
- *
- * @author  Jim Wigginton <terrafrost@php.net>
- */
+
 abstract class PuTTY extends Progenitor
 {
-    /**
-     * Public Handler
-     *
-     * @var string
-     */
+    
     const PUBLIC_HANDLER = 'phpseclib3\Crypt\RSA\Formats\Keys\OpenSSH';
 
-    /**
-     * Algorithm Identifier
-     *
-     * @var array
-     */
+    
     protected static $types = ['ssh-rsa'];
 
-    /**
-     * Break a public or private key down into its constituent components
-     *
-     * @param string $key
-     * @param string $password optional
-     * @return array
-     */
+    
     public static function load($key, $password = '')
     {
         static $one;
@@ -82,19 +55,7 @@ abstract class PuTTY extends Progenitor
         return compact('publicExponent', 'modulus', 'privateExponent', 'primes', 'coefficients', 'exponents', 'comment', 'isPublicKey');
     }
 
-    /**
-     * Convert a private key to the appropriate format.
-     *
-     * @param \phpseclib3\Math\BigInteger $n
-     * @param \phpseclib3\Math\BigInteger $e
-     * @param \phpseclib3\Math\BigInteger $d
-     * @param array $primes
-     * @param array $exponents
-     * @param array $coefficients
-     * @param string $password optional
-     * @param array $options optional
-     * @return string
-     */
+    
     public static function savePrivateKey(BigInteger $n, BigInteger $e, BigInteger $d, array $primes, array $exponents, array $coefficients, $password = '', array $options = [])
     {
         if (count($primes) != 2) {
@@ -107,13 +68,7 @@ abstract class PuTTY extends Progenitor
         return self::wrapPrivateKey($public, $private, 'ssh-rsa', $password, $options);
     }
 
-    /**
-     * Convert a public key to the appropriate format
-     *
-     * @param \phpseclib3\Math\BigInteger $n
-     * @param \phpseclib3\Math\BigInteger $e
-     * @return string
-     */
+    
     public static function savePublicKey(BigInteger $n, BigInteger $e)
     {
         return self::wrapPublicKey(Strings::packSSH2('ii', $e, $n), 'ssh-rsa');

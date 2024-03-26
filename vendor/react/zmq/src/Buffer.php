@@ -10,47 +10,28 @@ use ZMQSocketException;
 
 class Buffer extends EventEmitter
 {
-    /**
-     * @var ZMQSocket
-     */
+    
     public $socket;
 
-    /**
-     * @var bool
-     */
+    
     public $closed = false;
 
-    /**
-     * @var bool
-     */
+    
     public $listening = false;
 
-    /**
-     * @var LoopInterface
-     */
+    
     protected $loop;
 
-    /**
-     * @var resource
-     */
+    
     protected $fileDescriptor;
 
-    /**
-     * @var callable
-     */
+    
     protected $writeListener;
 
-    /**
-     * @var array
-     */
+    
     protected $messages = array();
 
-    /**
-     * @param ZMQSocket     $socket
-     * @param resource      $fileDescriptor
-     * @param LoopInterface $loop
-     * @param callable      $writeListener
-     */
+    
     public function __construct(ZMQSocket $socket, $fileDescriptor, LoopInterface $loop, callable $writeListener)
     {
         $this->socket = $socket;
@@ -59,9 +40,7 @@ class Buffer extends EventEmitter
         $this->writeListener = $writeListener;
     }
 
-    /**
-     * @param string $message
-     */
+    
     public function send($message)
     {
         if ($this->closed) {

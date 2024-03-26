@@ -5,7 +5,7 @@
   width: 100%;
   height: 100%;
 
-  /* Must be displayed above for example selected Timeline items */
+  
   z-index: 10;
 }
 
@@ -13,7 +13,7 @@
   box-shadow: 0 0 10px #86d5f8;
 }
 
-/* override some bootstrap styles screwing up the timelines css */
+
 
 .vis [class*="span"] {
   min-height: 0;
@@ -138,35 +138,35 @@ input.vis-configuration.vis-config-rangeinput{
     position:relative;
     top:-5px;
     width:60px;
-    /*height:13px;*/
+    
     padding:1px;
     margin:0;
     pointer-events:none;
 }
 
 input.vis-configuration.vis-config-range{
-    /*removes default webkit styles*/
+    
     -webkit-appearance: none;
 
-    /*fix for FF unable to apply focus style bug */
+    
     border: 0px solid white;
     background-color:rgba(0,0,0,0);
 
-    /*required for proper track sizing in FF*/
+    
     width: 300px;
     height:20px;
 }
 input.vis-configuration.vis-config-range::-webkit-slider-runnable-track {
     width: 300px;
     height: 5px;
-    background: #dedede; /* Old browsers */
-    background: -moz-linear-gradient(top,  #dedede 0%, #c8c8c8 99%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dedede), color-stop(99%,#c8c8c8)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  #dedede 0%,#c8c8c8 99%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #dedede 0%, #c8c8c8 99%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  #dedede 0%,#c8c8c8 99%); /* IE10+ */
-    background: linear-gradient(to bottom,  #dedede 0%,#c8c8c8 99%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dedede', endColorstr='#c8c8c8',GradientType=0 ); /* IE6-9 */
+    background: #dedede; 
+    background: -moz-linear-gradient(top,  #dedede 0%, #c8c8c8 99%); 
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dedede), color-stop(99%,#c8c8c8)); 
+    background: -webkit-linear-gradient(top,  #dedede 0%,#c8c8c8 99%); 
+    background: -o-linear-gradient(top, #dedede 0%, #c8c8c8 99%); 
+    background: -ms-linear-gradient(top,  #dedede 0%,#c8c8c8 99%); 
+    background: linear-gradient(to bottom,  #dedede 0%,#c8c8c8 99%); 
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dedede', endColorstr='#c8c8c8',GradientType=0 ); 
 
     border: 1px solid #999999;
     box-shadow: #aaaaaa 0px 0px 3px 0px;
@@ -178,14 +178,14 @@ input.vis-configuration.vis-config-range::-webkit-slider-thumb {
     height: 17px;
     width: 17px;
     border-radius: 50%;
-    background: #3876c2; /* Old browsers */
-    background: -moz-linear-gradient(top,  #3876c2 0%, #385380 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3876c2), color-stop(100%,#385380)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  #3876c2 0%,#385380 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  #3876c2 0%,#385380 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  #3876c2 0%,#385380 100%); /* IE10+ */
-    background: linear-gradient(to bottom,  #3876c2 0%,#385380 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3876c2', endColorstr='#385380',GradientType=0 ); /* IE6-9 */
+    background: #3876c2; 
+    background: -moz-linear-gradient(top,  #3876c2 0%, #385380 100%); 
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3876c2), color-stop(100%,#385380)); 
+    background: -webkit-linear-gradient(top,  #3876c2 0%,#385380 100%); 
+    background: -o-linear-gradient(top,  #3876c2 0%,#385380 100%); 
+    background: -ms-linear-gradient(top,  #3876c2 0%,#385380 100%); 
+    background: linear-gradient(to bottom,  #3876c2 0%,#385380 100%); 
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3876c2', endColorstr='#385380',GradientType=0 ); 
     box-shadow: #111927 0px 0px 1px 0px;
     margin-top: -7px;
 }
@@ -193,27 +193,27 @@ input.vis-configuration.vis-config-range:focus {
     outline: none;
 }
 input.vis-configuration.vis-config-range:focus::-webkit-slider-runnable-track {
-    background: #9d9d9d; /* Old browsers */
-    background: -moz-linear-gradient(top, #9d9d9d 0%, #c8c8c8 99%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9d9d9d), color-stop(99%,#c8c8c8)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  #9d9d9d 0%,#c8c8c8 99%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  #9d9d9d 0%,#c8c8c8 99%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  #9d9d9d 0%,#c8c8c8 99%); /* IE10+ */
-    background: linear-gradient(to bottom,  #9d9d9d 0%,#c8c8c8 99%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9d9d9d', endColorstr='#c8c8c8',GradientType=0 ); /* IE6-9 */
+    background: #9d9d9d; 
+    background: -moz-linear-gradient(top, #9d9d9d 0%, #c8c8c8 99%); 
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9d9d9d), color-stop(99%,#c8c8c8)); 
+    background: -webkit-linear-gradient(top,  #9d9d9d 0%,#c8c8c8 99%); 
+    background: -o-linear-gradient(top,  #9d9d9d 0%,#c8c8c8 99%); 
+    background: -ms-linear-gradient(top,  #9d9d9d 0%,#c8c8c8 99%); 
+    background: linear-gradient(to bottom,  #9d9d9d 0%,#c8c8c8 99%); 
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9d9d9d', endColorstr='#c8c8c8',GradientType=0 ); 
 }
 
 input.vis-configuration.vis-config-range::-moz-range-track {
     width: 300px;
     height: 10px;
-    background: #dedede; /* Old browsers */
-    background: -moz-linear-gradient(top,  #dedede 0%, #c8c8c8 99%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dedede), color-stop(99%,#c8c8c8)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  #dedede 0%,#c8c8c8 99%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #dedede 0%, #c8c8c8 99%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  #dedede 0%,#c8c8c8 99%); /* IE10+ */
-    background: linear-gradient(to bottom,  #dedede 0%,#c8c8c8 99%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dedede', endColorstr='#c8c8c8',GradientType=0 ); /* IE6-9 */
+    background: #dedede; 
+    background: -moz-linear-gradient(top,  #dedede 0%, #c8c8c8 99%); 
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dedede), color-stop(99%,#c8c8c8)); 
+    background: -webkit-linear-gradient(top,  #dedede 0%,#c8c8c8 99%); 
+    background: -o-linear-gradient(top, #dedede 0%, #c8c8c8 99%); 
+    background: -ms-linear-gradient(top,  #dedede 0%,#c8c8c8 99%); 
+    background: linear-gradient(to bottom,  #dedede 0%,#c8c8c8 99%); 
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dedede', endColorstr='#c8c8c8',GradientType=0 ); 
 
     border: 1px solid #999999;
     box-shadow: #aaaaaa 0px 0px 3px 0px;
@@ -228,7 +228,7 @@ input.vis-configuration.vis-config-range::-moz-range-thumb {
     background:  #385380;
 }
 
-/*hide the outline behind the border*/
+
 input.vis-configuration.vis-config-range:-moz-focusring{
     outline: 1px solid white;
     outline-offset: -1px;
@@ -238,14 +238,14 @@ input.vis-configuration.vis-config-range::-ms-track {
     width: 300px;
     height: 5px;
 
-    /*remove bg colour from the track, we'll use ms-fill-lower and ms-fill-upper instead */
+    
     background: transparent;
 
-    /*leave room for the larger thumb to overflow with a transparent border */
+    
     border-color: transparent;
     border-width: 6px 0;
 
-    /*remove default tick marks*/
+    
     color: transparent;
 }
 input.vis-configuration.vis-config-range::-ms-fill-lower {
@@ -366,9 +366,7 @@ input.vis-configuration.vis-config-range:focus::-ms-fill-upper {
   width: 100%;
   height: 1px;
   box-shadow: 0 0 10px rgba(0,0,0,0.8);
-  /* TODO: find a nice way to ensure vis-shadows are drawn on top of items
-  z-index: 1;
-  */
+  
 }
 
 .vis-panel .vis-shadow.vis-top {
@@ -470,14 +468,14 @@ input.vis-configuration.vis-config-range:focus::-ms-fill-upper {
   border-width: 1px;
   background-color: #D5DDF6;
   display: inline-block;
-  /*overflow: hidden;*/
+  
 }
 
 .vis-item.vis-selected {
   border-color: #FFC200;
   background-color: #FFF785;
 
-  /* z-index must be higher than the z-index of custom time bar and current time bar */
+  
   z-index: 2;
 }
 
@@ -655,38 +653,18 @@ input.vis-configuration.vis-config-range:focus::-ms-fill-upper {
   z-index: 1;
 }
 .vis-timeline {
-  /*
-  -webkit-transition: height .4s ease-in-out;
-  transition:         height .4s ease-in-out;
-  */
+  
 }
 
 .vis-panel {
-  /*
-  -webkit-transition: height .4s ease-in-out, top .4s ease-in-out;
-  transition:         height .4s ease-in-out, top .4s ease-in-out;
-  */
+  
 }
 
 .vis-axis {
-  /*
-  -webkit-transition: top .4s ease-in-out;
-  transition:         top .4s ease-in-out;
-  */
+  
 }
 
-/* TODO: get animation working nicely
 
-.vis-item {
-  -webkit-transition: top .4s ease-in-out;
-  transition:         top .4s ease-in-out;
-}
-
-.vis-item.line {
-  -webkit-transition: height .4s ease-in-out, top .4s ease-in-out;
-  transition:         height .4s ease-in-out, top .4s ease-in-out;
-}
-/**/
 
 .vis-panel.vis-background.vis-horizontal .vis-grid.vis-horizontal {
   position: absolute;
@@ -784,7 +762,7 @@ input.vis-configuration.vis-config-range:focus::-ms-fill-upper {
 }
 
 .vis-legend-text {
-  /*font-size: 10px;*/
+  
   white-space: nowrap;
   display: inline-block
 }
@@ -900,14 +878,14 @@ div.vis-network div.vis-manipulation {
   border-bottom: 1px;
   border-style:solid;
   border-color: #d6d9d8;
-  background: #ffffff; /* Old browsers */
-  background: -moz-linear-gradient(top,  #ffffff 0%, #fcfcfc 48%, #fafafa 50%, #fcfcfc 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(48%,#fcfcfc), color-stop(50%,#fafafa), color-stop(100%,#fcfcfc)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top,  #ffffff 0%,#fcfcfc 48%,#fafafa 50%,#fcfcfc 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top,  #ffffff 0%,#fcfcfc 48%,#fafafa 50%,#fcfcfc 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top,  #ffffff 0%,#fcfcfc 48%,#fafafa 50%,#fcfcfc 100%); /* IE10+ */
-  background: linear-gradient(to bottom,  #ffffff 0%,#fcfcfc 48%,#fafafa 50%,#fcfcfc 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#fcfcfc',GradientType=0 ); /* IE6-9 */
+  background: #ffffff; 
+  background: -moz-linear-gradient(top,  #ffffff 0%, #fcfcfc 48%, #fafafa 50%, #fcfcfc 100%); 
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(48%,#fcfcfc), color-stop(50%,#fafafa), color-stop(100%,#fcfcfc)); 
+  background: -webkit-linear-gradient(top,  #ffffff 0%,#fcfcfc 48%,#fafafa 50%,#fcfcfc 100%); 
+  background: -o-linear-gradient(top,  #ffffff 0%,#fcfcfc 48%,#fafafa 50%,#fcfcfc 100%); 
+  background: -ms-linear-gradient(top,  #ffffff 0%,#fcfcfc 48%,#fafafa 50%,#fcfcfc 100%); 
+  background: linear-gradient(to bottom,  #ffffff 0%,#fcfcfc 48%,#fafafa 50%,#fcfcfc 100%); 
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#fcfcfc',GradientType=0 ); 
 
   padding-top:4px;
   position: absolute;
@@ -924,7 +902,7 @@ div.vis-network div.vis-edit-mode {
   height: 30px;
 }
 
-/* FIXME: shouldn't the vis-close button be a child of the vis-manipulation div? */
+
 
 div.vis-network div.vis-close {
   position:absolute;
@@ -961,7 +939,7 @@ div.vis-network div.vis-edit-mode div.vis-button {
   background-repeat:no-repeat;
   height:24px;
   margin-left: 10px;
-  /*vertical-align:middle;*/
+  
   cursor: pointer;
   padding: 0px 8px 0px 8px;
   -webkit-touch-callout: none;
@@ -1020,7 +998,7 @@ div.vis-network div.vis-manipulation div.vis-button.vis-connect {
 div.vis-network div.vis-manipulation div.vis-button.vis-delete {
   background-image: url("img/network/deleteIcon.png");
 }
-/* top right bottom left */
+
 div.vis-network div.vis-manipulation div.vis-label,
 div.vis-network div.vis-edit-mode div.vis-label {
   margin: 0 0 0 23px;
@@ -1032,18 +1010,10 @@ div.vis-network div.vis-manipulation div.vis-separator-line {
   width:1px;
   height:21px;
   background-color: #bdbdbd;
-  margin: 0px 7px 0 15px; /*top right bottom left*/
+  margin: 0px 7px 0 15px; 
 }
 
-/* TODO: is this redundant?
-div.network-navigation_wrapper {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-}
-*/
+
 div.vis-network-tooltip {
   position: absolute;
   visibility: hidden;
@@ -1193,14 +1163,14 @@ div.vis-color-picker div.vis-selector {
   height:15px;
   border-radius:15px;
   border:1px solid #ffffff;
-  background: #4c4c4c; /* Old browsers */
-  background: -moz-linear-gradient(top,  #4c4c4c 0%, #595959 12%, #666666 25%, #474747 39%, #2c2c2c 50%, #000000 51%, #111111 60%, #2b2b2b 76%, #1c1c1c 91%, #131313 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4c4c4c), color-stop(12%,#595959), color-stop(25%,#666666), color-stop(39%,#474747), color-stop(50%,#2c2c2c), color-stop(51%,#000000), color-stop(60%,#111111), color-stop(76%,#2b2b2b), color-stop(91%,#1c1c1c), color-stop(100%,#131313)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top,  #4c4c4c 0%,#595959 12%,#666666 25%,#474747 39%,#2c2c2c 50%,#000000 51%,#111111 60%,#2b2b2b 76%,#1c1c1c 91%,#131313 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top,  #4c4c4c 0%,#595959 12%,#666666 25%,#474747 39%,#2c2c2c 50%,#000000 51%,#111111 60%,#2b2b2b 76%,#1c1c1c 91%,#131313 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top,  #4c4c4c 0%,#595959 12%,#666666 25%,#474747 39%,#2c2c2c 50%,#000000 51%,#111111 60%,#2b2b2b 76%,#1c1c1c 91%,#131313 100%); /* IE10+ */
-  background: linear-gradient(to bottom,  #4c4c4c 0%,#595959 12%,#666666 25%,#474747 39%,#2c2c2c 50%,#000000 51%,#111111 60%,#2b2b2b 76%,#1c1c1c 91%,#131313 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', endColorstr='#131313',GradientType=0 ); /* IE6-9 */
+  background: #4c4c4c; 
+  background: -moz-linear-gradient(top,  #4c4c4c 0%, #595959 12%, #666666 25%, #474747 39%, #2c2c2c 50%, #000000 51%, #111111 60%, #2b2b2b 76%, #1c1c1c 91%, #131313 100%); 
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4c4c4c), color-stop(12%,#595959), color-stop(25%,#666666), color-stop(39%,#474747), color-stop(50%,#2c2c2c), color-stop(51%,#000000), color-stop(60%,#111111), color-stop(76%,#2b2b2b), color-stop(91%,#1c1c1c), color-stop(100%,#131313)); 
+  background: -webkit-linear-gradient(top,  #4c4c4c 0%,#595959 12%,#666666 25%,#474747 39%,#2c2c2c 50%,#000000 51%,#111111 60%,#2b2b2b 76%,#1c1c1c 91%,#131313 100%); 
+  background: -o-linear-gradient(top,  #4c4c4c 0%,#595959 12%,#666666 25%,#474747 39%,#2c2c2c 50%,#000000 51%,#111111 60%,#2b2b2b 76%,#1c1c1c 91%,#131313 100%); 
+  background: -ms-linear-gradient(top,  #4c4c4c 0%,#595959 12%,#666666 25%,#474747 39%,#2c2c2c 50%,#000000 51%,#111111 60%,#2b2b2b 76%,#1c1c1c 91%,#131313 100%); 
+  background: linear-gradient(to bottom,  #4c4c4c 0%,#595959 12%,#666666 25%,#474747 39%,#2c2c2c 50%,#000000 51%,#111111 60%,#2b2b2b 76%,#1c1c1c 91%,#131313 100%); 
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', endColorstr='#131313',GradientType=0 ); 
 }
 
 
@@ -1267,23 +1237,23 @@ div.vis-color-picker div.vis-button {
 }
 
 div.vis-color-picker div.vis-button.vis-cancel {
-  /*border:2px solid #ff4e33;*/
-  /*background-color: #ff7761;*/
+  
+  
   left:5px;
 }
 div.vis-color-picker div.vis-button.vis-load {
-  /*border:2px solid #a153e6;*/
-  /*background-color: #cb8dff;*/
+  
+  
   left:82px;
 }
 div.vis-color-picker div.vis-button.vis-apply {
-  /*border:2px solid #4588e6;*/
-  /*background-color: #82b6ff;*/
+  
+  
   left:159px;
 }
 div.vis-color-picker div.vis-button.vis-save {
-  /*border:2px solid #45e655;*/
-  /*background-color: #6dff7c;*/
+  
+  
   left:236px;
 }
 
@@ -1293,12 +1263,3 @@ div.vis-color-picker input.vis-range {
   height:20px;
 }
 
-/* TODO: is this redundant?
-div.vis-color-picker input.vis-range-brightness {
-  width: 289px !important;
-}
-
-
-div.vis-color-picker input.vis-saturation-range {
-  width: 289px !important;
-}*/

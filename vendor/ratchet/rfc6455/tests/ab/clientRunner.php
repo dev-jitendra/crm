@@ -59,12 +59,12 @@ function getTestCases() {
 
     $connector->connect($testServer . ':9002')->then(function (ConnectionInterface $connection) use ($deferred, $testServer) {
         $cn = new ClientNegotiator();
-        $cnRequest = $cn->generateRequest(new Uri('ws://' . $testServer . ':9002/getCaseCount'));
+        $cnRequest = $cn->generateRequest(new Uri('ws:
 
         $rawResponse = "";
         $response = null;
 
-        /** @var MessageBuffer $ms */
+        
         $ms = null;
 
         $connection->on('data', function ($data) use ($connection, &$rawResponse, &$response, &$ms, $cn, $deferred, &$context, $cnRequest) {
@@ -97,7 +97,7 @@ function getTestCases() {
                 }
             }
 
-            // feed the message streamer
+            
             if ($ms) {
                 $ms->onData($data);
             }
@@ -125,7 +125,7 @@ function runTest($case)
     $connector->connect($testServer . ':9002')->then(function (ConnectionInterface $connection) use ($deferred, $casePath, $case, $testServer) {
         $cn = new ClientNegotiator(
             PermessageDeflateOptions::permessageDeflateSupported() ? PermessageDeflateOptions::createEnabled() : null);
-        $cnRequest = $cn->generateRequest(new Uri('ws://' . $testServer . ':9002' . $casePath));
+        $cnRequest = $cn->generateRequest(new Uri('ws:
 
         $rawResponse = "";
         $response = null;
@@ -159,7 +159,7 @@ function runTest($case)
                 }
             }
 
-            // feed the message streamer
+            
             if ($ms) {
                 $ms->onData($data);
             }
@@ -182,16 +182,16 @@ function createReport() {
     $deferred = new Deferred();
 
     $connector->connect($testServer . ':9002')->then(function (ConnectionInterface $connection) use ($deferred, $testServer) {
-        // $reportPath = "/updateReports?agent=" . AGENT . "&shutdownOnComplete=true";
-        // we will stop it using docker now instead of just shutting down
+        
+        
         $reportPath = "/updateReports?agent=" . AGENT;
         $cn = new ClientNegotiator();
-        $cnRequest = $cn->generateRequest(new Uri('ws://' . $testServer . ':9002' . $reportPath));
+        $cnRequest = $cn->generateRequest(new Uri('ws:
 
         $rawResponse = "";
         $response = null;
 
-        /** @var MessageBuffer $ms */
+        
         $ms = null;
 
         $connection->on('data', function ($data) use ($connection, &$rawResponse, &$response, &$ms, $cn, $deferred, &$context, $cnRequest) {
@@ -224,7 +224,7 @@ function createReport() {
                 }
             }
 
-            // feed the message streamer
+            
             if ($ms) {
                 $ms->onData($data);
             }

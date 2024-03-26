@@ -5,10 +5,10 @@ use PHPUnit\Framework\TestCase;
 
 class SingleEventsTest extends TestCase
 {
-    // phpcs:disable Generic.Arrays.DisallowLongArraySyntax
-    // phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-    // phpcs:disable Squiz.Commenting.FunctionComment
-    // phpcs:disable Squiz.Commenting.VariableComment
+    
+    
+    
+    
 
     private $originalTimeZone = null;
 
@@ -112,13 +112,13 @@ class SingleEventsTest extends TestCase
     public function getOptions($defaultTimezone)
     {
         $options = array(
-            'defaultSpan'                 => 2,                // Default value
-            'defaultTimeZone'             => $defaultTimezone, // Default value: UTC
-            'defaultWeekStart'            => 'MO',             // Default value
-            'disableCharacterReplacement' => false,            // Default value
-            'filterDaysAfter'             => null,             // Default value
-            'filterDaysBefore'            => null,             // Default value
-            'skipRecurrence'              => false,            // Default value
+            'defaultSpan'                 => 2,                
+            'defaultTimeZone'             => $defaultTimezone, 
+            'defaultWeekStart'            => 'MO',             
+            'disableCharacterReplacement' => false,            
+            'filterDaysAfter'             => null,             
+            'filterDaysBefore'            => null,             
+            'skipRecurrence'              => false,            
         );
 
         return $options;
@@ -129,7 +129,7 @@ class SingleEventsTest extends TestCase
         return array(
             'BEGIN:VCALENDAR',
             'VERSION:2.0',
-            'PRODID:-//Google Inc//Google Calendar 70.9054//EN',
+            'PRODID:-
             'X-WR-CALNAME:Private',
             'X-APPLE-CALENDAR-COLOR:#FF2968',
             'X-WR-CALDESC:',
@@ -432,7 +432,7 @@ class SingleEventsTest extends TestCase
             'BEGIN:VTIMEZONE',
             'TZID:US-Eastern',
             'LAST-MODIFIED:19870101T000000Z',
-            'TZURL:http://zones.stds_r_us.net/tz/US-Eastern',
+            'TZURL:http:
             'BEGIN:STANDARD',
             'DTSTART:19671029T020000',
             'RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10',

@@ -1,58 +1,25 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module view-helper */
+
+
 
 import {marked} from 'marked';
 import DOMPurify from 'dompurify';
 import Handlebars from 'handlebars';
 
-/**
- * A view helper.
- */
+
 class ViewHelper {
 
     constructor() {
         this._registerHandlebarsHelpers();
 
-        /** @private */
+        
         this.mdBeforeList = [
-            /*{
-                regex: /```\n?([\s\S]*?)```/g,
-                value: (s, string) => {
-                    return '```\n' + string.replace(/\\\>/g, '>') + '```';
-                },
-            },*/
+            
             {
-                // Also covers triple-backtick blocks.
+                
                 regex: /`([\s\S]*?)`/g,
                 value: (s, string) => {
-                    // noinspection RegExpRedundantEscape
+                    
                     return '`' + string.replace(/\\\</g, '<') + '`';
                 },
             },
@@ -90,170 +57,76 @@ class ViewHelper {
         });
     }
 
-    /**
-     * A layout manager.
-     *
-     * @type {module:layout-manager}
-     */
+    
     layoutManager = null
 
-    /**
-     * A config.
-     *
-     * @type {module:models/settings}
-     */
+    
     settings = null
 
-    /**
-     * A config.
-     *
-     * @type {module:models/settings}
-     */
+    
     config = null
 
-    /**
-     * A current user.
-     *
-     * @type {module:models/user}
-     */
+    
     user = null
 
-    /**
-     * A preferences.
-     *
-     * @type {module:models/preferences}
-     */
+    
     preferences = null
 
-    /**
-     * An ACL manager.
-     *
-     * @type {module:acl-manager}
-     */
+    
     acl = null
 
-    /**
-     * A model factory.
-     *
-     * @type {module:model-factory}
-     */
+    
     modelFactory = null
 
-    /**
-     * A collection factory.
-     *
-     * @type {module:collection-factory}
-     */
+    
     collectionFactory = null
 
-    /**
-     * A router.
-     *
-     * @type {module:router}
-     */
+    
     router = null
 
-    /**
-     * A storage.
-     *
-     * @type {module:storage}
-     */
+    
     storage = null
 
-    /**
-     * A session storage.
-     *
-     * @type {module:session-storage}
-     */
+    
     sessionStorage = null
 
-    /**
-     * A date-time util.
-     *
-     * @type {module:date-time}
-     */
+    
     dateTime = null
 
-    /**
-     * A language.
-     *
-     * @type {module:language}
-     */
+    
     language = null
 
-    /**
-     * A metadata.
-     *
-     * @type {module:metadata}
-     */
+    
     metadata = null
 
-    /**
-     * A field-manager util.
-     *
-     * @type {module:field-manager}
-     */
+    
     fieldManager = null
 
-    /**
-     * A cache.
-     *
-     * @type {module:cache}
-     */
+    
     cache = null
 
-    /**
-     * A theme manager.
-     *
-     * @type {module:theme-manager}
-     */
+    
     themeManager = null
 
-    /**
-     * A web-socket manager. Null if not enabled.
-     *
-     * @type {?module:web-socket-manager}
-     */
+    
     webSocketManager = null
 
-    /**
-     * A number util.
-     *
-     * @type {module:num-util}
-     */
+    
     numberUtil = null
 
-    /**
-     * A page-title util.
-     *
-     * @type {module:page-title}
-     */
+    
     pageTitle = null
 
-    /**
-     * A broadcast channel.
-     *
-     * @type {?module:broadcast-channel}
-     */
+    
     broadcastChannel = null
 
-    /**
-     * A base path.
-     *
-     * @type {string}
-     */
+    
     basePath = ''
 
-    /**
-     * Application parameters.
-     *
-     * @type {Object}
-     */
+    
     appParams = null
 
-    /**
-     * @private
-     */
+    
     _registerHandlebarsHelpers() {
         Handlebars.registerHelper('img', img => {
             return new Handlebars.SafeString(`<img src="img/${img}" alt="img">`);
@@ -284,7 +157,7 @@ class ViewHelper {
         });
 
         Handlebars.registerHelper('ifEqual', function (left, right, options) {
-            // noinspection EqualityComparisonWithCoercionJS
+            
             if (left == right) {
                 return options.fn(this);
             }
@@ -293,7 +166,7 @@ class ViewHelper {
         });
 
         Handlebars.registerHelper('ifNotEqual', function (left, right, options) {
-            // noinspection EqualityComparisonWithCoercionJS
+            
             if (left != right) {
                 return options.fn(this);
             }
@@ -302,7 +175,7 @@ class ViewHelper {
         });
 
         Handlebars.registerHelper('ifPropEquals', function (object, property, value, options) {
-            // noinspection EqualityComparisonWithCoercionJS
+            
             if (object[property] == value) {
                 return options.fn(this);
             }
@@ -311,7 +184,7 @@ class ViewHelper {
         });
 
         Handlebars.registerHelper('ifAttrEquals', function (model, attr, value, options) {
-            // noinspection EqualityComparisonWithCoercionJS
+            
             if (model.get(attr) == value) {
                 return options.fn(this);
             }
@@ -494,7 +367,7 @@ class ViewHelper {
             return Espo.Utils.toDom(string);
         });
 
-        // noinspection SpellCheckingInspection
+        
         Handlebars.registerHelper('breaklines', (text) => {
             text = Handlebars.Utils.escapeExpression(text || '');
             text = text.replace(/(\r\n|\n|\r)/gm, '<br>');
@@ -517,7 +390,7 @@ class ViewHelper {
             let translationHash = options.hash.translatedOptions || null;
 
             if (translationHash === null) {
-                translationHash = this.language.translate(/** @type {string} */field, 'options', scope) || {};
+                translationHash = this.language.translate(field, 'options', scope) || {};
 
                 if (typeof translationHash !== 'object') {
                     translationHash = {};
@@ -550,7 +423,7 @@ class ViewHelper {
                 return value === name || !value && !name;
             };
 
-            options.hash = /** @type {Object.<string, *>} */ options.hash || {};
+            options.hash =  options.hash || {};
 
             const scope = options.hash.scope || false;
             const category = options.hash.category || false;
@@ -572,7 +445,7 @@ class ViewHelper {
             if (translationHash === null) {
                 if (!category && field) {
                     translationHash = this.language
-                        .translate(/** @type {string}*/field, 'options', /** @type {string}*/scope) || {};
+                        .translate(field, 'options', scope) || {};
 
                     if (typeof translationHash !== 'object') {
                         translationHash = {};
@@ -588,7 +461,7 @@ class ViewHelper {
                     return translationHash[name] || name;
                 }
 
-                return this.language.translate(name, category, /** @type {string} */scope);
+                return this.language.translate(name, category, scope);
             };
 
             for (const key in list) {
@@ -616,35 +489,17 @@ class ViewHelper {
         });
     }
 
-    /**
-     * Get an application parameter.
-     *
-     * @param {string} name
-     * @returns {*}
-     */
+    
     getAppParam(name) {
         return (this.appParams || {})[name];
     }
 
-    /**
-     * Escape a string.
-     *
-     * @param {string} text A string.
-     * @returns {string}
-     */
+    
     escapeString(text) {
         return Handlebars.Utils.escapeExpression(text);
     }
 
-    /**
-     * Get a user avatar HTML.
-     *
-     * @param {string} id A user ID.
-     * @param {'small'|'medium'|'large'} [size='small'] A size.
-     * @param {int} [width=16]
-     * @param {string} [additionalClassName]  An additional class-name.
-     * @returns {string}
-     */
+    
     getAvatarHtml(id, size, width, additionalClassName) {
         if (this.config.get('avatarsDisabled')) {
             return '';
@@ -662,7 +517,7 @@ class ViewHelper {
             className += ' ' + additionalClassName;
         }
 
-        // noinspection RequiredAttributes,HtmlRequiredAltAttribute
+        
         return $(`<img>`)
             .attr('src', `${basePath}?entryPoint=avatar&size=${size}&id=${id}&t=${t}`)
             .attr('alt', 'avatar')
@@ -671,27 +526,16 @@ class ViewHelper {
             .get(0).outerHTML;
     }
 
-    /**
-     * A Markdown text to HTML (one-line).
-     *
-     * @param {string} text A text.
-     * @returns {Handlebars.SafeString} HTML.
-     */
+    
     transformMarkdownInlineText(text) {
         return this.transformMarkdownText(text, {inline: true});
     }
 
-    /**
-     * A Markdown text to HTML.
-     *
-     * @param {string} text A text.
-     * @param {{inline?: boolean, linksInNewTab?: boolean}} [options] Options.
-     * @returns {Handlebars.SafeString} HTML.
-     */
+    
     transformMarkdownText(text, options) {
         text = text || '';
 
-        // noinspection RegExpRedundantEscape
+        
         text = text.replace(/\</g, '\\<');
 
         this.mdBeforeList.forEach(item => {
@@ -718,14 +562,7 @@ class ViewHelper {
         return new Handlebars.SafeString(text);
     }
 
-    /**
-     * Get a color-icon HTML for a scope.
-     *
-     * @param {string} scope A scope.
-     * @param {boolean} [noWhiteSpace=false] No white space.
-     * @param {string} [additionalClassName] An additional class-name.
-     * @returns {string}
-     */
+    
     getScopeColorIconHtml(scope, noWhiteSpace, additionalClassName) {
         if (this.config.get('scopeColorsDisabled') || this.preferences.get('scopeColorsDisabled')) {
             return '';
@@ -756,23 +593,12 @@ class ViewHelper {
         return html;
     }
 
-    /**
-     * Sanitize HTML.
-     *
-     * @param {string} text HTML.
-     * @param {Object} [options] Options.
-     * @returns {string}
-     */
+    
     sanitizeHtml(text, options) {
         return DOMPurify.sanitize(text, options);
     }
 
-    /**
-     * Moderately sanitize HTML.
-     *
-     * @param {string} value HTML.
-     * @returns {string}
-     */
+    
     moderateSanitizeHtml(value) {
         value = value || '';
         value = value.replace(/<\/?(base)[^><]*>/gi, '');
@@ -806,14 +632,9 @@ class ViewHelper {
         return value;
     }
 
-    /**
-     * Strip event handlers in HTML.
-     *
-     * @param {string} html HTML.
-     * @returns {string}
-     */
+    
     stripEventHandlersInHtml(html) {
-        let j; // @todo Revise.
+        let j; 
 
         function stripHTML() {
             html = html.slice(0, strip) + html.slice(j);
@@ -844,7 +665,7 @@ class ViewHelper {
                         break;
                     }
 
-                    // noinspection JSIncompatibleTypesComparison
+                    
                     if (lastQuote === html[j]){
                         lastQuote = false;
 
@@ -869,12 +690,7 @@ class ViewHelper {
         return html;
     }
 
-    /**
-     * Calculate a content container height.
-     *
-     * @param {JQuery} $el Element.
-     * @returns {number}
-     */
+    
     calculateContentContainerHeight($el) {
         const smallScreenWidth = this.themeManager.getParam('screenWidthXs');
 
@@ -901,16 +717,9 @@ class ViewHelper {
         return $window.height() - spaceHeight - 20;
     }
 
-    /**
-     * Process view-setup-handlers.
-     *
-     * @param {module:view} view A view.
-     * @param {string} type A view-setup-handler type.
-     * @param {string} [scope] A scope.
-     * @return Promise
-     */
+    
     processSetupHandlers(view, type, scope) {
-        // noinspection JSUnresolvedReference
+        
         scope = scope || view.scope || view.entityType;
 
         let handlerIdList = this.metadata.get(['clientDefs', 'Global', 'viewSetupHandlers', type]) || [];
@@ -926,21 +735,14 @@ class ViewHelper {
             return Promise.resolve();
         }
 
-        /**
-         * @interface
-         * @name ViewHelper~Handler
-         */
+        
 
-        /**
-         * @function
-         * @name ViewHelper~Handler#process
-         * @param {module:view} [view] Deprecated.
-         */
+        
         const promiseList = [];
 
         for (const id of handlerIdList) {
             const promise = new Promise(resolve => {
-                Espo.loader.require(id, /** typeof ViewHelper~Handler */Handler => {
+                Espo.loader.require(id, Handler => {
                     const result = (new Handler(view)).process(view);
 
                     if (result && Object.prototype.toString.call(result) === '[object Promise]') {
@@ -959,14 +761,10 @@ class ViewHelper {
         return Promise.all(promiseList);
     }
 
-    /** @private */
+    
     _isXsScreen
 
-    /**
-     * Is xs screen width.
-     *
-     * @return {boolean}
-     */
+    
     isXsScreen() {
         if (this._isXsScreen == null) {
             this._isXsScreen = window.innerWidth < this.themeManager.getParam('screenWidthXs');

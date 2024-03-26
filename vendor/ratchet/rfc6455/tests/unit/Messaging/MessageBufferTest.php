@@ -11,10 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 class MessageBufferTest extends TestCase
 {
-    /**
-     * This is to test that MessageBuffer can handle a large receive
-     * buffer with many many frames without blowing the stack (pre-v0.4 issue)
-     */
+    
     public function testProcessingLotsOfFramesInASingleChunk() {
         $frame = new Frame('a', true, Frame::OP_TEXT);
 
@@ -76,9 +73,9 @@ class MessageBufferTest extends TestCase
 
         $frameRaw = $frame->getContents();
 
-        $frameRaw[1] = "\x7f"; // 127 in the first spot
+        $frameRaw[1] = "\x7f"; 
 
-        $frameRaw[2] = "\xff"; // this will unpack to -1
+        $frameRaw[2] = "\xff"; 
         $frameRaw[3] = "\xff";
         $frameRaw[4] = "\xff";
         $frameRaw[5] = "\xff";
@@ -87,7 +84,7 @@ class MessageBufferTest extends TestCase
         $frameRaw[8] = "\xff";
         $frameRaw[9] = "\xff";
 
-        /** @var Frame $controlFrame */
+        
         $controlFrame = null;
         $messageCount = 0;
 
@@ -120,9 +117,9 @@ class MessageBufferTest extends TestCase
 
         $frameRaw = $frame->getContents();
 
-        $frameRaw[1] = "\x7f"; // 127 in the first spot
+        $frameRaw[1] = "\x7f"; 
 
-        $frameRaw[2] = "\x7f"; // this will unpack to -1
+        $frameRaw[2] = "\x7f"; 
         $frameRaw[3] = "\xff";
         $frameRaw[4] = "\xff";
         $frameRaw[5] = "\xff";
@@ -131,7 +128,7 @@ class MessageBufferTest extends TestCase
         $frameRaw[8] = "\xff";
         $frameRaw[9] = "\xff";
 
-        /** @var Frame $controlFrame */
+        
         $controlFrame = null;
         $messageCount = 0;
 
@@ -163,7 +160,7 @@ class MessageBufferTest extends TestCase
 
         $frameRaw = $frame->getContents();
 
-        /** @var Frame $controlFrame */
+        
         $controlFrame = null;
         $messageCount = 0;
 
@@ -196,7 +193,7 @@ class MessageBufferTest extends TestCase
         $frame = new Frame(str_repeat('b', 200), true, Frame::OP_TEXT);
         $secondFrameRaw = $frame->getContents();
 
-        /** @var Frame $controlFrame */
+        
         $controlFrame = null;
         $messageCount = 0;
 
@@ -216,7 +213,7 @@ class MessageBufferTest extends TestCase
         );
 
         $messageBuffer->onData($firstFrameRaw);
-        // only put part of the second frame in to watch it fail fast
+        
         $messageBuffer->onData(substr($secondFrameRaw, 0, 150));
 
         $this->assertEquals(0, $messageCount);
@@ -225,39 +222,9 @@ class MessageBufferTest extends TestCase
         $this->assertEquals([Frame::CLOSE_TOO_BIG], array_merge(unpack('n*', substr($controlFrame->getPayload(), 0, 2))));
     }
 
-    /**
-     * Some test cases from memory limit inspired by https://github.com/BrandEmbassy/php-memory
-     *
-     * Here is the license for that project:
-     * MIT License
-     *
-     * Copyright (c) 2018 Brand Embassy
-     *
-     * Permission is hereby granted, free of charge, to any person obtaining a copy
-     * of this software and associated documentation files (the "Software"), to deal
-     * in the Software without restriction, including without limitation the rights
-     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-     * copies of the Software, and to permit persons to whom the Software is
-     * furnished to do so, subject to the following conditions:
-     *
-     * The above copyright notice and this permission notice shall be included in all
-     * copies or substantial portions of the Software.
-     *
-     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-     * SOFTWARE.
-     */
+    
 
-    /**
-     * @dataProvider phpConfigurationProvider
-     *
-     * @param string $phpConfigurationValue
-     * @param int $expectedLimit
-     */
+    
     public function testMemoryLimits($phpConfigurationValue, $expectedLimit) {
         $method = new \ReflectionMethod('Ratchet\RFC6455\Messaging\MessageBuffer', 'getMemoryLimit');
         $method->setAccessible(true);
@@ -281,9 +248,7 @@ class MessageBufferTest extends TestCase
         ];
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
+    
     public function testInvalidMaxFramePayloadSizes() {
         $messageBuffer = new MessageBuffer(
             new CloseFrameChecker(),
@@ -296,9 +261,7 @@ class MessageBufferTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
+    
     public function testInvalidMaxMessagePayloadSizes() {
         $messageBuffer = new MessageBuffer(
             new CloseFrameChecker(),
@@ -311,15 +274,7 @@ class MessageBufferTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider phpConfigurationProvider
-     *
-     * @param string $phpConfigurationValue
-     * @param int $expectedLimit
-     *
-     * @runInSeparateProcess
-     * @requires PHP 7.0
-     */
+    
     public function testIniSizes($phpConfigurationValue, $expectedLimit) {
         $value = @ini_set('memory_limit', $phpConfigurationValue);
         if ($value === false) {
@@ -347,10 +302,7 @@ class MessageBufferTest extends TestCase
         $this->assertEquals($expectedLimit / 4, $prop->getValue($messageBuffer));
     }
 
-    /**
-     * @runInSeparateProcess
-     * @requires PHP 7.0
-     */
+    
     public function testInvalidIniSize() {
         $value = @ini_set('memory_limit', 'lots of memory');
         if ($value === false) {

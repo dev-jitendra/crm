@@ -1,32 +1,6 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/record/list-tree-item */
+
+
 
 import View from 'view';
 
@@ -51,19 +25,19 @@ class ListTreeRecordItemView extends View {
     }
 
     events = {
-        /** @this ListTreeRecordItemView */
+        
         'click [data-action="unfold"]': function (e) {
             this.unfold();
 
             e.stopPropagation();
         },
-        /** @this ListTreeRecordItemView */
+        
         'click [data-action="fold"]': function (e) {
             this.fold();
 
             e.stopPropagation();
         },
-        /** @this ListTreeRecordItemView */
+        
         'click [data-action="remove"]': function (e) {
             this.actionRemove();
 
@@ -146,11 +120,9 @@ class ListTreeRecordItemView extends View {
         });
     }
 
-    /**
-     * @return {module:views/record/list-tree}
-     */
+    
     getParentListView() {
-        return /** @type module:views/record/list-tree */this.getParentView();
+        return this.getParentView();
     }
 
     createChildren() {
@@ -340,11 +312,9 @@ class ListTreeRecordItemView extends View {
         });
     }
 
-    /**
-     * @return module:views/record/list-tree
-     */
+    
     getChildrenView() {
-        return /** @type module:views/record/list-tree */this.getView('children');
+        return this.getView('children');
     }
 }
 

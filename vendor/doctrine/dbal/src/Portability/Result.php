@@ -11,7 +11,7 @@ final class Result extends AbstractResultMiddleware
 {
     private Converter $converter;
 
-    /** @internal The result can be only instantiated by the portability connection or statement. */
+    
     public function __construct(ResultInterface $result, Converter $converter)
     {
         parent::__construct($result);
@@ -19,9 +19,7 @@ final class Result extends AbstractResultMiddleware
         $this->converter = $converter;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function fetchNumeric()
     {
         return $this->converter->convertNumeric(
@@ -29,9 +27,7 @@ final class Result extends AbstractResultMiddleware
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function fetchAssociative()
     {
         return $this->converter->convertAssociative(
@@ -39,9 +35,7 @@ final class Result extends AbstractResultMiddleware
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function fetchOne()
     {
         return $this->converter->convertOne(
@@ -49,9 +43,7 @@ final class Result extends AbstractResultMiddleware
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function fetchAllNumeric(): array
     {
         return $this->converter->convertAllNumeric(
@@ -59,9 +51,7 @@ final class Result extends AbstractResultMiddleware
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function fetchAllAssociative(): array
     {
         return $this->converter->convertAllAssociative(
@@ -69,9 +59,7 @@ final class Result extends AbstractResultMiddleware
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function fetchFirstColumn(): array
     {
         return $this->converter->convertFirstColumn(

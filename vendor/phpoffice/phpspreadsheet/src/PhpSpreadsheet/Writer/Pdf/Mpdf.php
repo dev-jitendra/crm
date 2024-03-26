@@ -7,31 +7,21 @@ use PhpOffice\PhpSpreadsheet\Writer\Pdf;
 
 class Mpdf extends Pdf
 {
-    /**
-     * Gets the implementation of external PDF library that should be used.
-     *
-     * @param array $config Configuration array
-     *
-     * @return \Mpdf\Mpdf implementation
-     */
+    
     protected function createExternalWriterInstance($config)
     {
         return new \Mpdf\Mpdf($config);
     }
 
-    /**
-     * Save Spreadsheet to file.
-     *
-     * @param string $pFilename Name of the file to save as
-     */
+    
     public function save($pFilename): void
     {
         $fileHandle = parent::prepareForSave($pFilename);
 
-        //  Default PDF paper size
-        $paperSize = 'LETTER'; //    Letter    (8.5 in. by 11 in.)
+        
+        $paperSize = 'LETTER'; 
 
-        //  Check for paper size and page orientation
+        
         if (null === $this->getSheetIndex()) {
             $orientation = ($this->spreadsheet->getSheet(0)->getPageSetup()->getOrientation()
                 == PageSetup::ORIENTATION_LANDSCAPE) ? 'L' : 'P';
@@ -43,7 +33,7 @@ class Mpdf extends Pdf
         }
         $this->setOrientation($orientation);
 
-        //  Override Page Orientation
+        
         if (null !== $this->getOrientation()) {
             $orientation = ($this->getOrientation() == PageSetup::ORIENTATION_DEFAULT)
                 ? PageSetup::ORIENTATION_PORTRAIT
@@ -51,7 +41,7 @@ class Mpdf extends Pdf
         }
         $orientation = strtoupper($orientation);
 
-        //  Override Paper Size
+        
         if (null !== $this->getPaperSize()) {
             $printPaperSize = $this->getPaperSize();
         }
@@ -60,7 +50,7 @@ class Mpdf extends Pdf
             $paperSize = self::$paperSizes[$printPaperSize];
         }
 
-        //  Create PDF
+        
         $config = ['tempDir' => $this->tempDir . '/mpdf'];
         $pdf = $this->createExternalWriterInstance($config);
         $ortmp = $orientation;
@@ -74,7 +64,7 @@ class Mpdf extends Pdf
             'margin-bottom' => $this->inchesToMm($this->spreadsheet->getActiveSheet()->getPageMargins()->getBottom()),
         ]);
 
-        //  Document info
+        
         $pdf->SetTitle($this->spreadsheet->getProperties()->getTitle());
         $pdf->SetAuthor($this->spreadsheet->getProperties()->getCreator());
         $pdf->SetSubject($this->spreadsheet->getProperties()->getSubject());
@@ -86,19 +76,13 @@ class Mpdf extends Pdf
             $pdf->WriteHTML(\implode(PHP_EOL, $lines));
         }
 
-        //  Write to file
+        
         fwrite($fileHandle, $pdf->Output('', 'S'));
 
         parent::restoreStateAfterSave();
     }
 
-    /**
-     * Convert inches to mm.
-     *
-     * @param float $inches
-     *
-     * @return float
-     */
+    
     private function inchesToMm($inches)
     {
         return $inches * 25.4;

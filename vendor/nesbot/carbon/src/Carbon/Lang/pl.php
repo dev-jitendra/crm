@@ -1,32 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Wacław Jacek
- * - François B
- * - Tim Fish
- * - Serhan Apaydın
- * - Massimiliano Caniparoli
- * - JD Isaacks
- * - Jakub Szwacz
- * - Jan
- * - Paul
- * - damlys
- * - Marek (marast78)
- * - Peter (UnrulyNatives)
- * - Qrzysio
- * - Jan (aso824)
- * - diverpl
- */
+
+
 
 use Carbon\CarbonInterface;
 

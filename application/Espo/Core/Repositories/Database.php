@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Repositories;
 
@@ -43,12 +17,7 @@ use Espo\Core\Utils\DateTime as DateTimeUtil;
 use Espo\Core\Utils\Id\RecordIdGenerator;
 use Espo\Core\Utils\Metadata;
 
-/**
- * A database repository. Extending is not recommended. Use hooks, field saver framework instead.
- *
- * @template TEntity of Entity
- * @extends RDBRepository<TEntity>
- */
+
 class Database extends RDBRepository
 {
     private const ATTR_ID = 'id';
@@ -58,21 +27,18 @@ class Database extends RDBRepository
     private const ATTR_CREATED_AT = 'createdAt';
     private const ATTR_MODIFIED_AT = 'modifiedAt';
 
-    /**
-     * Disables hook processing.
-     * @var bool
-     */
+    
     protected $hooksDisabled = false;
 
-    /** @var ?array<string, mixed> */
+    
     private $restoreData = null;
-    /** @var Metadata */
+    
     protected $metadata;
-    /** @var HookManager */
+    
     protected $hookManager;
-    /** @var ApplicationState  */
+    
     protected $applicationState;
-    /** @var RecordIdGenerator */
+    
     protected $recordIdGenerator;
 
     public function __construct(
@@ -99,24 +65,17 @@ class Database extends RDBRepository
         parent::__construct($entityType, $entityManager, $entityFactory, $hookMediator);
     }
 
-    /**
-     * @deprecated Use `$this->metadata`.
-     */
-    protected function getMetadata() /** @phpstan-ignore-line */
+    
+    protected function getMetadata() 
     {
         return $this->metadata;
     }
 
-    /**
-     * @deprecated Will be removed.
-     */
-    public function handleSelectParams(&$params) /** @phpstan-ignore-line */
+    
+    public function handleSelectParams(&$params) 
     {}
 
-    /**
-     * @param TEntity $entity
-     * @param array<string, mixed> $options
-     */
+    
     public function save(Entity $entity, array $options = []): void
     {
         if (
@@ -136,11 +95,7 @@ class Database extends RDBRepository
         parent::save($entity, $options);
     }
 
-    /**
-     * @param TEntity $entity
-     * @param array<string, mixed> $options
-     * @return void
-     */
+    
     protected function beforeRemove(Entity $entity, array $options = [])
     {
         parent::beforeRemove($entity, $options);
@@ -159,7 +114,7 @@ class Database extends RDBRepository
             $modifiedById = $options[SaveOption::MODIFIED_BY_ID] ?? null;
 
             if ($modifiedById === SystemUser::NAME) {
-                // For bc.
+                
                 $modifiedById = $this->systemUser->getId();
             }
 
@@ -173,11 +128,7 @@ class Database extends RDBRepository
         }
     }
 
-    /**
-     * @param TEntity $entity
-     * @param array<string, mixed> $options
-     * @return void
-     */
+    
     protected function afterRemove(Entity $entity, array $options = [])
     {
         parent::afterRemove($entity, $options);
@@ -187,13 +138,7 @@ class Database extends RDBRepository
         }
     }
 
-    /**
-     * @param TEntity $entity
-     * @param string $relationName
-     * @param array<string, mixed> $params
-     * @param array<string, mixed> $options
-     * @return void
-     */
+    
     protected function afterMassRelate(Entity $entity, $relationName, array $params = [], array $options = [])
     {
         if ($this->hooksDisabled || !empty($options[SaveOption::SKIP_HOOKS])) {
@@ -214,14 +159,7 @@ class Database extends RDBRepository
         );
     }
 
-    /**
-     * @param TEntity $entity
-     * @param string $relationName
-     * @param Entity|string $foreign
-     * @param \stdClass|array<string, mixed>|null $data
-     * @param array<string, mixed> $options
-     * @return void
-     */
+    
     protected function afterRelate(Entity $entity, $relationName, $foreign, $data = null, array $options = [])
     {
         parent::afterRelate($entity, $relationName, $foreign, $data, $options);
@@ -252,13 +190,7 @@ class Database extends RDBRepository
         }
     }
 
-    /**
-     * @param TEntity $entity
-     * @param string $relationName
-     * @param Entity|string $foreign
-     * @param array<string, mixed> $options
-     * @return void
-     */
+    
     protected function afterUnrelate(Entity $entity, $relationName, $foreign, array $options = [])
     {
         parent::afterUnrelate($entity, $relationName, $foreign, $options);
@@ -285,11 +217,7 @@ class Database extends RDBRepository
         }
     }
 
-    /**
-     * @param TEntity $entity
-     * @param array<string, mixed> $options
-     * @return void
-     */
+    
     protected function beforeSave(Entity $entity, array $options = [])
     {
         parent::beforeSave($entity, $options);
@@ -299,11 +227,7 @@ class Database extends RDBRepository
         }
     }
 
-    /**
-     * @param TEntity $entity
-     * @param array<string, mixed> $options
-     * @return void
-     */
+    
     protected function afterSave(Entity $entity, array $options = [])
     {
         if (!empty($this->restoreData)) {
@@ -319,10 +243,7 @@ class Database extends RDBRepository
         }
     }
 
-    /**
-     * @param TEntity $entity
-     * @param array<string, mixed> $options
-     */
+    
     private function processCreatedAndModifiedFieldsSave(Entity $entity, array $options): void
     {
         if ($entity->isNew()) {
@@ -362,7 +283,7 @@ class Database extends RDBRepository
             $modifiedById = $options[SaveOption::MODIFIED_BY_ID] ?? null;
 
             if ($modifiedById === SystemUser::NAME) {
-                // For bc.
+                
                 $modifiedById = $this->systemUser->getId();
             }
 
@@ -378,10 +299,7 @@ class Database extends RDBRepository
         }
     }
 
-    /**
-     * @param TEntity $entity
-     * @param array<string, mixed> $options
-     */
+    
     private function processCreatedAndModifiedFieldsSaveNew(Entity $entity, array $options): void
     {
         $nowString = DateTimeUtil::getSystemNowString();
@@ -402,7 +320,7 @@ class Database extends RDBRepository
 
             if ($createdById) {
                 if ($createdById === SystemUser::NAME) {
-                    // For bc.
+                    
                     $createdById = $this->systemUser->getId();
                 }
 
@@ -418,10 +336,7 @@ class Database extends RDBRepository
         }
     }
 
-    /**
-     * @pparam TEntity $entity
-     * @return mixed
-     */
+    
     private function getAttributeParam(Entity $entity, string $attribute, string $param)
     {
         if ($entity instanceof BaseEntity) {
@@ -439,10 +354,7 @@ class Database extends RDBRepository
         return $entityDefs->getAttribute($attribute)->getParam($param);
     }
 
-    /**
-     * @param TEntity $entity
-     * @return mixed
-     */
+    
     private function getRelationParam(Entity $entity, string $relation, string $param)
     {
         if ($entity instanceof BaseEntity) {

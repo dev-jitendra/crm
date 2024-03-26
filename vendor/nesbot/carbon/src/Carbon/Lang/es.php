@@ -1,32 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Kunal Marwaha
- * - kostas
- * - François B
- * - Tim Fish
- * - Claire Coloma
- * - Steven Heinrich
- * - JD Isaacks
- * - Raphael Amorim
- * - Jorge Y. Castillo
- * - Víctor Díaz
- * - Diego
- * - Sebastian Thierer
- * - quinterocesar
- * - Daniel Commesse Liévanos (danielcommesse)
- * - Pete Scopes (pdscopes)
- */
+
+
 
 use Carbon\CarbonInterface;
 

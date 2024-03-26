@@ -1,30 +1,16 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Routing\Loader;
 
 use Symfony\Component\Config\Resource\DirectoryResource;
 use Symfony\Component\Routing\RouteCollection;
 
-/**
- * AnnotationDirectoryLoader loads routing information from annotations set
- * on PHP classes and methods.
- *
- * @author Fabien Potencier <fabien@symfony.com>
- */
+
 class AnnotationDirectoryLoader extends AnnotationFileLoader
 {
-    /**
-     * @throws \InvalidArgumentException When the directory does not exist or its routes cannot be parsed
-     */
+    
     public function load(mixed $path, string $type = null): ?RouteCollection
     {
         if (!is_dir($dir = $this->locator->locate($path))) {
@@ -64,9 +50,7 @@ class AnnotationDirectoryLoader extends AnnotationFileLoader
         return $collection;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function supports(mixed $resource, string $type = null): bool
     {
         if ('annotation' === $type) {

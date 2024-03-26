@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation\Test;
 
@@ -21,13 +14,7 @@ use Symfony\Component\Translation\Provider\ProviderInterface;
 use Symfony\Component\Translation\TranslatorBagInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-/**
- * A test case to ease testing a translation provider.
- *
- * @author Mathieu Santostefano <msantostefano@protonmail.com>
- *
- * @internal
- */
+
 abstract class ProviderTestCase extends TestCase
 {
     protected HttpClientInterface $client;
@@ -39,14 +26,10 @@ abstract class ProviderTestCase extends TestCase
 
     abstract public static function createProvider(HttpClientInterface $client, LoaderInterface $loader, LoggerInterface $logger, string $defaultLocale, string $endpoint): ProviderInterface;
 
-    /**
-     * @return iterable<array{0: ProviderInterface, 1: string}>
-     */
+    
     abstract public static function toStringProvider(): iterable;
 
-    /**
-     * @dataProvider toStringProvider
-     */
+    
     public function testToString(ProviderInterface $provider, string $expected)
     {
         $this->assertSame($expected, (string) $provider);

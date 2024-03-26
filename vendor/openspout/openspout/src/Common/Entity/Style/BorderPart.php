@@ -36,16 +36,7 @@ final class BorderPart
     private readonly string $color;
     private readonly string $width;
 
-    /**
-     * @param string $name  @see  BorderPart::allowedNames
-     * @param string $color A RGB color code
-     * @param string $width @see BorderPart::allowedWidths
-     * @param string $style @see BorderPart::allowedStyles
-     *
-     * @throws InvalidNameException
-     * @throws InvalidStyleException
-     * @throws InvalidWidthException
-     */
+    
     public function __construct(
         string $name,
         string $color = Color::BLACK,

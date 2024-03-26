@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation;
 
@@ -16,17 +9,13 @@ use Symfony\Component\Translation\Exception\InvalidArgumentException;
 use Symfony\Contracts\Translation\LocaleAwareInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
- */
+
 class LoggingTranslator implements TranslatorInterface, TranslatorBagInterface, LocaleAwareInterface
 {
     private TranslatorInterface $translator;
     private LoggerInterface $logger;
 
-    /**
-     * @param TranslatorInterface&TranslatorBagInterface&LocaleAwareInterface $translator The translator must implement TranslatorBagInterface
-     */
+    
     public function __construct(TranslatorInterface $translator, LoggerInterface $logger)
     {
         if (!$translator instanceof TranslatorBagInterface || !$translator instanceof LocaleAwareInterface) {
@@ -71,9 +60,7 @@ class LoggingTranslator implements TranslatorInterface, TranslatorBagInterface, 
         return $this->translator->getCatalogues();
     }
 
-    /**
-     * Gets the fallback locales.
-     */
+    
     public function getFallbackLocales(): array
     {
         if ($this->translator instanceof Translator || method_exists($this->translator, 'getFallbackLocales')) {
@@ -83,17 +70,13 @@ class LoggingTranslator implements TranslatorInterface, TranslatorBagInterface, 
         return [];
     }
 
-    /**
-     * Passes through all unknown calls onto the translator object.
-     */
+    
     public function __call(string $method, array $args)
     {
         return $this->translator->{$method}(...$args);
     }
 
-    /**
-     * Logs for missing translations.
-     */
+    
     private function log(string $id, ?string $domain, ?string $locale)
     {
         $domain ??= 'messages';

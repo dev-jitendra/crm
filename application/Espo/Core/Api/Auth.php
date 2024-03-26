@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Api;
 
@@ -41,10 +15,7 @@ use Espo\Core\Utils\Json;
 
 use Exception;
 
-/**
- * Determines which auth method to use. Fetches a username and password from headers and server parameters.
- * Then tries to log in.
- */
+
 class Auth
 {
     private const HEADER_ESPO_AUTHORIZATION = 'Espo-Authorization';
@@ -57,10 +28,7 @@ class Auth
         private bool $isEntryPoint = false
     ) {}
 
-    /**
-     * @throws BadRequest
-     * @throws Exception
-     */
+    
     public function process(Request $request, Response $response): AuthResult
     {
         $username = null;
@@ -120,9 +88,7 @@ class Auth
         return AuthResult::createNotResolved();
     }
 
-    /**
-     * @throws Exception
-     */
+    
     private function processAuthNotRequired(
         AuthenticationData $data,
         Request $request,
@@ -145,9 +111,7 @@ class Auth
         return null;
     }
 
-    /**
-     * @throws Exception
-     */
+    
     private function processWithAuthData(
         AuthenticationData $data,
         Request $request,
@@ -182,20 +146,17 @@ class Auth
         return AuthResult::createNotResolved();
     }
 
-    /**
-     * @return array{string, string}
-     * @throws BadRequest
-     */
+    
     private function decodeAuthorizationString(string $string): array
     {
-        /** @var string $stringDecoded */
+        
         $stringDecoded = base64_decode($string);
 
         if (!str_contains($stringDecoded, ':')) {
             throw new BadRequest("Auth: Bad authorization string provided.");
         }
 
-        /** @var array{string, string} */
+        
         return explode(':', $stringDecoded, 2);
     }
 
@@ -215,9 +176,7 @@ class Auth
         $response->writeBody(Json::encode($bodyData));
     }
 
-    /**
-     * @throws Exception
-     */
+    
     private function handleException(Response $response, Exception $e): void
     {
         if (
@@ -293,10 +252,7 @@ class Auth
         return null;
     }
 
-    /**
-     * @return array{?string, ?string}
-     * @throws BadRequest
-     */
+    
     private function obtainUsernamePasswordFromRequest(Request $request): array
     {
         if ($request->hasHeader(self::HEADER_ESPO_AUTHORIZATION)) {

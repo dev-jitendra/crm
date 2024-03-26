@@ -10,9 +10,7 @@ class PutObjectAclOutput extends Result
 {
     private $requestCharged;
 
-    /**
-     * @return RequestCharged::*|null
-     */
+    
     public function getRequestCharged(): ?string
     {
         $this->initialize();

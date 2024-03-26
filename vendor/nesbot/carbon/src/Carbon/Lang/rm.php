@@ -1,29 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Philippe Vaucher
- * - tjku
- * - Max Melentiev
- * - Juanito Fatas
- * - Tsutomu Kuroda
- * - Akira Matsuda
- * - Christopher Dell
- * - Enrique Vidal
- * - Simone Carletti
- * - Aaron Patterson
- * - Nicolás Hock Isaza
- * - sebastian de castelberg
- */
+
+
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [
         'LT' => 'HH:mm',

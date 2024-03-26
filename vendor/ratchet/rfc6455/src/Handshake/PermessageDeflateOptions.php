@@ -9,7 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 final class PermessageDeflateOptions
 {
     const MAX_WINDOW_BITS = 15;
-    /* this is a private instead of const for 5.4 compatibility */
+    
     private static $VALID_BITS = ['8', '9', '10', '11', '12', '13', '14', '15'];
 
     private $deflateEnabled = false;
@@ -78,14 +78,7 @@ final class PermessageDeflateOptions
         return $new;
     }
 
-    /**
-     * https://tools.ietf.org/html/rfc6455#section-9.1
-     * https://tools.ietf.org/html/rfc7692#section-7
-     *
-     * @param MessageInterface $requestOrResponse
-     * @return PermessageDeflateOptions[]
-     * @throws \Exception
-     */
+    
     public static function fromRequestOrResponse(MessageInterface $requestOrResponse) {
         $optionSets = [];
 
@@ -153,56 +146,43 @@ final class PermessageDeflateOptions
             $optionSets[] = $options;
         }
 
-        // always put a disabled on the end
+        
         $optionSets[] = new static();
 
         return $optionSets;
     }
 
-    /**
-     * @return mixed
-     */
+    
     public function getServerNoContextTakeover()
     {
         return $this->server_no_context_takeover;
     }
 
-    /**
-     * @return mixed
-     */
+    
     public function getClientNoContextTakeover()
     {
         return $this->client_no_context_takeover;
     }
 
-    /**
-     * @return mixed
-     */
+    
     public function getServerMaxWindowBits()
     {
         return $this->server_max_window_bits;
     }
 
-    /**
-     * @return mixed
-     */
+    
     public function getClientMaxWindowBits()
     {
         return $this->client_max_window_bits;
     }
 
-    /**
-     * @return bool
-     */
+    
     public function isEnabled()
     {
         return $this->deflateEnabled;
     }
 
-    /**
-     * @param ResponseInterface $response
-     * @return ResponseInterface
-     */
+    
     public function addHeaderToResponse(ResponseInterface $response)
     {
         if (!$this->deflateEnabled) {

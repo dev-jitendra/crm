@@ -1,32 +1,6 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/record/base */
+
+
 
 import View from 'view';
 import ViewRecordHelper from 'view-record-helper';
@@ -35,96 +9,51 @@ import _ from 'underscore';
 import $ from 'jquery';
 import DefaultsPopulator from 'helpers/model/defaults-populator';
 
-/**
- * A base record view. To be extended.
- */
+
 class BaseRecordView extends View {
 
-    /**
-     * A type.
-     */
+    
     type = 'edit'
 
-    /**
-     * An entity type.
-     *
-     * @type {string|null}
-     */
+    
     entityType = null
 
-    /**
-     * A scope.
-     *
-     * @type {string|null}
-     */
+    
     scope = null
 
-    /**
-     * Is new. Is set automatically.
-     */
+    
     isNew = false
 
-    /**
-     * @deprecated
-     * @protected
-     */
+    
     dependencyDefs = {}
 
-    /**
-     * Dynamic logic.
-     *
-     * @protected
-     * @type {Object}
-     */
+    
     dynamicLogicDefs = {}
 
-    /**
-     * A field list.
-     *
-     * @protected
-     */
+    
     fieldList = null
 
-    /**
-     * A mode.
-     *
-     * @type {'detail'|'edit'|null}
-     */
+    
     mode = null
 
-    /**
-     * A last save cancel reason.
-     *
-     * @protected
-     * @type {string|null}
-     */
+    
     lastSaveCancelReason = null
 
-    /**
-     * A record-helper.
-     *
-     * @protected
-     * @type {module:view-record-helper}
-     */
+    
     recordHelper = null
 
-    /** @const */
+    
     MODE_DETAIL = 'detail'
-    /** @const */
+    
     MODE_EDIT = 'edit'
 
-    /** @const */
+    
     TYPE_DETAIL = 'detail'
-    // noinspection JSUnusedGlobalSymbols
-    /** @const  */
+    
+    
     TYPE_EDIT = 'edit'
 
-    /**
-     * Hide a field.
-     *
-     * @param {string} name A field name.
-     * @param {boolean } [locked] To lock. Won't be able to un-hide.
-     */
+    
     hideField(name, locked) {
         this.recordHelper.setFieldStateParam(name, 'hidden', true);
 
@@ -166,11 +95,7 @@ class BaseRecordView extends View {
         }
     }
 
-    /**
-     * Show a field.
-     *
-     * @param {string} name A field name.
-     */
+    
     showField(name) {
         if (this.recordHelper.getFieldStateParam(name, 'hiddenLocked')) {
             return;
@@ -216,12 +141,7 @@ class BaseRecordView extends View {
         }
     }
 
-    /**
-     * Set a field as read-only.
-     *
-     * @param {string} name A field name.
-     * @param {boolean } [locked] To lock. Won't be able to un-set.
-     */
+    
     setFieldReadOnly(name, locked) {
         const previousValue = this.recordHelper.getFieldStateParam(name, 'readOnly');
 
@@ -242,12 +162,7 @@ class BaseRecordView extends View {
             this.trigger('set-field-read-only', name);
         }
 
-        /**
-         * @todo
-         *   Move to fields/base. Listen to recordHelper 'field-change' (if recordHelper is available).
-         *   Same for set state methods.
-         *   Issue is that sometimes state is changed in between view initialization (for bottom views with fields).
-         */
+        
 
         if (!view && !this.isReady) {
             this.once('ready', () => {
@@ -264,11 +179,7 @@ class BaseRecordView extends View {
         }
     }
 
-    /**
-     * Set a field as not read-only.
-     *
-     * @param {string} name A field name.
-     */
+    
     setFieldNotReadOnly(name) {
         const previousValue = this.recordHelper.getFieldStateParam(name, 'readOnly');
 
@@ -306,11 +217,7 @@ class BaseRecordView extends View {
         }
     }
 
-    /**
-     * Set a field as required.
-     *
-     * @param {string} name A field name.
-     */
+    
     setFieldRequired(name) {
         const previousValue = this.recordHelper.getFieldStateParam(name, 'required');
 
@@ -327,11 +234,7 @@ class BaseRecordView extends View {
         }
     }
 
-    /**
-     * Set a field as not required.
-     *
-     * @param {string} name A field name.
-     */
+    
     setFieldNotRequired(name) {
         const previousValue = this.recordHelper.getFieldStateParam(name, 'required');
 
@@ -348,12 +251,7 @@ class BaseRecordView extends View {
         }
     }
 
-    /**
-     * Set an option list for a field.
-     *
-     * @param {string} name A field name.
-     * @param {string[]} list Options.
-     */
+    
     setFieldOptionList(name, list) {
         const had = this.recordHelper.hasFieldOptionList(name);
         const previousList = this.recordHelper.getFieldOptionList(name);
@@ -373,11 +271,7 @@ class BaseRecordView extends View {
         }
     }
 
-    /**
-     * Reset field options (revert to default).
-     *
-     * @param {string} name A field name.
-     */
+    
     resetFieldOptionList(name) {
         const had = this.recordHelper.hasFieldOptionList(name);
 
@@ -396,12 +290,7 @@ class BaseRecordView extends View {
         }
     }
 
-    /**
-     * Show a panel.
-     *
-     * @param {string} name A panel name.
-     * @param [softLockedType] Omitted.
-     */
+    
     showPanel(name, softLockedType) {
         this.recordHelper.setPanelStateParam(name, 'hidden', false);
 
@@ -410,13 +299,7 @@ class BaseRecordView extends View {
         }
     }
 
-    /**
-     * Hide a panel.
-     *
-     * @param {string} name A panel name.
-     * @param {boolean} [locked=false] Won't be able to un-hide.
-     * @param {module:views/record/detail~panelSoftLockedType} [softLockedType='default']
-     */
+    
     hidePanel(name, locked, softLockedType) {
         this.recordHelper.setPanelStateParam(name, 'hidden', true);
 
@@ -425,11 +308,7 @@ class BaseRecordView extends View {
         }
     }
 
-    /**
-     * Style a panel. Style is set in the `data-style` DOM attribute.
-     *
-     * @param {string} name A panel name.
-     */
+    
     stylePanel(name) {
         this.recordHelper.setPanelStateParam(name, 'styled', true);
 
@@ -461,11 +340,7 @@ class BaseRecordView extends View {
         });
     }
 
-    /**
-     * Un-style a panel.
-     *
-     * @param {string} name A panel name.
-     */
+    
     unstylePanel(name) {
         this.recordHelper.setPanelStateParam(name, 'styled', false);
 
@@ -497,11 +372,7 @@ class BaseRecordView extends View {
         });
     }
 
-    /**
-     * Set/unset a confirmation upon leaving the form.
-     *
-     * @param {boolean} value True sets a required confirmation.
-     */
+    
     setConfirmLeaveOut(value) {
         if (!this.getRouter()) {
             return;
@@ -510,12 +381,7 @@ class BaseRecordView extends View {
         this.getRouter().confirmLeaveOut = value;
     }
 
-    /**
-     * Get field views.
-     *
-     * @param {boolean} [withHidden] With hidden.
-     * @return {Object.<string, module:views/fields/base>}
-     */
+    
     getFieldViews(withHidden) {
         const fields = {};
 
@@ -530,26 +396,17 @@ class BaseRecordView extends View {
         return fields;
     }
 
-    /**
-     * @deprecated Use `getFieldViews`.
-     * @private
-     * @return {Object<string, module:views/fields/base>}
-     */
+    
     getFields() {
         return this.getFieldViews();
     }
 
-    /**
-     * Get a field view.
-     *
-     * @param {string} name A field name.
-     * @return {module:views/fields/base|null}
-     */
+    
     getFieldView(name) {
-        /** @type {module:views/fields/base|null} */
+        
         let view =  this.getView(name + 'Field') || null;
 
-        // @todo Remove.
+        
         if (!view) {
             view = this.getView(name) || null;
         }
@@ -557,37 +414,24 @@ class BaseRecordView extends View {
         return view;
     }
 
-    /**
-     * @deprecated Use `getFieldView`.
-     * @return {module:views/fields/base|null}
-     */
+    
     getField(name) {
         return this.getFieldView(name);
     }
 
-    /**
-     * Get a field list.
-     *
-     * @return {string[]}
-     */
+    
     getFieldList() {
         return Object.keys(this.getFieldViews());
     }
 
-    /**
-     * Get a field view list.
-     *
-     * @return {module:views/fields/base[]}
-     */
+    
     getFieldViewList() {
         return this.getFieldList()
             .map(field => this.getFieldView(field))
             .filter(view => view !== null);
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     data() {
         return {
             scope: this.scope,
@@ -597,10 +441,7 @@ class BaseRecordView extends View {
         };
     }
 
-    /**
-     * @todo Remove.
-     * @private
-     */
+    
     handleDataBeforeRender(data) {
         this.getFieldList().forEach((field) => {
             const viewKey = field + 'Field';
@@ -609,15 +450,13 @@ class BaseRecordView extends View {
         });
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     setup() {
         if (typeof this.model === 'undefined') {
             throw new Error('Model has not been injected into record view.');
         }
 
-        /** @type {module:view-record-helper} */
+        
         this.recordHelper = this.options.recordHelper || new ViewRecordHelper();
 
         this.dynamicLogicDefs = this.options.dynamicLogicDefs || this.dynamicLogicDefs;
@@ -647,11 +486,7 @@ class BaseRecordView extends View {
         this.setupBeforeFinal();
     }
 
-    /**
-     * Set up before final.
-     *
-     * @protected
-     */
+    
     setupBeforeFinal() {
         this.attributes = this.model.getClonedAttributes();
 
@@ -687,31 +522,18 @@ class BaseRecordView extends View {
         this.initDynamicLogic();
     }
 
-    /**
-     * Set an initial attribute value.
-     *
-     * @protected
-     * @param {string} attribute An attribute name.
-     * @param {*} value
-     */
+    
     setInitialAttributeValue(attribute, value) {
         this.attributes[attribute] = value;
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * Check whether a current attribute value differs from initial.
-     *
-     * @param {string} name An attribute name.
-     * @return {boolean}
-     */
+    
+    
     checkAttributeIsChanged(name) {
         return !_.isEqual(this.attributes[name], this.model.get(name));
     }
 
-    /**
-     * Reset model changes.
-     */
+    
     resetModelChanges() {
         if (this.updatedAttributes) {
             this.attributes = this.updatedAttributes;
@@ -730,12 +552,7 @@ class BaseRecordView extends View {
         this.model.set(this.attributes, {skipReRender: true});
     }
 
-    /**
-     * Set model attribute values.
-     *
-     * @param {Object.<string,*>} setAttributes Values.
-     * @param {Object.<string,*>} [options] Options.
-     */
+    
     setModelAttributes(setAttributes, options) {
         for (const item in this.model.attributes) {
             if (!(item in setAttributes)) {
@@ -746,11 +563,7 @@ class BaseRecordView extends View {
         this.model.set(setAttributes, options || {});
     }
 
-    /**
-     * Init dynamic logic.
-     *
-     * @protected
-     */
+    
     initDynamicLogic() {
         this.dynamicLogicDefs = Espo.Utils.clone(this.dynamicLogicDefs || {});
         this.dynamicLogicDefs.fields = Espo.Utils.clone(this.dynamicLogicDefs.fields);
@@ -762,21 +575,14 @@ class BaseRecordView extends View {
         this.processDynamicLogic();
     }
 
-    /**
-     * Process dynamic logic.
-     *
-     * @protected
-     */
+    
     processDynamicLogic() {
         this.dynamicLogic.process();
     }
 
-    /**
-     * @protected
-     * @internal
-     */
+    
     initDependency() {
-        // noinspection JSDeprecatedSymbols
+        
         Object.keys(this.dependencyDefs || {}).forEach((attr) => {
             this.listenTo(this.model, 'change:' + attr, () => {
                 this._handleDependencyAttribute(attr);
@@ -786,20 +592,12 @@ class BaseRecordView extends View {
         this._handleDependencyAttributes();
     }
 
-    /**
-     * @deprecated
-     * @private
-     * For bc.
-     */
+    
     initDependancy() {
         this.initDependency();
     }
 
-    /**
-     * Set up a field level security.
-     *
-     * @protected
-     */
+    
     setupFieldLevelSecurity() {
         const forbiddenFieldList = this.getAcl().getScopeForbiddenFieldList(this.entityType, 'read');
 
@@ -814,29 +612,17 @@ class BaseRecordView extends View {
         });
     }
 
-    /**
-     * Set is changed.
-     *
-     * @protected
-     */
+    
     setIsChanged() {
         this.isChanged = true;
     }
 
-    /**
-     * Set is not changed.
-     *
-     * @protected
-     */
+    
     setIsNotChanged() {
         this.isChanged = false;
     }
 
-    /**
-     * Validate.
-     *
-     * @return {boolean} True if not valid.
-     */
+    
     validate() {
         const invalidFieldList = [];
 
@@ -855,18 +641,10 @@ class BaseRecordView extends View {
         return !!invalidFieldList.length;
     }
 
-    /**
-     * @protected
-     * @param {string[]} invalidFieldList Invalid fields.
-     */
+    
     onInvalid(invalidFieldList) {}
 
-    /**
-     * Validate a specific field.
-     *
-     * @param {string} field A field name.
-     * @return {boolean} True if not valid.
-     */
+    
     validateField(field) {
         const msg =
             this.translate('fieldInvalid', 'messages')
@@ -937,9 +715,7 @@ class BaseRecordView extends View {
         return notValid;
     }
 
-    /**
-     * Processed after save.
-     */
+    
     afterSave() {
         if (this.isNew) {
             Espo.Ui.success(this.translate('Created'));
@@ -951,56 +727,32 @@ class BaseRecordView extends View {
         this.setIsNotChanged();
     }
 
-    /**
-     * Processed before before-save.
-     */
+    
     beforeBeforeSave() {}
 
-    /**
-     * Processed before save.
-     */
+    
     beforeSave() {
         Espo.Ui.notify(this.translate('saving', 'messages'));
     }
 
-    /**
-     * Processed after save error.
-     */
+    
     afterSaveError() {}
 
-    /**
-     * Processed after save a not modified record.
-     */
+    
     afterNotModified() {
         Espo.Ui.warning(this.translate('notModified', 'messages'));
 
         this.setIsNotChanged();
     }
 
-    /**
-     * Processed after save not valid.
-     */
+    
     afterNotValid() {
         Espo.Ui.error(this.translate('Not valid'));
     }
 
-    /**
-     * Save options.
-     *
-     * @typedef {Object} module:views/record/base~saveOptions
-     *
-     * @property {Object.<string,string>} [headers] HTTP headers.
-     * @property {boolean} [skipNotModifiedWarning] Don't show a not-modified warning.
-     * @property {function():void} [afterValidate] A callback called after validate.
-     * @property {boolean} [bypassClose] Bypass closing. Only for inline-edit.
-     */
+    
 
-    /**
-     * Save.
-     *
-     * @param {module:views/record/base~saveOptions} [options] Options.
-     * @return {Promise}
-     */
+    
     save(options) {
         options = options || {};
 
@@ -1151,15 +903,7 @@ class BaseRecordView extends View {
         });
     }
 
-    /**
-     * Handle a save error.
-     *
-     * @param {module:ajax.Xhr} xhr XHR.
-     * @param {module:views/record/base~saveOptions} [options] Options.
-     * @param {function} saveResolve Resolve the save promise.
-     * @param {function} saveReject Reject the same promise.
-     * @return {Promise<boolean>}
-     */
+    
     handleSaveError(xhr, options, saveResolve, saveReject) {
         let handlerData = null;
 
@@ -1240,11 +984,7 @@ class BaseRecordView extends View {
         });
     }
 
-    /**
-     * Fetch data from the form.
-     *
-     * @return {Object.<string,*>}
-     */
+    
     fetch() {
         let data = {};
         const fieldViews = this.getFieldViews();
@@ -1264,11 +1004,7 @@ class BaseRecordView extends View {
         return data;
     }
 
-    /**
-     * Process fetch.
-     *
-     * @return {Object<string,*>|null}
-     */
+    
     processFetch() {
         const data = this.fetch();
 
@@ -1281,9 +1017,7 @@ class BaseRecordView extends View {
         return data;
     }
 
-    /**
-     * Populate defaults.
-     */
+    
     populateDefaults() {
         const populator = new DefaultsPopulator(
             this.getUser(),
@@ -1295,28 +1029,21 @@ class BaseRecordView extends View {
         populator.populate(this.model);
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * @protected
-     * @param duplicates
-     */
+    
+    
     errorHandlerDuplicate(duplicates) {}
 
-    /**
-     * @private
-     */
+    
     _handleDependencyAttributes() {
-        // noinspection JSDeprecatedSymbols
+        
         Object.keys(this.dependencyDefs || {}).forEach(attr => {
             this._handleDependencyAttribute(attr);
         });
     }
 
-    /**
-     * @private
-     */
+    
     _handleDependencyAttribute(attr) {
-        // noinspection JSDeprecatedSymbols
+        
         const data = this.dependencyDefs[attr];
         const value = this.model.get(attr);
 
@@ -1335,9 +1062,7 @@ class BaseRecordView extends View {
         }
     }
 
-    /**
-     * @private
-     */
+    
     _doDependencyAction(data) {
         const action = data.action;
 
@@ -1405,17 +1130,7 @@ class BaseRecordView extends View {
         }
     }
 
-    /**
-     * Create a field view.
-     *
-     * @protected
-     * @param {string} name A field name.
-     * @param {string|null} [view] A view name/path.
-     * @param {Object<string,*>} [params] Field params.
-     * @param {'detail'|'edit'} [mode='edit'] A mode.
-     * @param {boolean} [readOnly] Read-only.
-     * @param {Object<string,*>} [options] View options.
-     */
+    
     createField(name, view, params, mode, readOnly, options) {
         const o = {
             model: this.model,
@@ -1469,11 +1184,7 @@ class BaseRecordView extends View {
         }
     }
 
-    /**
-     * Get a currently focused field view.
-     *
-     * @return {module:views/fields/base|null}
-     */
+    
     getFocusedFieldView() {
         const $active = $(window.document.activeElement);
 
@@ -1496,11 +1207,7 @@ class BaseRecordView extends View {
         return this.getFieldView(name);
     }
 
-    /**
-     * Process exit.
-     *
-     * @param {string} [after] An exit parameter.
-     */
+    
     exit(after) {}
 }
 

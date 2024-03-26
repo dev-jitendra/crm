@@ -1,24 +1,13 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpFoundation;
 
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
-/**
- * ExpressionRequestMatcher uses an expression to match a Request.
- *
- * @author Fabien Potencier <fabien@symfony.com>
- */
+
 class ExpressionRequestMatcher extends RequestMatcher
 {
     private $language;

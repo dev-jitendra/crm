@@ -1,20 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - François B
- * - JD Isaacks
- * - Daniel Monaghan
- */
+
+
 return [
     'year' => '{1}blwyddyn|]1,Inf[:count flynedd',
     'y' => ':countbl',
@@ -62,8 +50,8 @@ return [
             $number > 20
                 ? (\in_array((int) $number, [40, 50, 60, 80, 100], true) ? 'fed' : 'ain')
                 : ([
-                    '', 'af', 'il', 'ydd', 'ydd', 'ed', 'ed', 'ed', 'fed', 'fed', 'fed', // 1af to 10fed
-                    'eg', 'fed', 'eg', 'eg', 'fed', 'eg', 'eg', 'fed', 'eg', 'fed', // 11eg to 20fed
+                    '', 'af', 'il', 'ydd', 'ydd', 'ed', 'ed', 'ed', 'fed', 'fed', 'fed', 
+                    'eg', 'fed', 'eg', 'eg', 'fed', 'eg', 'eg', 'fed', 'eg', 'fed', 
                 ])[$number] ?? ''
         );
     },

@@ -15,24 +15,15 @@ use function strpos;
 use const OPENSSL_PKCS1_OAEP_PADDING;
 use const OPENSSL_PKCS1_PADDING;
 
-/**
- * RSA public key
- */
+
 class PublicKey extends AbstractKey
 {
     public const CERT_START = '-----BEGIN CERTIFICATE-----';
 
-    /** @var string */
+    
     protected $certificateString;
 
-    /**
-     * Create public key instance public key from PEM formatted key file
-     * or X.509 certificate file
-     *
-     * @param  string      $pemOrCertificateFile
-     * @return PublicKey
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public static function fromFile($pemOrCertificateFile)
     {
         if (! is_readable($pemOrCertificateFile)) {
@@ -44,12 +35,7 @@ class PublicKey extends AbstractKey
         return new static(file_get_contents($pemOrCertificateFile));
     }
 
-    /**
-     * Construct public key with PEM formatted string or X.509 certificate
-     *
-     * @param  string $pemStringOrCertificate
-     * @throws Exception\RuntimeException
-     */
+    
     public function __construct($pemStringOrCertificate)
     {
         $result = openssl_pkey_get_public($pemStringOrCertificate);
@@ -69,21 +55,7 @@ class PublicKey extends AbstractKey
         $this->details            = openssl_pkey_get_details($this->opensslKeyResource);
     }
 
-    /**
-     * Encrypt using this key
-     *
-     * Starting in 2.4.9/2.5.2, we changed the default padding to
-     * OPENSSL_PKCS1_OAEP_PADDING to prevent Bleichenbacher's chosen-ciphertext
-     * attack.
-     *
-     * @see http://archiv.infsec.ethz.ch/education/fs08/secsem/bleichenbacher98.pdf
-     *
-     * @param  string $data
-     * @param  string $padding
-     * @throws Exception\InvalidArgumentException
-     * @throws Exception\RuntimeException
-     * @return string
-     */
+    
     public function encrypt($data, $padding = OPENSSL_PKCS1_OAEP_PADDING)
     {
         if (empty($data)) {
@@ -101,15 +73,7 @@ class PublicKey extends AbstractKey
         return $encrypted;
     }
 
-    /**
-     * Decrypt using this key
-     *
-     * @param  string $data
-     * @param  string $padding
-     * @throws Exception\InvalidArgumentException
-     * @throws Exception\RuntimeException
-     * @return string
-     */
+    
     public function decrypt($data, $padding = OPENSSL_PKCS1_PADDING)
     {
         if (! is_string($data)) {
@@ -130,22 +94,13 @@ class PublicKey extends AbstractKey
         return $decrypted;
     }
 
-    /**
-     * Get certificate string
-     *
-     * @return string
-     */
+    
     public function getCertificate()
     {
         return $this->certificateString;
     }
 
-    /**
-     * To string
-     *
-     * @return string
-     * @throws Exception\RuntimeException
-     */
+    
     public function toString()
     {
         if (! empty($this->certificateString)) {

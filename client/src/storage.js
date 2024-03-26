@@ -1,69 +1,29 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module storage */
 
-/**
- * A storage. Data is saved across browser sessions, has no expiration time.
- */
+
+
+
 class Storage {
 
     constructor() {}
 
-    /** @protected */
+    
     prefix = 'espo'
 
-    /** @protected */
+    
     storageObject = localStorage
 
-    /**
-     * @private
-     * @param {string} type
-     * @returns {string}
-     */
+    
     composeFullPrefix(type) {
         return this.prefix + '-' + type;
     }
 
-    /**
-     * @private
-     * @param {string} type
-     * @param {string} name
-     * @returns {string}
-     */
+    
     composeKey(type, name) {
         return this.composeFullPrefix(type) + '-' + name;
     }
 
-    /**
-     * @private
-     * @param {string} type
-     */
+    
     checkType(type) {
         if (
             typeof type === 'undefined' &&
@@ -73,13 +33,7 @@ class Storage {
         }
     }
 
-    /**
-     * Has a value.
-     *
-     * @param {string} type A type (category).
-     * @param {string} name A name.
-     * @returns {boolean}
-     */
+    
     has(type, name) {
         this.checkType(type);
 
@@ -88,13 +42,7 @@ class Storage {
         return this.storageObject.getItem(key) !== null;
     }
 
-    /**
-     * Get a value.
-     *
-     * @param {string} type A type (category).
-     * @param {string} name A name.
-     * @returns {*} Null if not stored.
-     */
+    
     get(type, name) {
         this.checkType(type);
 
@@ -124,7 +72,7 @@ class Storage {
                     result = stored;
                 }
             }
-            else if (stored[0] === "{" || stored[0] === "[") { // for backward compatibility
+            else if (stored[0] === "{" || stored[0] === "[") { 
                 try {
                     result = JSON.parse(stored);
                 }
@@ -139,13 +87,7 @@ class Storage {
         return null;
     }
 
-    /**
-     * Set (store) a value.
-     *
-     * @param {string} type A type (category).
-     * @param {string} name A name.
-     * @param {*} value A value.
-     */
+    
     set(type, name, value) {
         this.checkType(type);
 
@@ -177,12 +119,7 @@ class Storage {
         }
     }
 
-    /**
-     * Clear a value.
-     *
-     * @param {string} type A type (category).
-     * @param {string} name A name.
-     */
+    
     clear(type, name) {
         let reText;
 

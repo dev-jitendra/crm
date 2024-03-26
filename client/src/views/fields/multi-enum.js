@@ -1,40 +1,12 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/fields/multi-enum */
+
+
 
 import ArrayFieldView from 'views/fields/array';
 import RegExpPattern from 'helpers/reg-exp-pattern';
 import MultiSelect from 'ui/multi-select';
 
-/**
- * A multi-enum field.
- */
+
 class MultiEnumFieldView extends ArrayFieldView {
 
     type = 'multiEnum'
@@ -43,20 +15,17 @@ class MultiEnumFieldView extends ArrayFieldView {
     detailTemplate = 'fields/array/detail'
     editTemplate = 'fields/multi-enum/edit'
 
-    /** @const */
+    
     MAX_ITEM_LENGTH = 100
 
-    /**
-     * @protected
-     * @type {boolean}
-     */
+    
     restoreOnBackspace = false
 
     validationElementSelector = '.selectize-control'
 
     events = {}
 
-    /** @inheritDoc */
+    
     data() {
         return {
             ...super.data(),
@@ -140,7 +109,7 @@ class MultiEnumFieldView extends ArrayFieldView {
                 });
             });
 
-            /** @type {module:ui/multi-select~Options} */
+            
             let multiSelectOptions = {
                 items: items,
                 delimiter: this.itemDelimiter,
@@ -159,11 +128,7 @@ class MultiEnumFieldView extends ArrayFieldView {
         }
     }
 
-    /**
-     * @protected
-     * @param {string} input
-     * @return {{text: string, value: string}|null}
-     */
+    
     createCustomOptionCallback(input) {
         if (input.length > this.MAX_ITEM_LENGTH) {
             let message = this.translate('arrayItemMaxLength', 'messages')

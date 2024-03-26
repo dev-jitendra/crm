@@ -1,17 +1,5 @@
 <?php
-/**
- * Adapted by Darren Stephens <darren.stephens@durham.ac.uk>
- * from Java implementation of Telepen by <rstuart114@gmail.com> Robin Stuart 
- * at https://github.com/woo-j/OkapiBarcode which uses the 
- * Apache License 2.0 http://www.apache.org/licenses/LICENSE-2.0
- *
- * Implements Telepen (also known as Telepen Alpha), and Telepen Numeric.
- *
- * Telepen can encode ASCII text input and includes a modulo-127 check digit.
- * Telepen Numeric allows compression of numeric data into a Telepen symbol. Data
- * can consist of pairs of numbers or pairs consisting of a numerical digit followed
- * by an X character. Telepen Numeric also includes a mod-127 check digit.
- */
+
 
 namespace Picqer\Barcode\Types;
 
@@ -40,18 +28,16 @@ class TypeTelepen implements TypeInterface
 
     public function getBarcodeData(string $code): Barcode
     {
-        /* The stream we get from the telepen output gives us the 
-         * width of alternating black/white stripes
-         */
+        
 
-        $encoded = $this->encode($code); //binary string
+        $encoded = $this->encode($code); 
         $barcode = new Barcode($code);
 
         $drawBar = true;
         for ($i = 0; $i < strlen($encoded); ++$i) {
             $barWidth = $encoded[$i];
             $barcode->addBar(new BarcodeBar($barWidth, 250, $drawBar));
-            $drawBar = !$drawBar; //flip to other colour
+            $drawBar = !$drawBar; 
         }
 
         return $barcode;
@@ -71,38 +57,35 @@ class TypeTelepen implements TypeInterface
 
     protected function encodeAlpha($code) : string
     {
-        // We aren't interested in the non-printable parts of the ASCII set
+        
         if (
             !preg_match('/[ -~]+/', $code)
-        ) { // everything from ASCII32-ASCII127
+        ) { 
             throw new InvalidFormatException("Invalid characters in data");
         }
 
         $count = 0;
 
-        /* other implementations use the byte-chr-int type equivalence to work 
-         * with array indices in the conversion/lookup table. It's probably
-         * better to be more explicit with php, hence the use of ord and chr here.
-         */
+        
 
-        // begin with start char
+        
         $dest = $this->telepen_lookup_table[ord(self::TELEPEN_START_CHAR)];
 
         for ($i = 0; $i < strlen($code); $i++) {
-            //$ascii_code = ord(substr($code, $i, 1));
+            
             $ascii_code = ord($code[$i]);
             $dest .= ($this->telepen_lookup_table[$ascii_code]);
             $count += $ascii_code;
         }
 
-        // Now add check and terminator
+        
         $check_digit = 127 - ($count % 127);
         if ($check_digit == 127) {
             $check_digit = 0;
         }
 
         $dest .= $this->telepen_lookup_table[ord($check_digit)];
-        $dest .= $this->telepen_lookup_table[ord(self::TELEPEN_STOP_CHAR)]; // Stop
+        $dest .= $this->telepen_lookup_table[ord(self::TELEPEN_STOP_CHAR)]; 
 
         return $dest;
     }
@@ -110,24 +93,24 @@ class TypeTelepen implements TypeInterface
     private function encodeNumeric(string $code) : string
     {
 
-        /* If input contains non-numeric or X, exit */
+        
         if (!preg_match('/^[0-9X]+$/', $code)) {
             throw new InvalidFormatException("Invalid characters in data");
         }
 
-        /* If input is an odd length, exit */
+        
         $t = '';
         if (strlen($code) % 2 > 0) {
             throw new InvalidFormatException("There must be an even number of digits");
         }
 
         $count = 0;
-        $dest = $this->telepen_lookup_table[ord(self::TELEPEN_START_CHAR)]; // begin with the start character _
+        $dest = $this->telepen_lookup_table[ord(self::TELEPEN_START_CHAR)]; 
         
         for ($i = 0; $i < strlen($code); $i += 2) {
             $c1 = $code[$i];
             $c2 = $code[$i+1];
-            /* Input nX is allowed, but Xn is not */
+            
             if ($c1 == 'X') {
                 throw new InvalidFormatException("Invalid position of X in data");
             }
@@ -147,19 +130,12 @@ class TypeTelepen implements TypeInterface
         }
 
         $dest .= $this->telepen_lookup_table[$check_digit];
-        $dest .= $this->telepen_lookup_table[ord(self::TELEPEN_STOP_CHAR)]; // Stop
+        $dest .= $this->telepen_lookup_table[ord(self::TELEPEN_STOP_CHAR)]; 
 
         return $dest;
     }
 
-    /**
-     * The table provides a representation of barcode patterns 
-     * for each character in the ASCII set. from ASCII0-127
-     * Each barcode starts with "_" - ASCII95 0x5F, 
-     * and ends with "z" - ASCII122 0xFA.
-     * More information about Telepen symbology is available from
-     * https://v4l237.n3cdn1.secureserver.net/wp-content/uploads/2022/05/Barcode-Symbology-information-and-History.pdf
-     */
+    
     private function createTelepenConversionTable()
     {
         $this->telepen_lookup_table = [

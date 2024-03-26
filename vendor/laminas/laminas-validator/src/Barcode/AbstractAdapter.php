@@ -13,24 +13,15 @@ use function substr;
 
 abstract class AbstractAdapter implements AdapterInterface
 {
-    /**
-     * Allowed options for this adapter
-     *
-     * @var array
-     */
+    
     protected $options = [
-        'length'      => null, // Allowed barcode lengths, integer, array, string
-        'characters'  => null, // Allowed barcode characters
-        'checksum'    => null, // Callback to checksum function
-        'useChecksum' => true, // Is a checksum value included?, boolean
+        'length'      => null, 
+        'characters'  => null, 
+        'checksum'    => null, 
+        'useChecksum' => true, 
     ];
 
-    /**
-     * Checks the length of a barcode
-     *
-     * @param  string $value The barcode to check for proper length
-     * @return bool
-     */
+    
     public function hasValidLength($value)
     {
         if (! is_string($value)) {
@@ -75,12 +66,7 @@ abstract class AbstractAdapter implements AdapterInterface
         return false;
     }
 
-    /**
-     * Checks for allowed characters within the barcode
-     *
-     * @param  string $value The barcode to check for allowed characters
-     * @return bool
-     */
+    
     public function hasValidCharacters($value)
     {
         if (! is_string($value)) {
@@ -106,12 +92,7 @@ abstract class AbstractAdapter implements AdapterInterface
         return true;
     }
 
-    /**
-     * Validates the checksum
-     *
-     * @param  string $value The barcode to check the checksum for
-     * @return bool
-     */
+    
     public function hasValidChecksum($value)
     {
         $checksum = $this->getChecksum();
@@ -124,54 +105,32 @@ abstract class AbstractAdapter implements AdapterInterface
         return false;
     }
 
-    /**
-     * Returns the allowed barcode length
-     *
-     * @return int|array
-     */
+    
     public function getLength()
     {
         return $this->options['length'];
     }
 
-    /**
-     * Returns the allowed characters
-     *
-     * @return int|string|array
-     */
+    
     public function getCharacters()
     {
         return $this->options['characters'];
     }
 
-    /**
-     * Returns the checksum function name
-     *
-     * @return string
-     */
+    
     public function getChecksum()
     {
         return $this->options['checksum'];
     }
 
-    /**
-     * Sets the checksum validation method
-     *
-     * @param callable $checksum Checksum method to call
-     * @return $this
-     */
+    
     protected function setChecksum($checksum)
     {
         $this->options['checksum'] = $checksum;
         return $this;
     }
 
-    /**
-     * Sets the checksum validation, if no value is given, the actual setting is returned
-     *
-     * @param  bool $check
-     * @return AbstractAdapter|bool
-     */
+    
     public function useChecksum($check = null)
     {
         if ($check === null) {
@@ -182,37 +141,21 @@ abstract class AbstractAdapter implements AdapterInterface
         return $this;
     }
 
-    /**
-     * Sets the length of this barcode
-     *
-     * @param int|array $length
-     * @return $this
-     */
+    
     protected function setLength($length)
     {
         $this->options['length'] = $length;
         return $this;
     }
 
-    /**
-     * Sets the allowed characters of this barcode
-     *
-     * @param int $characters
-     * @return $this
-     */
+    
     protected function setCharacters($characters)
     {
         $this->options['characters'] = $characters;
         return $this;
     }
 
-    /**
-     * Validates the checksum (Modulo 10)
-     * GTIN implementation factor 3
-     *
-     * @param  string $value The barcode to validate
-     * @return bool
-     */
+    
     protected function gtin($value)
     {
         $barcode = substr($value, 0, -1);
@@ -233,13 +176,7 @@ abstract class AbstractAdapter implements AdapterInterface
         return $value[$length + 1] === (string) $checksum;
     }
 
-    /**
-     * Validates the checksum (Modulo 10)
-     * IDENTCODE implementation factors 9 and 4
-     *
-     * @param  string $value The barcode to validate
-     * @return bool
-     */
+    
     protected function identcode($value)
     {
         $barcode = substr($value, 0, -1);
@@ -260,13 +197,7 @@ abstract class AbstractAdapter implements AdapterInterface
         return $value[$length + 1] === (string) $checksum;
     }
 
-    /**
-     * Validates the checksum (Modulo 10)
-     * CODE25 implementation factor 3
-     *
-     * @param  string $value The barcode to validate
-     * @return bool
-     */
+    
     protected function code25($value)
     {
         $barcode = substr($value, 0, -1);
@@ -287,13 +218,7 @@ abstract class AbstractAdapter implements AdapterInterface
         return $value[$length + 1] === (string) $checksum;
     }
 
-    /**
-     * Validates the checksum ()
-     * POSTNET implementation
-     *
-     * @param  string $value The barcode to validate
-     * @return bool
-     */
+    
     protected function postnet($value)
     {
         $checksum = substr($value, -1, 1);

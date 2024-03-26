@@ -8,12 +8,7 @@ use React\Promise;
 use InvalidArgumentException;
 use RuntimeException;
 
-/**
- * Unix domain socket connector
- *
- * Unix domain sockets use atomic operations, so we can as well emulate
- * async behavior.
- */
+
 final class UnixConnector implements ConnectorInterface
 {
     private $loop;
@@ -25,9 +20,9 @@ final class UnixConnector implements ConnectorInterface
 
     public function connect($path)
     {
-        if (\strpos($path, '://') === false) {
-            $path = 'unix://' . $path;
-        } elseif (\substr($path, 0, 7) !== 'unix://') {
+        if (\strpos($path, ':
+            $path = 'unix:
+        } elseif (\substr($path, 0, 7) !== 'unix:
             return Promise\reject(new \InvalidArgumentException(
                 'Given URI "' . $path . '" is invalid (EINVAL)',
                 \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : (\defined('PCNTL_EINVAL') ? \PCNTL_EINVAL : 22)

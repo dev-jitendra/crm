@@ -1,30 +1,4 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 import View from 'view';
 import $ from 'jquery';
@@ -36,7 +10,7 @@ class NavbarSiteView extends View {
     currentTab = null
 
     events = {
-        /** @this NavbarSiteView */
+        
         'click .navbar-collapse.in a.nav-link': function (e) {
             const $a = $(e.currentTarget);
             const href = $a.attr('href');
@@ -45,42 +19,42 @@ class NavbarSiteView extends View {
                 this.xsCollapse();
             }
         },
-        /** @this NavbarSiteView */
+        
         'click a.nav-link': function () {
             if (this.isSideMenuOpened) {
                 this.closeSideMenu();
             }
         },
-        /** @this NavbarSiteView */
+        
         'click a.navbar-brand.nav-link': function () {
             this.xsCollapse();
         },
-        /** @this NavbarSiteView */
+        
         'click a.minimizer': function () {
             this.switchMinimizer();
         },
-        /** @this NavbarSiteView */
+        
         'click a.side-menu-button': function () {
             this.switchSideMenu();
         },
-        /** @this NavbarSiteView */
+        
         'click a.action': function (e) {
             Espo.Utils.handleAction(this, e.originalEvent, e.currentTarget);
         },
-        /** @this NavbarSiteView */
+        
         'click [data-action="toggleCollapsable"]': function () {
             this.toggleCollapsable();
         },
-        /** @this NavbarSiteView */
+        
         'click li.show-more a': function (e) {
             e.stopPropagation();
             this.showMoreTabs();
         },
-        /** @this NavbarSiteView */
+        
         'click .not-in-more > .nav-link-group': function (e) {
             this.handleGroupDropdownClick(e);
         },
-        /** @this NavbarSiteView */
+        
         'click .in-more .nav-link-group': function (e) {
             this.handleGroupDropdownClick(e);
         },
@@ -364,7 +338,7 @@ class NavbarSiteView extends View {
 
         const itemDefs = this.getMetadata().get(['app', 'clientNavbar', 'items']) || {};
 
-        /** @type {string[]} */
+        
         this.itemList = Object.keys(itemDefs)
             .filter(name => !itemDefs[name].disabled)
             .sort((name1, name2) => {
@@ -436,19 +410,12 @@ class NavbarSiteView extends View {
             });
     }
 
-    /**
-     *
-     * @param {string} name
-     * @return {{view: string, class: string}}
-     */
+    
     getItemDefs(name) {
         return this.getMetadata().get(['app', 'clientNavbar', 'items', name]);
     }
 
-    /**
-     * @param {string} name
-     * @return {Promise}
-     */
+    
     createItemView(name) {
         const defs = this.getItemDefs(name)
 
@@ -472,7 +439,7 @@ class NavbarSiteView extends View {
             return false;
         }
 
-        const defs = /** @type {{disabled?: boolean, acl?: boolean, tabAclPermission?: string}} */
+        const defs = 
             scopes[scope] || {};
 
         if (defs.disabled) {
@@ -1199,16 +1166,9 @@ class NavbarSiteView extends View {
         return o;
     }
 
-    /**
-     * @typedef {Object} MenuDataItem
-     * @property {string} [link]
-     * @property {string} [html]
-     * @property {true} [divider]
-     */
+    
 
-    /**
-     * @return {MenuDataItem[]}
-     */
+    
     getMenuDataList() {
         let avatarHtml = this.getHelper().getAvatarHtml(this.getUser().id, 'small', 16, 'avatar-link');
 
@@ -1216,7 +1176,7 @@ class NavbarSiteView extends View {
             avatarHtml += ' ';
         }
 
-        /** @type {MenuDataItem[]}*/
+        
         let list = [
             {
                 link: '#User/view/' + this.getUser().id,
@@ -1264,12 +1224,12 @@ class NavbarSiteView extends View {
         return list;
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionLogout() {
         this.getRouter().logout();
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionShowLastViewed() {
         Espo.Ui.notify(' ... ');
 
@@ -1284,7 +1244,7 @@ class NavbarSiteView extends View {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionShowHistory() {
         this.createView('dialog', 'views/modals/action-history', {}, (view) => {
             view.render();

@@ -30,22 +30,16 @@ use const DB2_AUTOCOMMIT_ON;
 
 final class Connection implements ServerInfoAwareConnection
 {
-    /** @var resource */
+    
     private $connection;
 
-    /**
-     * @internal The connection can be only instantiated by its driver.
-     *
-     * @param resource $connection
-     */
+    
     public function __construct($connection)
     {
         $this->connection = $connection;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getServerVersion()
     {
         $serverInfo = db2_server_info($this->connection);
@@ -70,9 +64,7 @@ final class Connection implements ServerInfoAwareConnection
         return $this->prepare($sql)->execute();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function quote($value, $type = ParameterType::STRING)
     {
         $value = db2_escape_string($value);
@@ -95,15 +87,13 @@ final class Connection implements ServerInfoAwareConnection
         return db2_num_rows($stmt);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function lastInsertId($name = null)
     {
         if ($name !== null) {
             Deprecation::triggerIfCalledFromOutside(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/issues/4687',
+                'https:
                 'The usage of Connection::lastInsertId() with a sequence name is deprecated.',
             );
         }
@@ -143,7 +133,7 @@ final class Connection implements ServerInfoAwareConnection
         return $result;
     }
 
-    /** @return resource */
+    
     public function getNativeConnection()
     {
         return $this->connection;

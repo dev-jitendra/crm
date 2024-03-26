@@ -12,7 +12,7 @@ use function is_object;
 use function spl_object_hash;
 use function sprintf;
 
-/** @psalm-immutable */
+
 class Exception extends \Exception
 {
     public static function notSupported(string $method): self
@@ -20,7 +20,7 @@ class Exception extends \Exception
         return new self(sprintf("Operation '%s' is not supported by platform.", $method));
     }
 
-    /** @param mixed $invalidPlatform */
+    
     public static function invalidPlatformType($invalidPlatform): self
     {
         if (is_object($invalidPlatform)) {
@@ -42,12 +42,7 @@ class Exception extends \Exception
         );
     }
 
-    /**
-     * Returns a new instance for an invalid specified platform version.
-     *
-     * @param string $version        The invalid platform version given.
-     * @param string $expectedFormat The expected platform version format.
-     */
+    
     public static function invalidPlatformVersionSpecified(string $version, string $expectedFormat): self
     {
         return new self(
@@ -60,7 +55,7 @@ class Exception extends \Exception
         );
     }
 
-    /** @param string|null $url The URL that was provided in the connection parameters (if any). */
+    
     public static function driverRequired(?string $url = null): self
     {
         if ($url !== null) {
@@ -77,7 +72,7 @@ class Exception extends \Exception
             'instance is given to DriverManager::getConnection().');
     }
 
-    /** @param string[] $knownDrivers */
+    
     public static function unknownDriver(string $unknownDriverName, array $knownDrivers): self
     {
         return new self("The given 'driver' " . $unknownDriverName . ' is unknown, ' .

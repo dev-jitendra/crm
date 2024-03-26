@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Mail;
 
@@ -60,20 +34,18 @@ use Laminas\Mime\Part as MimePart;
 use Exception;
 use InvalidArgumentException;
 
-/**
- * Sends emails. Builds parameters for sending. Should not be used directly.
- */
+
 class Sender
 {
     private ?SmtpTransport $transport = null;
     private bool $isGlobal = false;
-    /** @var array<string, mixed>  */
+    
     private array $params = [];
-    /** @var array<string, mixed> */
+    
     private array $overrideParams = [];
     private ?Envelope $envelope = null;
     private ?Message $message = null;
-    /** @var ?iterable<Attachment> */
+    
     private $attachmentList = null;
 
     public function __construct(
@@ -85,14 +57,11 @@ class Sender
         private FileStorageManager $fileStorageManager
     ) {
 
-        /** @noinspection PhpDeprecationInspection */
+        
         $this->useGlobal();
     }
 
-    /**
-     * @deprecated As of 6.0. EmailSender should be used as an access point
-     * for email sending functionality. Sender instances are not meant to be reused.
-     */
+    
     public function resetParams(): self
     {
         $this->params = [];
@@ -104,11 +73,7 @@ class Sender
         return $this;
     }
 
-    /**
-     * With parameters.
-     *
-     * @param SenderParams|array<string, mixed> $params
-     */
+    
     public function withParams($params): self
     {
         if ($params instanceof SenderParams) {
@@ -136,11 +101,7 @@ class Sender
         return $this;
     }
 
-    /**
-     * With specific SMTP parameters.
-     *
-     * @param SmtpParams|array<string, mixed> $params
-     */
+    
     public function withSmtpParams($params): self
     {
         if ($params instanceof SmtpParams) {
@@ -150,15 +111,11 @@ class Sender
             throw new InvalidArgumentException();
         }
 
-        /** @noinspection PhpDeprecationInspection */
+        
         return $this->useSmtp($params);
     }
 
-    /**
-     * With specific attachments.
-     *
-     * @param iterable<Attachment> $attachmentList
-     */
+    
     public function withAttachments(iterable $attachmentList): self
     {
         $this->attachmentList = $attachmentList;
@@ -166,20 +123,14 @@ class Sender
         return $this;
     }
 
-    /**
-     * With envelope options.
-     *
-     * @param array<string, mixed> $options
-     */
+    
     public function withEnvelopeOptions(array $options): self
     {
-        /** @noinspection PhpDeprecationInspection */
+        
         return $this->setEnvelopeOptions($options);
     }
 
-    /**
-     * Set a message instance.
-     */
+    
     public function withMessage(Message $message): self
     {
         $this->message = $message;
@@ -187,10 +138,7 @@ class Sender
         return $this;
     }
 
-    /**
-     * @deprecated As of v6.0. Use withParams.
-     * @param array<string, mixed> $params
-     */
+    
     public function setParams(array $params = []): self
     {
         $this->params = array_merge($this->params, $params);
@@ -199,10 +147,7 @@ class Sender
     }
 
 
-    /**
-     * @deprecated As of 6.0. Use withSmtpParams.
-     * @param array<string, mixed> $params
-     */
+    
     public function useSmtp(array $params = []): self
     {
         $this->isGlobal = false;
@@ -212,10 +157,7 @@ class Sender
         return $this;
     }
 
-    /**
-     * @deprecated As of v6.0. Sender class not meant to be reused. Global params is applied by default.
-     * No need to reset it back.
-     */
+    
     public function useGlobal(): self
     {
         $this->params = [];
@@ -225,9 +167,7 @@ class Sender
         return $this;
     }
 
-    /**
-     * @param array<string, mixed> $params
-     */
+    
     private function applySmtp(array $params = []): void
     {
         $this->params = $params;
@@ -257,7 +197,7 @@ class Sender
             if ($authMechanism) {
                 $authMechanism = preg_replace("([.]{2,})", '', $authMechanism);
 
-                /** @noinspection SpellCheckingInspection */
+                
                 if (in_array($authMechanism, ['login', 'crammd5', 'plain'])) {
                     $options['connectionClass'] = $authMechanism;
                 }
@@ -300,9 +240,7 @@ class Sender
         }
     }
 
-    /**
-     * @throws NoSmtp
-     */
+    
     private function applyGlobal(): void
     {
         $systemAccount = $this->accountProvider->getSystem();
@@ -320,9 +258,7 @@ class Sender
         $this->applySmtp($smtpParams->toArray());
     }
 
-    /**
-     * @deprecated As of v6.0. Use EmailSender::hasSystemSmtp.
-     */
+    
     public function hasSystemSmtp(): bool
     {
         if ($this->config->get('smtpServer')) {
@@ -336,14 +272,7 @@ class Sender
         return false;
     }
 
-    /**
-     * Send an email.
-     *
-     * @param ?array<string, mixed> $params @deprecated As of v6.0. Use withParams.
-     * @param ?Message $message @deprecated As of v6.0. Use withMessage.
-     * @param iterable<Attachment> $attachmentList @deprecated As of v6.0. Use withAttachments.
-     * @throws SendingError
-     */
+    
     public function send(
         Email $email,
         ?array $params = [],
@@ -412,13 +341,13 @@ class Sender
 
         $attachmentPartList = [];
 
-        /** @var EntityCollection<Attachment> $attachmentCollection */
+        
         $attachmentCollection = $this->entityManager
             ->getCollectionFactory()
             ->create(Attachment::ENTITY_TYPE);
 
         if (!$email->isNew()) {
-            /** @var Collection<Attachment> $relatedAttachmentCollection */
+            
             $relatedAttachmentCollection = $this->entityManager
                 ->getRDBRepository(Email::ENTITY_TYPE)
                 ->getRelation($email, 'attachments')
@@ -562,7 +491,7 @@ class Sender
                 $message->getHeaders()->addHeader($contentTypeHeader);
             }
 
-            /** @phpstan-ignore-next-line */
+            
             $message->getHeaders()->get('content-type')->setType($messageType);
         }
 
@@ -601,23 +530,21 @@ class Sender
             $email->set('dateSent', DateTime::createNow()->toString());
         }
         catch (Exception $e) {
-            /** @noinspection PhpDeprecationInspection */
+            
             $this->resetParams();
-            /** @noinspection PhpDeprecationInspection */
+            
             $this->useGlobal();
 
             $this->handleException($e);
         }
 
-        /** @noinspection PhpDeprecationInspection */
+        
         $this->resetParams();
-        /** @noinspection PhpDeprecationInspection */
+        
         $this->useGlobal();
     }
 
-    /**
-     * @return MimePart[]
-     */
+    
     private function getInlineAttachmentPartList(Email $email): array
     {
         $list = [];
@@ -643,10 +570,7 @@ class Sender
         return $list;
     }
 
-    /**
-     * @return never
-     * @throws SendingError
-     */
+    
     private function handleException(Exception $e): void
     {
         if ($e instanceof ProtocolRuntimeException) {
@@ -690,11 +614,7 @@ class Sender
         return $messageId;
     }
 
-    /**
-     * @deprecated As of v6.0. Use withEnvelopeOptions.
-     *
-     * @param array<string, mixed> $options
-     */
+    
     public function setEnvelopeOptions(array $options): self
     {
         $this->envelope = new Envelope($options);

@@ -1,23 +1,12 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpFoundation;
 
 use Symfony\Component\Routing\RequestContext;
 
-/**
- * A helper service for manipulating URLs within and outside the request scope.
- *
- * @author Valentin Udaltsov <udaltsov.valentin@gmail.com>
- */
+
 final class UrlHelper
 {
     private $requestStack;
@@ -31,7 +20,7 @@ final class UrlHelper
 
     public function getAbsoluteUrl(string $path): string
     {
-        if (str_contains($path, '://') || '//' === substr($path, 0, 2)) {
+        if (str_contains($path, ':
             return $path;
         }
 
@@ -60,7 +49,7 @@ final class UrlHelper
 
     public function getRelativePath(string $path): string
     {
-        if (str_contains($path, '://') || '//' === substr($path, 0, 2)) {
+        if (str_contains($path, ':
             return $path;
         }
 
@@ -97,6 +86,6 @@ final class UrlHelper
             $path = rtrim($this->requestContext->getBaseUrl(), '/').'/'.$path;
         }
 
-        return $scheme.'://'.$host.$port.$path;
+        return $scheme.':
     }
 }

@@ -18,42 +18,34 @@ class Chart extends WriterPart
 {
     protected $calculateCellValues;
 
-    /**
-     * @var int
-     */
+    
     private $seriesIndex;
 
-    /**
-     * Write charts to XML format.
-     *
-     * @param mixed $calculateCellValues
-     *
-     * @return string XML Output
-     */
+    
     public function writeChart(\PhpOffice\PhpSpreadsheet\Chart\Chart $pChart, $calculateCellValues = true)
     {
         $this->calculateCellValues = $calculateCellValues;
 
-        // Create XML writer
+        
         $objWriter = null;
         if ($this->getParentWriter()->getUseDiskCaching()) {
             $objWriter = new XMLWriter(XMLWriter::STORAGE_DISK, $this->getParentWriter()->getDiskCachingDirectory());
         } else {
             $objWriter = new XMLWriter(XMLWriter::STORAGE_MEMORY);
         }
-        //    Ensure that data series values are up-to-date before we save
+        
         if ($this->calculateCellValues) {
             $pChart->refresh();
         }
 
-        // XML header
+        
         $objWriter->startDocument('1.0', 'UTF-8', 'yes');
 
-        // c:chartSpace
+        
         $objWriter->startElement('c:chartSpace');
-        $objWriter->writeAttribute('xmlns:c', 'http://schemas.openxmlformats.org/drawingml/2006/chart');
-        $objWriter->writeAttribute('xmlns:a', 'http://schemas.openxmlformats.org/drawingml/2006/main');
-        $objWriter->writeAttribute('xmlns:r', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships');
+        $objWriter->writeAttribute('xmlns:c', 'http:
+        $objWriter->writeAttribute('xmlns:a', 'http:
+        $objWriter->writeAttribute('xmlns:r', 'http:
 
         $objWriter->startElement('c:date1904');
         $objWriter->writeAttribute('val', 0);
@@ -97,16 +89,11 @@ class Chart extends WriterPart
 
         $objWriter->endElement();
 
-        // Return
+        
         return $objWriter->getData();
     }
 
-    /**
-     * Write Chart Title.
-     *
-     * @param XMLWriter $objWriter XML Writer
-     * @param Title $title
-     */
+    
     private function writeTitle(XMLWriter $objWriter, ?Title $title = null): void
     {
         if ($title === null) {
@@ -144,12 +131,7 @@ class Chart extends WriterPart
         $objWriter->endElement();
     }
 
-    /**
-     * Write Chart Legend.
-     *
-     * @param XMLWriter $objWriter XML Writer
-     * @param Legend $legend
-     */
+    
     private function writeLegend(XMLWriter $objWriter, ?Legend $legend = null): void
     {
         if ($legend === null) {
@@ -193,15 +175,7 @@ class Chart extends WriterPart
         $objWriter->endElement();
     }
 
-    /**
-     * Write Chart Plot Area.
-     *
-     * @param XMLWriter $objWriter XML Writer
-     * @param Title $xAxisLabel
-     * @param Title $yAxisLabel
-     * @param Axis $xAxis
-     * @param Axis $yAxis
-     */
+    
     private function writePlotArea(XMLWriter $objWriter, \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $pSheet, PlotArea $plotArea, ?Title $xAxisLabel = null, ?Title $yAxisLabel = null, ?Axis $xAxis = null, ?Axis $yAxis = null, ?GridLines $majorGridlines = null, ?GridLines $minorGridlines = null): void
     {
         if ($plotArea === null) {
@@ -245,7 +219,7 @@ class Chart extends WriterPart
             $this->writeDataLabels($objWriter, $layout);
 
             if ($chartType === DataSeries::TYPE_LINECHART) {
-                //    Line only, Line3D can't be smoothed
+                
                 $objWriter->startElement('c:smooth');
                 $objWriter->writeAttribute('val', (int) $plotGroup->getSmoothLine());
                 $objWriter->endElement();
@@ -286,7 +260,7 @@ class Chart extends WriterPart
                 $objWriter->endElement();
             }
 
-            //    Generate 2 unique numbers to use for axId values
+            
             $id1 = '75091328';
             $id2 = '75089408';
 
@@ -325,12 +299,7 @@ class Chart extends WriterPart
         $objWriter->endElement();
     }
 
-    /**
-     * Write Data Labels.
-     *
-     * @param XMLWriter $objWriter XML Writer
-     * @param \PhpOffice\PhpSpreadsheet\Chart\Layout $chartLayout Chart layout
-     */
+    
     private function writeDataLabels(XMLWriter $objWriter, ?Layout $chartLayout = null): void
     {
         $objWriter->startElement('c:dLbls');
@@ -373,15 +342,7 @@ class Chart extends WriterPart
         $objWriter->endElement();
     }
 
-    /**
-     * Write Category Axis.
-     *
-     * @param XMLWriter $objWriter XML Writer
-     * @param Title $xAxisLabel
-     * @param string $id1
-     * @param string $id2
-     * @param bool $isMultiLevelSeries
-     */
+    
     private function writeCategoryAxis($objWriter, $xAxisLabel, $id1, $id2, $isMultiLevelSeries, Axis $yAxis): void
     {
         $objWriter->startElement('c:catAx');
@@ -490,16 +451,7 @@ class Chart extends WriterPart
         $objWriter->endElement();
     }
 
-    /**
-     * Write Value Axis.
-     *
-     * @param XMLWriter $objWriter XML Writer
-     * @param Title $yAxisLabel
-     * @param string $groupType Chart type
-     * @param string $id1
-     * @param string $id2
-     * @param bool $isMultiLevelSeries
-     */
+    
     private function writeValueAxis($objWriter, $yAxisLabel, $groupType, $id1, $id2, $isMultiLevelSeries, Axis $xAxis, GridLines $majorGridlines, GridLines $minorGridlines): void
     {
         $objWriter->startElement('c:valAx');
@@ -549,9 +501,9 @@ class Chart extends WriterPart
             $objWriter->writeAttribute('val', $majorGridlines->getLineColorProperty('value'));
             $objWriter->startElement('a:alpha');
             $objWriter->writeAttribute('val', $majorGridlines->getLineColorProperty('alpha'));
-            $objWriter->endElement(); //end alpha
-            $objWriter->endElement(); //end srgbClr
-            $objWriter->endElement(); //end solidFill
+            $objWriter->endElement(); 
+            $objWriter->endElement(); 
+            $objWriter->endElement(); 
 
             $objWriter->startElement('a:prstDash');
             $objWriter->writeAttribute('val', $majorGridlines->getLineStyleProperty('dash'));
@@ -581,7 +533,7 @@ class Chart extends WriterPart
                 $objWriter->writeAttribute('len', $majorGridlines->getLineStyleArrowParameters('end', 'len'));
                 $objWriter->endElement();
             }
-            $objWriter->endElement(); //end ln
+            $objWriter->endElement(); 
         }
         $objWriter->startElement('a:effectLst');
 
@@ -592,9 +544,9 @@ class Chart extends WriterPart
             $objWriter->writeAttribute('val', $majorGridlines->getGlowColor('value'));
             $objWriter->startElement('a:alpha');
             $objWriter->writeAttribute('val', $majorGridlines->getGlowColor('alpha'));
-            $objWriter->endElement(); //end alpha
-            $objWriter->endElement(); //end schemeClr
-            $objWriter->endElement(); //end glow
+            $objWriter->endElement(); 
+            $objWriter->endElement(); 
+            $objWriter->endElement(); 
         }
 
         if ($majorGridlines->getShadowProperty('presets') !== null) {
@@ -628,21 +580,21 @@ class Chart extends WriterPart
 
             $objWriter->startElement('a:alpha');
             $objWriter->writeAttribute('val', $majorGridlines->getShadowProperty(['color', 'alpha']));
-            $objWriter->endElement(); //end alpha
+            $objWriter->endElement(); 
 
-            $objWriter->endElement(); //end color:type
-            $objWriter->endElement(); //end shadow
+            $objWriter->endElement(); 
+            $objWriter->endElement(); 
         }
 
         if ($majorGridlines->getSoftEdgesSize() !== null) {
             $objWriter->startElement('a:softEdge');
             $objWriter->writeAttribute('rad', $majorGridlines->getSoftEdgesSize());
-            $objWriter->endElement(); //end softEdge
+            $objWriter->endElement(); 
         }
 
-        $objWriter->endElement(); //end effectLst
-        $objWriter->endElement(); //end spPr
-        $objWriter->endElement(); //end majorGridLines
+        $objWriter->endElement(); 
+        $objWriter->endElement(); 
+        $objWriter->endElement(); 
 
         if ($minorGridlines->getObjectState()) {
             $objWriter->startElement('c:minorGridlines');
@@ -656,9 +608,9 @@ class Chart extends WriterPart
                 $objWriter->writeAttribute('val', $minorGridlines->getLineColorProperty('value'));
                 $objWriter->startElement('a:alpha');
                 $objWriter->writeAttribute('val', $minorGridlines->getLineColorProperty('alpha'));
-                $objWriter->endElement(); //end alpha
-                $objWriter->endElement(); //end srgbClr
-                $objWriter->endElement(); //end solidFill
+                $objWriter->endElement(); 
+                $objWriter->endElement(); 
+                $objWriter->endElement(); 
 
                 $objWriter->startElement('a:prstDash');
                 $objWriter->writeAttribute('val', $minorGridlines->getLineStyleProperty('dash'));
@@ -688,7 +640,7 @@ class Chart extends WriterPart
                     $objWriter->writeAttribute('len', $minorGridlines->getLineStyleArrowParameters('end', 'len'));
                     $objWriter->endElement();
                 }
-                $objWriter->endElement(); //end ln
+                $objWriter->endElement(); 
             }
 
             $objWriter->startElement('a:effectLst');
@@ -700,9 +652,9 @@ class Chart extends WriterPart
                 $objWriter->writeAttribute('val', $minorGridlines->getGlowColor('value'));
                 $objWriter->startElement('a:alpha');
                 $objWriter->writeAttribute('val', $minorGridlines->getGlowColor('alpha'));
-                $objWriter->endElement(); //end alpha
-                $objWriter->endElement(); //end schemeClr
-                $objWriter->endElement(); //end glow
+                $objWriter->endElement(); 
+                $objWriter->endElement(); 
+                $objWriter->endElement(); 
             }
 
             if ($minorGridlines->getShadowProperty('presets') !== null) {
@@ -735,20 +687,20 @@ class Chart extends WriterPart
                 $objWriter->writeAttribute('val', $minorGridlines->getShadowProperty(['color', 'value']));
                 $objWriter->startElement('a:alpha');
                 $objWriter->writeAttribute('val', $minorGridlines->getShadowProperty(['color', 'alpha']));
-                $objWriter->endElement(); //end alpha
-                $objWriter->endElement(); //end color:type
-                $objWriter->endElement(); //end shadow
+                $objWriter->endElement(); 
+                $objWriter->endElement(); 
+                $objWriter->endElement(); 
             }
 
             if ($minorGridlines->getSoftEdgesSize() !== null) {
                 $objWriter->startElement('a:softEdge');
                 $objWriter->writeAttribute('rad', $minorGridlines->getSoftEdgesSize());
-                $objWriter->endElement(); //end softEdge
+                $objWriter->endElement(); 
             }
 
-            $objWriter->endElement(); //end effectLst
-            $objWriter->endElement(); //end spPr
-            $objWriter->endElement(); //end minorGridLines
+            $objWriter->endElement(); 
+            $objWriter->endElement(); 
+            $objWriter->endElement(); 
         }
 
         if ($yAxisLabel !== null) {
@@ -927,8 +879,8 @@ class Chart extends WriterPart
             $objWriter->endElement();
         }
 
-        $objWriter->endElement(); //effectList
-        $objWriter->endElement(); //end spPr
+        $objWriter->endElement(); 
+        $objWriter->endElement(); 
 
         if ($id1 > 0) {
             $objWriter->startElement('c:crossAx');
@@ -973,13 +925,7 @@ class Chart extends WriterPart
         $objWriter->endElement();
     }
 
-    /**
-     * Get the data series type(s) for a chart plot series.
-     *
-     * @param PlotArea $plotArea
-     *
-     * @return array|string
-     */
+    
     private static function getChartType($plotArea)
     {
         $groupCount = $plotArea->getPlotGroupCount();
@@ -1000,15 +946,7 @@ class Chart extends WriterPart
         return $chartType;
     }
 
-    /**
-     * Method writing plot series values.
-     *
-     * @param XMLWriter $objWriter XML Writer
-     * @param int       $val       value for idx (default: 3)
-     * @param string    $fillColor hex color (default: FF9900)
-     *
-     * @return XMLWriter XML Writer
-     */
+    
     private function writePlotSeriesValuesElement($objWriter, $val = 3, $fillColor = 'FF9900')
     {
         $objWriter->startElement('c:dPt');
@@ -1032,16 +970,7 @@ class Chart extends WriterPart
         return $objWriter;
     }
 
-    /**
-     * Write Plot Group (series of related plots).
-     *
-     * @param DataSeries $plotGroup
-     * @param string $groupType Type of plot for dataseries
-     * @param XMLWriter $objWriter XML Writer
-     * @param bool &$catIsMultiLevelSeries Is category a multi-series category
-     * @param bool &$valIsMultiLevelSeries Is value set a multi-series set
-     * @param string &$plotGroupingType Type of grouping for multi-series values
-     */
+    
     private function writePlotGroup($plotGroup, $groupType, $objWriter, &$catIsMultiLevelSeries, &$valIsMultiLevelSeries, &$plotGroupingType): void
     {
         if ($plotGroup === null) {
@@ -1061,7 +990,7 @@ class Chart extends WriterPart
             $objWriter->endElement();
         }
 
-        //    Get these details before the loop, because we can use the count to check for varyColors
+        
         $plotSeriesOrder = $plotGroup->getPlotOrder();
         $plotSeriesCount = count($plotSeriesOrder);
 
@@ -1104,7 +1033,7 @@ class Chart extends WriterPart
             $objWriter->writeAttribute('val', $this->seriesIndex + $plotSeriesRef);
             $objWriter->endElement();
 
-            //    Values
+            
             $plotSeriesValues = $plotGroup->getPlotValuesByIndex($plotSeriesRef);
 
             if (($groupType == DataSeries::TYPE_PIECHART) || ($groupType == DataSeries::TYPE_PIECHART_3D) || ($groupType == DataSeries::TYPE_DONUTCHART)) {
@@ -1118,7 +1047,7 @@ class Chart extends WriterPart
                 }
             }
 
-            //    Labels
+            
             $plotSeriesLabel = $plotGroup->getPlotLabelByIndex($plotSeriesRef);
             if ($plotSeriesLabel && ($plotSeriesLabel->getPointCount() > 0)) {
                 $objWriter->startElement('c:tx');
@@ -1128,7 +1057,7 @@ class Chart extends WriterPart
                 $objWriter->endElement();
             }
 
-            //    Formatting for the points
+            
             if (($groupType == DataSeries::TYPE_LINECHART) || ($groupType == DataSeries::TYPE_STOCKCHART)) {
                 $plotLineWidth = 12700;
                 if ($plotSeriesValues) {
@@ -1170,7 +1099,7 @@ class Chart extends WriterPart
                 $objWriter->endElement();
             }
 
-            //    Category Labels
+            
             $plotSeriesCategory = $plotGroup->getPlotCategoryByIndex($plotSeriesRef);
             if ($plotSeriesCategory && ($plotSeriesCategory->getPointCount() > 0)) {
                 $catIsMultiLevelSeries = $catIsMultiLevelSeries || $plotSeriesCategory->isMultiLevelSeries();
@@ -1196,7 +1125,7 @@ class Chart extends WriterPart
                 $objWriter->endElement();
             }
 
-            //    Values
+            
             if ($plotSeriesValues) {
                 $valIsMultiLevelSeries = $valIsMultiLevelSeries || $plotSeriesValues->isMultiLevelSeries();
 
@@ -1220,12 +1149,7 @@ class Chart extends WriterPart
         $this->seriesIndex += $plotSeriesIdx + 1;
     }
 
-    /**
-     * Write Plot Series Label.
-     *
-     * @param DataSeriesValues $plotSeriesLabel
-     * @param XMLWriter $objWriter XML Writer
-     */
+    
     private function writePlotSeriesLabel($plotSeriesLabel, $objWriter): void
     {
         if ($plotSeriesLabel === null) {
@@ -1253,14 +1177,7 @@ class Chart extends WriterPart
         $objWriter->endElement();
     }
 
-    /**
-     * Write Plot Series Values.
-     *
-     * @param DataSeriesValues $plotSeriesValues
-     * @param XMLWriter $objWriter XML Writer
-     * @param string $groupType Type of plot for dataseries
-     * @param string $dataType Datatype of series values
-     */
+    
     private function writePlotSeriesValues($plotSeriesValues, XMLWriter $objWriter, $groupType, $dataType = 'str'): void
     {
         if ($plotSeriesValues === null) {
@@ -1345,12 +1262,7 @@ class Chart extends WriterPart
         }
     }
 
-    /**
-     * Write Bubble Chart Details.
-     *
-     * @param DataSeriesValues $plotSeriesValues
-     * @param XMLWriter $objWriter XML Writer
-     */
+    
     private function writeBubbles($plotSeriesValues, $objWriter): void
     {
         if ($plotSeriesValues === null) {
@@ -1390,12 +1302,7 @@ class Chart extends WriterPart
         $objWriter->endElement();
     }
 
-    /**
-     * Write Layout.
-     *
-     * @param XMLWriter $objWriter XML Writer
-     * @param Layout $layout
-     */
+    
     private function writeLayout(XMLWriter $objWriter, ?Layout $layout = null): void
     {
         $objWriter->startElement('c:layout');
@@ -1458,18 +1365,14 @@ class Chart extends WriterPart
         $objWriter->endElement();
     }
 
-    /**
-     * Write Alternate Content block.
-     *
-     * @param XMLWriter $objWriter XML Writer
-     */
+    
     private function writeAlternateContent($objWriter): void
     {
         $objWriter->startElement('mc:AlternateContent');
-        $objWriter->writeAttribute('xmlns:mc', 'http://schemas.openxmlformats.org/markup-compatibility/2006');
+        $objWriter->writeAttribute('xmlns:mc', 'http:
 
         $objWriter->startElement('mc:Choice');
-        $objWriter->writeAttribute('xmlns:c14', 'http://schemas.microsoft.com/office/drawing/2007/8/2/chart');
+        $objWriter->writeAttribute('xmlns:c14', 'http:
         $objWriter->writeAttribute('Requires', 'c14');
 
         $objWriter->startElement('c14:style');
@@ -1486,11 +1389,7 @@ class Chart extends WriterPart
         $objWriter->endElement();
     }
 
-    /**
-     * Write Printer Settings.
-     *
-     * @param XMLWriter $objWriter XML Writer
-     */
+    
     private function writePrintSettings($objWriter): void
     {
         $objWriter->startElement('c:printSettings');

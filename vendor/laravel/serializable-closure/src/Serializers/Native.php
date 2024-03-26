@@ -15,96 +15,49 @@ use UnitEnum;
 
 class Native implements Serializable
 {
-    /**
-     * Transform the use variables before serialization.
-     *
-     * @var \Closure|null
-     */
+    
     public static $transformUseVariables;
 
-    /**
-     * Resolve the use variables after unserialization.
-     *
-     * @var \Closure|null
-     */
+    
     public static $resolveUseVariables;
 
-    /**
-     * The closure to be serialized/unserialized.
-     *
-     * @var \Closure
-     */
+    
     protected $closure;
 
-    /**
-     * The closure's reflection.
-     *
-     * @var \Laravel\SerializableClosure\Support\ReflectionClosure|null
-     */
+    
     protected $reflector;
 
-    /**
-     * The closure's code.
-     *
-     * @var array|null
-     */
+    
     protected $code;
 
-    /**
-     * The closure's reference.
-     *
-     * @var string
-     */
+    
     protected $reference;
 
-    /**
-     * The closure's scope.
-     *
-     * @var \Laravel\SerializableClosure\Support\ClosureScope|null
-     */
+    
     protected $scope;
 
-    /**
-     * The "key" that marks an array as recursive.
-     */
+    
     const ARRAY_RECURSIVE_KEY = 'LARAVEL_SERIALIZABLE_RECURSIVE_KEY';
 
-    /**
-     * Creates a new serializable closure instance.
-     *
-     * @param  \Closure  $closure
-     * @return void
-     */
+    
     public function __construct(Closure $closure)
     {
         $this->closure = $closure;
     }
 
-    /**
-     * Resolve the closure with the given arguments.
-     *
-     * @return mixed
-     */
+    
     public function __invoke()
     {
         return call_user_func_array($this->closure, func_get_args());
     }
 
-    /**
-     * Gets the closure.
-     *
-     * @return \Closure
-     */
+    
     public function getClosure()
     {
         return $this->closure;
     }
 
-    /**
-     * Get the serializable representation of the closure.
-     *
-     * @return array
-     */
+    
     public function __serialize()
     {
         if ($this->scope === null) {
@@ -156,12 +109,7 @@ class Native implements Serializable
         return $data;
     }
 
-    /**
-     * Restore the closure after serialization.
-     *
-     * @param  array  $data
-     * @return void
-     */
+    
     public function __unserialize($data)
     {
         ClosureStream::register();
@@ -185,7 +133,7 @@ class Native implements Serializable
             $this->scope = null;
         }
 
-        $this->closure = include ClosureStream::STREAM_PROTO.'://'.$this->code['function'];
+        $this->closure = include ClosureStream::STREAM_PROTO.':
 
         if ($this->code['this'] === $this) {
             $this->code['this'] = null;
@@ -202,13 +150,7 @@ class Native implements Serializable
         $this->code = $this->code['function'];
     }
 
-    /**
-     * Ensures the given closures are serializable.
-     *
-     * @param  mixed  $data
-     * @param  \Laravel\SerializableClosure\Support\ClosureScope  $storage
-     * @return void
-     */
+    
     public static function wrapClosures(&$data, $storage)
     {
         if ($data instanceof Closure) {
@@ -289,11 +231,7 @@ class Native implements Serializable
         }
     }
 
-    /**
-     * Gets the closure's reflector.
-     *
-     * @return \Laravel\SerializableClosure\Support\ReflectionClosure
-     */
+    
     public function getReflector()
     {
         if ($this->reflector === null) {
@@ -304,12 +242,7 @@ class Native implements Serializable
         return $this->reflector;
     }
 
-    /**
-     * Internal method used to map closure pointers.
-     *
-     * @param  mixed  $data
-     * @return void
-     */
+    
     protected function mapPointers(&$data)
     {
         $scope = $this->scope;
@@ -394,12 +327,7 @@ class Native implements Serializable
         }
     }
 
-    /**
-     * Internal method used to map closures by reference.
-     *
-     * @param  mixed  $data
-     * @return void
-     */
+    
     protected function mapByReference(&$data)
     {
         if ($data instanceof Closure) {

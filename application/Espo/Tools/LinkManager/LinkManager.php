@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\LinkManager;
 
@@ -43,9 +17,7 @@ use Espo\Tools\LinkManager\Params as LinkParams;
 use Espo\Tools\LinkManager\Type as LinkType;
 use Espo\Tools\EntityManager\NameUtil;
 
-/**
- * Administration > Entity Manager > {Entity Type} > Relationships.
- */
+
 class LinkManager
 {
     private const MANY_TO_MANY = 'manyToMany';
@@ -55,7 +27,7 @@ class LinkManager
     private const ONE_TO_ONE_LEFT = 'oneToOneLeft';
     private const ONE_TO_ONE_RIGHT = 'oneToOneRight';
 
-    // 64 - 3
+    
     private const MAX_LINK_NAME_LENGTH = 61;
 
     public function __construct(
@@ -68,29 +40,7 @@ class LinkManager
         private Route $routeUtil
     ) {}
 
-    /**
-     * @param array{
-     *     linkType: string,
-     *     entity: string,
-     *     link: string,
-     *     entityForeign: string,
-     *     linkForeign: string,
-     *     label: string,
-     *     labelForeign: string,
-     *     relationName?: ?string,
-     *     linkMultipleField?: bool,
-     *     linkMultipleFieldForeign?: bool,
-     *     audited?: bool,
-     *     auditedForeign?: bool,
-     *     layout?: string,
-     *     layoutForeign?: string,
-     *     parentEntityTypeList?: string[],
-     *     foreignLinkEntityTypeList?: string[],
-     * } $params
-     * @throws BadRequest
-     * @throws Error
-     * @throws Conflict
-     */
+    
     public function create(array $params): void
     {
         $linkType = $params['linkType'];
@@ -577,26 +527,7 @@ class LinkManager
         $this->dataManager->rebuild();
     }
 
-    /**
-     * @param array{
-     *   entity: string,
-     *   link: string,
-     *   entityForeign?: ?string,
-     *   linkForeign?: ?string,
-     *   label?: string,
-     *   labelForeign?: string,
-     *   linkMultipleField?: bool,
-     *   linkMultipleFieldForeign?: bool,
-     *   audited?: bool,
-     *   auditedForeign?: bool,
-     *   parentEntityTypeList?: string[],
-     *   foreignLinkEntityTypeList?: string[],
-     *   layout?: string,
-     *   layoutForeign?: string,
-     * } $params
-     * @throws BadRequest
-     * @throws Error
-     */
+    
     public function update(array $params): void
     {
         $entity = $params['entity'];
@@ -658,7 +589,7 @@ class LinkManager
             $this->metadata->get("entityDefs.$entityForeign.links.$linkForeign.type") == Entity::HAS_MANY &&
             $this->metadata->get("entityDefs.$entityForeign.links.$linkForeign.isCustom")
         ) {
-            /** @var string $entityForeign */
+            
 
             if (array_key_exists('linkMultipleFieldForeign', $params)) {
                 $linkMultipleFieldForeign = $params['linkMultipleFieldForeign'];
@@ -715,7 +646,7 @@ class LinkManager
                 ]
             )
         ) {
-            /** @var string $entityForeign */
+            
 
             if (array_key_exists('auditedForeign', $params)) {
                 $auditedForeign = $params['auditedForeign'];
@@ -773,8 +704,8 @@ class LinkManager
         $labelForeign = null;
 
         if ($linkType !== Entity::BELONGS_TO_PARENT) {
-            /** @var string $linkForeign */
-            /** @var string $entityForeign */
+            
+            
 
             if (isset($params['labelForeign'])) {
                 $labelForeign = $params['labelForeign'];
@@ -797,8 +728,8 @@ class LinkManager
                 }
 
                 if ($labelForeign && $linkType !== Entity::BELONGS_TO_PARENT) {
-                    /** @var string $linkForeign */
-                    /** @var string $entityForeign */
+                    
+                    
 
                     $this->baseLanguage->set($entityForeign, 'fields', $linkForeign, $labelForeign);
                     $this->baseLanguage->set($entityForeign, 'links', $linkForeign, $labelForeign);
@@ -811,14 +742,7 @@ class LinkManager
         $this->dataManager->clearCache();
     }
 
-    /**
-     * @param array{
-     *   entity?: string,
-     *   link?: string,
-     * } $params
-     * @throws Error
-     * @throws BadRequest
-     */
+    
     public function delete(array $params): void
     {
         $entity = $params['entity'] ?? null;
@@ -927,16 +851,7 @@ class LinkManager
         $this->dataManager->clearCache();
     }
 
-    /**
-     * @param array{
-     *   entity: string,
-     *   link: string,
-     *   entityForeign?: ?string,
-     *   linkForeign?: ?string,
-     *   layout?: string,
-     *   layoutForeign?: string,
-     * } $params
-     */
+    
     private function setLayouts(array $params): void
     {
         $this->setLayout($params['entity'], $params['link'], $params['layout'] ?? null);
@@ -957,9 +872,7 @@ class LinkManager
         ]);
     }
 
-    /**
-     * @param string[] $foreignLinkEntityTypeList
-     */
+    
     private function updateParentForeignLinks(
         string $entityType,
         string $link,
@@ -993,7 +906,7 @@ class LinkManager
             $toCreateList[] = $foreignEntityType;
         }
 
-        /** @var string[] $entityTypeList */
+        
         $entityTypeList = array_keys($this->metadata->get('entityDefs') ?? []);
 
         foreach ($entityTypeList as $itemEntityType) {

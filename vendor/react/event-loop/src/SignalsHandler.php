@@ -2,9 +2,7 @@
 
 namespace React\EventLoop;
 
-/**
- * @internal
- */
+
 final class SignalsHandler
 {
     private $signals = array();

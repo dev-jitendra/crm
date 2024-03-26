@@ -5,27 +5,16 @@ namespace AsyncAws\S3\ValueObject;
 use AsyncAws\Core\Exception\InvalidArgument;
 use AsyncAws\S3\Enum\Permission;
 
-/**
- * Container for grant information.
- */
+
 final class Grant
 {
-    /**
-     * The person being granted permissions.
-     */
+    
     private $grantee;
 
-    /**
-     * Specifies the permission given to the grantee.
-     */
+    
     private $permission;
 
-    /**
-     * @param array{
-     *   Grantee?: null|Grantee|array,
-     *   Permission?: null|Permission::*,
-     * } $input
-     */
+    
     public function __construct(array $input)
     {
         $this->grantee = isset($input['Grantee']) ? Grantee::create($input['Grantee']) : null;
@@ -42,22 +31,18 @@ final class Grant
         return $this->grantee;
     }
 
-    /**
-     * @return Permission::*|null
-     */
+    
     public function getPermission(): ?string
     {
         return $this->permission;
     }
 
-    /**
-     * @internal
-     */
+    
     public function requestBody(\DomElement $node, \DomDocument $document): void
     {
         if (null !== $v = $this->grantee) {
             $node->appendChild($child = $document->createElement('Grantee'));
-            $child->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+            $child->setAttribute('xmlns:xsi', 'http:
             $v->requestBody($child, $document);
         }
         if (null !== $v = $this->permission) {

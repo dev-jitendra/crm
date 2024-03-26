@@ -1,30 +1,15 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpFoundation;
 
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
-/**
- * InputBag is a container for user input values such as $_GET, $_POST, $_REQUEST, and $_COOKIE.
- *
- * @author Saif Eddin Gmati <azjezz@protonmail.com>
- */
+
 final class InputBag extends ParameterBag
 {
-    /**
-     * Returns a scalar input value by name.
-     *
-     * @param string|int|float|bool|null $default The default value if the input key does not exist
-     */
+    
     public function get(string $key, mixed $default = null): string|int|float|bool|null
     {
         if (null !== $default && !\is_scalar($default) && !$default instanceof \Stringable) {
@@ -40,18 +25,14 @@ final class InputBag extends ParameterBag
         return $this === $value ? $default : $value;
     }
 
-    /**
-     * Replaces the current input values by a new set.
-     */
+    
     public function replace(array $inputs = [])
     {
         $this->parameters = [];
         $this->add($inputs);
     }
 
-    /**
-     * Adds input values.
-     */
+    
     public function add(array $inputs = [])
     {
         foreach ($inputs as $input => $value) {
@@ -59,11 +40,7 @@ final class InputBag extends ParameterBag
         }
     }
 
-    /**
-     * Sets an input by name.
-     *
-     * @param string|int|float|bool|array|null $value
-     */
+    
     public function set(string $key, mixed $value)
     {
         if (null !== $value && !\is_scalar($value) && !\is_array($value) && !$value instanceof \Stringable) {
@@ -73,14 +50,12 @@ final class InputBag extends ParameterBag
         $this->parameters[$key] = $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function filter(string $key, mixed $default = null, int $filter = \FILTER_DEFAULT, mixed $options = []): mixed
     {
         $value = $this->has($key) ? $this->all()[$key] : $default;
 
-        // Always turn $options into an array - this allows filter_var option shortcuts.
+        
         if (!\is_array($options) && $options) {
             $options = ['flags' => $options];
         }

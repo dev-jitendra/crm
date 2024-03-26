@@ -13,19 +13,13 @@ class FinfoMimeTypeDetector implements MimeTypeDetector
 {
     private const INCONCLUSIVE_MIME_TYPES = ['application/x-empty', 'text/plain', 'text/x-asm'];
 
-    /**
-     * @var finfo
-     */
+    
     private $finfo;
 
-    /**
-     * @var ExtensionToMimeTypeMap
-     */
+    
     private $extensionMap;
 
-    /**
-     * @var int|null
-     */
+    
     private $bufferSampleSize;
 
     public function __construct(

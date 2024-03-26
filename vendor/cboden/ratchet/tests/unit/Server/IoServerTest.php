@@ -5,9 +5,7 @@ use React\EventLoop\StreamSelectLoop;
 use React\EventLoop\LoopInterface;
 use React\Socket\Server;
 
-/**
- * @covers Ratchet\Server\IoServer
- */
+
 class IoServerTest extends \PHPUnit_Framework_TestCase {
     protected $server;
 
@@ -32,19 +30,19 @@ class IoServerTest extends \PHPUnit_Framework_TestCase {
         $this->reactor = new Server(0, $loop);
 
         $uri = $this->reactor->getAddress();
-        $this->port   = parse_url((strpos($uri, '://') === false ? 'tcp://' : '') . $uri, PHP_URL_PORT);
+        $this->port   = parse_url((strpos($uri, ':
         $this->server = new IoServer($this->app, $this->reactor, $loop);
     }
 
     public function testOnOpen() {
         $this->app->expects($this->once())->method('onOpen')->with($this->isInstanceOf('\\Ratchet\\ConnectionInterface'));
 
-        $client = stream_socket_client("tcp://localhost:{$this->port}");
+        $client = stream_socket_client("tcp:
 
         $this->tickLoop($this->server->loop);
 
-        //$this->assertTrue(is_string($this->app->last['onOpen'][0]->remoteAddress));
-        //$this->assertTrue(is_int($this->app->last['onOpen'][0]->resourceId));
+        
+        
     }
 
     public function testOnData() {

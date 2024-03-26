@@ -21,7 +21,7 @@ final class Border
     public const WIDTH_MEDIUM = 'medium';
     public const WIDTH_THICK = 'thick';
 
-    /** @var array<string, BorderPart> */
+    
     private array $parts;
 
     public function __construct(BorderPart ...$borderParts)
@@ -36,9 +36,7 @@ final class Border
         return $this->parts[$name] ?? null;
     }
 
-    /**
-     * @return array<string, BorderPart>
-     */
+    
     public function getParts(): array
     {
         return $this->parts;

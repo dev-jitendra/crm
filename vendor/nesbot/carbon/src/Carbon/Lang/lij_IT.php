@@ -1,18 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Gastaldi    alessio.gastaldi@libero.it
- */
+
+
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [
         'L' => 'DD/MM/YYYY',
@@ -25,9 +15,9 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'first_day_of_week' => 1,
     'day_of_first_week_of_year' => 4,
 
-    'year' => ':count etæ', // less reliable
-    'y' => ':count etæ', // less reliable
-    'a_year' => ':count etæ', // less reliable
+    'year' => ':count etæ', 
+    'y' => ':count etæ', 
+    'a_year' => ':count etæ', 
 
     'month' => ':count meize',
     'm' => ':count meize',
@@ -41,9 +31,9 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'd' => ':count giorno',
     'a_day' => ':count giorno',
 
-    'hour' => ':count reléuio', // less reliable
-    'h' => ':count reléuio', // less reliable
-    'a_hour' => ':count reléuio', // less reliable
+    'hour' => ':count reléuio', 
+    'h' => ':count reléuio', 
+    'a_hour' => ':count reléuio', 
 
     'minute' => ':count menûo',
     'min' => ':count menûo',

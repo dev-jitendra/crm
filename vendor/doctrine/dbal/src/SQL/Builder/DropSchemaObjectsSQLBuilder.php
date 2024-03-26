@@ -19,11 +19,7 @@ final class DropSchemaObjectsSQLBuilder
         $this->platform = $platform;
     }
 
-    /**
-     * @return list<string>
-     *
-     * @throws Exception
-     */
+    
     public function buildSQL(Schema $schema): array
     {
         return array_merge(
@@ -32,23 +28,13 @@ final class DropSchemaObjectsSQLBuilder
         );
     }
 
-    /**
-     * @param list<Table> $tables
-     *
-     * @return list<string>
-     */
+    
     private function buildTableStatements(array $tables): array
     {
         return $this->platform->getDropTablesSQL($tables);
     }
 
-    /**
-     * @param list<Sequence> $sequences
-     *
-     * @return list<string>
-     *
-     * @throws Exception
-     */
+    
     private function buildSequenceStatements(array $sequences): array
     {
         $statements = [];

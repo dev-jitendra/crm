@@ -1,18 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Walser Translation Team ml@translate-wae.ch
- */
+
+
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [
         'L' => 'YYYY-MM-DD',
@@ -25,7 +15,7 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'first_day_of_week' => 1,
     'day_of_first_week_of_year' => 4,
 
-    'month' => ':count Maano', // less reliable
-    'm' => ':count Maano', // less reliable
-    'a_month' => ':count Maano', // less reliable
+    'month' => ':count Maano', 
+    'm' => ':count Maano', 
+    'a_month' => ':count Maano', 
 ]);

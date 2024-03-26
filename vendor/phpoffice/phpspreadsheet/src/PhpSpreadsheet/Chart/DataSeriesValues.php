@@ -17,73 +17,31 @@ class DataSeriesValues
         self::DATASERIES_TYPE_NUMBER,
     ];
 
-    /**
-     * Series Data Type.
-     *
-     * @var string
-     */
+    
     private $dataType;
 
-    /**
-     * Series Data Source.
-     *
-     * @var string
-     */
+    
     private $dataSource;
 
-    /**
-     * Format Code.
-     *
-     * @var string
-     */
+    
     private $formatCode;
 
-    /**
-     * Series Point Marker.
-     *
-     * @var string
-     */
+    
     private $pointMarker;
 
-    /**
-     * Point Count (The number of datapoints in the dataseries).
-     *
-     * @var int
-     */
+    
     private $pointCount = 0;
 
-    /**
-     * Data Values.
-     *
-     * @var array of mixed
-     */
+    
     private $dataValues = [];
 
-    /**
-     * Fill color (can be array with colors if dataseries have custom colors).
-     *
-     * @var string|string[]
-     */
+    
     private $fillColor;
 
-    /**
-     * Line Width.
-     *
-     * @var int
-     */
+    
     private $lineWidth = 12700;
 
-    /**
-     * Create a new DataSeriesValues object.
-     *
-     * @param string $dataType
-     * @param string $dataSource
-     * @param null|mixed $formatCode
-     * @param int $pointCount
-     * @param mixed $dataValues
-     * @param null|mixed $marker
-     * @param null|string|string[] $fillColor
-     */
+    
     public function __construct($dataType = self::DATASERIES_TYPE_NUMBER, $dataSource = null, $formatCode = null, $pointCount = 0, $dataValues = [], $marker = null, $fillColor = null)
     {
         $this->setDataType($dataType);
@@ -95,28 +53,13 @@ class DataSeriesValues
         $this->fillColor = $fillColor;
     }
 
-    /**
-     * Get Series Data Type.
-     *
-     * @return string
-     */
+    
     public function getDataType()
     {
         return $this->dataType;
     }
 
-    /**
-     * Set Series Data Type.
-     *
-     * @param string $dataType Datatype of this data series
-     *                                Typical values are:
-     *                                    DataSeriesValues::DATASERIES_TYPE_STRING
-     *                                        Normally used for axis point values
-     *                                    DataSeriesValues::DATASERIES_TYPE_NUMBER
-     *                                        Normally used for chart data values
-     *
-     * @return $this
-     */
+    
     public function setDataType($dataType)
     {
         if (!in_array($dataType, self::$dataTypeValues)) {
@@ -127,23 +70,13 @@ class DataSeriesValues
         return $this;
     }
 
-    /**
-     * Get Series Data Source (formula).
-     *
-     * @return string
-     */
+    
     public function getDataSource()
     {
         return $this->dataSource;
     }
 
-    /**
-     * Set Series Data Source (formula).
-     *
-     * @param string $dataSource
-     *
-     * @return $this
-     */
+    
     public function setDataSource($dataSource)
     {
         $this->dataSource = $dataSource;
@@ -151,23 +84,13 @@ class DataSeriesValues
         return $this;
     }
 
-    /**
-     * Get Point Marker.
-     *
-     * @return string
-     */
+    
     public function getPointMarker()
     {
         return $this->pointMarker;
     }
 
-    /**
-     * Set Point Marker.
-     *
-     * @param string $marker
-     *
-     * @return $this
-     */
+    
     public function setPointMarker($marker)
     {
         $this->pointMarker = $marker;
@@ -175,23 +98,13 @@ class DataSeriesValues
         return $this;
     }
 
-    /**
-     * Get Series Format Code.
-     *
-     * @return string
-     */
+    
     public function getFormatCode()
     {
         return $this->formatCode;
     }
 
-    /**
-     * Set Series Format Code.
-     *
-     * @param string $formatCode
-     *
-     * @return $this
-     */
+    
     public function setFormatCode($formatCode)
     {
         $this->formatCode = $formatCode;
@@ -199,33 +112,19 @@ class DataSeriesValues
         return $this;
     }
 
-    /**
-     * Get Series Point Count.
-     *
-     * @return int
-     */
+    
     public function getPointCount()
     {
         return $this->pointCount;
     }
 
-    /**
-     * Get fill color.
-     *
-     * @return string|string[] HEX color or array with HEX colors
-     */
+    
     public function getFillColor()
     {
         return $this->fillColor;
     }
 
-    /**
-     * Set fill color for series.
-     *
-     * @param string|string[] $color HEX color or array with HEX colors
-     *
-     * @return   DataSeriesValues
-     */
+    
     public function setFillColor($color)
     {
         if (is_array($color)) {
@@ -240,13 +139,7 @@ class DataSeriesValues
         return $this;
     }
 
-    /**
-     * Method for validating hex color.
-     *
-     * @param string $color value for color
-     *
-     * @return bool true if validation was successful
-     */
+    
     private function validateColor($color)
     {
         if (!preg_match('/^[a-f0-9]{6}$/i', $color)) {
@@ -256,23 +149,13 @@ class DataSeriesValues
         return true;
     }
 
-    /**
-     * Get line width for series.
-     *
-     * @return int
-     */
+    
     public function getLineWidth()
     {
         return $this->lineWidth;
     }
 
-    /**
-     * Set line width for the series.
-     *
-     * @param int $width
-     *
-     * @return $this
-     */
+    
     public function setLineWidth($width)
     {
         $minWidth = 12700;
@@ -281,11 +164,7 @@ class DataSeriesValues
         return $this;
     }
 
-    /**
-     * Identify if the Data Series is a multi-level or a simple series.
-     *
-     * @return null|bool
-     */
+    
     public function isMultiLevelSeries()
     {
         if (count($this->dataValues) > 0) {
@@ -295,11 +174,7 @@ class DataSeriesValues
         return null;
     }
 
-    /**
-     * Return the level count of a multi-level Data Series.
-     *
-     * @return int
-     */
+    
     public function multiLevelCount()
     {
         $levelCount = 0;
@@ -310,21 +185,13 @@ class DataSeriesValues
         return $levelCount;
     }
 
-    /**
-     * Get Series Data Values.
-     *
-     * @return array of mixed
-     */
+    
     public function getDataValues()
     {
         return $this->dataValues;
     }
 
-    /**
-     * Get the first Series Data value.
-     *
-     * @return mixed
-     */
+    
     public function getDataValue()
     {
         $count = count($this->dataValues);
@@ -337,13 +204,7 @@ class DataSeriesValues
         return $this->dataValues;
     }
 
-    /**
-     * Set Series Data Values.
-     *
-     * @param array $dataValues
-     *
-     * @return $this
-     */
+    
     public function setDataValues($dataValues)
     {
         $this->dataValues = Functions::flattenArray($dataValues);

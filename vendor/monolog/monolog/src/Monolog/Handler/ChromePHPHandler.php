@@ -1,13 +1,6 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Monolog package.
- *
- * (c) Jordi Boggiano <j.boggiano@seld.be>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Monolog\Handler;
 
@@ -18,42 +11,26 @@ use Monolog\Utils;
 use Monolog\LogRecord;
 use Monolog\DateTimeImmutable;
 
-/**
- * Handler sending logs to the ChromePHP extension (http://www.chromephp.com/)
- *
- * This also works out of the box with Firefox 43+
- *
- * @author Christophe Coevoet <stof@notk.org>
- */
+
 class ChromePHPHandler extends AbstractProcessingHandler
 {
     use WebRequestRecognizerTrait;
 
-    /**
-     * Version of the extension
-     */
+    
     protected const VERSION = '4.0';
 
-    /**
-     * Header name
-     */
+    
     protected const HEADER_NAME = 'X-ChromeLogger-Data';
 
-    /**
-     * Regular expression to detect supported browsers (matches any Chrome, or Firefox 43+)
-     */
+    
     protected const USER_AGENT_REGEX = '{\b(?:Chrome/\d+(?:\.\d+)*|HeadlessChrome|Firefox/(?:4[3-9]|[5-9]\d|\d{3,})(?:\.\d)*)\b}';
 
     protected static bool $initialized = false;
 
-    /**
-     * Tracks whether we sent too much data
-     *
-     * Chrome limits the headers to 4KB, so when we sent 3KB we stop sending
-     */
+    
     protected static bool $overflowed = false;
 
-    /** @var mixed[] */
+    
     protected static array $json = [
         'version' => self::VERSION,
         'columns' => ['label', 'log', 'backtrace', 'type'],
@@ -62,9 +39,7 @@ class ChromePHPHandler extends AbstractProcessingHandler
 
     protected static bool $sendHeaders = true;
 
-    /**
-     * @throws \RuntimeException If the function json_encode does not exist
-     */
+    
     public function __construct(int|string|Level $level = Level::Debug, bool $bubble = true)
     {
         parent::__construct($level, $bubble);
@@ -73,9 +48,7 @@ class ChromePHPHandler extends AbstractProcessingHandler
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function handleBatch(array $records): void
     {
         if (!$this->isWebRequest()) {
@@ -100,20 +73,13 @@ class ChromePHPHandler extends AbstractProcessingHandler
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     protected function getDefaultFormatter(): FormatterInterface
     {
         return new ChromePHPFormatter();
     }
 
-    /**
-     * Creates & sends header for a record
-     *
-     * @see sendHeader()
-     * @see send()
-     */
+    
     protected function write(LogRecord $record): void
     {
         if (!$this->isWebRequest()) {
@@ -125,11 +91,7 @@ class ChromePHPHandler extends AbstractProcessingHandler
         $this->send();
     }
 
-    /**
-     * Sends the log header
-     *
-     * @see sendHeader()
-     */
+    
     protected function send(): void
     {
         if (self::$overflowed || !self::$sendHeaders) {
@@ -168,9 +130,7 @@ class ChromePHPHandler extends AbstractProcessingHandler
         }
     }
 
-    /**
-     * Send header string to the client
-     */
+    
     protected function sendHeader(string $header, string $content): void
     {
         if (!headers_sent() && self::$sendHeaders) {
@@ -178,9 +138,7 @@ class ChromePHPHandler extends AbstractProcessingHandler
         }
     }
 
-    /**
-     * Verifies if the headers are accepted by the current user agent
-     */
+    
     protected function headersAccepted(): bool
     {
         if (!isset($_SERVER['HTTP_USER_AGENT'])) {

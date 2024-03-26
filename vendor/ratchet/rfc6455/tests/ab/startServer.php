@@ -54,8 +54,8 @@ $socket->on('connection', function (React\Socket\ConnectionInterface $connection
             return;
         }
 
-        // there is no need to look through the client requests
-        // we support any valid permessage deflate
+        
+        
         $deflateOptions = PermessageDeflateOptions::fromRequestOrResponse($psrRequest)[0];
 
         $parser = new \Ratchet\RFC6455\Messaging\MessageBuffer($closeFrameChecker,

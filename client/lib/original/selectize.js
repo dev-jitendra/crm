@@ -1,19 +1,5 @@
 var _previousDefineAmd = define.amd; define.amd = false;
-/**
- * sifter.js
- * Copyright (c) 2013–2020 Brian Reavis & contributors
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
- * file except in compliance with the License. You may obtain a copy of the License at:
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
- * ANY KIND, either express or implied. See the License for the specific language
- * governing permissions and limitations under the License.
- *
- * @author Brian Reavis <brian@thirdroute.com>
- */
+
 
 (function(root, factory) {
 	if (typeof define === 'function' && define.amd) {
@@ -25,27 +11,13 @@ var _previousDefineAmd = define.amd; define.amd = false;
 	}
 }(this, function() {
 
-	/**
-	 * Textually searches arrays and hashes of objects
-	 * by property (or multiple properties). Designed
-	 * specifically for autocomplete.
-	 *
-	 * @constructor
-	 * @param {array|object} items
-	 * @param {object} items
-	 */
+	
 	var Sifter = function(items, settings) {
 		this.items = items;
 		this.settings = settings || {diacritics: true};
 	};
 
-	/**
-	 * Splits a search string into an array of individual
-	 * regexps to be used to match results.
-	 *
-	 * @param {string} query
-	 * @returns {array}
-	 */
+	
 	Sifter.prototype.tokenize = function(query, respect_word_boundaries) {
 		query = trim(String(query || '').toLowerCase());
 		if (!query || !query.length) return [];
@@ -73,17 +45,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		return tokens;
 	};
 
-	/**
-	 * Iterates over arrays and hashes.
-	 *
-	 * ```
-	 * this.iterator(this.items, function(item, id) {
-	 *    // invoked for each item
-	 * });
-	 * ```
-	 *
-	 * @param {array|object} object
-	 */
+	
 	Sifter.prototype.iterator = function(object, callback) {
 		var iterator;
 		if (is_array(object)) {
@@ -105,16 +67,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		iterator.apply(object, [callback]);
 	};
 
-	/**
-	 * Returns a function to be used to score individual results.
-	 *
-	 * Good matches will have a higher score than poor matches.
-	 * If an item is not a match, 0 will be returned by the function.
-	 *
-	 * @param {object|string} search
-	 * @param {object} options (optional)
-	 * @returns {function}
-	 */
+	
 	Sifter.prototype.getScoreFunction = function(search, options) {
 		var self, fields, tokens, token_count, nesting;
 
@@ -125,14 +78,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		token_count = tokens.length;
 		nesting     = search.options.nesting;
 
-		/**
-		 * Calculates how close of a match the
-		 * given value is against a search token.
-		 *
-		 * @param {mixed} value
-		 * @param {object} token
-		 * @return {number}
-		 */
+		
 		var scoreValue = function(value, token) {
 			var score, pos;
 
@@ -145,14 +91,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			return score;
 		};
 
-		/**
-		 * Calculates the score of an object
-		 * against the search query.
-		 *
-		 * @param {object} token
-		 * @param {object} data
-		 * @return {number}
-		 */
+		
 		var scoreObject = (function() {
 			var field_count = fields.length;
 			if (!field_count) {
@@ -200,15 +139,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		}
 	};
 
-	/**
-	 * Returns a function that can be used to compare two
-	 * results, for sorting purposes. If no sorting should
-	 * be performed, `null` will be returned.
-	 *
-	 * @param {string|object} search
-	 * @param {object} options
-	 * @return function(a,b)
-	 */
+	
 	Sifter.prototype.getSortFunction = function(search, options) {
 		var i, n, self, field, fields, fields_count, multiplier, multipliers, get_field, implicit_score, sort;
 
@@ -216,20 +147,13 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		search = self.prepareSearch(search, options);
 		sort   = (!search.query && options.sort_empty) || options.sort;
 
-		/**
-		 * Fetches the specified sort field value
-		 * from a search result item.
-		 *
-		 * @param  {string} name
-		 * @param  {object} result
-		 * @return {mixed}
-		 */
+		
 		get_field = function(name, result) {
 			if (name === '$score') return result.score;
 			return getattr(self.items[result.id], name, options.nesting);
 		};
 
-		// parse options
+		
 		fields = [];
 		if (sort) {
 			for (i = 0, n = sort.length; i < n; i++) {
@@ -239,8 +163,8 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 		}
 
-		// the "$score" field is implied to be the primary
-		// sort field, unless it's manually specified
+		
+		
 		if (search.query) {
 			implicit_score = true;
 			for (i = 0, n = fields.length; i < n; i++) {
@@ -266,7 +190,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			multipliers.push(fields[i].direction === 'desc' ? -1 : 1);
 		}
 
-		// build function
+		
 		fields_count = fields.length;
 		if (!fields_count) {
 			return null;
@@ -295,15 +219,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		}
 	};
 
-	/**
-	 * Parses a search query and returns an object
-	 * with tokens and fields ready to be populated
-	 * with results.
-	 *
-	 * @param {string} query
-	 * @param {object} options
-	 * @returns {object}
-	 */
+	
 	Sifter.prototype.prepareSearch = function(query, options) {
 		if (typeof query === 'object') return query;
 
@@ -326,29 +242,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		};
 	};
 
-	/**
-	 * Searches through all items and returns a sorted array of matches.
-	 *
-	 * The `options` parameter can contain:
-	 *
-	 *   - fields {string|array}
-	 *   - sort {array}
-	 *   - score {function}
-	 *   - filter {bool}
-	 *   - limit {integer}
-	 *
-	 * Returns an object containing:
-	 *
-	 *   - options {object}
-	 *   - query {string}
-	 *   - tokens {array}
-	 *   - total {int}
-	 *   - items {array}
-	 *
-	 * @param {string} query
-	 * @param {object} options
-	 * @returns {object}
-	 */
+	
 	Sifter.prototype.search = function(query, options) {
 		var self = this, value, score, search, calculateScore;
 		var fn_sort;
@@ -358,10 +252,10 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		options = search.options;
 		query   = search.query;
 
-		// generate result scoring function
+		
 		fn_score = options.score || self.getScoreFunction(search);
 
-		// perform search and sort
+		
 		if (query.length) {
 			self.iterator(self.items, function(item, id) {
 				score = fn_score(item);
@@ -378,7 +272,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		fn_sort = self.getSortFunction(search, options);
 		if (fn_sort) search.items.sort(fn_sort);
 
-		// apply limits
+		
 		search.total = search.items.length;
 		if (typeof options.limit === 'number') {
 			search.items = search.items.slice(0, options.limit);
@@ -387,8 +281,8 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		return search;
 	};
 
-	// utilities
-	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	
+	
 
 	var cmp = function(a, b) {
 		if (typeof a === 'number' && typeof b === 'number') {
@@ -415,13 +309,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		return a;
 	};
 
-	/**
-	 * A property getter resolving dot-notation
-	 * @param  {Object}  obj     The root object to fetch property on
-	 * @param  {String}  name    The optionally dotted property name to fetch
-	 * @param  {Boolean} nesting Handle nesting or not
-	 * @return {Object}          The resolved property value
-	 */
+	
 	var getattr = function(obj, name, nesting) {
 	    if (!obj || !name) return;
 	    if (!nesting) return obj[name];
@@ -492,28 +380,14 @@ var _previousDefineAmd = define.amd; define.amd = false;
 	})();
 
 
-	// export
-	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	
+	
 
 	return Sifter;
 }));
 
 
-/**
- * microplugin.js
- * Copyright (c) 2013 Brian Reavis & contributors
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
- * file except in compliance with the License. You may obtain a copy of the License at:
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
- * ANY KIND, either express or implied. See the License for the specific language
- * governing permissions and limitations under the License.
- *
- * @author Brian Reavis <brian@thirdroute.com>
- */
+
 
 (function(root, factory) {
 	if (typeof define === 'function' && define.amd) {
@@ -529,21 +403,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 	MicroPlugin.mixin = function(Interface) {
 		Interface.plugins = {};
 
-		/**
-		 * Initializes the listed plugins (with options).
-		 * Acceptable formats:
-		 *
-		 * List (without options):
-		 *   ['a', 'b', 'c']
-		 *
-		 * List (with options):
-		 *   [{'name': 'a', options: {}}, {'name': 'b', options: {}}]
-		 *
-		 * Hash (with options):
-		 *   {'a': { ... }, 'b': { ... }, 'c': { ... }}
-		 *
-		 * @param {mixed} plugins
-		 */
+		
 		Interface.prototype.initializePlugins = function(plugins) {
 			var i, n, key;
 			var self  = this;
@@ -593,11 +453,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			plugins.names.push(name);
 		};
 
-		/**
-		 * Initializes a plugin.
-		 *
-		 * @param {string} name
-		 */
+		
 		Interface.prototype.require = function(name) {
 			var self = this;
 			var plugins = self.plugins;
@@ -612,12 +468,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			return plugins.loaded[name];
 		};
 
-		/**
-		 * Registers a plugin.
-		 *
-		 * @param {string} name
-		 * @param {function} fn
-		 */
+		
 		Interface.define = function(name, fn) {
 			Interface.plugins[name] = {
 				'name' : name,
@@ -635,26 +486,10 @@ var _previousDefineAmd = define.amd; define.amd = false;
 	return MicroPlugin;
 }));
 
-/**
- * selectize.js (v0.13.6)
- * Copyright (c) 2013–2015 Brian Reavis & contributors
- * Copyright (c) 2020-2022 Selectize Team & contributors
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
- * file except in compliance with the License. You may obtain a copy of the License at:
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
- * ANY KIND, either express or implied. See the License for the specific language
- * governing permissions and limitations under the License.
- *
- * @author Brian Reavis <brian@thirdroute.com>
- * @author Ris Adams <selectize@risadams.com>
- */
 
-/*jshint curly:false */
-/*jshint browser:true */
+
+
+
 
 (function(root, factory) {
 	if (typeof define === 'function' && define.amd) {
@@ -673,8 +508,8 @@ var _previousDefineAmd = define.amd; define.amd = false;
 	
 		var highlight = function(node) {
 			var skip = 0;
-			// Wrap matching part of text node with highlighting <span>, e.g.
-			// Soccer  ->  <span class="highlight">Soc</span>cer  for regex = /soc/i
+			
+			
 			if (node.nodeType === 3) {
 				var pos = node.data.search(regex);
 				if (pos >= 0 && node.data.length > 0) {
@@ -689,8 +524,8 @@ var _previousDefineAmd = define.amd; define.amd = false;
 					skip = 1;
 				}
 			} 
-			// Recurse element node, looking for child text nodes to highlight, unless element 
-			// is childless, <script>, <style>, or already highlighted: <span class="highlight">
+			
+			
 			else if (node.nodeType === 1 && node.childNodes && !/(script|style)/i.test(node.tagName) && ( node.className !== 'highlight' || node.tagName !== 'SPAN' )) {
 				for (var i = 0; i < node.childNodes.length; ++i) {
 					i += highlight(node.childNodes[i]);
@@ -704,10 +539,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		});
 	};
 	
-	/**
-	 * removeHighlight fn copied from highlight v5 and
-	 * edited to remove with() and pass js strict mode
-	 */
+	
 	$.fn.removeHighlight = function() {
 		return this.find("span.highlight").each(function() {
 			this.parentNode.firstChild.nodeName;
@@ -734,7 +566,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			if (event in this._events === false) return;
 			this._events[event].splice(this._events[event].indexOf(fct), 1);
 		},
-		trigger: function(event /* , args... */){
+		trigger: function(event ){
 			this._events = this._events || {};
 			if (event in this._events === false) return;
 			for (var i = 0; i < this._events[event].length; i++){
@@ -743,13 +575,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		}
 	};
 	
-	/**
-	 * Mixin will delegate all MicroEvent.js function in the destination object.
-	 *
-	 * - MicroEvent.mixin(Foobar) will make Foobar able to use MicroEvent
-	 *
-	 * @param {object} the object which will support MicroEvent
-	 */
+	
 	MicroEvent.mixin = function(destObject){
 		var props = ['on', 'off', 'trigger'];
 		for (var i = 0; i < props.length; i++){
@@ -787,7 +613,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 	var TAG_SELECT    = 1;
 	var TAG_INPUT     = 2;
 	
-	// for now, android support in general is too spotty to support validity
+	
 	var SUPPORTS_VALIDITY_API = !uaDetect("Android", /android/i) && !!document.createElement('input').validity;
 	
 	
@@ -795,34 +621,14 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		return typeof object !== 'undefined';
 	};
 	
-	/**
-	 * Converts a scalar to its best string representation
-	 * for hash keys and HTML attribute values.
-	 *
-	 * Transformations:
-	 *   'str'     -> 'str'
-	 *   null      -> ''
-	 *   undefined -> ''
-	 *   true      -> '1'
-	 *   false     -> '0'
-	 *   0         -> '0'
-	 *   1         -> '1'
-	 *
-	 * @param {string} value
-	 * @returns {string|null}
-	 */
+	
 	var hash_key = function(value) {
 		if (typeof value === 'undefined' || value === null) return null;
 		if (typeof value === 'boolean') return value ? '1' : '0';
 		return value + '';
 	};
 	
-	/**
-	 * Escapes a string for use within HTML.
-	 *
-	 * @param {string} str
-	 * @returns {string}
-	 */
+	
 	var escape_html = function(str) {
 		return (str + '')
 			.replace(/&/g, '&amp;')
@@ -831,26 +637,14 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			.replace(/"/g, '&quot;');
 	};
 	
-	/**
-	 * Escapes "$" characters in replacement strings.
-	 *
-	 * @param {string} str
-	 * @returns {string}
-	 */
+	
 	var escape_replace = function(str) {
 		return (str + '').replace(/\$/g, '$$$$');
 	};
 	
 	var hook = {};
 	
-	/**
-	 * Wraps `method` on `self` so that `fn`
-	 * is invoked before the original method.
-	 *
-	 * @param {object} self
-	 * @param {string} method
-	 * @param {function} fn
-	 */
+	
 	hook.before = function(self, method, fn) {
 		var original = self[method];
 		self[method] = function() {
@@ -859,14 +653,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		};
 	};
 	
-	/**
-	 * Wraps `method` on `self` so that `fn`
-	 * is invoked after the original method.
-	 *
-	 * @param {object} self
-	 * @param {string} method
-	 * @param {function} fn
-	 */
+	
 	hook.after = function(self, method, fn) {
 		var original = self[method];
 		self[method] = function() {
@@ -876,12 +663,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		};
 	};
 	
-	/**
-	 * Wraps `fn` so that it can only be invoked once.
-	 *
-	 * @param {function} fn
-	 * @returns {function}
-	 */
+	
 	var once = function(fn) {
 		var called = false;
 		return function() {
@@ -891,14 +673,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		};
 	};
 	
-	/**
-	 * Wraps `fn` so that it can only be called once
-	 * every `delay` milliseconds (invoked on the falling edge).
-	 *
-	 * @param {function} fn
-	 * @param {int} delay
-	 * @returns {function}
-	 */
+	
 	var debounce = function(fn, delay) {
 		var timeout;
 		return function() {
@@ -911,20 +686,13 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		};
 	};
 	
-	/**
-	 * Debounce all fired events types listed in `types`
-	 * while executing the provided `fn`.
-	 *
-	 * @param {object} self
-	 * @param {array} types
-	 * @param {function} fn
-	 */
+	
 	var debounce_events = function(self, types, fn) {
 		var type;
 		var trigger = self.trigger;
 		var event_args = {};
 	
-		// override trigger method
+		
 		self.trigger = function() {
 			var type = arguments[0];
 			if (types.indexOf(type) !== -1) {
@@ -934,11 +702,11 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 		};
 	
-		// invoke provided function
+		
 		fn.apply(self, []);
 		self.trigger = trigger;
 	
-		// trigger queued events
+		
 		for (type in event_args) {
 			if (event_args.hasOwnProperty(type)) {
 				trigger.apply(self, event_args[type]);
@@ -946,14 +714,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		}
 	};
 	
-	/**
-	 * A workaround for http://bugs.jquery.com/ticket/6696
-	 *
-	 * @param {object} $parent - Parent element to listen on.
-	 * @param {string} event - Event name.
-	 * @param {string} selector - Descendant selector to filter by.
-	 * @param {function} fn - Event handler.
-	 */
+	
 	var watchChildEvent = function($parent, event, selector, fn) {
 		$parent.on(event, selector, function(e) {
 			var child = e.target;
@@ -965,15 +726,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		});
 	};
 	
-	/**
-	 * Determines the current selection within a text input control.
-	 * Returns an object containing:
-	 *   - start
-	 *   - length
-	 *
-	 * @param {object} input
-	 * @returns {object}
-	 */
+	
 	var getSelection = function(input) {
 		var result = {};
 	  if(input === undefined) {
@@ -994,13 +747,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		return result;
 	};
 	
-	/**
-	 * Copies CSS properties from one element to another.
-	 *
-	 * @param {object} $from
-	 * @param {object} $to
-	 * @param {array} properties
-	 */
+	
 	var transferStyles = function($from, $to, properties) {
 		var i, n, styles = {};
 		if (properties) {
@@ -1013,14 +760,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		$to.css(styles);
 	};
 	
-	/**
-	 * Measures the width of a string within a
-	 * parent element (in pixels).
-	 *
-	 * @param {string} str
-	 * @param {object} $parent
-	 * @returns {int}
-	 */
+	
 	var measureString = function(str, $parent) {
 		if (!str) {
 			return 0;
@@ -1055,15 +795,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		return Selectize.$testInput.width();
 	};
 	
-	/**
-	 * Sets up an input to grow horizontally as the user
-	 * types. If the value is changed manually, you can
-	 * trigger the "update" handler to resize:
-	 *
-	 * $input.trigger('update');
-	 *
-	 * @param {object} $input
-	 */
+	
 	var autoGrow = function($input) {
 		var currentWidth = null;
 	
@@ -1081,11 +813,11 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			if (e.type && e.type.toLowerCase() === 'keydown') {
 				keyCode = e.keyCode;
 				printable = (
-					(keyCode >= 48 && keyCode <= 57)  || // 0-9
-					(keyCode >= 65 && keyCode <= 90)   || // a-z
-					(keyCode >= 96 && keyCode <= 111)  || // numpad 0-9, numeric operators
-					(keyCode >= 186 && keyCode <= 222) || // semicolon, equal, comma, dash, etc.
-					keyCode === 32 // space
+					(keyCode >= 48 && keyCode <= 57)  || 
+					(keyCode >= 65 && keyCode <= 90)   || 
+					(keyCode >= 96 && keyCode <= 111)  || 
+					(keyCode >= 186 && keyCode <= 222) || 
+					keyCode === 32 
 				);
 	
 				if (keyCode === KEY_DELETE || keyCode === KEY_BACKSPACE) {
@@ -1140,7 +872,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		console.error(component + ": " + message)
 	
 		if(options.explanation){
-			// console.group is undefined in <IE11
+			
 			if(console.group) console.group();
 			console.error(options.explanation);
 			if(console.group) console.groupEnd();
@@ -1153,12 +885,12 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		input = $input[0];
 		input.selectize = self;
 	
-		// detect rtl environment
+		
 		var computedStyle = window.getComputedStyle && window.getComputedStyle(input, null);
 		dir = computedStyle ? computedStyle.getPropertyValue('direction') : input.currentStyle && input.currentStyle.direction;
 		dir = dir || $input.parents('[dir]:first').attr('dir') || '';
 	
-		// setup default state
+		
 		$.extend(self, {
 			order            : 0,
 			settings         : settings,
@@ -1203,10 +935,10 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			onSearchChange   : settings.loadThrottle === null ? self.onSearchChange : debounce(self.onSearchChange, settings.loadThrottle)
 		});
 	
-		// search system
+		
 		self.sifter = new Sifter(this.options, {diacritics: settings.diacritics});
 	
-		// build options table
+		
 		if (self.settings.options) {
 			for (i = 0, n = self.settings.options.length; i < n; i++) {
 				self.registerOption(self.settings.options[i]);
@@ -1214,7 +946,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			delete self.settings.options;
 		}
 	
-		// build optgroup table
+		
 		if (self.settings.optgroups) {
 			for (i = 0, n = self.settings.optgroups.length; i < n; i++) {
 				self.registerOptionGroup(self.settings.optgroups[i]);
@@ -1222,7 +954,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			delete self.settings.optgroups;
 		}
 	
-		// option-dependent defaults
+		
 		self.settings.mode = self.settings.mode || (self.settings.maxItems === 1 ? 'single' : 'multi');
 		if (typeof self.settings.hideSelected !== 'boolean') {
 			self.settings.hideSelected = self.settings.mode === 'multi';
@@ -1234,8 +966,8 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		self.setup();
 	};
 	
-	// mixins
-	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	
+	
 	
 	MicroEvent.mixin(Selectize);
 	
@@ -1251,14 +983,12 @@ var _previousDefineAmd = define.amd; define.amd = false;
 	}
 	
 	
-	// methods
-	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	
+	
 	
 	$.extend(Selectize.prototype, {
 	
-		/**
-		 * Creates all elements and sets up event bindings.
-		 */
+		
 		setup: function() {
 			var self      = this;
 			var settings  = self.settings;
@@ -1317,7 +1047,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				$control_input.attr('placeholder', settings.placeholder);
 			}
 	
-			// if splitOn was not passed in, construct it from the delimiter to allow pasting universally
+			
 			if (!self.settings.splitOn && self.settings.delimiter) {
 				var delimiterEscaped = self.settings.delimiter.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 				self.settings.splitOn = new RegExp('\\s*' + delimiterEscaped + '+\\s*');
@@ -1376,11 +1106,11 @@ var _previousDefineAmd = define.amd; define.amd = false;
 	
 			$document.on('mousedown' + eventNS, function(e) {
 				if (self.isFocused) {
-					// prevent events on the dropdown scrollbar from causing the control to blur
+					
 					if (e.target === self.$dropdown[0] || e.target.parentNode === self.$dropdown[0]) {
 						return false;
 					}
-					// blur on click outside
+					
 					if (!self.$control.has(e.target).length && e.target !== self.$control[0]) {
 						self.blur(e.target);
 					}
@@ -1396,8 +1126,8 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				self.ignoreHover = false;
 			});
 	
-			// store original children and tab index so that they can be
-			// restored when the destroy() method is called.
+			
+			
 			this.revertSettings = {
 				$children : $input.children().detach(),
 				tabindex  : $input.attr('tabindex')
@@ -1411,7 +1141,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				delete settings.items;
 			}
 	
-			// feature detect for the validation API
+			
 			if (SUPPORTS_VALIDITY_API) {
 				$input.on('invalid' + eventNS, function(e) {
 					e.preventDefault();
@@ -1436,16 +1166,14 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			$input.addClass('selectized');
 			self.trigger('initialize');
 	
-			// preload options
+			
 			if (settings.preload === true) {
 				self.onSearchChange('');
 			}
 	
 		},
 	
-		/**
-		 * Sets up default rendering functions.
-		 */
+		
 		setupTemplates: function() {
 			var self = this;
 			var field_label = self.settings.labelField;
@@ -1473,10 +1201,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			self.settings.render = $.extend({}, templates, self.settings.render);
 		},
 	
-		/**
-		 * Maps fired events to callbacks provided
-		 * in the settings used when creating the control.
-		 */
+		
 		setupCallbacks: function() {
 			var key, fn, callbacks = {
 				'initialize'      : 'onInitialize',
@@ -1508,45 +1233,33 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 		},
 	
-		/**
-		 * Triggered when the main control element
-		 * has a click event.
-		 *
-		 * @param {object} e
-		 * @return {boolean}
-		 */
+		
 		onClick: function(e) {
 			var self = this;
 	
-			// necessary for mobile webkit devices (manual focus triggering
-			// is ignored unless invoked within a click event)
-	    // also necessary to reopen a dropdown that has been closed by
-	    // closeAfterSelect
+			
+			
+	    
+	    
 			if (!self.isFocused || !self.isOpen) {
 				self.focus();
 				e.preventDefault();
 			}
 		},
 	
-		/**
-		 * Triggered when the main control element
-		 * has a mouse down event.
-		 *
-		 * @param {object} e
-		 * @return {boolean}
-		 */
+		
 		onMouseDown: function(e) {
 			var self = this;
 			var defaultPrevented = e.isDefaultPrevented();
 			var $target = $(e.target);
 	
 			if (self.isFocused) {
-				// retain focus by preventing native handling. if the
-				// event target is the input it should not be modified.
-				// otherwise, text selection within the input won't work.
+				
+				
+				
 				if (e.target !== self.$control_input[0]) {
 					if (self.settings.mode === 'single') {
-						// toggle dropdown
+						
 						self.isOpen ? self.close() : self.open();
 					} else if (!defaultPrevented) {
 						self.setActiveItem(null);
@@ -1554,7 +1267,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 					return false;
 				}
 			} else {
-				// give control focus
+				
 				if (!defaultPrevented) {
 					window.setTimeout(function() {
 						self.focus();
@@ -1563,11 +1276,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 		},
 	
-		/**
-		 * Triggered when the value of the control has been changed.
-		 * This should propagate the event to the original DOM
-		 * input / select element.
-		 */
+		
 		onChange: function() {
 			var self = this;
 			if (self.getValue() !== "") {
@@ -1577,12 +1286,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			this.$input.trigger('change');
 		},
 	
-		/**
-		 * Triggered on <input> paste.
-		 *
-		 * @param {object} e
-		 * @returns {boolean}
-		 */
+		
 		onPaste: function(e) {
 			var self = this;
 	
@@ -1591,11 +1295,11 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				return;
 			}
 	
-			// If a regex or string is included, this will split the pasted
-			// input and create Items for each separate value
+			
+			
 			if (self.settings.splitOn) {
 	
-				// Wait for pasted text to be recognized in value
+				
 				setTimeout(function() {
 					var pastedText = self.$control_input.val();
 					if(!pastedText.match(self.settings.splitOn)){ return }
@@ -1610,12 +1314,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 		},
 	
-		/**
-		 * Triggered on <input> keypress.
-		 *
-		 * @param {object} e
-		 * @returns {boolean}
-		 */
+		
 		onKeyPress: function(e) {
 			if (this.isLocked) return e && e.preventDefault();
 			var character = String.fromCharCode(e.keyCode || e.which);
@@ -1626,12 +1325,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 		},
 	
-		/**
-		 * Triggered on <input> keydown.
-		 *
-		 * @param {object} e
-		 * @returns {boolean}
-		 */
+		
 		onKeyDown: function(e) {
 			var isInput = e.target === this.$control_input[0];
 			var self = this;
@@ -1695,8 +1389,8 @@ var _previousDefineAmd = define.amd; define.amd = false;
 					if (self.settings.selectOnTab && self.isOpen && self.$activeOption) {
 						self.onOptionSelect({currentTarget: self.$activeOption});
 	
-						// Default behaviour is to jump to the next field, we only want this
-						// if the current field doesn't accept any more entries
+						
+						
 						if (!self.isFull()) {
 							e.preventDefault();
 						}
@@ -1717,12 +1411,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 		},
 	
-		/**
-		 * Triggered on <input> input.
-		 *
-		 * @param {object} e
-		 * @returns {boolean}
-		 */
+		
 		onInput: function(e) {
 			var self = this;
 	
@@ -1735,14 +1424,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 		},
 	
-		/**
-		 * Invokes the user-provide option provider / loader.
-		 *
-		 * Note: this function is debounced in the Selectize
-		 * constructor (by `settings.loadThrottle` milliseconds)
-		 *
-		 * @param {string} value
-		 */
+		
 		onSearchChange: function(value) {
 			var self = this;
 			var fn = self.settings.load;
@@ -1754,12 +1436,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			});
 		},
 	
-		/**
-		 * Triggered on <input> focus.
-		 *
-		 * @param {object} e (optional)
-		 * @returns {boolean}
-		 */
+		
 		onFocus: function(e) {
 			var self = this;
 			var wasFocused = self.isFocused;
@@ -1785,12 +1462,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			self.refreshState();
 		},
 	
-		/**
-		 * Triggered on <input> blur.
-		 *
-		 * @param {object} e
-		 * @param {Element} dest
-		 */
+		
 		onBlur: function(e, dest) {
 			var self = this;
 			if (!self.isFocused) return;
@@ -1799,7 +1471,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			if (self.ignoreFocus) {
 				return;
 			} else if (!self.ignoreBlur && document.activeElement === self.$dropdown_content[0]) {
-				// necessary to prevent IE closing the dropdown when the scrollbar is clicked
+				
 				self.ignoreBlur = true;
 				self.onFocus(e);
 				return;
@@ -1813,7 +1485,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				self.setCaret(self.items.length);
 				self.refreshState();
 	
-				// IE11 bug: element still marked as active
+				
 				dest && dest.focus && dest.focus();
 	
 				self.isBlurring = false;
@@ -1830,25 +1502,13 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 		},
 	
-		/**
-		 * Triggered when the user rolls over
-		 * an option in the autocomplete dropdown menu.
-		 *
-		 * @param {object} e
-		 * @returns {boolean}
-		 */
+		
 		onOptionHover: function(e) {
 			if (this.ignoreHover) return;
 			this.setActiveOption(e.currentTarget, false);
 		},
 	
-		/**
-		 * Triggered when the user clicks on an option
-		 * in the autocomplete dropdown menu.
-		 *
-		 * @param {object} e
-		 * @returns {boolean}
-		 */
+		
 		onOptionSelect: function(e) {
 			var value, $target, $option, self = this;
 	
@@ -1879,13 +1539,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 		},
 	
-		/**
-		 * Triggered when the user clicks on an item
-		 * that has been selected.
-		 *
-		 * @param {object} e
-		 * @returns {boolean}
-		 */
+		
 		onItemSelect: function(e) {
 			var self = this;
 	
@@ -1896,13 +1550,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 		},
 	
-		/**
-		 * Invokes the provided method that provides
-		 * results to a callback---which are then added
-		 * as options to the control.
-		 *
-		 * @param {function} fn
-		 */
+		
 		load: function(fn) {
 			var self = this;
 			var $wrapper = self.$wrapper.addClass(self.settings.loadingClass);
@@ -1921,21 +1569,13 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}]);
 		},
 	
-		/**
-		 * Gets the value of input field of the control.
-		 *
-		 * @returns {string} value
-		 */
+		
 		getTextboxValue: function() {
 			var $input = this.$control_input;
 			return $input.val();
 		},
 	
-		/**
-		 * Sets the input field of the control to the specified value.
-		 *
-		 * @param {string} value
-		 */
+		
 		setTextboxValue: function(value) {
 			var $input = this.$control_input;
 			var changed = $input.val() !== value;
@@ -1945,14 +1585,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 		},
 	
-		/**
-		 * Returns the value of the control. If multiple items
-		 * can be selected (e.g. <select multiple>), this returns
-		 * an array. If only one item can be selected, this
-		 * returns a string.
-		 *
-		 * @returns {mixed}
-		 */
+		
 		getValue: function() {
 			if (this.tagType === TAG_SELECT && this.$input.attr('multiple')) {
 				return this.items;
@@ -1961,11 +1594,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 		},
 	
-		/**
-		 * Resets the selected items to the given value.
-		 *
-		 * @param {mixed} value
-		 */
+		
 		setValue: function(value, silent) {
 			var events = silent ? [] : ['change'];
 	
@@ -1975,24 +1604,15 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			});
 		},
 	
-		/**
-		 * Resets the number of max items to the given value
-		 *
-		 * @param {number} value
-		 */
+		
 		setMaxItems: function(value){
-			if(value === 0) value = null; //reset to unlimited items.
+			if(value === 0) value = null; 
 			this.settings.maxItems = value;
 			this.settings.mode = this.settings.mode || (this.settings.maxItems === 1 ? 'single' : 'multi');
 			this.refreshState();
 		},
 	
-		/**
-		 * Sets the selected item.
-		 *
-		 * @param {object} $item
-		 * @param {object} e (optional)
-		 */
+		
 		setActiveItem: function($item, e) {
 			var self = this;
 			var eventName;
@@ -2002,7 +1622,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			if (self.settings.mode === 'single') return;
 			$item = $($item);
 	
-			// clear the active selection
+			
 			if (!$item.length) {
 				$(self.$activeItems).removeClass('active');
 				self.$activeItems = [];
@@ -2012,7 +1632,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				return;
 			}
 	
-			// modify selection
+			
 			eventName = e && e.type.toLowerCase();
 	
 			if (eventName === 'mousedown' && self.isShiftDown && self.$activeItems.length) {
@@ -2045,21 +1665,14 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				self.$activeItems = [$item.addClass('active')[0]];
 			}
 	
-			// ensure control has focus
+			
 			self.hideInput();
 			if (!this.isFocused) {
 				self.focus();
 			}
 		},
 	
-		/**
-		 * Sets the selected item in the dropdown menu
-		 * of available options.
-		 *
-		 * @param {object} $object
-		 * @param {boolean} scroll
-		 * @param {boolean} animate
-		 */
+		
 		setActiveOption: function($option, scroll, animate) {
 			var height_menu, height_item, y;
 			var scroll_top, scroll_bottom;
@@ -2095,9 +1708,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 		},
 	
-		/**
-		 * Selects all items (CTRL + A).
-		 */
+		
 		selectAll: function() {
 			var self = this;
 			if (self.settings.mode === 'single') return;
@@ -2110,10 +1721,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			self.focus();
 		},
 	
-		/**
-		 * Hides the input element out of view, while
-		 * retaining its focus.
-		 */
+		
 		hideInput: function() {
 			var self = this;
 	
@@ -2122,17 +1730,13 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			self.isInputHidden = true;
 		},
 	
-		/**
-		 * Restores input visibility.
-		 */
+		
 		showInput: function() {
 			this.$control_input.css({opacity: 1, position: 'relative', left: 0});
 			this.isInputHidden = false;
 		},
 	
-		/**
-		 * Gives the control focus.
-		 */
+		
 		focus: function() {
 			var self = this;
 			if (self.isDisabled) return self;
@@ -2146,37 +1750,19 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			return self;
 		},
 	
-		/**
-		 * Forces the control out of focus.
-		 *
-		 * @param {Element} dest
-		 */
+		
 		blur: function(dest) {
 			this.$control_input[0].blur();
 			this.onBlur(null, dest);
 			return this;
 		},
 	
-		/**
-		 * Returns a function that scores an object
-		 * to show how good of a match it is to the
-		 * provided query.
-		 *
-		 * @param {string} query
-		 * @param {object} options
-		 * @return {function}
-		 */
+		
 		getScoreFunction: function(query) {
 			return this.sifter.getScoreFunction(query, this.getSearchOptions());
 		},
 	
-		/**
-		 * Returns search options for sifter (the system
-		 * for scoring and sorting results).
-		 *
-		 * @see https://github.com/brianreavis/sifter.js
-		 * @return {object}
-		 */
+		
 		getSearchOptions: function() {
 			var settings = this.settings;
 			var sort = settings.sortField;
@@ -2192,27 +1778,14 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			};
 		},
 	
-		/**
-		 * Searches through available options and returns
-		 * a sorted array of matches.
-		 *
-		 * Returns an object containing:
-		 *
-		 *   - query {string}
-		 *   - tokens {array}
-		 *   - total {int}
-		 *   - items {array}
-		 *
-		 * @param {string} query
-		 * @returns {object}
-		 */
+		
 		search: function(query) {
 			var i, value, score, result, calculateScore;
 			var self     = this;
 			var settings = self.settings;
 			var options  = this.getSearchOptions();
 	
-			// validate user-provided result scoring function
+			
 			if (settings.score) {
 				calculateScore = self.settings.score.apply(this, [query]);
 				if (typeof calculateScore !== 'function') {
@@ -2220,7 +1793,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				}
 			}
 	
-			// perform search
+			
 			if (query !== self.lastQuery) {
 				self.lastQuery = query;
 				result = self.sifter.search(query, $.extend(options, {score: calculateScore}));
@@ -2229,7 +1802,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				result = $.extend(true, {}, self.currentResults);
 			}
 	
-			// filter out selected items
+			
 			if (settings.hideSelected) {
 				for (i = result.items.length - 1; i >= 0; i--) {
 					if (self.items.indexOf(hash_key(result.items[i].id)) !== -1) {
@@ -2241,12 +1814,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			return result;
 		},
 	
-		/**
-		 * Refreshes the list of available options shown
-		 * in the autocomplete dropdown menu.
-		 *
-		 * @param {boolean} triggerDropdown
-		 */
+		
 		refreshOptions: function(triggerDropdown) {
 			var i, j, k, n, groups, groups_order, option, option_html, optgroup, optgroups, html, html_children, has_create_option;
 			var $active, $active_before, $create;
@@ -2261,13 +1829,13 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			var $dropdown_content = self.$dropdown_content;
 			var active_before     = self.$activeOption && hash_key(self.$activeOption.attr('data-value'));
 	
-			// build markup
+			
 			n = results.items.length;
 			if (typeof self.settings.maxOptions === 'number') {
 				n = Math.min(n, self.settings.maxOptions);
 			}
 	
-			// render and group available options individually
+			
 			groups = {};
 			groups_order = [];
 	
@@ -2290,7 +1858,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				}
 			}
 	
-			// sort optgroups
+			
 			if (this.settings.lockOptgroupOrder) {
 				groups_order.sort(function(a, b) {
 					var a_order = self.optgroups[a] && self.optgroups[a].$order || 0;
@@ -2299,13 +1867,13 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				});
 			}
 	
-			// render optgroup headers & join groups
+			
 			html = document.createDocumentFragment();
 			for (i = 0, n = groups_order.length; i < n; i++) {
 				optgroup = groups_order[i];
 				if (self.optgroups.hasOwnProperty(optgroup) && groups[optgroup].childNodes.length) {
-					// render the optgroup header and options within it,
-					// then pass it to the wrapper template
+					
+					
 					html_children = document.createDocumentFragment();
 					html_children.appendChild(self.render('optgroup_header', self.optgroups[optgroup]));
 					html_children.appendChild(groups[optgroup]);
@@ -2321,7 +1889,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 	
 			$dropdown_content.html(html);
 	
-			// highlight matching terms inline
+			
 			if (self.settings.highlight) {
 				$dropdown_content.removeHighlight();
 				if (results.query.length && results.tokens.length) {
@@ -2331,9 +1899,9 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				}
 			}
 	
-			// add "selected" class to selected options
+			
 			if (!self.settings.hideSelected) {
-				// clear selection on all previously selected elements first
+				
 				self.$dropdown.find('.selected').removeClass('selected');
 	
 				for (i = 0, n = self.items.length; i < n; i++) {
@@ -2341,7 +1909,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				}
 			}
 	
-			// add create option
+			
 			has_create_option = self.canCreate(query);
 			if (has_create_option) {
 				if(self.settings.showAddOptionOnCreate) {
@@ -2350,7 +1918,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				}
 			}
 	
-			// activate
+			
 			self.hasOptions = results.items.length > 0 || ( has_create_option && self.settings.showAddOptionOnCreate );
 			if (self.hasOptions) {
 				if (results.items.length > 0) {
@@ -2378,18 +1946,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 		},
 	
-		/**
-		 * Adds an available option. If it already exists,
-		 * nothing will happen. Note: this does not refresh
-		 * the options list dropdown (use `refreshOptions`
-		 * for that).
-		 *
-		 * Usage:
-		 *
-		 *   this.addOption(data)
-		 *
-		 * @param {object|array} data
-		 */
+		
 		addOption: function(data) {
 			var i, n, value, self = this;
 	
@@ -2407,12 +1964,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 		},
 	
-		/**
-		 * Registers an option to the pool of options.
-		 *
-		 * @param {object} data
-		 * @return {boolean|string}
-		 */
+		
 		registerOption: function(data) {
 			var key = hash_key(data[this.settings.valueField]);
 			if (typeof key === 'undefined' || key === null || this.options.hasOwnProperty(key)) return false;
@@ -2421,12 +1973,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			return key;
 		},
 	
-		/**
-		 * Registers an option group to the pool of option groups.
-		 *
-		 * @param {object} data
-		 * @return {boolean|string}
-		 */
+		
 		registerOptionGroup: function(data) {
 			var key = hash_key(data[this.settings.optgroupValueField]);
 			if (!key) return false;
@@ -2436,13 +1983,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			return key;
 		},
 	
-		/**
-		 * Registers a new optgroup for options
-		 * to be bucketed into.
-		 *
-		 * @param {string} id
-		 * @param {object} data
-		 */
+		
 		addOptionGroup: function(id, data) {
 			data[this.settings.optgroupValueField] = id;
 			if (id = this.registerOptionGroup(data)) {
@@ -2450,11 +1991,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 		},
 	
-		/**
-		 * Removes an existing option group.
-		 *
-		 * @param {string} id
-		 */
+		
 		removeOptionGroup: function(id) {
 			if (this.optgroups.hasOwnProperty(id)) {
 				delete this.optgroups[id];
@@ -2463,23 +2000,14 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 		},
 	
-		/**
-		 * Clears all existing option groups.
-		 */
+		
 		clearOptionGroups: function() {
 			this.optgroups = {};
 			this.renderCache = {};
 			this.trigger('optgroup_clear');
 		},
 	
-		/**
-		 * Updates an option available for selection. If
-		 * it is visible in the selected items or options
-		 * dropdown, it will be re-rendered automatically.
-		 *
-		 * @param {string} value
-		 * @param {object} data
-		 */
+		
 		updateOption: function(value, data) {
 			var self = this;
 			var $item, $item_new;
@@ -2488,14 +2016,14 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			value     = hash_key(value);
 			value_new = hash_key(data[self.settings.valueField]);
 	
-			// sanity checks
+			
 			if (value === null) return;
 			if (!self.options.hasOwnProperty(value)) return;
 			if (typeof value_new !== 'string') throw new Error('Value must be set in option data');
 	
 			order_old = self.options[value].$order;
 	
-			// update references
+			
 			if (value_new !== value) {
 				delete self.options[value];
 				index_item = self.items.indexOf(value);
@@ -2506,7 +2034,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			data.$order = data.$order || order_old;
 			self.options[value_new] = data;
 	
-			// invalidate render cache
+			
 			cache_items = self.renderCache['item'];
 			cache_options = self.renderCache['option'];
 	
@@ -2519,7 +2047,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				delete cache_options[value_new];
 			}
 	
-			// update the item if it's selected
+			
 			if (self.items.indexOf(value_new) !== -1) {
 				$item = self.getItem(value);
 				$item_new = $(self.render('item', data));
@@ -2527,21 +2055,16 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				$item.replaceWith($item_new);
 			}
 	
-			// invalidate last query because we might have updated the sortField
+			
 			self.lastQuery = null;
 	
-			// update dropdown contents
+			
 			if (self.isOpen) {
 				self.refreshOptions(false);
 			}
 		},
 	
-		/**
-		 * Removes a single option.
-		 *
-		 * @param {string} value
-		 * @param {boolean} silent
-		 */
+		
 		removeOption: function(value, silent) {
 			var self = this;
 			value = hash_key(value);
@@ -2558,11 +2081,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			self.removeItem(value, silent);
 		},
 	
-		/**
-		 * Clears all options.
-		 *
-		 * @param {boolean} silent
-		 */
+		
 		clearOptions: function(silent) {
 			var self = this;
 	
@@ -2581,36 +2100,18 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			self.clear(silent);
 		},
 	
-		/**
-		 * Returns the jQuery element of the option
-		 * matching the given value.
-		 *
-		 * @param {string} value
-		 * @returns {object}
-		 */
+		
 		getOption: function(value) {
 			return this.getElementWithValue(value, this.$dropdown_content.find('[data-selectable]'));
 		},
 	
-		/**
-		 * Returns the jQuery element of the first
-		 * selectable option.
-		 *
-		 * @return {object}
-		 */
+		
 		getFirstOption: function() {
 			var $options = this.$dropdown.find('[data-selectable]');
 			return $options.length > 0 ? $options.eq(0) : $();
 		},
 	
-		/**
-		 * Returns the jQuery element of the next or
-		 * previous selectable option.
-		 *
-		 * @param {object} $option
-		 * @param {int} direction  can be 1 for next or -1 for previous
-		 * @return {object}
-		 */
+		
 		getAdjacentOption: function($option, direction) {
 			var $options = this.$dropdown.find('[data-selectable]');
 			var index    = $options.index($option) + direction;
@@ -2618,14 +2119,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			return index >= 0 && index < $options.length ? $options.eq(index) : $();
 		},
 	
-		/**
-		 * Finds the first element with a "data-value" attribute
-		 * that matches the given value.
-		 *
-		 * @param {mixed} value
-		 * @param {object} $els
-		 * @return {object}
-		 */
+		
 		getElementWithValue: function(value, $els) {
 			value = hash_key(value);
 	
@@ -2640,15 +2134,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			return $();
 		},
 	
-		/**
-		 * Finds the first element with a "textContent" property
-		 * that matches the given textContent value.
-		 *
-		 * @param {mixed} textContent
-		 * @param {boolean} ignoreCase
-		 * @param {object} $els
-		 * @return {object}
-		 */
+		
 		getElementWithTextContent: function(textContent, ignoreCase ,$els) {
 			textContent = hash_key(textContent);
 	
@@ -2668,37 +2154,18 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			return $();
 		},
 	
-		/**
-		 * Returns the jQuery element of the item
-		 * matching the given value.
-		 *
-		 * @param {string} value
-		 * @returns {object}
-		 */
+		
 		getItem: function(value) {
 			return this.getElementWithValue(value, this.$control.children());
 		},
 	
-		/**
-		 * Returns the jQuery element of the item
-		 * matching the given textContent.
-		 *
-		 * @param {string} value
-		 * @param {boolean} ignoreCase
-		 * @returns {object}
-		 */
+		
 		getFirstItemMatchedByTextContent: function(textContent, ignoreCase) {
 			ignoreCase = (ignoreCase !== null && ignoreCase === true) ? true : false;
 			return this.getElementWithTextContent(textContent, ignoreCase, this.$dropdown_content.find('[data-selectable]'));
 		},
 	
-		/**
-		 * "Selects" multiple items at once. Adds them to the list
-		 * at the current caret position.
-		 *
-		 * @param {string} value
-		 * @param {boolean} silent
-		 */
+		
 		addItems: function(values, silent) {
 			this.buffer = document.createDocumentFragment();
 	
@@ -2719,13 +2186,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			this.buffer = null;
 		},
 	
-		/**
-		 * "Selects" an item. Adds it to the list
-		 * at the current caret position.
-		 *
-		 * @param {string} value
-		 * @param {boolean} silent
-		 */
+		
 		addItem: function(value, silent) {
 			var events = silent ? [] : ['change'];
 	
@@ -2756,7 +2217,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				if (self.isSetup) {
 					$options = self.$dropdown_content.find('[data-selectable]');
 	
-					// update menu / remove the option (if this is not one item being added as part of series)
+					
 					if (!self.isPending) {
 						$option = self.getOption(value);
 						value_next = self.getAdjacentOption($option, 1).attr('data-value');
@@ -2766,7 +2227,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 						}
 					}
 	
-					// hide the menu if the maximum number of items have been selected or no options are left
+					
 					if (!$options.length || self.isFull()) {
 						self.close();
 					} else if (!self.isPending) {
@@ -2783,12 +2244,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			});
 		},
 	
-		/**
-		 * Removes the selected item matching
-		 * the provided value.
-		 *
-		 * @param {string} value
-		 */
+		
 		removeItem: function(value, silent) {
 			var self = this;
 			var $item, i, idx;
@@ -2823,19 +2279,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 		},
 	
-		/**
-		 * Invokes the `create` method provided in the
-		 * selectize options that should provide the data
-		 * for the new item, given the user input.
-		 *
-		 * Once this completes, it will be added
-		 * to the item list.
-		 *
-		 * @param {string} value
-		 * @param {boolean} [triggerDropdown]
-		 * @param {function} [callback]
-		 * @return {boolean}
-		 */
+		
 		createItem: function(input, triggerDropdown) {
 			var self  = this;
 			var caret = self.caretPos;
@@ -2892,9 +2336,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			return true;
 		},
 	
-		/**
-		 * Re-renders the selected item lists.
-		 */
+		
 		refreshItems: function() {
 			this.lastQuery = null;
 	
@@ -2906,23 +2348,13 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			this.updateOriginalInput();
 		},
 	
-		/**
-		 * Updates all state-dependent attributes
-		 * and CSS classes.
-		 */
+		
 		refreshState: function() {
 			this.refreshValidityState();
 			this.refreshClasses();
 		},
 	
-		/**
-		 * Update the `required` attribute of both input and control input.
-		 *
-		 * The `required` property needs to be activated on the control input
-		 * for the error to be displayed at the right place. `required` also
-		 * needs to be temporarily deactivated on the input since the input is
-		 * hidden and can't show errors.
-		 */
+		
 		refreshValidityState: function() {
 			if (!this.isRequired) return false;
 	
@@ -2933,9 +2365,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			this.$input.prop('required', !invalid);
 		},
 	
-		/**
-		 * Updates all state-dependent CSS classes.
-		 */
+		
 		refreshClasses: function() {
 			var self     = this;
 			var isFull   = self.isFull();
@@ -2959,20 +2389,12 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			self.$control_input.data('grow', !isFull && !isLocked);
 		},
 	
-		/**
-		 * Determines whether or not more items can be added
-		 * to the control without exceeding the user-defined maximum.
-		 *
-		 * @returns {boolean}
-		 */
+		
 		isFull: function() {
 			return this.settings.maxItems !== null && this.items.length >= this.settings.maxItems;
 		},
 	
-		/**
-		 * Refreshes the original <select> or <input>
-		 * element to reflect the current state.
-		 */
+		
 		updateOriginalInput: function(opts) {
 			var i, n, options, label, self = this;
 			opts = opts || {};
@@ -2999,10 +2421,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 		},
 	
-		/**
-		 * Shows/hide the input placeholder depending
-		 * on if there items in the list already.
-		 */
+		
 		updatePlaceholder: function() {
 			if (!this.settings.placeholder) return;
 			var $input = this.$control_input;
@@ -3015,10 +2434,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			$input.triggerHandler('update', {force: true});
 		},
 	
-		/**
-		 * Shows the autocomplete dropdown containing
-		 * the available options.
-		 */
+		
 		open: function() {
 			var self = this;
 	
@@ -3032,9 +2448,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			self.trigger('dropdown_open', self.$dropdown);
 		},
 	
-		/**
-		 * Closes the autocomplete dropdown menu.
-		 */
+		
 		close: function() {
 			var self = this;
 			var trigger = self.isOpen;
@@ -3042,11 +2456,11 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			if (self.settings.mode === 'single' && self.items.length) {
 				self.hideInput();
 	
-				// Do not trigger blur while inside a blur event,
-				// this fixes some weird tabbing behavior in FF and IE.
-				// See #1164
+				
+				
+				
 				if (self.isBlurring) {
-					self.$control_input.blur(); // close keyboard on iOS
+					self.$control_input.blur(); 
 				}
 			}
 	
@@ -3058,10 +2472,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			if (trigger) self.trigger('dropdown_close', self.$dropdown);
 		},
 	
-		/**
-		 * Calculates and applies the appropriate
-		 * position of the dropdown.
-		 */
+		
 		positionDropdown: function() {
 			var $control = this.$control;
 			var offset = this.settings.dropdownParent === 'body' ? $control.offset() : $control.position();
@@ -3074,12 +2485,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			});
 		},
 	
-		/**
-		 * Resets / clears all selected items
-		 * from the control.
-		 *
-		 * @param {boolean} silent
-		 */
+		
 		clear: function(silent) {
 			var self = this;
 	
@@ -3096,12 +2502,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			self.trigger('clear');
 		},
 	
-		/**
-		 * A helper method for inserting an element
-		 * at the current caret position.
-		 *
-		 * @param {object} $el
-		 */
+		
 		insertAtCaret: function($el) {
 			var caret = Math.min(this.caretPos, this.items.length);
 			var el = $el[0];
@@ -3116,12 +2517,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			this.setCaret(caret + 1);
 		},
 	
-		/**
-		 * Removes the current selected item(s).
-		 *
-		 * @param {object} e (optional)
-		 * @returns {boolean}
-		 */
+		
 		deleteSelection: function(e) {
 			var i, n, direction, selection, values, caret, option_select, $option_select, $tail;
 			var self = this;
@@ -3137,7 +2533,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				}
 			}
 	
-			// determine items that will be removed
+			
 			values = [];
 	
 			if (self.$activeItems.length) {
@@ -3160,12 +2556,12 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				}
 			}
 	
-			// allow the callback to abort
+			
 			if (!values.length || (typeof self.settings.onDelete === 'function' && self.settings.onDelete.apply(self, [values]) === false)) {
 				return false;
 			}
 	
-			// perform removal
+			
 			if (typeof caret !== 'undefined') {
 				self.setCaret(caret);
 			}
@@ -3177,7 +2573,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			self.positionDropdown();
 			self.refreshOptions(true);
 	
-			// select previous option
+			
 			if (option_select) {
 				$option_select = self.getOption(option_select);
 				if ($option_select.length) {
@@ -3188,16 +2584,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			return true;
 		},
 	
-		/**
-		 * Selects the previous / next item (depending
-		 * on the `direction` argument).
-		 *
-		 * > 0 - right
-		 * < 0 - left
-		 *
-		 * @param {int} direction
-		 * @param {object} e (optional)
-		 */
+		
 		advanceSelection: function(direction, e) {
 			var tail, selection, idx, valueLength, cursorAtEdge, $tail;
 			var self = this;
@@ -3227,12 +2614,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 		},
 	
-		/**
-		 * Moves the caret left / right.
-		 *
-		 * @param {int} direction
-		 * @param {object} e (optional)
-		 */
+		
 		advanceCaret: function(direction, e) {
 			var self = this, fn, $adj;
 	
@@ -3251,11 +2633,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 		},
 	
-		/**
-		 * Moves the caret to the specified index.
-		 *
-		 * @param {int} i
-		 */
+		
 		setCaret: function(i) {
 			var self = this;
 	
@@ -3266,9 +2644,9 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 	
 			if(!self.isPending) {
-				// the input must be moved by leaving it in place and moving the
-				// siblings, due to the fact that focus cannot be restored once lost
-				// on mobile webkit devices
+				
+				
+				
 				var j, n, fn, $children, $child;
 				$children = self.$control.children(':not(input)');
 				for (j = 0, n = $children.length; j < n; j++) {
@@ -3284,28 +2662,20 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			self.caretPos = i;
 		},
 	
-		/**
-		 * Disables user input on the control. Used while
-		 * items are being asynchronously created.
-		 */
+		
 		lock: function() {
 			this.close();
 			this.isLocked = true;
 			this.refreshState();
 		},
 	
-		/**
-		 * Re-enables user input on the control.
-		 */
+		
 		unlock: function() {
 			this.isLocked = false;
 			this.refreshState();
 		},
 	
-		/**
-		 * Disables user input on the control completely.
-		 * While disabled, it cannot receive focus.
-		 */
+		
 		disable: function() {
 			var self = this;
 			self.$input.prop('disabled', true);
@@ -3314,10 +2684,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			self.lock();
 		},
 	
-		/**
-		 * Enables the control so that it can respond
-		 * to focus and user input.
-		 */
+		
 		enable: function() {
 			var self = this;
 			self.$input.prop('disabled', false);
@@ -3326,11 +2693,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			self.unlock();
 		},
 	
-		/**
-		 * Completely destroys the control and
-		 * unbinds all event listeners so that it can
-		 * be garbage collected.
-		 */
+		
 		destroy: function() {
 			var self = this;
 			var eventNS = self.eventNS;
@@ -3364,14 +2727,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			delete self.$input[0].selectize;
 		},
 	
-		/**
-		 * A helper method for rendering "item" and
-		 * "option" templates, given the data.
-		 *
-		 * @param {string} templateName
-		 * @param {object} data
-		 * @returns {string}
-		 */
+		
 		render: function(templateName, data) {
 			var value, id, label;
 			var html = '';
@@ -3384,7 +2740,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				cache = !!value;
 			}
 	
-			// pull markup from cache if it exists
+			
 			if (cache) {
 				if (!isset(self.renderCache[templateName])) {
 					self.renderCache[templateName] = {};
@@ -3394,10 +2750,10 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				}
 			}
 	
-			// render markup
+			
 			html = $(self.settings.render[templateName].apply(this, [data, escape_html]));
 	
-			// add mandatory attributes
+			
 			if (templateName === 'option' || templateName === 'option_create') {
 				if (!data[self.settings.disabledField]) {
 					html.attr('data-selectable', '');
@@ -3414,7 +2770,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				html.attr('data-value', value || '');
 			}
 	
-			// update cache
+			
 			if (cache) {
 				self.renderCache[templateName][value] = html[0];
 			}
@@ -3422,13 +2778,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			return html[0];
 		},
 	
-		/**
-		 * Clears the render cache for a template. If
-		 * no template is given, clears all render
-		 * caches.
-		 *
-		 * @param {string} templateName
-		 */
+		
 		clearCache: function(templateName) {
 			var self = this;
 			if (typeof templateName === 'undefined') {
@@ -3438,13 +2788,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 		},
 	
-		/**
-		 * Determines whether or not to display the
-		 * create item prompt, given a user input.
-		 *
-		 * @param {string} input
-		 * @return {boolean}
-		 */
+		
 		canCreate: function(input) {
 			var self = this;
 			if (!self.settings.create) return false;
@@ -3465,7 +2809,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 	
 		plugins: [],
 		delimiter: ',',
-		splitOn: null, // regexp or string for splitting up values from a paste command
+		splitOn: null, 
 		persist: true,
 		diacritics: true,
 		create: false,
@@ -3486,7 +2830,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		closeAfterSelect: false,
 	
 		scrollDuration: 60,
-		deselectBehavior: 'previous', //top, previous
+		deselectBehavior: 'previous', 
 		loadThrottle: 300,
 		loadingClass: 'loading',
 	
@@ -3513,35 +2857,10 @@ var _previousDefineAmd = define.amd; define.amd = false;
 	
 		copyClassesToDropdown: true,
 	
-		/*
-		load                 : null, // function(query, callback) { ... }
-		score                : null, // function(search) { ... }
-		formatValueToKey     : null, // function(key) { ... }
-		onInitialize         : null, // function() { ... }
-		onChange             : null, // function(value) { ... }
-		onItemAdd            : null, // function(value, $item) { ... }
-		onItemRemove         : null, // function(value) { ... }
-		onClear              : null, // function() { ... }
-		onOptionAdd          : null, // function(value, data) { ... }
-		onOptionRemove       : null, // function(value) { ... }
-		onOptionClear        : null, // function() { ... }
-		onOptionGroupAdd     : null, // function(id, data) { ... }
-		onOptionGroupRemove  : null, // function(id) { ... }
-		onOptionGroupClear   : null, // function() { ... }
-		onDropdownOpen       : null, // function($dropdown) { ... }
-		onDropdownClose      : null, // function($dropdown) { ... }
-		onType               : null, // function(str) { ... }
-		onDelete             : null, // function(values) { ... }
-		*/
+		
 	
 		render: {
-			/*
-			item: null,
-			optgroup: null,
-			optgroup_header: null,
-			option: null,
-			option_create: null
-			*/
+			
 		}
 	};
 	
@@ -3557,12 +2876,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 		var field_optgroup_label = settings.optgroupLabelField;
 		var field_optgroup_value = settings.optgroupValueField;
 	
-		/**
-		 * Initializes selectize from a <input type="text"> element.
-		 *
-		 * @param {object} $input
-		 * @param {object} settings_element
-		 */
+		
 		var init_textbox = function($input, settings_element) {
 			var i, n, values, option;
 	
@@ -3587,12 +2901,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 			}
 		};
 	
-		/**
-		 * Initializes selectize from a <select> element.
-		 *
-		 * @param {object} $input
-		 * @param {object} settings_element
-		 */
+		
 		var init_select = function($input, settings_element) {
 			var i, n, tagName, $children, order = 0;
 			var options = settings_element.options;
@@ -3612,10 +2921,10 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				var value = hash_key($option.val());
 				if (!value && !settings.allowEmptyOption) return;
 	
-				// if the option already exists, it's probably been
-				// duplicated in another optgroup. in this case, push
-				// the current group to the "optgroup" property on the
-				// existing option so that it's rendered in both places.
+				
+				
+				
+				
 				if (optionsMap.hasOwnProperty(value)) {
 					if (group) {
 						var arr = optionsMap[value][field_optgroup];
@@ -3730,7 +3039,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 	      const offset = this.settings.dropdownParent === 'body' ? $control.offset() : $control.position();
 	      offset.top += $control.outerHeight(true);
 	
-	      const dropdownHeight = this.$dropdown.prop('scrollHeight') + 5; // 5 - padding value;
+	      const dropdownHeight = this.$dropdown.prop('scrollHeight') + 5; 
 	      const controlPosTop = this.$control.get(0).getBoundingClientRect().top;
 	      const wrapperHeight = this.$wrapper.height();
 	      const position = controlPosTop + dropdownHeight + wrapperHeight  > window.innerHeight ? POSITION.top : POSITION.bottom;
@@ -3778,7 +3087,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 	    return function () {
 	      original.apply(self, arguments);
 	
-	      // https://stackoverflow.com/questions/30053167/autocomplete-off-vs-false
+	      
 	      self.$control_input.attr({ autocomplete: "new-password", autofill: "no" });
 	    };
 	  })();
@@ -3819,11 +3128,11 @@ var _previousDefineAmd = define.amd; define.amd = false;
 					disabled: self.isLocked,
 					start: function(e, ui) {
 						ui.placeholder.css('width', ui.helper.css('width'));
-						// $control.css({overflow: 'visible'});
+						
 						$control.addClass('dragging');
 					},
 					stop: function() {
-						// $control.css({overflow: 'hidden'});
+						
 						$control.removeClass('dragging');
 						var active = self.$activeItems ? self.$activeItems.slice() : null;
 						var values = [];
@@ -3986,13 +3295,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				var self = thisRef;
 				var html = '<a href="javascript:void(0)" class="' + options.className + '" tabindex="-1" title="' + escape_html(options.title) + '">' + options.label + '</a>';
 	
-				/**
-				 * Appends an element as a child (with raw HTML).
-				 *
-				 * @param {string} html_container
-				 * @param {string} html_element
-				 * @return {string}
-				 */
+				
 				var append = function(html_container, html_element) {
 					return $('<span>').append(html_container)
 						.append(html_element);
@@ -4001,7 +3304,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				thisRef.setup = (function() {
 					var original = self.setup;
 					return function() {
-						// override the item rendering method to add the button to each
+						
 						if (options.append) {
 							var id = $(self.$input.context).attr('id');
 							var selectizer = $('#'+id);
@@ -4014,7 +3317,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 	
 						original.apply(thisRef, arguments);
 	
-						// add event listener
+						
 						thisRef.$control.on('click', '.' + options.className, function(e) {
 							e.preventDefault();
 							if (self.isLocked) return;
@@ -4031,13 +3334,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				var self = thisRef;
 				var html = '<a href="javascript:void(0)" class="' + options.className + '" tabindex="-1" title="' + escape_html(options.title) + '">' + options.label + '</a>';
 	
-				/**
-				 * Appends an element as a child (with raw HTML).
-				 *
-				 * @param {string} html_container
-				 * @param {string} html_element
-				 * @return {string}
-				 */
+				
 				var append = function(html_container, html_element) {
 					var pos = html_container.search(/(<\/[^>]+>\s*)$/);
 					return html_container.substring(0, pos) + html_element + html_container.substring(pos);
@@ -4046,7 +3343,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 				thisRef.setup = (function() {
 					var original = self.setup;
 					return function() {
-						// override the item rendering method to add the button to each
+						
 						if (options.append) {
 							var render_item = self.settings.render.item;
 							self.settings.render.item = function(data) {
@@ -4056,7 +3353,7 @@ var _previousDefineAmd = define.amd; define.amd = false;
 	
 						original.apply(thisRef, arguments);
 	
-						// add event listener
+						
 						thisRef.$control.on('click', '.' + options.className, function(e) {
 							e.preventDefault();
 							if (self.isLocked) return;

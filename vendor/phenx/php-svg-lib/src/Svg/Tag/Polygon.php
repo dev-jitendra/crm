@@ -1,10 +1,5 @@
 <?php
-/**
- * @package php-svg-lib
- * @link    http://github.com/PhenX/php-svg-lib
- * @author  Fabien Ménager <fabien.menager@gmail.com>
- * @license GNU LGPLv3+ http://www.gnu.org/copyleft/lesser.html
- */
+
 
 namespace Svg\Tag;
 
@@ -19,7 +14,7 @@ class Polygon extends Shape
         $count = count($points);
 
         if ($count < 4) {
-            // nothing to draw
+            
             return;
         }
 
@@ -29,7 +24,7 @@ class Polygon extends Shape
 
         for ($i = 2; $i < $count; $i += 2) {
             if ($i + 1 === $count) {
-                // invalid trailing point
+                
                 continue;
             }
             $x = $points[$i];

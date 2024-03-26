@@ -9,35 +9,10 @@ use React\EventLoop\Tick\FutureTickQueue;
 use React\EventLoop\Timer\Timer;
 use SplObjectStorage;
 
-/**
- * [Deprecated] An `ext-libevent` based event loop.
- *
- * This uses the [`libevent` PECL extension](https://pecl.php.net/package/libevent),
- * that provides an interface to `libevent` library.
- * `libevent` itself supports a number of system-specific backends (epoll, kqueue).
- *
- * This event loop does only work with PHP 5.
- * An [unofficial update](https://github.com/php/pecl-event-libevent/pull/2) for
- * PHP 7 does exist, but it is known to cause regular crashes due to `SEGFAULT`s.
- * To reiterate: Using this event loop on PHP 7 is not recommended.
- * Accordingly, neither the [`Loop` class](#loop) nor the deprecated
- * [`Factory` class](#factory) will try to use this event loop on PHP 7.
- *
- * This event loop is known to trigger a readable listener only if
- * the stream *becomes* readable (edge-triggered) and may not trigger if the
- * stream has already been readable from the beginning.
- * This also implies that a stream may not be recognized as readable when data
- * is still left in PHP's internal stream buffers.
- * As such, it's recommended to use `stream_set_read_buffer($stream, 0);`
- * to disable PHP's internal read buffer in this case.
- * See also [`addReadStream()`](#addreadstream) for more details.
- *
- * @link https://pecl.php.net/package/libevent
- * @deprecated 1.2.0, use [`ExtEventLoop`](#exteventloop) instead.
- */
+
 final class ExtLibeventLoop implements LoopInterface
 {
-    /** @internal */
+    
     const MICROSECONDS_PER_SECOND = 1000000;
 
     private $eventBase;
@@ -212,11 +187,7 @@ final class ExtLibeventLoop implements LoopInterface
         $this->running = false;
     }
 
-    /**
-     * Schedule a timer for execution.
-     *
-     * @param TimerInterface $timer
-     */
+    
     private function scheduleTimer(TimerInterface $timer)
     {
         $this->timerEvents[$timer] = $event = \event_timer_new();
@@ -226,13 +197,7 @@ final class ExtLibeventLoop implements LoopInterface
         \event_add($event, $timer->getInterval() * self::MICROSECONDS_PER_SECOND);
     }
 
-    /**
-     * Create a callback used as the target of timer events.
-     *
-     * A reference is kept to the callback for the lifetime of the loop
-     * to prevent "Cannot destroy active lambda function" fatal error from
-     * the event extension.
-     */
+    
     private function createTimerCallback()
     {
         $that = $this;
@@ -240,32 +205,26 @@ final class ExtLibeventLoop implements LoopInterface
         $this->timerCallback = function ($_, $__, $timer) use ($timers, $that) {
             \call_user_func($timer->getCallback(), $timer);
 
-            // Timer already cancelled ...
+            
             if (!$timers->contains($timer)) {
                 return;
             }
 
-            // Reschedule periodic timers ...
+            
             if ($timer->isPeriodic()) {
                 \event_add(
                     $timers[$timer],
                     $timer->getInterval() * ExtLibeventLoop::MICROSECONDS_PER_SECOND
                 );
 
-            // Clean-up one shot timers ...
+            
             } else {
                 $that->cancelTimer($timer);
             }
         };
     }
 
-    /**
-     * Create a callback used as the target of stream events.
-     *
-     * A reference is kept to the callback for the lifetime of the loop
-     * to prevent "Cannot destroy active lambda function" fatal error from
-     * the event extension.
-     */
+    
     private function createStreamCallback()
     {
         $read =& $this->readListeners;

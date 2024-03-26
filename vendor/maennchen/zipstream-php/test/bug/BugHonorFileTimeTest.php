@@ -13,10 +13,7 @@ use ZipStream\ZipStream;
 
 use function fopen;
 
-/**
- * Asserts that specified last-modified timestamps are not overwritten when a
- * file is added
- */
+
 class BugHonorFileTimeTest extends TestCase
 {
     public function testHonorsFileTime(): void
@@ -25,7 +22,7 @@ class BugHonorFileTimeTest extends TestCase
         $fileOpt = new File();
         $expectedTime = new DateTime('2019-04-21T19:25:00-0800');
 
-        $archiveOpt->setOutputStream(fopen('php://memory', 'wb'));
+        $archiveOpt->setOutputStream(fopen('php:
         $fileOpt->setTime(clone $expectedTime);
 
         $zip = new ZipStream(null, $archiveOpt);

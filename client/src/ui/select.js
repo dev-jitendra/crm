@@ -1,79 +1,20 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module module:ui/select */
+
+
 
 import Selectize from 'lib!selectize';
 
-/**
- * @typedef module:ui/select~Options
- * @type {Object}
- * @property {boolean} [selectOnTab=false] To select on tab.
- * @property {boolean} [matchAnyWord=false] To match any word when searching.
- * @property {function(string, module:ui/select~OptionItemsCallback): void} [load] Loads additional items
- *   when typing in search.
- * @property {function(string, module:ui/select~OptionItemFull): Number} [score] A score function scoring
- *   searched items.
- * @property {'value'|'text'|'$order'|'$score'} [sortBy='$order'] Item sorting.
- * @property {'asc'|'desc'} [sortDirection='asc'] Sort direction.
- */
 
-/**
- * @callback  module:ui/select~OptionItemsCallback
- * @param {module:ui/select~OptionItem[]} list An option item list.
- */
 
-/**
- * @typedef module:ui/select~OptionItem
- * @type {Object}
- * @property {string} value A value.
- * @property {string} text A label.
- */
 
-/**
- * @typedef module:ui/select~OptionItemFull
- * @type {Object}
- * @property {string} value A value.
- * @property {string} text A label.
- * @property {Number} $order An order index.
- */
 
-/**
- * @module ui/select
- *
- * Important. The Selectize library is heavily customized to fix multitude of UIX issues.
- * Upgrading is not advisable. Consider forking.
- */
+
+
+
+
+
 const Select = {
-    /**
-     * @param {Element|JQuery} element An element.
-     * @param {module:ui/select~Options} [options] Options.
-     */
+    
     init: function (element, options = {}) {
         const score = options.score;
         const $el = $(element);
@@ -106,7 +47,7 @@ const Select = {
             $relativeParent = $modalBody;
         }
 
-        // noinspection JSUnusedGlobalSymbols
+        
         const selectizeOptions = {
             sortField: [{field: options.sortBy, direction: options.sortDirection}],
             load: options.load,
@@ -146,7 +87,7 @@ const Select = {
                     this.removeItem(values.pop(), true);
                 }
 
-                // noinspection JSUnresolvedReference
+                
                 this.showInput();
                 this.positionDropdown();
                 this.refreshOptions(true);
@@ -154,9 +95,9 @@ const Select = {
         };
 
         if (!options.matchAnyWord) {
-            /** @this Selectize */
+            
             selectizeOptions.score = function (search) {
-                // noinspection JSUnresolvedReference
+                
                 const score = this.getScoreFunction(search);
 
                 search = search.toLowerCase();
@@ -172,9 +113,9 @@ const Select = {
         }
 
         if (options.matchAnyWord) {
-            /** @this Selectize */
+            
             selectizeOptions.score = function (search) {
-                // noinspection JSUnresolvedReference
+                
                 const score = this.getScoreFunction(search);
 
                 search = search.toLowerCase();
@@ -206,12 +147,7 @@ const Select = {
         $el.selectize(selectizeOptions);
     },
 
-    /**
-     * Focus.
-     *
-     * @param {Element|JQuery} element An element.
-     * @param {{noTrigger?: boolean}} [options] Options.
-     */
+    
     focus: function (element, options) {
         const $el = $(element);
 
@@ -237,12 +173,7 @@ const Select = {
         }
     },
 
-    /**
-     * Set options.
-     *
-     * @param {Element|JQuery} element An element.
-     * @param {{value: string, text: string}[]} options Options.
-     */
+    
     setOptions: function (element, options) {
         const $el = $(element);
 
@@ -261,23 +192,14 @@ const Select = {
         });
     },
 
-    /**
-     * Set value.
-     *
-     * @param {JQuery} $el An element.
-     * @param {string} value A value.
-     */
+    
     setValue: function ($el, value) {
         const selectize = $el.get(0).selectize;
 
         selectize.setValue(value, true);
     },
 
-    /**
-     * Destroy.
-     *
-     * @param {JQuery} $el An element.
-     */
+    
     destroy: function ($el) {
         if (!$el.length || !$el[0].selectize) {
             return;
@@ -286,11 +208,7 @@ const Select = {
         $el[0].selectize.destroy();
     },
 
-    /**
-     * @private
-     * @param {module:ui/select~Options} options
-     * @return {module:ui/select~Options}
-     */
+    
     applyDefaultOptions: function (options) {
         options = Espo.Utils.clone(options);
 
@@ -312,9 +230,7 @@ const Select = {
         return options;
     },
 
-    /**
-     * @private
-     */
+    
     loadEspoSelectPlugin: function () {
         if ('espo_select' in Selectize.plugins) {
             return;
@@ -343,7 +259,7 @@ const Select = {
 
                     self.$dropdown
                         .on('mousedown', '[data-selectable]', function () {
-                            // Prevent issue when down inside, up outside.
+                            
                             $(document).one('mouseup.select', function () {
                                 self.focusOnControlSilently();
                             });
@@ -360,15 +276,7 @@ const Select = {
                 self.preventReOpenOnFocus = false;
             };
 
-            /*this.positionDropdown = (function () {
-                let original = self.positionDropdown;
-
-                return function () {
-                    original.apply(this, arguments);
-
-                    this.$dropdown.css({margin: 'unset'});
-                };
-            })();*/
+            
 
             this.refreshOptions = (function () {
                 const original = self.refreshOptions;
@@ -387,7 +295,7 @@ const Select = {
                 const original = self.blur;
 
                 return function () {
-                    // Prevent closing on mouse down.
+                    
                     if (self.preventClose) {
                         return;
                     }
@@ -463,7 +371,7 @@ const Select = {
                 const original = self.onMouseDown;
 
                 return function (e) {
-                    // Prevent flicking when clicking on input.
+                    
                     if (!self.isOpen && !self.isInputHidden && self.$control_input.val()) {
                         return;
                     }
@@ -511,7 +419,7 @@ const Select = {
                 const original = self.onBlur;
 
                 return function () {
-                    // Prevent closing on mouse down.
+                    
                     if (self.preventClose) {
                         return;
                     }
@@ -559,7 +467,7 @@ const Select = {
                             (
                                 e.code.match(/Key[A-Z]/i) ||
                                 e.key.match(/[0-9]/) ||
-                                RegExp(/^\p{L}/, 'u').test(e.key) // is letter
+                                RegExp(/^\p{L}/, 'u').test(e.key) 
                             )
                         ) {
                             const keyCode = e.keyCode;

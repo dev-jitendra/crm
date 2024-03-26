@@ -1,13 +1,6 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Monolog package.
- *
- * (c) Jordi Boggiano <j.boggiano@seld.be>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Monolog\Handler;
 
@@ -17,36 +10,16 @@ use Monolog\Utils;
 use Monolog\Handler\Slack\SlackRecord;
 use Monolog\LogRecord;
 
-/**
- * Sends notifications through Slack Webhooks
- *
- * @author Haralan Dobrev <hkdobrev@gmail.com>
- * @see    https://api.slack.com/incoming-webhooks
- */
+
 class SlackWebhookHandler extends AbstractProcessingHandler
 {
-    /**
-     * Slack Webhook token
-     */
+    
     private string $webhookUrl;
 
-    /**
-     * Instance of the SlackRecord util class preparing data for Slack API.
-     */
+    
     private SlackRecord $slackRecord;
 
-    /**
-     * @param string      $webhookUrl             Slack Webhook URL
-     * @param string|null $channel                Slack channel (encoded ID or name)
-     * @param string|null $username               Name of a bot
-     * @param bool        $useAttachment          Whether the message should be added to Slack as attachment (plain text otherwise)
-     * @param string|null $iconEmoji              The emoji name to use (or null)
-     * @param bool        $useShortAttachment     Whether the the context/extra messages added to Slack as attachments are in a short style
-     * @param bool        $includeContextAndExtra Whether the attachment should include context and extra data
-     * @param string[]    $excludeFields          Dot separated list of fields to exclude from slack message. E.g. ['context.field1', 'extra.field2']
-     *
-     * @throws MissingExtensionException If the curl extension is missing
-     */
+    
     public function __construct(
         string $webhookUrl,
         ?string $channel = null,
@@ -88,9 +61,7 @@ class SlackWebhookHandler extends AbstractProcessingHandler
         return $this->webhookUrl;
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     protected function write(LogRecord $record): void
     {
         $postData = $this->slackRecord->getSlackData($record);

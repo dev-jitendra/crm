@@ -1,29 +1,10 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpFoundation;
 
-/**
- * StreamedResponse represents a streamed HTTP response.
- *
- * A StreamedResponse uses a callback for its content.
- *
- * The callback should use the standard PHP functions like echo
- * to stream the response back to the client. The flush() function
- * can also be used if needed.
- *
- * @see flush()
- *
- * @author Fabien Potencier <fabien@symfony.com>
- */
+
 class StreamedResponse extends Response
 {
     protected $callback;
@@ -41,11 +22,7 @@ class StreamedResponse extends Response
         $this->headersSent = false;
     }
 
-    /**
-     * Sets the PHP callback associated with this Response.
-     *
-     * @return $this
-     */
+    
     public function setCallback(callable $callback): static
     {
         $this->callback = $callback;
@@ -53,13 +30,7 @@ class StreamedResponse extends Response
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * This method only sends the headers once.
-     *
-     * @return $this
-     */
+    
     public function sendHeaders(): static
     {
         if ($this->headersSent) {
@@ -71,13 +42,7 @@ class StreamedResponse extends Response
         return parent::sendHeaders();
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * This method only sends the content once.
-     *
-     * @return $this
-     */
+    
     public function sendContent(): static
     {
         if ($this->streamed) {
@@ -95,13 +60,7 @@ class StreamedResponse extends Response
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @throws \LogicException when the content is not null
-     *
-     * @return $this
-     */
+    
     public function setContent(?string $content): static
     {
         if (null !== $content) {
@@ -113,9 +72,7 @@ class StreamedResponse extends Response
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getContent(): string|false
     {
         return false;

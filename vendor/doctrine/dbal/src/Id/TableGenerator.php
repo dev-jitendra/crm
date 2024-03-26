@@ -16,65 +16,23 @@ use function is_int;
 
 use const CASE_LOWER;
 
-/**
- * Table ID Generator for those poor languages that are missing sequences.
- *
- * WARNING: The Table Id Generator clones a second independent database
- * connection to work correctly. This means using the generator requests that
- * generate IDs will have two open database connections. This is necessary to
- * be safe from transaction failures in the main connection. Make sure to only
- * ever use one TableGenerator otherwise you end up with many connections.
- *
- * TableID Generator does not work with SQLite.
- *
- * The TableGenerator does not take care of creating the SQL Table itself. You
- * should look at the `TableGeneratorSchemaVisitor` to do this for you.
- * Otherwise the schema for a table looks like:
- *
- * CREATE sequences (
- *   sequence_name VARCHAR(255) NOT NULL,
- *   sequence_value INT NOT NULL DEFAULT 1,
- *   sequence_increment_by INT NOT NULL DEFAULT 1,
- *   PRIMARY KEY (sequence_name)
- * );
- *
- * Technically this generator works as follows:
- *
- * 1. Use a robust transaction serialization level.
- * 2. Open transaction
- * 3. Acquire a read lock on the table row (SELECT .. FOR UPDATE)
- * 4. Increment current value by one and write back to database
- * 5. Commit transaction
- *
- * If you are using a sequence_increment_by value that is larger than one the
- * ID Generator will keep incrementing values until it hits the incrementation
- * gap before issuing another query.
- *
- * If no row is present for a given sequence a new one will be created with the
- * default values 'value' = 1 and 'increment_by' = 1
- *
- * @deprecated
- */
+
 class TableGenerator
 {
     private Connection $conn;
 
-    /** @var string */
+    
     private $generatorTableName;
 
-    /** @var mixed[][] */
+    
     private array $sequences = [];
 
-    /**
-     * @param string $generatorTableName
-     *
-     * @throws Exception
-     */
+    
     public function __construct(Connection $conn, $generatorTableName = 'sequences')
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/4681',
+            'https:
             'The TableGenerator class is is deprecated.',
         );
 
@@ -91,15 +49,7 @@ class TableGenerator
         $this->generatorTableName = $generatorTableName;
     }
 
-    /**
-     * Generates the next unused value for the given sequence name.
-     *
-     * @param string $sequence
-     *
-     * @return int
-     *
-     * @throws Exception
-     */
+    
     public function nextValue($sequence)
     {
         if (isset($this->sequences[$sequence])) {

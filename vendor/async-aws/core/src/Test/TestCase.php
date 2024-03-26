@@ -7,9 +7,7 @@ use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 
 class TestCase extends PHPUnitTestCase
 {
-    /**
-     * Asserts that two Body documents are equal.
-     */
+    
     public static function assertHttpFormEqualsHttpForm(string $expected, string $actual, string $message = ''): void
     {
         $expectedArray = preg_split('/[\n&\s]+/', trim($expected));
@@ -18,9 +16,7 @@ class TestCase extends PHPUnitTestCase
         self::assertEqualsCanonicalizing($expectedArray, $actualArray, $message);
     }
 
-    /**
-     * Asserts that two Body documents are equal.
-     */
+    
     public static function assertUrlEqualsUrl(string $expected, string $actual, string $message = ''): void
     {
         $actualUrl = parse_url($actual);
@@ -41,9 +37,7 @@ class TestCase extends PHPUnitTestCase
         self::assertEqualsIgnoringCase($expectedQuery, $actualQuery);
     }
 
-    /**
-     * Asserts that two Body documents are equal.
-     */
+    
     public static function assertRequestEqualsHttpRequest(string $expected, Request $actual, string $message = ''): void
     {
         $expected = explode("\n\n", trim($expected));

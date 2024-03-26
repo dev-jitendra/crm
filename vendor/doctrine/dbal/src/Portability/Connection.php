@@ -7,9 +7,7 @@ use Doctrine\DBAL\Driver\Middleware\AbstractConnectionMiddleware;
 use Doctrine\DBAL\Driver\Result as DriverResult;
 use Doctrine\DBAL\Driver\Statement as DriverStatement;
 
-/**
- * Portability wrapper for a Connection.
- */
+
 final class Connection extends AbstractConnectionMiddleware
 {
     public const PORTABILITY_ALL           = 255;

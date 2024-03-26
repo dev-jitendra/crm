@@ -6,11 +6,7 @@ namespace League\MimeTypeDetection;
 
 class GeneratedExtensionToMimeTypeMap implements ExtensionToMimeTypeMap
 {
-    /**
-     * @var string[]
-     *
-     * @internal
-     */
+    
     public const MIME_TYPES_FOR_EXTENSIONS = [
         '1km' => 'application/vnd.1000minds.decision-model+xml',
         '3dml' => 'text/vnd.in3d.3dml',

@@ -4,27 +4,16 @@ namespace AsyncAws\S3\ValueObject;
 
 use AsyncAws\Core\Exception\InvalidArgument;
 
-/**
- * Container for the request.
- */
+
 final class Delete
 {
-    /**
-     * The objects to delete.
-     */
+    
     private $objects;
 
-    /**
-     * Element to enable quiet mode for the request. When you add this element, you must set its value to true.
-     */
+    
     private $quiet;
 
-    /**
-     * @param array{
-     *   Objects: ObjectIdentifier[],
-     *   Quiet?: null|bool,
-     * } $input
-     */
+    
     public function __construct(array $input)
     {
         $this->objects = isset($input['Objects']) ? array_map([ObjectIdentifier::class, 'create'], $input['Objects']) : null;
@@ -36,9 +25,7 @@ final class Delete
         return $input instanceof self ? $input : new self($input);
     }
 
-    /**
-     * @return ObjectIdentifier[]
-     */
+    
     public function getObjects(): array
     {
         return $this->objects ?? [];
@@ -49,9 +36,7 @@ final class Delete
         return $this->quiet;
     }
 
-    /**
-     * @internal
-     */
+    
     public function requestBody(\DomElement $node, \DomDocument $document): void
     {
         if (null === $v = $this->objects) {

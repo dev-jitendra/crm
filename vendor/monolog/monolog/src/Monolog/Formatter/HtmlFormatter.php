@@ -1,13 +1,6 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Monolog package.
- *
- * (c) Jordi Boggiano <j.boggiano@seld.be>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Monolog\Formatter;
 
@@ -15,18 +8,10 @@ use Monolog\Level;
 use Monolog\Utils;
 use Monolog\LogRecord;
 
-/**
- * Formats incoming records into an HTML table
- *
- * This is especially useful for html email logging
- *
- * @author Tiago Brito <tlfbrito@gmail.com>
- */
+
 class HtmlFormatter extends NormalizerFormatter
 {
-    /**
-     * Translates Monolog log levels to html color priorities.
-     */
+    
     protected function getLevelColor(Level $level): string
     {
         return match ($level) {
@@ -41,22 +26,13 @@ class HtmlFormatter extends NormalizerFormatter
         };
     }
 
-    /**
-     * @param string|null $dateFormat The format of the timestamp: one supported by DateTime::format
-     * @throws \RuntimeException If the function json_encode does not exist
-     */
+    
     public function __construct(?string $dateFormat = null)
     {
         parent::__construct($dateFormat);
     }
 
-    /**
-     * Creates an HTML table row
-     *
-     * @param string $th       Row header content
-     * @param string $td       Row standard cell content
-     * @param bool   $escapeTd false if td content must not be html escaped
-     */
+    
     protected function addRow(string $th, string $td = ' ', bool $escapeTd = true): string
     {
         $th = htmlspecialchars($th, ENT_NOQUOTES, 'UTF-8');
@@ -67,11 +43,7 @@ class HtmlFormatter extends NormalizerFormatter
         return "<tr style=\"padding: 4px;text-align: left;\">\n<th style=\"vertical-align: top;background: #ccc;color: #000\" width=\"100\">$th:</th>\n<td style=\"padding: 4px;text-align: left;vertical-align: top;background: #eee;color: #000\">".$td."</td>\n</tr>";
     }
 
-    /**
-     * Create a HTML h1 tag
-     *
-     * @param string $title Text to be in the h1
-     */
+    
     protected function addTitle(string $title, Level $level): string
     {
         $title = htmlspecialchars($title, ENT_NOQUOTES, 'UTF-8');
@@ -79,11 +51,7 @@ class HtmlFormatter extends NormalizerFormatter
         return '<h1 style="background: '.$this->getLevelColor($level).';color: #ffffff;padding: 5px;" class="monolog-output">'.$title.'</h1>';
     }
 
-    /**
-     * Formats a log record.
-     *
-     * @return string The formatted record
-     */
+    
     public function format(LogRecord $record): string
     {
         $output = $this->addTitle($record->level->getName(), $record->level);
@@ -112,11 +80,7 @@ class HtmlFormatter extends NormalizerFormatter
         return $output.'</table>';
     }
 
-    /**
-     * Formats a set of log records.
-     *
-     * @return string The formatted set of records
-     */
+    
     public function formatBatch(array $records): string
     {
         $message = '';
@@ -127,9 +91,7 @@ class HtmlFormatter extends NormalizerFormatter
         return $message;
     }
 
-    /**
-     * @param mixed $data
-     */
+    
     protected function convertToString($data): string
     {
         if (null === $data || is_scalar($data)) {

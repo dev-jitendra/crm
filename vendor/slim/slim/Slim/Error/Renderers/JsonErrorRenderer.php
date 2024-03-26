@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -19,9 +15,7 @@ use function json_encode;
 use const JSON_PRETTY_PRINT;
 use const JSON_UNESCAPED_SLASHES;
 
-/**
- * Default Slim application JSON Error Renderer
- */
+
 class JsonErrorRenderer extends AbstractErrorRenderer
 {
     public function __invoke(Throwable $exception, bool $displayErrorDetails): string
@@ -38,12 +32,10 @@ class JsonErrorRenderer extends AbstractErrorRenderer
         return (string) json_encode($error, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     }
 
-    /**
-     * @return array<string|int>
-     */
+    
     private function formatExceptionFragment(Throwable $exception): array
     {
-        /** @var int|string $code */
+        
         $code = $exception->getCode();
         return [
             'type' => get_class($exception),

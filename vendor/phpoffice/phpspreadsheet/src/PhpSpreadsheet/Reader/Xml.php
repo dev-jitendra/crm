@@ -22,21 +22,13 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Font;
 use SimpleXMLElement;
 
-/**
- * Reader for SpreadsheetML, the XML schema for Microsoft Office Excel 2003.
- */
+
 class Xml extends BaseReader
 {
-    /**
-     * Formats.
-     *
-     * @var array
-     */
+    
     protected $styles = [];
 
-    /**
-     * Create a new Excel2003XML Reader instance.
-     */
+    
     public function __construct()
     {
         parent::__construct();
@@ -73,18 +65,18 @@ class Xml extends BaseReader
             'gray25' => Fill::FILL_PATTERN_LIGHTGRAY,
             'gray125' => Fill::FILL_PATTERN_GRAY125,
             'gray0625' => Fill::FILL_PATTERN_GRAY0625,
-            'horzstripe' => Fill::FILL_PATTERN_DARKHORIZONTAL, // horizontal stripe
-            'vertstripe' => Fill::FILL_PATTERN_DARKVERTICAL, // vertical stripe
-            'reversediagstripe' => Fill::FILL_PATTERN_DARKUP, // reverse diagonal stripe
-            'diagstripe' => Fill::FILL_PATTERN_DARKDOWN, // diagonal stripe
-            'diagcross' => Fill::FILL_PATTERN_DARKGRID, // diagoanl crosshatch
-            'thickdiagcross' => Fill::FILL_PATTERN_DARKTRELLIS, // thick diagonal crosshatch
+            'horzstripe' => Fill::FILL_PATTERN_DARKHORIZONTAL, 
+            'vertstripe' => Fill::FILL_PATTERN_DARKVERTICAL, 
+            'reversediagstripe' => Fill::FILL_PATTERN_DARKUP, 
+            'diagstripe' => Fill::FILL_PATTERN_DARKDOWN, 
+            'diagcross' => Fill::FILL_PATTERN_DARKGRID, 
+            'thickdiagcross' => Fill::FILL_PATTERN_DARKTRELLIS, 
             'thinhorzstripe' => Fill::FILL_PATTERN_LIGHTHORIZONTAL,
             'thinvertstripe' => Fill::FILL_PATTERN_LIGHTVERTICAL,
             'thinreversediagstripe' => Fill::FILL_PATTERN_LIGHTUP,
             'thindiagstripe' => Fill::FILL_PATTERN_LIGHTDOWN,
-            'thinhorzcross' => Fill::FILL_PATTERN_LIGHTGRID, // thin horizontal crosshatch
-            'thindiagcross' => Fill::FILL_PATTERN_LIGHTTRELLIS, // thin diagonal crosshatch
+            'thinhorzcross' => Fill::FILL_PATTERN_LIGHTGRID, 
+            'thindiagcross' => Fill::FILL_PATTERN_LIGHTTRELLIS, 
         ],
     ];
 
@@ -93,39 +85,33 @@ class Xml extends BaseReader
         return self::$mappings;
     }
 
-    /**
-     * Can the current IReader read the file?
-     *
-     * @param string $pFilename
-     *
-     * @return bool
-     */
+    
     public function canRead($pFilename)
     {
-        //    Office                    xmlns:o="urn:schemas-microsoft-com:office:office"
-        //    Excel                    xmlns:x="urn:schemas-microsoft-com:office:excel"
-        //    XML Spreadsheet            xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
-        //    Spreadsheet component    xmlns:c="urn:schemas-microsoft-com:office:component:spreadsheet"
-        //    XML schema                 xmlns:s="uuid:BDC6E3F0-6DA3-11d1-A2A3-00AA00C14882"
-        //    XML data type            xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882"
-        //    MS-persist recordset    xmlns:rs="urn:schemas-microsoft-com:rowset"
-        //    Rowset                    xmlns:z="#RowsetSchema"
-        //
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
         $signature = [
             '<?xml version="1.0"',
             '<?mso-application progid="Excel.Sheet"?>',
         ];
 
-        // Open file
+        
         $data = file_get_contents($pFilename);
 
-        // Why?
-        //$data = str_replace("'", '"', $data); // fix headers with single quote
+        
+        
 
         $valid = true;
         foreach ($signature as $match) {
-            // every part of the signature must be present
+            
             if (strpos($data, $match) === false) {
                 $valid = false;
 
@@ -133,7 +119,7 @@ class Xml extends BaseReader
             }
         }
 
-        //    Retrieve charset encoding
+        
         if (preg_match('/<?xml.*encoding=[\'"](.*?)[\'"].*?>/m', $data, $matches)) {
             $charSet = strtoupper($matches[1]);
             if (1 == preg_match('/^ISO-8859-\d[\dL]?$/i', $charSet)) {
@@ -146,13 +132,7 @@ class Xml extends BaseReader
         return $valid;
     }
 
-    /**
-     * Check if the file is a valid SimpleXML.
-     *
-     * @param string $pFilename
-     *
-     * @return false|SimpleXMLElement
-     */
+    
     public function trySimpleXMLLoadString($pFilename)
     {
         try {
@@ -169,13 +149,7 @@ class Xml extends BaseReader
         return $xml;
     }
 
-    /**
-     * Reads names of the worksheets from a file, without parsing the whole file to a Spreadsheet object.
-     *
-     * @param string $pFilename
-     *
-     * @return array
-     */
+    
     public function listWorksheetNames($pFilename)
     {
         File::assertFile($pFilename);
@@ -198,13 +172,7 @@ class Xml extends BaseReader
         return $worksheetNames;
     }
 
-    /**
-     * Return worksheet info (Name, Last Column Letter, Last Column Index, Total Rows, Total Columns).
-     *
-     * @param string $pFilename
-     *
-     * @return array
-     */
+    
     public function listWorksheetInfo($pFilename)
     {
         File::assertFile($pFilename);
@@ -269,20 +237,14 @@ class Xml extends BaseReader
         return $worksheetInfo;
     }
 
-    /**
-     * Loads Spreadsheet from file.
-     *
-     * @param string $pFilename
-     *
-     * @return Spreadsheet
-     */
+    
     public function load($pFilename)
     {
-        // Create new Spreadsheet
+        
         $spreadsheet = new Spreadsheet();
         $spreadsheet->removeSheetByIndex(0);
 
-        // Load into this instance
+        
         return $this->loadIntoExisting($pFilename, $spreadsheet);
     }
 
@@ -307,13 +269,7 @@ class Xml extends BaseReader
         return mb_chr((int) hexdec($hex[1]), 'UTF-8');
     }
 
-    /**
-     * Loads from file into Spreadsheet instance.
-     *
-     * @param string $pFilename
-     *
-     * @return Spreadsheet
-     */
+    
     public function loadIntoExisting($pFilename, Spreadsheet $spreadsheet)
     {
         File::assertFile($pFilename);
@@ -430,18 +386,18 @@ class Xml extends BaseReader
                 continue;
             }
 
-            // Create new Worksheet
+            
             $spreadsheet->createSheet();
             $spreadsheet->setActiveSheetIndex($worksheetID);
             if (isset($worksheet_ss['Name'])) {
                 $worksheetName = (string) $worksheet_ss['Name'];
-                //    Use false for $updateFormulaCellReferences to prevent adjustment of worksheet references in
-                //        formula cells... during the load, all formulae should be correct, and we're simply bringing
-                //        the worksheet name in line with the formula, not the reverse
+                
+                
+                
                 $spreadsheet->getActiveSheet()->setTitle($worksheetName, false, false);
             }
 
-            // locally scoped defined names
+            
             if (isset($worksheet->Names[0])) {
                 foreach ($worksheet->Names[0] as $definedName) {
                     $definedName_ss = $definedName->attributes($namespaces['ss']);
@@ -528,15 +484,7 @@ class Xml extends BaseReader
                             if (isset($cellData_ss['Type'])) {
                                 $cellDataType = $cellData_ss['Type'];
                                 switch ($cellDataType) {
-                                    /*
-                                    const TYPE_STRING        = 's';
-                                    const TYPE_FORMULA        = 'f';
-                                    const TYPE_NUMERIC        = 'n';
-                                    const TYPE_BOOL            = 'b';
-                                    const TYPE_NULL            = 'null';
-                                    const TYPE_INLINE        = 'inlineStr';
-                                    const TYPE_ERROR        = 'e';
-                                    */
+                                    
                                     case 'String':
                                         $type = DataType::TYPE_STRING;
 
@@ -594,9 +542,9 @@ class Xml extends BaseReader
                         if (isset($cell_ss['StyleID'])) {
                             $style = (string) $cell_ss['StyleID'];
                             if ((isset($this->styles[$style])) && (!empty($this->styles[$style]))) {
-                                //if (!$spreadsheet->getActiveSheet()->cellExists($columnID . $rowID)) {
-                                //    $spreadsheet->getActiveSheet()->getCell($columnID . $rowID)->setValue(null);
-                                //}
+                                
+                                
+                                
                                 $spreadsheet->getActiveSheet()->getStyle($cellRange)->applyFromArray($this->styles[$style]);
                             }
                         }
@@ -627,7 +575,7 @@ class Xml extends BaseReader
             ++$worksheetID;
         }
 
-        // Globally scoped defined names
+        
         $activeWorksheet = $spreadsheet->setActiveSheetIndex(0);
         if (isset($xml->Names[0])) {
             foreach ($xml->Names[0] as $definedName) {
@@ -642,7 +590,7 @@ class Xml extends BaseReader
             }
         }
 
-        // Return
+        
         return $spreadsheet;
     }
 
@@ -693,9 +641,7 @@ class Xml extends BaseReader
         }
     }
 
-    /**
-     * @param string $styleID
-     */
+    
     private function parseStyleAlignment($styleID, SimpleXMLElement $styleAttributes): void
     {
         $verticalAlignmentStyles = [
@@ -742,9 +688,7 @@ class Xml extends BaseReader
 
     private static $borderPositions = ['top', 'left', 'bottom', 'right'];
 
-    /**
-     * @param $styleID
-     */
+    
     private function parseStyleBorders($styleID, SimpleXMLElement $styleData, array $namespaces): void
     {
         $diagonalDirection = '';
@@ -809,9 +753,7 @@ class Xml extends BaseReader
         }
     }
 
-    /**
-     * @param $styleID
-     */
+    
     private function parseStyleFont(string $styleID, SimpleXMLElement $styleAttributes): void
     {
         foreach ($styleAttributes as $styleAttributeKey => $styleAttributeValue) {
@@ -849,9 +791,7 @@ class Xml extends BaseReader
         }
     }
 
-    /**
-     * @param $styleID
-     */
+    
     private function parseStyleInterior($styleID, SimpleXMLElement $styleAttributes): void
     {
         foreach ($styleAttributes as $styleAttributeKey => $styleAttributeValue) {
@@ -874,9 +814,7 @@ class Xml extends BaseReader
         }
     }
 
-    /**
-     * @param $styleID
-     */
+    
     private function parseStyleNumberFormat($styleID, SimpleXMLElement $styleAttributes): void
     {
         $fromFormats = ['\-', '\ '];

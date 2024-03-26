@@ -1,27 +1,15 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Contracts\Service;
 
 use Psr\Container\ContainerInterface;
 
-/**
- * Implementation of ServiceSubscriberInterface that determines subscribed services from
- * private method return types. Service ids are available as "ClassName::methodName".
- *
- * @author Kevin Bond <kevinbond@gmail.com>
- */
+
 trait ServiceSubscriberTrait
 {
-    /** @var ContainerInterface */
+    
     protected $container;
 
     public static function getSubscribedServices(): array
@@ -47,9 +35,7 @@ trait ServiceSubscriberTrait
         return $services;
     }
 
-    /**
-     * @required
-     */
+    
     public function setContainer(ContainerInterface $container)
     {
         $this->container = $container;

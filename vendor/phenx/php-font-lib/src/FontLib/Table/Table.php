@@ -1,25 +1,14 @@
 <?php
-/**
- * @package php-font-lib
- * @link    https://github.com/PhenX/php-font-lib
- * @author  Fabien Ménager <fabien.menager@gmail.com>
- * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
- */
+
 namespace FontLib\Table;
 
 use FontLib\TrueType\File;
 use FontLib\Font;
 use FontLib\BinaryStream;
 
-/**
- * Generic font table.
- *
- * @package php-font-lib
- */
+
 class Table extends BinaryStream {
-  /**
-   * @var DirectoryEntry
-   */
+  
   protected $entry;
   protected $def = array();
 
@@ -30,9 +19,7 @@ class Table extends BinaryStream {
     $entry->setTable($this);
   }
 
-  /**
-   * @return File
-   */
+  
   public function getFont() {
     return $this->entry->getFont();
   }

@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Routing\Generator;
 
@@ -15,9 +8,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\RequestContext;
 
-/**
- * Generates URLs based on rules dumped by CompiledUrlGeneratorDumper.
- */
+
 class CompiledUrlGenerator extends UrlGenerator
 {
     private array $compiledRoutes = [];

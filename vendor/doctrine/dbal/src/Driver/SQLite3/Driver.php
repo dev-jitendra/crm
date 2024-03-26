@@ -8,9 +8,7 @@ use SQLite3;
 
 final class Driver extends AbstractSQLiteDriver
 {
-    /**
-     * {@inheritdoc}
-     */
+    
     public function connect(array $params): Connection
     {
         $isMemory = (bool) ($params['memory'] ?? false);

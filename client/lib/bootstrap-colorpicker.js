@@ -1,39 +1,22 @@
-/*!
- * Bootstrap Colorpicker v2.5.2
- * https://itsjavi.com/bootstrap-colorpicker/
- *
- * Originally written by (c) 2012 Stefan Petre
- * Licensed under the Apache License v2.0
- * http://www.apache.org/licenses/LICENSE-2.0.txt
- *
- */
+
 
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
-    // AMD. Register as an anonymous module unless amdModuleId is set
+    
     define(["jquery"], function(jq) {
       return (factory(jq));
     });
   } else if (typeof exports === 'object') {
-    // Node. Does not work with strict CommonJS, but
-    // only CommonJS-like environments that support module.exports,
-    // like Node.
+    
+    
+    
     module.exports = factory(require("jquery"));
   } else if (jQuery && !jQuery.fn.colorpicker) {
     factory(jQuery);
   }
 }(this, function($) {
   'use strict';
-  /**
-   * Color manipulation helper class
-   *
-   * @param {Object|String} [val]
-   * @param {Object} [predefinedColors]
-   * @param {String|null} [fallbackColor]
-   * @param {String|null} [fallbackFormat]
-   * @param {Boolean} [hexNumberSignPrefix]
-   * @constructor
-   */
+  
   var Color = function(
     val, predefinedColors, fallbackColor, fallbackFormat, hexNumberSignPrefix) {
     this.fallbackValue = fallbackColor ?
@@ -55,11 +38,11 @@
 
     this.value = this.fallbackValue;
 
-    this.origFormat = null; // original string format
+    this.origFormat = null; 
 
     this.predefinedColors = predefinedColors ? predefinedColors : {};
 
-    // We don't want to share aliases across instances so we extend new object
+    
     this.colors = $.extend({}, Color.webColors, this.predefinedColors);
 
     if (val) {
@@ -71,7 +54,7 @@
     }
 
     if (!this.value) {
-      // Initial value is always black if no arguments are passed or val is empty
+      
       this.value = {
         h: 0,
         s: 0,
@@ -81,7 +64,7 @@
     }
   };
 
-  Color.webColors = { // 140 predefined colors from the HTML Colors spec
+  Color.webColors = { 
     "aliceblue": "f0f8ff",
     "antiquewhite": "faebd7",
     "aqua": "00ffff",
@@ -227,17 +210,13 @@
 
   Color.prototype = {
     constructor: Color,
-    colors: {}, // merged web and predefined colors
+    colors: {}, 
     predefinedColors: {},
-    /**
-     * @return {Object}
-     */
+    
     getValue: function() {
       return this.value;
     },
-    /**
-     * @param {Object} val
-     */
+    
     setValue: function(val) {
       this.value = val;
     },
@@ -269,12 +248,8 @@
     rgbaIsTransparent: function(rgba) {
       return ((rgba.r === 0) && (rgba.g === 0) && (rgba.b === 0) && (rgba.a === 0));
     },
-    // parse a string to HSB
-    /**
-     * @protected
-     * @param {String} strVal
-     * @returns {boolean} Returns true if it could be parsed, false otherwise
-     */
+    
+    
     setColor: function(strVal) {
       strVal = strVal.toLowerCase().trim();
       if (strVal) {
@@ -299,7 +274,7 @@
               this.origFormat = parsedColor.format;
             }
           } else if (this.fallbackValue) {
-            // if parser fails, defaults to fallbackValue if defined, otherwise the value won't be changed
+            
             this.value = this.fallbackValue;
           }
         }
@@ -404,7 +379,7 @@
     toAlias: function(r, g, b, a) {
       var c, rgb = (arguments.length === 0) ? this.toHex(true) : this.toHex(true, r, g, b, a);
 
-      // support predef. colors in non-hex format too, as defined in the alias itself
+      
       var original = this.origFormat === 'alias' ? rgb : this.toString(false, this.origFormat);
 
       for (var alias in this.colors) {
@@ -475,10 +450,7 @@
       var b = Math.round(this.HueToRGB(p, q, tb) * 255);
       return [r, g, b, this._sanitizeNumber(a)];
     },
-    /**
-     * @param {String} strVal
-     * @returns {Object} Object containing h,s,b,a,format properties or FALSE if failed to parse
-     */
+    
     parse: function(strVal) {
       if (arguments.length === 0) {
         return false;
@@ -507,7 +479,7 @@
           if (result instanceof Object) {
             result.format = format;
           }
-          return false; // stop iterating
+          return false; 
         }
         return true;
       });
@@ -524,15 +496,9 @@
         return this.fallbackFormat;
       }
 
-      return 'rgba'; // By default, return a format that will not lose the alpha info
+      return 'rgba'; 
     },
-    /**
-     *
-     * @param {string} [format] (default: rgba)
-     * @param {boolean} [translateAlias] Return real color for pre-defined (non-standard) aliases (default: false)
-     * @param {boolean} [forceRawValue] Forces hashtag prefix when getting hex color (default: false)
-     * @returns {String}
-     */
+    
     toString: function(forceRawValue, format, translateAlias) {
       format = format || this.origFormat || this.fallbackFormat;
       translateAlias = translateAlias || false;
@@ -593,9 +559,9 @@
           break;
       }
     },
-    // a set of RE's that can match strings and generate color tuples.
-    // from John Resig color plugin
-    // https://github.com/jquery/jquery-color/
+    
+    
+    
     stringParsers: [{
       re: /rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*?\)/,
       format: 'rgb',
@@ -693,20 +659,18 @@
     }
   };
 
-  /*
-   * Default plugin options
-   */
+  
   var defaults = {
-    horizontal: false, // horizontal mode layout ?
-    inline: false, //forces to show the colorpicker as an inline element
-    color: false, //forces a color
-    format: false, //forces a format
-    input: 'input', // children input selector
-    container: false, // container selector
-    component: '.add-on, .input-group-addon', // children component selector
-    fallbackColor: false, // fallback color value. null = keeps current color.
-    fallbackFormat: 'hex', // fallback color format
-    hexNumberSignPrefix: true, // put a '#' (number sign) before hex strings
+    horizontal: false, 
+    inline: false, 
+    color: false, 
+    format: false, 
+    input: 'input', 
+    container: false, 
+    component: '.add-on, .input-group-addon', 
+    fallbackColor: false, 
+    fallbackFormat: 'hex', 
+    hexNumberSignPrefix: true, 
     sliders: {
       saturation: {
         maxLeft: 100,
@@ -755,17 +719,11 @@
       '<div class="colorpicker-selectors"></div>' +
       '</div>',
     align: 'right',
-    customClass: null, // custom class added to the colorpicker element
-    colorSelectors: null // custom color aliases
+    customClass: null, 
+    colorSelectors: null 
   };
 
-  /**
-   * Colorpicker component class
-   *
-   * @param {Object|String} element
-   * @param {Object} options
-   * @constructor
-   */
+  
   var Colorpicker = function(element, options) {
     this.element = $(element).addClass('colorpicker-element');
     this.options = $.extend(true, {}, defaults, this.element.data(), options);
@@ -777,13 +735,13 @@
     this.container = (this.options.container === true) ? this.element : this.options.container;
     this.container = (this.container !== false) ? $(this.container) : false;
 
-    // Is the element an input? Should we search inside for any input?
+    
     this.input = this.element.is('input') ? this.element : (this.options.input ?
       this.element.find(this.options.input) : false);
     if (this.input && (this.input.length === 0)) {
       this.input = false;
     }
-    // Set HSB color
+    
     this.color = this.createColor(this.options.color !== false ? this.options.color : this.getValue());
 
     this.format = this.options.format !== false ? this.options.format : this.color.origFormat;
@@ -795,7 +753,7 @@
 
     this.disabled = false;
 
-    // Setup picker
+    
     var $picker = this.picker = $(this.options.template);
     if (this.options.customClass) {
       $picker.addClass(this.options.customClass);
@@ -844,20 +802,20 @@
       }
     }
 
-    // Prevent closing the colorpicker when clicking on itself
+    
     $picker.on('mousedown.colorpicker touchstart.colorpicker', $.proxy(function(e) {
       if (e.target === e.currentTarget) {
         e.preventDefault();
       }
     }, this));
 
-    // Bind click/tap events on the sliders
+    
     $picker.find('.colorpicker-saturation, .colorpicker-hue, .colorpicker-alpha')
       .on('mousedown.colorpicker touchstart.colorpicker', $.proxy(this.mousedown, this));
 
     $picker.appendTo(this.container ? this.container : $('body'));
 
-    // Bind other events
+    
     if (this.input !== false) {
       this.input.on({
         'keyup.colorpicker': $.proxy(this.keyup, this)
@@ -889,7 +847,7 @@
       });
     }
 
-    // for HTML5 input[type='color']
+    
     if ((this.input !== false) && (this.component !== false) && (this.input.attr('type') === 'color')) {
 
       this.input.on({
@@ -939,7 +897,7 @@
     },
     show: function(e) {
       if (this.isDisabled()) {
-        // Don't show the widget if it's disabled (the input)
+        
         return;
       }
       this.picker.addClass('colorpicker-visible').removeClass('colorpicker-hidden');
@@ -963,7 +921,7 @@
     },
     hide: function(e) {
       if ((typeof e !== 'undefined') && e.target) {
-        // Prevent hide if triggered by an event and an element inside the colorpicker has been clicked/touched
+        
         if (
           $(e.currentTarget).parents('.colorpicker').length > 0 ||
           $(e.target).parents('.colorpicker').length > 0
@@ -1056,16 +1014,16 @@
     update: function(force) {
       var val;
       if ((this.getValue(false) !== false) || (force === true)) {
-        // Update input/data only if the current value is not empty
+        
         val = this.updateComponent();
         this.updateInput(val);
         this.updateData(val);
-        this.updatePicker(); // only update picker if value is not empty
+        this.updatePicker(); 
       }
       return val;
 
     },
-    setValue: function(val) { // set color manually
+    setValue: function(val) { 
       this.color = this.createColor(val);
       this.update(true);
       this.element.trigger({
@@ -1074,12 +1032,7 @@
         value: val
       });
     },
-    /**
-     * Creates a new color using the instance options
-     * @protected
-     * @param {String} val
-     * @returns {Color}
-     */
+    
     createColor: function(val) {
       return new Color(
         val ? val : null,
@@ -1098,7 +1051,7 @@
         val = this.element.data('color');
       }
       if ((val === undefined) || (val === '') || (val === null)) {
-        // if not defined or empty, return default
+        
         val = defaultValue;
       }
       return val;
@@ -1148,7 +1101,7 @@
 
       var target = $(e.target);
 
-      //detect the slider and set the limits and callbacks
+      
       var zone = target.closest('div');
       var sl = this.options.horizontal ? this.options.slidersHorz : this.options.sliders;
       if (!zone.is('.colorpicker')) {
@@ -1162,7 +1115,7 @@
           return false;
         }
         var offset = zone.offset();
-        //reference to guide's style
+        
         this.currentSlider.guide = zone.find('i')[0].style;
         this.currentSlider.left = e.pageX - offset.left;
         this.currentSlider.top = e.pageY - offset.top;
@@ -1170,7 +1123,7 @@
           left: e.pageX,
           top: e.pageY
         };
-        //trigger mousemove to move the guide to the current position
+        
         $(window.document).on({
           'mousemove.colorpicker': $.proxy(this.mousemove, this),
           'touchmove.colorpicker': $.proxy(this.mousemove, this),
@@ -1209,22 +1162,22 @@
       if (this.currentSlider.callTop) {
         this.color[this.currentSlider.callTop].call(this.color, top / this.currentSlider.maxTop);
       }
-      // Change format dynamically
-      // Only occurs if user choose the dynamic format by
-      // setting option format to false
+      
+      
+      
       if (
         this.options.format === false &&
         (this.currentSlider.callTop === 'setAlpha' ||
           this.currentSlider.callLeft === 'setAlpha')
       ) {
 
-        // Converting from hex / rgb to rgba
+        
         if (this.color.value.a !== 1) {
           this.format = 'rgba';
           this.color.origFormat = 'rgba';
         }
 
-        // Converting from rgba to hex
+        
         else {
           this.format = 'hex';
           this.color.origFormat = 'hex';
@@ -1265,9 +1218,9 @@
         this.update(true);
       } else {
         this.color = this.createColor(this.input.val());
-        // Change format dynamically
-        // Only occurs if user choose the dynamic format by
-        // setting option format to false
+        
+        
+        
         if (this.color.origFormat && this.options.format === false) {
           this.format = this.color.origFormat;
         }
@@ -1305,9 +1258,9 @@
       if (typeof option === 'string') {
         if ($.isFunction(inst[option])) {
           returnValue = inst[option].apply(inst, apiArgs);
-        } else { // its a property ?
+        } else { 
           if (apiArgs.length) {
-            // set property
+            
             inst[option] = apiArgs[0];
           }
           returnValue = inst[option];

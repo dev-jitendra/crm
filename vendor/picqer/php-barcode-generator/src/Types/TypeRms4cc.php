@@ -2,13 +2,7 @@
 
 namespace Picqer\Barcode\Types;
 
-/*
- * RMS4CC - CBC - KIX
- * RMS4CC (Royal Mail 4-state Customer Code) - CBC (Customer Bar Code) - KIX (Klant index - Customer index)
- * RM4SCC is the name of the barcode symbology used by the Royal Mail for its Cleanmail service.
- * @param $kix (boolean) if true prints the KIX variation (doesn't use the start and end symbols, and the checksum)
- *     - in this case the house number must be sufficed with an X and placed at the end of the code.
- */
+
 
 use Picqer\Barcode\Barcode;
 use Picqer\Barcode\BarcodeBar;
@@ -19,11 +13,11 @@ class TypeRms4cc implements TypeInterface
 
     public function getBarcodeData(string $code): Barcode
     {
-        // bar mode
-        // 1 = pos 1, length 2
-        // 2 = pos 1, length 3
-        // 3 = pos 2, length 1
-        // 4 = pos 2, length 2
+        
+        
+        
+        
+        
         $barmode = [
             '0' => [3, 3, 2, 2],
             '1' => [3, 4, 1, 2],
@@ -69,7 +63,7 @@ class TypeRms4cc implements TypeInterface
         $barcode = new Barcode($code);
 
         if (! $this->kix) {
-            // table for checksum calculation (row,col)
+            
             $checktable = [
                 '0' => [1, 1],
                 '1' => [1, 2],
@@ -121,7 +115,7 @@ class TypeRms4cc implements TypeInterface
             $code .= $chk[0];
             ++$len;
 
-            // start bar
+            
             $barcode->addBar(new BarcodeBar(1, 2, 1));
             $barcode->addBar(new BarcodeBar(1, 2, 0));
         }
@@ -156,7 +150,7 @@ class TypeRms4cc implements TypeInterface
         }
 
         if (! $this->kix) {
-            // stop bar
+            
             $barcode->addBar(new BarcodeBar(1, 3, 1));
         }
 

@@ -1,48 +1,16 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module modules/crm/views/calendar/calendar */
+
+
 
 import View from 'view';
 import moment from 'moment';
 import * as FullCalendar from 'fullcalendar';
 
-/**
- * @typedef {import('@fullcalendar/core/internal-common.js').EventImpl} EventImpl
- */
 
-/**
- * @typedef {import('@fullcalendar/core/internal-common.d.ts').CalendarOptions} CalendarOptions
- */
 
-/**
- * @typedef {import('@fullcalendar/interaction/index.d.ts').ExtraListenerRefiners} ExtraListenerRefiners
- */
+
+
+
 
 class CalendarView extends View {
 
@@ -71,7 +39,7 @@ class CalendarView extends View {
     }
     rangeSeparator = ' – '
 
-    /** @private */
+    
     fetching = false
 
     modeViewMap = {
@@ -96,33 +64,33 @@ class CalendarView extends View {
         'allDayCopy',
     ]
 
-    /** @type {FullCalendar.Calendar} */
+    
     calendar
 
     events = {
-        /** @this CalendarView */
+        
         'click button[data-action="prev"]': function () {
             this.actionPrevious();
         },
-        /** @this CalendarView */
+        
         'click button[data-action="next"]': function () {
             this.actionNext();
         },
-        /** @this CalendarView */
+        
         'click button[data-action="today"]': function () {
             this.actionToday();
         },
-        /** @this CalendarView */
+        
         'click [data-action="mode"]': function (e) {
             const mode = $(e.currentTarget).data('mode');
 
             this.selectMode(mode);
         },
-        /** @this CalendarView */
+        
         'click [data-action="refresh"]': function () {
             this.actionRefresh();
         },
-        /** @this CalendarView */
+        
         'click [data-action="toggleScopeFilter"]': function (e) {
             const $target = $(e.currentTarget);
             const filterName = $target.data('name');
@@ -311,9 +279,7 @@ class CalendarView extends View {
         this.trigger('change:mode', mode);
     }
 
-    /**
-     * @return {module:modules/crm/views/calendar/mode-buttons}
-     */
+    
     getModeButtonsView() {
         return this.getView('modeButtons');
     }
@@ -407,22 +373,7 @@ class CalendarView extends View {
         return title;
     }
 
-    /**
-     * @param {Object.<string, *>} o
-     * @return {{
-     *     recordId,
-     *     dateStart?: string,
-     *     originalColor?: string,
-     *     scope?: string,
-     *     display: string,
-     *     id: string,
-     *     dateEnd?: string,
-     *     dateStartDate?: ?string,
-     *     title: string,
-     *     dateEndDate?: ?string,
-     *     status?: string,
-     * }}
-     */
+    
     convertToFcEvent(o) {
         const event = {
             title: o.name || '',
@@ -503,11 +454,7 @@ class CalendarView extends View {
         return event;
     }
 
-    /**
-     * @private
-     * @param {string|Date} date
-     * @return {moment.Moment}
-     */
+    
     dateToMoment(date)  {
         return moment.tz(
             date,
@@ -515,18 +462,12 @@ class CalendarView extends View {
         );
     }
 
-    /**
-     * @param {string} scope
-     * @return {string[]}
-     */
+    
     getEventTypeCompletedStatusList(scope) {
         return this.getMetadata().get(['scopes', scope, 'completedStatusList']) || [];
     }
 
-    /**
-     * @param {string} scope
-     * @return {string[]}
-     */
+    
     getEventTypeCanceledStatusList(scope) {
         return this.getMetadata().get(['scopes', scope, 'canceledStatusList']) || [];
     }
@@ -589,10 +530,7 @@ class CalendarView extends View {
         ).toString(16).slice(1) + alpha;
     }
 
-    /**
-     * @param {EventImpl} event
-     * @param {boolean} [notInitial]
-     */
+    
     handleAllDay(event, notInitial) {
         let start = event.start ? this.dateToMoment(event.start) : null;
         const end = event.end ? this.dateToMoment(event.end) : null;
@@ -658,11 +596,11 @@ class CalendarView extends View {
             ) {
                 event.allDay = true;
 
-                //if (!notInitial) {
+                
                     if (end.hours() !== 0 || end.minutes() !== 0) {
                         end.add(1, 'days');
                     }
-                //}
+                
             } else {
                 event.allDay = false;
             }
@@ -693,10 +631,7 @@ class CalendarView extends View {
         return events;
     }
 
-    /**
-     * @param {string} date
-     * @return {string}
-     */
+    
     convertDateTime(date) {
         const format = this.getDateTime().internalDateTimeFormat;
         const timeZone = this.getDateTime().timeZone;
@@ -745,7 +680,7 @@ class CalendarView extends View {
             slotLabelFormat = 'h:mmA';
         }
 
-        /** @type {CalendarOptions & Object.<string, *>} */
+        
         const options = {
             headerToolbar: false,
             slotLabelFormat: slotLabelFormat,
@@ -862,7 +797,7 @@ class CalendarView extends View {
                 this.fetchEvents(fromStr, toStr, callback);
             },
             eventDrop: info => {
-                const event = /** @type {EventImpl} */info.event;
+                const event = info.event;
                 const delta = info.delta;
 
                 const scope = event.extendedProps.scope;
@@ -984,7 +919,7 @@ class CalendarView extends View {
 
         if (this.teamIdList) {
             options.eventContent = arg => {
-                const event = /** @type {EventImpl} */arg.event;
+                const event = arg.event;
 
                 const $content = $('<div>');
 
@@ -1054,15 +989,7 @@ class CalendarView extends View {
         }, 150);
     }
 
-    /**
-     * @param {{
-     *   [allDay]: boolean,
-     *   [dateStart]: string,
-     *   [dateEnd]: string,
-     *   [dateStartDate]: ?string,
-     *   [dateEndDate]: ?string,
-     * }} [values]
-     */
+    
     createEvent(values) {
         values = values || {};
 
@@ -1171,10 +1098,7 @@ class CalendarView extends View {
 
         this.applyPropsToEvent(event, data);
     }
-    /**
-     * @param {EventImpl} event
-     * @return {Object.<string, *>}
-     */
+    
     obtainPropsFromEvent(event) {
         const props = {};
 
@@ -1192,10 +1116,7 @@ class CalendarView extends View {
         return props;
     }
 
-    /**
-     * @param {EventImpl} event
-     * @param {Object.<string, *>} props
-     */
+    
     applyPropsToEvent(event, props) {
         if ('start' in props) {
             event.setDates(props.start, props.end, {allDay: props.allDay});

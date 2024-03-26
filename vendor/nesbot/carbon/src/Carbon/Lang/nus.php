@@ -1,13 +1,6 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 return array_replace_recursive(require __DIR__.'/en.php', [
     'meridiem' => ['RW', 'TŊ'],
@@ -26,11 +19,11 @@ return array_replace_recursive(require __DIR__.'/en.php', [
         'LLLL' => 'dddd D MMMM YYYY h:mm a',
     ],
 
-    'year' => ':count jiök', // less reliable
-    'y' => ':count jiök', // less reliable
-    'a_year' => ':count jiök', // less reliable
+    'year' => ':count jiök', 
+    'y' => ':count jiök', 
+    'a_year' => ':count jiök', 
 
-    'month' => ':count pay', // less reliable
-    'm' => ':count pay', // less reliable
-    'a_month' => ':count pay', // less reliable
+    'month' => ':count pay', 
+    'm' => ':count pay', 
+    'a_month' => ':count pay', 
 ]);

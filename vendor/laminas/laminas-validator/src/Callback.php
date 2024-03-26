@@ -11,41 +11,25 @@ use function is_callable;
 
 class Callback extends AbstractValidator
 {
-    /**
-     * Invalid callback
-     */
+    
     public const INVALID_CALLBACK = 'callbackInvalid';
 
-    /**
-     * Invalid value
-     */
+    
     public const INVALID_VALUE = 'callbackValue';
 
-    /**
-     * Validation failure message template definitions
-     *
-     * @var array
-     */
+    
     protected $messageTemplates = [
         self::INVALID_VALUE    => 'The input is not valid',
         self::INVALID_CALLBACK => 'An exception has been raised within the callback',
     ];
 
-    /**
-     * Default options to set for the validator
-     *
-     * @var mixed
-     */
+    
     protected $options = [
-        'callback'        => null, // Callback in a call_user_func format, string || array
-        'callbackOptions' => [], // Options for the callback
+        'callback'        => null, 
+        'callbackOptions' => [], 
     ];
 
-    /**
-     * Constructor
-     *
-     * @param array|callable $options
-     */
+    
     public function __construct($options = null)
     {
         if (is_callable($options)) {
@@ -55,23 +39,13 @@ class Callback extends AbstractValidator
         parent::__construct($options);
     }
 
-    /**
-     * Returns the set callback
-     *
-     * @return mixed
-     */
+    
     public function getCallback()
     {
         return $this->options['callback'];
     }
 
-    /**
-     * Sets the callback
-     *
-     * @param  string|array|callable $callback
-     * @return $this Provides a fluent interface
-     * @throws InvalidArgumentException
-     */
+    
     public function setCallback($callback)
     {
         if (! is_callable($callback)) {
@@ -82,36 +56,20 @@ class Callback extends AbstractValidator
         return $this;
     }
 
-    /**
-     * Returns the set options for the callback
-     *
-     * @return mixed
-     */
+    
     public function getCallbackOptions()
     {
         return $this->options['callbackOptions'];
     }
 
-    /**
-     * Sets options for the callback
-     *
-     * @return $this Provides a fluent interface
-     */
+    
     public function setCallbackOptions(mixed $options)
     {
         $this->options['callbackOptions'] = (array) $options;
         return $this;
     }
 
-    /**
-     * Returns true if and only if the set callback returns
-     * for the provided $value
-     *
-     * @param  mixed $value
-     * @param  mixed $context Additional context to provide to the callback
-     * @return bool
-     * @throws InvalidArgumentException
-     */
+    
     public function isValid($value, $context = null)
     {
         $this->setValue($value);

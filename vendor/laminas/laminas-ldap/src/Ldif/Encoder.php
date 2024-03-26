@@ -30,55 +30,37 @@ use const CASE_LOWER;
 use const PHP_EOL;
 use const SORT_STRING;
 
-/**
- * Laminas\Ldap\Ldif\Encoder provides methods to encode and decode LDAP data into/from Ldif.
- */
+
 class Encoder
 {
-    /**
-     * Additional options used during encoding
-     *
-     * @var array
-     */
+    
     protected $options = [
         'sort'    => true,
         'version' => 1,
         'wrap'    => 78,
     ];
 
-    /** @var bool */
+    
     protected $versionWritten = false;
 
-    /**
-     * @param  array $options Additional options used during encoding
-     */
+    
     protected function __construct(array $options = [])
     {
         $this->options = array_merge($this->options, $options);
     }
 
-    /**
-     * Decodes the string $string into an array of Ldif items
-     *
-     * @param  string $string
-     * @return array
-     */
+    
     public static function decode($string)
     {
         $encoder = new static([]);
         return $encoder->_decode($string);
     }
 
-    /**
-     * Decodes the string $string into an array of Ldif items
-     *
-     * @param  string $string
-     * @return array
-     */
-    // @codingStandardsIgnoreStart
+    
+    
     protected function _decode($string)
     {
-        // @codingStandardsIgnoreEnd
+        
         $items     = [];
         $item      = [];
         $last      = null;
@@ -118,12 +100,7 @@ class Encoder
         return count($items) > 1 ? $items : $items[0];
     }
 
-    /**
-     * Pushes a decoded attribute to the stack
-     *
-     * @param array $attribute
-     * @param array $entry
-     */
+    
     protected function pushAttribute(array $attribute, array &$entry)
     {
         $name  = $attribute[0];
@@ -141,13 +118,7 @@ class Encoder
         }
     }
 
-    /**
-     * Encode $value into a Ldif representation
-     *
-     * @param  mixed $value   The value to be encoded
-     * @param  array $options Additional options used during encoding
-     * @return string The encoded value
-     */
+    
     public static function encode($value, array $options = [])
     {
         $encoder = new static($options);
@@ -155,17 +126,11 @@ class Encoder
         return $encoder->_encode($value);
     }
 
-    /**
-     * Recursive driver which determines the type of value to be encoded
-     * and then dispatches to the appropriate method.
-     *
-     * @param  mixed $value The value to be encoded
-     * @return string Encoded value
-     */
-    // @codingStandardsIgnoreStart
+    
+    
     protected function _encode($value)
     {
-        // @codingStandardsIgnoreEnd
+        
         if (is_scalar($value)) {
             return $this->encodeString($value);
         } elseif (is_array($value)) {
@@ -177,15 +142,7 @@ class Encoder
         return null;
     }
 
-    /**
-     * Encodes $string according to RFC2849
-     *
-     * @link http://www.faqs.org/rfcs/rfc2849.html
-     *
-     * @param  scalar $string
-     * @param  bool $base64
-     * @return string
-     */
+    
     protected function encodeString($string, &$base64 = null)
     {
         $string = (string) $string;
@@ -193,20 +150,9 @@ class Encoder
             return '';
         }
 
-        /*
-         * SAFE-INIT-CHAR = %x01-09 / %x0B-0C / %x0E-1F /
-         *                  %x21-39 / %x3B / %x3D-7F
-         *                ; any value <= 127 except NUL, LF, CR,
-         *                ; SPACE, colon (":", ASCII 58 decimal)
-         *                ; and less-than ("<" , ASCII 60 decimal)
-         *
-         */
+        
         $unsafeInitChar = [0, 10, 13, 32, 58, 60];
-        /*
-         * SAFE-CHAR      = %x01-09 / %x0B-0C / %x0E-7F
-         *                ; any value <= 127 decimal except NUL, LF,
-         *                ; and CR
-         */
+        
         $unsafeChar = [0, 10, 13];
 
         $base64 = false;
@@ -223,7 +169,7 @@ class Encoder
                 break;
             }
         }
-        // Test for ending space
+        
         if (substr($string, -1) === ' ') {
             $base64 = true;
         }
@@ -235,15 +181,7 @@ class Encoder
         return $string;
     }
 
-    /**
-     * Encodes an attribute with $name and $value according to RFC2849
-     *
-     * @link http://www.faqs.org/rfcs/rfc2849.html
-     *
-     * @param  string       $name
-     * @param  array|string $value
-     * @return string
-     */
+    
     protected function encodeAttribute($name, $value)
     {
         if (! is_array($value)) {
@@ -274,14 +212,7 @@ class Encoder
         return trim($output, PHP_EOL);
     }
 
-    /**
-     * Encodes a collection of attributes according to RFC2849
-     *
-     * @link http://www.faqs.org/rfcs/rfc2849.html
-     *
-     * @param  array $attributes
-     * @return string
-     */
+    
     protected function encodeAttributes(array $attributes)
     {
         $string     = '';

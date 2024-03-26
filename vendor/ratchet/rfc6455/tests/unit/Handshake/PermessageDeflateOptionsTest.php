@@ -20,10 +20,7 @@ class PermessageDeflateOptionsTest extends TestCase
         ];
     }
 
-    /**
-     * @requires function deflate_init
-     * @dataProvider versionSupportProvider
-     */
+    
     public function testVersionSupport($version, $supported) {
         $this->assertEquals($supported, PermessageDeflateOptions::permessageDeflateSupported($version));
     }

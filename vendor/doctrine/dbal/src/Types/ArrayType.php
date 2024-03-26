@@ -15,33 +15,23 @@ use function unserialize;
 use const E_DEPRECATED;
 use const E_USER_DEPRECATED;
 
-/**
- * Type that maps a PHP array to a clob SQL type.
- *
- * @deprecated Use {@link JsonType} instead.
- */
+
 class ArrayType extends Type
 {
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {
         return $platform->getClobTypeDeclarationSQL($column);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        // @todo 3.0 - $value === null check to save real NULL in database
+        
         return serialize($value);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         if ($value === null) {
@@ -65,24 +55,18 @@ class ArrayType extends Type
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getName()
     {
         return Types::ARRAY;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated
-     */
+    
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5509',
+            'https:
             '%s is deprecated.',
             __METHOD__,
         );

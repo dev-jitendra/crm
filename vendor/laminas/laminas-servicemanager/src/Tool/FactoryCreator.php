@@ -37,12 +37,7 @@ class FactoryCreator
 
         class %sFactory implements FactoryInterface
         {
-            /**
-             * @param ContainerInterface $container
-             * @param string $requestedName
-             * @param null|array $options
-             * @return %s
-             */
+            
             public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
             {
                 return new %s(%s);
@@ -56,10 +51,7 @@ class FactoryCreator
         ContainerInterface::class,
     ];
 
-    /**
-     * @param string $className
-     * @return string
-     */
+    
     public function createFactory($className)
     {
         $class = $this->getClassName($className);
@@ -80,10 +72,7 @@ class FactoryCreator
         return substr($className, strrpos($className, '\\') + 1);
     }
 
-    /**
-     * @param string $className
-     * @return array
-     */
+    
     private function getConstructorParameters($className)
     {
         $reflectionClass = new ReflectionClass($className);
@@ -130,10 +119,7 @@ class FactoryCreator
         }, $constructorParameters);
     }
 
-    /**
-     * @param string $className
-     * @return string
-     */
+    
     private function createArgumentString($className)
     {
         $arguments = array_map(static fn(string $dependency): string

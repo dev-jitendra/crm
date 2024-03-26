@@ -9,9 +9,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 final class AsciiStringType extends StringType
 {
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return $platform->getAsciiStringTypeDeclarationSQL($column);

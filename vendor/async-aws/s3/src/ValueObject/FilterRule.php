@@ -5,31 +5,16 @@ namespace AsyncAws\S3\ValueObject;
 use AsyncAws\Core\Exception\InvalidArgument;
 use AsyncAws\S3\Enum\FilterRuleName;
 
-/**
- * Specifies the Amazon S3 object key name to filter on and whether to filter on the suffix or prefix of the key name.
- */
+
 final class FilterRule
 {
-    /**
-     * The object key name prefix or suffix identifying one or more objects to which the filtering rule applies. The maximum
-     * length is 1,024 characters. Overlapping prefixes and suffixes are not supported. For more information, see
-     * Configuring Event Notifications in the *Amazon Simple Storage Service Developer Guide*.
-     *
-     * @see https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html
-     */
+    
     private $name;
 
-    /**
-     * The value that the filter searches for in object key names.
-     */
+    
     private $value;
 
-    /**
-     * @param array{
-     *   Name?: null|FilterRuleName::*,
-     *   Value?: null|string,
-     * } $input
-     */
+    
     public function __construct(array $input)
     {
         $this->name = $input['Name'] ?? null;
@@ -41,9 +26,7 @@ final class FilterRule
         return $input instanceof self ? $input : new self($input);
     }
 
-    /**
-     * @return FilterRuleName::*|null
-     */
+    
     public function getName(): ?string
     {
         return $this->name;
@@ -54,9 +37,7 @@ final class FilterRule
         return $this->value;
     }
 
-    /**
-     * @internal
-     */
+    
     public function requestBody(\DomElement $node, \DomDocument $document): void
     {
         if (null !== $v = $this->name) {

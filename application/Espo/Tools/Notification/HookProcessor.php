@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\Notification;
 
@@ -41,16 +15,14 @@ use Espo\Entities\User;
 use Espo\Entities\Notification;
 use Espo\Core\ORM\Entity as CoreEntity;
 
-/**
- * Handles operations with entities.
- */
+
 class HookProcessor
 {
-    /** @var array<string, AssignmentNotificator<Entity>> */
+    
     private $notificatorsHash = [];
-    /** @var array<string, bool> */
+    
     private $hasStreamCache = [];
-    /** @var array<string, string> */
+    
     private $userNameHash = [];
 
     public function __construct(
@@ -62,9 +34,7 @@ class HookProcessor
         private User $user
     ) {}
 
-    /**
-     * @param array<string, mixed> $options
-     */
+    
     public function afterSave(Entity $entity, array $options): void
     {
         $entityType = $entity->getEntityType();
@@ -73,10 +43,7 @@ class HookProcessor
             return;
         }
 
-        /**
-         * No need to process assignment notifications for entity types that have Stream enabled.
-         * Users are notified via Stream notifications.
-         */
+        
         if (
             $this->checkHasStream($entityType) &&
             !$entity->hasLinkMultipleField('assignedUsers') &&
@@ -94,7 +61,7 @@ class HookProcessor
         $notificator = $this->getNotificator($entityType);
 
         if (!$notificator instanceof AssignmentNotificator) {
-            // For backward compatibility.
+            
             $notificator->process($entity, $options);
 
             return;
@@ -105,9 +72,7 @@ class HookProcessor
         $notificator->process($entity, $params);
     }
 
-    /**
-     * @param array<string, mixed> $options
-     */
+    
     public function beforeRemove(Entity $entity, array $options): void
     {
         $entityType = $entity->getEntityType();
@@ -175,9 +140,7 @@ class HookProcessor
         return $this->hasStreamCache[$entityType];
     }
 
-    /**
-     * @return AssignmentNotificator<Entity>
-     */
+    
     private function getNotificator(string $entityType): object
     {
         if (empty($this->notificatorsHash[$entityType])) {
@@ -196,7 +159,7 @@ class HookProcessor
         }
 
         if (!array_key_exists($id, $this->userNameHash)) {
-            /** @var ?User $user */
+            
             $user = $this->entityManager->getEntityById(User::ENTITY_TYPE, $id);
 
             if ($user) {

@@ -1,24 +1,12 @@
 <?php
 
-/**
- *
- * Function code for the matrix multiplication operation
- *
- * @copyright  Copyright (c) 2018 Mark Baker (https://github.com/MarkBaker/PHPMatrix)
- * @license    https://opensource.org/licenses/MIT    MIT
- */
+
 
 namespace Matrix;
 
 use Matrix\Operators\Multiplication;
 
-/**
- * Multiplies two or more matrices
- *
- * @param array<int, mixed> $matrixValues The matrices to multiply
- * @return Matrix
- * @throws Exception
- */
+
 function multiply(...$matrixValues): Matrix
 {
     if (count($matrixValues) < 2) {

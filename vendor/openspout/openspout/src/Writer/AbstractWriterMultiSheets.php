@@ -15,13 +15,7 @@ abstract class AbstractWriterMultiSheets extends AbstractWriter
 {
     private WorkbookManagerInterface $workbookManager;
 
-    /**
-     * Returns all the workbook's sheets.
-     *
-     * @return Sheet[] All the workbook's sheets
-     *
-     * @throws WriterNotOpenedException If the writer has not been opened yet
-     */
+    
     final public function getSheets(): array
     {
         $this->throwIfWorkbookIsNotAvailable();
@@ -36,14 +30,7 @@ abstract class AbstractWriterMultiSheets extends AbstractWriter
         return $externalSheets;
     }
 
-    /**
-     * Creates a new sheet and make it the current sheet. The data will now be written to this sheet.
-     *
-     * @return Sheet The created sheet
-     *
-     * @throws IOException
-     * @throws WriterNotOpenedException If the writer has not been opened yet
-     */
+    
     final public function addNewSheetAndMakeItCurrent(): Sheet
     {
         $this->throwIfWorkbookIsNotAvailable();
@@ -52,13 +39,7 @@ abstract class AbstractWriterMultiSheets extends AbstractWriter
         return $worksheet->getExternalSheet();
     }
 
-    /**
-     * Returns the current sheet.
-     *
-     * @return Sheet The current sheet
-     *
-     * @throws WriterNotOpenedException If the writer has not been opened yet
-     */
+    
     final public function getCurrentSheet(): Sheet
     {
         $this->throwIfWorkbookIsNotAvailable();
@@ -66,15 +47,7 @@ abstract class AbstractWriterMultiSheets extends AbstractWriter
         return $this->workbookManager->getCurrentWorksheet()->getExternalSheet();
     }
 
-    /**
-     * Sets the given sheet as the current one. New data will be written to this sheet.
-     * The writing will resume where it stopped (i.e. data won't be truncated).
-     *
-     * @param Sheet $sheet The sheet to set as current
-     *
-     * @throws SheetNotFoundException   If the given sheet does not exist in the workbook
-     * @throws WriterNotOpenedException If the writer has not been opened yet
-     */
+    
     final public function setCurrentSheet(Sheet $sheet): void
     {
         $this->throwIfWorkbookIsNotAvailable();
@@ -91,9 +64,7 @@ abstract class AbstractWriterMultiSheets extends AbstractWriter
         }
     }
 
-    /**
-     * @throws Exception\WriterException
-     */
+    
     protected function addRowToWriter(Row $row): void
     {
         $this->throwIfWorkbookIsNotAvailable();
@@ -107,11 +78,7 @@ abstract class AbstractWriterMultiSheets extends AbstractWriter
         }
     }
 
-    /**
-     * Checks if the workbook has been created. Throws an exception if not created yet.
-     *
-     * @throws WriterNotOpenedException If the workbook is not created yet
-     */
+    
     private function throwIfWorkbookIsNotAvailable(): void
     {
         if (!isset($this->workbookManager)) {

@@ -55,41 +55,25 @@ use Psr\Log\NullLogger;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-/**
- * Factory that instantiate API clients.
- *
- * @author Tobias Nyholm <tobias.nyholm@gmail.com>
- */
+
 class AwsClientFactory
 {
-    /**
-     * @var array<string, mixed>
-     */
+    
     private $serviceCache;
 
-    /**
-     * @var HttpClientInterface
-     */
+    
     private $httpClient;
 
-    /**
-     * @var Configuration
-     */
+    
     private $configuration;
 
-    /**
-     * @var CredentialProvider
-     */
+    
     private $credentialProvider;
 
-    /**
-     * @var LoggerInterface|null
-     */
+    
     private $logger;
 
-    /**
-     * @param Configuration|array<Configuration::OPTION_*, string|null> $configuration
-     */
+    
     public function __construct($configuration = [], ?CredentialProvider $credentialProvider = null, ?HttpClientInterface $httpClient = null, ?LoggerInterface $logger = null)
     {
         if (\is_array($configuration)) {

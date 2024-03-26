@@ -1,23 +1,10 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Polyfill\Php80;
 
-/**
- * @author Ion Bazan <ion.bazan@gmail.com>
- * @author Nico Oelgart <nicoswd@gmail.com>
- * @author Nicolas Grekas <p@tchwork.com>
- *
- * @internal
- */
+
 final class Php80
 {
     public static function fdiv(float $dividend, float $divisor): float

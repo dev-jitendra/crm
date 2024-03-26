@@ -4,18 +4,10 @@ namespace PhpOffice\PhpSpreadsheet\Shared\Escher;
 
 class DgContainer
 {
-    /**
-     * Drawing index, 1-based.
-     *
-     * @var int
-     */
+    
     private $dgId;
 
-    /**
-     * Last shape index in this drawing.
-     *
-     * @var int
-     */
+    
     private $lastSpId;
 
     private $spgrContainer;

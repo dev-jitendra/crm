@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Entities;
 
@@ -63,9 +37,7 @@ class User extends Person
         return (bool) $this->get('isActive');
     }
 
-    /**
-     * @deprecated Use `isPortal`.
-     */
+    
     public function isPortalUser(): bool
     {
         return $this->isPortal();
@@ -76,18 +48,14 @@ class User extends Person
         return $this->get('type');
     }
 
-    /**
-     * Is regular user.
-     */
+    
     public function isRegular(): bool
     {
         return $this->getType() === self::TYPE_REGULAR ||
             ($this->has('type') && !$this->getType());
     }
 
-    /**
-     * Is admin, super-admin or system user.
-     */
+    
     public function isAdmin(): bool
     {
         return $this->getType() === self::TYPE_ADMIN ||
@@ -95,33 +63,25 @@ class User extends Person
             $this->isSuperAdmin();
     }
 
-    /**
-     * Is portal user.
-     */
+    
     public function isPortal(): bool
     {
         return $this->getType() === self::TYPE_PORTAL;
     }
 
-    /**
-     * Is API user.
-     */
+    
     public function isApi(): bool
     {
         return $this->getType() === self::TYPE_API;
     }
 
-    /**
-     * Is system user.
-     */
+    
     public function isSystem(): bool
     {
         return $this->getType() === self::TYPE_SYSTEM;
     }
 
-    /**
-     * Is super-admin user.
-     */
+    
     public function isSuperAdmin(): bool
     {
         return $this->getType() === self::TYPE_SUPER_ADMIN;
@@ -129,40 +89,38 @@ class User extends Person
 
     public function getRoles(): LinkMultiple
     {
-        /** @var LinkMultiple */
+        
         return $this->getValueObject('roles');
     }
 
     public function getDefaultTeam(): ?Link
     {
-        /** @var ?Link */
+        
         return $this->getValueObject('defaultTeam');
     }
 
     public function getWorkingTimeCalendar(): ?Link
     {
-        /** @var ?Link */
+        
         return $this->getValueObject('workingTimeCalendar');
     }
 
     public function getLayoutSet(): ?Link
     {
-        /** @var ?Link */
+        
         return $this->getValueObject('layoutSet');
     }
 
     public function getTeams(): LinkMultiple
     {
-        /** @var LinkMultiple */
+        
         return $this->getValueObject('teams');
     }
 
-    /**
-     * @return string[]
-     */
+    
     public function getTeamIdList(): array
     {
-        /** @var string[] */
+        
         return $this->getLinkMultipleIdList('teams');
     }
 
@@ -182,7 +140,7 @@ class User extends Person
 
     public function getPortals(): LinkMultiple
     {
-        /** @var LinkMultiple */
+        
         return $this->getValueObject('portals');
     }
 
@@ -245,15 +203,13 @@ class User extends Person
 
     public function getContact(): ?Link
     {
-        /** @var ?Link $value */
+        
         $value = $this->getValueObject('contact');
 
         return $value;
     }
 
-    /**
-     * Get a portal ID of the currently logged user.
-     */
+    
     public function getPortalId(): ?string
     {
         return $this->get('portalId');
@@ -261,15 +217,13 @@ class User extends Person
 
     public function getAccounts(): LinkMultiple
     {
-        /** @var LinkMultiple $value */
+        
         $value = $this->getValueObject('accounts');
 
         return $value;
     }
 
-    /**
-     * @return ?string
-     */
+    
     protected function _getName()
     {
         if (!$this->hasInContainer('name') || !$this->getFromContainer('name')) {
@@ -281,9 +235,7 @@ class User extends Person
         return $this->getFromContainer('name');
     }
 
-    /**
-     * @return bool
-     */
+    
     protected function _hasName()
     {
         if ($this->hasInContainer('name')) {

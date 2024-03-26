@@ -7,9 +7,7 @@ use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpClient\RetryableHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-/**
- * @author Jérémy Derussé <jeremy@derusse.com>
- */
+
 class AwsHttpClientFactory
 {
     public static function createRetryableClient(?HttpClientInterface $httpClient = null, ?LoggerInterface $logger = null): HttpClientInterface
@@ -18,7 +16,7 @@ class AwsHttpClientFactory
             $httpClient = HttpClient::create();
         }
         if (class_exists(RetryableHttpClient::class)) {
-            /** @psalm-suppress MissingDependency */
+            
             $httpClient = new RetryableHttpClient(
                 $httpClient,
                 new AwsRetryStrategy(),

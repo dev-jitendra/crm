@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Job;
 
@@ -41,12 +15,10 @@ use DateInterval;
 use RuntimeException;
 use TypeError;
 
-/**
- * Creates a job record in database.
- */
+
 class JobScheduler
 {
-    /** @var ?class-string */
+    
     private ?string $className = null;
     private ?string $queue = null;
     private ?string $group = null;
@@ -57,11 +29,7 @@ class JobScheduler
     public function __construct(private EntityManager $entityManager)
     {}
 
-    /**
-     * A class name of the job. Should implement the `Job` interface.
-     *
-     * @param class-string<Job|JobDataLess> $className
-     */
+    
     public function setClassName(string $className): self
     {
         if (!class_exists($className)) {
@@ -82,11 +50,7 @@ class JobScheduler
         return $this;
     }
 
-    /**
-     * In what queue to run the job.
-     *
-     * @param ?string $queue A queue name. Available names are defined in the `QueueName` class.
-     */
+    
     public function setQueue(?string $queue): self
     {
         $this->queue = $queue;
@@ -94,12 +58,7 @@ class JobScheduler
         return $this;
     }
 
-    /**
-     * In what group to run the job. Jobs within a group will run one-by-one. Jobs with different group
-     * can run in parallel. The job can't have both queue and group set.
-     *
-     * @param ?string $group A group. Any string ID value can be used as a group name. E.g. a user ID.
-     */
+    
     public function setGroup(?string $group): self
     {
         $this->group = $group;
@@ -107,9 +66,7 @@ class JobScheduler
         return $this;
     }
 
-    /**
-     * Set an execution time. If not set, then the current time will be used.
-     */
+    
     public function setTime(?DateTimeInterface $time): self
     {
         $timeCopy = $time;
@@ -118,16 +75,14 @@ class JobScheduler
             $timeCopy = DateTimeImmutable::createFromMutable($time);
         }
 
-        /** @var ?DateTimeImmutable $timeCopy */
+        
 
         $this->time = $timeCopy;
 
         return $this;
     }
 
-    /**
-     * Set an execution delay.
-     */
+    
     public function setDelay(?DateInterval $delay): self
     {
         $this->delay = $delay;
@@ -135,14 +90,10 @@ class JobScheduler
         return $this;
     }
 
-    /**
-     * Set data to be passed to the job.
-     *
-     * @param Data|array<string, mixed>|null $data
-     */
+    
     public function setData($data): self
     {
-        /** @var mixed $data */
+        
 
         if (!is_null($data) && !is_array($data) && !$data instanceof Data) {
             throw new TypeError();
@@ -175,7 +126,7 @@ class JobScheduler
 
         $data = $this->data ?? Data::create();
 
-        /** @var JobEntity */
+        
         return $this->entityManager->createEntity(JobEntity::ENTITY_TYPE, [
             'name' => $this->className,
             'className' => $this->className,

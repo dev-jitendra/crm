@@ -17,54 +17,19 @@ use function trigger_error;
 
 use const E_USER_DEPRECATED;
 
-/**
- * Abstract plugin manager.
- *
- * Abstract PluginManagerInterface implementation providing:
- *
- * - creation context support. The constructor accepts the parent container
- *   instance, which is then used when creating instances.
- * - plugin validation. Implementations may define the `$instanceOf` property
- *   to indicate what class types constitute valid plugins, omitting the
- *   requirement to define the `validate()` method.
- *
- * The implementation extends `ServiceManager`, thus providing the same set
- * of capabilities as found in that implementation.
- *
- * @template InstanceType
- * @implements PluginManagerInterface<InstanceType>
- * @psalm-import-type ServiceManagerConfiguration from ServiceManager
- * @psalm-suppress PropertyNotSetInConstructor
- */
+
 abstract class AbstractPluginManager extends ServiceManager implements PluginManagerInterface
 {
-    /**
-     * Whether or not to auto-add a FQCN as an invokable if it exists.
-     *
-     * @var bool
-     */
+    
     protected $autoAddInvokableClass = true;
 
-    /**
-     * An object type that the created instance must be instanced of
-     *
-     * @var null|string
-     * @psalm-var null|class-string<InstanceType>
-     */
+    
     protected $instanceOf;
 
-    /**
-     * Sets the provided $parentLocator as the creation context for all
-     * factories; for $config, {@see \Laminas\ServiceManager\ServiceManager::configure()}
-     * for details on its accepted structure.
-     *
-     * @param null|ConfigInterface|ContainerInterface $configInstanceOrParentLocator
-     * @param array $config
-     * @psalm-param ServiceManagerConfiguration $config
-     */
+    
     public function __construct($configInstanceOrParentLocator = null, array $config = [])
     {
-        /** @psalm-suppress DocblockTypeContradiction */
+        
         if (
             null !== $configInstanceOrParentLocator
             && ! $configInstanceOrParentLocator instanceof ConfigInterface
@@ -103,17 +68,7 @@ abstract class AbstractPluginManager extends ServiceManager implements PluginMan
             : $this;
     }
 
-    /**
-     * Override configure() to validate service instances.
-     *
-     * @param  array $config
-     * @psalm-param ServiceManagerConfiguration $config
-     * @return self
-     * @throws InvalidServiceException If an instance passed in the `services` configuration is invalid for the
-     *                                 plugin manager.
-     * @throws ContainerModificationsNotAllowedException If the allow override flag has been toggled off, and a
-     *                                                   service instanceexists for a given service.
-     */
+    
     public function configure(array $config)
     {
         if (isset($config['services'])) {
@@ -127,31 +82,14 @@ abstract class AbstractPluginManager extends ServiceManager implements PluginMan
         return $this;
     }
 
-    /**
-     * Override setService for additional plugin validation.
-     *
-     * {@inheritDoc}
-     *
-     * @param string|class-string<InstanceType> $name
-     * @param InstanceType $service
-     */
+    
     public function setService($name, $service)
     {
         $this->validate($service);
         parent::setService($name, $service);
     }
 
-    /**
-     * @param class-string<InstanceType>|string $name Service name of plugin to retrieve.
-     * @param null|array<mixed> $options Options to use when creating the instance.
-     * @return mixed
-     * @psalm-return ($name is class-string<InstanceType> ? InstanceType : mixed)
-     * @throws Exception\ServiceNotFoundException If the manager does not have
-     *     a service definition for the instance, and the service is not
-     *     auto-invokable.
-     * @throws InvalidServiceException If the plugin created is invalid for the
-     *     plugin context.
-     */
+    
     public function get($name, ?array $options = null)
     {
         if (! $this->has($name)) {
@@ -171,11 +109,7 @@ abstract class AbstractPluginManager extends ServiceManager implements PluginMan
         return $instance;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @psalm-assert InstanceType $instance
-     */
+    
     public function validate(mixed $instance)
     {
         if (method_exists($this, 'validatePlugin')) {
@@ -199,16 +133,7 @@ abstract class AbstractPluginManager extends ServiceManager implements PluginMan
         ));
     }
 
-    /**
-     * Implemented for backwards compatibility only.
-     *
-     * Returns the creation context.
-     *
-     * @deprecated since 3.0.0. The creation context should be passed during
-     *     instantiation instead.
-     *
-     * @return void
-     */
+    
     public function setServiceLocator(ContainerInterface $container)
     {
         trigger_error(sprintf(

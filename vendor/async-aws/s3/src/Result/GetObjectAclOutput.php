@@ -11,21 +11,15 @@ use AsyncAws\S3\ValueObject\Owner;
 
 class GetObjectAclOutput extends Result
 {
-    /**
-     * Container for the bucket owner's display name and ID.
-     */
+    
     private $owner;
 
-    /**
-     * A list of grants.
-     */
+    
     private $grants = [];
 
     private $requestCharged;
 
-    /**
-     * @return Grant[]
-     */
+    
     public function getGrants(): array
     {
         $this->initialize();
@@ -40,9 +34,7 @@ class GetObjectAclOutput extends Result
         return $this->owner;
     }
 
-    /**
-     * @return RequestCharged::*|null
-     */
+    
     public function getRequestCharged(): ?string
     {
         $this->initialize();
@@ -64,9 +56,7 @@ class GetObjectAclOutput extends Result
         $this->grants = !$data->AccessControlList ? [] : $this->populateResultGrants($data->AccessControlList);
     }
 
-    /**
-     * @return Grant[]
-     */
+    
     private function populateResultGrants(\SimpleXMLElement $xml): array
     {
         $items = [];

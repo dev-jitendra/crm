@@ -7,11 +7,7 @@ use PhpOffice\PhpSpreadsheet\Settings;
 
 class XmlScanner
 {
-    /**
-     * String used to identify risky xml elements.
-     *
-     * @var string
-     */
+    
     private $pattern;
 
     private $callback;
@@ -24,7 +20,7 @@ class XmlScanner
 
         $this->disableEntityLoaderCheck();
 
-        // A fatal error will bypass the destructor, so we register a shutdown here
+        
         register_shutdown_function([__CLASS__, 'shutdown']);
     }
 
@@ -109,20 +105,14 @@ class XmlScanner
         return $xml;
     }
 
-    /**
-     * Scan the XML for use of <!ENTITY to prevent XXE/XEE attacks.
-     *
-     * @param mixed $xml
-     *
-     * @return string
-     */
+    
     public function scan($xml)
     {
         $this->disableEntityLoaderCheck();
 
         $xml = $this->toUtf8($xml);
 
-        // Don't rely purely on libxml_disable_entity_loader()
+        
         $pattern = '/\\0?' . implode('\\0?', str_split($this->pattern)) . '\\0?/';
 
         if (preg_match($pattern, $xml)) {
@@ -136,13 +126,7 @@ class XmlScanner
         return $xml;
     }
 
-    /**
-     * Scan theXML for use of <!ENTITY to prevent XXE/XEE attacks.
-     *
-     * @param string $filestream
-     *
-     * @return string
-     */
+    
     public function scanFile($filestream)
     {
         return $this->scan(file_get_contents($filestream));

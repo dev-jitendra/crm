@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -26,24 +22,15 @@ class RoutingResults
 
     protected string $uri;
 
-    /**
-     * The status is one of the constants shown above
-     * NOT_FOUND = 0
-     * FOUND = 1
-     * METHOD_NOT_ALLOWED = 2
-     */
+    
     protected int $routeStatus;
 
     protected ?string $routeIdentifier = null;
 
-    /**
-     * @var array<string, string>
-     */
+    
     protected array $routeArguments;
 
-    /**
-     * @param array<string, string> $routeArguments
-     */
+    
     public function __construct(
         DispatcherInterface $dispatcher,
         string $method,
@@ -85,9 +72,7 @@ class RoutingResults
         return $this->routeIdentifier;
     }
 
-    /**
-     * @return array<string, string>
-     */
+    
     public function getRouteArguments(bool $urlDecode = true): array
     {
         if (!$urlDecode) {
@@ -102,9 +87,7 @@ class RoutingResults
         return $routeArguments;
     }
 
-    /**
-     * @return string[]
-     */
+    
     public function getAllowedMethods(): array
     {
         return $this->dispatcher->getAllowedMethods($this->uri);

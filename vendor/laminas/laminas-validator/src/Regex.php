@@ -19,31 +19,22 @@ class Regex extends AbstractValidator
     public const NOT_MATCH = 'regexNotMatch';
     public const ERROROUS  = 'regexErrorous';
 
-    /** @var array */
+    
     protected $messageTemplates = [
         self::INVALID   => 'Invalid type given. String, integer or float expected',
         self::NOT_MATCH => "The input does not match against pattern '%pattern%'",
         self::ERROROUS  => "There was an internal error while using the pattern '%pattern%'",
     ];
 
-    /** @var array */
+    
     protected $messageVariables = [
         'pattern' => 'pattern',
     ];
 
-    /**
-     * Regular expression pattern
-     *
-     * @var non-empty-string
-     */
+    
     protected $pattern;
 
-    /**
-     * Sets validator options
-     *
-     * @param  non-empty-string|array|Traversable $pattern
-     * @throws Exception\InvalidArgumentException On missing 'pattern' parameter.
-     */
+    
     public function __construct($pattern)
     {
         if (is_string($pattern)) {
@@ -69,23 +60,13 @@ class Regex extends AbstractValidator
         parent::__construct($pattern);
     }
 
-    /**
-     * Returns the pattern option
-     *
-     * @return non-empty-string|null
-     */
+    
     public function getPattern()
     {
         return $this->pattern;
     }
 
-    /**
-     * Sets the pattern option
-     *
-     * @param non-empty-string $pattern
-     * @throws Exception\InvalidArgumentException If there is a fatal error in pattern matching.
-     * @return $this Provides a fluent interface
-     */
+    
     public function setPattern($pattern)
     {
         ErrorHandler::start();
@@ -104,12 +85,7 @@ class Regex extends AbstractValidator
         return $this;
     }
 
-    /**
-     * Returns true if and only if $value matches against the pattern option
-     *
-     * @param  string $value
-     * @return bool
-     */
+    
     public function isValid($value)
     {
         if (! is_string($value) && ! is_int($value) && ! is_float($value)) {

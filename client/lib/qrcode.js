@@ -1,37 +1,28 @@
-/**
- * @fileoverview
- * - Using the 'QRCode for Javascript library'
- * - Fixed dataset of 'QRCode for Javascript library' for support full-spec.
- * - this library has no dependencies.
- * 
- * @author davidshimjs
- * @see <a href="http://www.d-project.com/" target="_blank">http://www.d-project.com/</a>
- * @see <a href="http://jeromeetienne.github.com/jquery-qrcode/" target="_blank">http://jeromeetienne.github.com/jquery-qrcode/</a>
- */
+
 var QRCode;
 
 (function () {
-	//---------------------------------------------------------------------
-	// QRCode for JavaScript
-	//
-	// Copyright (c) 2009 Kazuhiko Arase
-	//
-	// URL: http://www.d-project.com/
-	//
-	// Licensed under the MIT license:
-	//   http://www.opensource.org/licenses/mit-license.php
-	//
-	// The word "QR Code" is registered trademark of 
-	// DENSO WAVE INCORPORATED
-	//   http://www.denso-wave.com/qrcode/faqpatent-e.html
-	//
-	//---------------------------------------------------------------------
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	function QR8bitByte(data) {
 		this.mode = QRMode.MODE_8BIT_BYTE;
 		this.data = data;
 		this.parsedData = [];
 
-		// Added to support UTF-8 Characters
+		
 		for (var i = 0, l = this.data.length; i < l; i++) {
 			var byteArray = [];
 			var code = this.data.charCodeAt(i);
@@ -155,12 +146,12 @@ var QRCode;
 		return typeof CanvasRenderingContext2D != "undefined";
 	}
 	
-	// android 2.x doesn't support Data-URI spec
+	
 	function _getAndroid() {
 		var android = false;
 		var sAgent = navigator.userAgent;
 		
-		if (/android/i.test(sAgent)) { // android
+		if (/android/i.test(sAgent)) { 
 			android = true;
 			var aMat = sAgent.toString().match(/android ([0-9]\.[0-9])/i);
 			
@@ -189,14 +180,14 @@ var QRCode;
 			this.clear();
 
 			function makeSVG(tag, attrs) {
-				var el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+				var el = document.createElementNS('http:
 				for (var k in attrs)
 					if (attrs.hasOwnProperty(k)) el.setAttribute(k, attrs[k]);
 				return el;
 			}
 
 			var svg = makeSVG("svg" , {'viewBox': '0 0 ' + String(nCount) + " " + String(nCount), 'width': '100%', 'height': '100%', 'fill': _htOption.colorLight});
-			svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
+			svg.setAttributeNS("http:
 			_el.appendChild(svg);
 
 			svg.appendChild(makeSVG("rect", {"fill": _htOption.colorLight, "width": "100%", "height": "100%"}));
@@ -206,7 +197,7 @@ var QRCode;
 				for (var col = 0; col < nCount; col++) {
 					if (oQRCode.isDark(row, col)) {
 						var child = makeSVG("use", {"x": String(row), "y": String(col)});
-						child.setAttributeNS("http://www.w3.org/1999/xlink", "href", "#template")
+						child.setAttributeNS("http:
 						svg.appendChild(child);
 					}
 				}
@@ -221,18 +212,14 @@ var QRCode;
 
 	var useSVG = document.documentElement.tagName.toLowerCase() === "svg";
 
-	// Drawing in DOM by using Table tag
+	
 	var Drawing = useSVG ? svgDrawer : !_isSupportCanvas() ? (function () {
 		var Drawing = function (el, htOption) {
 			this._el = el;
 			this._htOption = htOption;
 		};
 			
-		/**
-		 * Draw the QRCode
-		 * 
-		 * @param {QRCode} oQRCode
-		 */
+		
 		Drawing.prototype.draw = function (oQRCode) {
             var _htOption = this._htOption;
             var _el = this._el;
@@ -254,7 +241,7 @@ var QRCode;
 			aHTML.push('</table>');
 			_el.innerHTML = aHTML.join('');
 			
-			// Fix the margin values as real size.
+			
 			var elTable = _el.childNodes[0];
 			var nLeftMarginTable = (_htOption.width - elTable.offsetWidth) / 2;
 			var nTopMarginTable = (_htOption.height - elTable.offsetHeight) / 2;
@@ -264,23 +251,21 @@ var QRCode;
 			}
 		};
 		
-		/**
-		 * Clear the QRCode
-		 */
+		
 		Drawing.prototype.clear = function () {
 			this._el.innerHTML = '';
 		};
 		
 		return Drawing;
-	})() : (function () { // Drawing in Canvas
+	})() : (function () { 
 		function _onMakeImage() {
 			this._elImage.src = this._elCanvas.toDataURL("image/png");
 			this._elImage.style.display = "block";
 			this._elCanvas.style.display = "none";			
 		}
 		
-		// Android 2.1 bug workaround
-		// http://code.google.com/p/android/issues/detail?id=5141
+		
+		
 		if (this._android && this._android <= 2.1) {
 	    	var factor = 1 / window.devicePixelRatio;
 	        var drawImage = CanvasRenderingContext2D.prototype.drawImage; 
@@ -300,19 +285,13 @@ var QRCode;
 	    	};
 		}
 		
-		/**
-		 * Check whether the user's browser supports Data URI or not
-		 * 
-		 * @private
-		 * @param {Function} fSuccess Occurs if it supports Data URI
-		 * @param {Function} fFail Occurs if it doesn't support Data URI
-		 */
+		
 		function _safeSetDataURI(fSuccess, fFail) {
             var self = this;
             self._fFail = fFail;
             self._fSuccess = fSuccess;
 
-            // Check it just once
+            
             if (self._bSupportDataURI === null) {
                 var el = document.createElement("img");
                 var fOnError = function() {
@@ -333,7 +312,7 @@ var QRCode;
                 el.onabort = fOnError;
                 el.onerror = fOnError;
                 el.onload = fOnSuccess;
-                el.src = "data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=="; // the Image contains 1px data.
+                el.src = "data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4
                 return;
             } else if (self._bSupportDataURI === true && self._fSuccess) {
                 self._fSuccess.call(self);
@@ -342,13 +321,7 @@ var QRCode;
             }
 		};
 		
-		/**
-		 * Drawing QRCode by using canvas
-		 * 
-		 * @constructor
-		 * @param {HTMLElement} el
-		 * @param {Object} htOption QRCode Options 
-		 */
+		
 		var Drawing = function (el, htOption) {
     		this._bIsPainted = false;
     		this._android = _getAndroid();
@@ -368,11 +341,7 @@ var QRCode;
 			this._bSupportDataURI = null;
 		};
 			
-		/**
-		 * Draw the QRCode
-		 * 
-		 * @param {QRCode} oQRCode 
-		 */
+		
 		Drawing.prototype.draw = function (oQRCode) {
             var _elImage = this._elImage;
             var _oContext = this._oContext;
@@ -397,7 +366,7 @@ var QRCode;
 					_oContext.fillStyle = bIsDark ? _htOption.colorDark : _htOption.colorLight;					
 					_oContext.fillRect(nLeft, nTop, nWidth, nHeight);
 					
-					// 안티 앨리어싱 방지 처리
+					
 					_oContext.strokeRect(
 						Math.floor(nLeft) + 0.5,
 						Math.floor(nTop) + 0.5,
@@ -417,36 +386,25 @@ var QRCode;
 			this._bIsPainted = true;
 		};
 			
-		/**
-		 * Make the image from Canvas if the browser supports Data URI.
-		 */
+		
 		Drawing.prototype.makeImage = function () {
 			if (this._bIsPainted) {
 				_safeSetDataURI.call(this, _onMakeImage);
 			}
 		};
 			
-		/**
-		 * Return whether the QRCode is painted or not
-		 * 
-		 * @return {Boolean}
-		 */
+		
 		Drawing.prototype.isPainted = function () {
 			return this._bIsPainted;
 		};
 		
-		/**
-		 * Clear the QRCode
-		 */
+		
 		Drawing.prototype.clear = function () {
 			this._oContext.clearRect(0, 0, this._elCanvas.width, this._elCanvas.height);
 			this._bIsPainted = false;
 		};
 		
-		/**
-		 * @private
-		 * @param {Number} nNumber
-		 */
+		
 		Drawing.prototype.round = function (nNumber) {
 			if (!nNumber) {
 				return nNumber;
@@ -458,14 +416,7 @@ var QRCode;
 		return Drawing;
 	})();
 	
-	/**
-	 * Get the type by string length
-	 * 
-	 * @private
-	 * @param {String} sText
-	 * @param {Number} nCorrectLevel
-	 * @return {Number} type
-	 */
+	
 	function _getTypeNumber(sText, nCorrectLevel) {			
 		var nType = 1;
 		var length = _getUTF8Length(sText);
@@ -507,31 +458,7 @@ var QRCode;
 		return replacedText.length + (replacedText.length != sText ? 3 : 0);
 	}
 	
-	/**
-	 * @class QRCode
-	 * @constructor
-	 * @example 
-	 * new QRCode(document.getElementById("test"), "http://jindo.dev.naver.com/collie");
-	 *
-	 * @example
-	 * var oQRCode = new QRCode("test", {
-	 *    text : "http://naver.com",
-	 *    width : 128,
-	 *    height : 128
-	 * });
-	 * 
-	 * oQRCode.clear(); // Clear the QRCode.
-	 * oQRCode.makeCode("http://map.naver.com"); // Re-create the QRCode.
-	 *
-	 * @param {HTMLElement|String} el target element or 'id' attribute of element.
-	 * @param {Object|String} vOption
-	 * @param {String} vOption.text QRCode link data
-	 * @param {Number} [vOption.width=256]
-	 * @param {Number} [vOption.height=256]
-	 * @param {String} [vOption.colorDark="#000000"]
-	 * @param {String} [vOption.colorLight="#ffffff"]
-	 * @param {QRCode.CorrectLevel} [vOption.correctLevel=QRCode.CorrectLevel.H] [L|M|Q|H] 
-	 */
+	
 	QRCode = function (el, vOption) {
 		this._htOption = {
 			width : 256, 
@@ -548,7 +475,7 @@ var QRCode;
 			};
 		}
 		
-		// Overwrites options
+		
 		if (vOption) {
 			for (var i in vOption) {
 				this._htOption[i] = vOption[i];
@@ -573,11 +500,7 @@ var QRCode;
 		}
 	};
 	
-	/**
-	 * Make the QRCode
-	 * 
-	 * @param {String} sText link data
-	 */
+	
 	QRCode.prototype.makeCode = function (sText) {
 		this._oQRCode = new QRCodeModel(_getTypeNumber(sText, this._htOption.correctLevel), this._htOption.correctLevel);
 		this._oQRCode.addData(sText);
@@ -587,28 +510,18 @@ var QRCode;
 		this.makeImage();
 	};
 	
-	/**
-	 * Make the Image from Canvas element
-	 * - It occurs automatically
-	 * - Android below 3 doesn't support Data-URI spec.
-	 * 
-	 * @private
-	 */
+	
 	QRCode.prototype.makeImage = function () {
 		if (typeof this._oDrawing.makeImage == "function" && (!this._android || this._android >= 3)) {
 			this._oDrawing.makeImage();
 		}
 	};
 	
-	/**
-	 * Clear the QRCode
-	 */
+	
 	QRCode.prototype.clear = function () {
 		this._oDrawing.clear();
 	};
 	
-	/**
-	 * @name QRCode.CorrectLevel
-	 */
+	
 	QRCode.CorrectLevel = QRErrorCorrectLevel;
 })();

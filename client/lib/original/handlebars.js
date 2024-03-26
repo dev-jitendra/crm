@@ -1,30 +1,5 @@
 Espo.loader.setContextId('lib!handlebars');
-/**!
 
- @license
- handlebars v4.7.7
-
-Copyright (C) 2011-2019 by Yehuda Katz
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
-*/
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -35,51 +10,51 @@ THE SOFTWARE.
 	else
 		root["Handlebars"] = factory();
 })(this, function() {
-return /******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
+return  (function(modules) { 
+ 	
+ 	var installedModules = {};
 
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
+ 	
+ 	function __webpack_require__(moduleId) {
 
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
-/******/ 			return installedModules[moduleId].exports;
+ 		
+ 		if(installedModules[moduleId])
+ 			return installedModules[moduleId].exports;
 
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			exports: {},
-/******/ 			id: moduleId,
-/******/ 			loaded: false
-/******/ 		};
+ 		
+ 		var module = installedModules[moduleId] = {
+ 			exports: {},
+ 			id: moduleId,
+ 			loaded: false
+ 		};
 
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+ 		
+ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
 
-/******/ 		// Flag the module as loaded
-/******/ 		module.loaded = true;
+ 		
+ 		module.loaded = true;
 
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
+ 		
+ 		return module.exports;
+ 	}
 
 
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
+ 	
+ 	__webpack_require__.m = modules;
 
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
+ 	
+ 	__webpack_require__.c = installedModules;
 
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
+ 	
+ 	__webpack_require__.p = "";
 
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(0);
-/******/ })
-/************************************************************************/
-/******/ ([
-/* 0 */
-/***/ (function(module, exports, __webpack_require__) {
+ 	
+ 	return __webpack_require__(0);
+ })
+
+ ([
+
+ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -91,7 +66,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _handlebarsRuntime2 = _interopRequireDefault(_handlebarsRuntime);
 
-	// Compiler imports
+	
 
 	var _handlebarsCompilerAst = __webpack_require__(45);
 
@@ -146,9 +121,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = inst;
 	module.exports = exports['default'];
 
-/***/ }),
-/* 1 */
-/***/ (function(module, exports) {
+ }),
+
+ (function(module, exports) {
 
 	"use strict";
 
@@ -160,9 +135,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.__esModule = true;
 
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -176,8 +151,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var base = _interopRequireWildcard(_handlebarsBase);
 
-	// Each of these augment the Handlebars object. No need to setup here.
-	// (This is done to easily share code between commonjs and browse envs)
+	
+	
 
 	var _handlebarsSafeString = __webpack_require__(37);
 
@@ -199,7 +174,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _handlebarsNoConflict2 = _interopRequireDefault(_handlebarsNoConflict);
 
-	// For compatibility and usage outside of module systems, make the Handlebars object a namespace
+	
 	function create() {
 	  var hb = new base.HandlebarsEnvironment();
 
@@ -227,9 +202,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = inst;
 	module.exports = exports['default'];
 
-/***/ }),
-/* 3 */
-/***/ (function(module, exports) {
+ }),
+
+ (function(module, exports) {
 
 	"use strict";
 
@@ -252,9 +227,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.__esModule = true;
 
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -287,7 +262,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.LAST_COMPATIBLE_COMPILER_REVISION = LAST_COMPATIBLE_COMPILER_REVISION;
 	var REVISION_CHANGES = {
-	  1: '<= 1.0.rc.2', // 1.0.rc.2 is actually rev2 but doesn't report it
+	  1: '<= 1.0.rc.2', 
 	  2: '== 1.0.0-rc.3',
 	  3: '== 1.0.0-rc.4',
 	  4: '== 1.x.x',
@@ -356,10 +331,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  unregisterDecorator: function unregisterDecorator(name) {
 	    delete this.decorators[name];
 	  },
-	  /**
-	   * Reset the memory of illegal property accesses that have already been logged.
-	   * @deprecated should only be used in handlebars test-cases
-	   */
+	  
 	  resetLoggedPropertyAccesses: function resetLoggedPropertyAccesses() {
 	    _internalProtoAccess.resetLoggedProperties();
 	  }
@@ -371,9 +343,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.createFrame = _utils.createFrame;
 	exports.logger = _logger2['default'];
 
-/***/ }),
-/* 5 */
-/***/ (function(module, exports) {
+ }),
+
+ (function(module, exports) {
 
 	'use strict';
 
@@ -402,7 +374,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return escape[chr];
 	}
 
-	function extend(obj /* , ...source */) {
+	function extend(obj ) {
 	  for (var i = 1; i < arguments.length; i++) {
 	    for (var key in arguments[i]) {
 	      if (Object.prototype.hasOwnProperty.call(arguments[i], key)) {
@@ -417,14 +389,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	var toString = Object.prototype.toString;
 
 	exports.toString = toString;
-	// Sourced from lodash
-	// https://github.com/bestiejs/lodash/blob/master/LICENSE.txt
-	/* eslint-disable func-style */
+	
+	
+	
 	var isFunction = function isFunction(value) {
 	  return typeof value === 'function';
 	};
-	// fallback for older versions of Chrome and Safari
-	/* istanbul ignore next */
+	
+	
 	if (isFunction(/x/)) {
 	  exports.isFunction = isFunction = function (value) {
 	    return typeof value === 'function' && toString.call(value) === '[object Function]';
@@ -432,15 +404,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	exports.isFunction = isFunction;
 
-	/* eslint-enable func-style */
+	
 
-	/* istanbul ignore next */
+	
 	var isArray = Array.isArray || function (value) {
 	  return value && typeof value === 'object' ? toString.call(value) === '[object Array]' : false;
 	};
 
 	exports.isArray = isArray;
-	// Older IE versions do not directly support indexOf so we must implement our own, sadly.
+	
 
 	function indexOf(array, value) {
 	  for (var i = 0, len = array.length; i < len; i++) {
@@ -453,7 +425,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function escapeExpression(string) {
 	  if (typeof string !== 'string') {
-	    // don't escape SafeStrings, since they're already safe
+	    
 	    if (string && string.toHTML) {
 	      return string.toHTML();
 	    } else if (string == null) {
@@ -462,9 +434,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return string + '';
 	    }
 
-	    // Force a string conversion as this will be done by the append regardless and
-	    // the regex test will do this transparently behind the scenes, causing issues if
-	    // an object's to string has escaped characters in it.
+	    
+	    
+	    
 	    string = '' + string;
 	  }
 
@@ -499,9 +471,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return (contextPath ? contextPath + '.' : '') + id;
 	}
 
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -528,12 +500,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  var tmp = Error.prototype.constructor.call(this, message);
 
-	  // Unfortunately errors are not enumerable in Chrome (at least), so `for prop in tmp` doesn't work.
+	  
 	  for (var idx = 0; idx < errorProps.length; idx++) {
 	    this[errorProps[idx]] = tmp[errorProps[idx]];
 	  }
 
-	  /* istanbul ignore else */
+	  
 	  if (Error.captureStackTrace) {
 	    Error.captureStackTrace(this, Exception);
 	  }
@@ -543,8 +515,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.lineNumber = line;
 	      this.endLineNumber = endLineNumber;
 
-	      // Work around issue under safari where we can't directly set the column value
-	      /* istanbul ignore next */
+	      
+	      
 	      if (_Object$defineProperty) {
 	        Object.defineProperty(this, 'column', {
 	          value: column,
@@ -560,7 +532,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 	  } catch (nop) {
-	    /* Ignore if the browser is very particular */
+	    
 	  }
 	}
 
@@ -569,24 +541,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = Exception;
 	module.exports = exports['default'];
 
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	module.exports = { "default": __webpack_require__(8), __esModule: true };
 
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	var $ = __webpack_require__(9);
 	module.exports = function defineProperty(it, key, desc){
 	  return $.setDesc(it, key, desc);
 	};
 
-/***/ }),
-/* 9 */
-/***/ (function(module, exports) {
+ }),
+
+ (function(module, exports) {
 
 	var $Object = Object;
 	module.exports = {
@@ -602,9 +574,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  each:       [].forEach
 	};
 
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -661,9 +633,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}
 
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -704,11 +676,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	module.exports = exports['default'];
 
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
 
-	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
+ (function(module, exports, __webpack_require__) {
+
+	(function(global) {'use strict';
 
 	var _Object$keys = __webpack_require__(13)['default'];
 
@@ -787,9 +759,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	          var priorKey = undefined;
 
 	          _Object$keys(context).forEach(function (key) {
-	            // We're running the iterations one step out of sync so we can detect
-	            // the last iteration without have to scan the object twice and create
-	            // an itermediate keys array.
+	            
+	            
+	            
 	            if (priorKey !== undefined) {
 	              execIteration(priorKey, i - 1);
 	            }
@@ -812,26 +784,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	module.exports = exports['default'];
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+	}.call(exports, (function() { return this; }())))
 
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	module.exports = { "default": __webpack_require__(14), __esModule: true };
 
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	__webpack_require__(15);
 	module.exports = __webpack_require__(21).Object.keys;
 
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
 
-	// 19.1.2.14 Object.keys(O)
+ (function(module, exports, __webpack_require__) {
+
+	
 	var toObject = __webpack_require__(16);
 
 	__webpack_require__(18)('keys', function($keys){
@@ -840,31 +812,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	});
 
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
 
-	// 7.1.13 ToObject(argument)
+ (function(module, exports, __webpack_require__) {
+
+	
 	var defined = __webpack_require__(17);
 	module.exports = function(it){
 	  return Object(defined(it));
 	};
 
-/***/ }),
-/* 17 */
-/***/ (function(module, exports) {
+ }),
 
-	// 7.2.1 RequireObjectCoercible(argument)
+ (function(module, exports) {
+
+	
 	module.exports = function(it){
 	  if(it == undefined)throw TypeError("Can't call method on  " + it);
 	  return it;
 	};
 
-/***/ }),
-/* 18 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
 
-	// most Object methods by ES6 should accept primitives
+ (function(module, exports, __webpack_require__) {
+
+	
 	var $export = __webpack_require__(19)
 	  , core    = __webpack_require__(21)
 	  , fails   = __webpack_require__(24);
@@ -875,9 +847,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  $export($export.S + $export.F * fails(function(){ fn(1); }), 'Object', exp);
 	};
 
-/***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	var global    = __webpack_require__(20)
 	  , core      = __webpack_require__(21)
@@ -896,57 +868,57 @@ return /******/ (function(modules) { // webpackBootstrap
 	    , key, own, out;
 	  if(IS_GLOBAL)source = name;
 	  for(key in source){
-	    // contains in native
+	    
 	    own = !IS_FORCED && target && key in target;
 	    if(own && key in exports)continue;
-	    // export native or passed
+	    
 	    out = own ? target[key] : source[key];
-	    // prevent global pollution for namespaces
+	    
 	    exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key]
-	    // bind timers to global for call from export context
+	    
 	    : IS_BIND && own ? ctx(out, global)
-	    // wrap global constructors for prevent change them in library
+	    
 	    : IS_WRAP && target[key] == out ? (function(C){
 	      var F = function(param){
 	        return this instanceof C ? new C(param) : C(param);
 	      };
 	      F[PROTOTYPE] = C[PROTOTYPE];
 	      return F;
-	    // make static versions for prototype methods
+	    
 	    })(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
 	    if(IS_PROTO)(exports[PROTOTYPE] || (exports[PROTOTYPE] = {}))[key] = out;
 	  }
 	};
-	// type bitmap
-	$export.F = 1;  // forced
-	$export.G = 2;  // global
-	$export.S = 4;  // static
-	$export.P = 8;  // proto
-	$export.B = 16; // bind
-	$export.W = 32; // wrap
+	
+	$export.F = 1;  
+	$export.G = 2;  
+	$export.S = 4;  
+	$export.P = 8;  
+	$export.B = 16; 
+	$export.W = 32; 
 	module.exports = $export;
 
-/***/ }),
-/* 20 */
-/***/ (function(module, exports) {
+ }),
 
-	// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+ (function(module, exports) {
+
+	
 	var global = module.exports = typeof window != 'undefined' && window.Math == Math
 	  ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
-	if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
+	if(typeof __g == 'number')__g = global; 
 
-/***/ }),
-/* 21 */
-/***/ (function(module, exports) {
+ }),
+
+ (function(module, exports) {
 
 	var core = module.exports = {version: '1.2.6'};
-	if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
+	if(typeof __e == 'number')__e = core; 
 
-/***/ }),
-/* 22 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
 
-	// optional / simple context binding
+ (function(module, exports, __webpack_require__) {
+
+	
 	var aFunction = __webpack_require__(23);
 	module.exports = function(fn, that, length){
 	  aFunction(fn);
@@ -962,23 +934,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return fn.call(that, a, b, c);
 	    };
 	  }
-	  return function(/* ...args */){
+	  return function(){
 	    return fn.apply(that, arguments);
 	  };
 	};
 
-/***/ }),
-/* 23 */
-/***/ (function(module, exports) {
+ }),
+
+ (function(module, exports) {
 
 	module.exports = function(it){
 	  if(typeof it != 'function')throw TypeError(it + ' is not a function!');
 	  return it;
 	};
 
-/***/ }),
-/* 24 */
-/***/ (function(module, exports) {
+ }),
+
+ (function(module, exports) {
 
 	module.exports = function(exec){
 	  try {
@@ -988,9 +960,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	};
 
-/***/ }),
-/* 25 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -1003,12 +975,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _exception2 = _interopRequireDefault(_exception);
 
 	exports['default'] = function (instance) {
-	  instance.registerHelper('helperMissing', function () /* [args, ]options */{
+	  instance.registerHelper('helperMissing', function () {
 	    if (arguments.length === 1) {
-	      // A missing field in a {{foo}} construct.
+	      
 	      return undefined;
 	    } else {
-	      // Someone is actually trying to call something, blow up.
+	      
 	      throw new _exception2['default']('Missing helper: "' + arguments[arguments.length - 1].name + '"');
 	    }
 	  });
@@ -1016,9 +988,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	module.exports = exports['default'];
 
-/***/ }),
-/* 26 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -1041,9 +1013,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      conditional = conditional.call(this);
 	    }
 
-	    // Default behavior is to render the positive path if the value is truthy and not empty.
-	    // The `includeZero` option may be set to treat the condtional as purely not empty based on the
-	    // behavior of isEmpty. Effectively this determines if 0 is handled by the positive path or negative.
+	    
+	    
+	    
 	    if (!options.hash.includeZero && !conditional || _utils.isEmpty(conditional)) {
 	      return options.inverse(this);
 	    } else {
@@ -1065,16 +1037,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	module.exports = exports['default'];
 
-/***/ }),
-/* 27 */
-/***/ (function(module, exports) {
+ }),
+
+ (function(module, exports) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
 	exports['default'] = function (instance) {
-	  instance.registerHelper('log', function () /* message, options */{
+	  instance.registerHelper('log', function () {
 	    var args = [undefined],
 	        options = arguments[arguments.length - 1];
 	    for (var i = 0; i < arguments.length - 1; i++) {
@@ -1095,9 +1067,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	module.exports = exports['default'];
 
-/***/ }),
-/* 28 */
-/***/ (function(module, exports) {
+ }),
+
+ (function(module, exports) {
 
 	'use strict';
 
@@ -1106,7 +1078,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = function (instance) {
 	  instance.registerHelper('lookup', function (obj, field, options) {
 	    if (!obj) {
-	      // Note for 5.0: Change to "obj == null" in 5.0
+	      
 	      return obj;
 	    }
 	    return options.lookupProperty(obj, field);
@@ -1115,9 +1087,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	module.exports = exports['default'];
 
-/***/ }),
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -1161,9 +1133,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	module.exports = exports['default'];
 
-/***/ }),
-/* 30 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -1180,9 +1152,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _decoratorsInline2['default'](instance);
 	}
 
-/***/ }),
-/* 31 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -1196,7 +1168,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (!props.partials) {
 	      props.partials = {};
 	      ret = function (context, options) {
-	        // Create a new partials stack frame prior to exec.
+	        
 	        var original = container.partials;
 	        container.partials = _utils.extend({}, original, props.partials);
 	        var ret = fn(context, options);
@@ -1213,9 +1185,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	module.exports = exports['default'];
 
-/***/ }),
-/* 32 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -1227,7 +1199,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  methodMap: ['debug', 'info', 'warn', 'error'],
 	  level: 'info',
 
-	  // Maps a given level value to the `methodMap` indexes above.
+	  
 	  lookupLevel: function lookupLevel(level) {
 	    if (typeof level === 'string') {
 	      var levelMap = _utils.indexOf(logger.methodMap, level.toLowerCase());
@@ -1241,13 +1213,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return level;
 	  },
 
-	  // Can be overridden in the host environment
+	  
 	  log: function log(level) {
 	    level = logger.lookupLevel(level);
 
 	    if (typeof console !== 'undefined' && logger.lookupLevel(logger.level) <= level) {
 	      var method = logger.methodMap[level];
-	      // eslint-disable-next-line no-console
+	      
 	      if (!console[method]) {
 	        method = 'log';
 	      }
@@ -1256,7 +1228,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        message[_key - 1] = arguments[_key];
 	      }
 
-	      console[method].apply(console, message); // eslint-disable-line no-console
+	      console[method].apply(console, message); 
 	    }
 	  }
 	};
@@ -1264,9 +1236,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = logger;
 	module.exports = exports['default'];
 
-/***/ }),
-/* 33 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -1297,7 +1269,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  defaultMethodWhiteList['__lookupGetter__'] = false;
 
 	  var defaultPropertyWhiteList = _Object$create(null);
-	  // eslint-disable-next-line no-proto
+	  
 	  defaultPropertyWhiteList['__proto__'] = false;
 
 	  return {
@@ -1334,7 +1306,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function logUnexpecedPropertyAccessOnce(propertyName) {
 	  if (loggedProperties[propertyName] !== true) {
 	    loggedProperties[propertyName] = true;
-	    logger.log('error', 'Handlebars: Access has been denied to resolve the property "' + propertyName + '" because it is not an "own property" of its parent.\n' + 'You can add a runtime option to disable the check or this warning:\n' + 'See https://handlebarsjs.com/api-reference/runtime-options.html#options-to-control-prototype-access for details');
+	    logger.log('error', 'Handlebars: Access has been denied to resolve the property "' + propertyName + '" because it is not an "own property" of its parent.\n' + 'You can add a runtime option to disable the check or this warning:\n' + 'See https:
 	  }
 	}
 
@@ -1344,24 +1316,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	  });
 	}
 
-/***/ }),
-/* 34 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	module.exports = { "default": __webpack_require__(35), __esModule: true };
 
-/***/ }),
-/* 35 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	var $ = __webpack_require__(9);
 	module.exports = function create(P, D){
 	  return $.create(P, D);
 	};
 
-/***/ }),
-/* 36 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -1372,12 +1344,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _utils = __webpack_require__(5);
 
-	/**
-	 * Create a new object with "null"-prototype to avoid truthy results on prototype properties.
-	 * The resulting object can be used with "object[property]" to check if a property exists
-	 * @param {...object} sources a varargs parameter of source objects that will be merged
-	 * @returns {object}
-	 */
+	
 
 	function createNewLookupObject() {
 	  for (var _len = arguments.length, sources = Array(_len), _key = 0; _key < _len; _key++) {
@@ -1387,11 +1354,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return _utils.extend.apply(undefined, [_Object$create(null)].concat(sources));
 	}
 
-/***/ }),
-/* 37 */
-/***/ (function(module, exports) {
+ }),
 
-	// Build out our basic SafeString type
+ (function(module, exports) {
+
+	
 	'use strict';
 
 	exports.__esModule = true;
@@ -1406,9 +1373,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = SafeString;
 	module.exports = exports['default'];
 
-/***/ }),
-/* 38 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -1457,13 +1424,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        compilerVersions = _base.REVISION_CHANGES[compilerRevision];
 	    throw new _exception2['default']('Template was precompiled with an older version of Handlebars than the current runtime. ' + 'Please update your precompiler to a newer version (' + runtimeVersions + ') or downgrade your runtime to an older version (' + compilerVersions + ').');
 	  } else {
-	    // Use the embedded version info since the runtime doesn't know about this revision yet
+	    
 	    throw new _exception2['default']('Template was precompiled with a newer version of Handlebars than the current runtime. ' + 'Please update your runtime to a newer version (' + compilerInfo[1] + ').');
 	  }
 	}
 
 	function template(templateSpec, env) {
-	  /* istanbul ignore next */
+	  
 	  if (!env) {
 	    throw new _exception2['default']('No environment passed to template');
 	  }
@@ -1473,11 +1440,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  templateSpec.main.decorator = templateSpec.main_d;
 
-	  // Note: Using env.VM references rather than local var references throughout this section to allow
-	  // for external users to override these as pseudo-supported APIs.
+	  
+	  
 	  env.VM.checkRevision(templateSpec.compiler);
 
-	  // backwards compatibility for precompiled templates with compiler-version 7 (<4.3.0)
+	  
 	  var templateWasPrecompiledWithCompilerV7 = templateSpec.compiler && templateSpec.compiler[0] === 7;
 
 	  function invokePartialWrapper(partial, context, options) {
@@ -1518,7 +1485,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }
 
-	  // Just add water
+	  
 	  var container = {
 	    strict: function strict(obj, name, loc) {
 	      if (!obj || !(name in obj)) {
@@ -1591,7 +1558,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      return obj;
 	    },
-	    // An empty object to use as replacement for null-contexts
+	    
 	    nullContext: _Object$seal({}),
 
 	    noop: env.VM.noop,
@@ -1617,7 +1584,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 
-	    function main(context /*, options*/) {
+	    function main(context ) {
 	      return '' + templateSpec.main(container, context, container.helpers, container.partials, data, blockParams, depths);
 	    }
 
@@ -1634,7 +1601,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      container.helpers = mergedHelpers;
 
 	      if (templateSpec.usePartial) {
-	        // Use mergeIfNeeded here to prevent compiling global partials multiple times
+	        
 	        container.partials = container.mergeIfNeeded(options.partials, env.partials);
 	      }
 	      if (templateSpec.usePartial || templateSpec.useDecorators) {
@@ -1648,7 +1615,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      _helpers.moveHelperToHooks(container, 'helperMissing', keepHelperInHelpers);
 	      _helpers.moveHelperToHooks(container, 'blockHelperMissing', keepHelperInHelpers);
 	    } else {
-	      container.protoAccessControl = options.protoAccessControl; // internal option
+	      container.protoAccessControl = options.protoAccessControl; 
 	      container.helpers = options.helpers;
 	      container.partials = options.partials;
 	      container.decorators = options.decorators;
@@ -1689,9 +1656,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return prog;
 	}
 
-	/**
-	 * This is currently part of the official API, therefore implementation details should not be changed.
-	 */
+	
 
 	function resolvePartial(partial, context, options) {
 	  if (!partial) {
@@ -1701,7 +1666,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      partial = options.partials[options.name];
 	    }
 	  } else if (!partial.call && !options.name) {
-	    // This is a dynamic partial that returned a string
+	    
 	    options.name = partial;
 	    partial = options.partials[partial];
 	  }
@@ -1709,7 +1674,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	function invokePartial(partial, context, options) {
-	  // Use the current closure context to save the partial-block if this partial
+	  
 	  var currentPartialBlock = options.data && options.data['partial-block'];
 	  options.partial = true;
 	  if (options.ids) {
@@ -1720,13 +1685,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (options.fn && options.fn !== noop) {
 	    (function () {
 	      options.data = _base.createFrame(options.data);
-	      // Wrapper function to get access to currentPartialBlock from the closure
+	      
 	      var fn = options.fn;
 	      partialBlock = options.data['partial-block'] = function partialBlockWrapper(context) {
 	        var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-	        // Restore the partial-block from the closure for the execution of the block
-	        // i.e. the part inside the block of the partial call.
+	        
+	        
 	        options.data = _base.createFrame(options.data);
 	        options.data['partial-block'] = currentPartialBlock;
 	        return fn(context, options);
@@ -1783,24 +1748,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	  });
 	}
 
-/***/ }),
-/* 39 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	module.exports = { "default": __webpack_require__(40), __esModule: true };
 
-/***/ }),
-/* 40 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	__webpack_require__(41);
 	module.exports = __webpack_require__(21).Object.seal;
 
-/***/ }),
-/* 41 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
 
-	// 19.1.2.17 Object.seal(O)
+ (function(module, exports, __webpack_require__) {
+
+	
 	var isObject = __webpack_require__(42);
 
 	__webpack_require__(18)('seal', function($seal){
@@ -1809,17 +1774,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	});
 
-/***/ }),
-/* 42 */
-/***/ (function(module, exports) {
+ }),
+
+ (function(module, exports) {
 
 	module.exports = function(it){
 	  return typeof it === 'object' ? it !== null : typeof it === 'function';
 	};
 
-/***/ }),
-/* 43 */
-/***/ (function(module, exports) {
+ }),
+
+ (function(module, exports) {
 
 	'use strict';
 
@@ -1828,11 +1793,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function wrapHelper(helper, transformOptionsFn) {
 	  if (typeof helper !== 'function') {
-	    // This should not happen, but apparently it does in https://github.com/wycats/handlebars.js/issues/1639
-	    // We try to make the wrapper least-invasive by not wrapping it, if the helper is not a function.
+	    
+	    
 	    return helper;
 	  }
-	  var wrapper = function wrapper() /* dynamic arguments */{
+	  var wrapper = function wrapper() {
 	    var options = arguments[arguments.length - 1];
 	    arguments[arguments.length - 1] = transformOptionsFn(options);
 	    return helper.apply(this, arguments);
@@ -1840,19 +1805,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return wrapper;
 	}
 
-/***/ }),
-/* 44 */
-/***/ (function(module, exports) {
+ }),
 
-	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
+ (function(module, exports) {
+
+	(function(global) {'use strict';
 
 	exports.__esModule = true;
 
 	exports['default'] = function (Handlebars) {
-	  /* istanbul ignore next */
+	  
 	  var root = typeof global !== 'undefined' ? global : window,
 	      $Handlebars = root.Handlebars;
-	  /* istanbul ignore next */
+	  
 	  Handlebars.noConflict = function () {
 	    if (root.Handlebars === Handlebars) {
 	      root.Handlebars = $Handlebars;
@@ -1862,21 +1827,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	module.exports = exports['default'];
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+	}.call(exports, (function() { return this; }())))
 
-/***/ }),
-/* 45 */
-/***/ (function(module, exports) {
+ }),
+
+ (function(module, exports) {
 
 	'use strict';
 
 	exports.__esModule = true;
 	var AST = {
-	  // Public API used to evaluate derived attributes regarding AST nodes
+	  
 	  helpers: {
-	    // a mustache is definitely a helper if:
-	    // * it is an eligible helper, and
-	    // * it has at least one parameter or hash segment
+	    
+	    
+	    
 	    helperExpression: function helperExpression(node) {
 	      return node.type === 'SubExpression' || (node.type === 'MustacheStatement' || node.type === 'BlockStatement') && !!(node.params && node.params.length || node.hash);
 	    },
@@ -1886,22 +1851,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	      );
 	    },
 
-	    // an ID is simple if it only has one part, and that part is not
-	    // `..` or `this`.
+	    
+	    
 	    simpleId: function simpleId(path) {
 	      return path.parts.length === 1 && !AST.helpers.scopedId(path) && !path.depth;
 	    }
 	  }
 	};
 
-	// Must be exported as an object rather than the root of the module as the jison lexer
-	// must modify the object to operate properly.
+	
+	
 	exports['default'] = AST;
 	module.exports = exports['default'];
 
-/***/ }),
-/* 46 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -1933,14 +1898,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	_utils.extend(yy, Helpers);
 
 	function parseWithoutProcessing(input, options) {
-	  // Just return if an already-compiled AST was passed in.
+	  
 	  if (input.type === 'Program') {
 	    return input;
 	  }
 
 	  _parser2['default'].yy = yy;
 
-	  // Altering the shared object here, but this is ok as parser is a sync operation
+	  
 	  yy.locInfo = function (locInfo) {
 	    return new yy.SourceLocation(options && options.srcName, locInfo);
 	  };
@@ -1957,12 +1922,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return strip.accept(ast);
 	}
 
-/***/ }),
-/* 47 */
-/***/ (function(module, exports) {
+ }),
 
-	// File ignored in coverage tests via setting in .istanbul.yml
-	/* Jison generated parser */
+ (function(module, exports) {
+
+	
+	
 	"use strict";
 
 	exports.__esModule = true;
@@ -2349,7 +2314,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return true;
 	        }
 	    };
-	    /* Jison generated lexer */
+	    
 	    var lexer = (function () {
 	        var lexer = { EOF: 1,
 	            parseError: function parseError(str, hash) {
@@ -2395,7 +2360,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                this._input = ch + this._input;
 	                this.yytext = this.yytext.substr(0, this.yytext.length - len - 1);
-	                //this.yyleng -= len;
+	                
 	                this.offset -= len;
 	                var oldLines = this.match.split(/(?:\r\n?|\n)/g);
 	                this.match = this.match.substr(0, this.match.length - 1);
@@ -2543,9 +2508,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    break;
 	                case 4:
 	                    this.popState();
-	                    // Should be using `this.topState()` below, but it currently
-	                    // returns the second top instead of the first top. Opened an
-	                    // issue about it at https://github.com/zaach/jison/issues/291
+	                    
+	                    
+	                    
 	                    if (this.conditionStack[this.conditionStack.length - 1] === 'raw') {
 	                        return 15;
 	                    } else {
@@ -2634,7 +2599,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    return 87;
 	                    break;
 	                case 28:
-	                    // ignore whitespace
+	                    
 	                    break;
 	                case 29:
 	                    this.popState();return 54;
@@ -2698,9 +2663,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();exports["default"] = handlebars;
 	module.exports = exports["default"];
 
-/***/ }),
-/* 48 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -2751,9 +2716,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      omitRight(body, i);
 
 	      if (omitLeft(body, i)) {
-	        // If we are on a standalone node, save the indent info for partials
+	        
 	        if (current.type === 'PartialStatement') {
-	          // Pull out the whitespace from the final line
+	          
 	          current.indent = /([ \t]+$)/.exec(body[i - 1].original)[1];
 	        }
 	      }
@@ -2761,11 +2726,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (doStandalone && openStandalone) {
 	      omitRight((current.program || current.inverse).body);
 
-	      // Strip out the previous content node if it's whitespace only
+	      
 	      omitLeft(body, i);
 	    }
 	    if (doStandalone && closeStandalone) {
-	      // Always strip the next node
+	      
 	      omitRight(body, i);
 
 	      omitLeft((current.inverse || current.program).body);
@@ -2779,7 +2744,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.accept(block.program);
 	  this.accept(block.inverse);
 
-	  // Find the inverse program that is involed with whitespace stripping.
+	  
 	  var program = block.program || block.inverse,
 	      inverse = block.program && block.inverse,
 	      firstInverse = inverse,
@@ -2788,7 +2753,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (inverse && inverse.chained) {
 	    firstInverse = inverse.body[0].program;
 
-	    // Walk the inverse chain to find the last inverse that is actually in the chain.
+	    
 	    while (lastInverse.chained) {
 	      lastInverse = lastInverse.body[lastInverse.body.length - 1].program;
 	    }
@@ -2798,8 +2763,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    open: block.openStrip.open,
 	    close: block.closeStrip.close,
 
-	    // Determine the standalone candiacy. Basically flag our content as being possibly standalone
-	    // so our parent can determine if we actually are standalone
+	    
+	    
 	    openStandalone: isNextWhitespace(program.body),
 	    closeStandalone: isPrevWhitespace((firstInverse || program).body)
 	  };
@@ -2822,7 +2787,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      omitLeft(lastInverse.body, null, true);
 	    }
 
-	    // Find standalone else statments
+	    
 	    if (!this.options.ignoreStandalone && isPrevWhitespace(program.body) && isNextWhitespace(firstInverse.body)) {
 	      omitLeft(program.body);
 	      omitRight(firstInverse.body);
@@ -2839,7 +2804,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	WhitespaceControl.prototype.PartialStatement = WhitespaceControl.prototype.CommentStatement = function (node) {
-	  /* istanbul ignore next */
+	  
 	  var strip = node.strip || {};
 	  return {
 	    inlineStandalone: true,
@@ -2853,8 +2818,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    i = body.length;
 	  }
 
-	  // Nodes that end with newlines are considered whitespace (but are special
-	  // cased for strip operations)
+	  
+	  
 	  var prev = body[i - 1],
 	      sibling = body[i - 2];
 	  if (!prev) {
@@ -2881,13 +2846,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}
 
-	// Marks the node to the right of the position as omitted.
-	// I.e. {{foo}}' ' will mark the ' ' node as omitted.
-	//
-	// If i is undefined, then the first child will be marked as such.
-	//
-	// If mulitple is truthy then all whitespace will be stripped out until non-whitespace
-	// content is met.
+	
+	
+	
+	
+	
+	
+	
 	function omitRight(body, i, multiple) {
 	  var current = body[i == null ? 0 : i + 1];
 	  if (!current || current.type !== 'ContentStatement' || !multiple && current.rightStripped) {
@@ -2899,20 +2864,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	  current.rightStripped = current.value !== original;
 	}
 
-	// Marks the node to the left of the position as omitted.
-	// I.e. ' '{{foo}} will mark the ' ' node as omitted.
-	//
-	// If i is undefined then the last child will be marked as such.
-	//
-	// If mulitple is truthy then all whitespace will be stripped out until non-whitespace
-	// content is met.
+	
+	
+	
+	
+	
+	
+	
 	function omitLeft(body, i, multiple) {
 	  var current = body[i == null ? body.length - 1 : i - 1];
 	  if (!current || current.type !== 'ContentStatement' || !multiple && current.leftStripped) {
 	    return;
 	  }
 
-	  // We omit the last node if it's whitespace only and not preceded by a non-content node.
+	  
 	  var original = current.value;
 	  current.value = current.value.replace(multiple ? /\s+$/ : /[ \t]+$/, '');
 	  current.leftStripped = current.value !== original;
@@ -2922,9 +2887,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = WhitespaceControl;
 	module.exports = exports['default'];
 
-/***/ }),
-/* 49 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -2944,12 +2909,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  constructor: Visitor,
 	  mutating: false,
 
-	  // Visits a given value. If mutating, will replace the value if necessary.
+	  
 	  acceptKey: function acceptKey(node, name) {
 	    var value = this.accept(node[name]);
 	    if (this.mutating) {
-	      // Hacky sanity check: This may have a few false positives for type for the helper
-	      // methods but will generally do the right thing without a lot of overhead.
+	      
+	      
 	      if (value && !Visitor.prototype[value.type]) {
 	        throw new _exception2['default']('Unexpected node type "' + value.type + '" found when accepting ' + name + ' on ' + node.type);
 	      }
@@ -2957,8 +2922,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  },
 
-	  // Performs an accept operation with added sanity check to ensure
-	  // required keys are not removed.
+	  
+	  
 	  acceptRequired: function acceptRequired(node, name) {
 	    this.acceptKey(node, name);
 
@@ -2967,8 +2932,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  },
 
-	  // Traverses a given array. If mutating, empty respnses will be removed
-	  // for child elements.
+	  
+	  
 	  acceptArray: function acceptArray(array) {
 	    for (var i = 0, l = array.length; i < l; i++) {
 	      this.acceptKey(array, i);
@@ -2986,7 +2951,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return;
 	    }
 
-	    /* istanbul ignore next: Sanity code */
+	    
 	    if (!this[object.type]) {
 	      throw new _exception2['default']('Unknown type: ' + object.type, object);
 	    }
@@ -3024,18 +2989,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.acceptKey(partial, 'program');
 	  },
 
-	  ContentStatement: function ContentStatement() /* content */{},
-	  CommentStatement: function CommentStatement() /* comment */{},
+	  ContentStatement: function ContentStatement() {},
+	  CommentStatement: function CommentStatement() {},
 
 	  SubExpression: visitSubExpression,
 
-	  PathExpression: function PathExpression() /* path */{},
+	  PathExpression: function PathExpression() {},
 
-	  StringLiteral: function StringLiteral() /* string */{},
-	  NumberLiteral: function NumberLiteral() /* number */{},
-	  BooleanLiteral: function BooleanLiteral() /* bool */{},
-	  UndefinedLiteral: function UndefinedLiteral() /* literal */{},
-	  NullLiteral: function NullLiteral() /* literal */{},
+	  StringLiteral: function StringLiteral() {},
+	  NumberLiteral: function NumberLiteral() {},
+	  BooleanLiteral: function BooleanLiteral() {},
+	  UndefinedLiteral: function UndefinedLiteral() {},
+	  NullLiteral: function NullLiteral() {},
 
 	  Hash: function Hash(hash) {
 	    this.acceptArray(hash.pairs);
@@ -3065,9 +3030,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = Visitor;
 	module.exports = exports['default'];
 
-/***/ }),
-/* 50 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -3140,8 +3105,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  for (var i = 0, l = parts.length; i < l; i++) {
 	    var part = parts[i].part,
 
-	    // If we have [] syntax then we do not treat path references as operators,
-	    // i.e. foo.[this] resolves to approximately context.foo['this']
+	    
+	    
 	    isLiteral = parts[i].original !== part;
 	    original += (parts[i].separator || '') + part;
 
@@ -3167,7 +3132,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	function prepareMustache(path, params, hash, open, strip, locInfo) {
-	  // Must use charAt to support IE pre-10
+	  
 	  var escapeFlag = open.charAt(3) || open.charAt(2),
 	      escaped = escapeFlag !== '{' && escapeFlag !== '&';
 
@@ -3257,7 +3222,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var firstLoc = statements[0].loc,
 	        lastLoc = statements[statements.length - 1].loc;
 
-	    /* istanbul ignore else */
+	    
 	    if (firstLoc && lastLoc) {
 	      loc = {
 	        source: firstLoc.source,
@@ -3296,11 +3261,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	}
 
-/***/ }),
-/* 51 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
 
-	/* eslint-disable new-cap */
+ (function(module, exports, __webpack_require__) {
+
+	
 
 	'use strict';
 
@@ -3327,10 +3292,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function Compiler() {}
 
-	// the foundHelper register will disambiguate helper lookup from finding a
-	// function in a context. This is necessary for mustache compatibility, which
-	// requires that context functions in blocks are evaluated by blockHelperMissing,
-	// and then proceed as if the resulting value was provided to blockHelperMissing.
+	
+	
+	
+	
 
 	Compiler.prototype = {
 	  compiler: Compiler,
@@ -3349,8 +3314,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 
-	    // We know that length is the same between the two arrays because they are directly tied
-	    // to the opcode behavior above.
+	    
+	    
 	    len = this.children.length;
 	    for (var i = 0; i < len; i++) {
 	      if (!this.children[i].equals(other.children[i])) {
@@ -3389,7 +3354,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  compileProgram: function compileProgram(program) {
 	    var childCompiler = new this.compiler(),
-	        // eslint-disable-line new-cap
+	        
 	    result = childCompiler.compile(program, this.options),
 	        guid = this.guid++;
 
@@ -3402,7 +3367,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 
 	  accept: function accept(node) {
-	    /* istanbul ignore next: Sanity code */
+	    
 	    if (!this[node.type]) {
 	      throw new _exception2['default']('Unknown type: ' + node.type, node);
 	    }
@@ -3446,8 +3411,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    } else if (type === 'simple') {
 	      this.simpleSexpr(block);
 
-	      // now that the simple mustache is resolved, we need to
-	      // evaluate it by executing `blockHelperMissing`
+	      
+	      
 	      this.opcode('pushProgram', program);
 	      this.opcode('pushProgram', inverse);
 	      this.opcode('emptyHash');
@@ -3455,8 +3420,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    } else {
 	      this.ambiguousSexpr(block, program, inverse);
 
-	      // now that the simple mustache is resolved, we need to
-	      // evaluate it by executing `blockHelperMissing`
+	      
+	      
 	      this.opcode('pushProgram', program);
 	      this.opcode('pushProgram', inverse);
 	      this.opcode('emptyHash');
@@ -3600,7 +3565,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (blockParamId) {
 	      this.opcode('lookupBlockParam', blockParamId, path.parts);
 	    } else if (!name) {
-	      // Context reference, i.e. `{{foo .}}` or `{{foo ..}}`
+	      
 	      this.opcode('pushContext');
 	    } else if (path.data) {
 	      this.options.data = true;
@@ -3646,7 +3611,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.opcode('popHash');
 	  },
 
-	  // HELPERS
+	  
 	  opcode: function opcode(name) {
 	    this.opcodes.push({
 	      opcode: name,
@@ -3668,17 +3633,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var isBlockParam = isSimple && !!this.blockParamIndex(sexpr.path.parts[0]);
 
-	    // a mustache is an eligible helper if:
-	    // * its id is simple (a single part, not `this` or `..`)
+	    
+	    
 	    var isHelper = !isBlockParam && _ast2['default'].helpers.helperExpression(sexpr);
 
-	    // if a mustache is an eligible helper but not a definite
-	    // helper, it is ambiguous, and will be resolved in a later
-	    // pass or at runtime.
+	    
+	    
+	    
 	    var isEligible = !isBlockParam && (isHelper || isSimple);
 
-	    // if ambiguous, we can possibly resolve the ambiguity now
-	    // An eligible helper is one that does not have a complex path, i.e. `this.foo`, `../foo` etc.
+	    
+	    
 	    if (isEligible && !isHelper) {
 	      var _name = sexpr.path.parts[0],
 	          options = this.options;
@@ -3709,7 +3674,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    if (this.stringParams) {
 	      if (value.replace) {
-	        value = value.replace(/^(\.?\.\/)*/g, '').replace(/\//g, '.');
+	        value = value.replace(/^(\.?\.\/)*/g, '').replace(/\
 	      }
 
 	      if (val.depth) {
@@ -3719,8 +3684,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.opcode('pushStringParam', value, val.type);
 
 	      if (val.type === 'SubExpression') {
-	        // SubExpressions get evaluated and passed in
-	        // in string params mode.
+	        
+	        
 	        this.accept(val);
 	      }
 	    } else {
@@ -3735,7 +3700,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else {
 	          value = val.original || value;
 	          if (value.replace) {
-	            value = value.replace(/^this(?:\.|$)/, '').replace(/^\.\//, '').replace(/^\.$/, '');
+	            value = value.replace(/^this(?:\.|$)/, '').replace(/^\.\
 	          }
 
 	          this.opcode('pushId', val.type, value);
@@ -3814,7 +3779,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return env.template(templateSpec);
 	  }
 
-	  // Template is only compiled on first use and cached after that point.
+	  
 	  function ret(context, execOptions) {
 	    if (!compiled) {
 	      compiled = compileInput();
@@ -3854,8 +3819,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	function transformLiteralToPath(sexpr) {
 	  if (!sexpr.path.parts) {
 	    var literal = sexpr.path;
-	    // Casting to string here to make false and 0 literal values play nicely with the rest
-	    // of the system.
+	    
+	    
 	    sexpr.path = {
 	      type: 'PathExpression',
 	      data: false,
@@ -3867,9 +3832,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}
 
-/***/ }),
-/* 52 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
+
+ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -3898,9 +3863,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	function JavaScriptCompiler() {}
 
 	JavaScriptCompiler.prototype = {
-	  // PUBLIC API: You can override these methods in a subclass to provide
-	  // alternative compiled forms for name lookup and buffering semantics
-	  nameLookup: function nameLookup(parent, name /*,  type */) {
+	  
+	  
+	  nameLookup: function nameLookup(parent, name ) {
 	    return this.internalNameLookup(parent, name);
 	  },
 	  depthedLookup: function depthedLookup(name) {
@@ -3914,7 +3879,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 
 	  appendToBuffer: function appendToBuffer(source, location, explicit) {
-	    // Force a source as this simplifies the merge logic.
+	    
 	    if (!_utils.isArray(source)) {
 	      source = [source];
 	    }
@@ -3923,9 +3888,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (this.environment.isSimple) {
 	      return ['return ', source, ';'];
 	    } else if (explicit) {
-	      // This is a case where the buffer operation occurs as a child of another
-	      // construct, generally braces. We have to explicitly output these buffer
-	      // operations to ensure that the emitted code goes in the correct location.
+	      
+	      
+	      
 	      return ['buffer += ', source, ';'];
 	    } else {
 	      source.appendToBuffer = true;
@@ -3936,7 +3901,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  initializeBuffer: function initializeBuffer() {
 	    return this.quotedString('');
 	  },
-	  // END PUBLIC API
+	  
 	  internalNameLookup: function internalNameLookup(parent, name) {
 	    this.lookupPropertyFunctionIsUsed = true;
 	    return ['lookupProperty(', parent, ',', JSON.stringify(name), ')'];
@@ -3989,11 +3954,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this[opcode.opcode].apply(this, opcode.args);
 	    }
 
-	    // Flush any trailing content that might be pending.
+	    
 	    this.source.currentLocation = firstLoc;
 	    this.pushSource('');
 
-	    /* istanbul ignore next */
+	    
 	    if (this.stackSlot || this.inlineStack.length || this.compileStack.length) {
 	      throw new _exception2['default']('Compile completed with content left on stack');
 	    }
@@ -4023,7 +3988,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      };
 
 	      if (this.decorators) {
-	        ret.main_d = this.decorators; // eslint-disable-line camelcase
+	        ret.main_d = this.decorators; 
 	        ret.useDecorators = true;
 	      }
 
@@ -4080,15 +4045,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 
 	  preamble: function preamble() {
-	    // track the last context pushed into place to allow skipping the
-	    // getContext opcode when it would be a noop
+	    
+	    
 	    this.lastContext = 0;
 	    this.source = new _codeGen2['default'](this.options.srcName);
 	    this.decorators = new _codeGen2['default'](this.options.srcName);
 	  },
 
 	  createFunctionContext: function createFunctionContext(asObject) {
-	    // istanbul ignore next
+	    
 
 	    var _this = this;
 
@@ -4099,12 +4064,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      varDeclarations += ', ' + locals.join(', ');
 	    }
 
-	    // Generate minimizer alias mappings
-	    //
-	    // When using true SourceNodes, this will update all references to the given alias
-	    // as the source nodes are reused in situ. For the non-source node compilation mode,
-	    // aliases will not be used, but this case is already being run on the client and
-	    // we aren't concern about minimizing the template size.
+	    
+	    
+	    
+	    
+	    
+	    
 	    var aliasCount = 0;
 	    _Object$keys(this.aliases).forEach(function (alias) {
 	      var node = _this.aliases[alias];
@@ -4127,7 +4092,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      params.push('depths');
 	    }
 
-	    // Perform a second pass over the output to merge content when possible
+	    
 	    var source = this.mergeSource(varDeclarations);
 
 	    if (asObject) {
@@ -4200,15 +4165,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return '\n      lookupProperty = container.lookupProperty || function(parent, propertyName) {\n        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {\n          return parent[propertyName];\n        }\n        return undefined\n    }\n    '.trim();
 	  },
 
-	  // [blockValue]
-	  //
-	  // On stack, before: hash, inverse, program, value
-	  // On stack, after: return value of blockHelperMissing
-	  //
-	  // The purpose of this opcode is to take a block of the form
-	  // `{{#this.foo}}...{{/this.foo}}`, resolve the value of `foo`, and
-	  // replace it on the stack with the result of properly
-	  // invoking blockHelperMissing.
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 	  blockValue: function blockValue(name) {
 	    var blockHelperMissing = this.aliasable('container.hooks.blockHelperMissing'),
 	        params = [this.contextName(0)];
@@ -4220,14 +4185,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.push(this.source.functionCall(blockHelperMissing, 'call', params));
 	  },
 
-	  // [ambiguousBlockValue]
-	  //
-	  // On stack, before: hash, inverse, program, value
-	  // Compiler value, before: lastHelper=value of last found helper, if any
-	  // On stack, after, if no lastHelper: same as [blockValue]
-	  // On stack, after, if lastHelper: value
+	  
+	  
+	  
+	  
+	  
+	  
 	  ambiguousBlockValue: function ambiguousBlockValue() {
-	    // We're being a bit cheeky and reusing the options value from the prior exec
+	    
 	    var blockHelperMissing = this.aliasable('container.hooks.blockHelperMissing'),
 	        params = [this.contextName(0)];
 	    this.setupHelperArgs('', 0, params, true);
@@ -4240,12 +4205,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.pushSource(['if (!', this.lastHelper, ') { ', current, ' = ', this.source.functionCall(blockHelperMissing, 'call', params), '}']);
 	  },
 
-	  // [appendContent]
-	  //
-	  // On stack, before: ...
-	  // On stack, after: ...
-	  //
-	  // Appends the string value of `content` to the current buffer
+	  
+	  
+	  
+	  
+	  
+	  
 	  appendContent: function appendContent(content) {
 	    if (this.pendingContent) {
 	      content = this.pendingContent + content;
@@ -4256,15 +4221,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.pendingContent = content;
 	  },
 
-	  // [append]
-	  //
-	  // On stack, before: value, ...
-	  // On stack, after: ...
-	  //
-	  // Coerces `value` to a String and appends it to the current buffer.
-	  //
-	  // If `value` is truthy, or 0, it is coerced into a string and appended
-	  // Otherwise, the empty string is appended
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 	  append: function append() {
 	    if (this.isInline()) {
 	      this.replaceStack(function (current) {
@@ -4281,50 +4246,50 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  },
 
-	  // [appendEscaped]
-	  //
-	  // On stack, before: value, ...
-	  // On stack, after: ...
-	  //
-	  // Escape `value` and append it to the buffer
+	  
+	  
+	  
+	  
+	  
+	  
 	  appendEscaped: function appendEscaped() {
 	    this.pushSource(this.appendToBuffer([this.aliasable('container.escapeExpression'), '(', this.popStack(), ')']));
 	  },
 
-	  // [getContext]
-	  //
-	  // On stack, before: ...
-	  // On stack, after: ...
-	  // Compiler value, after: lastContext=depth
-	  //
-	  // Set the value of the `lastContext` compiler value to the depth
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 	  getContext: function getContext(depth) {
 	    this.lastContext = depth;
 	  },
 
-	  // [pushContext]
-	  //
-	  // On stack, before: ...
-	  // On stack, after: currentContext, ...
-	  //
-	  // Pushes the value of the current context onto the stack.
+	  
+	  
+	  
+	  
+	  
+	  
 	  pushContext: function pushContext() {
 	    this.pushStackLiteral(this.contextName(this.lastContext));
 	  },
 
-	  // [lookupOnContext]
-	  //
-	  // On stack, before: ...
-	  // On stack, after: currentContext[name], ...
-	  //
-	  // Looks up the value of `name` on the current context and pushes
-	  // it onto the stack.
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 	  lookupOnContext: function lookupOnContext(parts, falsy, strict, scoped) {
 	    var i = 0;
 
 	    if (!scoped && this.options.compat && !this.lastContext) {
-	      // The depthed query is expected to handle the undefined logic for the root level that
-	      // is implemented below, so we evaluate that directly in compat mode
+	      
+	      
 	      this.push(this.depthedLookup(parts[i++]));
 	    } else {
 	      this.pushContext();
@@ -4333,13 +4298,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.resolvePath('context', parts, i, falsy, strict);
 	  },
 
-	  // [lookupBlockParam]
-	  //
-	  // On stack, before: ...
-	  // On stack, after: blockParam[name], ...
-	  //
-	  // Looks up the value of `parts` on the given block param and pushes
-	  // it onto the stack.
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 	  lookupBlockParam: function lookupBlockParam(blockParamId, parts) {
 	    this.useBlockParams = true;
 
@@ -4347,12 +4312,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.resolvePath('context', parts, 1);
 	  },
 
-	  // [lookupData]
-	  //
-	  // On stack, before: ...
-	  // On stack, after: data, ...
-	  //
-	  // Push the data lookup operator
+	  
+	  
+	  
+	  
+	  
+	  
 	  lookupData: function lookupData(depth, parts, strict) {
 	    if (!depth) {
 	      this.pushStackLiteral('data');
@@ -4364,7 +4329,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 
 	  resolvePath: function resolvePath(type, parts, i, falsy, strict) {
-	    // istanbul ignore next
+	    
 
 	    var _this2 = this;
 
@@ -4375,47 +4340,47 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var len = parts.length;
 	    for (; i < len; i++) {
-	      /* eslint-disable no-loop-func */
+	      
 	      this.replaceStack(function (current) {
 	        var lookup = _this2.nameLookup(current, parts[i], type);
-	        // We want to ensure that zero and false are handled properly if the context (falsy flag)
-	        // needs to have the special handling for these values.
+	        
+	        
 	        if (!falsy) {
 	          return [' != null ? ', lookup, ' : ', current];
 	        } else {
-	          // Otherwise we can use generic falsy handling
+	          
 	          return [' && ', lookup];
 	        }
 	      });
-	      /* eslint-enable no-loop-func */
+	      
 	    }
 	  },
 
-	  // [resolvePossibleLambda]
-	  //
-	  // On stack, before: value, ...
-	  // On stack, after: resolved value, ...
-	  //
-	  // If the `value` is a lambda, replace it on the stack by
-	  // the return value of the lambda
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 	  resolvePossibleLambda: function resolvePossibleLambda() {
 	    this.push([this.aliasable('container.lambda'), '(', this.popStack(), ', ', this.contextName(0), ')']);
 	  },
 
-	  // [pushStringParam]
-	  //
-	  // On stack, before: ...
-	  // On stack, after: string, currentContext, ...
-	  //
-	  // This opcode is designed for use in string mode, which
-	  // provides the string value of a parameter along with its
-	  // depth rather than resolving it immediately.
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 	  pushStringParam: function pushStringParam(string, type) {
 	    this.pushContext();
 	    this.pushString(type);
 
-	    // If it's a subexpression, the string result
-	    // will be pushed after this opcode.
+	    
+	    
 	    if (type !== 'SubExpression') {
 	      if (typeof string === 'string') {
 	        this.pushString(string);
@@ -4427,11 +4392,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  emptyHash: function emptyHash(omitEmpty) {
 	    if (this.trackIds) {
-	      this.push('{}'); // hashIds
+	      this.push('{}'); 
 	    }
 	    if (this.stringParams) {
-	      this.push('{}'); // hashContexts
-	      this.push('{}'); // hashTypes
+	      this.push('{}'); 
+	      this.push('{}'); 
 	    }
 	    this.pushStackLiteral(omitEmpty ? 'undefined' : '{}');
 	  },
@@ -4456,36 +4421,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.push(this.objectLiteral(hash.values));
 	  },
 
-	  // [pushString]
-	  //
-	  // On stack, before: ...
-	  // On stack, after: quotedString(string), ...
-	  //
-	  // Push a quoted version of `string` onto the stack
+	  
+	  
+	  
+	  
+	  
+	  
 	  pushString: function pushString(string) {
 	    this.pushStackLiteral(this.quotedString(string));
 	  },
 
-	  // [pushLiteral]
-	  //
-	  // On stack, before: ...
-	  // On stack, after: value, ...
-	  //
-	  // Pushes a value onto the stack. This operation prevents
-	  // the compiler from creating a temporary variable to hold
-	  // it.
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 	  pushLiteral: function pushLiteral(value) {
 	    this.pushStackLiteral(value);
 	  },
 
-	  // [pushProgram]
-	  //
-	  // On stack, before: ...
-	  // On stack, after: program(guid), ...
-	  //
-	  // Push a program expression onto the stack. This takes
-	  // a compile-time guid and converts it into a runtime-accessible
-	  // expression.
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 	  pushProgram: function pushProgram(guid) {
 	    if (guid != null) {
 	      this.pushStackLiteral(this.programExpression(guid));
@@ -4494,13 +4459,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  },
 
-	  // [registerDecorator]
-	  //
-	  // On stack, before: hash, program, params..., ...
-	  // On stack, after: ...
-	  //
-	  // Pops off the decorator's parameters, invokes the decorator,
-	  // and inserts the decorator into the decorators list.
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 	  registerDecorator: function registerDecorator(paramSize, name) {
 	    var foundDecorator = this.nameLookup('decorators', name, 'decorator'),
 	        options = this.setupHelperArgs(name, paramSize);
@@ -4508,15 +4473,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.decorators.push(['fn = ', this.decorators.functionCall(foundDecorator, '', ['fn', 'props', 'container', options]), ' || fn;']);
 	  },
 
-	  // [invokeHelper]
-	  //
-	  // On stack, before: hash, inverse, program, params..., ...
-	  // On stack, after: result of helper invocation
-	  //
-	  // Pops off the helper's parameters, invokes the helper,
-	  // and pushes the helper's return value onto the stack.
-	  //
-	  // If the helper is not found, `helperMissing` is called.
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 	  invokeHelper: function invokeHelper(paramSize, name, isSimple) {
 	    var nonHelper = this.popStack(),
 	        helper = this.setupHelper(paramSize, name);
@@ -4524,10 +4489,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var possibleFunctionCalls = [];
 
 	    if (isSimple) {
-	      // direct call to helper
+	      
 	      possibleFunctionCalls.push(helper.name);
 	    }
-	    // call a function from the input object
+	    
 	    possibleFunctionCalls.push(nonHelper);
 	    if (!this.options.strict) {
 	      possibleFunctionCalls.push(this.aliasable('container.hooks.helperMissing'));
@@ -4546,30 +4511,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    return result;
 	  },
-	  // [invokeKnownHelper]
-	  //
-	  // On stack, before: hash, inverse, program, params..., ...
-	  // On stack, after: result of helper invocation
-	  //
-	  // This operation is used when the helper is known to exist,
-	  // so a `helperMissing` fallback is not required.
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 	  invokeKnownHelper: function invokeKnownHelper(paramSize, name) {
 	    var helper = this.setupHelper(paramSize, name);
 	    this.push(this.source.functionCall(helper.name, 'call', helper.callParams));
 	  },
 
-	  // [invokeAmbiguous]
-	  //
-	  // On stack, before: hash, inverse, program, params..., ...
-	  // On stack, after: result of disambiguation
-	  //
-	  // This operation is used when an expression like `{{foo}}`
-	  // is provided, but we don't know at compile-time whether it
-	  // is a helper or a path.
-	  //
-	  // This operation emits more code than the other options,
-	  // and can be avoided by passing the `knownHelpers` and
-	  // `knownHelpersOnly` flags at compile-time.
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 	  invokeAmbiguous: function invokeAmbiguous(name, helperCall) {
 	    this.useRegister('helper');
 
@@ -4589,13 +4554,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.push(['(', lookup, helper.paramsInit ? ['),(', helper.paramsInit] : [], '),', '(typeof helper === ', this.aliasable('"function"'), ' ? ', this.source.functionCall('helper', 'call', helper.callParams), ' : helper))']);
 	  },
 
-	  // [invokePartial]
-	  //
-	  // On stack, before: context, ...
-	  // On stack after: result of partial invocation
-	  //
-	  // This operation pops off a context, invokes a partial with that context,
-	  // and pushes the result of the invocation back.
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 	  invokePartial: function invokePartial(isDynamic, name, indent) {
 	    var params = [],
 	        options = this.setupParams(name, 1, params);
@@ -4627,12 +4592,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.push(this.source.functionCall('container.invokePartial', '', params));
 	  },
 
-	  // [assignToHash]
-	  //
-	  // On stack, before: value, ..., hash, ...
-	  // On stack, after: ..., hash, ...
-	  //
-	  // Pops a value off the stack and assigns it to the current hash
+	  
+	  
+	  
+	  
+	  
+	  
 	  assignToHash: function assignToHash(key) {
 	    var value = this.popStack(),
 	        context = undefined,
@@ -4672,7 +4637,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  },
 
-	  // HELPERS
+	  
 
 	  compiler: JavaScriptCompiler,
 
@@ -4683,12 +4648,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    for (var i = 0, l = children.length; i < l; i++) {
 	      child = children[i];
-	      compiler = new this.compiler(); // eslint-disable-line new-cap
+	      compiler = new this.compiler(); 
 
 	      var existing = this.matchExistingProgram(child);
 
 	      if (existing == null) {
-	        this.context.programs.push(''); // Placeholder to prevent name conflicts for nested children
+	        this.context.programs.push(''); 
 	        var index = this.context.programs.length;
 	        child.index = index;
 	        child.name = 'program' + index;
@@ -4769,21 +4734,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	        createdStack = undefined,
 	        usedLiteral = undefined;
 
-	    /* istanbul ignore next */
+	    
 	    if (!this.isInline()) {
 	      throw new _exception2['default']('replaceStack on non-inline');
 	    }
 
-	    // We want to merge the inline statement into the replacement statement via ','
+	    
 	    var top = this.popStack(true);
 
 	    if (top instanceof Literal) {
-	      // Literals do not need to be inlined
+	      
 	      stack = [top.value];
 	      prefix = ['(', stack];
 	      usedLiteral = true;
 	    } else {
-	      // Get or create the current stack name for use by the inline
+	      
 	      createdStack = true;
 	      var _name = this.incrStack();
 
@@ -4817,7 +4782,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.inlineStack = [];
 	    for (var i = 0, len = inlineStack.length; i < len; i++) {
 	      var entry = inlineStack[i];
-	      /* istanbul ignore if */
+	      
 	      if (entry instanceof Literal) {
 	        this.compileStack.push(entry);
 	      } else {
@@ -4839,7 +4804,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return item.value;
 	    } else {
 	      if (!inline) {
-	        /* istanbul ignore next */
+	        
 	        if (!this.stackSlot) {
 	          throw new _exception2['default']('Invalid stack pop');
 	        }
@@ -4853,7 +4818,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var stack = this.isInline() ? this.inlineStack : this.compileStack,
 	        item = stack[stack.length - 1];
 
-	    /* istanbul ignore if */
+	    
 	    if (item instanceof Literal) {
 	      return item.value;
 	    } else {
@@ -4931,15 +4896,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var inverse = this.popStack(),
 	        program = this.popStack();
 
-	    // Avoid setting fn and inverse if neither are set. This allows
-	    // helpers to do a check for `if (options.fn)`
+	    
+	    
 	    if (program || inverse) {
 	      options.fn = program || 'container.noop';
 	      options.inverse = inverse || 'container.noop';
 	    }
 
-	    // The parameters go on to the stack in order (making sure that they are evaluated in order)
-	    // so we need to pop them off the stack in reverse order
+	    
+	    
 	    var i = paramSize;
 	    while (i--) {
 	      param = this.popStack();
@@ -5002,9 +4967,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	})();
 
-	/**
-	 * @deprecated May be removed in the next major version
-	 */
+	
 	JavaScriptCompiler.isValidJavaScriptVariableName = function (name) {
 	  return !JavaScriptCompiler.RESERVED_WORDS[name] && /^[a-zA-Z_$][0-9a-zA-Z_$]*$/.test(name);
 	};
@@ -5031,11 +4994,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = JavaScriptCompiler;
 	module.exports = exports['default'];
 
-/***/ }),
-/* 53 */
-/***/ (function(module, exports, __webpack_require__) {
+ }),
 
-	/* global define */
+ (function(module, exports, __webpack_require__) {
+
+	
 	'use strict';
 
 	var _Object$keys = __webpack_require__(13)['default'];
@@ -5047,17 +5010,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	var SourceNode = undefined;
 
 	try {
-	  /* istanbul ignore next */
+	  
 	  if (false) {
-	    // We don't support this in AMD environments. For these environments, we asusme that
-	    // they are running on the browser and thus have no need for the source-map library.
+	    
+	    
 	    var SourceMap = require('source-map');
 	    SourceNode = SourceMap.SourceNode;
 	  }
 	} catch (err) {}
-	/* NOP */
+	
 
-	/* istanbul ignore if: tested but not covered in istanbul due to dist build  */
+	
 	if (!SourceNode) {
 	  SourceNode = function (line, column, srcFile, chunks) {
 	    this.src = '';
@@ -5065,7 +5028,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.add(chunks);
 	    }
 	  };
-	  /* istanbul ignore next */
+	  
 	  SourceNode.prototype = {
 	    add: function add(chunks) {
 	      if (_utils.isArray(chunks)) {
@@ -5097,7 +5060,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    return ret;
 	  } else if (typeof chunk === 'boolean' || typeof chunk === 'number') {
-	    // Handle primitives that the SourceNode will throw up on
+	    
 	    return chunk + '';
 	  }
 	  return chunk;
@@ -5155,12 +5118,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 
 	  quotedString: function quotedString(str) {
-	    return '"' + (str + '').replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\u2028/g, '\\u2028') // Per Ecma-262 7.3 + 7.8.4
+	    return '"' + (str + '').replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\u2028/g, '\\u2028') 
 	    .replace(/\u2029/g, '\\u2029') + '"';
 	  },
 
 	  objectLiteral: function objectLiteral(obj) {
-	    // istanbul ignore next
+	    
 
 	    var _this = this;
 
@@ -5205,8 +5168,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = CodeGen;
 	module.exports = exports['default'];
 
-/***/ })
-/******/ ])
+ })
+ ])
 });
 ;
 Espo.loader.setContextId(null);

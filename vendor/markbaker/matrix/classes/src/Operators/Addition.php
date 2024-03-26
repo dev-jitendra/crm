@@ -7,13 +7,7 @@ use Matrix\Exception;
 
 class Addition extends Operator
 {
-    /**
-     * Execute the addition
-     *
-     * @param mixed $value The matrix or numeric value to add to the current base value
-     * @throws Exception If the provided argument is not appropriate for the operation
-     * @return $this The operation object, allowing multiple additions to be chained
-     **/
+    
     public function execute($value): Operator
     {
         if (is_array($value)) {
@@ -29,12 +23,7 @@ class Addition extends Operator
         throw new Exception('Invalid argument for addition');
     }
 
-    /**
-     * Execute the addition for a scalar
-     *
-     * @param mixed $value The numeric value to add to the current base value
-     * @return $this The operation object, allowing multiple additions to be chained
-     **/
+    
     protected function addScalar($value): Operator
     {
         for ($row = 0; $row < $this->rows; ++$row) {
@@ -46,13 +35,7 @@ class Addition extends Operator
         return $this;
     }
 
-    /**
-     * Execute the addition for a matrix
-     *
-     * @param Matrix $value The numeric value to add to the current base value
-     * @return $this The operation object, allowing multiple additions to be chained
-     * @throws Exception If the provided argument is not appropriate for the operation
-     **/
+    
     protected function addMatrix(Matrix $value): Operator
     {
         $this->validateMatchingDimensions($value);

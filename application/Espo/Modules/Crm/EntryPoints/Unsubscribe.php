@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Modules\Crm\EntryPoints;
 
@@ -66,11 +40,7 @@ class Unsubscribe implements EntryPoint
         private ActionRenderer $actionRenderer
     ) {}
 
-    /**
-     * @throws BadRequest
-     * @throws Error
-     * @throws NotFound
-     */
+    
     public function run(Request $request, Response $response): void
     {
         $id = $request->getQueryParam('id') ?? null;
@@ -89,7 +59,7 @@ class Unsubscribe implements EntryPoint
 
         $queueItemId = $id;
 
-        /** @var ?EmailQueueItem $queueItem */
+        
         $queueItem = $this->entityManager->getEntityById(EmailQueueItem::ENTITY_TYPE, $queueItemId);
 
         if (!$queueItem) {
@@ -102,7 +72,7 @@ class Unsubscribe implements EntryPoint
         $massEmailId = $queueItem->getMassEmailId();
 
         if ($massEmailId) {
-            /** @var MassEmail $massEmail */
+            
             $massEmail = $this->entityManager->getEntityById(MassEmail::ENTITY_TYPE, $massEmailId);
         }
 
@@ -110,7 +80,7 @@ class Unsubscribe implements EntryPoint
             $campaignId = $massEmail->getCampaignId();
 
             if ($campaignId) {
-                /** @var ?Campaign $campaign */
+                
                 $campaign = $this->entityManager->getEntityById(Campaign::ENTITY_TYPE, $campaignId);
             }
 
@@ -138,7 +108,7 @@ class Unsubscribe implements EntryPoint
 
             $link = $this->util->getLinkByEntityType($target->getEntityType());
 
-            /** @var Collection<TargetList> $targetListList */
+            
             $targetListList = $this->entityManager
                 ->getRDBRepository(MassEmail::ENTITY_TYPE)
                 ->getRelation($massEmail, 'targetLists')
@@ -180,9 +150,7 @@ class Unsubscribe implements EntryPoint
         }
     }
 
-    /**
-     * @param array<string, mixed> $actionData
-     */
+    
     protected function display(Response $response, array $actionData): void
     {
         $data = [
@@ -196,9 +164,7 @@ class Unsubscribe implements EntryPoint
         $this->actionRenderer->write($response, $params);
     }
 
-    /**
-     * @throws NotFound
-     */
+    
     protected function processWithHash(Response $response, string $emailAddress, string $hash): void
     {
         $hash2 = $this->hasher->hash($emailAddress);
@@ -235,7 +201,7 @@ class Unsubscribe implements EntryPoint
 
     private function getEmailAddressRepository(): EmailAddressRepository
     {
-        /** @var EmailAddressRepository */
+        
         return $this->entityManager->getRepository(EmailAddress::ENTITY_TYPE);
     }
 }

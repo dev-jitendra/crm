@@ -11,85 +11,34 @@ use AsyncAws\S3\ValueObject\CreateBucketConfiguration;
 
 final class CreateBucketRequest extends Input
 {
-    /**
-     * The canned ACL to apply to the bucket.
-     *
-     * @var null|BucketCannedACL::*
-     */
+    
     private $acl;
 
-    /**
-     * The name of the bucket to create.
-     *
-     * @required
-     *
-     * @var string|null
-     */
+    
     private $bucket;
 
-    /**
-     * The configuration information for the bucket.
-     *
-     * @var CreateBucketConfiguration|null
-     */
+    
     private $createBucketConfiguration;
 
-    /**
-     * Allows grantee the read, write, read ACP, and write ACP permissions on the bucket.
-     *
-     * @var string|null
-     */
+    
     private $grantFullControl;
 
-    /**
-     * Allows grantee to list the objects in the bucket.
-     *
-     * @var string|null
-     */
+    
     private $grantRead;
 
-    /**
-     * Allows grantee to read the bucket ACL.
-     *
-     * @var string|null
-     */
+    
     private $grantReadAcp;
 
-    /**
-     * Allows grantee to create, overwrite, and delete any object in the bucket.
-     *
-     * @var string|null
-     */
+    
     private $grantWrite;
 
-    /**
-     * Allows grantee to write the ACL for the applicable bucket.
-     *
-     * @var string|null
-     */
+    
     private $grantWriteAcp;
 
-    /**
-     * Specifies whether you want S3 Object Lock to be enabled for the new bucket.
-     *
-     * @var bool|null
-     */
+    
     private $objectLockEnabledForBucket;
 
-    /**
-     * @param array{
-     *   ACL?: BucketCannedACL::*,
-     *   Bucket?: string,
-     *   CreateBucketConfiguration?: CreateBucketConfiguration|array,
-     *   GrantFullControl?: string,
-     *   GrantRead?: string,
-     *   GrantReadACP?: string,
-     *   GrantWrite?: string,
-     *   GrantWriteACP?: string,
-     *   ObjectLockEnabledForBucket?: bool,
-     *   @region?: string,
-     * } $input
-     */
+    
     public function __construct(array $input = [])
     {
         $this->acl = $input['ACL'] ?? null;
@@ -109,9 +58,7 @@ final class CreateBucketRequest extends Input
         return $input instanceof self ? $input : new self($input);
     }
 
-    /**
-     * @return BucketCannedACL::*|null
-     */
+    
     public function getAcl(): ?string
     {
         return $this->acl;
@@ -157,12 +104,10 @@ final class CreateBucketRequest extends Input
         return $this->objectLockEnabledForBucket;
     }
 
-    /**
-     * @internal
-     */
+    
     public function request(): Request
     {
-        // Prepare headers
+        
         $headers = ['content-type' => 'application/xml'];
         if (null !== $this->acl) {
             if (!BucketCannedACL::exists($this->acl)) {
@@ -189,10 +134,10 @@ final class CreateBucketRequest extends Input
             $headers['x-amz-bucket-object-lock-enabled'] = $this->objectLockEnabledForBucket ? 'true' : 'false';
         }
 
-        // Prepare query
+        
         $query = [];
 
-        // Prepare URI
+        
         $uri = [];
         if (null === $v = $this->bucket) {
             throw new InvalidArgument(sprintf('Missing parameter "Bucket" for "%s". The value cannot be null.', __CLASS__));
@@ -200,20 +145,18 @@ final class CreateBucketRequest extends Input
         $uri['Bucket'] = $v;
         $uriString = '/' . rawurlencode($uri['Bucket']);
 
-        // Prepare Body
+        
 
         $document = new \DOMDocument('1.0', 'UTF-8');
         $document->formatOutput = false;
         $this->requestBody($document, $document);
         $body = $document->hasChildNodes() ? $document->saveXML() : '';
 
-        // Return the Request
+        
         return new Request('PUT', $uriString, $query, $headers, StreamFactory::create($body));
     }
 
-    /**
-     * @param BucketCannedACL::*|null $value
-     */
+    
     public function setAcl(?string $value): self
     {
         $this->acl = $value;
@@ -281,7 +224,7 @@ final class CreateBucketRequest extends Input
     {
         if (null !== $v = $this->createBucketConfiguration) {
             $node->appendChild($child = $document->createElement('CreateBucketConfiguration'));
-            $child->setAttribute('xmlns', 'http://s3.amazonaws.com/doc/2006-03-01/');
+            $child->setAttribute('xmlns', 'http:
             $v->requestBody($child, $document);
         }
     }

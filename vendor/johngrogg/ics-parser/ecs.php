@@ -82,14 +82,14 @@ use SlevomatCodingStandard\Namespaces\UnusedUsesSniff;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\EasyCodingStandard\ValueObject\Option;
 
-// ecs check --fix .
+
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
     $parameters->set(Option::LINE_ENDING, "\n");
 
-    // https://github.com/symplify/easy-coding-standard/blob/master/config/set/psr12.php
+    
     $parameters->set(Option::SETS, array('psr12'));
 
     $parameters->set(Option::SKIP, array(
@@ -102,7 +102,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         'PhpCsFixer\Fixer\Phpdoc\PhpdocVarAnnotationCorrectOrderFixer' => null,
         'PhpCsFixer\Fixer\Phpdoc\PhpdocVarWithoutNameFixer'            => null,
         'PhpCsFixer\Fixer\ReturnNotation\SimplifiedNullReturnFixer'    => null,
-        // Requires PHP 7.1 and above
+        
         'PhpCsFixer\Fixer\ClassNotation\VisibilityRequiredFixer' => null,
     ));
 

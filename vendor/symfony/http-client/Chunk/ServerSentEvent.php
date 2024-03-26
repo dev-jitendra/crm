@@ -1,22 +1,12 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpClient\Chunk;
 
 use Symfony\Contracts\HttpClient\ChunkInterface;
 
-/**
- * @author Antoine Bluchet <soyuka@gmail.com>
- * @author Nicolas Grekas <p@tchwork.com>
- */
+
 final class ServerSentEvent extends DataChunk implements ChunkInterface
 {
     private $data = '';
@@ -28,7 +18,7 @@ final class ServerSentEvent extends DataChunk implements ChunkInterface
     {
         parent::__construct(-1, $content);
 
-        // remove BOM
+        
         if (0 === strpos($content, "\xEF\xBB\xBF")) {
             $content = substr($content, 3);
         }

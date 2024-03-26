@@ -15,27 +15,24 @@ use function substr;
 
 final class ExpandArrayParameters implements Visitor
 {
-    /** @var array<int,mixed>|array<string,mixed> */
+    
     private array $originalParameters;
 
-    /** @var array<int,Type|int|string|null>|array<string,Type|int|string|null> */
+    
     private array $originalTypes;
 
     private int $originalParameterIndex = 0;
 
-    /** @var list<string> */
+    
     private array $convertedSQL = [];
 
-    /** @var list<mixed> */
+    
     private array $convertedParameters = [];
 
-    /** @var array<int,Type|int|string|null> */
+    
     private array $convertedTypes = [];
 
-    /**
-     * @param array<int, mixed>|array<string, mixed>                             $parameters
-     * @param array<int,Type|int|string|null>|array<string,Type|int|string|null> $types
-     */
+    
     public function __construct(array $parameters, array $types)
     {
         $this->originalParameters = $parameters;
@@ -76,16 +73,13 @@ final class ExpandArrayParameters implements Visitor
         return implode('', $this->convertedSQL);
     }
 
-    /** @return list<mixed> */
+    
     public function getParameters(): array
     {
         return $this->convertedParameters;
     }
 
-    /**
-     * @param int|string $key
-     * @param mixed      $value
-     */
+    
     private function acceptParameter($key, $value): void
     {
         if (! isset($this->originalTypes[$key])) {
@@ -116,16 +110,13 @@ final class ExpandArrayParameters implements Visitor
         $this->appendTypedParameter($value, $type - Connection::ARRAY_PARAM_OFFSET);
     }
 
-    /** @return array<int,Type|int|string|null> */
+    
     public function getTypes(): array
     {
         return $this->convertedTypes;
     }
 
-    /**
-     * @param list<mixed>          $values
-     * @param Type|int|string|null $type
-     */
+    
     private function appendTypedParameter(array $values, $type): void
     {
         $this->convertedSQL[] = implode(', ', array_fill(0, count($values), '?'));

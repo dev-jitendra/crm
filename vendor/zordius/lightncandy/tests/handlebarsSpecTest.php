@@ -65,9 +65,7 @@ class Utils {
 
 class HandlebarsSpecTest extends TestCase
 {
-    /**
-     * @dataProvider jsonSpecProvider
-     */
+    
     public function testSpecs($spec)
     {
         global $tmpdir;
@@ -81,7 +79,7 @@ class HandlebarsSpecTest extends TestCase
             recursive_lambda_fix($spec['options']['data']);
         }
 
-        // Fix {} for these test cases
+        
         if (
                ($spec['it'] === 'should override template partials') ||
                ($spec['it'] === 'should override partials down the entire stack') ||
@@ -90,13 +88,13 @@ class HandlebarsSpecTest extends TestCase
             $spec['data'] = new stdClass;
         }
 
-        //// Skip bad specs
-        // 1. No expected nor exception in spec
+        
+        
         if (!isset($spec['expected']) && !isset($spec['exception'])) {
             $this->markTestIncomplete("Skip [{$spec['file']}#{$spec['description']}]#{$spec['no']} , no expected result in spec, skip.");
         }
 
-        // 2. Not supported case: foo/bar path
+        
         if (
                ($spec['it'] === 'literal paths' && $spec['no'] === 58) ||
                ($spec['it'] === 'literal paths' && $spec['no'] === 59) ||
@@ -109,21 +107,21 @@ class HandlebarsSpecTest extends TestCase
             $this->markTestIncomplete('Not supported case: foo/bar path');
         }
 
-        // 3. Different API, no need to test
+        
         if (
                ($spec['it'] === 'registering undefined partial throws an exception')
            ) {
             $this->markTestIncomplete('Not supported case: just skip it');
         }
 
-        // 4. block parameters, special case now do not support
+        
         if (
                ($spec['it'] === 'should not take presedence over pathed values')
            ) {
             $this->markTestIncomplete('Not supported case: just skip it');
         }
 
-        // 5. Not supported case: helperMissing and blockHelperMissing
+        
         if (
                ($spec['it'] === 'if a context is not found, helperMissing is used') ||
                ($spec['it'] === 'if a context is not found, custom helperMissing is used') ||
@@ -136,55 +134,55 @@ class HandlebarsSpecTest extends TestCase
             $this->markTestIncomplete('Not supported case: just skip it');
         }
 
-        // 6. Not supported case: misc
+        
         if (
-               // compat mode
+               
                ($spec['description'] === 'compat mode') ||
 
-               // directives
+               
                ($spec['description'] === 'directives') ||
 
-               // track ids
+               
                ($spec['file'] === 'specs/handlebars/spec/track-ids.json') ||
 
-               // Error report: position
+               
                ($spec['it'] === 'knows how to report the correct line number in errors') ||
                ($spec['it'] === 'knows how to report the correct line number in errors when the first character is a newline') ||
 
-               // chained inverted sections + block params
+               
                ($spec['it'] === 'should allow block params on chained helpers') ||
 
-               // Decorators: https://github.com/wycats/handlebars.js/blob/master/docs/decorators-api.md
+               
                ($spec['description'] === 'decorators') ||
 
-               // strict mode
+               
                ($spec['description'] === 'strict mode') ||
 
-               // assume objects
+               
                ($spec['description'] === 'assume objects') ||
 
-               // helper for raw block
+               
                ($spec['it'] === 'helper for raw block gets parameters') ||
 
-               // lambda function in data
+               
                ($spec['it'] === 'Functions are bound to the context in knownHelpers only mode') ||
 
-               // !!!! Never support
+               
                ($spec['template'] === '{{foo}')
            ) {
             $this->markTestIncomplete('Not supported case: just skip it');
         }
 
-        // TODO: require fix
+        
         if (
-               // inline partials
+               
                ($spec['template'] === '{{#with .}}{{#*inline "myPartial"}}success{{/inline}}{{/with}}{{> myPartial}}') ||
 
-               // SafeString
+               
                ($spec['it'] === 'functions returning safestrings shouldn\'t be escaped') ||
                ($spec['it'] === 'rendering function partial in vm mode') ||
 
-               // need confirm
+               
                ($spec['it'] === 'provides each nested helper invocation its own options hash') ||
                ($spec['template'] === '{{echo (header)}}') ||
                ($spec['it'] === 'block functions without context argument') ||
@@ -194,7 +192,7 @@ class HandlebarsSpecTest extends TestCase
             $this->markTestIncomplete('TODO: require fix');
         }
 
-        // FIX SPEC
+        
         if ($spec['it'] === 'should take presednece over parent block params') {
             $spec['helpers']['goodbyes']['php'] = 'function($options) { static $value; if($value === null) { $value = 1; } return $options->fn(array("value" => "bar"), array("blockParams" => ($options["fn.blockParams"] === 1) ? array($value++, $value++) : null));}';
         }
@@ -203,7 +201,7 @@ class HandlebarsSpecTest extends TestCase
         }
 
         foreach ($test_flags as $f) {
-            // setup helpers
+            
             $tested++;
             $helpers = array();
             $helpersList = '';
@@ -211,7 +209,7 @@ class HandlebarsSpecTest extends TestCase
                 if (!isset($func['php'])) {
                     $this->markTestIncomplete("Skip [{$spec['file']}#{$spec['description']}]#{$spec['no']} , no PHP helper code provided for this case.");
                 }
-                $hname = preg_replace('/\\.|\\//', '_', "custom_helper_{$spec['no']}_{$tested}_$name");
+                $hname = preg_replace('/\\.|\\
                 $helpers[$name] = $hname;
                 $standalone = $f & LightnCandy::FLAG_STANDALONEPHP;
                 $helper = preg_replace('/\\$options->(\\w+)/', '$options[\'$1\']',
@@ -233,7 +231,7 @@ class HandlebarsSpecTest extends TestCase
             try {
                 $partials = isset($spec['globalPartials']) ? $spec['globalPartials'] : array();
 
-                // Do not use array_merge() here because it destories numeric key
+                
                 if (isset($spec['partials'])) {
                     foreach ($spec['partials'] as $k => $v) {
                         $partials[$k] = $v;
@@ -279,18 +277,18 @@ class HandlebarsSpecTest extends TestCase
 
                 $parsed = print_r(LightnCandy::$lastParsed, true);
             } catch (Exception $e) {
-                // Exception as expected, pass!
+                
                 if (isset($spec['exception'])) {
                     $this->assertEquals(true, true);
                     continue;
                 }
 
-                // Failed this case
+                
                 $this->fail('Exception:' . $e->getMessage());
             }
             $renderer = LightnCandy::prepare($php, null, false);
             if ($spec['description'] === 'Tokenizer') {
-                // no compile error means passed
+                
                 $this->assertEquals(true, true);
                 continue;
             }
@@ -303,7 +301,7 @@ class HandlebarsSpecTest extends TestCase
                 $result = $renderer($spec['data'], $ropt);
             } catch (Exception $e) {
                 if (!isset($spec['expected'])) {
-                    // expected error and catched here, so passed
+                    
                     $this->assertEquals(true, true);
                     continue;
                 }

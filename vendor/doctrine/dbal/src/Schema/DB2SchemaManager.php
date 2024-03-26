@@ -20,39 +20,27 @@ use function substr;
 
 use const CASE_LOWER;
 
-/**
- * IBM Db2 Schema Manager.
- *
- * @extends AbstractSchemaManager<DB2Platform>
- */
+
 class DB2SchemaManager extends AbstractSchemaManager
 {
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listTableNames()
     {
         return $this->doListTableNames();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listTables()
     {
         return $this->doListTables();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @deprecated Use {@see introspectTable()} instead.
-     */
+    
     public function listTableDetails($name)
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5595',
+            'https:
             '%s is deprecated. Use introspectTable() instead.',
             __METHOD__,
         );
@@ -60,35 +48,25 @@ class DB2SchemaManager extends AbstractSchemaManager
         return $this->doListTableDetails($name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listTableColumns($table, $database = null)
     {
         return $this->doListTableColumns($table, $database);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listTableIndexes($table)
     {
         return $this->doListTableIndexes($table);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function listTableForeignKeys($table, $database = null)
     {
         return $this->doListTableForeignKeys($table, $database);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @throws Exception
-     */
+    
     protected function _getPortableTableColumnDefinition($tableColumn)
     {
         $tableColumn = array_change_key_case($tableColumn, CASE_LOWER);
@@ -169,9 +147,7 @@ class DB2SchemaManager extends AbstractSchemaManager
         return new Column($tableColumn['colname'], Type::getType($type), $options);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableTableDefinition($table)
     {
         $table = array_change_key_case($table, CASE_LOWER);
@@ -179,9 +155,7 @@ class DB2SchemaManager extends AbstractSchemaManager
         return $table['name'];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableTableIndexesList($tableIndexes, $tableName = null)
     {
         foreach ($tableIndexes as &$tableIndexRow) {
@@ -192,9 +166,7 @@ class DB2SchemaManager extends AbstractSchemaManager
         return parent::_getPortableTableIndexesList($tableIndexes, $tableName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableTableForeignKeyDefinition($tableForeignKey)
     {
         return new ForeignKeyConstraint(
@@ -206,9 +178,7 @@ class DB2SchemaManager extends AbstractSchemaManager
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableTableForeignKeysList($tableForeignKeys)
     {
         $foreignKeys = [];
@@ -236,11 +206,7 @@ class DB2SchemaManager extends AbstractSchemaManager
         return parent::_getPortableTableForeignKeysList($foreignKeys);
     }
 
-    /**
-     * @param string $def
-     *
-     * @return string|null
-     */
+    
     protected function _getPortableForeignKeyRuleDef($def)
     {
         if ($def === 'C') {
@@ -254,9 +220,7 @@ class DB2SchemaManager extends AbstractSchemaManager
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function _getPortableViewDefinition($view)
     {
         $view = array_change_key_case($view, CASE_LOWER);
@@ -418,9 +382,7 @@ SQL;
         return $this->_conn->executeQuery($sql, $params);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     protected function fetchTableOptionsByTable(string $databaseName, ?string $tableName = null): array
     {
         $sql = 'SELECT NAME, REMARKS';
@@ -439,7 +401,7 @@ SQL;
             $sql .= ' WHERE ' . implode(' AND ', $conditions);
         }
 
-        /** @var array<string,array<string,mixed>> $metadata */
+        
         $metadata = $this->_conn->executeQuery($sql, $params)
             ->fetchAllAssociativeIndexed();
 

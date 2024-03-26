@@ -17,14 +17,7 @@ use function str_starts_with;
 use const JSON_ERROR_DEPTH;
 use const JSON_THROW_ON_ERROR;
 
-/**
- * @psalm-type CustomOptions = array{
- *     allow: int-mask-of<self::ALLOW_*>,
- *     maxDepth: positive-int,
- * }
- * @psalm-import-type AbstractOptions from AbstractValidator
- * @psalm-type Options = AbstractOptions|CustomOptions
- */
+
 final class IsJsonString extends AbstractValidator
 {
     public const ERROR_NOT_STRING         = 'errorNotString';
@@ -39,7 +32,7 @@ final class IsJsonString extends AbstractValidator
     public const ALLOW_OBJECT = 0b0010000;
     public const ALLOW_ALL    = 0b0011111;
 
-    /** @var array<self::ERROR_*, non-empty-string> */
+    
     protected $messageTemplates = [
         self::ERROR_NOT_STRING         => 'Expected a string but %type% was received',
         self::ERROR_TYPE_NOT_ALLOWED   => 'Received a JSON %type% but this type is not acceptable',
@@ -47,25 +40,25 @@ final class IsJsonString extends AbstractValidator
         self::ERROR_INVALID_JSON       => 'An invalid JSON payload was received',
     ];
 
-    /** @var array<string, string> */
+    
     protected $messageVariables = [
         'type'     => 'type',
         'maxDepth' => 'maxDepth',
     ];
 
     protected ?string $type = null;
-    /** @var int-mask-of<self::ALLOW_*> */
+    
     protected int $allow = self::ALLOW_ALL;
-    /** @var positive-int */
+    
     protected int $maxDepth = 512;
 
-    /** @param int-mask-of<self::ALLOW_*> $type */
+    
     public function setAllow(int $type): void
     {
         $this->allow = $type;
     }
 
-    /** @param positive-int $maxDepth */
+    
     public function setMaxDepth(int $maxDepth): void
     {
         $this->maxDepth = $maxDepth;
@@ -81,7 +74,7 @@ final class IsJsonString extends AbstractValidator
         }
 
         if (is_numeric($value)) {
-            /** @psalm-var mixed $value */
+            
             $value = json_decode($value);
 
             if (is_int($value) && ! $this->isAllowed(self::ALLOW_INT)) {
@@ -127,7 +120,7 @@ final class IsJsonString extends AbstractValidator
         }
 
         try {
-            /** @psalm-suppress UnusedFunctionCall */
+            
             json_decode($value, true, $this->maxDepth, JSON_THROW_ON_ERROR);
 
             return true;
@@ -144,7 +137,7 @@ final class IsJsonString extends AbstractValidator
         }
     }
 
-    /** @param self::ALLOW_* $flag */
+    
     private function isAllowed(int $flag): bool
     {
         return ($this->allow & $flag) === $flag;

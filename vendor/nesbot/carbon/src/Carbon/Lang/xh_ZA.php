@@ -1,18 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Zuza Software Foundation (Translate.org.za) Dwayne Bailey dwayne@translate.org.za
- */
+
+
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [
         'L' => 'DD/MM/YYYY',
@@ -24,21 +14,21 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'weekdays_min' => ['Caw', 'Mvu', 'Bin', 'Tha', 'Sin', 'Hla', 'Mgq'],
     'day_of_first_week_of_year' => 1,
 
-    'year' => ':count ihlobo', // less reliable
-    'y' => ':count ihlobo', // less reliable
-    'a_year' => ':count ihlobo', // less reliable
+    'year' => ':count ihlobo', 
+    'y' => ':count ihlobo', 
+    'a_year' => ':count ihlobo', 
 
-    'hour' => ':count iwotshi', // less reliable
-    'h' => ':count iwotshi', // less reliable
-    'a_hour' => ':count iwotshi', // less reliable
+    'hour' => ':count iwotshi', 
+    'h' => ':count iwotshi', 
+    'a_hour' => ':count iwotshi', 
 
-    'minute' => ':count ingqalelo', // less reliable
-    'min' => ':count ingqalelo', // less reliable
-    'a_minute' => ':count ingqalelo', // less reliable
+    'minute' => ':count ingqalelo', 
+    'min' => ':count ingqalelo', 
+    'a_minute' => ':count ingqalelo', 
 
-    'second' => ':count nceda', // less reliable
-    's' => ':count nceda', // less reliable
-    'a_second' => ':count nceda', // less reliable
+    'second' => ':count nceda', 
+    's' => ':count nceda', 
+    'a_second' => ':count nceda', 
 
     'month' => ':count inyanga',
     'm' => ':count inyanga',

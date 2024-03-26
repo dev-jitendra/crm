@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\ORM\Repository;
 
@@ -45,9 +19,7 @@ use Espo\ORM\Repository\RDBRelationSelectBuilder as Builder;
 use LogicException;
 use RuntimeException;
 
-/**
- * An access point for a specific relation of a record.
- */
+
 class RDBRelation
 {
     private EntityManager $entityManager;
@@ -97,9 +69,7 @@ class RDBRelation
         }
     }
 
-    /**
-     * Create a select builder.
-     */
+    
     private function createSelectBuilder(?Select $query = null): Builder
     {
         if ($this->noBuilder) {
@@ -109,9 +79,7 @@ class RDBRelation
         return new Builder($this->entityManager, $this->entity, $this->relationName, $query);
     }
 
-    /**
-     * Clone a query.
-     */
+    
     public function clone(Select $query): Builder
     {
         if ($this->noBuilder) {
@@ -134,7 +102,7 @@ class RDBRelation
     {
         $mapper = $this->entityManager->getMapper();
 
-        /** @noinspection PhpConditionAlreadyCheckedInspection */
+        
         if (!$mapper instanceof RDBMapper) {
             throw new LogicException();
         }
@@ -142,11 +110,7 @@ class RDBRelation
         return $mapper;
     }
 
-    /**
-     * Find related records.
-     *
-     * @return Collection<Entity>
-     */
+    
     public function find(): Collection
     {
         if ($this->isBelongsToParentType()) {
@@ -166,9 +130,7 @@ class RDBRelation
         return $this->createSelectBuilder()->find();
     }
 
-    /**
-     * Find a first record.
-     */
+    
     public function findOne(): ?Entity
     {
         if ($this->isBelongsToParentType()) {
@@ -193,167 +155,79 @@ class RDBRelation
         return null;
     }
 
-    /**
-     * Get a number of related records.
-     */
+    
     public function count(): int
     {
         return $this->createSelectBuilder()->count();
     }
 
-    /**
-     * Add JOIN.
-     *
-     * @param Join|string $target
-     * A relation name or table. A relation name should be in camelCase, a table in CamelCase.
-     * @param string|null $alias An alias.
-     * @param WhereItem|array<string|int, mixed>|null $conditions Join conditions.
-     */
+    
     public function join($target, ?string $alias = null, $conditions = null): Builder
     {
         return $this->createSelectBuilder()->join($target, $alias, $conditions);
     }
 
-    /**
-     * Add LEFT JOIN.
-     *
-     * @param Join|string $target
-     * A relation name or table. A relation name should be in camelCase, a table in CamelCase.
-     * @param string|null $alias An alias.
-     * @param WhereItem|array<string|int, mixed>|null $conditions Join conditions.
-     */
+    
     public function leftJoin($target, ?string $alias = null, $conditions = null): Builder
     {
         return $this->createSelectBuilder()->leftJoin($target, $alias, $conditions);
     }
 
-    /**
-     * Set DISTINCT parameter.
-     */
+    
     public function distinct(): Builder
     {
         return $this->createSelectBuilder()->distinct();
     }
 
-    /**
-     * Set to return STH collection. Recommended for fetching large number of records.
-     */
+    
     public function sth(): Builder
     {
         return $this->createSelectBuilder()->sth();
     }
 
-    /**
-     * Add a WHERE clause.
-     *
-     * Usage options:
-     * * `where(WhereItem $clause)`
-     * * `where(array $clause)`
-     * * `where(string $key, string $value)`
-     *
-     * @param WhereItem|array<string|int, mixed>|string $clause A key or where clause.
-     * @param array<int, mixed>|scalar|null $value A value. Should be omitted if the first argument is not string.
-     */
+    
     public function where($clause = [], $value = null): Builder
     {
         return $this->createSelectBuilder()->where($clause, $value);
     }
 
-    /**
-     * Add a HAVING clause.
-     *
-     * Usage options:
-     * * `having(WhereItem $clause)`
-     * * `having(array $clause)`
-     * * `having(string $key, string $value)`
-     *
-     * @param WhereItem|array<string|int, mixed>|string $clause A key or where clause.
-     * @param array<int, mixed>|string|null $value A value. Should be omitted if the first argument is not string.
-     */
+    
     public function having($clause = [], $value = null): Builder
     {
         return $this->createSelectBuilder()->having($clause, $value);
     }
 
-    /**
-     * Apply ORDER. Passing an array will override previously set items.
-     * Passing non-array will append an item,
-     *
-     * Usage options:
-     * * `order(Order $expression)
-     * * `order([$expr1, $expr2, ...])
-     * * `order(string $expression, string $direction)
-     *
-     * @param Order|Order[]|Expression|string|array<int, string[]>|string[] $orderBy
-     *   An attribute to order by or an array or order items.
-     *   Passing an array will reset a previously set order.
-     * @param (Order::ASC|Order::DESC)|bool|null $direction A direction.
-     */
+    
     public function order($orderBy = 'id', $direction = null): Builder
     {
         return $this->createSelectBuilder()->order($orderBy, $direction);
     }
 
-    /**
-     * Apply OFFSET and LIMIT.
-     */
+    
     public function limit(?int $offset = null, ?int $limit = null): Builder
     {
         return $this->createSelectBuilder()->limit($offset, $limit);
     }
 
-    /**
-     * Specify SELECT. Columns and expressions to be selected. If not called, then
-     * all entity attributes will be selected. Passing an array will reset
-     * previously set items. Passing a SelectExpression|Expression|string will append the item.
-     *
-     * Usage options:
-     * * `select(SelectExpression $expression)`
-     * * `select([$expr1, $expr2, ...])`
-     * * `select(string $expression, string $alias)`
-     *
-     * @param Selection|Selection[]|Expression|Expression[]|string[]|string|array<int, string[]|string> $select
-     *   An array of expressions or one expression.
-     * @param string|null $alias An alias. Actual if the first parameter is not an array.
-     */
+    
     public function select($select = [], ?string $alias = null): Builder
     {
         return $this->createSelectBuilder()->select($select, $alias);
     }
 
-    /**
-     * Specify GROUP BY.
-     * Passing an array will reset previously set items.
-     * Passing a string|Expression will append an item.
-     *
-     * Usage options:
-     * * `groupBy(Expression|string $expression)`
-     * * `groupBy([$expr1, $expr2, ...])`
-     *
-     * @param Expression|Expression[]|string|string[] $groupBy
-     */
+    
     public function group($groupBy): Builder
     {
         return $this->createSelectBuilder()->group($groupBy);
     }
 
-    /**
-     * @deprecated Use `group` method.
-     * @param Expression|Expression[]|string|string[] $groupBy
-     */
+    
     public function groupBy($groupBy): Builder
     {
         return $this->group($groupBy);
     }
 
-    /**
-     * Apply middle table conditions for a many-to-many relationship.
-     *
-     * Usage example:
-     * `->columnsWhere(['column' => $value])`
-     *
-     * @param WhereItem|array<string|int, mixed> $clause Where clause.
-     */
+    
     public function columnsWhere($clause): Builder
     {
         return $this->createSelectBuilder()->columnsWhere($clause);
@@ -370,11 +244,7 @@ class RDBRelation
         }
     }
 
-    /**
-     * Whether related with an entity.
-     *
-     * @throws RuntimeException
-     */
+    
     public function isRelated(Entity $entity): bool
     {
         if (!$entity->hasId()) {
@@ -397,10 +267,7 @@ class RDBRelation
             ->findOne();
     }
 
-    /**
-     * Whether related with another entity. An entity is specified by an ID.
-     * Does not work with 'belongsToParent' relations.
-     */
+    
     public function isRelatedById(string $id): bool
     {
         if ($this->isBelongsToParentType()) {
@@ -450,12 +317,7 @@ class RDBRelation
         return $fromEntity->get($idAttribute) === $entity->getId();
     }
 
-    /**
-     * Relate with an entity by ID.
-     *
-     * @param array<string, mixed>|null $columnData Role values.
-     * @param array<string, mixed> $options
-     */
+    
     public function relateById(string $id, ?array $columnData = null, array $options = []): void
     {
         if ($this->isBelongsToParentType()) {
@@ -466,7 +328,7 @@ class RDBRelation
             throw new RuntimeException();
         }
 
-        /** @var string $foreignEntityType */
+        
         $foreignEntityType = $this->foreignEntityType;
 
         $seed = $this->entityManager->getEntityFactory()->create($foreignEntityType);
@@ -476,11 +338,7 @@ class RDBRelation
         $this->relate($seed, $columnData, $options);
     }
 
-    /**
-     * Unrelate from an entity by ID.
-     *
-     * @param array<string, mixed> $options
-     */
+    
     public function unrelateById(string $id, array $options = []): void
     {
         if ($this->isBelongsToParentType()) {
@@ -491,7 +349,7 @@ class RDBRelation
             throw new RuntimeException();
         }
 
-        /** @var string $foreignEntityType */
+        
         $foreignEntityType = $this->foreignEntityType;
 
         $seed = $this->entityManager->getEntityFactory()->create($foreignEntityType);
@@ -501,11 +359,7 @@ class RDBRelation
         $this->unrelate($seed, $options);
     }
 
-    /**
-     * Update relationship columns by ID. For many-to-many relationships.
-     *
-     * @param array<string, mixed> $columnData Role values.
-     */
+    
     public function updateColumnsById(string $id, array $columnData): void
     {
         if ($this->isBelongsToParentType()) {
@@ -516,7 +370,7 @@ class RDBRelation
             throw new RuntimeException();
         }
 
-        /** @var string $foreignEntityType */
+        
         $foreignEntityType = $this->foreignEntityType;
 
         $seed = $this->entityManager->getEntityFactory()->create($foreignEntityType);
@@ -526,12 +380,7 @@ class RDBRelation
         $this->updateColumns($seed, $columnData);
     }
 
-    /**
-     * Relate with an entity.
-     *
-     * @param array<string, mixed>|null $columnData Role values.
-     * @param array<string, mixed> $options
-     */
+    
     public function relate(Entity $entity, ?array $columnData = null, array $options = []): void
     {
         $this->processCheckForeignEntity($entity);
@@ -546,11 +395,7 @@ class RDBRelation
         $this->afterRelate($entity, $columnData, $options);
     }
 
-    /**
-     * Unrelate from an entity.
-     *
-     * @param array<string, mixed> $options
-     */
+    
     public function unrelate(Entity $entity, array $options = []): void
     {
         $this->processCheckForeignEntity($entity);
@@ -559,11 +404,7 @@ class RDBRelation
         $this->afterUnrelate($entity, $options);
     }
 
-    /**
-     * Mass-relate.
-     *
-     * @param array<string, mixed> $options
-     */
+    
     public function massRelate(Select $query, array $options = []): void
     {
         if ($this->isBelongsToParentType()) {
@@ -579,11 +420,7 @@ class RDBRelation
         $this->afterMassRelate($query, $options);
     }
 
-    /**
-     * Update relationship columns. For many-to-many relationships.
-     *
-     * @param array<string, mixed> $columnData Role values.
-     */
+    
     public function updateColumns(Entity $entity, array $columnData): void
     {
         $this->processCheckForeignEntity($entity);
@@ -601,11 +438,7 @@ class RDBRelation
         $this->getMapper()->updateRelationColumns($this->entity, $this->relationName, $id, $columnData);
     }
 
-    /**
-     * Get a relationship column value. For many-to-many relationships.
-     *
-     * @return string|int|float|bool|null
-     */
+    
     public function getColumn(Entity $entity, string $column)
     {
         $this->processCheckForeignEntity($entity);
@@ -623,9 +456,7 @@ class RDBRelation
         return $this->getMapper()->getRelationColumn($this->entity, $this->relationName, $id, $column);
     }
 
-    /**
-     * Get a relationship column value by a foreign record ID. For many-to-many relationships.
-     */
+    
     public function getColumnById(string $id, string $column): string|int|float|bool|null
     {
         if ($this->relationType !== Entity::MANY_MANY) {
@@ -635,51 +466,37 @@ class RDBRelation
         return $this->getMapper()->getRelationColumn($this->entity, $this->relationName, $id, $column);
     }
 
-    /**
-     * @param array<string, mixed>|null $columnData Role values.
-     * @param array<string, mixed> $options
-     */
+    
     private function beforeRelate(Entity $entity, ?array $columnData, array $options): void
     {
         $this->hookMediator->beforeRelate($this->entity, $this->relationName, $entity, $columnData, $options);
     }
 
-    /**
-     * @param array<string, mixed>|null $columnData Role values.
-     * @param array<string, mixed> $options
-     */
+    
     private function afterRelate(Entity $entity, ?array $columnData, array $options): void
     {
         $this->hookMediator->afterRelate($this->entity, $this->relationName, $entity, $columnData, $options);
     }
 
-    /**
-     * @param array<string, mixed> $options
-     */
+    
     private function beforeUnrelate(Entity $entity, array $options): void
     {
         $this->hookMediator->beforeUnrelate($this->entity, $this->relationName, $entity, $options);
     }
 
-    /**
-     * @param array<string, mixed> $options
-     */
+    
     private function afterUnrelate(Entity $entity, array $options): void
     {
         $this->hookMediator->afterUnrelate($this->entity, $this->relationName, $entity, $options);
     }
 
-    /**
-     * @param array<string, mixed> $options
-     */
+    
     private function beforeMassRelate(Select $query, array $options): void
     {
         $this->hookMediator->beforeMassRelate($this->entity, $this->relationName, $query, $options);
     }
 
-    /**
-     * @param array<string, mixed> $options
-     */
+    
     private function afterMassRelate(Select $query, array $options): void
     {
         $this->hookMediator->afterMassRelate($this->entity, $this->relationName, $query, $options);

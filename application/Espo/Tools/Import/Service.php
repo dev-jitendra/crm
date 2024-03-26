@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\Import;
 
@@ -67,12 +41,7 @@ class Service
         private FileStorageManager $fileStorageManager
     ) {}
 
-    /**
-     * @param string[] $attributeList
-     * @param string $attachmentId
-     * @throws Forbidden
-     * @throws Error
-     */
+    
     public function import(
         string $entityType,
         array $attributeList,
@@ -111,17 +80,14 @@ class Service
         return $result;
     }
 
-    /**
-     * @throws Forbidden
-     * @throws Error
-     */
+    
     public function importContentsWithParamsId(string $contents, string $importParamsId): Result
     {
         if (!$contents) {
             throw new Error("Contents is empty.");
         }
 
-        /** @var ?ImportEntity $source */
+        
         $source = $this->entityManager->getEntityById(ImportEntity::ENTITY_TYPE, $importParamsId);
 
         if (!$source) {
@@ -144,14 +110,10 @@ class Service
         return $this->import($entityType, $attributeList, $attachmentId, $params);
     }
 
-    /**
-     * @throws Forbidden
-     * @throws Error
-     * @throws NotFound
-     */
+    
     public function importById(string $id, bool $startFromLastIndex = false, bool $forceResume = false): Result
     {
-        /** @var ?ImportEntity $import */
+        
         $import = $this->entityManager->getEntity(ImportEntity::ENTITY_TYPE, $id);
 
         if (!$import) {
@@ -196,10 +158,7 @@ class Service
             ->run();
     }
 
-    /**
-     * @throws Forbidden
-     * @throws NotFound
-     */
+    
     public function revert(string $id): void
     {
         if (!$this->acl->checkScope(ImportEntity::ENTITY_TYPE)) {
@@ -326,10 +285,7 @@ class Service
         }
     }
 
-    /**
-     * @return string Attachment ID.
-     * @throws Forbidden
-     */
+    
     public function uploadFile(string $contents): string
     {
         if (!$this->acl->checkScope(ImportEntity::ENTITY_TYPE)) {
@@ -348,10 +304,7 @@ class Service
         return $attachment->getId();
     }
 
-    /**
-     * @throws Forbidden
-     * @throws NotFound
-     */
+    
     public function removeDuplicates(string $id): void
     {
         if (!$this->acl->checkScope(ImportEntity::ENTITY_TYPE)) {
@@ -414,10 +367,7 @@ class Service
         }
     }
 
-    /**
-     * @throws NotFound
-     * @throws Forbidden
-     */
+    
     public function unmarkAsDuplicate(string $importId, string $entityType, string $entityId): void
     {
         if (!$this->acl->checkScope(ImportEntity::ENTITY_TYPE)) {
@@ -442,11 +392,7 @@ class Service
         $this->entityManager->saveEntity($entity);
     }
 
-    /**
-     * @param string $importId An import ID.
-     * @return ?string An attachment ID.
-     * @throws NotFound
-     */
+    
     public function exportErrors(string $importId): ?string
     {
         $import = $this->entityManager
@@ -484,7 +430,7 @@ class Service
 
         $file = new SplFileObject($filePath);
 
-        $resource = fopen('php://temp', 'w+');
+        $resource = fopen('php:
 
         if ($resource === false) {
             throw new RuntimeException("Could not open temp.");
@@ -492,7 +438,7 @@ class Service
 
         $stream = Psr7Utils::streamFor($resource);
 
-        /** @var Collection<ImportError> $errorList */
+        
         $errorList = $this->entityManager
             ->getRDBRepositoryByClass(ImportEntity::class)
             ->getRelation($import, 'errors')
@@ -504,7 +450,7 @@ class Service
         if ($import->getParams()->headerRow()) {
             $file->seek(0);
 
-            /** @var string|false $line */
+            
             $line = $file->current();
 
             if ($line === false) {
@@ -517,7 +463,7 @@ class Service
         foreach ($errorList as $error) {
             $file->seek($error->getRowIndex());
 
-            /** @var string|false $line */
+            
             $line = $file->current();
 
             if ($line === false) {

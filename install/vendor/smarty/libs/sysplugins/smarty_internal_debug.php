@@ -1,55 +1,26 @@
 <?php
-/**
- * Smarty Internal Plugin Debug
- *
- * Class to collect data for the Smarty Debugging Consol
- *
- * @package Smarty
- * @subpackage Debug
- * @author Uwe Tews
- */
 
-/**
- * Smarty Internal Plugin Debug Class
- *
- * @package Smarty
- * @subpackage Debug
- */
+
+
 class Smarty_Internal_Debug extends Smarty_Internal_Data
 {
-    /**
-     * template data
-     *
-     * @var array
-     */
+    
     public static $template_data = array();
 
-    /**
-     * List of uid's which shall be ignored
-     *
-     * @var array
-     */
+    
     public static $ignore_uid = array();
 
-    /**
-     * Ignore template
-     *
-     * @param object $template
-     */
+    
     public static function ignore($template)
     {
-        // calculate Uid if not already done
+        
         if ($template->source->uid == '') {
             $template->source->filepath;
         }
         self::$ignore_uid[$template->source->uid] = true;
     }
 
-    /**
-     * Start logging of compile time
-     *
-     * @param object $template
-     */
+    
     public static function start_compile($template)
     {
         static $_is_stringy = array('string' => true, 'eval' => true);
@@ -74,11 +45,7 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data
         self::$template_data[$key]['start_time'] = microtime(true);
     }
 
-    /**
-     * End logging of compile time
-     *
-     * @param object $template
-     */
+    
     public static function end_compile($template)
     {
         if (!empty($template->compiler->trace_uid)) {
@@ -93,58 +60,38 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data
         self::$template_data[$key]['compile_time'] += microtime(true) - self::$template_data[$key]['start_time'];
     }
 
-    /**
-     * Start logging of render time
-     *
-     * @param object $template
-     */
+    
     public static function start_render($template)
     {
         $key = self::get_key($template);
         self::$template_data[$key]['start_time'] = microtime(true);
     }
 
-    /**
-     * End logging of compile time
-     *
-     * @param object $template
-     */
+    
     public static function end_render($template)
     {
         $key = self::get_key($template);
         self::$template_data[$key]['render_time'] += microtime(true) - self::$template_data[$key]['start_time'];
     }
 
-    /**
-     * Start logging of cache time
-     *
-     * @param object $template cached template
-     */
+    
     public static function start_cache($template)
     {
         $key = self::get_key($template);
         self::$template_data[$key]['start_time'] = microtime(true);
     }
 
-    /**
-     * End logging of cache time
-     *
-     * @param object $template cached template
-     */
+    
     public static function end_cache($template)
     {
         $key = self::get_key($template);
         self::$template_data[$key]['cache_time'] += microtime(true) - self::$template_data[$key]['start_time'];
     }
 
-    /**
-     * Opens a window for the Smarty Debugging Consol and display the data
-     *
-     * @param Smarty_Internal_Template|Smarty $obj object to debug
-     */
+    
     public static function display_debug($obj)
     {
-        // prepare information of assigned variables
+        
         $ptr = self::get_debug_vars($obj);
         if ($obj instanceof Smarty) {
             $smarty = clone $obj;
@@ -183,12 +130,7 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data
         echo $_template->fetch();
     }
 
-    /**
-     * Recursively gets variables from all template/data scopes
-     *
-     * @param  Smarty_Internal_Template|Smarty_Data $obj object to debug
-     * @return StdClass
-     */
+    
     public static function get_debug_vars($obj)
     {
         $config_vars = $obj->config_vars;
@@ -221,16 +163,11 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data
         return (object)array('tpl_vars' => $tpl_vars, 'config_vars' => $config_vars);
     }
 
-    /**
-     * Return key into $template_data for template
-     *
-     * @param  object $template template object
-     * @return string key into $template_data
-     */
+    
     private static function get_key($template)
     {
         static $_is_stringy = array('string' => true, 'eval' => true);
-        // calculate Uid if not already done
+        
         if ($template->source->uid == '') {
             $template->source->filepath;
         }

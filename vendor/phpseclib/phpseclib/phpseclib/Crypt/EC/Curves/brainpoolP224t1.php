@@ -1,15 +1,6 @@
 <?php
 
-/**
- * brainpoolP224t1
- *
- * PHP version 5 and 7
- *
- * @author    Jim Wigginton <terrafrost@php.net>
- * @copyright 2017 Jim Wigginton
- * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
- * @link      http://pear.php.net/package/Math_BigInteger
- */
+
 
 namespace phpseclib3\Crypt\EC\Curves;
 
@@ -22,7 +13,7 @@ class brainpoolP224t1 extends Prime
     {
         $this->setModulo(new BigInteger('D7C134AA264366862A18302575D1D787B09F075797DA89F57EC8C0FF', 16));
         $this->setCoefficients(
-            new BigInteger('D7C134AA264366862A18302575D1D787B09F075797DA89F57EC8C0FC', 16), // eg. -3
+            new BigInteger('D7C134AA264366862A18302575D1D787B09F075797DA89F57EC8C0FC', 16), 
             new BigInteger('4B337D934104CD7BEF271BF60CED1ED20DA14C08B3BB64F18A60888D', 16)
         );
         $this->setBasePoint(

@@ -1,23 +1,12 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation\Loader;
 
 use Symfony\Component\Translation\Exception\InvalidResourceException;
 
-/**
- * JsonFileLoader loads translations from an json file.
- *
- * @author singles
- */
+
 class JsonFileLoader extends FileLoader
 {
     protected function loadResource(string $resource): array
@@ -34,9 +23,7 @@ class JsonFileLoader extends FileLoader
         return $messages;
     }
 
-    /**
-     * Translates JSON_ERROR_* constant into meaningful message.
-     */
+    
     private function getJSONErrorMessage(int $errorCode): string
     {
         return match ($errorCode) {

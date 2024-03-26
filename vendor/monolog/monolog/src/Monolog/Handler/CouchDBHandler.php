@@ -1,13 +1,6 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Monolog package.
- *
- * (c) Jordi Boggiano <j.boggiano@seld.be>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Monolog\Handler;
 
@@ -16,38 +9,13 @@ use Monolog\Formatter\JsonFormatter;
 use Monolog\Level;
 use Monolog\LogRecord;
 
-/**
- * CouchDB handler
- *
- * @author Markus Bachmann <markus.bachmann@bachi.biz>
- * @phpstan-type Options array{
- *     host: string,
- *     port: int,
- *     dbname: string,
- *     username: string|null,
- *     password: string|null
- * }
- * @phpstan-type InputOptions array{
- *     host?: string,
- *     port?: int,
- *     dbname?: string,
- *     username?: string|null,
- *     password?: string|null
- * }
- */
+
 class CouchDBHandler extends AbstractProcessingHandler
 {
-    /**
-     * @var mixed[]
-     * @phpstan-var Options
-     */
+    
     private array $options;
 
-    /**
-     * @param mixed[] $options
-     *
-     * @phpstan-param InputOptions $options
-     */
+    
     public function __construct(array $options = [], int|string|Level $level = Level::Debug, bool $bubble = true)
     {
         $this->options = array_merge([
@@ -61,9 +29,7 @@ class CouchDBHandler extends AbstractProcessingHandler
         parent::__construct($level, $bubble);
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     protected function write(LogRecord $record): void
     {
         $basicAuth = null;
@@ -71,7 +37,7 @@ class CouchDBHandler extends AbstractProcessingHandler
             $basicAuth = sprintf('%s:%s@', $this->options['username'], $this->options['password']);
         }
 
-        $url = 'http://'.$basicAuth.$this->options['host'].':'.$this->options['port'].'/'.$this->options['dbname'];
+        $url = 'http:
         $context = stream_context_create([
             'http' => [
                 'method'        => 'POST',
@@ -87,9 +53,7 @@ class CouchDBHandler extends AbstractProcessingHandler
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     protected function getDefaultFormatter(): FormatterInterface
     {
         return new JsonFormatter(JsonFormatter::BATCH_MODE_JSON, false);

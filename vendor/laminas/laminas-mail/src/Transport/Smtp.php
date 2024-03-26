@@ -14,38 +14,28 @@ use function count;
 use function sprintf;
 use function time;
 
-/**
- * SMTP connection object
- *
- * Loads an instance of Laminas\Mail\Protocol\Smtp and forwards smtp transactions
- */
+
 class Smtp implements TransportInterface
 {
-    /** @var SmtpOptions */
+    
     protected $options;
 
-    /** @var Envelope|null */
+    
     protected $envelope;
 
-    /** @var null|Protocol\Smtp */
+    
     protected $connection;
 
-    /** @var bool */
+    
     protected $autoDisconnect = true;
 
-    /** @var Protocol\SmtpPluginManager */
+    
     protected $plugins;
 
-    /**
-     * When did we connect to the server?
-     *
-     * @var int|null
-     */
+    
     protected $connectedTime;
 
-    /**
-     * @param  SmtpOptions $options Optional
-     */
+    
     public function __construct(?SmtpOptions $options = null)
     {
         if (! $options instanceof SmtpOptions) {
@@ -54,62 +44,39 @@ class Smtp implements TransportInterface
         $this->setOptions($options);
     }
 
-    /**
-     * Set options
-     *
-     * @return Smtp
-     */
+    
     public function setOptions(SmtpOptions $options)
     {
         $this->options = $options;
         return $this;
     }
 
-    /**
-     * Get options
-     *
-     * @return SmtpOptions
-     */
+    
     public function getOptions()
     {
         return $this->options;
     }
 
-    /**
-     * Set options
-     */
+    
     public function setEnvelope(Envelope $envelope)
     {
         $this->envelope = $envelope;
     }
 
-    /**
-     * Get envelope
-     *
-     * @return Envelope|null
-     */
+    
     public function getEnvelope()
     {
         return $this->envelope;
     }
 
-    /**
-     * Set plugin manager for obtaining SMTP protocol connection
-     *
-     * @throws Exception\InvalidArgumentException
-     * @return Smtp
-     */
+    
     public function setPluginManager(Protocol\SmtpPluginManager $plugins)
     {
         $this->plugins = $plugins;
         return $this;
     }
 
-    /**
-     * Get plugin manager for loading SMTP protocol connection
-     *
-     * @return Protocol\SmtpPluginManager
-     */
+    
     public function getPluginManager()
     {
         if (null === $this->plugins) {
@@ -118,42 +85,26 @@ class Smtp implements TransportInterface
         return $this->plugins;
     }
 
-    /**
-     * Set the automatic disconnection when destruct
-     *
-     * @param  bool $flag
-     * @return Smtp
-     */
+    
     public function setAutoDisconnect($flag)
     {
         $this->autoDisconnect = (bool) $flag;
         return $this;
     }
 
-    /**
-     * Get the automatic disconnection value
-     *
-     * @return bool
-     */
+    
     public function getAutoDisconnect()
     {
         return $this->autoDisconnect;
     }
 
-    /**
-     * Return an SMTP connection
-     *
-     * @param  string $name
-     * @return Protocol\Smtp
-     */
+    
     public function plugin($name, ?array $options = null)
     {
         return $this->getPluginManager()->get($name, $options);
     }
 
-    /**
-     * Class destructor to ensure all open connections are closed
-     */
+    
     public function __destruct()
     {
         $connection = $this->getConnection();
@@ -164,7 +115,7 @@ class Smtp implements TransportInterface
         try {
             $connection->quit();
         } catch (ProtocolException\ExceptionInterface) {
-            // ignore
+            
         }
 
         if ($this->autoDisconnect) {
@@ -172,9 +123,7 @@ class Smtp implements TransportInterface
         }
     }
 
-    /**
-     * Sets the connection protocol instance
-     */
+    
     public function setConnection(Protocol\AbstractProtocol $connection)
     {
         $this->connection = $connection;
@@ -186,11 +135,7 @@ class Smtp implements TransportInterface
         }
     }
 
-    /**
-     * Gets the connection protocol instance
-     *
-     * @return null|Protocol\Smtp
-     */
+    
     public function getConnection()
     {
         $timeLimit = $this->getOptions()->getConnectionTimeLimit();
@@ -204,11 +149,7 @@ class Smtp implements TransportInterface
         return $this->connection;
     }
 
-    /**
-     * Disconnect the connection protocol instance
-     *
-     * @return void
-     */
+    
     public function disconnect()
     {
         $connection = $this->getConnection();
@@ -218,34 +159,27 @@ class Smtp implements TransportInterface
         }
     }
 
-    /**
-     * Send an email via the SMTP connection protocol
-     *
-     * The connection via the protocol adapter is made just-in-time to allow a
-     * developer to add a custom adapter if required before mail is sent.
-     *
-     * @throws Exception\RuntimeException
-     */
+    
     public function send(Message $message)
     {
-        // If sending multiple messages per session use existing adapter
+        
         $connection = $this->getConnection();
 
         if (! $connection instanceof Protocol\Smtp || ! $connection->hasSession()) {
             $connection = $this->connect();
         } else {
-            // Reset connection to ensure reliable transaction
+            
             $connection->rset();
         }
 
-        // Prepare message
+        
         $from       = $this->prepareFromAddress($message);
         $recipients = $this->prepareRecipients($message);
         $headers    = $this->prepareHeaders($message);
         $body       = $this->prepareBody($message);
 
         if ((count($recipients) == 0) && (! empty($headers) || ! empty($body))) {
-            // Per RFC 2821 3.3 (page 18)
+            
             throw new Exception\RuntimeException(
                 sprintf(
                     '%s transport expects at least one recipient if the message has at least one header or body',
@@ -254,24 +188,19 @@ class Smtp implements TransportInterface
             );
         }
 
-        // Set sender email address
+        
         $connection->mail($from);
 
-        // Set recipient forward paths
+        
         foreach ($recipients as $recipient) {
             $connection->rcpt($recipient);
         }
 
-        // Issue DATA command to client
+        
         $connection->data($headers . Headers::EOL . $body);
     }
 
-    /**
-     * Retrieve email address for envelope FROM
-     *
-     * @throws Exception\RuntimeException
-     * @return string
-     */
+    
     protected function prepareFromAddress(Message $message)
     {
         if ($this->getEnvelope() && $this->getEnvelope()->getFrom()) {
@@ -285,7 +214,7 @@ class Smtp implements TransportInterface
 
         $from = $message->getFrom();
         if (! count($from)) {
-            // Per RFC 2822 3.6
+            
             throw new Exception\RuntimeException(sprintf(
                 '%s transport expects either a Sender or at least one From address in the Message; none provided',
                 self::class
@@ -297,11 +226,7 @@ class Smtp implements TransportInterface
         return $sender->getEmail();
     }
 
-    /**
-     * Prepare array of email address recipients
-     *
-     * @return array
-     */
+    
     protected function prepareRecipients(Message $message)
     {
         if ($this->getEnvelope() && $this->getEnvelope()->getTo()) {
@@ -323,11 +248,7 @@ class Smtp implements TransportInterface
         return $recipients;
     }
 
-    /**
-     * Prepare header string from message
-     *
-     * @return string
-     */
+    
     protected function prepareHeaders(Message $message)
     {
         $headers = clone $message->getHeaders();
@@ -335,24 +256,16 @@ class Smtp implements TransportInterface
         return $headers->toString();
     }
 
-    /**
-     * Prepare body string from message
-     *
-     * @return string
-     */
+    
     protected function prepareBody(Message $message)
     {
         return $message->getBodyText();
     }
 
-    /**
-     * Lazy load the connection
-     *
-     * @return Protocol\Smtp
-     */
+    
     protected function lazyLoadConnection()
     {
-        // Check if authentication is required and determine required class
+        
         $options        = $this->getOptions();
         $config         = $options->getConnectionConfig();
         $config['host'] = $options->getHost();
@@ -363,11 +276,7 @@ class Smtp implements TransportInterface
         return $this->connect();
     }
 
-    /**
-     * Connect the connection, and pass it helo
-     *
-     * @return Protocol\Smtp
-     */
+    
     protected function connect()
     {
         if (! $this->connection instanceof Protocol\Smtp) {

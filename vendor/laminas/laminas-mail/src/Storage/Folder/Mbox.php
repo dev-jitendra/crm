@@ -24,42 +24,16 @@ use const E_WARNING;
 
 class Mbox extends Storage\Mbox implements FolderInterface
 {
-    /**
-     * Storage\Folder root folder for folder structure
-     *
-     * @var Storage\Folder
-     */
+    
     protected $rootFolder;
 
-    /**
-     * rootdir of folder structure
-     *
-     * @var string
-     */
+    
     protected $rootdir;
 
-    /**
-     * name of current folder
-     *
-     * @var string
-     */
+    
     protected $currentFolder;
 
-    /**
-     * Create instance with parameters
-     *
-     * Disallowed parameters are:
-     * - filename use \Laminas\Mail\Storage\Mbox for a single file
-     *
-     * Supported parameters are:
-     *
-     * - dirname rootdir of mbox structure
-     * - folder initial selected folder, default is 'INBOX'
-     *
-     * @param array|object $params Array, iterable object, or stdClass object
-     *     with reader specific parameters
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public function __construct($params)
     {
         $params = ParamsNormalizer::normalizeParams($params);
@@ -87,17 +61,7 @@ class Mbox extends Storage\Mbox implements FolderInterface
         $this->has['uniqueid'] = false;
     }
 
-    /**
-     * find all subfolders and mbox files for folder structure
-     *
-     * Result is save in Storage\Folder instances with the root in $this->rootFolder.
-     * $parentFolder and $parentGlobalName are only used internally for recursion.
-     *
-     * @param string $currentDir call with root dir, also used for recursion.
-     * @param Storage\Folder|null $parentFolder used for recursion
-     * @param string $parentGlobalName used for recursion
-     * @throws Exception\InvalidArgumentException
-     */
+    
     protected function buildFolderTree($currentDir, $parentFolder = null, $parentGlobalName = '')
     {
         if (! $parentFolder) {
@@ -112,7 +76,7 @@ class Mbox extends Storage\Mbox implements FolderInterface
             throw new Exception\InvalidArgumentException("can't read dir $currentDir");
         }
         while (($entry = readdir($dh)) !== false) {
-            // ignore hidden files for mbox
+            
             if ($entry[0] == '.') {
                 continue;
             }
@@ -122,7 +86,7 @@ class Mbox extends Storage\Mbox implements FolderInterface
                 $parentFolder->$entry = new Storage\Folder($entry, $globalName);
                 continue;
             }
-            if (! is_dir($absoluteEntry)) { /* || $entry == '.' || $entry == '..' */
+            if (! is_dir($absoluteEntry)) { 
                 continue;
             }
             $folder               = new Storage\Folder($entry, $globalName, false);
@@ -133,13 +97,7 @@ class Mbox extends Storage\Mbox implements FolderInterface
         closedir($dh);
     }
 
-    /**
-     * get root folder or given folder
-     *
-     * @param string $rootFolder get folder structure for given folder, else root
-     * @return Storage\Folder root or wanted folder
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public function getFolders($rootFolder = null)
     {
         if (! $rootFolder) {
@@ -169,30 +127,22 @@ class Mbox extends Storage\Mbox implements FolderInterface
         return $currentFolder;
     }
 
-    /**
-     * select given folder
-     *
-     * folder must be selectable!
-     *
-     * @param Storage\Folder|string $globalName global name of folder or
-     *     instance for subfolder
-     * @throws Exception\RuntimeException
-     */
+    
     public function selectFolder($globalName)
     {
         $this->currentFolder = (string) $globalName;
 
-        // getting folder from folder tree for validation
+        
         $folder = $this->getFolders($this->currentFolder);
 
         try {
             $this->openMboxFile($this->rootdir . $folder->getGlobalName());
         } catch (Exception\ExceptionInterface $e) {
-            // check what went wrong
+            
             if (! $folder->isSelectable()) {
                 throw new Exception\RuntimeException("{$this->currentFolder} is not selectable", 0, $e);
             }
-            // seems like file has vanished; rebuilding folder tree - but it's still an exception
+            
             $this->buildFolderTree($this->rootdir);
             throw new Exception\RuntimeException(
                 'seems like the mbox file has vanished; I have rebuilt the folder tree; '
@@ -203,35 +153,22 @@ class Mbox extends Storage\Mbox implements FolderInterface
         }
     }
 
-    /**
-     * get Storage\Folder instance for current folder
-     *
-     * @return string instance of current folder
-     * @throws Exception\ExceptionInterface
-     */
+    
     public function getCurrentFolder()
     {
         return $this->currentFolder;
     }
 
-    /**
-     * magic method for serialize()
-     *
-     * with this method you can cache the mbox class
-     *
-     * @return array name of variables
-     */
+    
     public function __sleep()
     {
         return array_merge(parent::__sleep(), ['currentFolder', 'rootFolder', 'rootdir']);
     }
 
-    /**
-     * magic method for unserialize(), with this method you can cache the mbox class
-     */
+    
     public function __wakeup()
     {
-        // if cache is stall selectFolder() rebuilds the tree on error
+        
         parent::__wakeup();
     }
 }

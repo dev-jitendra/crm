@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\MassAction;
 
@@ -33,13 +7,11 @@ use Espo\Core\Select\SearchParams;
 
 use RuntimeException;
 
-/**
- * @immutable
- */
+
 class Params
 {
     private string $entityType;
-    /** @var ?string[] */
+    
     private ?array $ids = null;
     private ?SearchParams $searchParams = null;
 
@@ -50,10 +22,7 @@ class Params
         return $this->entityType;
     }
 
-    /**
-     * @return string[]
-     * @throws RuntimeException
-     */
+    
     public function getIds(): array
     {
         if (!$this->ids) {
@@ -77,9 +46,7 @@ class Params
         return !is_null($this->ids);
     }
 
-    /**
-     * @param string[] $ids
-     */
+    
     public static function createWithIds(string $entityType, array $ids): self
     {
         return self::fromRaw([
@@ -98,20 +65,10 @@ class Params
         return $obj;
     }
 
-    /**
-     * Create from raw params.
-     *
-     * @param array{
-     *   entityType?: string,
-     *   where?: array<int, array<string, mixed>>,
-     *   ids?: ?string[],
-     *   searchParams?: ?array<string, mixed>,
-     * } $params
-     * @throws RuntimeException
-     */
+    
     public static function fromRaw(array $params, ?string $entityType = null): self
     {
-        /** @var array<string, mixed> $params */
+        
 
         $obj = new self();
 
@@ -173,9 +130,7 @@ class Params
         return $obj;
     }
 
-    /**
-     * @return void
-     */
+    
     public function __clone()
     {
         if ($this->searchParams) {
@@ -183,13 +138,7 @@ class Params
         }
     }
 
-    /**
-     * @return array{
-     *   entityType: string,
-     *   ids: ?string[],
-     *   searchParams: string,
-     * }
-     */
+    
     public function __serialize(): array
     {
         return [
@@ -199,13 +148,7 @@ class Params
         ];
     }
 
-    /**
-     * @param array{
-     *   entityType: string,
-     *   ids: ?string[],
-     *   searchParams: string,
-     * } $data
-     */
+    
     public function __unserialize(array $data): void
     {
         $this->entityType = $data['entityType'];

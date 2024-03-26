@@ -1,21 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - nootanghimire
- * - Josh Soref
- * - Nj Subedi
- * - JD Isaacks
- */
+
+
 return [
     'year' => 'एक बर्ष|:count बर्ष',
     'y' => ':count वर्ष',

@@ -5,31 +5,21 @@ namespace AsyncAws\Core\Exception\Http;
 use AsyncAws\Core\AwsError\AwsError;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-/**
- * @author Nicolas Grekas <p@tchwork.com>
- * @author Tobias Nyholm <tobias.nyholm@gmail.com>
- * @author Jérémy Derussé <jeremy@derusse.com>
- *
- * @internal
- */
+
 trait HttpExceptionTrait
 {
-    /**
-     * @var ResponseInterface
-     */
+    
     private $response;
 
-    /**
-     * @var ?AwsError
-     */
+    
     private $awsError;
 
     public function __construct(ResponseInterface $response, ?AwsError $awsError = null)
     {
         $this->response = $response;
-        /** @var int $code */
+        
         $code = $response->getInfo('http_code');
-        /** @var string $url */
+        
         $url = $response->getInfo('url');
 
         $message = sprintf('HTTP %d returned for "%s".', $code, $url);

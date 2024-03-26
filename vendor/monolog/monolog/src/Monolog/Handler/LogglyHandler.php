@@ -1,13 +1,6 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Monolog package.
- *
- * (c) Jordi Boggiano <j.boggiano@seld.be>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Monolog\Handler;
 
@@ -18,36 +11,22 @@ use function array_key_exists;
 use CurlHandle;
 use Monolog\LogRecord;
 
-/**
- * Sends errors to Loggly.
- *
- * @author Przemek Sobstel <przemek@sobstel.org>
- * @author Adam Pancutt <adam@pancutt.com>
- * @author Gregory Barchard <gregory@barchard.net>
- */
+
 class LogglyHandler extends AbstractProcessingHandler
 {
     protected const HOST = 'logs-01.loggly.com';
     protected const ENDPOINT_SINGLE = 'inputs';
     protected const ENDPOINT_BATCH = 'bulk';
 
-    /**
-     * Caches the curl handlers for every given endpoint.
-     *
-     * @var CurlHandle[]
-     */
+    
     protected array $curlHandlers = [];
 
     protected string $token;
 
-    /** @var string[] */
+    
     protected array $tag = [];
 
-    /**
-     * @param string $token API token supplied by Loggly
-     *
-     * @throws MissingExtensionException If the curl extension is missing
-     */
+    
     public function __construct(string $token, int|string|Level $level = Level::Debug, bool $bubble = true)
     {
         if (!extension_loaded('curl')) {
@@ -59,9 +38,7 @@ class LogglyHandler extends AbstractProcessingHandler
         parent::__construct($level, $bubble);
     }
 
-    /**
-     * Loads and returns the shared curl handler for the given endpoint.
-     */
+    
     protected function getCurlHandler(string $endpoint): CurlHandle
     {
         if (!array_key_exists($endpoint, $this->curlHandlers)) {
@@ -71,12 +48,10 @@ class LogglyHandler extends AbstractProcessingHandler
         return $this->curlHandlers[$endpoint];
     }
 
-    /**
-     * Starts a fresh curl session for the given endpoint and returns its handler.
-     */
+    
     private function loadCurlHandle(string $endpoint): CurlHandle
     {
-        $url = sprintf("https://%s/%s/%s/", static::HOST, $endpoint, $this->token);
+        $url = sprintf("https:
 
         $ch = curl_init();
 
@@ -87,10 +62,7 @@ class LogglyHandler extends AbstractProcessingHandler
         return $ch;
     }
 
-    /**
-     * @param string[]|string $tag
-     * @return $this
-     */
+    
     public function setTag(string|array $tag): self
     {
         if ('' === $tag || [] === $tag) {
@@ -102,10 +74,7 @@ class LogglyHandler extends AbstractProcessingHandler
         return $this;
     }
 
-    /**
-     * @param string[]|string $tag
-     * @return $this
-     */
+    
     public function addTag(string|array $tag): self
     {
         if ('' !== $tag) {

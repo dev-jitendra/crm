@@ -1,27 +1,6 @@
 <?php
 
-/**
- * PKCS#8 Formatted Key Handler
- *
- * PHP version 5
- *
- * Used by PHP's openssl_public_encrypt() and openssl's rsautl (when -pubin is set)
- *
- * Processes keys with the following headers:
- *
- * -----BEGIN ENCRYPTED PRIVATE KEY-----
- * -----BEGIN PRIVATE KEY-----
- * -----BEGIN PUBLIC KEY-----
- *
- * Analogous to ssh-keygen's pkcs8 format (as specified by -m). Although PKCS8
- * is specific to private keys it's basically creating a DER-encoded wrapper
- * for keys. This just extends that same concept to public keys (much like ssh-keygen)
- *
- * @author    Jim Wigginton <terrafrost@php.net>
- * @copyright 2015 Jim Wigginton
- * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
- * @link      http://phpseclib.sourceforge.net
- */
+
 
 namespace phpseclib3\Crypt\Common\Formats\Keys;
 
@@ -37,103 +16,54 @@ use phpseclib3\Exception\UnsupportedAlgorithmException;
 use phpseclib3\File\ASN1;
 use phpseclib3\File\ASN1\Maps;
 
-/**
- * PKCS#8 Formatted Key Handler
- *
- * @author  Jim Wigginton <terrafrost@php.net>
- */
+
 abstract class PKCS8 extends PKCS
 {
-    /**
-     * Default encryption algorithm
-     *
-     * @var string
-     */
+    
     private static $defaultEncryptionAlgorithm = 'id-PBES2';
 
-    /**
-     * Default encryption scheme
-     *
-     * Only used when defaultEncryptionAlgorithm is id-PBES2
-     *
-     * @var string
-     */
+    
     private static $defaultEncryptionScheme = 'aes128-CBC-PAD';
 
-    /**
-     * Default PRF
-     *
-     * Only used when defaultEncryptionAlgorithm is id-PBES2
-     *
-     * @var string
-     */
+    
     private static $defaultPRF = 'id-hmacWithSHA256';
 
-    /**
-     * Default Iteration Count
-     *
-     * @var int
-     */
+    
     private static $defaultIterationCount = 2048;
 
-    /**
-     * OIDs loaded
-     *
-     * @var bool
-     */
+    
     private static $oidsLoaded = false;
 
-    /**
-     * Sets the default encryption algorithm
-     *
-     * @param string $algo
-     */
+    
     public static function setEncryptionAlgorithm($algo)
     {
         self::$defaultEncryptionAlgorithm = $algo;
     }
 
-    /**
-     * Sets the default encryption algorithm for PBES2
-     *
-     * @param string $algo
-     */
+    
     public static function setEncryptionScheme($algo)
     {
         self::$defaultEncryptionScheme = $algo;
     }
 
-    /**
-     * Sets the iteration count
-     *
-     * @param int $count
-     */
+    
     public static function setIterationCount($count)
     {
         self::$defaultIterationCount = $count;
     }
 
-    /**
-     * Sets the PRF for PBES2
-     *
-     * @param string $algo
-     */
+    
     public static function setPRF($algo)
     {
         self::$defaultPRF = $algo;
     }
 
-    /**
-     * Returns a SymmetricKey object based on a PBES1 $algo
-     *
-     * @return \phpseclib3\Crypt\Common\SymmetricKey
-     * @param string $algo
-     */
+    
     private static function getPBES1EncryptionObject($algo)
     {
         $algo = preg_match('#^pbeWith(?:MD2|MD5|SHA1|SHA)And(.*?)-CBC$#', $algo, $matches) ?
             $matches[1] :
-            substr($algo, 13); // strlen('pbeWithSHAAnd') == 13
+            substr($algo, 13); 
 
         switch ($algo) {
             case 'DES':
@@ -173,12 +103,7 @@ abstract class PKCS8 extends PKCS
         return $cipher;
     }
 
-    /**
-     * Returns a hash based on a PBES1 $algo
-     *
-     * @return string
-     * @param string $algo
-     */
+    
     private static function getPBES1Hash($algo)
     {
         if (preg_match('#^pbeWith(MD2|MD5|SHA1|SHA)And.*?-CBC$#', $algo, $matches)) {
@@ -188,12 +113,7 @@ abstract class PKCS8 extends PKCS
         return 'sha1';
     }
 
-    /**
-     * Returns a KDF baesd on a PBES1 $algo
-     *
-     * @return string
-     * @param string $algo
-     */
+    
     private static function getPBES1KDF($algo)
     {
         switch ($algo) {
@@ -209,12 +129,7 @@ abstract class PKCS8 extends PKCS
         return 'pkcs12';
     }
 
-    /**
-     * Returns a SymmetricKey object baesd on a PBES2 $algo
-     *
-     * @return SymmetricKey
-     * @param string $algo
-     */
+    
     private static function getPBES2EncryptionObject($algo)
     {
         switch ($algo) {
@@ -226,7 +141,7 @@ abstract class PKCS8 extends PKCS
                 break;
             case 'rc2CBC':
                 $cipher = new RC2('cbc');
-                // in theory this can be changed
+                
                 $cipher->setKeyLength(128);
                 break;
             case 'rc5-CBC-PAD':
@@ -244,10 +159,7 @@ abstract class PKCS8 extends PKCS
         return $cipher;
     }
 
-    /**
-     * Initialize static variables
-     *
-     */
+    
     private static function initialize_static_variables()
     {
         if (!isset(static::$childOIDsLoaded)) {
@@ -261,9 +173,9 @@ abstract class PKCS8 extends PKCS
             static::$childOIDsLoaded = true;
         }
         if (!self::$oidsLoaded) {
-            // from https://tools.ietf.org/html/rfc2898
+            
             ASN1::loadOIDs([
-               // PBES1 encryption schemes
+               
                'pbeWithMD2AndDES-CBC' => '1.2.840.113549.1.5.1',
                'pbeWithMD2AndRC2-CBC' => '1.2.840.113549.1.5.4',
                'pbeWithMD5AndDES-CBC' => '1.2.840.113549.1.5.3',
@@ -271,8 +183,8 @@ abstract class PKCS8 extends PKCS
                'pbeWithSHA1AndDES-CBC' => '1.2.840.113549.1.5.10',
                'pbeWithSHA1AndRC2-CBC' => '1.2.840.113549.1.5.11',
 
-               // from PKCS#12:
-               // https://tools.ietf.org/html/rfc7292
+               
+               
                'pbeWithSHAAnd128BitRC4' => '1.2.840.113549.1.12.1.1',
                'pbeWithSHAAnd40BitRC4' => '1.2.840.113549.1.12.1.2',
                'pbeWithSHAAnd3-KeyTripleDES-CBC' => '1.2.840.113549.1.12.1.3',
@@ -284,8 +196,8 @@ abstract class PKCS8 extends PKCS
                'id-PBES2' => '1.2.840.113549.1.5.13',
                'id-PBMAC1' => '1.2.840.113549.1.5.14',
 
-               // from PKCS#5 v2.1:
-               // http://www.rsa.com/rsalabs/pkcs/files/h11302-wp-pkcs5v2-1-password-based-cryptography-standard.pdf
+               
+               
                'id-hmacWithSHA1' => '1.2.840.113549.2.7',
                'id-hmacWithSHA224' => '1.2.840.113549.2.8',
                'id-hmacWithSHA256' => '1.2.840.113549.2.9',
@@ -307,13 +219,7 @@ abstract class PKCS8 extends PKCS
         }
     }
 
-    /**
-     * Break a public or private key down into its constituent components
-     *
-     * @param string $key
-     * @param string $password optional
-     * @return array
-     */
+    
     protected static function load($key, $password = '')
     {
         if (!Strings::is_stringable($key)) {
@@ -331,7 +237,7 @@ abstract class PKCS8 extends PKCS
         if (strlen($password) && is_array($decrypted)) {
             $algorithm = $decrypted['encryptionAlgorithm']['algorithm'];
             switch ($algorithm) {
-                // PBES1
+                
                 case 'pbeWithMD2AndDES-CBC':
                 case 'pbeWithMD2AndRC2-CBC':
                 case 'pbeWithMD5AndDES-CBC':
@@ -403,7 +309,7 @@ abstract class PKCS8 extends PKCS
                             case 58:
                                 $effectiveKeyLength = 128;
                                 break;
-                            //default: // should be >= 256
+                            
                         }
                         $cipher->setIV($iv);
                         $cipher->setKeyLength($effectiveKeyLength);
@@ -443,11 +349,11 @@ abstract class PKCS8 extends PKCS
                     }
                     break;
                 case 'id-PBMAC1':
-                    //$temp = ASN1::decodeBER($decrypted['encryptionAlgorithm']['parameters']);
-                    //$value = ASN1::asn1map($temp[0], Maps\PBMAC1params::MAP);
-                    // since i can't find any implementation that does PBMAC1 it is unsupported
+                    
+                    
+                    
                     throw new UnsupportedAlgorithmException('Only PBES1 and PBES2 PKCS#8 keys are supported.');
-                // at this point we'll assume that the key conforms to PublicKeyInfo
+                
             }
         }
 
@@ -479,10 +385,10 @@ abstract class PKCS8 extends PKCS
             return $private + $meta;
         }
 
-        // EncryptedPrivateKeyInfo and PublicKeyInfo have largely identical "signatures". the only difference
-        // is that the former has an octet string and the later has a bit string. the first byte of a bit
-        // string represents the number of bits in the last byte that are to be ignored but, currently,
-        // bit strings wanting a non-zero amount of bits trimmed are not supported
+        
+        
+        
+        
         $public = ASN1::asn1map($decoded[0], Maps\PublicKeyInfo::MAP);
 
         if (is_array($public)) {
@@ -513,18 +419,7 @@ abstract class PKCS8 extends PKCS
         throw new \RuntimeException('Unable to parse using either OneAsymmetricKey or PublicKeyInfo ASN1 maps');
     }
 
-    /**
-     * Wrap a private key appropriately
-     *
-     * @param string $key
-     * @param string $attr
-     * @param mixed $params
-     * @param string $password
-     * @param string $oid optional
-     * @param string $publicKey optional
-     * @param array $options optional
-     * @return string
-     */
+    
     protected static function wrapPrivateKey($key, $attr, $params, $password, $oid = null, $publicKey = '', array $options = [])
     {
         self::initialize_static_variables();
@@ -626,14 +521,7 @@ abstract class PKCS8 extends PKCS
                "-----END PRIVATE KEY-----";
     }
 
-    /**
-     * Wrap a public key appropriately
-     *
-     * @param string $key
-     * @param mixed $params
-     * @param string $oid
-     * @return string
-     */
+    
     protected static function wrapPublicKey($key, $params, $oid = null)
     {
         self::initialize_static_variables();
@@ -656,12 +544,7 @@ abstract class PKCS8 extends PKCS
                "-----END PUBLIC KEY-----";
     }
 
-    /**
-     * Perform some preliminary parsing of the key
-     *
-     * @param string $key
-     * @return array
-     */
+    
     private static function preParse(&$key)
     {
         self::initialize_static_variables();
@@ -683,12 +566,7 @@ abstract class PKCS8 extends PKCS
         return $decoded;
     }
 
-    /**
-     * Returns the encryption parameters used by the key
-     *
-     * @param string $key
-     * @return array
-     */
+    
     public static function extractEncryptionAlgorithm($key)
     {
         if (!Strings::is_stringable($key)) {

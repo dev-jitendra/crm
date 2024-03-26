@@ -4,8 +4,8 @@ namespace Laminas\Mail;
 
 class Storage
 {
-    // maildir and IMAP flags, using IMAP names, where possible to be able to distinguish between IMAP
-    // system flags and other flags
+    
+    
     public const FLAG_PASSED   = 'Passed';
     public const FLAG_SEEN     = '\Seen';
     public const FLAG_UNSEEN   = '\Unseen';

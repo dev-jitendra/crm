@@ -12,10 +12,10 @@ use function is_object;
 use function sprintf;
 use function strtolower;
 
-// phpcs:ignore WebimpressCodingStandard.NamingConventions.AbstractClass.Prefix
+
 abstract class Factory
 {
-    /** @var array Known transport types */
+    
     protected static $classMap = [
         'file'     => File::class,
         'inmemory' => InMemory::class,
@@ -25,12 +25,7 @@ abstract class Factory
         'smtp'     => Smtp::class,
     ];
 
-    /**
-     * @param array $spec
-     * @return TransportInterface
-     * @throws Exception\InvalidArgumentException
-     * @throws Exception\DomainException
-     */
+    
     public static function create($spec = [])
     {
         if ($spec instanceof Traversable) {

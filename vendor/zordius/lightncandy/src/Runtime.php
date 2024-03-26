@@ -1,27 +1,11 @@
 <?php
-/*
 
-MIT License
-Copyright 2013-2020 Zordius Chen. All Rights Reserved.
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-Origin: https://github.com/zordius/lightncandy
-*/
 
-/**
- * file to support LightnCandy compiled PHP runtime
- *
- * @package    LightnCandy
- * @author     Zordius <zordius@gmail.com>
- */
 
 namespace LightnCandy;
 
-/**
- * LightnCandy class for Object property access on a string.
- */
+
 class StringObject
 {
     protected $string;
@@ -37,9 +21,7 @@ class StringObject
     }
 }
 
-/**
- * LightnCandy class for compiled PHP runtime.
- */
+
 class Runtime extends Encoder
 {
     const DEBUG_ERROR_LOG = 1;
@@ -48,19 +30,10 @@ class Runtime extends Encoder
     const DEBUG_TAGS_ANSI = 12;
     const DEBUG_TAGS_HTML = 20;
 
-    /**
-     * Output debug info.
-     *
-     * @param string $v expression
-     * @param string $f runtime function name
-     * @param array<string,array|string|integer> $cx render time context for lightncandy
-     *
-     * @expect '{{123}}' when input '123', 'miss', array('flags' => array('debug' => Runtime::DEBUG_TAGS), 'runtime' => 'LightnCandy\\Runtime'), ''
-     * @expect '<!--MISSED((-->{{#123}}<!--))--><!--SKIPPED--><!--MISSED((-->{{/123}}<!--))-->' when input '123', 'wi', array('flags' => array('debug' => Runtime::DEBUG_TAGS_HTML), 'runtime' => 'LightnCandy\\Runtime'), false, null, false, function () {return 'A';}
-     */
+    
     public static function debug($v, $f, $cx)
     {
-        // Build array of reference for call_user_func_array
+        
         $P = func_get_args();
         $params = array();
         for ($i=2;$i<count($P);$i++) {
@@ -95,14 +68,7 @@ class Runtime extends Encoder
         }
     }
 
-    /**
-     * Handle error by error_log or throw exception.
-     *
-     * @param array<string,array|string|integer> $cx render time context for lightncandy
-     * @param string $err error message
-     *
-     * @throws \Exception
-     */
+    
     public static function err($cx, $err)
     {
         if ($cx['flags']['debug'] & static::DEBUG_ERROR_LOG) {
@@ -114,45 +80,20 @@ class Runtime extends Encoder
         }
     }
 
-    /**
-     * Handle missing data error.
-     *
-     * @param array<string,array|string|integer> $cx render time context for lightncandy
-     * @param string $v expression
-     */
+    
     public static function miss($cx, $v)
     {
         static::err($cx, "Runtime: $v does not exist");
     }
 
-    /**
-     * For {{log}} .
-     *
-     * @param array<string,array|string|integer> $cx render time context for lightncandy
-     * @param string $v expression
-     */
+    
     public static function lo($cx, $v)
     {
         error_log(var_export($v[0], true));
         return '';
     }
 
-    /**
-     * Resursive lookup variable and helpers. This is slow and will only be used for instance property or method detection or lambdas.
-     *
-     * @param array<string,array|string|integer> $cx render time context for lightncandy
-     * @param array|string|boolean|integer|double|null $in current context
-     * @param array<array|string|integer> $base current variable context
-     * @param array<string|integer> $path array of names for path
-     * @param array|null $args extra arguments for lambda
-     *
-     * @return null|string Return the value or null when not found
-     *
-     * @expect null when input array('scopes' => array(), 'flags' => array('prop' => 0, 'method' => 0, 'mustlok' => 0)), null, 0, array('a', 'b')
-     * @expect 3 when input array('scopes' => array(), 'flags' => array('prop' => 0, 'method' => 0), 'mustlok' => 0), null, array('a' => array('b' => 3)), array('a', 'b')
-     * @expect null when input array('scopes' => array(), 'flags' => array('prop' => 0, 'method' => 0, 'mustlok' => 0)), null, (Object) array('a' => array('b' => 3)), array('a', 'b')
-     * @expect 3 when input array('scopes' => array(), 'flags' => array('prop' => 1, 'method' => 0, 'mustlok' => 0)), null, (Object) array('a' => array('b' => 3)), array('a', 'b')
-     */
+    
     public static function v($cx, $in, $base, $path, $args = null)
     {
         $count = count($cx['scopes']);
@@ -223,67 +164,22 @@ class Runtime extends Encoder
         }
     }
 
-    /**
-     * For {{#if}} .
-     *
-     * @param array<string,array|string|integer> $cx render time context for lightncandy
-     * @param array<array|string|integer>|string|integer|null $v value to be tested
-     * @param boolean $zero include zero as true
-     *
-     * @return boolean Return true when the value is not null nor false.
-     *
-     * @expect false when input array(), null, false
-     * @expect false when input array(), 0, false
-     * @expect true when input array(), 0, true
-     * @expect false when input array(), false, false
-     * @expect true when input array(), true, false
-     * @expect true when input array(), 1, false
-     * @expect false when input array(), '', false
-     * @expect false when input array(), array(), false
-     * @expect true when input array(), array(''), false
-     * @expect true when input array(), array(0), false
-     */
+    
     public static function ifvar($cx, $v, $zero)
     {
         return ($v !== null) && ($v !== false) && ($zero || ($v !== 0) && ($v !== 0.0)) && ($v !== '') && (is_array($v) ? (count($v) > 0) : true);
     }
 
-    /**
-     * For {{^var}} .
-     *
-     * @param array<string,array|string|integer> $cx render time context for lightncandy
-     * @param array<array|string|integer>|string|integer|null $v value to be tested
-     *
-     * @return boolean Return true when the value is not null nor false.
-     *
-     * @expect true when input array(), null
-     * @expect false when input array(), 0
-     * @expect true when input array(), false
-     * @expect false when input array(), 'false'
-     * @expect true when input array(), array()
-     * @expect false when input array(), array('1')
-     */
+    
     public static function isec($cx, $v)
     {
         return ($v === null) || ($v === false) || (is_array($v) && (count($v) === 0));
     }
 
-    /**
-     * For {{var}} .
-     *
-     * @param array<string,array|string|integer> $cx render time context for lightncandy
-     * @param array<array|string|integer>|string|integer|null $var value to be htmlencoded
-     *
-     * @return string The htmlencoded value of the specified variable
-     *
-     * @expect 'a' when input array('flags' => array('mustlam' => 0, 'lambda' => 0)), 'a'
-     * @expect 'a&amp;b' when input array('flags' => array('mustlam' => 0, 'lambda' => 0)), 'a&b'
-     * @expect 'a&#039;b' when input array('flags' => array('mustlam' => 0, 'lambda' => 0)), 'a\'b'
-     * @expect 'a&b' when input null, new \LightnCandy\SafeString('a&b')
-     */
+    
     public static function enc($cx, $var)
     {
-        // Use full namespace classname for more specific code export/match in Exporter.php replaceSafeString.
+        
         if ($var instanceof \LightnCandy\SafeString) {
             return (string)$var;
         }
@@ -291,22 +187,10 @@ class Runtime extends Encoder
         return htmlspecialchars(static::raw($cx, $var), ENT_QUOTES, 'UTF-8');
     }
 
-    /**
-     * For {{var}} , do html encode just like handlebars.js .
-     *
-     * @param array<string,array|string|integer> $cx render time context for lightncandy
-     * @param array<array|string|integer>|string|integer|null $var value to be htmlencoded
-     *
-     * @return string The htmlencoded value of the specified variable
-     *
-     * @expect 'a' when input array('flags' => array('mustlam' => 0, 'lambda' => 0)), 'a'
-     * @expect 'a&amp;b' when input array('flags' => array('mustlam' => 0, 'lambda' => 0)), 'a&b'
-     * @expect 'a&#x27;b' when input array('flags' => array('mustlam' => 0, 'lambda' => 0)), 'a\'b'
-     * @expect '&#x60;a&#x27;b' when input array('flags' => array('mustlam' => 0, 'lambda' => 0)), '`a\'b'
-     */
+    
     public static function encq($cx, $var)
     {
-        // Use full namespace classname for more specific code export/match in Exporter.php replaceSafeString.
+        
         if ($var instanceof \LightnCandy\SafeString) {
             return (string)$var;
         }
@@ -314,44 +198,7 @@ class Runtime extends Encoder
         return str_replace(array('=', '`', '&#039;'), array('&#x3D;', '&#x60;', '&#x27;'), htmlspecialchars(static::raw($cx, $var), ENT_QUOTES, 'UTF-8'));
     }
 
-    /**
-     * For {{#var}} or {{#each}} .
-     *
-     * @param array<string,array|string|integer> $cx render time context for lightncandy
-     * @param array<array|string|integer>|string|integer|null $v value for the section
-     * @param array<string>|null $bp block parameters
-     * @param array<array|string|integer>|string|integer|null $in input data with current scope
-     * @param boolean $each true when rendering #each
-     * @param Closure $cb callback function to render child context
-     * @param Closure|null $else callback function to render child context when {{else}}
-     *
-     * @return string The rendered string of the section
-     *
-     * @expect '' when input array('flags' => array('spvar' => 0, 'mustlam' => 0, 'mustsec' => 0, 'lambda' => 0)), false, null, false, false, function () {return 'A';}
-     * @expect '' when input array('flags' => array('spvar' => 0, 'mustlam' => 0, 'mustsec' => 0, 'lambda' => 0)), null, null, null, false, function () {return 'A';}
-     * @expect 'A' when input array('flags' => array('spvar' => 0, 'mustlam' => 0, 'mustsec' => 0, 'lambda' => 0)), true, null, true, false, function () {return 'A';}
-     * @expect 'A' when input array('flags' => array('spvar' => 0, 'mustlam' => 0, 'mustsec' => 0, 'lambda' => 0)), 0, null, 0, false, function () {return 'A';}
-     * @expect '-a=' when input array('scopes' => array(), 'flags' => array('spvar' => 0, 'mustlam' => 0, 'lambda' => 0)), array('a'), null, array('a'), false, function ($c, $i) {return "-$i=";}
-     * @expect '-a=-b=' when input array('scopes' => array(), 'flags' => array('spvar' => 0, 'mustlam' => 0, 'lambda' => 0)), array('a','b'), null, array('a','b'), false, function ($c, $i) {return "-$i=";}
-     * @expect '' when input array('scopes' => array(), 'flags' => array('spvar' => 0, 'mustlam' => 0, 'lambda' => 0)), 'abc', null, 'abc', true, function ($c, $i) {return "-$i=";}
-     * @expect '-b=' when input array('scopes' => array(), 'flags' => array('spvar' => 0, 'mustlam' => 0, 'lambda' => 0)), array('a' => 'b'), null, array('a' => 'b'), true, function ($c, $i) {return "-$i=";}
-     * @expect 'b' when input array('flags' => array('spvar' => 0, 'mustlam' => 0, 'mustsec' => 0, 'lambda' => 0)), 'b', null, 'b', false, function ($c, $i) {return print_r($i, true);}
-     * @expect '1' when input array('flags' => array('spvar' => 0, 'mustlam' => 0, 'mustsec' => 0, 'lambda' => 0)), 1, null, 1, false, function ($c, $i) {return print_r($i, true);}
-     * @expect '0' when input array('flags' => array('spvar' => 0, 'mustlam' => 0, 'mustsec' => 0, 'lambda' => 0)), 0, null, 0, false, function ($c, $i) {return print_r($i, true);}
-     * @expect '{"b":"c"}' when input array('flags' => array('spvar' => 0, 'mustlam' => 0, 'lambda' => 0)), array('b' => 'c'), null, array('b' => 'c'), false, function ($c, $i) {return json_encode($i);}
-     * @expect 'inv' when input array('flags' => array('spvar' => 0, 'mustlam' => 0, 'lambda' => 0)), array(), null, 0, true, function ($c, $i) {return 'cb';}, function ($c, $i) {return 'inv';}
-     * @expect 'inv' when input array('flags' => array('spvar' => 0, 'mustlam' => 0, 'lambda' => 0)), array(), null, 0, false, function ($c, $i) {return 'cb';}, function ($c, $i) {return 'inv';}
-     * @expect 'inv' when input array('flags' => array('spvar' => 0, 'mustlam' => 0, 'lambda' => 0)), false, null, 0, true, function ($c, $i) {return 'cb';}, function ($c, $i) {return 'inv';}
-     * @expect 'inv' when input array('flags' => array('spvar' => 0, 'mustlam' => 0, 'mustsec' => 0, 'lambda' => 0)), false, null, 0, false, function ($c, $i) {return 'cb';}, function ($c, $i) {return 'inv';}
-     * @expect 'inv' when input array('flags' => array('spvar' => 0, 'mustlam' => 0, 'lambda' => 0)), '', null, 0, true, function ($c, $i) {return 'cb';}, function ($c, $i) {return 'inv';}
-     * @expect 'cb' when input array('flags' => array('spvar' => 0, 'mustlam' => 0, 'mustsec' => 0, 'lambda' => 0)), '', null, 0, false, function ($c, $i) {return 'cb';}, function ($c, $i) {return 'inv';}
-     * @expect 'inv' when input array('flags' => array('spvar' => 0, 'mustlam' => 0, 'lambda' => 0)), 0, null, 0, true, function ($c, $i) {return 'cb';}, function ($c, $i) {return 'inv';}
-     * @expect 'cb' when input array('flags' => array('spvar' => 0, 'mustlam' => 0, 'mustsec' => 0, 'lambda' => 0)), 0, null, 0, false, function ($c, $i) {return 'cb';}, function ($c, $i) {return 'inv';}
-     * @expect 'inv' when input array('flags' => array('spvar' => 0, 'mustlam' => 0, 'lambda' => 0)), new stdClass, null, 0, true, function ($c, $i) {return 'cb';}, function ($c, $i) {return 'inv';}
-     * @expect 'cb' when input array('flags' => array('spvar' => 0, 'mustlam' => 0, 'mustsec' => 0, 'lambda' => 0)), new stdClass, null, 0, false, function ($c, $i) {return 'cb';}, function ($c, $i) {return 'inv';}
-     * @expect '268' when input array('scopes' => array(), 'flags' => array('spvar' => 1, 'mustlam' => 0, 'lambda' => 0), 'sp_vars'=>array('root' => 0)), array(1,3,4), null, 0, false, function ($c, $i) {return $i * 2;}
-     * @expect '038' when input array('scopes' => array(), 'flags' => array('spvar' => 1, 'mustlam' => 0, 'lambda' => 0), 'sp_vars'=>array('root' => 0)), array(1,3,'a'=>4), null, 0, true, function ($c, $i) {return $i * $c['sp_vars']['index'];}
-     */
+    
     public static function sec($cx, $v, $bp, $in, $each, $cb, $else = null)
     {
         $push = ($in !== $v) || $each;
@@ -367,7 +214,7 @@ class Runtime extends Encoder
             return $else($cx, $in);
         }
 
-        // #var, detect input type is object or not
+        
         if (!$loop && $isAry) {
             $keys = array_keys($v);
             $loop = (count(array_diff_key($v, array_keys($keys))) == 0);
@@ -376,7 +223,7 @@ class Runtime extends Encoder
 
         if (($loop && $isAry) || $isTrav) {
             if ($each && !$isTrav) {
-                // Detect input type is object or not when never done once
+                
                 if ($keys == null) {
                     $keys = array_keys($v);
                     $isObj = (count(array_diff_key($v, array_keys($keys))) > 0);
@@ -465,23 +312,7 @@ class Runtime extends Encoder
         return '';
     }
 
-    /**
-     * For {{#with}} .
-     *
-     * @param array<string,array|string|integer> $cx render time context for lightncandy
-     * @param array<array|string|integer>|string|integer|null $v value to be the new context
-     * @param array<array|string|integer>|string|integer|null $in input data with current scope
-     * @param array<string>|null $bp block parameters
-     * @param Closure $cb callback function to render child context
-     * @param Closure|null $else callback function to render child context when {{else}}
-     *
-     * @return string The rendered string of the token
-     *
-     * @expect '' when input array(), false, null, false, function () {return 'A';}
-     * @expect '' when input array(), null, null, null, function () {return 'A';}
-     * @expect '{"a":"b"}' when input array(), array('a'=>'b'), null, array('a'=>'c'), function ($c, $i) {return json_encode($i);}
-     * @expect '-b=' when input array(), 'b', null, array('a'=>'b'), function ($c, $i) {return "-$i=";}
-     */
+    
     public static function wi($cx, $v, $bp, $in, $cb, $else = null)
     {
         if (isset($bp[0])) {
@@ -500,16 +331,7 @@ class Runtime extends Encoder
         return $ret;
     }
 
-    /**
-     * Get merged context.
-     *
-     * @param array<string,array|string|integer> $cx render time context for lightncandy
-     * @param array<array|string|integer>|string|integer|null $a the context to be merged
-     * @param array<array|string|integer>|string|integer|null $b the new context to overwrite
-     *
-     * @return array<array|string|integer>|string|integer the merged context object
-     *
-     */
+    
     public static function m($cx, $a, $b)
     {
         if (is_array($b)) {
@@ -529,16 +351,7 @@ class Runtime extends Encoder
         return $a;
     }
 
-    /**
-     * For {{> partial}} .
-     *
-     * @param array<string,array|string|integer> $cx render time context for lightncandy
-     * @param string $p partial name
-     * @param array<array|string|integer>|string|integer|null $v value to be the new context
-     *
-     * @return string The rendered string of the partial
-     *
-     */
+    
     public static function p($cx, $p, $v, $pid, $sp = '')
     {
         $pp = ($p === '@partial-block') ? "$p" . ($pid > 0 ? $pid : $cx['partialid']) : $p;
@@ -553,29 +366,13 @@ class Runtime extends Encoder
         return call_user_func($cx['partials'][$pp], $cx, static::m($cx, $v[0][0], $v[1]), $sp);
     }
 
-    /**
-     * For {{#* inlinepartial}} .
-     *
-     * @param array<string,array|string|integer> $cx render time context for lightncandy
-     * @param string $p partial name
-     * @param Closure $code the compiled partial code
-     *
-     */
+    
     public static function in(&$cx, $p, $code)
     {
         $cx['partials'][$p] = $code;
     }
 
-    /* For single custom helpers.
-     *
-     * @param array<string,array|string|integer> $cx render time context for lightncandy
-     * @param string $ch the name of custom helper to be executed
-     * @param array<array|string|integer>|string|integer|null $vars variables for the helper
-     * @param string $op the name of variable resolver. should be one of: 'raw', 'enc', or 'encq'.
-     * @param array<string,array|string|integer> $_this current rendering context for the helper
-     *
-     * @return string The rendered string of the token
-     */
+    
     public static function hbch(&$cx, $ch, $vars, $op, &$_this)
     {
         if (isset($cx['blparam'][0][$ch])) {
@@ -597,19 +394,7 @@ class Runtime extends Encoder
         return static::exch($cx, $ch, $vars, $options);
     }
 
-    /**
-     * For block custom helpers.
-     *
-     * @param array<string,array|string|integer> $cx render time context for lightncandy
-     * @param string $ch the name of custom helper to be executed
-     * @param array<array|string|integer>|string|integer|null $vars variables for the helper
-     * @param array<string,array|string|integer> $_this current rendering context for the helper
-     * @param boolean $inverted the logic will be inverted
-     * @param Closure|null $cb callback function to render child context
-     * @param Closure|null $else callback function to render child context when {{else}}
-     *
-     * @return string The rendered string of the token
-     */
+    
     public static function hbbch(&$cx, $ch, $vars, &$_this, $inverted, $cb, $else = null)
     {
         $options = array(
@@ -628,7 +413,7 @@ class Runtime extends Encoder
             $options['fn.blockParams'] = count($vars[2]);
         }
 
-        // $invert the logic
+        
         if ($inverted) {
             $tmp = $else;
             $else = $cb;
@@ -686,16 +471,7 @@ class Runtime extends Encoder
         return static::exch($cx, $ch, $vars, $options);
     }
 
-    /**
-     * Execute custom helper with prepared options
-     *
-     * @param array<string,array|string|integer> $cx render time context for lightncandy
-     * @param string $ch the name of custom helper to be executed
-     * @param array<array|string|integer>|string|integer|null $vars variables for the helper
-     * @param array<string,array|string|integer> $options the options object
-     *
-     * @return string The rendered string of the token
-     */
+    
     public static function exch($cx, $ch, $vars, &$options)
     {
         $args = $vars[0];

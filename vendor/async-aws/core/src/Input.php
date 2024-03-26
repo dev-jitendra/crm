@@ -2,21 +2,13 @@
 
 namespace AsyncAws\Core;
 
-/**
- * Representation of a AWS Request.
- *
- * @author Jérémy Derussé <jeremy@derusse.com>
- */
+
 abstract class Input
 {
-    /**
-     * @var string|null
-     */
+    
     public $region;
 
-    /**
-     * @param array{'@region'?: ?string,...} $input
-     */
+    
     protected function __construct(array $input)
     {
         $this->region = $input['@region'] ?? null;

@@ -1,32 +1,6 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module app */
+
+
 
 import $ from 'jquery';
 import Backbone from 'backbone';
@@ -58,67 +32,31 @@ import NumberUtil from 'number-util';
 import PageTitle from 'page-title';
 import BroadcastChannel from 'broadcast-channel';
 
-/**
- * A main application class.
- *
- * @mixes Bull.Events
- */
+
 class App {
 
-    /**
-     * @param {module:app~Options} options Options.
-     * @param {module:app~callback} callback A callback.
-     */
+    
     constructor(options, callback) {
         options = options || {};
 
-        /**
-         * An application ID.
-         *
-         * @private
-         * @type {string}
-         */
+        
         this.id = options.id || 'espocrm-application-id';
 
-        /**
-         * Use cache.
-         *
-         * @private
-         * @type {boolean}
-         */
+        
         this.useCache = options.useCache || this.useCache;
 
         this.apiUrl = options.apiUrl || this.apiUrl;
 
-        /**
-         * A base path.
-         *
-         * @type {string}
-         */
+        
         this.basePath = options.basePath || '';
 
-        /**
-         * A default ajax request timeout.
-         *
-         * @private
-         * @type {Number}
-         */
+        
         this.ajaxTimeout = options.ajaxTimeout || 0;
 
-        /**
-         * A list of internal modules.
-         *
-         * @private
-         * @type {string[]}
-         */
+        
         this.internalModuleList = options.internalModuleList || [];
 
-        /**
-         * A list of bundled modules.
-         *
-         * @private
-         * @type {string[]}
-         */
+        
         this.bundledModuleList = options.bundledModuleList || [];
 
         this.appTimestamp = options.appTimestamp;
@@ -129,196 +67,97 @@ class App {
         this.initDomEventListeners();
     }
 
-    /**
-     * @private
-     * @type {boolean}
-     */
+    
     useCache = false
 
-    /**
-     * @protected
-     * @type {module:models/user}
-     */
+    
     user = null
 
-    /**
-     * @private
-     * @type {module:models/preferences}
-     */
+    
     preferences = null
 
-    /**
-     * @protected
-     * @type {module:models/settings}
-     */
+    
     settings = null
 
-    /**
-     * @private
-     * @type {module:metadata}
-     */
+    
     metadata = null
 
-    /**
-     * @private
-     * @type {module:language}
-     */
+    
     language = null
 
-    /**
-     * @private
-     * @type {module:field-manager}
-     */
+    
     fieldManager = null
 
-    /**
-     * @private
-     * @type {module:cache|null}
-     */
+    
     cache = null
 
-    /**
-     * @private
-     * @type {module:storage|null}
-     */
+    
     storage = null
 
-    /**
-     * @private
-     */
+    
     loader = null
 
-    /**
-     * An API URL.
-     *
-     * @private
-     */
+    
     apiUrl = 'api/v1'
 
-    /**
-     * An auth credentials string.
-     *
-     * @private
-     * @type {?string}
-     */
+    
     auth = null
 
-    /**
-     * Another user to login as.
-     *
-     * @private
-     * @type {?string}
-     */
+    
     anotherUser = null
 
-    /**
-     * A base controller.
-     *
-     * @private
-     * @type {module:controllers/base}
-     */
+    
     baseController = null
 
-    /**
-     * @private
-     */
+    
     controllers = null
 
-    /**
-     * @private
-     * @type {module:router}
-     */
+    
     router = null
 
-    /**
-     * @private
-     * @type {module:model-factory}
-     */
+    
     modelFactory = null
 
-    /**
-     * @private
-     * @type {module:collection-factory}
-     */
+    
     collectionFactory = null
 
-    /**
-     * A view factory.
-     *
-     * @private
-     * @type {Factory}
-     */
+    
     viewFactory = null
 
-    /**
-     * @type {function(string, function(View))}
-     * @private
-     */
+    
     viewLoader = null
 
-    /**
-     * @private
-     * @type {module:view-helper}
-     */
+    
     viewHelper = null
 
-    /**
-     * A body view.
-     *
-     * @protected
-     * @type {string}
-     */
+    
     masterView = 'views/site/master'
 
-    /**
-     * @private
-     * @type {Cache|null}
-     */
+    
     responseCache = null
 
-    /**
-     * @private
-     * @type {module:broadcast-channel|null}
-     */
+    
     broadcastChannel = null
 
-    /**
-     * @private
-     * @type {module:date-time|null}
-     */
+    
     dateTime = null
 
-    /**
-     * @private
-     * @type {module:num-util|null}
-     */
+    
     numberUtil = null
 
-    /**
-     * @private
-     * @type {module:web-socket-manager|null}
-     */
+    
     webSocketManager = null
 
-    /**
-     * An application timestamp. Used for asset cache busting and update detection.
-     *
-     * @private
-     * @type {Number|null}
-     */
+    
     appTimestamp = null
 
-    /** @private */
+    
     started = false
 
-    /** @private */
+    
     aclName = 'acl'
 
-    /**
-     * @private
-     * @param {module:app~Options} options
-     * @return Promise
-     */
+    
     initCache(options) {
         if (!this.useCache) {
             return Promise.resolve();
@@ -361,20 +200,13 @@ class App {
         });
     }
 
-    /**
-     * @private
-     * @param {module:app~Options} options
-     * @param {function} [callback]
-     */
+    
     init(options, callback) {
-        /** @type {Object.<string, *>} */
+        
         this.appParams = {};
         this.controllers = {};
 
-        /**
-         * @type {Espo.loader}
-         * @private
-         */
+        
         this.loader = Espo.loader;
 
         this.loader.setResponseCache(this.responseCache);
@@ -409,7 +241,7 @@ class App {
 
                 this.preferences.settings = this.settings;
 
-                /** @type {module:acl-manager} */
+                
                 this.acl = this.createAclManager();
 
                 this.fieldManager.acl = this.acl;
@@ -430,9 +262,7 @@ class App {
             });
     }
 
-    /**
-     * Start the application.
-     */
+    
     start() {
         this.initAuth();
 
@@ -447,10 +277,7 @@ class App {
         this.initUserData(null, () => this.onAuth.call(this));
     }
 
-    /**
-     * @private
-     * @param {boolean} [afterLogin]
-     */
+    
     onAuth(afterLogin) {
         this.metadata.load().then(() => {
             this.fieldManager.defs = this.metadata.get('fields');
@@ -532,9 +359,7 @@ class App {
         });
     }
 
-    /**
-     * @private
-     */
+    
     initRouter() {
         const routes = this.metadata.get(['app', 'clientRoutes']) || {};
 
@@ -558,17 +383,7 @@ class App {
         }
     }
 
-    /**
-     * Do an action.
-     *
-     * @public
-     * @param {{
-     *   controller?: string,
-     *   action: string,
-     *   options?: Object.<string,*>,
-     *   controllerClassName?: string,
-     * }} params
-     */
+    
     doAction(params) {
         this.trigger('action', params);
 
@@ -608,18 +423,14 @@ class App {
         this.getController(params.controller, callback);
     }
 
-    /**
-     * @private
-     */
+    
     initBaseController() {
         this.baseController = new BaseController({}, this.getControllerInjection());
 
         this.viewHelper.baseController = this.baseController;
     }
 
-    /**
-     * @private
-     */
+    
     getControllerInjection() {
         return {
             viewFactory: this.viewFactory,
@@ -639,11 +450,7 @@ class App {
         };
     }
 
-    /**
-     * @param {string} name
-     * @param {function(module:controller): void} callback
-     * @private
-     */
+    
     getController(name, callback) {
         if (!name) {
             callback(this.baseController);
@@ -673,10 +480,7 @@ class App {
         }
     }
 
-    /**
-     * @private
-     * @return {module:controller}
-     */
+    
     createController(className, name, callback) {
         Espo.loader.require(
             className,
@@ -696,9 +500,7 @@ class App {
         );
     }
 
-    /**
-     * @private
-     */
+    
     initUtils() {
         this.dateTime = new DateTime();
         this.modelFactory.dateTime = this.dateTime;
@@ -706,19 +508,12 @@ class App {
         this.numberUtil = new NumberUtil(this.settings, this.preferences);
     }
 
-    /**
-     * Create an acl-manager.
-     *
-     * @protected
-     * @return {module:acl-manager}
-     */
+    
     createAclManager() {
         return new AclManager(this.user, null, this.settings.get('aclAllowDeleteCreated'));
     }
 
-    /**
-     * @private
-     */
+    
     initView() {
         const helper = this.viewHelper = new ViewHelper();
 
@@ -827,9 +622,7 @@ class App {
         });
     }
 
-    /**
-     * @public
-     */
+    
     initAuth() {
         this.auth = this.storage.get('user', 'auth') || null;
         this.anotherUser = this.storage.get('user', 'anotherUser') || null;
@@ -862,9 +655,7 @@ class App {
         this.baseController.on('logout', () => this.logout());
     }
 
-    /**
-     * @private
-     */
+    
     logout(afterFail, silent) {
         let logoutWait = false;
 
@@ -875,7 +666,7 @@ class App {
                 logoutWait = this.appParams.logoutWait || false;
 
                 Ajax.postRequest('App/destroyAuthToken', {token: arr[1]}, {resolveWithXhr: true})
-                    .then(/** XMLHttpRequest */xhr => {
+                    .then(xhr => {
                         const redirectUrl = xhr.getResponseHeader('X-Logout-Redirect-Url');
 
                         if (redirectUrl) {
@@ -932,9 +723,7 @@ class App {
         this.loadStylesheet();
     }
 
-    /**
-     * @private
-     */
+    
     sendLogoutRequest() {
         const xhr = new XMLHttpRequest;
 
@@ -944,9 +733,7 @@ class App {
         xhr.abort();
     }
 
-    /**
-     * @private
-     */
+    
     loadStylesheet() {
         if (!this.metadata.get(['themes'])) {
             return;
@@ -957,9 +744,7 @@ class App {
         $('#main-stylesheet').attr('href', stylesheetPath);
     }
 
-    /**
-     * @private
-     */
+    
     setCookieAuth(username, token) {
         const date = new Date();
 
@@ -968,16 +753,12 @@ class App {
         document.cookie = 'auth-token=' + token + '; SameSite=Lax; expires=' + date.toUTCString() + '; path=/';
     }
 
-    /**
-     * @private
-     */
+    
     unsetCookieAuth() {
         document.cookie = 'auth-token' + '=; SameSite=Lax; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/';
     }
 
-    /**
-     * @private
-     */
+    
     initUserData(options, callback) {
         options = options || {};
 
@@ -1049,22 +830,15 @@ class App {
             });
     }
 
-    /**
-     * @private
-     */
+    
     requestUserData(callback) {
         Ajax.getRequest('App/user', {}, {appStart: true})
             .then(callback);
     }
 
-    /**
-     * @private
-     */
+    
     setupAjax() {
-        /**
-         * @param {XMLHttpRequest} xhr
-         * @param {Object.<string, *>} options
-         */
+        
         const beforeSend = (xhr, options) => {
             if (this.auth !== null && !options.login) {
                 xhr.setRequestHeader('Authorization', 'Basic ' + this.auth);
@@ -1079,10 +853,7 @@ class App {
 
         let appTimestampChangeProcessed = false;
 
-        /**
-         * @param {XMLHttpRequest} xhr
-         * @param {Object.<string, *>} options
-         */
+        
         const onSuccess = (xhr, options) => {
             const appTimestampHeader = xhr.getResponseHeader('X-App-Timestamp');
 
@@ -1092,12 +863,12 @@ class App {
 
             const appTimestamp = parseInt(appTimestampHeader);
 
-            // noinspection JSUnresolvedReference
+            
             const bypassAppReload = options.bypassAppReload;
 
             if (
                 this.appTimestamp &&
-                // this.appTimestamp is set to current time if cache disabled.
+                
                 appTimestamp > this.appTimestamp &&
                 !bypassAppReload
             ) {
@@ -1123,10 +894,7 @@ class App {
             }
         };
 
-        /**
-         * @param {module:ajax.Xhr} xhr
-         * @param {Object.<string, *>} options
-         */
+        
         const onError = (xhr, options) => {
             setTimeout(() => {
                 if (xhr.errorIsHandled) {
@@ -1142,7 +910,7 @@ class App {
                         break;
 
                     case 401:
-                        // noinspection JSUnresolvedReference
+                        
                         if (options.login) {
                             break;
                         }
@@ -1162,7 +930,7 @@ class App {
                         }
 
                         if (this.auth) {
-                            // noinspection JSUnresolvedReference
+                            
                             const silent = !options.appStart;
 
                             this.logout(true, silent);
@@ -1173,7 +941,7 @@ class App {
                         break;
 
                     case 403:
-                        // noinspection JSUnresolvedReference
+                        
                         if (options.main) {
                             this.baseController.error403();
 
@@ -1190,7 +958,7 @@ class App {
                         break;
 
                     case 404:
-                        // noinspection JSUnresolvedReference
+                        
                         if (options.main) {
                             this.baseController.error404();
 
@@ -1226,20 +994,20 @@ class App {
             onTimeout: onTimeout,
         });
 
-        // For backward compatibility.
-        // @todo Remove in v9.0.
+        
+        
         $.ajaxSetup({
             beforeSend: (xhr, options) => {
                 if (!options.url || !options.url.includes('q=')) {
                     console.warn(`$.ajax is deprecated, support will be removed in v9.0. Use Espo.Ajax instead.`);
                 }
 
-                // noinspection JSUnresolvedReference
+                
                 if (!options.local && this.apiUrl) {
                     options.url = Utils.trimSlash(this.apiUrl) + '/' + options.url;
                 }
 
-                // noinspection JSUnresolvedReference
+                
                 if (!options.local && this.basePath !== '') {
                     options.url = this.basePath + options.url;
                 }
@@ -1260,9 +1028,7 @@ class App {
         });
     }
 
-    /**
-     * @private
-     */
+    
     _processErrorAlert(xhr, label, noDetail) {
         let msg = this.language.translate('Error') + ' ' + xhr.status;
 
@@ -1282,7 +1048,7 @@ class App {
         }
 
         if (!isMessageDone && xhr.responseText && xhr.responseText[0] === '{') {
-            /** @type {Object.<string, *>|null} */
+            
             let data = null;
 
             try {
@@ -1334,18 +1100,16 @@ class App {
         Ui.error(obj.msg, obj.closeButton);
     }
 
-    /**
-     * @private
-     */
+    
     initBroadcastChannel() {
         this.broadcastChannel = new BroadcastChannel();
 
         this.broadcastChannel.subscribe(event => {
             if (!this.auth && this.started) {
                 if (event.data === 'logged-in') {
-                    // This works if the same instance opened in different tabs.
-                    // This does not work for different instances on the same domain
-                    // which may be the case in dev environment.
+                    
+                    
+                    
                     window.location.reload();
                 }
 
@@ -1405,9 +1169,7 @@ class App {
         });
     }
 
-    /**
-     * @private
-     */
+    
     initDomEventListeners() {
         $(document).on('keydown.espo.button', e => {
             if (
@@ -1428,10 +1190,7 @@ class App {
         });
     }
 
-    /**
-     * @private
-     * @return {Promise}
-     */
+    
     initTemplateBundles() {
         if (!this.responseCache) {
             return Promise.resolve();
@@ -1513,26 +1272,9 @@ class App {
     }
 }
 
-/**
- * @callback module:app~callback
- * @param {App} app A created application instance.
- */
 
-/**
- * Application options.
- *
- * @typedef {Object} module:app~Options
- * @property {string} [id] An application ID.
- * @property {string} [basePath] A base path.
- * @property {boolean} [useCache] Use cache.
- * @property {string} [apiUrl] An API URL.
- * @property {Number} [ajaxTimeout] A default ajax request timeout.
- * @property {string} [internalModuleList] A list of internal modules.
- *   Internal modules located in the `client/modules` directory.
- * @property {string} [bundledModuleList] A list of bundled modules.
- * @property {Number|null} [cacheTimestamp] A cache timestamp.
- * @property {Number|null} [appTimestamp] An application timestamp.
- */
+
+
 
 Object.assign(App.prototype, Events);
 

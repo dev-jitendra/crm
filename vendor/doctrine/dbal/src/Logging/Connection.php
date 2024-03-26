@@ -14,7 +14,7 @@ final class Connection extends AbstractConnectionMiddleware
 {
     private LoggerInterface $logger;
 
-    /** @internal This connection can be only instantiated by its driver. */
+    
     public function __construct(ConnectionInterface $connection, LoggerInterface $logger)
     {
         parent::__construct($connection);
@@ -50,9 +50,7 @@ final class Connection extends AbstractConnectionMiddleware
         return parent::exec($sql);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function beginTransaction()
     {
         $this->logger->debug('Beginning transaction');
@@ -60,9 +58,7 @@ final class Connection extends AbstractConnectionMiddleware
         return parent::beginTransaction();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function commit()
     {
         $this->logger->debug('Committing transaction');
@@ -70,9 +66,7 @@ final class Connection extends AbstractConnectionMiddleware
         return parent::commit();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function rollBack()
     {
         $this->logger->debug('Rolling back transaction');

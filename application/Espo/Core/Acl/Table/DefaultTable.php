@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Acl\Table;
 
@@ -41,10 +15,7 @@ use Espo\Core\Utils\Metadata;
 use stdClass;
 use RuntimeException;
 
-/**
- * A table is generated for a user. Multiple roles are merged into a single table.
- * Stores access levels.
- */
+
 class DefaultTable implements Table
 {
     private const LEVEL_NOT_SET = 'not-set';
@@ -52,9 +23,7 @@ class DefaultTable implements Table
     protected string $type = 'acl';
     protected string $defaultAclType = 'recordAllTeamOwnNo';
 
-    /**
-     * @var string[]
-     */
+    
     private $actionList = [
         self::ACTION_READ,
         self::ACTION_STREAM,
@@ -63,16 +32,12 @@ class DefaultTable implements Table
         self::ACTION_CREATE,
     ];
 
-    /**
-     * @var string[]
-     */
+    
     private $booleanActionList = [
         self::ACTION_CREATE,
     ];
 
-    /**
-     * @var string[]
-     */
+    
     protected $levelList = [
         self::LEVEL_YES,
         self::LEVEL_ALL,
@@ -81,17 +46,13 @@ class DefaultTable implements Table
         self::LEVEL_NO,
     ];
 
-    /**
-     * @var string[]
-     */
+    
     private $fieldActionList = [
         self::ACTION_READ,
         self::ACTION_EDIT,
     ];
 
-    /**
-     * @var string[]
-     */
+    
     protected $fieldLevelList = [
         self::LEVEL_YES,
         self::LEVEL_NO,
@@ -101,9 +62,7 @@ class DefaultTable implements Table
 
     private string $cacheKey;
 
-    /**
-     * @var string[]
-     */
+    
     private $valuePermissionList = [];
 
     public function __construct(
@@ -131,7 +90,7 @@ class DefaultTable implements Table
         $this->cacheKey = $cacheKeyProvider->get();
 
         if ($config->get('useCache') && $dataCache->has($this->cacheKey)) {
-            /** @var stdClass $cachedData */
+            
             $cachedData = $dataCache->get($this->cacheKey);
 
             $this->data = $cachedData;
@@ -145,9 +104,7 @@ class DefaultTable implements Table
         }
     }
 
-    /**
-     * Get scope data.
-     */
+    
     public function getScopeData(string $scope): ScopeData
     {
         if (!isset($this->data->scopes->$scope)) {
@@ -163,9 +120,7 @@ class DefaultTable implements Table
         return ScopeData::fromRaw($data);
     }
 
-    /**
-     * Get field data.
-     */
+    
     public function getFieldData(string $scope, string $field): FieldData
     {
         if (!isset($this->data->fields->$scope)) {
@@ -183,9 +138,7 @@ class DefaultTable implements Table
         return FieldData::fromRaw($data);
     }
 
-    /**
-     * Get a permission level.
-     */
+    
     public function getPermissionLevel(string $permission): string
     {
         return $this->data->permissions->$permission ?? self::LEVEL_NO;
@@ -521,9 +474,7 @@ class DefaultTable implements Table
         }
     }
 
-    /**
-     * @todo Revise usage of this method.
-     */
+    
     protected function applyAdditional(stdClass &$table, stdClass &$fieldTable, stdClass &$valuePermissionLists): void
     {
         if ($this->user->isPortal()) {
@@ -539,9 +490,7 @@ class DefaultTable implements Table
         }
     }
 
-    /**
-     * @param string[] $list
-     */
+    
     private function mergeValueList(array $list, string $defaultValue): string
     {
         $result = null;
@@ -572,9 +521,7 @@ class DefaultTable implements Table
         return $result;
     }
 
-    /**
-     * @return string[]
-     */
+    
     protected function getScopeWithAclList(): array
     {
         $scopeList = [];
@@ -592,9 +539,7 @@ class DefaultTable implements Table
         return $scopeList;
     }
 
-    /**
-     * @return string[]
-     */
+    
     protected function getScopeList(): array
     {
         $scopeList = [];
@@ -608,9 +553,7 @@ class DefaultTable implements Table
         return $scopeList;
     }
 
-    /**
-     * @param stdClass[] $tableList
-     */
+    
     private function mergeTableList(array $tableList): stdClass
     {
         $data = (object) [];
@@ -630,9 +573,7 @@ class DefaultTable implements Table
         return $data;
     }
 
-    /**
-     * @param stdClass|bool|null $row
-     */
+    
     private function mergeTableListItem(stdClass $data, string $scope, $row): void
     {
         if ($row === false || $row === null) {
@@ -685,7 +626,7 @@ class DefaultTable implements Table
                 continue;
             }
 
-            // @todo Remove everything below.
+            
             $previousAction = $this->actionList[$i - 1];
 
             if (in_array($action, $this->booleanActionList)) {
@@ -697,9 +638,7 @@ class DefaultTable implements Table
         }
     }
 
-    /**
-     * @param stdClass[] $tableList
-     */
+    
     private function mergeFieldTableList(array $tableList): stdClass
     {
         $data = (object) [];

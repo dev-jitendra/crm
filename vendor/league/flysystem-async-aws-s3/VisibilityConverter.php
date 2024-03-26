@@ -10,9 +10,7 @@ interface VisibilityConverter
 {
     public function visibilityToAcl(string $visibility): string;
 
-    /**
-     * @param Grant[] $grants
-     */
+    
     public function aclToVisibility(array $grants): string;
 
     public function defaultForDirectories(): string;

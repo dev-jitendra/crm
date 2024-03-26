@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpClient\Response;
 
@@ -17,27 +10,17 @@ use Symfony\Component\HttpClient\Exception\RedirectionException;
 use Symfony\Component\HttpClient\Exception\ServerException;
 use Symfony\Component\HttpClient\Exception\TransportException;
 
-/**
- * Implements common logic for response classes.
- *
- * @author Nicolas Grekas <p@tchwork.com>
- *
- * @internal
- */
+
 trait CommonResponseTrait
 {
-    /**
-     * @var callable|null A callback that tells whether we're waiting for response headers
-     */
+    
     private $initializer;
     private $shouldBuffer;
     private $content;
     private $offset = 0;
     private $jsonData;
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getContent(bool $throw = true): string
     {
         if ($this->initializer) {
@@ -66,7 +49,7 @@ trait CommonResponseTrait
             }
         } else {
             foreach (self::stream([$this]) as $chunk) {
-                // Chunks are buffered in $this->content already
+                
             }
         }
 
@@ -75,9 +58,7 @@ trait CommonResponseTrait
         return stream_get_contents($this->content);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function toArray(bool $throw = true): array
     {
         if ('' === $content = $this->getContent($throw)) {
@@ -103,20 +84,18 @@ trait CommonResponseTrait
         }
 
         if (null !== $this->content) {
-            // Option "buffer" is true
+            
             return $this->jsonData = $content;
         }
 
         return $content;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function toStream(bool $throw = true)
     {
         if ($throw) {
-            // Ensure headers arrived
+            
             $this->getHeaders($throw);
         }
 
@@ -127,9 +106,7 @@ trait CommonResponseTrait
         return $stream;
     }
 
-    /**
-     * @return array
-     */
+    
     public function __sleep()
     {
         throw new \BadMethodCallException('Cannot serialize '.__CLASS__);
@@ -140,9 +117,7 @@ trait CommonResponseTrait
         throw new \BadMethodCallException('Cannot unserialize '.__CLASS__);
     }
 
-    /**
-     * Closes the response and all its network handles.
-     */
+    
     abstract protected function close(): void;
 
     private static function initialize(self $response): void
@@ -160,7 +135,7 @@ trait CommonResponseTrait
                 }
             }
         } catch (\Throwable $e) {
-            // Persist timeouts thrown during initialization
+            
             $response->info['error'] = $e->getMessage();
             $response->close();
             throw $e;

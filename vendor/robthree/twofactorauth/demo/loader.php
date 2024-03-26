@@ -1,6 +1,6 @@
 <?php
 
-//http://www.leaseweblabs.com/2014/04/psr-0-psr-4-autoloading-classes-php/
+
 class Loader
 {
     protected static $parentPath = null;

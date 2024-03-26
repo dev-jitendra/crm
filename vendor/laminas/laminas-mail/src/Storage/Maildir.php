@@ -37,27 +37,13 @@ use const E_WARNING;
 
 class Maildir extends AbstractStorage
 {
-    /**
-     * used message class, change it in an extended class to extend the returned message class
-     *
-     * @var class-string<Mail\Storage\Message\MessageInterface>
-     */
+    
     protected $messageClass = File::class;
 
-    /**
-     * data of found message files in maildir dir
-     *
-     * @var array
-     */
+    
     protected $files = [];
 
-    /**
-     * known flag chars in filenames
-     *
-     * This list has to be in alphabetical order for setFlags()
-     *
-     * @var array
-     */
+    
     protected static $knownFlags = [
         'D' => Mail\Storage::FLAG_DRAFT,
         'F' => Mail\Storage::FLAG_FLAGGED,
@@ -67,14 +53,9 @@ class Maildir extends AbstractStorage
         'T' => Mail\Storage::FLAG_DELETED,
     ];
 
-    // TODO: getFlags($id) for fast access if headers are not needed (i.e. just setting flags)?
+    
 
-    /**
-     * Count messages all messages in current box
-     *
-     * @param mixed $flags
-     * @return int number of messages
-     */
+    
     public function countMessages($flags = null)
     {
         if ($flags === null) {
@@ -103,14 +84,7 @@ class Maildir extends AbstractStorage
         return $count;
     }
 
-    /**
-     * Get one or all fields from file structure. Also checks if message is valid
-     *
-     * @param  int         $id    message number
-     * @param  string|null $field wanted field
-     * @throws Exception\InvalidArgumentException
-     * @return string|array wanted field or all fields as array
-     */
+    
     protected function getFileData($id, $field = null)
     {
         if (! isset($this->files[$id - 1])) {
@@ -128,12 +102,7 @@ class Maildir extends AbstractStorage
         return $this->files[$id - 1][$field];
     }
 
-    /**
-     * Get a list of messages with number and size
-     *
-     * @param  int|null $id number of message or null for all messages
-     * @return int|array size of given message of list with all messages as array(num => size)
-     */
+    
     public function getSize($id = null)
     {
         if ($id !== null) {
@@ -149,16 +118,10 @@ class Maildir extends AbstractStorage
         return $result;
     }
 
-    /**
-     * Fetch a message
-     *
-     * @param  int $id number of message
-     * @return File
-     * @throws ExceptionInterface
-     */
+    
     public function getMessage($id)
     {
-        // TODO that's ugly, would be better to let the message class decide
+        
         if (
             trim($this->messageClass, '\\') === File::class
             || is_subclass_of($this->messageClass, File::class)
@@ -177,19 +140,11 @@ class Maildir extends AbstractStorage
         ]);
     }
 
-    /**
-     * Get raw header of message or part
-     *
-     * @param  int               $id       number of message
-     * @param  null|array|string $part     path to part or null for message header
-     * @param  int               $topLines include this many lines with header (after an empty line)
-     * @throws Exception\RuntimeException
-     * @return string raw header
-     */
+    
     public function getRawHeader($id, $part = null, $topLines = 0)
     {
         if ($part !== null) {
-            // TODO: implement
+            
             throw new Exception\RuntimeException('not implemented');
         }
 
@@ -208,18 +163,11 @@ class Maildir extends AbstractStorage
         return $content;
     }
 
-    /**
-     * Get raw content of message or part
-     *
-     * @param  int               $id   number of message
-     * @param  null|array|string $part path to part or null for message content
-     * @throws Exception\RuntimeException
-     * @return string raw content
-     */
+    
     public function getRawContent($id, $part = null)
     {
         if ($part !== null) {
-            // TODO: implement
+            
             throw new Exception\RuntimeException('not implemented');
         }
 
@@ -237,15 +185,7 @@ class Maildir extends AbstractStorage
         return $content;
     }
 
-    /**
-     * Create instance with parameters
-     * Supported parameters are:
-     *   - dirname dirname of mbox file
-     *
-     * @param array|object $params Array, iterable object, or stdClass object
-     *     with reader specific parameters
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public function __construct($params)
     {
         $params = ParamsNormalizer::normalizeParams($params);
@@ -269,12 +209,7 @@ class Maildir extends AbstractStorage
         $this->openMaildir($dirname);
     }
 
-    /**
-     * check if a given dir is a valid maildir
-     *
-     * @param string $dirname name of dir
-     * @return bool dir is valid maildir
-     */
+    
     protected function isMaildir($dirname)
     {
         if (file_exists($dirname . '/new') && ! is_dir($dirname . '/new')) {
@@ -286,12 +221,7 @@ class Maildir extends AbstractStorage
         return is_dir($dirname . '/cur');
     }
 
-    /**
-     * open given dir as current maildir
-     *
-     * @param string $dirname name of maildir
-     * @throws Exception\RuntimeException
-     */
+    
     protected function openMaildir($dirname)
     {
         if ($this->files) {
@@ -318,13 +248,7 @@ class Maildir extends AbstractStorage
         closedir($dh);
     }
 
-    /**
-     * find all files in opened dir handle and add to maildir files
-     *
-     * @param resource $dh            dir handle used for search
-     * @param string   $dirname       dirname of dir in $dh
-     * @param array    $defaultFlags default flags for given dir
-     */
+    
     protected function getMaildirFiles($dh, $dirname, $defaultFlags = [])
     {
         while (($entry = readdir($dh)) !== false) {
@@ -386,44 +310,25 @@ class Maildir extends AbstractStorage
         usort($this->files, static fn($a, $b): int => strcmp($a['filename'], $b['filename']));
     }
 
-    /**
-     * Close resource for mail lib. If you need to control, when the resource
-     * is closed. Otherwise the destructor would call this.
-     */
+    
     public function close()
     {
         $this->files = [];
     }
 
-    /**
-     * Waste some CPU cycles doing nothing.
-     *
-     * @return bool always return true
-     */
+    
     public function noop()
     {
         return true;
     }
 
-    /**
-     * stub for not supported message deletion
-     *
-     * @param int $id
-     * @throws Exception\RuntimeException
-     */
+    
     public function removeMessage($id)
     {
         throw new Exception\RuntimeException('maildir is (currently) read-only');
     }
 
-    /**
-     * get unique id for one or all messages
-     *
-     * if storage does not support unique ids it's the same as the message number
-     *
-     * @param int|null $id message number
-     * @return array|string message number for given message or all messages as array
-     */
+    
     public function getUniqueId($id = null)
     {
         if ($id) {
@@ -437,16 +342,7 @@ class Maildir extends AbstractStorage
         return $ids;
     }
 
-    /**
-     * get a message number from a unique id
-     *
-     * I.e. if you have a webmailer that supports deleting messages you should use unique ids
-     * as parameter and use this method to translate it to message number right before calling removeMessage()
-     *
-     * @param string $id unique id
-     * @throws Exception\InvalidArgumentException
-     * @return int message number
-     */
+    
     public function getNumberByUniqueId($id)
     {
         foreach ($this->files as $num => $file) {

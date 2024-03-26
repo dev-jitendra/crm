@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Authentication;
 
@@ -60,9 +34,7 @@ use Espo\Core\Exceptions\ServiceUnavailable;
 use LogicException;
 use RuntimeException;
 
-/**
- * Handles authentication. The entry point of the auth process.
- */
+
 class Authentication
 {
     private const LOGOUT_USERNAME = '**logout';
@@ -91,11 +63,7 @@ class Authentication
         private LanguageProxy $language
     ) {}
 
-    /**
-     * Process logging in.
-     *
-     * @throws ServiceUnavailable
-     */
+    
     public function login(AuthenticationData $data, Request $request, Response $response): Result
     {
         $username = $data->getUsername();
@@ -197,7 +165,7 @@ class Authentication
         }
 
         if (!$user) {
-            // Supposed not to ever happen.
+            
             return $this->processFail(Result::fail(FailReason::USER_NOT_FOUND), $data, $request);
         }
 
@@ -466,7 +434,7 @@ class Authentication
             $request->getHeader(self::HEADER_CREATE_TOKEN_SECRET) === 'true' &&
             !$this->configDataProvider->isAuthTokenSecretDisabled();
 
-        /** @var ?string $password */
+        
         $password = $user->get('password');
         $ipAddress = $this->util->obtainIpFromRequest($request);
 
@@ -484,7 +452,7 @@ class Authentication
             $this->setSecretInCookie($authToken->getSecret(), $response, $request);
         }
 
-        /** @noinspection PhpConditionAlreadyCheckedInspection */
+        
         if (
             $this->configDataProvider->preventConcurrentAuthToken() &&
             $authToken instanceof AuthTokenEntity
@@ -509,15 +477,7 @@ class Authentication
         return $authToken;
     }
 
-    /**
-     * Destroy an auth token.
-     *
-     * @param string $token A token to destroy.
-     * @param Request $request A request.
-     * @param Response $response A response.
-     * @throws Forbidden
-     * @throws NotFound
-     */
+    
     public function destroyAuthToken(string $token, Request $request, Response $response): void
     {
         $authToken = $this->authTokenManager->get($token);
@@ -538,8 +498,8 @@ class Authentication
             $sentSecret = $request->getCookieParam(self::COOKIE_AUTH_TOKEN_SECRET);
 
             if (
-                // Still need the ability to destroy auth tokens of another users
-                // for login-as-another-user feature.
+                
+                
                 $authToken->getUserId() !== $user->getId() &&
                 $sentSecret !== $authToken->getSecret()
             ) {
@@ -583,11 +543,11 @@ class Authentication
             return null;
         }
 
-        /** @var AuthLogRecord $authLogRecord */
+        
         $authLogRecord = $this->entityManager->getNewEntity(AuthLogRecord::ENTITY_TYPE);
 
         $requestUrl =
-            $request->getUri()->getScheme() . '://' .
+            $request->getUri()->getScheme() . ':
             $request->getUri()->getHost() .
             $request->getUri()->getPath();
 
@@ -717,13 +677,13 @@ class Authentication
 
     private function getUserDataRepository(): UserDataRepository
     {
-        /** @var UserDataRepository */
+        
         return $this->entityManager->getRepository(UserData::ENTITY_TYPE);
     }
 
     private function getUsernameByAuthToken(AuthToken $authToken): ?string
     {
-        /** @var ?User $user */
+        
         $user = $this->entityManager
             ->getRDBRepository(User::ENTITY_TYPE)
             ->select(['userName'])
@@ -733,9 +693,7 @@ class Authentication
         return $user?->getUserName();
     }
 
-    /**
-     * @return array{?User, (FailReason::*)|null}
-     */
+    
     private function getLoggedUser(Request $request, User $user): array
     {
         $username = $request->getHeader(self::HEADER_ANOTHER_USER);
@@ -748,12 +706,12 @@ class Authentication
             return [null, FailReason::ANOTHER_USER_NOT_ALLOWED];
         }
 
-        // Important check.
+        
         if (!$user->isAdmin()) {
             return [null, FailReason::ANOTHER_USER_NOT_ALLOWED];
         }
 
-        /** @var ?User $loggedUser */
+        
         $loggedUser = $this->entityManager
             ->getRDBRepository(User::ENTITY_TYPE)
             ->where(['userName' => $username])

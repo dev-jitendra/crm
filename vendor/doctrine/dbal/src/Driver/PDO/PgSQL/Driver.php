@@ -11,11 +11,7 @@ use PDOException;
 
 final class Driver extends AbstractPostgreSQLDriver
 {
-    /**
-     * {@inheritdoc}
-     *
-     * @return Connection
-     */
+    
     public function connect(array $params)
     {
         $driverOptions = $params['driverOptions'] ?? [];
@@ -44,9 +40,7 @@ final class Driver extends AbstractPostgreSQLDriver
 
         $connection = new Connection($pdo);
 
-        /* defining client_encoding via SET NAMES to avoid inconsistent DSN support
-         * - passing client_encoding via the 'options' param breaks pgbouncer support
-         */
+        
         if (isset($params['charset'])) {
             $connection->exec('SET NAMES \'' . $params['charset'] . '\'');
         }
@@ -54,11 +48,7 @@ final class Driver extends AbstractPostgreSQLDriver
         return $connection;
     }
 
-    /**
-     * Constructs the Postgres PDO DSN.
-     *
-     * @param mixed[] $params
-     */
+    
     private function constructPdoDsn(array $params): string
     {
         $dsn = 'pgsql:';
@@ -76,7 +66,7 @@ final class Driver extends AbstractPostgreSQLDriver
         } elseif (isset($params['default_dbname'])) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5705',
+                'https:
                 'The "default_dbname" connection parameter is deprecated. Use "dbname" instead.',
             );
 
@@ -85,14 +75,14 @@ final class Driver extends AbstractPostgreSQLDriver
             if (isset($params['user']) && $params['user'] !== 'postgres') {
                 Deprecation::trigger(
                     'doctrine/dbal',
-                    'https://github.com/doctrine/dbal/pull/5705',
+                    'https:
                     'Relying on the DBAL connecting to the "postgres" database by default is deprecated.'
                         . ' Unless you want to have the server determine the default database for the connection,'
                         . ' specify the database name explicitly.',
                 );
             }
 
-            // Used for temporary connections to allow operations like dropping the database currently connected to.
+            
             $dsn .= 'dbname=postgres;';
         }
 

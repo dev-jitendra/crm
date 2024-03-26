@@ -2,27 +2,16 @@
 
 namespace AsyncAws\S3\ValueObject;
 
-/**
- * Details of the parts that were uploaded.
- */
+
 final class CompletedPart
 {
-    /**
-     * Entity tag returned when the part was uploaded.
-     */
+    
     private $etag;
 
-    /**
-     * Part number that identifies the part. This is a positive integer between 1 and 10,000.
-     */
+    
     private $partNumber;
 
-    /**
-     * @param array{
-     *   ETag?: null|string,
-     *   PartNumber?: null|int,
-     * } $input
-     */
+    
     public function __construct(array $input)
     {
         $this->etag = $input['ETag'] ?? null;
@@ -44,9 +33,7 @@ final class CompletedPart
         return $this->partNumber;
     }
 
-    /**
-     * @internal
-     */
+    
     public function requestBody(\DomElement $node, \DomDocument $document): void
     {
         if (null !== $v = $this->etag) {

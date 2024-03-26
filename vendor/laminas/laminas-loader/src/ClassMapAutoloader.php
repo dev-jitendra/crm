@@ -23,37 +23,19 @@ use function str_replace;
 use function strlen;
 use function substr;
 
-// Grab SplAutoloader interface
+
 require_once __DIR__ . '/SplAutoloader.php';
 
-/**
- * Class-map autoloader
- *
- * Utilizes class-map files to lookup classfile locations.
- */
+
 class ClassMapAutoloader implements SplAutoloader
 {
-    /**
-     * Registry of map files that have already been loaded
-     *
-     * @var array
-     */
+    
     protected $mapsLoaded = [];
 
-    /**
-     * Class name/filename map
-     *
-     * @var array
-     */
+    
     protected $map = [];
 
-    /**
-     * Constructor
-     *
-     * Create a new instance, and optionally configure the autoloader.
-     *
-     * @param  null|array|Traversable $options
-     */
+    
     public function __construct($options = null)
     {
         if (null !== $options) {
@@ -61,33 +43,14 @@ class ClassMapAutoloader implements SplAutoloader
         }
     }
 
-    /**
-     * Configure the autoloader
-     *
-     * Proxies to {@link registerAutoloadMaps()}.
-     *
-     * @param  array|Traversable $options
-     * @return ClassMapAutoloader
-     */
+    
     public function setOptions($options)
     {
         $this->registerAutoloadMaps($options);
         return $this;
     }
 
-    /**
-     * Register an autoload map
-     *
-     * An autoload map may be either an associative array, or a file returning
-     * an associative array.
-     *
-     * An autoload map should be an associative array containing
-     * classname/file pairs.
-     *
-     * @param  string|array $map
-     * @throws Exception\InvalidArgumentException
-     * @return ClassMapAutoloader
-     */
+    
     public function registerAutoloadMap($map)
     {
         if (is_string($map)) {
@@ -114,13 +77,7 @@ class ClassMapAutoloader implements SplAutoloader
         return $this;
     }
 
-    /**
-     * Register many autoload maps at once
-     *
-     * @param  array $locations
-     * @throws Exception\InvalidArgumentException
-     * @return ClassMapAutoloader
-     */
+    
     public function registerAutoloadMaps($locations)
     {
         if (! is_array($locations) && ! $locations instanceof Traversable) {
@@ -133,19 +90,13 @@ class ClassMapAutoloader implements SplAutoloader
         return $this;
     }
 
-    /**
-     * Retrieve current autoload map
-     *
-     * @return array
-     */
+    
     public function getAutoloadMap()
     {
         return $this->map;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function autoload($class)
     {
         if (isset($this->map[$class])) {
@@ -157,27 +108,13 @@ class ClassMapAutoloader implements SplAutoloader
         return false;
     }
 
-    /**
-     * Register the autoloader with spl_autoload registry
-     *
-     * @return void
-     */
+    
     public function register()
     {
         spl_autoload_register([$this, 'autoload'], true, true);
     }
 
-    /**
-     * Load a map from a file
-     *
-     * If the map has been previously loaded, returns the current instance;
-     * otherwise, returns whatever was returned by calling include() on the
-     * location.
-     *
-     * @param  string $location
-     * @return ClassMapAutoloader|mixed
-     * @throws Exception\InvalidArgumentException For nonexistent locations.
-     */
+    
     protected function loadMapFromFile($location)
     {
         if (! file_exists($location)) {
@@ -193,21 +130,14 @@ class ClassMapAutoloader implements SplAutoloader
         }
 
         if (in_array($path, $this->mapsLoaded)) {
-            // Already loaded this map
+            
             return $this;
         }
 
         return include $path;
     }
 
-    /**
-     * Resolve the real_path() to a file within a phar.
-     *
-     * @see https://bugs.php.net/bug.php?id=52769
-     *
-     * @param  string $path
-     * @return string
-     */
+    
     public static function realPharPath($path)
     {
         if (! preg_match('|^phar:(/{2,3})|', $path, $match)) {

@@ -12,11 +12,7 @@ use PDOException;
 
 final class Driver extends AbstractSQLiteDriver
 {
-    /**
-     * {@inheritdoc}
-     *
-     * @return Connection
-     */
+    
     public function connect(array $params)
     {
         $driverOptions        = $params['driverOptions'] ?? [];
@@ -25,7 +21,7 @@ final class Driver extends AbstractSQLiteDriver
         if (isset($driverOptions['userDefinedFunctions'])) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5742',
+                'https:
                 'The SQLite-specific driver option "userDefinedFunctions" is deprecated.'
                     . ' Register function directly on the native connection instead.',
             );
@@ -53,11 +49,7 @@ final class Driver extends AbstractSQLiteDriver
         return new Connection($pdo);
     }
 
-    /**
-     * Constructs the Sqlite PDO DSN.
-     *
-     * @param mixed[] $params
-     */
+    
     private function constructPdoDsn(array $params): string
     {
         $dsn = 'sqlite:';

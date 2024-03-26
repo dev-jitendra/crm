@@ -21,25 +21,17 @@ use function strpos;
 use const E_WARNING;
 use const STR_PAD_RIGHT;
 
-/**
- * GMP extension adapter
- */
+
 class Gmp implements AdapterInterface
 {
-    /**
-     * Create string representing big integer in decimal form from arbitrary integer format
-     *
-     * @param  string $operand
-     * @param  int|null $base
-     * @return bool|string
-     */
+    
     public function init($operand, $base = null)
     {
         $sign    = strpos($operand, '-') === 0 ? '-' : '';
         $operand = ltrim($operand, '-+');
 
         if (null === $base) {
-            // scientific notation
+            
             if (preg_match('#^(?:([1-9])\.)?([0-9]+)[eE]\+?([0-9]+)$#', $operand, $m)) {
                 if (! empty($m[1])) {
                     if ($m[3] < mb_strlen($m[2], '8bit')) {
@@ -50,13 +42,13 @@ class Gmp implements AdapterInterface
                 }
                 $operand = str_pad($m[1] . $m[2], $m[3] + 1, '0', STR_PAD_RIGHT);
             } else {
-                // let GMP guess base
+                
                 $base = 0;
             }
         }
 
         set_error_handler(function () {
- /* Do nothing */
+ 
         }, E_WARNING);
 
         try {
@@ -76,57 +68,31 @@ class Gmp implements AdapterInterface
         return gmp_strval($res);
     }
 
-    /**
-     * Add two big integers
-     *
-     * @param  string $leftOperand
-     * @param  string $rightOperand
-     * @return string
-     */
+    
     public function add($leftOperand, $rightOperand)
     {
         $result = gmp_add($leftOperand, $rightOperand);
         return gmp_strval($result);
     }
 
-    /**
-     * Subtract two big integers
-     *
-     * @param  string $leftOperand
-     * @param  string $rightOperand
-     * @return string
-     */
+    
     public function sub($leftOperand, $rightOperand)
     {
         $result = gmp_sub($leftOperand, $rightOperand);
         return gmp_strval($result);
     }
 
-    /**
-     * Multiply two big integers
-     *
-     * @param  string $leftOperand
-     * @param  string $rightOperand
-     * @return string
-     */
+    
     public function mul($leftOperand, $rightOperand)
     {
         $result = gmp_mul($leftOperand, $rightOperand);
         return gmp_strval($result);
     }
 
-    /**
-     * Divide two big integers and return integer part result.
-     * Raises exception if the divisor is zero.
-     *
-     * @param  string $leftOperand
-     * @param  string $rightOperand
-     * @return string|null
-     * @throws Exception\DivisionByZeroException
-     */
+    
     public function div($leftOperand, $rightOperand)
     {
-        // phpcs:ignore SlevomatCodingStandard.Operators.DisallowEqualOperators.DisallowedEqualOperator
+        
         if ($rightOperand == 0) {
             throw new Exception\DivisionByZeroException(
                 "Division by zero; divisor = {$rightOperand}"
@@ -137,91 +103,48 @@ class Gmp implements AdapterInterface
         return gmp_strval($result);
     }
 
-    /**
-     * Raise a big integers to another
-     *
-     * @param  string $operand
-     * @param  string $exp
-     * @return string
-     */
+    
     public function pow($operand, $exp)
     {
         $result = gmp_pow($operand, $exp);
         return gmp_strval($result);
     }
 
-    /**
-     * Get the square root of a big integer
-     *
-     * @param  string $operand
-     * @return string
-     */
+    
     public function sqrt($operand)
     {
         $result = gmp_sqrt($operand);
         return gmp_strval($result);
     }
 
-    /**
-     * Get absolute value of a big integer
-     *
-     * @param  string $operand
-     * @return string
-     */
+    
     public function abs($operand)
     {
         $result = gmp_abs($operand);
         return gmp_strval($result);
     }
 
-    /**
-     * Get modulus of a big integer
-     *
-     * @param  string $leftOperand
-     * @param  string $modulus
-     * @return string
-     */
+    
     public function mod($leftOperand, $modulus)
     {
         $result = gmp_mod($leftOperand, $modulus);
         return gmp_strval($result);
     }
 
-    /**
-     * Raise a big integer to another, reduced by a specified modulus
-     *
-     * @param  string $leftOperand
-     * @param  string $rightOperand
-     * @param  string $modulus
-     * @return string
-     */
+    
     public function powmod($leftOperand, $rightOperand, $modulus)
     {
         $result = gmp_powm($leftOperand, $rightOperand, $modulus);
         return gmp_strval($result);
     }
 
-    /**
-     * Compare two big integers and returns result as an integer where
-     * Returns < 0 if leftOperand is less than rightOperand;
-     * > 0 if leftOperand is greater than rightOperand, and 0 if they are equal.
-     *
-     * @param  string $leftOperand
-     * @param  string $rightOperand
-     * @return int
-     */
+    
     public function comp($leftOperand, $rightOperand)
     {
         return gmp_cmp($leftOperand, $rightOperand);
     }
 
-    /**
-     * Convert big integer into it's binary number representation
-     *
-     * @param  string $int
-     * @param  bool $twoc  return in twos' complement form
-     * @return string
-     */
+    
     public function intToBin($int, $twoc = false)
     {
         $nb         = chr(0);
@@ -254,13 +177,7 @@ class Gmp implements AdapterInterface
         return $bytes;
     }
 
-    /**
-     * Convert binary number into big integer
-     *
-     * @param  string $bytes
-     * @param  bool $twoc  whether binary number is in twos' complement form
-     * @return string
-     */
+    
     public function binToInt($bytes, $twoc = false)
     {
         $isNegative = (ord($bytes[0]) & 0x80) && $twoc;
@@ -280,18 +197,10 @@ class Gmp implements AdapterInterface
         return gmp_strval($result);
     }
 
-    /**
-     * Base conversion. Bases 2..62 are supported
-     *
-     * @param  string $operand
-     * @param  int    $fromBase
-     * @param  int    $toBase
-     * @return string
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public function baseConvert($operand, $fromBase, $toBase = 10)
     {
-        // phpcs:ignore SlevomatCodingStandard.Operators.DisallowEqualOperators.DisallowedEqualOperator
+        
         if ($fromBase == $toBase) {
             return $operand;
         }
@@ -316,7 +225,7 @@ class Gmp implements AdapterInterface
 
         $chars = self::BASE62_ALPHABET;
 
-        // convert operand to decimal
+        
         if ($fromBase !== 10) {
             $decimal = '0';
             for ($i = 0, $len = mb_strlen($operand, '8bit'); $i < $len; $i++) {
@@ -327,12 +236,12 @@ class Gmp implements AdapterInterface
             $decimal = gmp_init($operand);
         }
 
-        // phpcs:ignore SlevomatCodingStandard.Operators.DisallowEqualOperators.DisallowedEqualOperator
+        
         if ($toBase == 10) {
             return gmp_strval($decimal);
         }
 
-        // convert decimal to base
+        
         $result = '';
         do {
             [$decimal, $remainder] = gmp_div_qr($decimal, $toBase);

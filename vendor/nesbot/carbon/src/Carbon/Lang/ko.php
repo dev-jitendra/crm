@@ -1,25 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Kunal Marwaha
- * - FourwingsY
- * - François B
- * - Jason Katz-Brown
- * - Seokjun Kim
- * - Junho Kim
- * - JD Isaacks
- * - Juwon Kim
- */
+
+
 return [
     'year' => ':count년',
     'a_year' => '{1}일년|]1,Inf[:count년',

@@ -17,20 +17,16 @@ use function sprintf;
 
 final class CacheItem implements CacheItemInterface
 {
-    /** @var string */
+    
     private $key;
-    /** @var mixed */
+    
     private $value;
-    /** @var bool */
+    
     private $isHit;
-    /** @var float|null */
+    
     private $expiry;
 
-    /**
-     * @internal
-     *
-     * @param mixed $data
-     */
+    
     public function __construct(string $key, $data, bool $isHit)
     {
         $this->key   = $key;
@@ -43,11 +39,7 @@ final class CacheItem implements CacheItemInterface
         return $this->key;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @return mixed
-     */
+    
     public function get()
     {
         return $this->value;
@@ -58,9 +50,7 @@ final class CacheItem implements CacheItemInterface
         return $this->isHit;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function set($value): self
     {
         $this->value = $value;
@@ -68,9 +58,7 @@ final class CacheItem implements CacheItemInterface
         return $this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function expiresAt($expiration): self
     {
         if ($expiration === null) {
@@ -87,9 +75,7 @@ final class CacheItem implements CacheItemInterface
         return $this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function expiresAfter($time): self
     {
         if ($time === null) {
@@ -108,9 +94,7 @@ final class CacheItem implements CacheItemInterface
         return $this;
     }
 
-    /**
-     * @internal
-     */
+    
     public function getExpiry(): ?float
     {
         return $this->expiry;

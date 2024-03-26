@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation\Test;
 
@@ -24,13 +17,7 @@ use Symfony\Component\Translation\Provider\ProviderFactoryInterface;
 use Symfony\Component\Translation\TranslatorBagInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-/**
- * A test case to ease testing a translation provider factory.
- *
- * @author Mathieu Santostefano <msantostefano@protonmail.com>
- *
- * @internal
- */
+
 abstract class ProviderFactoryTestCase extends TestCase
 {
     protected HttpClientInterface $client;
@@ -42,35 +29,25 @@ abstract class ProviderFactoryTestCase extends TestCase
 
     abstract public function createFactory(): ProviderFactoryInterface;
 
-    /**
-     * @return iterable<array{0: bool, 1: string}>
-     */
+    
     abstract public static function supportsProvider(): iterable;
 
-    /**
-     * @return iterable<array{0: string, 1: string}>
-     */
+    
     abstract public static function createProvider(): iterable;
 
-    /**
-     * @return iterable<array{0: string, 1: string|null}>
-     */
+    
     public static function unsupportedSchemeProvider(): iterable
     {
         return [];
     }
 
-    /**
-     * @return iterable<array{0: string, 1: string|null}>
-     */
+    
     public static function incompleteDsnProvider(): iterable
     {
         return [];
     }
 
-    /**
-     * @dataProvider supportsProvider
-     */
+    
     public function testSupports(bool $expected, string $dsn)
     {
         $factory = $this->createFactory();
@@ -78,9 +55,7 @@ abstract class ProviderFactoryTestCase extends TestCase
         $this->assertSame($expected, $factory->supports(new Dsn($dsn)));
     }
 
-    /**
-     * @dataProvider createProvider
-     */
+    
     public function testCreate(string $expected, string $dsn)
     {
         $factory = $this->createFactory();
@@ -89,9 +64,7 @@ abstract class ProviderFactoryTestCase extends TestCase
         $this->assertSame($expected, (string) $provider);
     }
 
-    /**
-     * @dataProvider unsupportedSchemeProvider
-     */
+    
     public function testUnsupportedSchemeException(string $dsn, string $message = null)
     {
         $factory = $this->createFactory();
@@ -106,9 +79,7 @@ abstract class ProviderFactoryTestCase extends TestCase
         $factory->create($dsn);
     }
 
-    /**
-     * @dataProvider incompleteDsnProvider
-     */
+    
     public function testIncompleteDsnException(string $dsn, string $message = null)
     {
         $factory = $this->createFactory();

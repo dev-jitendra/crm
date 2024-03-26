@@ -115,19 +115,17 @@ class QR
         return $r;
     }
 
-    /**
-     * QR Decomposition computed by Householder reflections.
-     */
+    
     private function decompose(): void
     {
         for ($k = 0; $k < $this->columns; ++$k) {
-            // Compute 2-norm of k-th column without under/overflow.
+            
             $norm = 0.0;
             for ($i = $k; $i < $this->rows; ++$i) {
                 $norm = $this->hypo($norm, $this->qrMatrix[$i][$k]);
             }
             if ($norm != 0.0) {
-                // Form k-th Householder vector.
+                
                 if ($this->qrMatrix[$k][$k] < 0.0) {
                     $norm = -$norm;
                 }
@@ -135,7 +133,7 @@ class QR
                     $this->qrMatrix[$i][$k] /= $norm;
                 }
                 $this->qrMatrix[$k][$k] += 1.0;
-                // Apply transformation to remaining columns.
+                
                 for ($j = $k + 1; $j < $this->columns; ++$j) {
                     $s = 0.0;
                     for ($i = $k; $i < $this->rows; ++$i) {
@@ -162,15 +160,7 @@ class QR
         return true;
     }
 
-    /**
-     * Least squares solution of A*X = B.
-     *
-     * @param Matrix $B a Matrix with as many rows as A and any number of columns
-     *
-     * @throws Exception
-     *
-     * @return Matrix matrix that minimizes the two norm of Q*R*X-B
-     */
+    
     public function solve(Matrix $B): Matrix
     {
         if ($B->rows !== $this->rows) {
@@ -181,10 +171,10 @@ class QR
             throw new Exception('Can only perform this operation on a full-rank matrix');
         }
 
-        // Compute Y = transpose(Q)*B
+        
         $Y = $this->getQ()->transpose()
             ->multiply($B);
-        // Solve R*X = Y;
+        
         return $this->getR()->inverse()
             ->multiply($Y);
     }

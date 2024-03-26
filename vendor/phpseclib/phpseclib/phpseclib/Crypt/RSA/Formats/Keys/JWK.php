@@ -1,15 +1,6 @@
 <?php
 
-/**
- * JSON Web Key (RFC7517) Formatted RSA Handler
- *
- * PHP version 5
- *
- * @author    Jim Wigginton <terrafrost@php.net>
- * @copyright 2015 Jim Wigginton
- * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
- * @link      http://phpseclib.sourceforge.net
- */
+
 
 namespace phpseclib3\Crypt\RSA\Formats\Keys;
 
@@ -17,20 +8,10 @@ use phpseclib3\Common\Functions\Strings;
 use phpseclib3\Crypt\Common\Formats\Keys\JWK as Progenitor;
 use phpseclib3\Math\BigInteger;
 
-/**
- * JWK Formatted RSA Handler
- *
- * @author  Jim Wigginton <terrafrost@php.net>
- */
+
 abstract class JWK extends Progenitor
 {
-    /**
-     * Break a public or private key down into its constituent components
-     *
-     * @param string $key
-     * @param string $password optional
-     * @return array
-     */
+    
     public static function load($key, $password = '')
     {
         $key = parent::load($key, $password);
@@ -87,19 +68,7 @@ abstract class JWK extends Progenitor
         throw new \UnexpectedValueException('Key does not have an appropriate number of RSA parameters');
     }
 
-    /**
-     * Convert a private key to the appropriate format.
-     *
-     * @param \phpseclib3\Math\BigInteger $n
-     * @param \phpseclib3\Math\BigInteger $e
-     * @param \phpseclib3\Math\BigInteger $d
-     * @param array $primes
-     * @param array $exponents
-     * @param array $coefficients
-     * @param string $password optional
-     * @param array $options optional
-     * @return string
-     */
+    
     public static function savePrivateKey(BigInteger $n, BigInteger $e, BigInteger $d, array $primes, array $exponents, array $coefficients, $password = '', array $options = [])
     {
         if (count($primes) != 2) {
@@ -121,14 +90,7 @@ abstract class JWK extends Progenitor
         return self::wrapKey($key, $options);
     }
 
-    /**
-     * Convert a public key to the appropriate format
-     *
-     * @param \phpseclib3\Math\BigInteger $n
-     * @param \phpseclib3\Math\BigInteger $e
-     * @param array $options optional
-     * @return string
-     */
+    
     public static function savePublicKey(BigInteger $n, BigInteger $e, array $options = [])
     {
         $key = [

@@ -1,15 +1,6 @@
 <?php
 
-/**
- * brainpoolP320t1
- *
- * PHP version 5 and 7
- *
- * @author    Jim Wigginton <terrafrost@php.net>
- * @copyright 2017 Jim Wigginton
- * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
- * @link      http://pear.php.net/package/Math_BigInteger
- */
+
 
 namespace phpseclib3\Crypt\EC\Curves;
 
@@ -24,7 +15,7 @@ class brainpoolP320t1 extends Prime
                                         '2B9EC7893EC28FCD412B1F1B32E27', 16));
         $this->setCoefficients(
             new BigInteger('D35E472036BC4FB7E13C785ED201E065F98FCFA6F6F40DEF4F92B9EC7893EC28' .
-                           'FCD412B1F1B32E24', 16), // eg. -3
+                           'FCD412B1F1B32E24', 16), 
             new BigInteger('A7F561E038EB1ED560B3D147DB782013064C19F27ED27C6780AAF77FB8A547CE' .
                            'B5B4FEF422340353', 16)
         );

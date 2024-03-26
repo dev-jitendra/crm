@@ -12,7 +12,7 @@ use OpenSpout\Writer\AbstractWriter;
 
 final class Writer extends AbstractWriter
 {
-    /** @var string Content-Type value for the header */
+    
     protected static string $headerContentType = 'text/csv; charset=UTF-8';
 
     private readonly Options $options;
@@ -29,24 +29,16 @@ final class Writer extends AbstractWriter
         return $this->options;
     }
 
-    /**
-     * Opens the CSV streamer and makes it ready to accept data.
-     */
+    
     protected function openWriter(): void
     {
         if ($this->options->SHOULD_ADD_BOM) {
-            // Adds UTF-8 BOM for Unicode compatibility
+            
             fwrite($this->filePointer, EncodingHelper::BOM_UTF8);
         }
     }
 
-    /**
-     * Adds a row to the currently opened writer.
-     *
-     * @param Row $row The row containing cells and styles
-     *
-     * @throws IOException If unable to write data
-     */
+    
     protected function addRowToWriter(Row $row): void
     {
         $cells = array_map(static function (Cell\BooleanCell|Cell\DateIntervalCell|Cell\DateTimeCell|Cell\EmptyCell|Cell\FormulaCell|Cell\NumericCell|Cell\StringCell $value): string {
@@ -71,7 +63,7 @@ final class Writer extends AbstractWriter
             ''
         );
         if (false === $wasWriteSuccessful) {
-            throw new IOException('Unable to write data'); // @codeCoverageIgnore
+            throw new IOException('Unable to write data'); 
         }
 
         ++$this->lastWrittenRowIndex;
@@ -80,10 +72,7 @@ final class Writer extends AbstractWriter
         }
     }
 
-    /**
-     * Closes the CSV streamer, preventing any additional writing.
-     * If set, sets the headers and redirects output to the browser.
-     */
+    
     protected function closeWriter(): void
     {
         $this->lastWrittenRowIndex = 0;

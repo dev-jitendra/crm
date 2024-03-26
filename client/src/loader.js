@@ -1,30 +1,4 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 (function () {
 
@@ -38,52 +12,19 @@
         throw new Error("Loader was already loaded.");
     }
 
-    /**
-     * A callback with resolved dependencies passed as parameters.
-     * Should return a value to define a module.
-     *
-     * @callback Loader~requireCallback
-     * @param {...any} arguments Resolved dependencies.
-     * @returns {*}
-     */
+    
 
-    /**
-     * @typedef {Object} Loader~libData
-     * @property {string} [exportsTo] Exports to.
-     * @property {string} [exportsAs] Exports as.
-     * @property {boolean} [sourceMap] Has a source map.
-     * @property {string} [exposeAs] To expose to global as.
-     * @property {string} [path] A path.
-     * @property {string} [devPath] A path in developer mode.
-     */
+    
 
-    /**
-     * @typedef {Object} Loader~dto
-     * @property {string} path
-     * @property {function(value): void} callback
-     * @property {function|null} [errorCallback]
-     * @property {'script'|'text'} dataType
-     * @property {string} id
-     * @property {'amd'|'lib'|'res'} type
-     * @property {string|null} exportsTo
-     * @property {string|null} exportsAs
-     * @property {string} [url]
-     * @property {boolean} [useCache]
-     * @property {boolean} [suppressAmd]
-     */
+    
 
-    /**
-     * A loader. Used for loading and defining AMD modules, resource loading.
-     * Handles caching.
-     */
+    
     class Loader {
 
-        /**
-         * @param {int|null} [_cacheTimestamp=null]
-         */
+        
         constructor(_cacheTimestamp) {
             this._cacheTimestamp = _cacheTimestamp || null;
-            /** @type {Object.<string, Loader~libData>} */
+            
             this._libsConfig = {};
             this._loadCallbacks = {};
             this._pathsBeingLoaded = {};
@@ -115,18 +56,16 @@
             this._internalModuleListIsSet = false;
             this._bundleFileMap = {};
             this._bundleMapping = {};
-            /** @type {Object.<string, string[]>} */
+            
             this._bundleDependenciesMap = {};
-            /** @type {Object.<string, Promise>} */
+            
             this._bundlePromiseMap = {};
 
             this._addLibsConfigCallCount = 0;
             this._addLibsConfigCallMaxCount = 2;
         }
 
-        /**
-         * @param {boolean} isDeveloperMode
-         */
+        
         setIsDeveloperMode(isDeveloperMode) {
             if (this._isDeveloperModeIsSet) {
                 throw new Error('Is-Developer-Mode is already set.');
@@ -136,9 +75,7 @@
             this._isDeveloperModeIsSet = true;
         }
 
-        /**
-         * @param {string} basePath
-         */
+        
         setBasePath(basePath) {
             if (this._basePathIsSet) {
                 throw new Error('Base path is already set.');
@@ -148,23 +85,17 @@
             this._basePathIsSet = true;
         }
 
-        /**
-         * @returns {Number}
-         */
+        
         getCacheTimestamp() {
             return this._cacheTimestamp;
         }
 
-        /**
-         * @param {Number} cacheTimestamp
-         */
+        
         setCacheTimestamp(cacheTimestamp) {
             this._cacheTimestamp = cacheTimestamp;
         }
 
-        /**
-         * @param {Cache} responseCache
-         */
+        
         setResponseCache(responseCache) {
             if (this._responseCacheIsSet) {
                 throw new Error('Response-Cache is already set');
@@ -174,9 +105,7 @@
             this._responseCacheIsSet = true;
         }
 
-        /**
-         * @param {string[]} internalModuleList
-         */
+        
         setInternalModuleList(internalModuleList) {
             if (this._internalModuleListIsSet) {
                 throw new Error('Internal-module-list is already set');
@@ -187,17 +116,12 @@
             this._internalModuleListIsSet = true;
         }
 
-        /**
-         * @param {string[]} transpiledModuleList
-         */
+        
         setTranspiledModuleList(transpiledModuleList) {
             this._transpiledModuleList = transpiledModuleList;
         }
 
-        /**
-         * @private
-         * @param {string} id
-         */
+        
         _get(id) {
             if (id in this._definedMap) {
                 return this._definedMap[id];
@@ -206,11 +130,7 @@
             return void 0;
         }
 
-        /**
-         * @private
-         * @param {string} id
-         * @param {*} value
-         */
+        
         _set(id, value) {
             this._definedMap[id] = value;
 
@@ -227,11 +147,7 @@
             }
         }
 
-        /**
-         * @private
-         * @param {string} id
-         * @return {string}
-         */
+        
         _idToPath(id) {
             if (id.indexOf(':') === -1) {
                 return 'client/lib/transpiled/src/' + id + '.js';
@@ -261,14 +177,9 @@
             return 'client/custom/modules/' + mod + '/src/' + namePart + '.js';
         }
 
-        /**
-         * @private
-         * @param {string} script
-         * @param {string} id
-         * @param {string} path
-         */
+        
         _execute(script, id, path) {
-            /** @var {?string} */
+            
             let module = null;
 
             const colonIndex = id.indexOf(':');
@@ -290,7 +201,7 @@
                     if (libsData.sourceMap) {
                         const realPath = path.split('?')[0];
 
-                        script += `\n//# sourceMappingURL=${this._baseUrl + realPath}.map`;
+                        script += `\n
                     }
                 }
 
@@ -300,9 +211,9 @@
                 }
             }
 
-            script += `\n//# sourceURL=${this._baseUrl + path}`;
+            script += `\n
 
-            // For bc.
+            
             if (module && module !== 'crm') {
                 noStrictMode = true;
             }
@@ -316,11 +227,7 @@
             (new Function("'use strict'; " + script))();
         }
 
-        /**
-         * @private
-         * @param {string} id
-         * @param {*} value
-         */
+        
         _executeLoadCallback(id, value) {
             if (!(id in this._loadCallbacks)) {
                 return;
@@ -331,14 +238,7 @@
             delete this._loadCallbacks[id];
         }
 
-        /**
-         * Define a module.
-         *
-         * @param {string|null} id A module name to be defined.
-         * @param {string[]} dependencyIds A dependency list.
-         * @param {Loader~requireCallback} callback A callback with resolved dependencies
-         *   passed as parameters. Should return a value to define the module.
-         */
+        
         define(id, dependencyIds, callback) {
             if (id) {
                 id = this._normalizeId(id);
@@ -373,13 +273,7 @@
             });
         }
 
-        /**
-         * @private
-         * @param {function} callback
-         * @param {string} id
-         * @param {Array} args
-         * @param {number} indexOfExports
-         */
+        
         _defineProceed(callback, id, args, indexOfExports) {
             let value = callback.apply(root, args);
 
@@ -390,14 +284,14 @@
             if (indexOfExports !== -1) {
                 const exports = args[indexOfExports];
 
-                // noinspection JSUnresolvedReference
+                
                 value = ('default' in exports) ? exports.default : exports;
             }
 
             if (!id) {
                 console.error(value);
-                // Libs can define w/o id and set to the root.
-                // Not supposed to happen as should be suppressed by require.amd = false;
+                
+                
                 return;
             }
 
@@ -405,13 +299,7 @@
             this._executeLoadCallback(id, value);
         }
 
-        /**
-         * Require a module or multiple modules.
-         *
-         * @param {string|string[]} id A module or modules to require.
-         * @param {Loader~requireCallback} callback A callback with resolved dependencies.
-         * @param {Function|null} [errorCallback] An error callback.
-         */
+        
         require(id, callback, errorCallback) {
             let list;
 
@@ -467,9 +355,7 @@
             callback.apply(root);
         }
 
-        /**
-         * @private
-         */
+        
         _convertCamelCaseToHyphen(string) {
             if (string === null) {
                 return string;
@@ -478,11 +364,7 @@
             return string.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
         }
 
-        /**
-         * @param {string} id
-         * @param {string} subjectId
-         * @private
-         */
+        
         _normalizeIdPath(id, subjectId) {
             if (id.charAt(0) !== '.') {
                 return id;
@@ -525,11 +407,7 @@
             return outputPath;
         }
 
-        /**
-         * @private
-         * @param {string} id
-         * @return {string}
-         */
+        
         _restoreId(id) {
             if (!id.includes(':')) {
                 return id;
@@ -540,11 +418,7 @@
             return `modules/${mod}/${part}`;
         }
 
-        /**
-         * @private
-         * @param {string} id
-         * @return {string}
-         */
+        
         _normalizeId(id) {
             if (id in this._aliasMap) {
                 id = this._aliasMap[id];
@@ -585,11 +459,7 @@
             return id;
         }
 
-        /**
-         * @private
-         * @param {string} id
-         * @param {function(*)} callback
-         */
+        
         _addLoadCallback(id, callback) {
             if (!(id in this._loadCallbacks)) {
                 this._loadCallbacks[id] = [];
@@ -598,12 +468,7 @@
             this._loadCallbacks[id].push(callback);
         }
 
-        /**
-         * @private
-         * @param {string} id
-         * @param {function(*)} callback
-         * @param {function()} [errorCallback]
-         */
+        
         _load(id, callback, errorCallback) {
             if (id === 'exports') {
                 callback({});
@@ -734,7 +599,7 @@
                 return;
             }
 
-            /** @type {Loader~dto} */
+            
             const dto = {
                 id: id,
                 type: type,
@@ -791,11 +656,7 @@
                 });
         }
 
-        /**
-         * @private
-         * @param {string} name
-         * @return {Promise}
-         */
+        
         _requireBundle(name) {
             if (this._bundlePromiseMap[name]) {
                 return this._bundlePromiseMap[name];
@@ -826,11 +687,7 @@
             return this._bundlePromiseMap[name];
         }
 
-        /**
-         * @private
-         * @param {string} name
-         * @return {Promise}
-         */
+        
         _addBundle(name) {
             let src = this._bundleFileMap[name];
 
@@ -862,10 +719,7 @@
             });
         }
 
-        /**
-         * @private
-         * @return {*}
-         */
+        
         _fetchObject(exportsTo, exportsAs) {
             let from = root;
 
@@ -889,10 +743,7 @@
             return void 0;
         }
 
-        /**
-         * @private
-         * @param {Loader~dto} dto
-         */
+        
         _processRequest(dto) {
             const url = dto.url;
             const errorCallback = dto.errorCallback;
@@ -936,11 +787,7 @@
                 });
         }
 
-        /**
-         * @private
-         * @param {Loader~dto} dto
-         * @param {string} text
-         */
+        
         _handleResponseText(dto, text) {
             const id = dto.id;
             const callback = dto.callback;
@@ -991,10 +838,7 @@
             this._executeLoadCallback(id, value);
         }
 
-        /**
-         * @param {Object.<string, Loader~libData>} data
-         * @internal
-         */
+        
         addLibsConfig(data) {
             if (this._addLibsConfigCallCount === this._addLibsConfigCallMaxCount) {
                 throw new Error("Not allowed to call addLibsConfig.");
@@ -1005,16 +849,12 @@
             this._libsConfig = {...this._libsConfig, ...data};
         }
 
-        /**
-         * @param {Object.<string, string>} map
-         */
+        
         setAliasMap(map) {
             this._aliasMap = map;
         }
 
-        /**
-         * @private
-         */
+        
         _isModuleInternal(moduleName) {
             if (!(moduleName in this._internalModuleMap)) {
                 this._internalModuleMap[moduleName] = this._internalModuleList.indexOf(moduleName) !== -1;
@@ -1023,46 +863,27 @@
             return this._internalModuleMap[moduleName];
         }
 
-        /**
-         * @param {string} name A bundle name.
-         * @param {string} file A bundle file.
-         * @internal
-         */
+        
         mapBundleFile(name, file) {
             this._bundleFileMap[name] = file;
         }
 
-        /**
-         * @param {string} name A bundle name.
-         * @param {string[]} list Dependencies.
-         * @internal
-         */
+        
         mapBundleDependencies(name, list) {
             this._bundleDependenciesMap[name] = list;
         }
 
-        /**
-         * @param {Object.<string, string>} mapping
-         * @internal
-         */
+        
         addBundleMapping(mapping) {
             Object.assign(this._bundleMapping, mapping);
         }
 
-        /**
-         * @param {string} id
-         * @internal
-         */
+        
         setContextId(id) {
             this._contextId = id;
         }
 
-        /**
-         * Require a module.
-         *
-         * @param {string} id A module to require.
-         * @returns {Promise<*>}
-         */
+        
         requirePromise(id) {
             return new Promise((resolve, reject) => {
                 this.require(
@@ -1076,135 +897,77 @@
 
     const loader = new Loader();
 
-    // noinspection JSUnusedGlobalSymbols
+    
 
     Espo.loader = {
 
-        /**
-         * @param {boolean} isDeveloperMode
-         * @internal
-         */
+        
         setIsDeveloperMode: function (isDeveloperMode) {
             loader.setIsDeveloperMode(isDeveloperMode);
         },
 
-        /**
-         * @param {string} basePath
-         * @internal
-         */
+        
         setBasePath: function (basePath) {
             loader.setBasePath(basePath);
         },
 
-        /**
-         * @returns {Number}
-         */
+        
         getCacheTimestamp: function () {
             return loader.getCacheTimestamp();
         },
 
-        /**
-         * @param {Number} cacheTimestamp
-         * @internal
-         */
+        
         setCacheTimestamp: function (cacheTimestamp) {
             loader.setCacheTimestamp(cacheTimestamp);
         },
 
-        /**
-         * @param {Cache} responseCache
-         * @internal
-         */
+        
         setResponseCache: function (responseCache) {
             loader.setResponseCache(responseCache);
         },
 
-        /**
-         * Define a module.
-         *
-         * @param {string} id A module name to be defined.
-         * @param {string[]} dependencyIds A dependency list.
-         * @param {Loader~requireCallback} callback A callback with resolved dependencies
-         *   passed as parameters. Should return a value to define the module.
-         */
+        
         define: function (id, dependencyIds, callback) {
             loader.define(id, dependencyIds, callback);
         },
 
-        /**
-         * Require a module or multiple modules.
-         *
-         * @param {string|string[]} id A module or modules to require.
-         * @param {Loader~requireCallback} callback A callback with resolved dependencies.
-         * @param {Function|null} [errorCallback] An error callback.
-         */
+        
         require: function (id, callback, errorCallback) {
             loader.require(id, callback, errorCallback);
         },
 
-        /**
-         * Require a module or multiple modules.
-         *
-         * @param {string|string[]} id A module or modules to require.
-         * @returns {Promise<unknown>}
-         */
+        
         requirePromise: function (id) {
             return loader.requirePromise(id);
         },
 
-        /**
-         * @param {Object.<string, Loader~libData>} data
-         * @internal
-         */
+        
         addLibsConfig: function (data) {
             loader.addLibsConfig(data);
         },
 
-        /**
-         * @param {string} name A bundle name.
-         * @param {string} file A bundle file.
-         * @internal
-         */
+        
         mapBundleFile: function (name, file) {
             loader.mapBundleFile(name, file);
         },
 
-        /**
-         * @param {string} name A bundle name.
-         * @param {string[]} list Dependencies.
-         * @internal
-         */
+        
         mapBundleDependencies: function (name, list) {
             loader.mapBundleDependencies(name, list);
         },
 
-        /**
-         * @param {Object.<string, string>} mapping
-         * @internal
-         */
+        
         addBundleMapping: function (mapping) {
             loader.addBundleMapping(mapping);
         },
 
-        /**
-         * @param {string} id
-         * @internal
-         */
+        
         setContextId: function (id) {
             loader.setContextId(id);
         },
     };
 
-    /**
-     * Require a module or multiple modules.
-     *
-     * @param {string|string[]} id A module or modules to require.
-     * @param {Loader~requireCallback} callback A callback with resolved dependencies.
-     * @param {Object} [context] A context.
-     * @param {Function|null} [errorCallback] An error callback.
-     *
-     * @deprecated Use `Espo.loader.require` instead.
-     */
+    
     root.require = Espo.require = function (id, callback, context, errorCallback) {
         if (context) {
             callback = callback.bind(context);
@@ -1213,20 +976,7 @@
         loader.require(id, callback, errorCallback);
     };
 
-    /**
-     * Define an [AMD](https://github.com/amdjs/amdjs-api/blob/master/AMD.md) module.
-     *
-     * 3 signatures:
-     * 1. `(callback)` – Unnamed, no dependencies.
-     * 2. `(dependencyList, callback)` – Unnamed, with dependencies.
-     * 3. `(moduleName, dependencyList, callback)` – Named.
-     *
-     * @param {string|string[]|Loader~requireCallback} arg1 A module name to be defined,
-     *   a dependency list or a callback.
-     * @param {string[]|Loader~requireCallback} [arg2] A dependency list or a callback with resolved
-     *   dependencies.
-     * @param {Loader~requireCallback} [arg3] A callback with resolved dependencies.
-     */
+    
     root.define = Espo.define = function (arg1, arg2, arg3) {
         let id = null;
         let depIds = null;
@@ -1263,16 +1013,7 @@
             return;
         }
 
-        /**
-         * @type {{
-         *     cacheTimestamp?: int,
-         *     basePath?: string,
-         *     internalModuleList?: [],
-         *     transpiledModuleList?: [],
-         *     libsConfig?: Object.<string, Loader~libData>,
-         *     aliasMap?: Object.<string, *>,
-         * }}
-         */
+        
         const params = JSON.parse(loaderParamsTag.textContent);
 
         loader.setCacheTimestamp(params.cacheTimestamp);

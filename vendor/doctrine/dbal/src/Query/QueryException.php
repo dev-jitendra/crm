@@ -6,15 +6,10 @@ use Doctrine\DBAL\Exception;
 
 use function implode;
 
-/** @psalm-immutable */
+
 class QueryException extends Exception
 {
-    /**
-     * @param string   $alias
-     * @param string[] $registeredAliases
-     *
-     * @return QueryException
-     */
+    
     public static function unknownAlias($alias, $registeredAliases)
     {
         return new self("The given alias '" . $alias . "' is not part of " .
@@ -22,12 +17,7 @@ class QueryException extends Exception
             'aliases are: ' . implode(', ', $registeredAliases) . '.');
     }
 
-    /**
-     * @param string   $alias
-     * @param string[] $registeredAliases
-     *
-     * @return QueryException
-     */
+    
     public static function nonUniqueAlias($alias, $registeredAliases)
     {
         return new self("The given alias '" . $alias . "' is not unique " .

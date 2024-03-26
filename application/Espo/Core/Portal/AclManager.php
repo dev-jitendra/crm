@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Portal;
 
@@ -53,7 +27,7 @@ use RuntimeException;
 
 class AclManager extends InternalAclManager
 {
-    /** @var class-string */
+    
     protected $userAclClassName = Acl::class;
 
     private InternalAclManager $internalAclManager;
@@ -111,7 +85,7 @@ class AclManager extends InternalAclManager
         $key = $user->hasId() ? $user->getId() : spl_object_hash($user);
 
         if (!array_key_exists($key, $this->mapHashMap)) {
-            /** @var PortalTable $table */
+            
             $table = $this->getTable($user);
 
             $this->mapHashMap[$key] = $this->portalMapFactory->create($user, $table, $this->getPortal());
@@ -183,17 +157,13 @@ class AclManager extends InternalAclManager
         return parent::checkReadAll($user, $scope);
     }
 
-    /**
-     * Whether 'read' access is set to 'account' for a specific scope.
-     */
+    
     public function checkReadOnlyAccount(User $user, string $scope): bool
     {
         return $this->getLevel($user, $scope, PortalTable::ACTION_READ) === PortalTable::LEVEL_ACCOUNT;
     }
 
-    /**
-     * Whether 'read' access is set to 'contact' for a specific scope.
-     */
+    
     public function checkReadOnlyContact(User $user, string $scope): bool
     {
         return $this->getLevel($user, $scope, PortalTable::ACTION_READ)=== PortalTable::LEVEL_CONTACT;
@@ -240,9 +210,7 @@ class AclManager extends InternalAclManager
         return parent::checkOwnershipOwn($user, $entity);
     }
 
-    /**
-     * Check whether an entity belongs to a user account.
-     */
+    
     public function checkOwnershipAccount(User $user, Entity $entity): bool
     {
         $checker = $this->getOwnershipChecker($entity->getEntityType());
@@ -254,9 +222,7 @@ class AclManager extends InternalAclManager
         return $checker->checkAccount($user, $entity);
     }
 
-    /**
-     * Check whether an entity belongs to a user account.
-     */
+    
     public function checkOwnershipContact(User $user, Entity $entity): bool
     {
         $checker = $this->getOwnershipChecker($entity->getEntityType());
@@ -321,41 +287,31 @@ class AclManager extends InternalAclManager
         return !$user->isPortal();
     }
 
-    /**
-     * @deprecated As of v6.0. Use `getPermissionLevel` instead.
-     */
+    
     public function get(User $user, string $permission): string
     {
         return $this->getPermissionLevel($user, $permission);
     }
 
-    /**
-     * @deprecated As of v7.0. Use `checkOwnershipOwn`.
-     */
+    
     public function checkIsOwner(User $user, Entity $entity): bool
     {
         return $this->checkOwnershipOwn($user, $entity);
     }
 
-    /**
-     * @deprecated As of v7.0. Use `checkOwnershipTeam`.
-     */
+    
     public function checkInTeam(User $user, Entity $entity): bool
     {
         return $this->checkOwnershipTeam($user, $entity);
     }
 
-    /**
-     * @deprecated As of v7.0. Use `checkOwnershipAccount`.
-     */
+    
     public function checkInAccount(User $user, Entity $entity): bool
     {
         return $this->checkOwnershipAccount($user, $entity);
     }
 
-    /**
-     * @deprecated As of v7.0. Use `checkOwnershipContact`.
-     */
+    
     public function checkIsOwnContact(User $user, Entity $entity): bool
     {
         return $this->checkOwnershipContact($user, $entity);

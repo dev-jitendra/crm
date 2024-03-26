@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\Stream;
 
@@ -48,16 +22,14 @@ use Espo\Tools\Stream\Service as Service;
 use Espo\Tools\Stream\Jobs\AutoFollow as AutoFollowJob;
 use Espo\Tools\Stream\Jobs\ControlFollowers as ControlFollowersJob;
 
-/**
- * Handles operations with entities.
- */
+
 class HookProcessor
 {
-    /** @var array<string, bool> */
+    
     private $hasStreamCache = [];
-    /** @var array<string, bool> */
+    
     private $isLinkObservableInStreamCache = [];
-    /** @var ?array<string, ?string> */
+    
     private $statusFields = null;
 
     public function __construct(
@@ -69,9 +41,7 @@ class HookProcessor
         private JobSchedulerFactory $jobSchedulerFactory
     ) {}
 
-    /**
-     * @param array<string, mixed> $options
-     */
+    
     public function afterSave(Entity $entity, array $options): void
     {
         if ($this->checkHasStream($entity->getEntityType())) {
@@ -117,9 +87,7 @@ class HookProcessor
         return $this->isLinkObservableInStreamCache[$key];
     }
 
-    /**
-     * @param array<string, mixed> $options
-     */
+    
     private function handleCreateRelated(Entity $entity, array $options = []): void
     {
         $notifiedEntityTypeList = [];
@@ -152,9 +120,7 @@ class HookProcessor
         }
     }
 
-    /**
-     * @param string[] $notifiedEntityTypeList
-     */
+    
     private function handleCreateRelatedBelongsTo(
         Entity $entity,
         RelationDefs $defs,
@@ -191,10 +157,7 @@ class HookProcessor
         $notifiedEntityTypeList[] = $foreignEntityType;
     }
 
-    /**
-     * @param string[] $notifiedEntityTypeList
-     * @param array<string, mixed> $options
-     */
+    
     private function handleCreateRelatedBelongsToParent(
         Entity $entity,
         RelationDefs $defs,
@@ -229,10 +192,7 @@ class HookProcessor
         $notifiedEntityTypeList[] = $foreignEntityType;
     }
 
-    /**
-     * @param string[] $notifiedEntityTypeList
-     * @param array<string, mixed> $options
-     */
+    
     private function handleCreateRelatedHasMany(
         Entity $entity,
         RelationDefs $defs,
@@ -276,10 +236,7 @@ class HookProcessor
         $notifiedEntityTypeList[] = $foreignEntityType;
     }
 
-    /**
-     * @param string[] $ignoreUserIdList
-     * @return string[]
-     */
+    
     private function getAutofollowUserIdList(string $entityType, array $ignoreUserIdList = []): array
     {
         $userIdList = [];
@@ -305,9 +262,7 @@ class HookProcessor
         return $userIdList;
     }
 
-    /**
-     * @param array<string, mixed> $options
-     */
+    
     private function afterSaveStream(Entity $entity, array $options): void
     {
         if (!$entity instanceof CoreEntity) {
@@ -323,9 +278,7 @@ class HookProcessor
         $this->afterSaveStreamNotNew($entity, $options);
     }
 
-    /**
-     * @param array<string, mixed> $options
-     */
+    
     private function afterSaveStreamNew(CoreEntity $entity, array $options): void
     {
         $entityType = $entity->getEntityType();
@@ -340,7 +293,7 @@ class HookProcessor
         $assignedUserId = $entity->get('assignedUserId');
         $createdById = $entity->get('createdById');
 
-        /** @var string[] $assignedUserIdList */
+        
         $assignedUserIdList = $hasAssignedUsersField ? $entity->getLinkMultipleIdList($multipleField) : [];
 
         if (
@@ -395,18 +348,14 @@ class HookProcessor
         }
     }
 
-    /**
-     * @param array<string, mixed> $options
-     */
+    
     private function afterSaveStreamNotNew(CoreEntity $entity, array $options): void
     {
         $this->afterSaveStreamNotNew1($entity, $options);
         $this->afterSaveStreamNotNew2($entity);
     }
 
-    /**
-     * @param array<string, mixed> $options
-     */
+    
     private function afterSaveStreamNotNew1(CoreEntity $entity, array $options): void
     {
         if (!empty($options['noStream']) || !empty($options[SaveOption::SILENT])) {
@@ -436,7 +385,7 @@ class HookProcessor
             return;
         }
 
-        /** @var string[] $assignedUserIdList */
+        
         $assignedUserIdList = $entity->getLinkMultipleIdList($multipleField);
         $fetchedAssignedUserIdList = $entity->getFetched($multipleField . 'Ids') ?? [];
 
@@ -453,9 +402,7 @@ class HookProcessor
         }
     }
 
-    /**
-     * @param array<string, mixed> $options
-     */
+    
     private function afterSaveStreamNotNewAssignedUserIdChanged(Entity $entity, array $options): void
     {
         $assignedUserId = $entity->get('assignedUserId');
@@ -506,19 +453,17 @@ class HookProcessor
         return $this->getStatusFields()[$entityType] ?? null;
     }
 
-    /**
-     * @return array<string, string>
-     */
+    
     private function getStatusFields(): array
     {
         if (is_null($this->statusFields)) {
             $this->statusFields = [];
 
-            /** @var array<string, array<string, mixed>> $scopes */
+            
             $scopes = $this->metadata->get('scopes', []);
 
             foreach ($scopes as $scope => $data) {
-                /** @var ?string $statusField */
+                
                 $statusField = $data['statusField'] ?? null;
 
                 if (!$statusField) {
@@ -529,13 +474,11 @@ class HookProcessor
             }
         }
 
-        /** @var array<string, string> */
+        
         return $this->statusFields;
     }
 
-    /**
-     * @param array<string, mixed> $options
-     */
+    
     public function afterRelate(Entity $entity, Entity $foreignEntity, string $link, array $options): void
     {
         if (!$entity instanceof CoreEntity) {
@@ -567,9 +510,7 @@ class HookProcessor
         }
     }
 
-    /**
-     * @param array<string, mixed> $options
-     */
+    
     public function afterUnrelate(Entity $entity, Entity $foreignEntity, string $link, array $options): void
     {
         if (!$entity instanceof CoreEntity) {
@@ -594,15 +535,15 @@ class HookProcessor
         if ($audited) {
             $this->service->noteUnrelate($foreignEntity, $entityType, $entity->getId());
 
-            // @todo
-            // Add time period (a few minutes). If before, remove RELATE note, don't create 'unrelate' if before.
+            
+            
         }
 
         if ($auditedForeign) {
             $this->service->noteUnrelate($entity, $foreignEntity->getEntityType(), $foreignEntity->getId());
 
-            // @todo
-            // Add time period (a few minutes). If before, remove RELATE note, don't create 'unrelate' if before.
+            
+            
         }
     }
 }

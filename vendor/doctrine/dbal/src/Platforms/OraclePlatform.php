@@ -29,24 +29,10 @@ use function strpos;
 use function strtoupper;
 use function substr;
 
-/**
- * OraclePlatform.
- */
+
 class OraclePlatform extends AbstractPlatform
 {
-    /**
-     * Assertion for Oracle identifiers.
-     *
-     * @deprecated
-     *
-     * @link http://docs.oracle.com/cd/B19306_01/server.102/b14200/sql_elements008.htm
-     *
-     * @param string $identifier
-     *
-     * @return void
-     *
-     * @throws Exception
-     */
+    
     public static function assertValidIdentifier($identifier)
     {
         if (preg_match('(^(([a-zA-Z]{1}[a-zA-Z0-9_$#]{0,})|("[^"]+"))$)', $identifier) === 0) {
@@ -54,9 +40,7 @@ class OraclePlatform extends AbstractPlatform
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getSubstringExpression($string, $start, $length = null)
     {
         if ($length !== null) {
@@ -66,18 +50,12 @@ class OraclePlatform extends AbstractPlatform
         return sprintf('SUBSTR(%s, %d)', $string, $start);
     }
 
-    /**
-     * @deprecated Generate dates within the application.
-     *
-     * @param string $type
-     *
-     * @return string
-     */
+    
     public function getNowExpression($type = 'timestamp')
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/4753',
+            'https:
             'OraclePlatform::getNowExpression() is deprecated. Generate dates within the application.',
         );
 
@@ -90,9 +68,7 @@ class OraclePlatform extends AbstractPlatform
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getLocateExpression($str, $substr, $startPos = false)
     {
         if ($startPos === false) {
@@ -102,9 +78,7 @@ class OraclePlatform extends AbstractPlatform
         return 'INSTR(' . $str . ', ' . $substr . ', ' . $startPos . ')';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function getDateArithmeticIntervalExpression($date, $operator, $interval, $unit)
     {
         switch ($unit) {
@@ -148,17 +122,13 @@ class OraclePlatform extends AbstractPlatform
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getDateDiffExpression($date1, $date2)
     {
         return sprintf('TRUNC(%s) - TRUNC(%s)', $date1, $date2);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getBitAndComparisonExpression($value1, $value2)
     {
         return 'BITAND(' . $value1 . ', ' . $value2 . ')';
@@ -169,9 +139,7 @@ class OraclePlatform extends AbstractPlatform
         return "SYS_CONTEXT('USERENV', 'CURRENT_SCHEMA')";
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getBitOrComparisonExpression($value1, $value2)
     {
         return '(' . $value1 . '-' .
@@ -179,15 +147,13 @@ class OraclePlatform extends AbstractPlatform
                 . '+' . $value2 . ')';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getCreatePrimaryKeySQL(Index $index, $table): string
     {
         if ($table instanceof Table) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/issues/4798',
+                'https:
                 'Passing $table as a Table object to %s is deprecated. Pass it as a quoted name instead.',
                 __METHOD__,
             );
@@ -199,13 +165,7 @@ class OraclePlatform extends AbstractPlatform
             . ' PRIMARY KEY (' . $this->getIndexFieldDeclarationListSQL($index) . ')';
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * Need to specifiy minvalue, since start with is hidden in the system and MINVALUE <= START WITH.
-     * Therefore we can use MINVALUE to be able to get a hint what START WITH was for later introspection
-     * in {@see listSequences()}
-     */
+    
     public function getCreateSequenceSQL(Sequence $sequence)
     {
         return 'CREATE SEQUENCE ' . $sequence->getQuotedName($this) .
@@ -215,9 +175,7 @@ class OraclePlatform extends AbstractPlatform
                $this->getSequenceCacheSQL($sequence);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getAlterSequenceSQL(Sequence $sequence)
     {
         return 'ALTER SEQUENCE ' . $sequence->getQuotedName($this) .
@@ -225,9 +183,7 @@ class OraclePlatform extends AbstractPlatform
                . $this->getSequenceCacheSQL($sequence);
     }
 
-    /**
-     * Cache definition for sequences
-     */
+    
     private function getSequenceCacheSQL(Sequence $sequence): string
     {
         if ($sequence->getCache() === 0) {
@@ -245,25 +201,19 @@ class OraclePlatform extends AbstractPlatform
         return '';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getSequenceNextValSQL($sequence)
     {
         return 'SELECT ' . $sequence . '.nextval FROM DUAL';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getSetTransactionIsolationSQL($level)
     {
         return 'SET TRANSACTION ISOLATION LEVEL ' . $this->_getTransactionIsolationLevelSQL($level);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     protected function _getTransactionIsolationLevelSQL($level)
     {
         switch ($level) {
@@ -282,87 +232,67 @@ class OraclePlatform extends AbstractPlatform
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getBooleanTypeDeclarationSQL(array $column)
     {
         return 'NUMBER(1)';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getIntegerTypeDeclarationSQL(array $column)
     {
         return 'NUMBER(10)';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getBigIntTypeDeclarationSQL(array $column)
     {
         return 'NUMBER(20)';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getSmallIntTypeDeclarationSQL(array $column)
     {
         return 'NUMBER(5)';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getDateTimeTypeDeclarationSQL(array $column)
     {
         return 'TIMESTAMP(0)';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getDateTimeTzTypeDeclarationSQL(array $column)
     {
         return 'TIMESTAMP(0) WITH TIME ZONE';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getDateTypeDeclarationSQL(array $column)
     {
         return 'DATE';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getTimeTypeDeclarationSQL(array $column)
     {
         return 'DATE';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     protected function _getCommonIntegerTypeDeclarationSQL(array $column)
     {
         return '';
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected function getVarcharTypeDeclarationSQLSnippet($length, $fixed/*, $lengthOmitted = false*/)
+    
+    protected function getVarcharTypeDeclarationSQLSnippet($length, $fixed)
     {
         if ($length <= 0 || (func_num_args() > 2 && func_get_arg(2))) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/issues/3263',
+                'https:
                 'Relying on the default string column length on Oracle is deprecated'
                     . ', specify the length explicitly.',
             );
@@ -372,15 +302,13 @@ class OraclePlatform extends AbstractPlatform
                 : ($length > 0 ? 'VARCHAR2(' . $length . ')' : 'VARCHAR2(4000)');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function getBinaryTypeDeclarationSQLSnippet($length, $fixed/*, $lengthOmitted = false*/)
+    
+    protected function getBinaryTypeDeclarationSQLSnippet($length, $fixed)
     {
         if ($length <= 0 || (func_num_args() > 2 && func_get_arg(2))) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/issues/3263',
+                'https:
                 'Relying on the default binary column length on Oracle is deprecated'
                 . ', specify the length explicitly.',
             );
@@ -389,45 +317,31 @@ class OraclePlatform extends AbstractPlatform
         return 'RAW(' . ($length > 0 ? $length : $this->getBinaryMaxLength()) . ')';
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated
-     */
+    
     public function getBinaryMaxLength()
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/issues/3263',
+            'https:
             'OraclePlatform::getBinaryMaxLength() is deprecated.',
         );
 
         return 2000;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getClobTypeDeclarationSQL(array $column)
     {
         return 'CLOB';
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @internal The method should be only used from within the {@see AbstractSchemaManager} class hierarchy.
-     */
+    
     public function getListDatabasesSQL()
     {
         return 'SELECT username FROM all_users';
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @internal The method should be only used from within the {@see AbstractSchemaManager} class hierarchy.
-     */
+    
     public function getListSequencesSQL($database)
     {
         $database = $this->normalizeIdentifier($database);
@@ -437,9 +351,7 @@ class OraclePlatform extends AbstractPlatform
                'WHERE SEQUENCE_OWNER = ' . $database;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     protected function _getCreateTableSQL($name, array $columns, array $options = [])
     {
         $indexes            = $options['indexes'] ?? [];
@@ -468,13 +380,7 @@ class OraclePlatform extends AbstractPlatform
         return $sql;
     }
 
-    /**
-     * @deprecated The SQL used for schema introspection is an implementation detail and should not be relied upon.
-     *
-     * {@inheritDoc}
-     *
-     * @link http://ezcomponents.org/docs/api/trunk/DatabaseSchema/ezcDbSchemaOracleReader.html
-     */
+    
     public function getListTableIndexesSQL($table, $database = null)
     {
         $table = $this->normalizeIdentifier($table);
@@ -510,35 +416,19 @@ class OraclePlatform extends AbstractPlatform
              ORDER BY  uind_col.column_position ASC';
     }
 
-    /**
-     * @deprecated The SQL used for schema introspection is an implementation detail and should not be relied upon.
-     *
-     * {@inheritDoc}
-     */
+    
     public function getListTablesSQL()
     {
         return 'SELECT * FROM sys.user_tables';
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @internal The method should be only used from within the {@see AbstractSchemaManager} class hierarchy.
-     */
+    
     public function getListViewsSQL($database)
     {
         return 'SELECT view_name, text FROM sys.user_views';
     }
 
-    /**
-     * @internal The method should be only used from within the OraclePlatform class hierarchy.
-     *
-     * @param string $name
-     * @param string $table
-     * @param int    $start
-     *
-     * @return string[]
-     */
+    
     public function getCreateAutoincrementSql($name, $table, $start = 1)
     {
         $tableIdentifier   = $this->normalizeIdentifier($table);
@@ -599,15 +489,7 @@ END;';
         return $sql;
     }
 
-    /**
-     * @internal The method should be only used from within the OracleSchemaManager class hierarchy.
-     *
-     * Returns the SQL statements to drop the autoincrement for the given table name.
-     *
-     * @param string $table The table name to drop the autoincrement for.
-     *
-     * @return string[]
-     */
+    
     public function getDropAutoincrementSql($table)
     {
         $table                       = $this->normalizeIdentifier($table);
@@ -624,14 +506,7 @@ END;';
         ];
     }
 
-    /**
-     * Normalizes the given identifier.
-     *
-     * Uppercases the given identifier if it is not quoted by intention
-     * to reflect Oracle's internal auto uppercasing strategy of unquoted identifiers.
-     *
-     * @param string $name The identifier to normalize.
-     */
+    
     private function normalizeIdentifier($name): Identifier
     {
         $identifier = new Identifier($name);
@@ -639,12 +514,7 @@ END;';
         return $identifier->isQuoted() ? $identifier : new Identifier(strtoupper($name));
     }
 
-    /**
-     * Adds suffix to identifier,
-     *
-     * if the new string exceeds max identifier length,
-     * keeps $suffix, cuts from $identifier as much as the part exceeding.
-     */
+    
     private function addSuffix(string $identifier, string $suffix): string
     {
         $maxPossibleLengthWithoutSuffix = $this->getMaxIdentifierLength() - strlen($suffix);
@@ -655,12 +525,7 @@ END;';
         return $identifier . $suffix;
     }
 
-    /**
-     * Returns the autoincrement primary key identifier name for the given table identifier.
-     *
-     * Quotes the autoincrement primary key identifier name
-     * if the given table name is quoted by intention.
-     */
+    
     private function getAutoincrementIdentifierName(Identifier $table): string
     {
         $identifierName = $this->addSuffix($table->getName(), '_AI_PK');
@@ -670,11 +535,7 @@ END;';
             : $identifierName;
     }
 
-    /**
-     * @deprecated The SQL used for schema introspection is an implementation detail and should not be relied upon.
-     *
-     * {@inheritDoc}
-     */
+    
     public function getListTableForeignKeysSQL($table)
     {
         $table = $this->normalizeIdentifier($table);
@@ -704,11 +565,7 @@ END;';
     ORDER BY cols.constraint_name ASC, cols.position ASC';
     }
 
-    /**
-     * @deprecated
-     *
-     * {@inheritDoc}
-     */
+    
     public function getListTableConstraintsSQL($table)
     {
         $table = $this->normalizeIdentifier($table);
@@ -717,11 +574,7 @@ END;';
         return 'SELECT * FROM user_constraints WHERE table_name = ' . $table;
     }
 
-    /**
-     * @deprecated The SQL used for schema introspection is an implementation detail and should not be relied upon.
-     *
-     * {@inheritDoc}
-     */
+    
     public function getListTableColumnsSQL($table, $database = null)
     {
         $table = $this->normalizeIdentifier($table);
@@ -763,15 +616,13 @@ SQL
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getDropForeignKeySQL($foreignKey, $table)
     {
         if ($foreignKey instanceof ForeignKeyConstraint) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/issues/4798',
+                'https:
                 'Passing $foreignKey as a ForeignKeyConstraint object to %s is deprecated.'
                 . ' Pass it as a quoted name instead.',
                 __METHOD__,
@@ -783,7 +634,7 @@ SQL
         if ($table instanceof Table) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/issues/4798',
+                'https:
                 'Passing $table as a Table object to %s is deprecated. Pass it as a quoted name instead.',
                 __METHOD__,
             );
@@ -797,11 +648,7 @@ SQL
         return 'ALTER TABLE ' . $table . ' DROP CONSTRAINT ' . $foreignKey;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @internal The method should be only used from within the {@see AbstractPlatform} class hierarchy.
-     */
+    
     public function getAdvancedForeignKeyOptionsSQL(ForeignKeyConstraint $foreignKey)
     {
         $referentialAction = '';
@@ -817,20 +664,16 @@ SQL
         return '';
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @internal The method should be only used from within the {@see AbstractPlatform} class hierarchy.
-     */
+    
     public function getForeignKeyReferentialActionSQL($action)
     {
         $action = strtoupper($action);
 
         switch ($action) {
-            case 'RESTRICT': // RESTRICT is not supported, therefore falling back to NO ACTION.
+            case 'RESTRICT': 
             case 'NO ACTION':
-                // NO ACTION cannot be declared explicitly,
-                // therefore returning empty string to indicate to OMIT the referential clause.
+                
+                
                 return '';
 
             case 'CASCADE':
@@ -838,30 +681,24 @@ SQL
                 return $action;
 
             default:
-                // SET DEFAULT is not supported, throw exception instead.
+                
                 throw new InvalidArgumentException('Invalid foreign key action: ' . $action);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getCreateDatabaseSQL($name)
     {
         return 'CREATE USER ' . $name;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getDropDatabaseSQL($name)
     {
         return 'DROP USER ' . $name . ' CASCADE';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getAlterTableSQL(TableDiff $diff)
     {
         $sql         = [];
@@ -903,9 +740,9 @@ SQL
 
             $newColumn = $columnDiff->getNewColumn();
 
-            // Do not generate column alteration clause if type is binary and only fixed property has changed.
-            // Oracle only supports binary type columns with variable length.
-            // Avoids unnecessary table alteration statements.
+            
+            
+            
             if (
                 $newColumn->getType() instanceof BinaryType &&
                 $columnDiff->hasFixedChanged() &&
@@ -916,9 +753,7 @@ SQL
 
             $columnHasChangedComment = $columnDiff->hasCommentChanged();
 
-            /**
-             * Do not add query part if only comment has changed
-             */
+            
             if (! ($columnHasChangedComment && count($columnDiff->changedProperties) === 1)) {
                 $newColumnProperties = $newColumn->toArray();
 
@@ -978,7 +813,7 @@ SQL
             if ($newName !== false) {
                 Deprecation::trigger(
                     'doctrine/dbal',
-                    'https://github.com/doctrine/dbal/pull/5663',
+                    'https:
                     'Generation of "rename table" SQL using %s is deprecated. Use getRenameTableSQL() instead.',
                     __METHOD__,
                 );
@@ -1000,11 +835,7 @@ SQL
         return array_merge($sql, $tableSql, $columnSql);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @internal The method should be only used from within the {@see AbstractPlatform} class hierarchy.
-     */
+    
     public function getColumnDeclarationSQL($name, array $column)
     {
         if (isset($column['columnDefinition'])) {
@@ -1021,7 +852,7 @@ SQL
             if (! empty($column['unique'])) {
                 Deprecation::trigger(
                     'doctrine/dbal',
-                    'https://github.com/doctrine/dbal/pull/5656',
+                    'https:
                     'The usage of the "unique" column property is deprecated. Use unique constraints instead.',
                 );
 
@@ -1033,7 +864,7 @@ SQL
             if (! empty($column['check'])) {
                 Deprecation::trigger(
                     'doctrine/dbal',
-                    'https://github.com/doctrine/dbal/pull/5656',
+                    'https:
                     'The usage of the "check" column property is deprecated.',
                 );
 
@@ -1049,9 +880,7 @@ SQL
         return $name . ' ' . $columnDef;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function getRenameIndexSQL($oldIndexName, Index $index, $tableName)
     {
         if (strpos($tableName, '.') !== false) {
@@ -1062,16 +891,12 @@ SQL
         return ['ALTER INDEX ' . $oldIndexName . ' RENAME TO ' . $index->getQuotedName($this)];
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated
-     */
+    
     public function usesSequenceEmulatedIdentityColumns()
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5513',
+            'https:
             '%s is deprecated.',
             __METHOD__,
         );
@@ -1079,16 +904,12 @@ SQL
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @internal The method should be only used from within the OraclePlatform class hierarchy.
-     */
+    
     public function getIdentitySequenceName($tableName, $columnName)
     {
         $table = new Identifier($tableName);
 
-        // No usage of column name to preserve BC compatibility with <2.5
+        
         $identitySequenceName = $this->addSuffix($table->getName(), '_SEQ');
 
         if ($table->isQuoted()) {
@@ -1100,33 +921,25 @@ SQL
         return $identitySequenceIdentifier->getQuotedName($this);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @internal The method should be only used from within the {@see AbstractPlatform} class hierarchy.
-     */
+    
     public function supportsCommentOnStatement()
     {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getName()
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/issues/4749',
+            'https:
             'OraclePlatform::getName() is deprecated. Identify platforms by their class.',
         );
 
         return 'oracle';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     protected function doModifyLimitQuery($query, $limit, $offset)
     {
         if ($limit === null && $offset <= 0) {
@@ -1158,65 +971,49 @@ SQL
         return $query;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getCreateTemporaryTableSnippetSQL()
     {
         return 'CREATE GLOBAL TEMPORARY TABLE';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getDateTimeTzFormatString()
     {
         return 'Y-m-d H:i:sP';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getDateFormatString()
     {
         return 'Y-m-d 00:00:00';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getTimeFormatString()
     {
         return '1900-01-01 H:i:s';
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getMaxIdentifierLength()
     {
         return 30;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function supportsSequences()
     {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function supportsReleaseSavepoints()
     {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getTruncateTableSQL($tableName, $cascade = false)
     {
         $tableIdentifier = new Identifier($tableName);
@@ -1224,9 +1021,7 @@ SQL
         return 'TRUNCATE TABLE ' . $tableIdentifier->getQuotedName($this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getDummySelectSQL()
     {
         $expression = func_num_args() > 0 ? func_get_arg(0) : '1';
@@ -1234,9 +1029,7 @@ SQL
         return sprintf('SELECT %s FROM DUAL', $expression);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     protected function initializeDoctrineTypeMappings()
     {
         $this->doctrineTypeMapping = [
@@ -1266,24 +1059,18 @@ SQL
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function releaseSavePoint($savepoint)
     {
         return '';
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @deprecated Implement {@see createReservedKeywordsList()} instead.
-     */
+    
     protected function getReservedKeywordsClass()
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/issues/4510',
+            'https:
             'OraclePlatform::getReservedKeywordsClass() is deprecated,'
             . ' use OraclePlatform::createReservedKeywordsList() instead.',
         );
@@ -1291,15 +1078,13 @@ SQL
         return Keywords\OracleKeywords::class;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getBlobTypeDeclarationSQL(array $column)
     {
         return 'BLOB';
     }
 
-    /** @deprecated The SQL used for schema introspection is an implementation detail and should not be relied upon. */
+    
     public function getListTableCommentsSQL(string $table, ?string $database = null): string
     {
         $tableCommentsName = 'user_tab_comments';

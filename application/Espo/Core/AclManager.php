@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core;
 
@@ -61,30 +35,23 @@ use Espo\Core\Acl\Table\TableFactory;
 use stdClass;
 use InvalidArgumentException;
 
-/**
- * A central access point for access checking.
- *
- * @todo Refactor. Replace with an interface `Espo\Core\Acl\AclManager`.
- * Keep `Espo\Core\AclManager` as an extending interface for bc, bind it to the service.
- * Implementation in `Espo\Core\Acl\DefaultAclManager`.
- * The same for `Portal\AclManager`.
- */
+
 class AclManager
 {
     protected const PERMISSION_ASSIGNMENT = 'assignment';
 
-    /** @var array<string, AccessChecker> */
+    
     private $accessCheckerHashMap = [];
-    /** @var array<string, OwnershipChecker> */
+    
     private $ownershipCheckerHashMap = [];
-    /** @var array<string, Table> */
+    
     protected $tableHashMap = [];
-    /** @var array<string, Map> */
+    
     protected $mapHashMap = [];
-    /** @var class-string */
+    
     protected $userAclClassName = Acl::class;
 
-    /** @var array<string, class-string<AccessChecker>> */
+    
     private $entityActionInterfaceMap = [
         Table::ACTION_CREATE => AccessEntityCreateChecker::class,
         Table::ACTION_READ => AccessEntityReadChecker::class,
@@ -92,7 +59,7 @@ class AclManager
         Table::ACTION_DELETE => AccessEntityDeleteChecker::class,
         Table::ACTION_STREAM => AccessEntityStreamChecker::class,
     ];
-    /** @var array<string, class-string<AccessChecker>> */
+    
     private $actionInterfaceMap = [
         Table::ACTION_CREATE => AccessCreateChecker::class,
         Table::ACTION_READ => AccessReadChecker::class,
@@ -101,14 +68,14 @@ class AclManager
         Table::ACTION_STREAM => AccessStreamChecker::class,
     ];
 
-    /** @var AccessCheckerFactory|Portal\Acl\AccessChecker\AccessCheckerFactory */
+    
     protected $accessCheckerFactory;
-    /** @var OwnershipCheckerFactory|Portal\Acl\OwnershipChecker\OwnershipCheckerFactory */
+    
     protected $ownershipCheckerFactory;
 
-    /** @var TableFactory  */
+    
     private $tableFactory;
-    /** @var MapFactory  */
+    
     private $mapFactory;
 
     public function __construct(
@@ -126,9 +93,7 @@ class AclManager
         $this->mapFactory = $mapFactory;
     }
 
-    /**
-     * Get an access checker for a specific scope.
-     */
+    
     protected function getAccessChecker(string $scope): AccessChecker
     {
         if (!array_key_exists($scope, $this->accessCheckerHashMap)) {
@@ -138,9 +103,7 @@ class AclManager
         return $this->accessCheckerHashMap[$scope];
     }
 
-    /**
-     * Get an ownership checker for a specific scope.
-     */
+    
     protected function getOwnershipChecker(string $scope): OwnershipChecker
     {
         if (!array_key_exists($scope, $this->ownershipCheckerHashMap)) {
@@ -172,19 +135,13 @@ class AclManager
         return $this->mapHashMap[$key];
     }
 
-    /**
-     * Get a full access data map (for front-end).
-     */
+    
     public function getMapData(User $user): stdClass
     {
         return $this->getMap($user)->getData();
     }
 
-    /**
-     * Get an access level for a specific scope and action.
-     *
-     * @param Table::ACTION_* $action
-     */
+    
     public function getLevel(User $user, string $scope, string $action): string
     {
         if (!$this->checkScope($user, $scope)) {
@@ -196,9 +153,7 @@ class AclManager
         return $data->get($action);
     }
 
-    /**
-     * Get a permission. E.g. 'assignment' permission.
-     */
+    
     public function getPermissionLevel(User $user, string $permission): string
     {
         if (substr($permission, -10) === 'Permission') {
@@ -208,55 +163,38 @@ class AclManager
         return $this->getTable($user)->getPermissionLevel($permission);
     }
 
-    /**
-     * Whether there's no 'read' access for a specific scope.
-     */
+    
     public function checkReadNo(User $user, string $scope): bool
     {
         return $this->getLevel($user, $scope, Table::ACTION_READ) === Table::LEVEL_NO;
     }
 
-    /**
-     * Whether 'read' access is set to 'team' for a specific scope.
-     */
+    
     public function checkReadOnlyTeam(User $user, string $scope): bool
     {
         return $this->getLevel($user, $scope, Table::ACTION_READ) === Table::LEVEL_TEAM;
     }
 
-    /**
-     * Whether 'read' access is set to 'own' for a specific scope.
-     */
+    
     public function checkReadOnlyOwn(User $user, string $scope): bool
     {
         return $this->getLevel($user, $scope, Table::ACTION_READ) === Table::LEVEL_OWN;
     }
 
-    /**
-     * Whether 'read' access is set to 'all' for a specific scope.
-     */
+    
     public function checkReadAll(User $user, string $scope): bool
     {
         return $this->getLevel($user, $scope, Table::ACTION_READ) === Table::LEVEL_ALL;
     }
 
-    /**
-     * Check a scope or entity. If $action is omitted, it will check whether
-     * a scope level is set to 'enabled'.
-     *
-     * @param User $user A user to check for.
-     * @param string|Entity $subject An entity type or entity.
-     * @param string|null $action Action to check. Constants are available in the `Table` class.
-     *
-     * @throws NotImplemented
-     */
+    
     public function check(User $user, $subject, ?string $action = null): bool
     {
         if (is_string($subject)) {
             return $this->checkScope($user, $subject, $action);
         }
 
-        /** @var mixed $entity */
+        
         $entity = $subject;
 
         if ($entity instanceof Entity) {
@@ -268,13 +206,7 @@ class AclManager
         throw new InvalidArgumentException();
     }
 
-    /**
-     * The same as `check` but does not throw NotImplemented exception.
-     *
-     * @param User $user A user to check for.
-     * @param string|Entity $subject An entity type or entity.
-     * @param string|null $action Action to check. Constants are available in the `Table` class.
-     */
+    
     public function tryCheck(User $user, $subject, ?string $action = null): bool
     {
         try {
@@ -285,15 +217,7 @@ class AclManager
         }
     }
 
-    /**
-     * Check access to a specific entity.
-     *
-     * @param User $user A user to check for.
-     * @param Entity $entity An entity to check.
-     * @param string $action Action to check. Constants are available in the `Table` class.
-     *
-     * @throws NotImplemented
-     */
+    
     public function checkEntity(User $user, Entity $entity, string $action = Table::ACTION_READ): bool
     {
         $scope = $entity->getEntityType();
@@ -315,71 +239,49 @@ class AclManager
         }
 
         if (method_exists($checker, $methodName)) {
-            // For backward compatibility.
+            
             return $checker->$methodName($user, $entity, $data);
         }
 
         if (method_exists($checker, 'checkEntity')) {
-            // For backward compatibility.
+            
             return $checker->checkEntity($user, $entity, $data, $action);
         }
 
         throw new NotImplemented("No entity access checker for '{$scope}' action '{$action}'.");
     }
 
-    /**
-     * Check 'read' access to a specific entity.
-     *
-     * @throws NotImplemented.
-     */
+    
     public function checkEntityRead(User $user, Entity $entity): bool
     {
         return $this->checkEntity($user, $entity, Table::ACTION_READ);
     }
 
-    /**
-     * Check 'create' access to a specific entity.
-     *
-     * @throws NotImplemented
-     */
+    
     public function checkEntityCreate(User $user, Entity $entity): bool
     {
         return $this->checkEntity($user, $entity, Table::ACTION_CREATE);
     }
 
-    /**
-     * Check 'edit' access to a specific entity.
-     *
-     * @throws NotImplemented
-     */
+    
     public function checkEntityEdit(User $user, Entity $entity): bool
     {
         return $this->checkEntity($user, $entity, Table::ACTION_EDIT);
     }
 
-    /**
-     * Check 'delete' access to a specific entity.
-     *
-     * @throws NotImplemented
-     */
+    
     public function checkEntityDelete(User $user, Entity $entity): bool
     {
         return $this->checkEntity($user, $entity, Table::ACTION_DELETE);
     }
 
-    /**
-     * Check 'stream' access to a specific entity.
-     *
-     * @throws NotImplemented
-     */
+    
     public function checkEntityStream(User $user, Entity $entity): bool
     {
         return $this->checkEntity($user, $entity, Table::ACTION_STREAM);
     }
 
-    /**
-     * Check whether a user is an owner of an entity.
-     */
+    
     public function checkOwnershipOwn(User $user, Entity $entity): bool
     {
         $checker = $this->getOwnershipChecker($entity->getEntityType());
@@ -391,9 +293,7 @@ class AclManager
         return $checker->checkOwn($user, $entity);
     }
 
-    /**
-     * Check whether an entity belongs to a user team.
-     */
+    
     public function checkOwnershipTeam(User $user, Entity $entity): bool
     {
         $checker = $this->getOwnershipChecker($entity->getEntityType());
@@ -405,11 +305,7 @@ class AclManager
         return $checker->checkTeam($user, $entity);
     }
 
-    /**
-     * Check access to scope. If $action is omitted, it will check whether a scope level is set to 'enabled'.
-     *
-     * @throws NotImplemented If not implemented by an access checker class.
-     */
+    
     public function checkScope(User $user, string $scope, ?string $action = null): bool
     {
         if ($action && !$this->checkScope($user, $scope)) {
@@ -432,7 +328,7 @@ class AclManager
             return $checker->$methodName($user, $data);
         }
 
-        // For backward compatibility.
+        
         $methodName = 'checkScope';
 
         if (!method_exists($checker, $methodName)) {
@@ -442,9 +338,7 @@ class AclManager
         return $checker->$methodName($user, $data, $action);
     }
 
-    /**
-     * @return array<int,GlobalRestriction::TYPE_*>
-     */
+    
     protected function getGlobalRestrictionTypeList(User $user, string $action = Table::ACTION_READ): array
     {
         $typeList = [
@@ -470,13 +364,7 @@ class AclManager
         return $typeList;
     }
 
-    /**
-     * Get attributes forbidden for a user.
-     *
-     * @param Table::ACTION_READ|Table::ACTION_EDIT $action An action.
-     * @param string $thresholdLevel Should not be used. Stands for possible future enhancements.
-     * @return string[]
-     */
+    
     public function getScopeForbiddenAttributeList(
         User $user,
         string $scope,
@@ -499,13 +387,7 @@ class AclManager
         return array_unique($list);
     }
 
-    /**
-     * Get fields forbidden for a user.
-     *
-     * @param Table::ACTION_READ|Table::ACTION_EDIT $action An action.
-     * @param string $thresholdLevel Should not be used. Stands for possible future enhancements.
-     * @return string[]
-     */
+    
     public function getScopeForbiddenFieldList(
         User $user,
         string $scope,
@@ -528,13 +410,7 @@ class AclManager
         return array_unique($list);
     }
 
-    /**
-     * Get links forbidden for a user.
-     *
-     * @param Table::ACTION_READ|Table::ACTION_EDIT $action An action.
-     * @param string $thresholdLevel Should not be used. Stands for possible future enhancements.
-     * @return string[]
-     */
+    
     public function getScopeForbiddenLinkList(
         User $user,
         string $scope,
@@ -548,25 +424,13 @@ class AclManager
         );
     }
 
-    /**
-     * Check access to a field.
-     *
-     * @param User $user A user.
-     * @param string $scope A scope (entity type).
-     * @param string $field A field to check.
-     * @param Table::ACTION_READ|Table::ACTION_EDIT $action An action.
-     * @return bool
-     */
+    
     public function checkField(User $user, string $scope, string $field, string $action = Table::ACTION_READ): bool
     {
         return !in_array($field, $this->getScopeForbiddenFieldList($user, $scope, $action));
     }
 
-    /**
-     * Whether a user has access to another user over a specific permission.
-     *
-     * @param User|string $target User entity or user ID.
-     */
+    
     public function checkUserPermission(User $user, $target, string $permissionType = 'user'): bool
     {
         $permission = $this->getPermissionLevel($user, $permissionType);
@@ -591,10 +455,10 @@ class AclManager
         }
 
         if ($permission === Table::LEVEL_TEAM) {
-            /** @var string[] $teamIdList */
+            
             $teamIdList = $user->getLinkMultipleIdList('teams');
 
-            /** @var \Espo\Repositories\User $userRepository */
+            
             $userRepository = $this->entityManager->getRepository(User::ENTITY_TYPE);
 
             if (!$userRepository->checkBelongsToAnyOfTeams($userId, $teamIdList)) {
@@ -605,35 +469,24 @@ class AclManager
         return true;
     }
 
-    /**
-     * Whether a user can assign to another user.
-     *
-     * @param User|string $target User entity or user ID.
-     */
+    
     public function checkAssignmentPermission(User $user, $target): bool
     {
         return $this->checkUserPermission($user, $target, self::PERMISSION_ASSIGNMENT);
     }
 
-    /**
-     * Create a wrapper for a specific user.
-     */
+    
     public function createUserAcl(User $user): Acl
     {
         $className = $this->userAclClassName;
 
         $acl = new $className($this, $user);
 
-        /** @var Acl */
+        
         return $acl;
     }
 
-    /**
-     * Get a restricted field list for a specific scope by a restriction type.
-     *
-     * @param GlobalRestriction::TYPE_*|array<int, GlobalRestriction::TYPE_*> $type
-     * @return string[]
-     */
+    
     public function getScopeRestrictedFieldList(string $scope, $type): array
     {
         if (is_array($type)) {
@@ -654,12 +507,7 @@ class AclManager
         return $this->globalRestriction->getScopeRestrictedFieldList($scope, $type);
     }
 
-    /**
-     * Get a restricted attribute list for a specific scope by a restriction type.
-     *
-     * @param GlobalRestriction::TYPE_*|array<int,GlobalRestriction::TYPE_*> $type
-     * @return string[]
-     */
+    
     public function getScopeRestrictedAttributeList(string $scope, $type): array
     {
         if (is_array($type)) {
@@ -680,12 +528,7 @@ class AclManager
         return $this->globalRestriction->getScopeRestrictedAttributeList($scope, $type);
     }
 
-    /**
-     * Get a restricted link list for a specific scope by a restriction type.
-     *
-     * @param GlobalRestriction::TYPE_*|array<int, GlobalRestriction::TYPE_*> $type
-     * @return string[]
-     */
+    
     public function getScopeRestrictedLinkList(string $scope, $type): array
     {
         if (is_array($type)) {
@@ -706,50 +549,37 @@ class AclManager
         return $this->globalRestriction->getScopeRestrictedLinkList($scope, $type);
     }
 
-    /**
-     * Get an entity field that stores an owner-user (or multiple users).
-     * Must be a link or linkMultiple field. NULL means no owner.
-     */
+    
     public function getReadOwnerUserField(string $entityType): ?string
     {
         return $this->ownerUserFieldProvider->get($entityType);
     }
 
-    /**
-     * @deprecated As of v7.0. Use `checkOwnershipOwn`.
-     */
+    
     public function checkIsOwner(User $user, Entity $entity): bool
     {
         return $this->checkOwnershipOwn($user, $entity);
     }
 
-    /**
-     * @deprecated As of v7.0. Use `checkOwnershipTeam`.
-     */
+    
     public function checkInTeam(User $user, Entity $entity): bool
     {
         return $this->checkOwnershipTeam($user, $entity);
     }
 
-    /**
-     * @deprecated As of v7.0. Access checkers not to be exposed.
-     */
+    
     public function getImplementation(string $scope): object
     {
         return $this->getAccessChecker($scope);
     }
 
-    /**
-     * @deprecated Use `getPermissionLevel` instead.
-     */
+    
     public function get(User $user, string $permission): string
     {
         return $this->getPermissionLevel($user, $permission);
     }
 
-    /**
-     * @deprecated Use `checkUserPermission` instead.
-     */
+    
     public function checkUser(User $user, string $permission, User $target): bool
     {
         if ($this->getPermissionLevel($user, $permission) === Table::LEVEL_ALL) {

@@ -17,29 +17,22 @@ use function trim;
 
 class ContentType implements UnstructuredInterface
 {
-    /** @var string */
+    
     protected $type;
 
-    /**
-     * Header encoding
-     *
-     * @var string
-     */
+    
     protected $encoding = 'ASCII';
 
-    /** @var array */
+    
     protected $parameters = [];
 
-    /**
-     * @param string $headerLine
-     * @return static
-     */
+    
     public static function fromString($headerLine)
     {
         [$name, $value] = GenericHeader::splitHeaderLine($headerLine);
         $value          = HeaderWrap::mimeDecodeValue($value);
 
-        // check to ensure proper header type for this factory
+        
         if (! in_array(strtolower($name), ['contenttype', 'content_type', 'content-type'])) {
             throw new Exception\InvalidArgumentException('Invalid header line for Content-Type string');
         }
@@ -64,17 +57,13 @@ class ContentType implements UnstructuredInterface
         return $header;
     }
 
-    /**
-     * @return string
-     */
+    
     public function getFieldName()
     {
         return 'Content-Type';
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function getFieldValue($format = HeaderInterface::FORMAT_RAW)
     {
         $prepared = $this->type;
@@ -96,39 +85,26 @@ class ContentType implements UnstructuredInterface
         return implode(';' . Headers::FOLDING, $values);
     }
 
-    /**
-     * @param string $encoding
-     * @return self
-     */
+    
     public function setEncoding($encoding)
     {
         $this->encoding = $encoding;
         return $this;
     }
 
-    /**
-     * @return string
-     */
+    
     public function getEncoding()
     {
         return $this->encoding;
     }
 
-    /**
-     * @return string
-     */
+    
     public function toString()
     {
         return 'Content-Type: ' . $this->getFieldValue(HeaderInterface::FORMAT_ENCODED);
     }
 
-    /**
-     * Set the content type
-     *
-     * @param  string $type
-     * @throws Exception\InvalidArgumentException
-     * @return ContentType
-     */
+    
     public function setType($type)
     {
         if (! preg_match('/^[a-z-]+\/[a-z0-9.+-]+$/i', $type)) {
@@ -142,25 +118,13 @@ class ContentType implements UnstructuredInterface
         return $this;
     }
 
-    /**
-     * Retrieve the content type
-     *
-     * @return string
-     */
+    
     public function getType()
     {
         return $this->type;
     }
 
-    /**
-     * Add a parameter pair
-     *
-     * @param  string $name
-     * @param  string $value
-     * @return ContentType
-     * @throws Exception\InvalidArgumentException For parameter names that do not follow RFC 2822.
-     * @throws Exception\InvalidArgumentException For parameter values that do not follow RFC 2822.
-     */
+    
     public function addParameter($name, $value)
     {
         $name  = trim(strtolower($name));
@@ -179,22 +143,13 @@ class ContentType implements UnstructuredInterface
         return $this;
     }
 
-    /**
-     * Get all parameters
-     *
-     * @return array
-     */
+    
     public function getParameters()
     {
         return $this->parameters;
     }
 
-    /**
-     * Get a parameter by name
-     *
-     * @param  string $name
-     * @return null|string
-     */
+    
     public function getParameter($name)
     {
         $name = strtolower($name);
@@ -205,12 +160,7 @@ class ContentType implements UnstructuredInterface
         return null;
     }
 
-    /**
-     * Remove a named parameter
-     *
-     * @param  string $name
-     * @return bool
-     */
+    
     public function removeParameter($name)
     {
         $name = strtolower($name);

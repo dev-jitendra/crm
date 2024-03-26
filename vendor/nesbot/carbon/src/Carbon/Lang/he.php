@@ -1,22 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Daniel Cohen Gindi
- * - JD Isaacks
- * - Itai Nathaniel
- * - GabMic
- * - Yaakov Dahan (yakidahan)
- */
+
+
 return [
     'year' => 'שנה|{2}שנתיים|:count שנים',
     'y' => 'שנה|:count שנ׳',

@@ -1,21 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Josh Soref
- * - François B
- * - JD Isaacks
- * - Satheez
- */
+
+
 return [
     'year' => ':count வருடம்|:count ஆண்டுகள்',
     'a_year' => 'ஒரு வருடம்|:count ஆண்டுகள்',

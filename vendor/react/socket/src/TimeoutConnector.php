@@ -41,27 +41,27 @@ final class TimeoutConnector implements ConnectorInterface
                 $reject($v);
             });
 
-            // promise already resolved => no need to start timer
+            
             if ($timer === false) {
                 return;
             }
 
-            // start timeout timer which will cancel the pending promise
+            
             $timer = $loop->addTimer($time, function () use ($time, &$promise, $reject, $uri) {
                 $reject(new \RuntimeException(
                     'Connection to ' . $uri . ' timed out after ' . $time . ' seconds (ETIMEDOUT)',
                     \defined('SOCKET_ETIMEDOUT') ? \SOCKET_ETIMEDOUT : 110
                 ));
 
-                // Cancel pending connection to clean up any underlying resources and references.
-                // Avoid garbage references in call stack by passing pending promise by reference.
+                
+                
                 assert(\method_exists($promise, 'cancel'));
                 $promise->cancel();
                 $promise = null;
             });
         }, function () use (&$promise) {
-            // Cancelling this promise will cancel the pending connection, thus triggering the rejection logic above.
-            // Avoid garbage references in call stack by passing pending promise by reference.
+            
+            
             assert(\method_exists($promise, 'cancel'));
             $promise->cancel();
             $promise = null;

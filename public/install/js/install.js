@@ -1,30 +1,4 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 var InstallScript = function(opt) {
 	this.reChecking = false;
 
@@ -156,14 +130,14 @@ InstallScript.prototype.step2 = function() {
 				}
 				$('#test-connection').removeAttr('disabled');
 				self.hideLoading();
-			}, // success END
+			}, 
 			error: function() {
 				$('#next').removeAttr('disabled');
 				$('#test-connection').removeAttr('disabled');
 				self.hideLoading();
-			}, // error END
+			}, 
 
-		}) // checkSett END
+		}) 
 
 	})
 }
@@ -509,7 +483,7 @@ InstallScript.prototype.validate = function() {
 		}
 	}
 
-	// decimal and group sep
+	
 	$('[name="thousandSeparator"]').parent().parent().removeClass('has-error');
 	if (typeof(this.systemSettings.thousandSeparator) !== 'undefined'
 		&& typeof(this.systemSettings.decimalMark) !== 'undefined'
@@ -652,7 +626,7 @@ InstallScript.prototype.checkAction = function(dataMain) {
 			if (typeof(self.checkActions[currIndex]) != 'undefined'
 				&& typeof(self.checkActions[currIndex].break) != 'undefined'
 				&& self.checkActions[currIndex].break) {
-				// break next checking
+				
 				self.callbackChecking(ajaxData);
 			}
 		}
@@ -661,7 +635,7 @@ InstallScript.prototype.checkAction = function(dataMain) {
 		if (typeof(self.checkActions[currIndex]) != 'undefined'
 			&& typeof(self.checkActions[currIndex].break) != 'undefined'
 			&& self.checkActions[currIndex].break) {
-			// break next checking
+			
 			var ajaxData = {
 				'success': false,
 				'errorMsg': [self.getLang('Ajax failed', 'messages')]
@@ -712,7 +686,7 @@ InstallScript.prototype.callbackModRewrite = function(data) {
 	if (typeof(this.checkActions[realCheckIndex]) != 'undefined'
 		&& typeof(this.checkActions[realCheckIndex].break) != 'undefined') {
 		if (this.checkActions[realCheckIndex].break) {
-			// break next checking
+			
 			this.callbackChecking(ajaxData);
 		}
 		else {

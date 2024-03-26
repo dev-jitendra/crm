@@ -1,23 +1,12 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Monolog package.
- *
- * (c) Jordi Boggiano <j.boggiano@seld.be>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Monolog\Processor;
 
 use Monolog\LogRecord;
 
-/**
- * Injects sys_getloadavg in all records @see https://www.php.net/manual/en/function.sys-getloadavg.php
- *
- * @author Johan Vlaar <johan.vlaar.1994@gmail.com>
- */
+
 class LoadAverageProcessor implements ProcessorInterface
 {
     public const LOAD_1_MINUTE = 0;
@@ -30,14 +19,10 @@ class LoadAverageProcessor implements ProcessorInterface
         self::LOAD_15_MINUTE,
     ];
 
-    /**
-     * @var int
-     */
+    
     protected $avgSystemLoad;
 
-    /**
-     * @param self::LOAD_* $avgSystemLoad
-     */
+    
     public function __construct(int $avgSystemLoad = self::LOAD_1_MINUTE)
     {
         if (!in_array($avgSystemLoad, self::AVAILABLE_LOAD, true)) {
@@ -46,9 +31,7 @@ class LoadAverageProcessor implements ProcessorInterface
         $this->avgSystemLoad = $avgSystemLoad;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function __invoke(LogRecord $record): LogRecord
     {
         if (!function_exists('sys_getloadavg')) {

@@ -16,7 +16,7 @@ class GroupPosBased extends RegexBasedAbstract
                 continue;
             }
 
-            // find first non-empty match
+            
             for ($i = 1; '' === $matches[$i]; ++$i);
 
             list($handler, $varNames) = $data['routeMap'][$i];

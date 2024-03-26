@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace Doctrine\DBAL\Driver\OCI8;
 
-/**
- * Encapsulates the execution mode that is shared between the connection and its statements.
- *
- * @internal This class is not covered by the backward compatibility promise
- */
+
 final class ExecutionMode
 {
     private bool $isAutoCommitEnabled = true;

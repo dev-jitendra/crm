@@ -21,43 +21,33 @@ use OpenSpout\Writer\XLSX\Helper\DateIntervalHelper;
 use OpenSpout\Writer\XLSX\Manager\Style\StyleManager;
 use OpenSpout\Writer\XLSX\Options;
 
-/**
- * @internal
- */
+
 final class WorksheetManager implements WorksheetManagerInterface
 {
-    /**
-     * Maximum number of characters a cell can contain.
-     *
-     * @see https://support.office.com/en-us/article/Excel-specifications-and-limits-16c69c74-3d6a-4aaf-ba35-e6eb276e8eaa [Excel 2007]
-     * @see https://support.office.com/en-us/article/Excel-specifications-and-limits-1672b34d-7043-467e-8e27-269d656771c3 [Excel 2010]
-     * @see https://support.office.com/en-us/article/Excel-specifications-and-limits-ca36e2dc-1f09-4620-b726-67c00b05040f [Excel 2013/2016]
-     */
+    
     public const MAX_CHARACTERS_PER_CELL = 32767;
 
-    /** @var CommentsManager Manages comments */
+    
     private readonly CommentsManager $commentsManager;
 
     private readonly Options $options;
 
-    /** @var StyleManager Manages styles */
+    
     private readonly StyleManager $styleManager;
 
-    /** @var StyleMerger Helper to merge styles together */
+    
     private readonly StyleMerger $styleMerger;
 
-    /** @var SharedStringsManager Helper to write shared strings */
+    
     private readonly SharedStringsManager $sharedStringsManager;
 
-    /** @var XLSXEscaper Strings escaper */
+    
     private readonly XLSXEscaper $stringsEscaper;
 
-    /** @var StringHelper String helper */
+    
     private readonly StringHelper $stringHelper;
 
-    /**
-     * WorksheetManager constructor.
-     */
+    
     public function __construct(
         Options $options,
         StyleManager $styleManager,
@@ -106,15 +96,7 @@ final class WorksheetManager implements WorksheetManagerInterface
         fclose($worksheet->getFilePointer());
     }
 
-    /**
-     * Adds non empty row to the worksheet.
-     *
-     * @param Worksheet $worksheet The worksheet to add the row to
-     * @param Row       $row       The row to be written
-     *
-     * @throws InvalidArgumentException If a cell value's type is not supported
-     * @throws IOException              If the data cannot be written
-     */
+    
     private function addNonEmptyRow(Worksheet $worksheet, Row $row): void
     {
         $sheetFilePointer = $worksheet->getFilePointer();
@@ -130,7 +112,7 @@ final class WorksheetManager implements WorksheetManagerInterface
             $registeredStyle = $this->applyStyleAndRegister($cell, $rowStyle);
             $cellStyle = $registeredStyle->getStyle();
             if ($registeredStyle->isMatchingRowStyle()) {
-                $rowStyle = $cellStyle; // Replace actual rowStyle (possibly with null id) by registered style (with id)
+                $rowStyle = $cellStyle; 
             }
             $rowXML .= $this->getCellXML($rowIndexOneBased, $columnIndexZeroBased, $cell, $cellStyle->getId());
         }
@@ -143,11 +125,7 @@ final class WorksheetManager implements WorksheetManagerInterface
         }
     }
 
-    /**
-     * Applies styles to the given style, merging the cell's style with its row's style.
-     *
-     * @throws InvalidArgumentException If the given value cannot be processed
-     */
+    
     private function applyStyleAndRegister(Cell $cell, Style $rowStyle): RegisteredStyle
     {
         $isMatchingRowStyle = false;
@@ -180,11 +158,7 @@ final class WorksheetManager implements WorksheetManagerInterface
         return new RegisteredStyle($registeredStyle, $isMatchingRowStyle);
     }
 
-    /**
-     * Builds and returns xml for a single cell.
-     *
-     * @throws InvalidArgumentException If the given value cannot be processed
-     */
+    
     private function getCellXML(int $rowIndexOneBased, int $columnIndexZeroBased, Cell $cell, ?int $styleId): string
     {
         $columnLetters = CellHelper::getColumnLettersFromColumnIndex($columnIndexZeroBased);
@@ -204,14 +178,14 @@ final class WorksheetManager implements WorksheetManagerInterface
         } elseif ($cell instanceof Cell\DateIntervalCell) {
             $cellXML .= '><v>'.DateIntervalHelper::toExcel($cell->getValue()).'</v></c>';
         } elseif ($cell instanceof Cell\ErrorCell) {
-            // only writes the error value if it's a string
+            
             $cellXML .= ' t="e"><v>'.$cell->getRawValue().'</v></c>';
         } elseif ($cell instanceof Cell\EmptyCell) {
             if ($this->styleManager->shouldApplyStyleOnEmptyCell($styleId)) {
                 $cellXML .= '/>';
             } else {
-                // don't write empty cells that do no need styling
-                // NOTE: not appending to $cellXML is the right behavior!!
+                
+                
                 $cellXML = '';
             }
         }
@@ -219,15 +193,7 @@ final class WorksheetManager implements WorksheetManagerInterface
         return $cellXML;
     }
 
-    /**
-     * Returns the XML fragment for a cell containing a non empty string.
-     *
-     * @param string $cellValue The cell value
-     *
-     * @return string The XML fragment representing the cell
-     *
-     * @throws InvalidArgumentException If the string exceeds the maximum number of characters allowed per cell
-     */
+    
     private function getCellXMLFragmentForNonEmptyString(string $cellValue): string
     {
         if ($this->stringHelper->getStringLength($cellValue) > self::MAX_CHARACTERS_PER_CELL) {

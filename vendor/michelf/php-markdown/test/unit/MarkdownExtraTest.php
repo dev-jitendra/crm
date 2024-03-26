@@ -6,7 +6,7 @@ class MarkdownExtraTest extends \PHPUnit\Framework\TestCase
 	{
 		$obj = new \Michelf\MarkdownExtra();
 
-		// Allows custom expansions of arreviations to their full version with the abbr tag
+		
 		$obj->predef_abbr = array(
 			'foo' => 'foobar-test',
 		);
@@ -22,7 +22,7 @@ class MarkdownExtraTest extends \PHPUnit\Framework\TestCase
 	{
 		$obj = new \Michelf\MarkdownExtra();
 
-		// Allows custom expansions of arreviations to their full version with the abbr tag
+		
 		$obj->predef_abbr = array(
 			'foo' => 'foobar-test',
 			'ISP' => 'Internet Service Provider',

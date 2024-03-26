@@ -12,9 +12,7 @@ class EnableForeignKeys implements Middleware
     public function wrap(Driver $driver): Driver
     {
         return new class ($driver) extends AbstractDriverMiddleware {
-            /**
-             * {@inheritDoc}
-             */
+            
             public function connect(array $params): Connection
             {
                 $connection = parent::connect($params);

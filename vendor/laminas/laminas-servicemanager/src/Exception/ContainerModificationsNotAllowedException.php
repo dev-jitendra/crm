@@ -10,9 +10,7 @@ use function sprintf;
 
 class ContainerModificationsNotAllowedException extends DomainException implements ExceptionInterface
 {
-    /**
-     * @param string $service Name of service that already exists.
-     */
+    
     public static function fromExistingService(string $service): self
     {
         return new self(sprintf(

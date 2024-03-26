@@ -1,32 +1,6 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/login */
+
+
 
 import View from 'view';
 import Base64 from 'js-base64';
@@ -34,10 +8,10 @@ import $ from 'jquery';
 
 class LoginView extends View {
 
-    /** @inheritDoc */
+    
     template = 'login'
 
-    /** @inheritDoc */
+    
     views = {
         footer: {
             fullSelector: 'body > footer',
@@ -45,54 +19,42 @@ class LoginView extends View {
         },
     }
 
-    /**
-     * @type {string|null}
-     * @private
-     */
+    
     anotherUser = null
 
-    /** @private */
+    
     isPopoverDestroyed = false
 
-    /**
-     * @type {module:handlers/login}
-     * @private
-     */
+    
     handler = null
 
-    /**
-     * @type {boolean}
-     * @private
-     */
+    
     fallback = false
 
-    /**
-     * @type {string|null}
-     * @private
-     */
+    
     method = null
 
-    /** @inheritDoc */
+    
     events = {
-        /** @this LoginView */
+        
         'submit #login-form': function (e) {
             e.preventDefault();
 
             this.login();
         },
-        /** @this LoginView */
+        
         'click #sign-in': function () {
             this.signIn();
         },
-        /** @this LoginView */
+        
         'click a[data-action="passwordChangeRequest"]': function () {
             this.showPasswordChangeRequest();
         },
-        /** @this LoginView */
+        
         'click a[data-action="showFallback"]': function () {
             this.showFallback();
         },
-        /** @this LoginView */
+        
         'keydown': function (e) {
             if (Espo.Utils.getKeyFromKeyEvent(e) === 'Control+Enter') {
                 e.preventDefault();
@@ -111,7 +73,7 @@ class LoginView extends View {
         },
     }
 
-    /** @inheritDoc */
+    
     data() {
         return {
             logoSrc: this.getLogoSrc(),
@@ -125,7 +87,7 @@ class LoginView extends View {
         };
     }
 
-    /** @inheritDoc */
+    
     setup() {
         this.anotherUser = this.options.anotherUser || null;
 
@@ -157,10 +119,7 @@ class LoginView extends View {
             this.translate('Login');
     }
 
-    /**
-     * @private
-     * @return {string}
-     */
+    
     getLogoSrc() {
         const companyLogoId = this.getConfig().get('companyLogoId');
 
@@ -172,7 +131,7 @@ class LoginView extends View {
         return this.getBasePath() + '?entryPoint=LogoImage&id=' + companyLogoId;
     }
 
-    /** @inheritDoc */
+    
     afterRender() {
         this.$submit = this.$el.find('#btn-login');
         this.$signIn = this.$el.find('#sign-in');
@@ -190,7 +149,7 @@ class LoginView extends View {
         }
     }
 
-    /** @private */
+    
     signIn() {
         this.disableForm();
 
@@ -204,7 +163,7 @@ class LoginView extends View {
             })
     }
 
-    /** @private */
+    
     login() {
         let authString;
         let userName = this.$username.val();
@@ -245,12 +204,7 @@ class LoginView extends View {
         this.proceed(headers, userName, password);
     }
 
-    /**
-     * @private
-     * @param {Object.<string, string>} headers
-     * @param {string} [userName]
-     * @param {string} [password]
-     */
+    
     proceed(headers, userName, password) {
         headers = Espo.Utils.clone(headers);
 
@@ -300,13 +254,7 @@ class LoginView extends View {
             });
     }
 
-    /**
-     * Trigger login to proceed to the application.
-     *
-     * @private
-     * @param {string|null} userName A username.
-     * @param {Object.<string, *>} data Data returned from the `App/user` request.
-     */
+    
     triggerLogin(userName, data) {
         if (this.anotherUser) {
             data.anotherUser = this.anotherUser;
@@ -319,7 +267,7 @@ class LoginView extends View {
         this.trigger('login', userName, data);
     }
 
-    /** @private */
+    
     processEmptyUsername() {
         this.isPopoverDestroyed = false;
 
@@ -353,37 +301,31 @@ class LoginView extends View {
         });
     }
 
-    /** @private */
+    
     disableForm() {
         this.$submit.addClass('disabled').attr('disabled', 'disabled');
         this.$signIn.addClass('disabled').attr('disabled', 'disabled');
     }
 
-    /** @private */
+    
     undisableForm() {
         this.$submit.removeClass('disabled').removeAttr('disabled');
         this.$signIn.removeClass('disabled').removeAttr('disabled');
     }
 
-    /**
-     * @private
-     * @param {Object.<string, string>} headers
-     * @param {string} userName
-     * @param {string} password
-     * @param {Object.<string, *>} data
-     */
+    
     onSecondStepRequired(headers, userName, password, data) {
         const view = data.view || 'views/login-second-step';
 
         this.trigger('redirect', view, headers, userName, password, data);
     }
 
-    /** @private */
+    
     onError() {
         this.onFail('loginError');
     }
 
-    /** @private */
+    
     onWrongCredentials() {
         const msg = this.handler ?
             'failedToLogIn' :
@@ -392,7 +334,7 @@ class LoginView extends View {
         this.onFail(msg);
     }
 
-    /** @private */
+    
     onFail(msg) {
         const $cell = $('#login .form-group');
 
@@ -405,7 +347,7 @@ class LoginView extends View {
         Espo.Ui.error(this.translate(msg, 'messages', 'User'));
     }
 
-    /** @private */
+    
     showFallback() {
         this.$el.find('[data-action="showFallback"]').addClass('hidden');
 
@@ -416,12 +358,12 @@ class LoginView extends View {
         this.$submit.closest('.cell').removeClass('hidden');
     }
 
-    /** @private */
+    
     notifyLoading() {
         Espo.Ui.notify(' ... ');
     }
 
-    /** @private */
+    
     showPasswordChangeRequest() {
         this.notifyLoading();
 

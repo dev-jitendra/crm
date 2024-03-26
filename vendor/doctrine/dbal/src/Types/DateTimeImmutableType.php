@@ -8,22 +8,16 @@ use Doctrine\Deprecations\Deprecation;
 
 use function date_create_immutable;
 
-/**
- * Immutable type of {@see DateTimeType}.
- */
+
 class DateTimeImmutableType extends DateTimeType
 {
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getName()
     {
         return Types::DATETIME_IMMUTABLE;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         if ($value === null) {
@@ -41,9 +35,7 @@ class DateTimeImmutableType extends DateTimeType
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         if ($value === null || $value instanceof DateTimeImmutable) {
@@ -67,16 +59,12 @@ class DateTimeImmutableType extends DateTimeType
         return $dateTime;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated
-     */
+    
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5509',
+            'https:
             '%s is deprecated.',
             __METHOD__,
         );

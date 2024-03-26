@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Utils\Database\Orm;
 
@@ -49,7 +23,7 @@ class RelationConverter
 {
     private const DEFAULT_VARCHAR_LENGTH = 255;
 
-    /** @var string[] */
+    
     private $allowedParams = [
         'relationName',
         'conditions',
@@ -65,24 +39,18 @@ class RelationConverter
         private Log $log
     ) {}
 
-    /**
-     * @param string $name
-     * @param array<string, mixed> $params
-     * @param string $entityType
-     * @param array<string, mixed> $ormMetadata
-     * @return ?array<string, mixed>
-     */
+    
     public function process(string $name, array $params, string $entityType, array $ormMetadata): ?array
     {
         $foreignEntityType = $params['entity'] ?? null;
         $foreignLinkName = $params['foreign'] ?? null;
 
-        /** @var ?array<string, mixed> $foreignParams */
+        
         $foreignParams = $foreignEntityType && $foreignLinkName ?
             $this->metadata->get(['entityDefs', $foreignEntityType, 'links', $foreignLinkName]) :
             null;
 
-        /** @var ?string $relationshipName */
+        
         $relationshipName = $params['relationName'] ?? null;
 
         if ($relationshipName) {
@@ -125,13 +93,11 @@ class RelationConverter
         return $this->injectableFactory->create($className);
     }
 
-    /**
-     * @return class-string<LinkConverter>
-     */
+    
     private function getLinkConverterClassName(?string $relationship, string $type, ?string $foreignType): string
     {
         if ($relationship) {
-            /** @var class-string<LinkConverter> $className */
+            
             $className = $this->metadata->get(['app', 'relationships', $relationship, 'converterClassName']);
 
             if ($className) {
@@ -166,11 +132,7 @@ class RelationConverter
         throw new RuntimeException("Unsupported link type '{$type}'.");
     }
 
-    /**
-     * @param array<string, mixed> $relationDefs
-     * @param array<string, mixed> $params
-     * @param array<string, mixed> $foreignParams
-     */
+    
     private function mergeAllowedParams(array &$relationDefs, array $params, array $foreignParams): void
     {
         foreach ($this->allowedParams as $name) {
@@ -184,11 +146,7 @@ class RelationConverter
         }
     }
 
-    /**
-     * @param array<string, mixed> $params
-     * @param array<string, mixed> $foreignParams
-     * @return array<string, mixed>|scalar|null
-     */
+    
     private function getAllowedParam(string $name, array $params, array $foreignParams): mixed
     {
         $value = $params[$name] ?? null;
@@ -203,10 +161,10 @@ class RelationConverter
                 return $foreignValue;
             }
 
-            /** @var array<int|string, mixed> $value */
-            /** @var array<int|string, mixed> $foreignValue */
+            
+            
 
-            /** @var array<string, mixed> */
+            
             return Util::merge($value, $foreignValue);
         }
 
@@ -221,16 +179,14 @@ class RelationConverter
         return null;
     }
 
-    /**
-     * @param array<string, mixed> $relationDefs
-     */
+    
     private function correct(array &$relationDefs): void
     {
         if (!isset($relationDefs['additionalColumns'])) {
             return;
         }
 
-        /** @var array<string, array<string, mixed>> $additionalColumns */
+        
         $additionalColumns = &$relationDefs['additionalColumns'];
 
         foreach ($additionalColumns as &$columnDefs) {

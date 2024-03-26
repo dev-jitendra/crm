@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core;
 
@@ -44,13 +18,7 @@ use Throwable;
 use RuntimeException;
 use Closure;
 
-/**
- * Creates an instance by a class name. Uses constructor param names and type hinting to detect which
- * dependencies are needed. Service dependencies are instantiated only once. Non-service dependencies
- * are instantiated every time along with a dependent class.
- *
- * Aware interfaces are also used to detect service dependencies.
- */
+
 class InjectableFactory
 {
     public function __construct(
@@ -58,56 +26,25 @@ class InjectableFactory
         private ?BindingContainer $bindingContainer = null
     ) {}
 
-    /**
-     * Create an instance by a class name.
-     *
-     * @template T of object
-     * @param class-string<T> $className An instantiatable class.
-     * @return T
-     */
+    
     public function create(string $className): object
     {
         return $this->createInternal($className);
     }
 
-    /**
-     * Create an instance by a class name with specific constructor parameters
-     * defined in an associative array. A key should match the parameter name.
-     *
-     * @template T of object
-     * @param class-string<T> $className An instantiatable class.
-     * @param array<string, mixed> $with Constructor parameter values.
-     * @return T
-     */
+    
     public function createWith(string $className, array $with): object
     {
         return $this->createInternal($className, $with);
     }
 
-    /**
-     * Create an instance by a class name with a specific binding.
-     *
-     * @template T of object
-     * @param class-string<T> $className An instantiatable class.
-     * @param BindingContainer $bindingContainer A binding container.
-     * @return T
-     */
+    
     public function createWithBinding(string $className, BindingContainer $bindingContainer): object
     {
         return $this->createInternal($className, null, $bindingContainer);
     }
 
-    /**
-     * Create an instance by an interface with an optional additional binding.
-     * An interface will be resolved by the global binding. If a class is provided, it will be tried to
-     * be resolved (if it's bound to an extended class). If the class is not bound, it will be instantiated
-     * (with the same behavior as with the `createWithBinding` method).
-     *
-     * @template T of object
-     * @param class-string<T> $interfaceName An interface or class.
-     * @param ?BindingContainer $bindingContainer A binding container.
-     * @return T
-     */
+    
     public function createResolved(string $interfaceName, ?BindingContainer $bindingContainer = null): object
     {
         $binding = $this->bindingContainer && $this->bindingContainer->hasByInterface($interfaceName) ?
@@ -149,12 +86,7 @@ class InjectableFactory
         return $obj;
     }
 
-    /**
-     * @template T of object
-     * @param class-string<T> $className
-     * @param ?array<string, mixed> $with
-     * @return T
-     */
+    
     private function createInternal(
         string $className,
         ?array $with = null,
@@ -171,7 +103,7 @@ class InjectableFactory
 
         $obj = $class->newInstanceArgs($injectionList);
 
-        // @todo Remove in v9.0.
+        
         if ($class->implementsInterface(Injectable::class)) {
             $this->applyInjectable($class, $obj);
 
@@ -183,11 +115,7 @@ class InjectableFactory
         return $obj;
     }
 
-    /**
-     * @param ReflectionClass<object> $class
-     * @param ?array<string, mixed> $with
-     * @return mixed[]
-     */
+    
     private function getConstructorInjectionList(
         ReflectionClass $class,
         ?array $with = null,
@@ -211,11 +139,7 @@ class InjectableFactory
         return $injectionList;
     }
 
-    /**
-     * @param ?ReflectionClass<object> $class
-     * @param ?array<string, mixed> $with
-     * @return mixed
-     */
+    
     private function getMethodParamInjection(
         ?ReflectionClass $class,
         ReflectionParameter $param,
@@ -239,7 +163,7 @@ class InjectableFactory
             !$type->isBuiltin()
         ) {
             try {
-                /** @var class-string $dependencyClassName */
+                
                 $dependencyClassName = $type->getName();
 
                 $dependencyClass = new ReflectionClass($dependencyClassName);
@@ -247,7 +171,7 @@ class InjectableFactory
             catch (Throwable $e) {
                 $badClassName = $type->getName();
 
-                // This trick allows to log syntax errors.
+                
                 class_exists($badClassName);
 
                 throw new RuntimeException("InjectableFactory: " . $e->getMessage());
@@ -298,9 +222,7 @@ class InjectableFactory
         );
     }
 
-    /**
-     * @return mixed[]
-     */
+    
     private function getCallbackInjectionList(callable $callback): array
     {
         $injectionList = [];
@@ -333,7 +255,7 @@ class InjectableFactory
         }
 
         if ($type === Binding::IMPLEMENTATION_CLASS_NAME) {
-            /** @var class-string $value */
+            
             return $this->createInternal($value, null, $bindingContainer);
         }
 
@@ -350,8 +272,8 @@ class InjectableFactory
         }
 
         if ($type === Binding::FACTORY_CLASS_NAME) {
-            /** @var class-string<object> $value */
-            /** @var Factory<object> $factory */
+            
+            
             $factory = $this->createInternal($value, null, $bindingContainer);
 
             return $factory->create();
@@ -360,10 +282,7 @@ class InjectableFactory
         throw new RuntimeException("InjectableFactory: Bad binding.");
     }
 
-    /**
-     * @param ReflectionClass<object> $paramHintClass
-     * @param ReflectionClass<object> $returnHintClass
-     */
+    
     private function areDependencyClassesMatching(
         ReflectionClass $paramHintClass,
         ReflectionClass $returnHintClass
@@ -380,10 +299,7 @@ class InjectableFactory
         return false;
     }
 
-    /**
-     * @param ReflectionClass<object> $class
-     * @param string[] $ignoreList
-     */
+    
     private function applyAwareInjections(ReflectionClass $class, object $obj, array $ignoreList = []): void
     {
         foreach ($class->getInterfaces() as $interface) {
@@ -411,9 +327,7 @@ class InjectableFactory
         }
     }
 
-    /**
-     * @param ReflectionClass<object> $class
-     */
+    
     private function classHasDependencySetter(
         ReflectionClass $class,
         string $name,
@@ -447,7 +361,7 @@ class InjectableFactory
             $type instanceof ReflectionNamedType &&
             !$type->isBuiltin()
         ) {
-            /** @var class-string $dependencyClassName */
+            
             $dependencyClassName = $type->getName();
 
             $paramClass = new ReflectionClass($dependencyClassName);
@@ -460,24 +374,13 @@ class InjectableFactory
         return false;
     }
 
-    /**
-     * @deprecated As of v6.0. Use create or createWith methods instead.
-     *
-     * @template T of object
-     * @param class-string<T> $className
-     * @param ?array<string, mixed> $with
-     * @return T
-     */
+    
     public function createByClassName(string $className, ?array $with = null): object
     {
         return $this->createInternal($className, $with);
     }
 
-    /**
-     * @deprecated
-     * @param ReflectionClass<object> $class
-     * @todo Remove in v9.0.
-     */
+    
     private function applyInjectable(ReflectionClass $class, object $obj): void
     {
         $setList = [];

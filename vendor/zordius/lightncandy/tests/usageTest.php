@@ -7,9 +7,7 @@ require_once('tests/helpers_for_test.php');
 
 class usageTest extends TestCase
 {
-    /**
-     * @dataProvider compileProvider
-     */
+    
     public function testUsedFeature($test)
     {
         LightnCandy::compile($test['template'], $test['options']);

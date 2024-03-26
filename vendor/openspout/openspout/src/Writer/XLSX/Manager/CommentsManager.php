@@ -10,21 +10,12 @@ use OpenSpout\Common\Helper\Escaper;
 use OpenSpout\Writer\Common\Entity\Worksheet;
 use OpenSpout\Writer\Common\Helper\CellHelper;
 
-/**
- * @internal
- *
- * This manager takes care of comments: writing them into two files:
- *  - commentsX.xml, containing the actual (rich) text of the comment
- *  - drawings/drawingX.vml, containing the layout of the panel showing the comment
- *
- * Each worksheet gets its unique set of 2 files, this class will make sure that these
- * files are created, closed and filled with the required data.
- */
+
 final class CommentsManager
 {
     public const COMMENTS_XML_FILE_HEADER = <<<'EOD'
         <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-        <comments xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+        <comments xmlns="http:
             <authors><author>Unknown</author></authors>
             <commentList>
         EOD;
@@ -50,18 +41,10 @@ final class CommentsManager
         </xml>
         EOD;
 
-    /**
-     * File-pointers to the commentsX.xml files, where the index is the id of the worksheet.
-     *
-     * @var resource[]
-     */
+    
     private array $commentsFilePointers = [];
 
-    /**
-     * File-pointers to the vmlDrawingX.vml files, where the index is the id of the worksheet.
-     *
-     * @var resource[]
-     */
+    
     private array $drawingFilePointers = [];
 
     private readonly string $xlFolder;
@@ -70,18 +53,14 @@ final class CommentsManager
 
     private readonly Escaper\XLSX $stringsEscaper;
 
-    /**
-     * @param string $xlFolder Path to the "xl" folder
-     */
+    
     public function __construct(string $xlFolder, Escaper\XLSX $stringsEscaper)
     {
         $this->xlFolder = $xlFolder;
         $this->stringsEscaper = $stringsEscaper;
     }
 
-    /**
-     * Create the two comment-files for the given worksheet.
-     */
+    
     public function createWorksheetCommentFiles(Worksheet $sheet): void
     {
         $sheetId = $sheet->getId();
@@ -98,9 +77,7 @@ final class CommentsManager
         $this->drawingFilePointers[$sheetId] = $drawingFp;
     }
 
-    /**
-     * Close the two comment-files for the given worksheet.
-     */
+    
     public function closeWorksheetCommentFiles(Worksheet $sheet): void
     {
         $sheetId = $sheet->getId();
@@ -128,30 +105,19 @@ final class CommentsManager
         }
     }
 
-    /**
-     * @return string The file path where the comments for the given sheet will be stored
-     */
+    
     private function getCommentsFilePath(Worksheet $sheet): string
     {
         return $this->xlFolder.\DIRECTORY_SEPARATOR.'comments'.$sheet->getId().'.xml';
     }
 
-    /**
-     * @return string The file path where the VML comments for the given sheet will be stored
-     */
+    
     private function getDrawingFilePath(Worksheet $sheet): string
     {
         return $this->xlFolder.\DIRECTORY_SEPARATOR.'drawings'.\DIRECTORY_SEPARATOR.'vmlDrawing'.$sheet->getId().'.vml';
     }
 
-    /**
-     * Add a comment to the commentsX.xml file.
-     *
-     * @param int     $sheetId              The id of the sheet (starting with 1)
-     * @param int     $rowIndexZeroBased    The row index, starting at 0, of the cell with the comment
-     * @param int     $columnIndexZeroBased The column index, starting at 0, of the cell with the comment
-     * @param Comment $comment              The actual comment
-     */
+    
     private function addXmlComment(int $sheetId, int $rowIndexZeroBased, int $columnIndexZeroBased, Comment $comment): void
     {
         $commentsFilePointer = $this->commentsFilePointers[$sheetId];
@@ -181,14 +147,7 @@ final class CommentsManager
         fwrite($commentsFilePointer, $commentxml);
     }
 
-    /**
-     * Add a comment to the vmlDrawingX.vml file.
-     *
-     * @param int     $sheetId              The id of the sheet (starting with 1)
-     * @param int     $rowIndexZeroBased    The row index, starting at 0, of the cell with the comment
-     * @param int     $columnIndexZeroBased The column index, starting at 0, of the cell with the comment
-     * @param Comment $comment              The actual comment
-     */
+    
     private function addVmlComment(int $sheetId, int $rowIndexZeroBased, int $columnIndexZeroBased, Comment $comment): void
     {
         $drawingFilePointer = $this->drawingFilePointers[$sheetId];

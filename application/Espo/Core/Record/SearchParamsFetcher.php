@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Record;
 
@@ -48,12 +22,7 @@ class SearchParamsFetcher
         private TextMetadataProvider $textMetadataProvider
     ) {}
 
-    /**
-     * Fetch search params from a request.
-     *
-     * @throws BadRequest
-     * @throws Forbidden
-     */
+    
     public function fetch(Request $request): SearchParams
     {
         return SearchParams::fromRaw(
@@ -61,11 +30,7 @@ class SearchParamsFetcher
         );
     }
 
-    /**
-     * @return array<string, mixed>
-     * @throws BadRequest
-     * @throws Forbidden
-     */
+    
     private function fetchRaw(Request $request): array
     {
         $params = $request->hasQueryParam('searchParams') ?
@@ -77,10 +42,7 @@ class SearchParamsFetcher
         return $params;
     }
 
-    /**
-     * @return array<string, mixed>
-     * @throws BadRequest
-     */
+    
     private function fetchRawJsonSearchParams(Request $request): array
     {
         try {
@@ -91,9 +53,7 @@ class SearchParamsFetcher
         }
     }
 
-    /**
-     * @return array<string, mixed>
-     */
+    
     private function fetchRawMultipleParams(Request $request): array
     {
         $params = [];
@@ -127,7 +87,7 @@ class SearchParamsFetcher
             $params['orderBy'] = $request->getQueryParam('orderBy');
         }
         else if ($request->getQueryParam('sortBy')) {
-            // legacy
+            
             $params['orderBy'] = $request->getQueryParam('sortBy');
         }
 
@@ -135,7 +95,7 @@ class SearchParamsFetcher
             $params['order'] = strtoupper($request->getQueryParam('order'));
         }
         else if ($request->getQueryParam('asc')) {
-            // legacy
+            
             $params['order'] = $request->getQueryParam('asc') === 'true' ?
                 SearchParams::ORDER_ASC : SearchParams::ORDER_DESC;
         }
@@ -167,18 +127,14 @@ class SearchParamsFetcher
         return $params;
     }
 
-    /**
-     * @param array<string, mixed> $params
-     * @throws BadRequest
-     * @throws Forbidden
-     */
+    
     private function handleRawParams(array &$params, Request $request): void
     {
         if (isset($params['maxSize']) && !is_int($params['maxSize'])) {
             throw new BadRequest('maxSize must be integer.');
         }
 
-        /** @var ?string $q */
+        
         $q = $params['q'] ?? null;
 
         if (
@@ -210,10 +166,7 @@ class SearchParamsFetcher
         return $this->textMetadataProvider->hasFullTextSearch($scope);
     }
 
-    /**
-     * @param array<string, mixed> $params
-     * @throws Forbidden
-     */
+    
     private function handleMaxSize(array &$params): void
     {
         $value = $params['maxSize'] ?? null;

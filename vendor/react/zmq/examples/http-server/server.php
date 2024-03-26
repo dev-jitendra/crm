@@ -8,7 +8,7 @@ $http = new React\Http\Server($socket);
 
 $context = new React\ZMQ\Context($loop);
 $dealer = $context->getSocket(ZMQ::SOCKET_DEALER);
-$dealer->bind('tcp://127.0.0.1:4444');
+$dealer->bind('tcp:
 
 $conns = new ArrayObject();
 

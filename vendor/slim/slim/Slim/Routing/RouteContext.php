@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -36,10 +32,10 @@ final class RouteContext
             throw new RuntimeException('Cannot create RouteContext before routing has been completed');
         }
 
-        /** @var RouteInterface|null $route */
-        /** @var RouteParserInterface $routeParser */
-        /** @var RoutingResults $routingResults */
-        /** @var string|null $basePath */
+        
+        
+        
+        
         return new self($route, $routeParser, $routingResults, $basePath);
     }
 

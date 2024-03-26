@@ -30,21 +30,19 @@ final class Statement implements StatementInterface
 
     private PDOStatement $stmt;
 
-    /** @internal The statement can be only instantiated by its driver connection. */
+    
     public function __construct(PDOStatement $stmt)
     {
         $this->stmt = $stmt;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function bindValue($param, $value, $type = ParameterType::STRING)
     {
         if (func_num_args() < 3) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5558',
+                'https:
                 'Not passing $type to Statement::bindValue() is deprecated.'
                     . ' Pass the type corresponding to the parameter being bound.',
             );
@@ -59,17 +57,7 @@ final class Statement implements StatementInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @deprecated Use {@see bindValue()} instead.
-     *
-     * @param mixed    $param
-     * @param mixed    $variable
-     * @param int      $type
-     * @param int|null $length
-     * @param mixed    $driverOptions The usage of the argument is deprecated.
-     */
+    
     public function bindParam(
         $param,
         &$variable,
@@ -79,7 +67,7 @@ final class Statement implements StatementInterface
     ): bool {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5563',
+            'https:
             '%s is deprecated. Use bindValue() instead.',
             __METHOD__,
         );
@@ -87,7 +75,7 @@ final class Statement implements StatementInterface
         if (func_num_args() < 3) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5558',
+                'https:
                 'Not passing $type to Statement::bindParam() is deprecated.'
                     . ' Pass the type corresponding to the parameter being bound.',
             );
@@ -96,7 +84,7 @@ final class Statement implements StatementInterface
         if (func_num_args() > 4) {
             Deprecation::triggerIfCalledFromOutside(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/issues/4533',
+                'https:
                 'The $driverOptions argument of Statement::bindParam() is deprecated.',
             );
         }
@@ -116,15 +104,13 @@ final class Statement implements StatementInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function execute($params = null): ResultInterface
     {
         if ($params !== null) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5556',
+                'https:
                 'Passing $params to Statement::execute() is deprecated. Bind parameters using'
                     . ' Statement::bindParam() or Statement::bindValue() instead.',
             );
@@ -139,13 +125,7 @@ final class Statement implements StatementInterface
         return new Result($this->stmt);
     }
 
-    /**
-     * Converts DBAL parameter type to PDO parameter type
-     *
-     * @param int $type Parameter type
-     *
-     * @throws ExceptionInterface
-     */
+    
     private function convertParamType(int $type): int
     {
         if (! isset(self::PARAM_TYPE_MAP[$type])) {

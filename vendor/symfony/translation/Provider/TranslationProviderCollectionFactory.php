@@ -1,29 +1,18 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation\Provider;
 
 use Symfony\Component\Translation\Exception\UnsupportedSchemeException;
 
-/**
- * @author Mathieu Santostefano <msantostefano@protonmail.com>
- */
+
 class TranslationProviderCollectionFactory
 {
     private iterable $factories;
     private array $enabledLocales;
 
-    /**
-     * @param iterable<mixed, ProviderFactoryInterface> $factories
-     */
+    
     public function __construct(iterable $factories, array $enabledLocales)
     {
         $this->factories = $factories;

@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\App;
 
@@ -46,22 +20,20 @@ class LanguageService
         private Container $container
     ) {}
 
-    // @todo Use proxy.
+    
     protected function getDefaultLanguage(): LanguageUtil
     {
-        /** @var LanguageUtil */
+        
         return $this->container->get('defaultLanguage');
     }
 
     protected function getLanguage(): LanguageUtil
     {
-        /** @var LanguageUtil */
+        
         return $this->container->get('language');
     }
 
-    /**
-     * @return array<string, mixed>
-     */
+    
     public function getDataForFrontend(bool $default = false): array
     {
         if ($default) {
@@ -107,7 +79,7 @@ class LanguageService
             unset($data['Campaign']['presetFilters']);
         }
         else {
-            /** @var string[] $scopeList */
+            
             $scopeList = array_keys($this->metadata->get(['scopes'], []));
 
             foreach ($scopeList as $scope) {
@@ -162,9 +134,7 @@ class LanguageService
         return $data;
     }
 
-    /**
-     * @param array<string, mixed> $data
-     */
+    
     private function unsetEmpty(array &$data, string $scope): void
     {
         if (($data[$scope]['options'] ?? null) === []) {
@@ -180,9 +150,7 @@ class LanguageService
         }
     }
 
-    /**
-     * @param array<string, mixed> $data
-     */
+    
     private function prepareDataNonAdmin(array &$data, LanguageUtil $languageObj): void
     {
         unset($data['Admin']);

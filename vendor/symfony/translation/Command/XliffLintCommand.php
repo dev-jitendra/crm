@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation\Command;
 
@@ -25,13 +18,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Translation\Exception\InvalidArgumentException;
 use Symfony\Component\Translation\Util\XliffUtils;
 
-/**
- * Validates XLIFF files syntax and outputs encountered errors.
- *
- * @author Grégoire Pineau <lyrixx@lyrixx.info>
- * @author Robin Chalas <robin.chalas@gmail.com>
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
- */
+
 #[AsCommand(name: 'lint:xliff', description: 'Lint an XLIFF file and outputs encountered errors')]
 class XliffLintCommand extends Command
 {
@@ -85,7 +72,7 @@ EOF
         $this->displayCorrectFiles = $output->isVerbose();
 
         if (['-'] === $filenames) {
-            return $this->display($io, [$this->validate(file_get_contents('php://stdin'))]);
+            return $this->display($io, [$this->validate(file_get_contents('php:
         }
 
         if (!$filenames) {
@@ -110,7 +97,7 @@ EOF
     {
         $errors = [];
 
-        // Avoid: Warning DOMDocument::loadXML(): Empty string supplied as input
+        
         if ('' === trim($content)) {
             return ['file' => $file, 'valid' => true];
         }
@@ -122,10 +109,10 @@ EOF
 
         if (null !== $targetLanguage = $this->getTargetLanguageFromFile($document)) {
             $normalizedLocalePattern = sprintf('(%s|%s)', preg_quote($targetLanguage, '/'), preg_quote(str_replace('-', '_', $targetLanguage), '/'));
-            // strict file names require translation files to be named '____.locale.xlf'
-            // otherwise, both '____.locale.xlf' and 'locale.____.xlf' are allowed
-            // also, the regexp matching must be case-insensitive, as defined for 'target-language' values
-            // http://docs.oasis-open.org/xliff/v1.2/os/xliff-core.html#target-language
+            
+            
+            
+            
             $expectedFilenamePattern = $this->requireStrictFileNames ? sprintf('/^.*\.(?i:%s)\.(?:xlf|xliff)/', $normalizedLocalePattern) : sprintf('/^(?:.*\.(?i:%s)|(?i:%s)\..*)\.(?:xlf|xliff)/', $normalizedLocalePattern, $normalizedLocalePattern);
 
             if (0 === preg_match($expectedFilenamePattern, basename($file))) {
@@ -174,7 +161,7 @@ EOF
                 ++$erroredFiles;
                 $io->text('<error> ERROR </error>'.($info['file'] ? sprintf(' in %s', $info['file']) : ''));
                 $io->listing(array_map(function ($error) use ($info, $githubReporter) {
-                    // general document errors have a '-1' line number
+                    
                     $line = -1 === $error['line'] ? null : $error['line'];
 
                     $githubReporter?->error($error['message'], $info['file'], $line, null !== $line ? $error['column'] : null);

@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Routing\Loader;
 
@@ -15,24 +8,13 @@ use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Routing\RouteCollection;
 
-/**
- * A route loader that calls a method on an object to load the routes.
- *
- * @author Ryan Weaver <ryan@knpuniversity.com>
- */
+
 abstract class ObjectLoader extends Loader
 {
-    /**
-     * Returns the object that the method will be called on to load routes.
-     *
-     * For example, if your application uses a service container,
-     * the $id may be a service id.
-     */
+    
     abstract protected function getObject(string $id): object;
 
-    /**
-     * Calls the object method that will load the routes.
-     */
+    
     public function load(mixed $resource, string $type = null): RouteCollection
     {
         if (!preg_match('/^[^\:]+(?:::(?:[^\:]+))?$/', $resource)) {
@@ -60,7 +42,7 @@ abstract class ObjectLoader extends Loader
             throw new \LogicException(sprintf('The "%s::%s()" method must return a RouteCollection: "%s" returned.', get_debug_type($loaderObject), $method, $type));
         }
 
-        // make the object file tracked so that if it changes, the cache rebuilds
+        
         $this->addClassResource(new \ReflectionClass($loaderObject), $routeCollection);
 
         return $routeCollection;

@@ -1,30 +1,4 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 import BaseFieldView from 'views/fields/base';
 import IntFieldView from 'views/fields/int';
@@ -40,7 +14,7 @@ class RangeIntFieldView extends BaseFieldView {
 
     validations = ['required', 'int', 'range', 'order']
 
-    // noinspection JSCheckFunctionSignatures
+    
     data() {
         const data = super.data();
 
@@ -48,7 +22,7 @@ class RangeIntFieldView extends BaseFieldView {
         data.fromValue = this.model.get(this.fromField);
         data.toValue = this.model.get(this.toField);
 
-        // noinspection JSValidateTypes
+        
         return data;
     }
 
@@ -107,9 +81,7 @@ class RangeIntFieldView extends BaseFieldView {
         this.setupAutoNumericOptions();
     }
 
-    /**
-     * @protected
-     */
+    
     setupAutoNumericOptions() {
         let separator = (!this.disableFormatting ? this.thousandSeparator : null) || '';
         let decimalCharacter = '.';
@@ -144,9 +116,9 @@ class RangeIntFieldView extends BaseFieldView {
             });
 
             if (this.autoNumericOptions) {
-                // noinspection JSUnusedGlobalSymbols
+                
                 this.autoNumericInstance1 = new AutoNumeric(this.$from.get(0), this.autoNumericOptions);
-                // noinspection JSUnusedGlobalSymbols
+                
                 this.autoNumericInstance2 = new AutoNumeric(this.$to.get(0), this.autoNumericOptions);
             }
         }
@@ -174,7 +146,7 @@ class RangeIntFieldView extends BaseFieldView {
         return result;
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     validateInt() {
         const validate = (name) => {
             if (isNaN(this.model.get(name))) {
@@ -195,7 +167,7 @@ class RangeIntFieldView extends BaseFieldView {
         return result;
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     validateRange() {
         const validate = (name) => {
             var value = this.model.get(name);
@@ -251,7 +223,7 @@ class RangeIntFieldView extends BaseFieldView {
         return result;
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     validateOrder() {
         let fromValue = this.model.get(this.fromField);
         let toValue = this.model.get(this.toField);

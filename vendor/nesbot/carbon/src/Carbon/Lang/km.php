@@ -1,21 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Kruy Vanna
- * - Sereysethy Touch
- * - JD Isaacks
- * - Sovichet Tep
- */
+
+
 return [
     'year' => '{1}មួយឆ្នាំ|]1,Inf[:count ឆ្នាំ',
     'y' => ':count ឆ្នាំ',

@@ -31,33 +31,22 @@ use const DB2_PARAM_IN;
 
 final class Statement implements StatementInterface
 {
-    /** @var resource */
+    
     private $stmt;
 
-    /** @var mixed[] */
+    
     private array $parameters = [];
 
-    /**
-     * Map of LOB parameter positions to the tuples containing reference to the variable bound to the driver statement
-     * and the temporary file handle bound to the underlying statement
-     *
-     * @var array<int,string|resource|null>
-     */
+    
     private array $lobs = [];
 
-    /**
-     * @internal The statement can be only instantiated by its driver connection.
-     *
-     * @param resource $stmt
-     */
+    
     public function __construct($stmt)
     {
         $this->stmt = $stmt;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function bindValue($param, $value, $type = ParameterType::STRING): bool
     {
         assert(is_int($param));
@@ -65,7 +54,7 @@ final class Statement implements StatementInterface
         if (func_num_args() < 3) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5558',
+                'https:
                 'Not passing $type to Statement::bindValue() is deprecated.'
                     . ' Pass the type corresponding to the parameter being bound.',
             );
@@ -74,16 +63,12 @@ final class Statement implements StatementInterface
         return $this->bindParam($param, $value, $type);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated Use {@see bindValue()} instead.
-     */
+    
     public function bindParam($param, &$variable, $type = ParameterType::STRING, $length = null): bool
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5563',
+            'https:
             '%s is deprecated. Use bindValue() instead.',
             __METHOD__,
         );
@@ -93,7 +78,7 @@ final class Statement implements StatementInterface
         if (func_num_args() < 3) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5558',
+                'https:
                 'Not passing $type to Statement::bindParam() is deprecated.'
                     . ' Pass the type corresponding to the parameter being bound.',
             );
@@ -116,12 +101,7 @@ final class Statement implements StatementInterface
         return true;
     }
 
-    /**
-     * @param int   $position Parameter position
-     * @param mixed $variable
-     *
-     * @throws Exception
-     */
+    
     private function bind($position, &$variable, int $parameterType, int $dataType): void
     {
         $this->parameters[$position] =& $variable;
@@ -131,15 +111,13 @@ final class Statement implements StatementInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function execute($params = null): ResultInterface
     {
         if ($params !== null) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5556',
+                'https:
                 'Passing $params to Statement::execute() is deprecated. Bind parameters using'
                     . ' Statement::bindParam() or Statement::bindValue() instead.',
             );
@@ -162,11 +140,7 @@ final class Statement implements StatementInterface
         return new Result($this->stmt);
     }
 
-    /**
-     * @return list<resource>
-     *
-     * @throws Exception
-     */
+    
     private function bindLobs(): array
     {
         $handles = [];
@@ -187,11 +161,7 @@ final class Statement implements StatementInterface
         return $handles;
     }
 
-    /**
-     * @return resource
-     *
-     * @throws Exception
-     */
+    
     private function createTemporaryFile()
     {
         $handle = @tmpfile();
@@ -203,12 +173,7 @@ final class Statement implements StatementInterface
         return $handle;
     }
 
-    /**
-     * @param resource $source
-     * @param resource $target
-     *
-     * @throws Exception
-     */
+    
     private function copyStreamToStream($source, $target): void
     {
         if (@stream_copy_to_stream($source, $target) === false) {

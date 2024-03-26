@@ -1,13 +1,6 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Monolog package.
- *
- * (c) Jordi Boggiano <j.boggiano@seld.be>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Monolog\Formatter;
 
@@ -16,21 +9,14 @@ use MongoDB\BSON\UTCDateTime;
 use Monolog\Utils;
 use Monolog\LogRecord;
 
-/**
- * Formats a record for use with the MongoDBHandler.
- *
- * @author Florian Plattner <me@florianplattner.de>
- */
+
 class MongoDBFormatter implements FormatterInterface
 {
     private bool $exceptionTraceAsString;
     private int $maxNestingLevel;
     private bool $isLegacyMongoExt;
 
-    /**
-     * @param int  $maxNestingLevel        0 means infinite nesting, the $record itself is level 1, $record->context is 2
-     * @param bool $exceptionTraceAsString set to false to log exception traces as a sub documents instead of strings
-     */
+    
     public function __construct(int $maxNestingLevel = 3, bool $exceptionTraceAsString = true)
     {
         $this->maxNestingLevel = max($maxNestingLevel, 0);
@@ -39,24 +25,16 @@ class MongoDBFormatter implements FormatterInterface
         $this->isLegacyMongoExt = extension_loaded('mongodb') && version_compare((string) phpversion('mongodb'), '1.1.9', '<=');
     }
 
-    /**
-     * @inheritDoc
-     *
-     * @return mixed[]
-     */
+    
     public function format(LogRecord $record): array
     {
-        /** @var mixed[] $res */
+        
         $res = $this->formatArray($record->toArray());
 
         return $res;
     }
 
-    /**
-     * @inheritDoc
-     *
-     * @return array<mixed[]>
-     */
+    
     public function formatBatch(array $records): array
     {
         $formatted = [];
@@ -67,10 +45,7 @@ class MongoDBFormatter implements FormatterInterface
         return $formatted;
     }
 
-    /**
-     * @param  mixed[]        $array
-     * @return mixed[]|string Array except when max nesting level is reached then a string "[...]"
-     */
+    
     protected function formatArray(array $array, int $nestingLevel = 0)
     {
         if ($this->maxNestingLevel > 0 && $nestingLevel > $this->maxNestingLevel) {
@@ -92,10 +67,7 @@ class MongoDBFormatter implements FormatterInterface
         return $array;
     }
 
-    /**
-     * @param  mixed          $value
-     * @return mixed[]|string
-     */
+    
     protected function formatObject($value, int $nestingLevel)
     {
         $objectVars = get_object_vars($value);
@@ -104,9 +76,7 @@ class MongoDBFormatter implements FormatterInterface
         return $this->formatArray($objectVars, $nestingLevel);
     }
 
-    /**
-     * @return mixed[]|string
-     */
+    
     protected function formatException(\Throwable $exception, int $nestingLevel)
     {
         $formattedException = [
@@ -139,18 +109,12 @@ class MongoDBFormatter implements FormatterInterface
         return new UTCDateTime((int) floor(((float) $value->format('U.u')) * 1000));
     }
 
-    /**
-     * This is needed to support MongoDB Driver v1.19 and below
-     *
-     * See https://github.com/mongodb/mongo-php-driver/issues/426
-     *
-     * It can probably be removed in 2.1 or later once MongoDB's 1.2 is released and widely adopted
-     */
+    
     private function legacyGetMongoDbDateTime(\DateTimeInterface $value): UTCDateTime
     {
         $milliseconds = floor(((float) $value->format('U.u')) * 1000);
 
-        $milliseconds = (PHP_INT_SIZE == 8) //64-bit OS?
+        $milliseconds = (PHP_INT_SIZE == 8) 
             ? (int) $milliseconds
             : (string) $milliseconds;
 

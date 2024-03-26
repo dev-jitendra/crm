@@ -14,14 +14,14 @@ final class Result implements ResultInterface
     private ?SQLite3Result $result;
     private int $changes;
 
-    /** @internal The result can be only instantiated by its driver connection or statement. */
+    
     public function __construct(SQLite3Result $result, int $changes)
     {
         $this->result  = $result;
         $this->changes = $changes;
     }
 
-    /** @inheritdoc */
+    
     public function fetchNumeric()
     {
         if ($this->result === null) {
@@ -31,7 +31,7 @@ final class Result implements ResultInterface
         return $this->result->fetchArray(SQLITE3_NUM);
     }
 
-    /** @inheritdoc */
+    
     public function fetchAssociative()
     {
         if ($this->result === null) {
@@ -41,25 +41,25 @@ final class Result implements ResultInterface
         return $this->result->fetchArray(SQLITE3_ASSOC);
     }
 
-    /** @inheritdoc */
+    
     public function fetchOne()
     {
         return FetchUtils::fetchOne($this);
     }
 
-    /** @inheritdoc */
+    
     public function fetchAllNumeric(): array
     {
         return FetchUtils::fetchAllNumeric($this);
     }
 
-    /** @inheritdoc */
+    
     public function fetchAllAssociative(): array
     {
         return FetchUtils::fetchAllAssociative($this);
     }
 
-    /** @inheritdoc */
+    
     public function fetchFirstColumn(): array
     {
         return FetchUtils::fetchFirstColumn($this);

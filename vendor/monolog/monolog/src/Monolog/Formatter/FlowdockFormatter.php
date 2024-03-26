@@ -1,24 +1,12 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Monolog package.
- *
- * (c) Jordi Boggiano <j.boggiano@seld.be>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Monolog\Formatter;
 
 use Monolog\LogRecord;
 
-/**
- * formats the record to be used in the FlowdockHandler
- *
- * @author Dominik Liebler <liebler.dominik@gmail.com>
- * @deprecated Since 2.9.0 and 3.3.0, Flowdock was shutdown we will thus drop this handler in Monolog 4
- */
+
 class FlowdockFormatter implements FormatterInterface
 {
     private string $source;
@@ -31,11 +19,7 @@ class FlowdockFormatter implements FormatterInterface
         $this->sourceEmail = $sourceEmail;
     }
 
-    /**
-     * @inheritDoc
-     *
-     * @return mixed[]
-     */
+    
     public function format(LogRecord $record): array
     {
         $tags = [
@@ -65,11 +49,7 @@ class FlowdockFormatter implements FormatterInterface
         ];
     }
 
-    /**
-     * @inheritDoc
-     *
-     * @return mixed[][]
-     */
+    
     public function formatBatch(array $records): array
     {
         $formatted = [];

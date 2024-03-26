@@ -1,32 +1,6 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/email/record/detail */
+
+
 
 import DetailRecordView from 'views/record/detail';
 
@@ -223,7 +197,7 @@ class EmailDetailRecordView extends DetailRecordView {
 
     controlSelectTemplateField() {
         if (this.mode === this.MODE_EDIT) {
-            // Not implemented for detail view yet.
+            
             this.hideField('selectTemplate');
 
             return;
@@ -252,7 +226,7 @@ class EmailDetailRecordView extends DetailRecordView {
         this.showActionItem('saveAndContinueEditing');
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionSaveDraft() {
         this.actionSaveAndContinueEditing();
     }
@@ -281,7 +255,7 @@ class EmailDetailRecordView extends DetailRecordView {
         }
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionRetrieveFromTrash() {
         Espo.Ajax.deleteRequest('Email/inbox/inTrash', {id: this.model.id}).then(() => {
             Espo.Ui.warning(this.translate('Retrieved from Trash', 'labels', 'Email'));
@@ -315,7 +289,7 @@ class EmailDetailRecordView extends DetailRecordView {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionShowBodyPlain() {
         this.createView('bodyPlain', 'views/email/modals/body-plain', {
             model: this.model
@@ -380,7 +354,7 @@ class EmailDetailRecordView extends DetailRecordView {
         return this.save();
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionSendFromDetail() {
         this.setEditMode()
             .then(() => {
@@ -391,7 +365,7 @@ class EmailDetailRecordView extends DetailRecordView {
             });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     exitAfterDelete() {
         let folderId = ((this.collection || {}).data || {}).folderId || null;
 
@@ -419,7 +393,7 @@ class EmailDetailRecordView extends DetailRecordView {
         return true;
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionViewUsers(data) {
         const viewName =
             this.getMetadata()
@@ -461,7 +435,7 @@ class EmailDetailRecordView extends DetailRecordView {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionSend() {
         this.send()
             .then(() => {
@@ -481,16 +455,16 @@ class EmailDetailRecordView extends DetailRecordView {
             });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionPrint() {
-        /** @type {module:views/fields/wysiwyg} */
+        
         const bodyView = this.getFieldView('body');
 
         if (!bodyView) {
             return;
         }
 
-        let iframe = /** @type HTMLIFrameElement */bodyView.$el.find('iframe').get(0);
+        let iframe = bodyView.$el.find('iframe').get(0);
 
         if (iframe) {
             iframe.contentWindow.print();
@@ -499,7 +473,7 @@ class EmailDetailRecordView extends DetailRecordView {
         }
 
         const el = bodyView.$el.get(0);
-        /** @type {Element} */
+        
         const recordElement = this.$el.get(0);
 
         iframe = document.createElement('iframe');
@@ -550,10 +524,7 @@ class EmailDetailRecordView extends DetailRecordView {
         this.showField('tasks');
     }
 
-    /**
-     * @protected
-     * @param {JQueryKeyEventObject} e
-     */
+    
     handleShortcutKeyCtrlS(e) {
         if (this.inlineEditModeIsOn || this.buttonsDisabled) {
             return;

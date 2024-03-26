@@ -1,18 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Neskie Manuel    bug-glibc-locales@gnu.org
- */
+
+
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [
         'L' => 'DD/MM/YY',
@@ -24,15 +14,15 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'weekdays_min' => ['Sxe', 'Spe', 'Sel', 'Ske', 'Sme', 'Sts', 'Stq'],
     'day_of_first_week_of_year' => 1,
 
-    'year' => ':count sqlélten', // less reliable
-    'y' => ':count sqlélten', // less reliable
-    'a_year' => ':count sqlélten', // less reliable
+    'year' => ':count sqlélten', 
+    'y' => ':count sqlélten', 
+    'a_year' => ':count sqlélten', 
 
-    'month' => ':count swewll', // less reliable
-    'm' => ':count swewll', // less reliable
-    'a_month' => ':count swewll', // less reliable
+    'month' => ':count swewll', 
+    'm' => ':count swewll', 
+    'a_month' => ':count swewll', 
 
-    'hour' => ':count seqwlút', // less reliable
-    'h' => ':count seqwlút', // less reliable
-    'a_hour' => ':count seqwlút', // less reliable
+    'hour' => ':count seqwlút', 
+    'h' => ':count seqwlút', 
+    'a_hour' => ':count seqwlút', 
 ]);

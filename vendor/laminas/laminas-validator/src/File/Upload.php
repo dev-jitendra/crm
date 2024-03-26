@@ -15,14 +15,10 @@ use function is_countable;
 use function is_string;
 use function is_uploaded_file;
 
-/**
- * Validator for the maximum size of a file up to a max of 2GB
- */
+
 class Upload extends AbstractValidator
 {
-    /**
-     * @const string Error constants
-     */
+    
     public const INI_SIZE       = 'fileUploadErrorIniSize';
     public const FORM_SIZE      = 'fileUploadErrorFormSize';
     public const PARTIAL        = 'fileUploadErrorPartial';
@@ -34,7 +30,7 @@ class Upload extends AbstractValidator
     public const FILE_NOT_FOUND = 'fileUploadErrorFileNotFound';
     public const UNKNOWN        = 'fileUploadErrorUnknown';
 
-    /** @var array<string, string> Error message templates */
+    
     protected $messageTemplates = [
         self::INI_SIZE       => "File '%value%' exceeds upload_max_filesize directive in php.ini",
         self::FORM_SIZE      => "File '%value%' exceeds the MAX_FILE_SIZE directive that was "
@@ -49,20 +45,12 @@ class Upload extends AbstractValidator
         self::UNKNOWN        => "Unknown error while uploading file '%value%'",
     ];
 
-    /** @var array<string, mixed> */
+    
     protected $options = [
         'files' => [],
     ];
 
-    /**
-     * Sets validator options
-     *
-     * The array $files must be given in syntax of Laminas\File\Transfer\Transfer to be checked
-     * If no files are given the $_FILES array will be used automatically.
-     * NOTE: This validator will only work with HTTP POST uploads!
-     *
-     * @param array|Traversable $options Array of files in syntax of \Laminas\File\Transfer\Transfer
-     */
+    
     public function __construct($options = [])
     {
         if (is_array($options) && ! array_key_exists('files', $options)) {
@@ -72,13 +60,7 @@ class Upload extends AbstractValidator
         parent::__construct($options);
     }
 
-    /**
-     * Returns the array of set files
-     *
-     * @param  string $file (Optional) The file to return in detail
-     * @return array
-     * @throws Exception\InvalidArgumentException If file is not found.
-     */
+    
     public function getFiles($file = null)
     {
         if ($file !== null) {
@@ -107,12 +89,7 @@ class Upload extends AbstractValidator
         return $this->options['files'];
     }
 
-    /**
-     * Sets the files to be checked
-     *
-     * @param  array $files The files to check in syntax of \Laminas\File\Transfer\Transfer
-     * @return $this Provides a fluent interface
-     */
+    
     public function setFiles($files = [])
     {
         if (
@@ -141,14 +118,7 @@ class Upload extends AbstractValidator
         return $this;
     }
 
-    /**
-     * Returns true if and only if the file was uploaded without errors
-     *
-     * @param  string $value Single file to check for upload errors, when giving null the $_FILES array
-     *                       from initialization will be used
-     * @param  mixed  $file
-     * @return bool
-     */
+    
     public function isValid($value, $file = null)
     {
         $files = [];
@@ -162,9 +132,9 @@ class Upload extends AbstractValidator
                         $files = array_merge($files, $this->getFiles($file));
                     }
 
-                    // PSR cannot search by tmp_name because it does not have
-                    // a public interface to get it, only user defined name
-                    // from form field.
+                    
+                    
+                    
                     continue;
                 }
 
@@ -191,12 +161,12 @@ class Upload extends AbstractValidator
             switch ($error) {
                 case 0:
                     if ($content instanceof UploadedFileInterface) {
-                        // done!
+                        
                         break;
                     }
 
-                    // For standard SAPI environments, check that the upload
-                    // was valid
+                    
+                    
                     if (! is_uploaded_file($content['tmp_name'])) {
                         $this->throwError($content, self::ATTACK);
                     }
@@ -243,13 +213,7 @@ class Upload extends AbstractValidator
         return true;
     }
 
-    /**
-     * Throws an error of the given type
-     *
-     * @param  array|string|UploadedFileInterface $file
-     * @param  string $errorType
-     * @return false
-     */
+    
     protected function throwError($file, $errorType)
     {
         if ($file !== null) {

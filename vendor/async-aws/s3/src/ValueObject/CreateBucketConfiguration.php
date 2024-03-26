@@ -5,22 +5,13 @@ namespace AsyncAws\S3\ValueObject;
 use AsyncAws\Core\Exception\InvalidArgument;
 use AsyncAws\S3\Enum\BucketLocationConstraint;
 
-/**
- * The configuration information for the bucket.
- */
+
 final class CreateBucketConfiguration
 {
-    /**
-     * Specifies the Region where the bucket will be created. If you don't specify a Region, the bucket is created in the US
-     * East (N. Virginia) Region (us-east-1).
-     */
+    
     private $locationConstraint;
 
-    /**
-     * @param array{
-     *   LocationConstraint?: null|BucketLocationConstraint::*,
-     * } $input
-     */
+    
     public function __construct(array $input)
     {
         $this->locationConstraint = $input['LocationConstraint'] ?? null;
@@ -31,17 +22,13 @@ final class CreateBucketConfiguration
         return $input instanceof self ? $input : new self($input);
     }
 
-    /**
-     * @return BucketLocationConstraint::*|null
-     */
+    
     public function getLocationConstraint(): ?string
     {
         return $this->locationConstraint;
     }
 
-    /**
-     * @internal
-     */
+    
     public function requestBody(\DomElement $node, \DomDocument $document): void
     {
         if (null !== $v = $this->locationConstraint) {

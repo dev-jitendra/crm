@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\ExternalAccount\Clients;
 
@@ -40,14 +14,14 @@ use DateTime;
 
 abstract class OAuth2Abstract implements IClient
 {
-    /** @var Client */
+    
     protected $client = null;
-    /** @var ?ClientManager */
+    
     protected $manager = null;
-    /** @var Log */
+    
     protected $log;
 
-    /** @var string[] */
+    
     protected $paramList = [
         'endpoint',
         'tokenEndpoint',
@@ -60,41 +34,30 @@ abstract class OAuth2Abstract implements IClient
         'expiresAt',
     ];
 
-    /** @var ?string */
+    
     protected $endpoint = null;
-    /**
-     * @noinspection PhpUnused
-     * @var ?string
-     */
+    
     protected $tokenEndpoint = null;
-    /**
-     * @noinspection PhpUnused
-     * @var ?string
-     */
+    
     protected $redirectUri = null;
-    /** @var ?string */
+    
     protected $clientId = null;
-    /** @var ?string */
+    
     protected $clientSecret = null;
-    /**
-     * @noinspection PhpUnused
-     * @var ?string
-     */
+    
     protected $tokenType = null;
-    /** @var ?string */
+    
     protected $accessToken = null;
-    /** @var ?string */
+    
     protected $refreshToken = null;
-    /** @var ?string */
+    
     protected $expiresAt = null;
 
     const ACCESS_TOKEN_EXPIRATION_MARGIN = '20 seconds';
     const LOCK_TIMEOUT = 5;
     const LOCK_CHECK_STEP = 0.5;
 
-    /**
-     * @param array<string, mixed> $params
-     */
+    
     public function __construct(
         Client $client,
         array $params = [],
@@ -108,10 +71,7 @@ abstract class OAuth2Abstract implements IClient
         $this->setParams($params);
     }
 
-    /**
-     * @param string $name
-     * @return mixed
-     */
+    
     public function getParam($name)
     {
         if (in_array($name, $this->paramList)) {
@@ -121,11 +81,7 @@ abstract class OAuth2Abstract implements IClient
         return null;
     }
 
-    /**
-     * @param string $name
-     * @param mixed $value
-     * @return void
-     */
+    
     public function setParam($name, $value)
     {
         if (in_array($name, $this->paramList)) {
@@ -139,10 +95,7 @@ abstract class OAuth2Abstract implements IClient
         }
     }
 
-    /**
-     * @param array<string, mixed> $params
-     * @return void
-     */
+    
     public function setParams(array $params)
     {
         foreach ($this->paramList as $name) {
@@ -152,16 +105,7 @@ abstract class OAuth2Abstract implements IClient
         }
     }
 
-    /**
-     * @param array{
-     *   accessToken: ?string,
-     *   tokenType: ?string,
-     *   expiresAt?: ?string,
-     *   refreshToken?: ?string
-     * } $data
-     * @return void
-     * @throws Error
-     */
+    
     protected function afterTokenRefreshed(array $data): void
     {
         if ($this->manager) {
@@ -169,15 +113,7 @@ abstract class OAuth2Abstract implements IClient
         }
     }
 
-    /**
-     * @param array<string, mixed> $result
-     * @return array{
-     *   accessToken: ?string,
-     *   tokenType: ?string,
-     *   refreshToken: ?string,
-     *   expiresAt: ?string,
-     * }
-     */
+    
     protected function getAccessTokenDataFromResponseResult($result): array
     {
         $data = [];
@@ -197,26 +133,11 @@ abstract class OAuth2Abstract implements IClient
                 ->format('Y-m-d H:i:s');
         }
 
-        /**
-         * @var array{
-         *   accessToken: ?string,
-         *   tokenType: ?string,
-         *   refreshToken: ?string,
-         *   expiresAt: ?string,
-         * }
-         */
+        
         return $data;
     }
 
-    /**
-     * @return ?array{
-     *   accessToken: ?string,
-     *   tokenType: ?string,
-     *   expiresAt: ?string,
-     *   refreshToken: ?string,
-     * }
-     * @throws Exception
-     */
+    
     public function getAccessTokenFromAuthorizationCode(string $code)
     {
         $response = $this->client->getAccessToken(
@@ -230,21 +151,14 @@ abstract class OAuth2Abstract implements IClient
 
         if ($response['code'] == 200) {
             if (!empty($response['result'])) {
-                /** @var array<string, mixed> $result */
+                
                 $result = $response['result'];
 
                 $data = $this->getAccessTokenDataFromResponseResult($result);
 
                 $data['refreshToken'] = $result['refresh_token'] ?? null;
 
-                /**
-                 * @var ?array{
-                 *   accessToken: ?string,
-                 *   tokenType: ?string,
-                 *   expiresAt: ?string,
-                 *   refreshToken: ?string,
-                 * }
-                 */
+                
                 return $data;
             }
             else {
@@ -260,14 +174,10 @@ abstract class OAuth2Abstract implements IClient
         return null;
     }
 
-    /**
-     * @return string
-     */
+    
     abstract protected function getPingUrl();
 
-    /**
-     * @return bool
-     */
+    
     public function ping()
     {
         if (empty($this->accessToken) || empty($this->clientId) || empty($this->clientSecret)) {
@@ -286,10 +196,7 @@ abstract class OAuth2Abstract implements IClient
         }
     }
 
-    /**
-     * @return void
-     * @throws Error
-     */
+    
     public function handleAccessTokenActuality()
     {
         if (!$this->getParam('expiresAt')) {
@@ -324,7 +231,7 @@ abstract class OAuth2Abstract implements IClient
         while (true) {
             usleep($this::LOCK_CHECK_STEP * 1000000);
 
-            if (!$this->isLocked()) { /** @phpstan-ignore-line */
+            if (!$this->isLocked()) { 
                 $this->log->debug("Oauth: Waited until unlocked for client {$this->clientId}.");
 
                 $this->reFetch();
@@ -380,16 +287,7 @@ abstract class OAuth2Abstract implements IClient
         $this->manager->reFetchClient($this);
     }
 
-    /**
-     * @param string $url
-     * @param array<string, mixed>|string|null $params
-     * @param string $httpMethod
-     * @param ?string $contentType
-     * @param bool $allowRenew
-     * @return mixed
-     *
-     * @throws Error
-     */
+    
     public function request(
         $url,
         $params = null,
@@ -463,10 +361,7 @@ abstract class OAuth2Abstract implements IClient
         throw new Error("Oauth: Error after requesting {$httpMethod} {$url}{$reasonPart}.", (int) $code);
     }
 
-    /**
-     * @return bool
-     * @throws Error
-     */
+    
     protected function refreshToken()
     {
         if (empty($this->refreshToken)) {
@@ -512,12 +407,7 @@ abstract class OAuth2Abstract implements IClient
         return false;
     }
 
-    /**
-     * @param array<string, mixed> $r
-     * @return ?array{
-     *   action: string,
-     * }
-     */
+    
     protected function handleErrorResponse($r)
     {
         if ($r['code'] == 401 && !empty($r['result'])) {

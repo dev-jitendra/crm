@@ -6,14 +6,7 @@ use Picqer\Barcode\Barcode;
 use Picqer\Barcode\Exceptions\InvalidCharacterException;
 use Picqer\Barcode\Helpers\BinarySequenceConverter;
 
-/*
- * MSI.
- * Variation of Plessey code, with similar applications
- * Contains digits (0 to 9) and encodes the data only in the width of bars.
- *
- * @param $code (string) code to represent.
- * @param $checksum (boolean) if true add a checksum to the code (modulo 11)
- */
+
 
 class TypeMsiChecksum implements TypeInterface
 {
@@ -38,7 +31,7 @@ class TypeMsiChecksum implements TypeInterface
         $chr['E'] = '110110110100';
         $chr['F'] = '110110110110';
         if ($this->checksum) {
-            // add checksum
+            
             $clen = strlen($code);
             $p = 2;
             $check = 0;
@@ -55,7 +48,7 @@ class TypeMsiChecksum implements TypeInterface
             }
             $code .= $check;
         }
-        $seq = '110'; // left guard
+        $seq = '110'; 
         $clen = strlen($code);
         for ($i = 0; $i < $clen; ++$i) {
             $digit = $code[$i];
@@ -64,7 +57,7 @@ class TypeMsiChecksum implements TypeInterface
             }
             $seq .= $chr[$digit];
         }
-        $seq .= '1001'; // right guard
+        $seq .= '1001'; 
 
         return BinarySequenceConverter::convert($code, $seq);
     }

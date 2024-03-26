@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\FieldManager;
 
@@ -41,14 +15,12 @@ use Espo\Core\Utils\Util;
 
 use stdClass;
 
-/**
- * Field Manager tool. Administration > Entity Manager > fields.
- */
+
 class FieldManager
 {
     private bool $isChanged = false;
 
-    /** @var string[] */
+    
     private $forbiddenFieldNameList = [
         'id',
         'deleted',
@@ -60,7 +32,7 @@ class FieldManager
         'true',
     ];
 
-    /** @var string[] */
+    
     private $forbiddenAnyCaseFieldNameList = [
         'id',
         'deleted',
@@ -70,7 +42,7 @@ class FieldManager
         'system',
     ];
 
-    // 64 - margin (for attribute name suffixes and prefixes)
+    
     private const MAX_NAME_LENGTH = 50;
 
     public function __construct(
@@ -81,10 +53,7 @@ class FieldManager
         private MetadataHelper $metadataHelper
     ) {}
 
-    /**
-     * @return array<string, mixed>
-     * @throws Error
-     */
+    
     public function read(string $scope, string $name): array
     {
         $fieldDefs = $this->getFieldDefs($scope, $name);
@@ -102,13 +71,7 @@ class FieldManager
         return $fieldDefs;
     }
 
-    /**
-     * @param array<string, mixed> $fieldDefs
-     * @return bool
-     * @throws BadRequest
-     * @throws Conflict
-     * @throws Error
-     */
+    
     public function create(string $scope, string $name, array $fieldDefs)
     {
         if (strlen($name) === 0) {
@@ -181,10 +144,7 @@ class FieldManager
         return $this->update($scope, $name, $fieldDefs, true);
     }
 
-    /**
-     * @param array<string, mixed> $fieldDefs
-     * @return bool
-     */
+    
     public function update(string $scope, string $name, array $fieldDefs, bool $isNew = false)
     {
         $name = trim($name);
@@ -402,10 +362,7 @@ class FieldManager
         return (bool) $result;
     }
 
-    /**
-     * @param array<string, mixed> $clientDefs
-     * @param string $name
-     */
+    
     protected function prepareClientDefsFieldsDynamicLogic(&$clientDefs, $name): void
     {
         if (!array_key_exists('dynamicLogic', $clientDefs)) {
@@ -421,10 +378,7 @@ class FieldManager
         }
     }
 
-    /**
-     * @param array<string, mixed> $clientDefs
-     * @param string $name
-     */
+    
     protected function prepareClientDefsOptionsDynamicLogic(&$clientDefs, $name): void
     {
         if (!array_key_exists('dynamicLogic', $clientDefs)) {
@@ -440,10 +394,7 @@ class FieldManager
         }
     }
 
-    /**
-     * @return bool
-     * @throws Error
-     */
+    
     public function delete(string $scope, string $name)
     {
         if ($this->isCore($scope, $name)) {
@@ -495,9 +446,7 @@ class FieldManager
         return (bool) $res;
     }
 
-    /**
-     * @throws Error
-     */
+    
     public function resetToDefault(string $scope, string $name): void
     {
         if (!$this->isCore($scope, $name)) {
@@ -524,9 +473,7 @@ class FieldManager
         $this->language->save();
     }
 
-    /**
-     * @param array<string, string> $value
-     */
+    
     protected function setTranslatedOptions(
         string $scope,
         string $name,
@@ -586,10 +533,7 @@ class FieldManager
         $this->baseLanguage->delete($scope, 'options', $name);
     }
 
-    /**
-     * @param ?stdClass $default
-     * @return ?array<string, mixed>
-     */
+    
     protected function getFieldDefs(string $scope, string $name, $default = null)
     {
         $defs = $this->metadata->getObjects(['entityDefs', $scope, 'fields', $name], $default);
@@ -601,10 +545,7 @@ class FieldManager
         return $defs;
     }
 
-    /**
-     * @param ?array<string, mixed> $default
-     * @return ?array<string, mixed>
-     */
+    
     protected function getCustomFieldDefs(string $scope, string $name, $default = null)
     {
         $customDefs = $this->metadata->getCustom('entityDefs', $scope, (object) []);
@@ -616,9 +557,7 @@ class FieldManager
         return $default;
     }
 
-    /**
-     * @param stdClass $newDefs
-     */
+    
     protected function saveCustomEntityDefs(string $scope, $newDefs): bool
     {
         $customDefs = $this->metadata->getCustom('entityDefs', $scope, (object) []);
@@ -648,18 +587,13 @@ class FieldManager
         return true;
     }
 
-    /**
-     * @return array<string, mixed>
-     */
+    
     protected function getLinkDefs(string $scope, string $name)
     {
         return $this->metadata->get('entityDefs' . '.' . $scope . '.links.' . $name);
     }
 
-    /**
-     * @param array<string, mixed> $fieldDefs
-     * @return array<string, mixed>
-     */
+    
     protected function prepareFieldDefs(string $scope, string $name, $fieldDefs)
     {
         $additionalParamList = [
@@ -768,13 +702,11 @@ class FieldManager
             }
         }
 
-        /** @var array<string, mixed> */
+        
         return $filteredFieldDefs;
     }
 
-    /**
-     * @param array<string, mixed> $fieldDefs
-     */
+    
     protected function normalizeDefs(string $scope, string $fieldName, array $fieldDefs): stdClass
     {
         $defs = new stdClass();
@@ -787,7 +719,7 @@ class FieldManager
             ];
         }
 
-        /** Save links for a field. */
+        
         $linkDefs = isset($fieldDefs['linkDefs']) ? $fieldDefs['linkDefs'] : null;
         $metaLinkDefs = $this->metadataHelper->getLinkDefsInFieldMeta($scope, $fieldDefs);
 
@@ -822,11 +754,7 @@ class FieldManager
         return false;
     }
 
-    /**
-     * @param string $name
-     * @param array<string, mixed> $defs
-     * @param array<string, mixed> $options
-     */
+    
     protected function processHook(
         string $methodName,
         ?string $type,
@@ -855,7 +783,7 @@ class FieldManager
 
     protected function getHook(string $type): ?object
     {
-        /** @var ?class-string $className */
+        
         $className = $this->metadata->get(['fields', $type, 'hookClassName']);
 
         if (!$className) {

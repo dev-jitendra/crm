@@ -1,42 +1,11 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 import LinkMultipleFieldView from 'views/fields/link-multiple';
 
-/**
- * A link-multiple field with a primary.
- */
+
 class LinkMultipleWithPrimaryFieldView extends LinkMultipleFieldView {
 
-    /**
-     * @protected
-     * @type {string}
-     */
+    
     primaryLink
 
     switchPrimary(id) {
@@ -54,9 +23,7 @@ class LinkMultipleWithPrimaryFieldView extends LinkMultipleFieldView {
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     getAttributeList() {
         const list = super.getAttributeList();
 
@@ -91,10 +58,7 @@ class LinkMultipleWithPrimaryFieldView extends LinkMultipleFieldView {
         };
     }
 
-    /**
-     * @protected
-     * @param {string|null} id An ID.
-     */
+    
     setPrimaryId(id) {
         this.primaryId = id;
 
@@ -104,9 +68,7 @@ class LinkMultipleWithPrimaryFieldView extends LinkMultipleFieldView {
         this.trigger('change');
     }
 
-    /**
-     * @protected
-     */
+    
     renderLinks() {
         if (this.primaryId) {
             this.addLinkHtml(this.primaryId, this.primaryName);
@@ -119,9 +81,7 @@ class LinkMultipleWithPrimaryFieldView extends LinkMultipleFieldView {
         });
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     getValueForDisplay() {
         if (this.isDetailMode() || this.isListMode()) {
             let itemList = [];
@@ -146,9 +106,7 @@ class LinkMultipleWithPrimaryFieldView extends LinkMultipleFieldView {
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     deleteLink(id) {
         if (id === this.primaryId) {
             this.setPrimaryId(null);
@@ -157,20 +115,16 @@ class LinkMultipleWithPrimaryFieldView extends LinkMultipleFieldView {
         super.deleteLink(id);
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     deleteLinkHtml(id) {
         super.deleteLinkHtml(id);
 
         this.managePrimaryButton();
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     addLinkHtml(id, name) {
-        // Do not use the `html` method to avoid XSS.
+        
 
         name = name || id;
 
@@ -230,9 +184,7 @@ class LinkMultipleWithPrimaryFieldView extends LinkMultipleFieldView {
         return $el;
     }
 
-    /**
-     * @protected
-     */
+    
     managePrimaryButton() {
         let $primary = this.$el.find('button[data-action="switchPrimary"]');
 
@@ -260,7 +212,7 @@ class LinkMultipleWithPrimaryFieldView extends LinkMultipleFieldView {
         data[this.primaryIdAttribute] = this.primaryId;
         data[this.primaryNameAttribute] = this.primaryName;
 
-        // noinspection JSValidateTypes
+        
         return data;
     }
 }

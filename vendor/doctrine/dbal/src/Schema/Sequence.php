@@ -8,26 +8,19 @@ use Doctrine\Deprecations\Deprecation;
 use function count;
 use function sprintf;
 
-/**
- * Sequence structure.
- */
+
 class Sequence extends AbstractAsset
 {
-    /** @var int */
+    
     protected $allocationSize = 1;
 
-    /** @var int */
+    
     protected $initialValue = 1;
 
-    /** @var int|null */
+    
     protected $cache;
 
-    /**
-     * @param string   $name
-     * @param int      $allocationSize
-     * @param int      $initialValue
-     * @param int|null $cache
-     */
+    
     public function __construct($name, $allocationSize = 1, $initialValue = 1, $cache = null)
     {
         $this->_setName($name);
@@ -36,29 +29,25 @@ class Sequence extends AbstractAsset
         $this->cache = $cache;
     }
 
-    /** @return int */
+    
     public function getAllocationSize()
     {
         return $this->allocationSize;
     }
 
-    /** @return int */
+    
     public function getInitialValue()
     {
         return $this->initialValue;
     }
 
-    /** @return int|null */
+    
     public function getCache()
     {
         return $this->cache;
     }
 
-    /**
-     * @param int $allocationSize
-     *
-     * @return Sequence
-     */
+    
     public function setAllocationSize($allocationSize)
     {
         if ($allocationSize > 0) {
@@ -70,11 +59,7 @@ class Sequence extends AbstractAsset
         return $this;
     }
 
-    /**
-     * @param int $initialValue
-     *
-     * @return Sequence
-     */
+    
     public function setInitialValue($initialValue)
     {
         if ($initialValue > 0) {
@@ -86,11 +71,7 @@ class Sequence extends AbstractAsset
         return $this;
     }
 
-    /**
-     * @param int $cache
-     *
-     * @return Sequence
-     */
+    
     public function setCache($cache)
     {
         $this->cache = $cache;
@@ -98,14 +79,7 @@ class Sequence extends AbstractAsset
         return $this;
     }
 
-    /**
-     * Checks if this sequence is an autoincrement sequence for a given table.
-     *
-     * This is used inside the comparator to not report sequences as missing,
-     * when the "from" schema implicitly creates the sequences.
-     *
-     * @return bool
-     */
+    
     public function isAutoIncrementsFor(Table $table)
     {
         $primaryKey = $table->getPrimaryKey();
@@ -133,16 +107,12 @@ class Sequence extends AbstractAsset
         return $tableSequenceName === $sequenceName;
     }
 
-    /**
-     * @deprecated
-     *
-     * @return void
-     */
+    
     public function visit(Visitor $visitor)
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5435',
+            'https:
             'Sequence::visit() is deprecated.',
         );
 

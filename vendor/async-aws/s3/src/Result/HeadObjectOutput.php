@@ -14,176 +14,93 @@ use AsyncAws\S3\Enum\StorageClass;
 
 class HeadObjectOutput extends Result
 {
-    /**
-     * Specifies whether the object retrieved was (true) or was not (false) a Delete Marker. If false, this response header
-     * does not appear in the response.
-     */
+    
     private $deleteMarker;
 
-    /**
-     * Indicates that a range of bytes was specified.
-     */
+    
     private $acceptRanges;
 
-    /**
-     * If the object expiration is configured (see PUT Bucket lifecycle), the response includes this header. It includes the
-     * expiry-date and rule-id key-value pairs providing object expiration information. The value of the rule-id is URL
-     * encoded.
-     */
+    
     private $expiration;
 
-    /**
-     * If the object is an archived object (an object whose storage class is GLACIER), the response includes this header if
-     * either the archive restoration is in progress (see RestoreObject or an archive copy is already restored.
-     *
-     * @see https://docs.aws.amazon.com/AmazonS3/latest/API/API_RestoreObject.html
-     */
+    
     private $restore;
 
-    /**
-     * The archive state of the head object.
-     */
+    
     private $archiveStatus;
 
-    /**
-     * Last modified date of the object.
-     */
+    
     private $lastModified;
 
-    /**
-     * Size of the body in bytes.
-     */
+    
     private $contentLength;
 
-    /**
-     * An ETag is an opaque identifier assigned by a web server to a specific version of a resource found at a URL.
-     */
+    
     private $etag;
 
-    /**
-     * This is set to the number of metadata entries not returned in `x-amz-meta` headers. This can happen if you create
-     * metadata using an API like SOAP that supports more flexible metadata than the REST API. For example, using SOAP, you
-     * can create metadata whose values are not legal HTTP headers.
-     */
+    
     private $missingMeta;
 
-    /**
-     * Version of the object.
-     */
+    
     private $versionId;
 
-    /**
-     * Specifies caching behavior along the request/reply chain.
-     */
+    
     private $cacheControl;
 
-    /**
-     * Specifies presentational information for the object.
-     */
+    
     private $contentDisposition;
 
-    /**
-     * Specifies what content encodings have been applied to the object and thus what decoding mechanisms must be applied to
-     * obtain the media-type referenced by the Content-Type header field.
-     */
+    
     private $contentEncoding;
 
-    /**
-     * The language the content is in.
-     */
+    
     private $contentLanguage;
 
-    /**
-     * A standard MIME type describing the format of the object data.
-     */
+    
     private $contentType;
 
-    /**
-     * The date and time at which the object is no longer cacheable.
-     */
+    
     private $expires;
 
-    /**
-     * If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or
-     * to an external URL. Amazon S3 stores the value of this header in the object metadata.
-     */
+    
     private $websiteRedirectLocation;
 
-    /**
-     * If the object is stored using server-side encryption either with an AWS KMS customer master key (CMK) or an Amazon
-     * S3-managed encryption key, the response includes this header with the value of the server-side encryption algorithm
-     * used when storing this object in Amazon S3 (for example, AES256, aws:kms).
-     */
+    
     private $serverSideEncryption;
 
-    /**
-     * A map of metadata to store with the object in S3.
-     */
+    
     private $metadata = [];
 
-    /**
-     * If server-side encryption with a customer-provided encryption key was requested, the response will include this
-     * header confirming the encryption algorithm used.
-     */
+    
     private $sseCustomerAlgorithm;
 
-    /**
-     * If server-side encryption with a customer-provided encryption key was requested, the response will include this
-     * header to provide round-trip message integrity verification of the customer-provided encryption key.
-     */
+    
     private $sseCustomerKeyMd5;
 
-    /**
-     * If present, specifies the ID of the AWS Key Management Service (AWS KMS) symmetric customer managed customer master
-     * key (CMK) that was used for the object.
-     */
+    
     private $sseKmsKeyId;
 
-    /**
-     * Indicates whether the object uses an S3 Bucket Key for server-side encryption with AWS KMS (SSE-KMS).
-     */
+    
     private $bucketKeyEnabled;
 
-    /**
-     * Provides storage class information of the object. Amazon S3 returns this header for all objects except for S3
-     * Standard storage class objects.
-     */
+    
     private $storageClass;
 
     private $requestCharged;
 
-    /**
-     * Amazon S3 can return this header if your request involves a bucket that is either a source or a destination in a
-     * replication rule.
-     */
+    
     private $replicationStatus;
 
-    /**
-     * The count of parts this object has.
-     */
+    
     private $partsCount;
 
-    /**
-     * The Object Lock mode, if any, that's in effect for this object. This header is only returned if the requester has the
-     * `s3:GetObjectRetention` permission. For more information about S3 Object Lock, see Object Lock.
-     *
-     * @see https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lock.html
-     */
+    
     private $objectLockMode;
 
-    /**
-     * The date and time when the Object Lock retention period expires. This header is only returned if the requester has
-     * the `s3:GetObjectRetention` permission.
-     */
+    
     private $objectLockRetainUntilDate;
 
-    /**
-     * Specifies whether a legal hold is in effect for this object. This header is only returned if the requester has the
-     * `s3:GetObjectLegalHold` permission. This header is not returned if the specified version of this object has never had
-     * a legal hold applied. For more information about S3 Object Lock, see Object Lock.
-     *
-     * @see https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lock.html
-     */
+    
     private $objectLockLegalHoldStatus;
 
     public function getAcceptRanges(): ?string
@@ -193,9 +110,7 @@ class HeadObjectOutput extends Result
         return $this->acceptRanges;
     }
 
-    /**
-     * @return ArchiveStatus::*|null
-     */
+    
     public function getArchiveStatus(): ?string
     {
         $this->initialize();
@@ -287,9 +202,7 @@ class HeadObjectOutput extends Result
         return $this->lastModified;
     }
 
-    /**
-     * @return array<string, string>
-     */
+    
     public function getMetadata(): array
     {
         $this->initialize();
@@ -304,9 +217,7 @@ class HeadObjectOutput extends Result
         return $this->missingMeta;
     }
 
-    /**
-     * @return ObjectLockLegalHoldStatus::*|null
-     */
+    
     public function getObjectLockLegalHoldStatus(): ?string
     {
         $this->initialize();
@@ -314,9 +225,7 @@ class HeadObjectOutput extends Result
         return $this->objectLockLegalHoldStatus;
     }
 
-    /**
-     * @return ObjectLockMode::*|null
-     */
+    
     public function getObjectLockMode(): ?string
     {
         $this->initialize();
@@ -338,9 +247,7 @@ class HeadObjectOutput extends Result
         return $this->partsCount;
     }
 
-    /**
-     * @return ReplicationStatus::*|null
-     */
+    
     public function getReplicationStatus(): ?string
     {
         $this->initialize();
@@ -348,9 +255,7 @@ class HeadObjectOutput extends Result
         return $this->replicationStatus;
     }
 
-    /**
-     * @return RequestCharged::*|null
-     */
+    
     public function getRequestCharged(): ?string
     {
         $this->initialize();
@@ -365,9 +270,7 @@ class HeadObjectOutput extends Result
         return $this->restore;
     }
 
-    /**
-     * @return ServerSideEncryption::*|null
-     */
+    
     public function getServerSideEncryption(): ?string
     {
         $this->initialize();
@@ -396,9 +299,7 @@ class HeadObjectOutput extends Result
         return $this->sseKmsKeyId;
     }
 
-    /**
-     * @return StorageClass::*|null
-     */
+    
     public function getStorageClass(): ?string
     {
         $this->initialize();

@@ -6,21 +6,13 @@ namespace AsyncAws\Core\Stream;
 
 use AsyncAws\Core\Exception\RuntimeException;
 
-/**
- * Provides a ResultStream from a resource filled by an HTTP response body.
- *
- * @author Jérémy Derussé <jeremy@derusse.com>
- */
+
 class ResponseBodyResourceStream implements ResultStream
 {
-    /**
-     * @var resource
-     */
+    
     private $resource;
 
-    /**
-     * @param resource $resource
-     */
+    
     public function __construct($resource)
     {
         $this->resource = $resource;
@@ -31,9 +23,7 @@ class ResponseBodyResourceStream implements ResultStream
         return $this->getContentAsString();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getChunks(): iterable
     {
         $pos = ftell($this->resource);
@@ -50,9 +40,7 @@ class ResponseBodyResourceStream implements ResultStream
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getContentAsString(): string
     {
         $pos = ftell($this->resource);
@@ -68,9 +56,7 @@ class ResponseBodyResourceStream implements ResultStream
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getContentAsResource()
     {
         if (!rewind($this->resource)) {

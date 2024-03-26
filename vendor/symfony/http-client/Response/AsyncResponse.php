@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpClient\Response;
 
@@ -22,11 +15,7 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-/**
- * Provides a single extension point to process a response's content stream.
- *
- * @author Nicolas Grekas <p@tchwork.com>
- */
+
 final class AsyncResponse implements ResponseInterface, StreamableInterface
 {
     use CommonResponseTrait;
@@ -41,9 +30,7 @@ final class AsyncResponse implements ResponseInterface, StreamableInterface
     private $stream;
     private $yieldedState;
 
-    /**
-     * @param ?callable(ChunkInterface, AsyncContext): ?\Iterator $passthru
-     */
+    
     public function __construct(HttpClientInterface $client, string $method, string $url, array $options, callable $passthru = null)
     {
         $this->client = $client;
@@ -120,13 +107,11 @@ final class AsyncResponse implements ResponseInterface, StreamableInterface
         return $this->info + $this->response->getInfo();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function toStream(bool $throw = true)
     {
         if ($throw) {
-            // Ensure headers arrived
+            
             $this->getHeaders(true);
         }
 
@@ -143,9 +128,7 @@ final class AsyncResponse implements ResponseInterface, StreamableInterface
         return $stream;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function cancel(): void
     {
         if ($this->info['canceled']) {
@@ -164,12 +147,12 @@ final class AsyncResponse implements ResponseInterface, StreamableInterface
 
         try {
             foreach (self::passthru($client, $this, new LastChunk()) as $chunk) {
-                // no-op
+                
             }
 
             $this->passthru = null;
         } catch (ExceptionInterface $e) {
-            // ignore any errors when canceling
+            
         }
     }
 
@@ -181,7 +164,7 @@ final class AsyncResponse implements ResponseInterface, StreamableInterface
             try {
                 $this->getHeaders(true);
             } catch (HttpExceptionInterface $httpException) {
-                // no-op
+                
             }
         }
 
@@ -190,10 +173,10 @@ final class AsyncResponse implements ResponseInterface, StreamableInterface
 
             try {
                 foreach (self::passthru($this->client, $this, new LastChunk()) as $chunk) {
-                    // no-op
+                    
                 }
             } catch (ExceptionInterface $e) {
-                // ignore any errors when destructing
+                
             }
         }
 
@@ -202,9 +185,7 @@ final class AsyncResponse implements ResponseInterface, StreamableInterface
         }
     }
 
-    /**
-     * @internal
-     */
+    
     public static function stream(iterable $responses, float $timeout = null, string $class = null): \Generator
     {
         while ($responses) {
@@ -255,10 +236,10 @@ final class AsyncResponse implements ResponseInterface, StreamableInterface
 
                 if (null === $chunk->getError()) {
                     if ($chunk->isFirst()) {
-                        // Ensure no exception is thrown on destruct for the wrapped response
+                        
                         $r->response->getStatusCode();
                     } elseif (0 === $r->offset && null === $r->content && $chunk->isLast()) {
-                        $r->content = fopen('php://memory', 'w+');
+                        $r->content = fopen('php:
                     }
                 }
 
@@ -276,7 +257,7 @@ final class AsyncResponse implements ResponseInterface, StreamableInterface
                 }
 
                 if (null !== $chunk->getError()) {
-                    // no-op
+                    
                 } elseif ($chunk->isFirst()) {
                     $r->yieldedState = self::FIRST_CHUNK_YIELDED;
                 } elseif (self::FIRST_CHUNK_YIELDED !== $r->yieldedState && null === $chunk->getInformationalStatus()) {
@@ -361,14 +342,14 @@ final class AsyncResponse implements ResponseInterface, StreamableInterface
             }
 
             if (null !== $chunk->getError()) {
-                // no-op
+                
             } elseif ($chunk->isFirst()) {
                 $e = $r->openBuffer();
 
                 yield $r => $chunk;
 
                 if ($r->initializer && null === $r->getInfo('error')) {
-                    // Ensure the HTTP status code is always checked
+                    
                     $r->getHeaders(true);
                 }
 
@@ -453,7 +434,7 @@ final class AsyncResponse implements ResponseInterface, StreamableInterface
         }
 
         if (true === $shouldBuffer) {
-            $this->content = fopen('php://temp', 'w+');
+            $this->content = fopen('php:
         } elseif (\is_resource($shouldBuffer)) {
             $this->content = $shouldBuffer;
         }

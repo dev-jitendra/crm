@@ -2,9 +2,7 @@
 namespace Ratchet\Http;
 use Ratchet\AbstractMessageComponentTestCase;
 
-/**
- * @covers Ratchet\Http\OriginCheck
- */
+
 class OriginCheckTest extends AbstractMessageComponentTestCase {
     protected $_reqStub;
 

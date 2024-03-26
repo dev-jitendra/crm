@@ -1,13 +1,6 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Monolog package.
- *
- * (c) Jordi Boggiano <j.boggiano@seld.be>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Monolog;
 
@@ -39,25 +32,21 @@ final class Utils
         return substr($string, $start, (null === $length) ? strlen($string) : $length);
     }
 
-    /**
-     * Makes sure if a relative path is passed in it is turned into an absolute path
-     *
-     * @param string $streamUrl stream URL or path without protocol
-     */
+    
     public static function canonicalizePath(string $streamUrl): string
     {
         $prefix = '';
-        if ('file://' === substr($streamUrl, 0, 7)) {
+        if ('file:
             $streamUrl = substr($streamUrl, 7);
-            $prefix = 'file://';
+            $prefix = 'file:
         }
 
-        // other type of stream, not supported
-        if (false !== strpos($streamUrl, '://')) {
+        
+        if (false !== strpos($streamUrl, ':
             return $streamUrl;
         }
 
-        // already absolute
+        
         if (substr($streamUrl, 0, 1) === '/' || substr($streamUrl, 1, 1) === ':' || substr($streamUrl, 0, 2) === '\\\\') {
             return $prefix.$streamUrl;
         }
@@ -67,15 +56,7 @@ final class Utils
         return $prefix.$streamUrl;
     }
 
-    /**
-     * Return the JSON representation of a value
-     *
-     * @param  mixed             $data
-     * @param  int               $encodeFlags  flags to pass to json encode, defaults to DEFAULT_JSON_FLAGS
-     * @param  bool              $ignoreErrors whether to ignore encoding errors or to throw on error, when ignored and the encoding fails, "null" is returned which is valid json for null
-     * @throws \RuntimeException if encoding fails and errors are not ignored
-     * @return string            when errors are ignored and the encoding fails, "null" is returned which is valid json for null
-     */
+    
     public static function jsonEncode($data, ?int $encodeFlags = null, bool $ignoreErrors = false): string
     {
         if (null === $encodeFlags) {
@@ -99,20 +80,7 @@ final class Utils
         return $json;
     }
 
-    /**
-     * Handle a json_encode failure.
-     *
-     * If the failure is due to invalid string encoding, try to clean the
-     * input and encode again. If the second encoding attempt fails, the
-     * initial error is not encoding related or the input can't be cleaned then
-     * raise a descriptive exception.
-     *
-     * @param  int               $code        return code of json_last_error function
-     * @param  mixed             $data        data that was meant to be encoded
-     * @param  int               $encodeFlags flags to pass to json encode, defaults to JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION
-     * @throws \RuntimeException if failure can't be corrected
-     * @return string            JSON encoded data after error correction
-     */
+    
     public static function handleJsonError(int $code, $data, ?int $encodeFlags = null): string
     {
         if ($code !== JSON_ERROR_UTF8) {
@@ -140,9 +108,7 @@ final class Utils
         return $json;
     }
 
-    /**
-     * @internal
-     */
+    
     public static function pcreLastErrorMessage(int $code): string
     {
         if (PHP_VERSION_ID >= 80000) {
@@ -159,13 +125,7 @@ final class Utils
         return $constants[$code] ?? 'UNDEFINED_ERROR';
     }
 
-    /**
-     * Throws an exception according to a given code with a customized message
-     *
-     * @param  int               $code return code of json_last_error function
-     * @param  mixed             $data data that was meant to be encoded
-     * @throws \RuntimeException
-     */
+    
     private static function throwEncodeError(int $code, $data): never
     {
         $msg = match ($code) {
@@ -179,24 +139,10 @@ final class Utils
         throw new \RuntimeException('JSON encoding failed: '.$msg.'. Encoding: '.var_export($data, true));
     }
 
-    /**
-     * Detect invalid UTF-8 string characters and convert to valid UTF-8.
-     *
-     * Valid UTF-8 input will be left unmodified, but strings containing
-     * invalid UTF-8 codepoints will be reencoded as UTF-8 with an assumed
-     * original encoding of ISO-8859-15. This conversion may result in
-     * incorrect output if the actual encoding was not ISO-8859-15, but it
-     * will be clean UTF-8 output and will not rely on expensive and fragile
-     * detection algorithms.
-     *
-     * Function converts the input in place in the passed variable so that it
-     * can be used as a callback for array_walk_recursive.
-     *
-     * @param mixed $data Input to check and convert if needed, passed by ref
-     */
+    
     private static function detectAndCleanUtf8(&$data): void
     {
-        if (is_string($data) && preg_match('//u', $data) !== 1) {
+        if (is_string($data) && preg_match('
             $data = preg_replace_callback(
                 '/[\x80-\xFF]+/',
                 function (array $m): string {
@@ -217,19 +163,14 @@ final class Utils
         }
     }
 
-    /**
-     * Converts a string with a valid 'memory_limit' format, to bytes.
-     *
-     * @param  string|false $val
-     * @return int|false    Returns an integer representing bytes. Returns FALSE in case of error.
-     */
+    
     public static function expandIniShorthandBytes($val)
     {
         if (!is_string($val)) {
             return false;
         }
 
-        // support -1
+        
         if ((int) $val < 0) {
             return (int) $val;
         }
@@ -242,10 +183,10 @@ final class Utils
         switch (strtolower($match['unit'] ?? '')) {
             case 'g':
                 $val *= 1024;
-                // no break
+                
             case 'm':
                 $val *= 1024;
-                // no break
+                
             case 'k':
                 $val *= 1024;
         }
@@ -266,7 +207,7 @@ final class Utils
                 $extra = "\nExtra: " . json_encode($record->extra, JSON_THROW_ON_ERROR);
             }
         } catch (\Throwable $e) {
-            // noop
+            
         }
 
         return "\nThe exception occurred while attempting to log: " . $record->message . $context . $extra;

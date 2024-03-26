@@ -1,17 +1,6 @@
 <?php
 
-/**
- * PuTTY Formatted Key Handler
- *
- * See PuTTY's SSHPUBK.C and https://tartarus.org/~simon/putty-snapshots/htmldoc/AppendixC.html
- *
- * PHP version 5
- *
- * @author    Jim Wigginton <terrafrost@php.net>
- * @copyright 2016 Jim Wigginton
- * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
- * @link      http://phpseclib.sourceforge.net
- */
+
 
 namespace phpseclib3\Crypt\Common\Formats\Keys;
 
@@ -21,42 +10,22 @@ use phpseclib3\Crypt\Hash;
 use phpseclib3\Crypt\Random;
 use phpseclib3\Exception\UnsupportedAlgorithmException;
 
-/**
- * PuTTY Formatted Key Handler
- *
- * @author  Jim Wigginton <terrafrost@php.net>
- */
+
 abstract class PuTTY
 {
-    /**
-     * Default comment
-     *
-     * @var string
-     */
+    
     private static $comment = 'phpseclib-generated-key';
 
-    /**
-     * Default version
-     *
-     * @var int
-     */
+    
     private static $version = 2;
 
-    /**
-     * Sets the default comment
-     *
-     * @param string $comment
-     */
+    
     public static function setComment($comment)
     {
         self::$comment = str_replace(["\r", "\n"], '', $comment);
     }
 
-    /**
-     * Sets the default version
-     *
-     * @param int $version
-     */
+    
     public static function setVersion($version)
     {
         if ($version != 2 && $version != 3) {
@@ -65,13 +34,7 @@ abstract class PuTTY
         self::$version = $version;
     }
 
-    /**
-     * Generate a symmetric key for PuTTY v2 keys
-     *
-     * @param string $password
-     * @param int $length
-     * @return string
-     */
+    
     private static function generateV2Key($password, $length)
     {
         $symkey = '';
@@ -83,16 +46,7 @@ abstract class PuTTY
         return substr($symkey, 0, $length);
     }
 
-    /**
-     * Generate a symmetric key for PuTTY v3 keys
-     *
-     * @param string $password
-     * @param string $flavour
-     * @param int $memory
-     * @param int $passes
-     * @param string $salt
-     * @return array
-     */
+    
     private static function generateV3Key($password, $flavour, $memory, $passes, $salt)
     {
         if (!function_exists('sodium_crypto_pwhash')) {
@@ -110,7 +64,7 @@ abstract class PuTTY
                 throw new UnsupportedAlgorithmException('Only Argon2i and Argon2id are supported');
         }
 
-        $length = 80; // keylen + ivlen + mac_keylen
+        $length = 80; 
         $temp = sodium_crypto_pwhash($length, $password, $salt, $passes, $memory << 10, $flavour);
 
         $symkey = substr($temp, 0, 32);
@@ -120,13 +74,7 @@ abstract class PuTTY
         return compact('symkey', 'symiv', 'hashkey');
     }
 
-    /**
-     * Break a public or private key down into its constituent components
-     *
-     * @param string $key
-     * @param string $password
-     * @return array
-     */
+    
     public static function load($key, $password)
     {
         if (!Strings::is_stringable($key)) {
@@ -180,7 +128,7 @@ abstract class PuTTY
         if (Strings::shift($key[0], strlen('PuTTY-User-Key-File-')) != 'PuTTY-User-Key-File-') {
             return false;
         }
-        $version = (int) Strings::shift($key[0], 3); // should be either "2: " or "3: 0" prior to int casting
+        $version = (int) Strings::shift($key[0], 3); 
         if ($version != 2 && $version != 3) {
             throw new \RuntimeException('Only v2 and v3 PuTTY private keys are supported');
         }
@@ -271,16 +219,7 @@ abstract class PuTTY
         return $components;
     }
 
-    /**
-     * Wrap a private key appropriately
-     *
-     * @param string $public
-     * @param string $private
-     * @param string $type
-     * @param string $password
-     * @param array $options optional
-     * @return string
-     */
+    
     protected static function wrapPrivateKey($public, $private, $type, $password, array $options = [])
     {
         $encryption = (!empty($password) || is_string($password)) ? 'aes256-cbc' : 'none';
@@ -353,15 +292,7 @@ abstract class PuTTY
         return $key;
     }
 
-    /**
-     * Wrap a public key appropriately
-     *
-     * This is basically the format described in RFC 4716 (https://tools.ietf.org/html/rfc4716)
-     *
-     * @param string $key
-     * @param string $type
-     * @return string
-     */
+    
     protected static function wrapPublicKey($key, $type)
     {
         $key = pack('Na*a*', strlen($type), $type, $key);

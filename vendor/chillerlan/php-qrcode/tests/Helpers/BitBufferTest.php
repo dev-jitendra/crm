@@ -1,14 +1,5 @@
 <?php
-/**
- * Class BitBufferTest
- *
- * @filesource   BitBufferTest.php
- * @created      08.02.2016
- * @package      chillerlan\QRCodeTest\Helpers
- * @author       Smiley <smiley@chillerlan.net>
- * @copyright    2015 Smiley
- * @license      MIT
- */
+
 
 namespace chillerlan\QRCodeTest\Helpers;
 
@@ -16,9 +7,7 @@ use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\Helpers\BitBuffer;
 use PHPUnit\Framework\TestCase;
 
-/**
- * BitBuffer coverage test
- */
+
 final class BitBufferTest extends TestCase{
 
 	protected BitBuffer $bitBuffer;
@@ -36,9 +25,7 @@ final class BitBufferTest extends TestCase{
 		];
 	}
 
-	/**
-	 * @dataProvider bitProvider
-	 */
+	
 	public function testPut(int $data, int $value):void{
 		$this->bitBuffer->put($data, 4);
 		$this::assertSame($value, $this->bitBuffer->getBuffer()[0]);

@@ -15,11 +15,7 @@ use function count;
 
 final class Driver extends AbstractMySQLDriver
 {
-    /**
-     * {@inheritdoc}
-     *
-     * @return Connection
-     */
+    
     public function connect(array $params)
     {
         if (! empty($params['persistent'])) {
@@ -81,12 +77,7 @@ final class Driver extends AbstractMySQLDriver
         return new Connection($connection);
     }
 
-    /**
-     * @param list<Initializer> $initializers
-     * @param array<int,mixed>  $options
-     *
-     * @return list<Initializer>
-     */
+    
     private function withOptions(array $initializers, array $options): array
     {
         if (count($options) !== 0) {
@@ -96,12 +87,7 @@ final class Driver extends AbstractMySQLDriver
         return $initializers;
     }
 
-    /**
-     * @param list<Initializer>   $initializers
-     * @param array<string,mixed> $params
-     *
-     * @return list<Initializer>
-     */
+    
     private function withSecure(array $initializers, array $params): array
     {
         if (
@@ -123,12 +109,7 @@ final class Driver extends AbstractMySQLDriver
         return $initializers;
     }
 
-    /**
-     * @param list<Initializer>   $initializers
-     * @param array<string,mixed> $params
-     *
-     * @return list<Initializer>
-     */
+    
     private function withCharset(array $initializers, array $params): array
     {
         if (isset($params['charset'])) {

@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace OpenSpout\Reader\XLSX\Manager\SharedStringsCaching;
 
-/**
- * @internal
- */
+
 final class MemoryLimit
 {
     private readonly string $memoryLimit;
@@ -16,14 +14,12 @@ final class MemoryLimit
         $this->memoryLimit = $memoryLimit;
     }
 
-    /**
-     * Returns the PHP "memory_limit" in Kilobytes.
-     */
+    
     public function getMemoryLimitInKB(): float
     {
         $memoryLimitFormatted = strtolower(trim($this->memoryLimit));
 
-        // No memory limit
+        
         if ('-1' === $memoryLimitFormatted) {
             return -1;
         }

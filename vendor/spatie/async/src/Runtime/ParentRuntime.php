@@ -12,13 +12,13 @@ use Symfony\Component\Process\Process;
 
 class ParentRuntime
 {
-    /** @var bool */
+    
     protected static $isInitialised = false;
 
-    /** @var string */
+    
     protected static $autoloader;
 
-    /** @var string */
+    
     protected static $childProcessScript;
 
     protected static $currentId = 0;
@@ -46,12 +46,7 @@ class ParentRuntime
         self::$isInitialised = true;
     }
 
-    /**
-     * @param \Spatie\Async\Task|callable $task
-     * @param int|null $outputLength
-     *
-     * @return \Spatie\Async\Process\Runnable
-     */
+    
     public static function createProcess($task, ?int $outputLength = null, ?string $binary = 'php'): Runnable
     {
         if (! self::$isInitialised) {
@@ -73,11 +68,7 @@ class ParentRuntime
         return ParallelProcess::create($process, self::getId());
     }
 
-    /**
-     * @param \Spatie\Async\Task|callable $task
-     *
-     * @return string
-     */
+    
     public static function encodeTask($task): string
     {
         if ($task instanceof Closure) {

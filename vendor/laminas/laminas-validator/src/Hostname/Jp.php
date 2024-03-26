@@ -1,10 +1,8 @@
-<?php // phpcs:disable PSR12.Files.FileHeader.IncorrectOrder
+<?php 
 
 namespace Laminas\Validator\Hostname;
 
-/**
- * Resource file for japanese idn validation
- */
+
 
 return [
     1 => '/^[\x{002d}0-9a-z\x{3005}-\x{3007}\x{3041}-\x{3093}\x{309D}\x{309E}'

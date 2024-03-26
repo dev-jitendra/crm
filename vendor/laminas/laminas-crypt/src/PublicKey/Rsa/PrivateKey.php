@@ -14,26 +14,13 @@ use function openssl_private_encrypt;
 use const OPENSSL_PKCS1_OAEP_PADDING;
 use const OPENSSL_PKCS1_PADDING;
 
-/**
- * RSA private key
- */
+
 class PrivateKey extends AbstractKey
 {
-    /**
-     * Public key
-     *
-     * @var PublicKey
-     */
+    
     protected $publicKey;
 
-    /**
-     * Create private key instance from PEM formatted key file
-     *
-     * @param  string      $pemFile
-     * @param  string|null $passPhrase
-     * @return PrivateKey
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public static function fromFile($pemFile, $passPhrase = null)
     {
         if (! is_readable($pemFile)) {
@@ -45,13 +32,7 @@ class PrivateKey extends AbstractKey
         return new static(file_get_contents($pemFile), $passPhrase);
     }
 
-    /**
-     * Constructor
-     *
-     * @param  string $pemString
-     * @param  string $passPhrase
-     * @throws Exception\RuntimeException
-     */
+    
     public function __construct($pemString, $passPhrase = null)
     {
         $result = openssl_pkey_get_private($pemString, $passPhrase);
@@ -66,11 +47,7 @@ class PrivateKey extends AbstractKey
         $this->details            = openssl_pkey_get_details($this->opensslKeyResource);
     }
 
-    /**
-     * Get the public key
-     *
-     * @return PublicKey
-     */
+    
     public function getPublicKey()
     {
         if ($this->publicKey === null) {
@@ -80,15 +57,7 @@ class PrivateKey extends AbstractKey
         return $this->publicKey;
     }
 
-    /**
-     * Encrypt using this key
-     *
-     * @param  string $data
-     * @param  integer $padding
-     * @return string
-     * @throws Exception\RuntimeException
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public function encrypt($data, $padding = OPENSSL_PKCS1_PADDING)
     {
         if (empty($data)) {
@@ -106,21 +75,7 @@ class PrivateKey extends AbstractKey
         return $encrypted;
     }
 
-    /**
-     * Decrypt using this key
-     *
-     * Starting in 2.4.9/2.5.2, we changed the default padding to
-     * OPENSSL_PKCS1_OAEP_PADDING to prevent Bleichenbacher's chosen-ciphertext
-     * attack.
-     *
-     * @see http://archiv.infsec.ethz.ch/education/fs08/secsem/bleichenbacher98.pdf
-     *
-     * @param  string $data
-     * @param  integer $padding
-     * @return string
-     * @throws Exception\RuntimeException
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public function decrypt($data, $padding = OPENSSL_PKCS1_OAEP_PADDING)
     {
         if (! is_string($data)) {
@@ -141,9 +96,7 @@ class PrivateKey extends AbstractKey
         return $decrypted;
     }
 
-    /**
-     * @return string
-     */
+    
     public function toString()
     {
         return $this->pemString;

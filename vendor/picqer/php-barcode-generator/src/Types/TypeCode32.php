@@ -7,10 +7,7 @@ use Picqer\Barcode\Exceptions\InvalidCharacterException;
 use Picqer\Barcode\Exceptions\InvalidCheckDigitException;
 use Picqer\Barcode\Exceptions\InvalidLengthException;
 
-/*
- * CODE 32 - italian pharmaceutical
- * General-purpose code in very wide use world-wide
- */
+
 class TypeCode32 extends TypeCode39
 {
     protected $conversionTable32 = [
@@ -50,7 +47,7 @@ class TypeCode32 extends TypeCode39
 
     public function getBarcodeData(string $code): Barcode
     {
-        // Validate code 32.
+        
         $stringLength = strlen($code);
 
         for ($i = 0;  $i < $stringLength; ++$i) {
@@ -59,7 +56,7 @@ class TypeCode32 extends TypeCode39
             }
         }
 
-        // Prepare code 32.
+        
         $code          = str_pad($code, 8, '0', STR_PAD_LEFT);
         $checksumDigit = $this->checksum_code32(substr($code, 0, 8));
         $stringLength  = max($stringLength, 8);
@@ -75,7 +72,7 @@ class TypeCode32 extends TypeCode39
             throw new InvalidCheckDigitException('Provided checksum digit is wrong for provided code.');
         }
 
-        // Convert code 32 into code 39.
+        
         $code39   = '';
         $codeElab = $code;
 
@@ -84,18 +81,12 @@ class TypeCode32 extends TypeCode39
             $codeElab = $codeElab % pow(32, $e);
         }
 
-        // Return barcode data for code 39.
+        
         return parent::getBarcodeData($code39);
     }
 
 
-    /**
-     * Calculate CODE 32 checksum (modulo 10).
-     *
-     * @param string $code code to represent.
-     * @return string char checksum.
-     * @protected
-     */
+    
     protected function checksum_code32(string $code): string
     {
         $s = 0;

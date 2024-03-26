@@ -1,13 +1,6 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Carbon\Doctrine;
 
@@ -18,22 +11,16 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Exception;
 
-/**
- * @template T of CarbonInterface
- */
+
 trait CarbonTypeConverter
 {
-    /**
-     * @return class-string<T>
-     */
+    
     protected function getCarbonClassName(): string
     {
         return Carbon::class;
     }
 
-    /**
-     * @return string
-     */
+    
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
         $precision = $fieldDeclaration['precision'] ?: 10;
@@ -61,11 +48,7 @@ trait CarbonTypeConverter
         return trim("$before($precision) $after");
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     *
-     * @return T|null
-     */
+    
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         $class = $this->getCarbonClassName();
@@ -99,11 +82,7 @@ trait CarbonTypeConverter
         return $date;
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     *
-     * @return string|null
-     */
+    
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         if ($value === null) {

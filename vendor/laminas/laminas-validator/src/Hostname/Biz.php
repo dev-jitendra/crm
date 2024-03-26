@@ -1,10 +1,8 @@
-<?php // phpcs:disable PSR12.Files.FileHeader.IncorrectOrder
+<?php 
 
 namespace Laminas\Validator\Hostname;
 
-/**
- * Resource file for biz idn validation
- */
+
 
 return [
     1  => '/^[\x{002d}0-9a-zäåæéöøü]{1,63}$/iu',

@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -32,17 +28,15 @@ class ResponseEmitter
         $this->responseChunkSize = $responseChunkSize;
     }
 
-    /**
-     * Send the response the client
-     */
+    
     public function emit(ResponseInterface $response): void
     {
         $isEmpty = $this->isResponseEmpty($response);
         if (headers_sent() === false) {
             $this->emitHeaders($response);
 
-            // Set the status _after_ the headers, because of PHP's "helpful" behavior with location headers.
-            // See https://github.com/slimphp/Slim/issues/1730
+            
+            
 
             $this->emitStatusLine($response);
         }
@@ -52,9 +46,7 @@ class ResponseEmitter
         }
     }
 
-    /**
-     * Emit Response Headers
-     */
+    
     private function emitHeaders(ResponseInterface $response): void
     {
         foreach ($response->getHeaders() as $name => $values) {
@@ -67,9 +59,7 @@ class ResponseEmitter
         }
     }
 
-    /**
-     * Emit Status Line
-     */
+    
     private function emitStatusLine(ResponseInterface $response): void
     {
         $statusLine = sprintf(
@@ -81,9 +71,7 @@ class ResponseEmitter
         header($statusLine, true, $response->getStatusCode());
     }
 
-    /**
-     * Emit Body
-     */
+    
     private function emitBody(ResponseInterface $response): void
     {
         $body = $response->getBody();
@@ -118,9 +106,7 @@ class ResponseEmitter
         }
     }
 
-    /**
-     * Asserts response body is empty or status code is 204, 205 or 304
-     */
+    
     public function isResponseEmpty(ResponseInterface $response): bool
     {
         if (in_array($response->getStatusCode(), [204, 205, 304], true)) {

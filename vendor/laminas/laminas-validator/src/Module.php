@@ -6,12 +6,7 @@ use Laminas\ModuleManager\ModuleManager;
 
 class Module
 {
-    /**
-     * Return default laminas-validator configuration for laminas-mvc applications.
-     *
-     * @return array[]
-     * @psalm-return array{service_manager: array}
-     */
+    
     public function getConfig()
     {
         $provider = new ConfigProvider();
@@ -21,12 +16,7 @@ class Module
         ];
     }
 
-    /**
-     * Register a specification for the ValidatorManager with the ServiceListener.
-     *
-     * @param ModuleManager $moduleManager
-     * @return void
-     */
+    
     public function init($moduleManager)
     {
         $event           = $moduleManager->getEvent();

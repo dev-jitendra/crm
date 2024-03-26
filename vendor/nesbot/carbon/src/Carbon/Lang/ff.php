@@ -1,17 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Unknown default region, use the first alphabetically.
- */
+
+
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [
         'LT' => 'HH:mm',
@@ -30,31 +21,31 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'day_of_first_week_of_year' => 1,
     'meridiem' => ['subaka', 'kikiiɗe'],
 
-    'year' => ':count baret', // less reliable
-    'y' => ':count baret', // less reliable
-    'a_year' => ':count baret', // less reliable
+    'year' => ':count baret', 
+    'y' => ':count baret', 
+    'a_year' => ':count baret', 
 
-    'month' => ':count lewru', // less reliable
-    'm' => ':count lewru', // less reliable
-    'a_month' => ':count lewru', // less reliable
+    'month' => ':count lewru', 
+    'm' => ':count lewru', 
+    'a_month' => ':count lewru', 
 
-    'week' => ':count naange', // less reliable
-    'w' => ':count naange', // less reliable
-    'a_week' => ':count naange', // less reliable
+    'week' => ':count naange', 
+    'w' => ':count naange', 
+    'a_week' => ':count naange', 
 
-    'day' => ':count dian', // less reliable
-    'd' => ':count dian', // less reliable
-    'a_day' => ':count dian', // less reliable
+    'day' => ':count dian', 
+    'd' => ':count dian', 
+    'a_day' => ':count dian', 
 
-    'hour' => ':count montor', // less reliable
-    'h' => ':count montor', // less reliable
-    'a_hour' => ':count montor', // less reliable
+    'hour' => ':count montor', 
+    'h' => ':count montor', 
+    'a_hour' => ':count montor', 
 
-    'minute' => ':count tokossuoum', // less reliable
-    'min' => ':count tokossuoum', // less reliable
-    'a_minute' => ':count tokossuoum', // less reliable
+    'minute' => ':count tokossuoum', 
+    'min' => ':count tokossuoum', 
+    'a_minute' => ':count tokossuoum', 
 
-    'second' => ':count tenen', // less reliable
-    's' => ':count tenen', // less reliable
-    'a_second' => ':count tenen', // less reliable
+    'second' => ':count tenen', 
+    's' => ':count tenen', 
+    'a_second' => ':count tenen', 
 ]);

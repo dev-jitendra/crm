@@ -16,10 +16,7 @@ use function sprintf;
 
 class CyclicAliasException extends InvalidArgumentException
 {
-    /**
-     * @param string   $alias conflicting alias key
-     * @param string[] $aliases map of referenced services, indexed by alias name (string)
-     */
+    
     public static function fromCyclicAlias(string $alias, array $aliases): self
     {
         $cycle  = $alias;
@@ -36,10 +33,7 @@ class CyclicAliasException extends InvalidArgumentException
         ));
     }
 
-    /**
-     * @param string[] $aliases map of referenced services, indexed by alias name (string)
-     * @return self
-     */
+    
     public static function fromAliasesMap(array $aliases)
     {
         $detectedCycles = array_filter(array_map(
@@ -62,13 +56,7 @@ class CyclicAliasException extends InvalidArgumentException
         ));
     }
 
-    /**
-     * Retrieves the cycle detected for the given $alias, or `null` if no cycle was detected
-     *
-     * @param string[] $aliases
-     * @param string   $alias
-     * @return array|null
-     */
+    
     private static function getCycleFor(array $aliases, $alias)
     {
         $cycleCandidate = [];
@@ -86,10 +74,7 @@ class CyclicAliasException extends InvalidArgumentException
         return null;
     }
 
-    /**
-     * @param string[] $aliases
-     * @return string
-     */
+    
     private static function printReferencesMap(array $aliases)
     {
         $map = [];
@@ -101,20 +86,13 @@ class CyclicAliasException extends InvalidArgumentException
         return "[\n" . implode("\n", $map) . "\n]";
     }
 
-    /**
-     * @param string[][] $detectedCycles
-     * @return string
-     */
+    
     private static function printCycles(array $detectedCycles)
     {
         return "[\n" . implode("\n", array_map([self::class, 'printCycle'], $detectedCycles)) . "\n]";
     }
 
-    /**
-     * @param string[] $detectedCycle
-     * @return string
-     * @phpcsSuppress SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedMethod
-     */
+    
     private static function printCycle(array $detectedCycle)
     {
         $fullCycle   = array_keys($detectedCycle);
@@ -129,10 +107,7 @@ class CyclicAliasException extends InvalidArgumentException
         );
     }
 
-    /**
-     * @param bool[][] $detectedCycles
-     * @return bool[][] de-duplicated
-     */
+    
     private static function deDuplicateDetectedCycles(array $detectedCycles)
     {
         $detectedCyclesByHash = [];

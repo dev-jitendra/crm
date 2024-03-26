@@ -25,50 +25,25 @@ use const SQLSRV_PARAM_IN;
 
 final class Statement implements StatementInterface
 {
-    /**
-     * The SQLSRV Resource.
-     *
-     * @var resource
-     */
+    
     private $conn;
 
-    /**
-     * The SQL statement to execute.
-     */
+    
     private string $sql;
 
-    /**
-     * The SQLSRV statement resource.
-     *
-     * @var resource|null
-     */
+    
     private $stmt;
 
-    /**
-     * References to the variables bound as statement parameters.
-     *
-     * @var array<int, mixed>
-     */
+    
     private array $variables = [];
 
-    /**
-     * Bound parameter types.
-     *
-     * @var array<int, int>
-     */
+    
     private array $types = [];
 
-    /**
-     * Append to any INSERT query to retrieve the last insert id.
-     */
+    
     private const LAST_INSERT_ID_SQL = ';SELECT SCOPE_IDENTITY() AS LastInsertId;';
 
-    /**
-     * @internal The statement can be only instantiated by its driver connection.
-     *
-     * @param resource $conn
-     * @param string   $sql
-     */
+    
     public function __construct($conn, $sql)
     {
         $this->conn = $conn;
@@ -81,9 +56,7 @@ final class Statement implements StatementInterface
         $this->sql .= self::LAST_INSERT_ID_SQL;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function bindValue($param, $value, $type = ParameterType::STRING): bool
     {
         assert(is_int($param));
@@ -91,7 +64,7 @@ final class Statement implements StatementInterface
         if (func_num_args() < 3) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5558',
+                'https:
                 'Not passing $type to Statement::bindValue() is deprecated.'
                     . ' Pass the type corresponding to the parameter being bound.',
             );
@@ -103,16 +76,12 @@ final class Statement implements StatementInterface
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated Use {@see bindValue()} instead.
-     */
+    
     public function bindParam($param, &$variable, $type = ParameterType::STRING, $length = null): bool
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5563',
+            'https:
             '%s is deprecated. Use bindValue() instead.',
             __METHOD__,
         );
@@ -122,7 +91,7 @@ final class Statement implements StatementInterface
         if (func_num_args() < 3) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5558',
+                'https:
                 'Not passing $type to Statement::bindParam() is deprecated.'
                     . ' Pass the type corresponding to the parameter being bound.',
             );
@@ -131,21 +100,19 @@ final class Statement implements StatementInterface
         $this->variables[$param] =& $variable;
         $this->types[$param]     = $type;
 
-        // unset the statement resource if it exists as the new one will need to be bound to the new variable
+        
         $this->stmt = null;
 
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function execute($params = null): ResultInterface
     {
         if ($params !== null) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5556',
+                'https:
                 'Passing $params to Statement::execute() is deprecated. Bind parameters using'
                     . ' Statement::bindParam() or Statement::bindValue() instead.',
             );
@@ -168,13 +135,7 @@ final class Statement implements StatementInterface
         return new Result($this->stmt);
     }
 
-    /**
-     * Prepares SQL Server statement resource
-     *
-     * @return resource
-     *
-     * @throws Exception
-     */
+    
     private function prepare()
     {
         $params = [];

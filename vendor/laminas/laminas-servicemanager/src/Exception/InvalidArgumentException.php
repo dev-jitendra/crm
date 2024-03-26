@@ -12,9 +12,7 @@ use function gettype;
 use function is_object;
 use function sprintf;
 
-/**
- * @inheritDoc
- */
+
 class InvalidArgumentException extends SplInvalidArgumentException implements ExceptionInterface
 {
     public static function fromInvalidInitializer(mixed $initializer): self

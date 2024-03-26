@@ -1,29 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Tornike Razmadze
- * - François B
- * - Lasha Dolidze
- * - Tim Fish
- * - JD Isaacks
- * - Tornike Razmadze
- * - François B
- * - Lasha Dolidze
- * - JD Isaacks
- * - LONGMAN
- * - Avtandil Kikabidze (akalongman)
- * - Levan Velijanashvili (Stichoza)
- */
+
+
 
 use Carbon\CarbonInterface;
 
@@ -51,19 +30,19 @@ return [
     'a_second' => '{1}რამდენიმე წამი|]1,Inf[:count წამი',
     'ago' => function ($time) {
         $replacements = [
-            // year
+            
             'წელი' => 'წლის',
-            // month
+            
             'თვე' => 'თვის',
-            // week
+            
             'კვირა' => 'კვირის',
-            // day
+            
             'დღე' => 'დღის',
-            // hour
+            
             'საათი' => 'საათის',
-            // minute
+            
             'წუთი' => 'წუთის',
-            // second
+            
             'წამი' => 'წამის',
         ];
         $time = strtr($time, array_flip($replacements));
@@ -73,19 +52,19 @@ return [
     },
     'from_now' => function ($time) {
         $replacements = [
-            // year
+            
             'წელი' => 'წელიწადში',
-            // week
+            
             'კვირა' => 'კვირაში',
-            // day
+            
             'დღე' => 'დღეში',
-            // month
+            
             'თვე' => 'თვეში',
-            // hour
+            
             'საათი' => 'საათში',
-            // minute
+            
             'წუთი' => 'წუთში',
-            // second
+            
             'წამი' => 'წამში',
         ];
         $time = strtr($time, array_flip($replacements));
@@ -95,19 +74,19 @@ return [
     },
     'after' => function ($time) {
         $replacements = [
-            // year
+            
             'წელი' => 'წლის',
-            // month
+            
             'თვე' => 'თვის',
-            // week
+            
             'კვირა' => 'კვირის',
-            // day
+            
             'დღე' => 'დღის',
-            // hour
+            
             'საათი' => 'საათის',
-            // minute
+            
             'წუთი' => 'წუთის',
-            // second
+            
             'წამი' => 'წამის',
         ];
         $time = strtr($time, array_flip($replacements));
@@ -117,19 +96,19 @@ return [
     },
     'before' => function ($time) {
         $replacements = [
-            // year
+            
             'წელი' => 'წლით',
-            // month
+            
             'თვე' => 'თვით',
-            // week
+            
             'კვირა' => 'კვირით',
-            // day
+            
             'დღე' => 'დღით',
-            // hour
+            
             'საათი' => 'საათით',
-            // minute
+            
             'წუთი' => 'წუთით',
-            // second
+            
             'წამი' => 'წამით',
         ];
         $time = strtr($time, array_flip($replacements));

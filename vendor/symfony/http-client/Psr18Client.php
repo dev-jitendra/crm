@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpClient;
 
@@ -40,15 +33,7 @@ if (!interface_exists(ClientInterface::class)) {
     throw new \LogicException('You cannot use the "Symfony\Component\HttpClient\Psr18Client" as the "psr/http-client" package is not installed. Try running "composer require psr/http-client".');
 }
 
-/**
- * An adapter to turn a Symfony HttpClientInterface into a PSR-18 ClientInterface.
- *
- * Run "composer require psr/http-client" to install the base ClientInterface. Run
- * "composer require nyholm/psr7" to install an efficient implementation of response
- * and stream factories with flex-provided autowiring aliases.
- *
- * @author Nicolas Grekas <p@tchwork.com>
- */
+
 final class Psr18Client implements ClientInterface, RequestFactoryInterface, StreamFactoryInterface, UriFactoryInterface
 {
     private $client;
@@ -78,9 +63,7 @@ final class Psr18Client implements ClientInterface, RequestFactoryInterface, Str
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function sendRequest(RequestInterface $request): ResponseInterface
     {
         try {
@@ -121,9 +104,7 @@ final class Psr18Client implements ClientInterface, RequestFactoryInterface, Str
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function createRequest(string $method, $uri): RequestInterface
     {
         if ($this->responseFactory instanceof RequestFactoryInterface) {
@@ -141,9 +122,7 @@ final class Psr18Client implements ClientInterface, RequestFactoryInterface, Str
         throw new \LogicException(sprintf('You cannot use "%s()" as the "nyholm/psr7" package is not installed. Try running "composer require nyholm/psr7".', __METHOD__));
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function createStream(string $content = ''): StreamInterface
     {
         $stream = $this->streamFactory->createStream($content);
@@ -155,25 +134,19 @@ final class Psr18Client implements ClientInterface, RequestFactoryInterface, Str
         return $stream;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function createStreamFromFile(string $filename, string $mode = 'r'): StreamInterface
     {
         return $this->streamFactory->createStreamFromFile($filename, $mode);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function createStreamFromResource($resource): StreamInterface
     {
         return $this->streamFactory->createStreamFromResource($resource);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function createUri(string $uri = ''): UriInterface
     {
         if ($this->responseFactory instanceof UriFactoryInterface) {
@@ -192,9 +165,7 @@ final class Psr18Client implements ClientInterface, RequestFactoryInterface, Str
     }
 }
 
-/**
- * @internal
- */
+
 class Psr18NetworkException extends \RuntimeException implements NetworkExceptionInterface
 {
     private $request;
@@ -211,9 +182,7 @@ class Psr18NetworkException extends \RuntimeException implements NetworkExceptio
     }
 }
 
-/**
- * @internal
- */
+
 class Psr18RequestException extends \InvalidArgumentException implements RequestExceptionInterface
 {
     private $request;

@@ -1,24 +1,10 @@
 <?php
-/**
- * @package dompdf
- * @link    https://github.com/dompdf/dompdf
- * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
- */
+
 namespace Dompdf;
 
 class Helpers
 {
-    /**
-     * print_r wrapper for html/cli output
-     *
-     * Wraps print_r() output in < pre > tags if the current sapi is not 'cli'.
-     * Returns the output string instead of displaying it if $return is true.
-     *
-     * @param mixed $mixed variable or expression to display
-     * @param bool $return
-     *
-     * @return string|null
-     */
+    
     public static function pre_r($mixed, $return = false)
     {
         if ($return) {
@@ -42,28 +28,12 @@ class Helpers
         return null;
     }
 
-    /**
-     * builds a full url given a protocol, hostname, base path and url
-     *
-     * @param string $protocol
-     * @param string $host
-     * @param string $base_path
-     * @param string $url
-     * @return string
-     *
-     * Initially the trailing slash of $base_path was optional, and conditionally appended.
-     * However on dynamically created sites, where the page is given as url parameter,
-     * the base path might not end with an url.
-     * Therefore do not append a slash, and **require** the $base_url to ending in a slash
-     * when needed.
-     * Vice versa, on using the local file system path of a file, make sure that the slash
-     * is appended (o.k. also for Windows)
-     */
+    
     public static function build_url($protocol, $host, $base_path, $url)
     {
         $protocol = mb_strtolower($protocol);
         if (empty($protocol)) {
-            $protocol = "file://";
+            $protocol = "file:
         }
         if ($url === "") {
             return null;
@@ -71,12 +41,12 @@ class Helpers
 
         $url_lc = mb_strtolower($url);
 
-        // Is the url already fully qualified, a Data URI, or a reference to a named anchor?
-        // File-protocol URLs may require additional processing (e.g. for URLs with a relative path)
+        
+        
         if (
             (
-                mb_strpos($url_lc, "://") !== false
-                && !in_array(substr($url_lc, 0, 7), ["file://", "phar://"], true)
+                mb_strpos($url_lc, ":
+                && !in_array(substr($url_lc, 0, 7), ["file:
             )
             || mb_substr($url_lc, 0, 1) === "#"
             || mb_strpos($url_lc, "data:") === 0
@@ -87,26 +57,26 @@ class Helpers
         }
 
         $res = "";
-        if (strpos($url_lc, "file://") === 0) {
+        if (strpos($url_lc, "file:
             $url = substr($url, 7);
-            $protocol = "file://";
-        } elseif (strpos($url_lc, "phar://") === 0) {
+            $protocol = "file:
+        } elseif (strpos($url_lc, "phar:
             $res = substr($url, strpos($url_lc, ".phar")+5);
             $url = substr($url, 7, strpos($url_lc, ".phar")-2);
-            $protocol = "phar://";
+            $protocol = "phar:
         }
 
         $ret = "";
 
-        $is_local_path = in_array($protocol, ["file://", "phar://"], true);
+        $is_local_path = in_array($protocol, ["file:
 
         if ($is_local_path) {
-            //On Windows local file, an abs path can begin also with a '\' or a drive letter and colon
-            //drive: followed by a relative path would be a drive specific default folder.
-            //not known in php app code, treat as abs path
-            //($url[1] !== ':' || ($url[2]!=='\\' && $url[2]!=='/'))
+            
+            
+            
+            
             if ($url[0] !== '/' && (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN' || (mb_strlen($url) > 1 && $url[0] !== '\\' && $url[1] !== ':'))) {
-                // For rel path and local access we ignore the host, and run the path through realpath()
+                
                 $ret .= realpath($base_path) . '/';
             }
             $ret .= $url;
@@ -123,24 +93,24 @@ class Helpers
         }
 
         $ret = $protocol;
-        // Protocol relative urls (e.g. "//example.org/style.css")
-        if (strpos($url, '//') === 0) {
+        
+        if (strpos($url, '
             $ret .= substr($url, 2);
-            //remote urls with backslash in html/css are not really correct, but lets be genereous
+            
         } elseif ($url[0] === '/' || $url[0] === '\\') {
-            // Absolute path
+            
             $ret .= $host . $url;
         } else {
-            // Relative path
-            //$base_path = $base_path !== "" ? rtrim($base_path, "/\\") . "/" : "";
+            
+            
             $ret .= $host . $base_path . $url;
         }
 
-        // URL should now be complete, final cleanup
+        
         $parsed_url = parse_url($ret);
 
-        // reproduced from https://www.php.net/manual/en/function.parse-url.php#106731
-        $scheme   = isset($parsed_url['scheme']) ? $parsed_url['scheme'] . '://' : '';
+        
+        $scheme   = isset($parsed_url['scheme']) ? $parsed_url['scheme'] . ':
         $host     = isset($parsed_url['host']) ? $parsed_url['host'] : '';
         $port     = isset($parsed_url['port']) ? ':' . $parsed_url['port'] : '';
         $user     = isset($parsed_url['user']) ? $parsed_url['user'] : '';
@@ -150,28 +120,8 @@ class Helpers
         $query    = isset($parsed_url['query']) ? '?' . $parsed_url['query'] : '';
         $fragment = isset($parsed_url['fragment']) ? '#' . $parsed_url['fragment'] : '';
         
-        // partially reproduced from https://stackoverflow.com/a/1243431/264628
-        /* replace '//' or '/./' or '/foo/../' with '/' */
-        $re = array('#(/\.?/)#', '#/(?!\.\.)[^/]+/\.\./#');
-        for ($n=1; $n>0; $path=preg_replace($re, '/', $path, -1, $n)) {}
-
-        $ret = "$scheme$user$pass$host$port$path$query$fragment";
-
-        return $ret;
-    }
-
-    /**
-     * Builds a HTTP Content-Disposition header string using `$dispositionType`
-     * and `$filename`.
-     *
-     * If the filename contains any characters not in the ISO-8859-1 character
-     * set, a fallback filename will be included for clients not supporting the
-     * `filename*` parameter.
-     *
-     * @param string $dispositionType
-     * @param string $filename
-     * @return string
-     */
+        
+        
     public static function buildContentDispositionHeader($dispositionType, $filename)
     {
         $encoding = mb_detect_encoding($filename);
@@ -187,19 +137,7 @@ class Helpers
         return $contentDisposition;
     }
 
-    /**
-     * Converts decimal numbers to roman numerals.
-     *
-     * As numbers larger than 3999 (and smaller than 1) cannot be represented in
-     * the standard form of roman numerals, those are left in decimal form.
-     *
-     * See https://en.wikipedia.org/wiki/Roman_numerals#Standard_form
-     *
-     * @param int|string $num
-     *
-     * @throws Exception
-     * @return string
-     */
+    
     public static function dec2roman($num): string
     {
 
@@ -220,16 +158,16 @@ class Helpers
 
         $ret = "";
         switch (mb_strlen($num)) {
-            /** @noinspection PhpMissingBreakStatementInspection */
+            
             case 4:
                 $ret .= $thou[$num[3]];
-            /** @noinspection PhpMissingBreakStatementInspection */
+            
             case 3:
                 $ret .= $hund[$num[2]];
-            /** @noinspection PhpMissingBreakStatementInspection */
+            
             case 2:
                 $ret .= $tens[$num[1]];
-            /** @noinspection PhpMissingBreakStatementInspection */
+            
             case 1:
                 $ret .= $ones[$num[0]];
             default:
@@ -239,42 +177,19 @@ class Helpers
         return $ret;
     }
 
-    /**
-     * Restrict a length to the given range.
-     *
-     * If min > max, the result is min.
-     *
-     * @param float $length
-     * @param float $min
-     * @param float $max
-     *
-     * @return float
-     */
+    
     public static function clamp(float $length, float $min, float $max): float
     {
         return max($min, min($length, $max));
     }
 
-    /**
-     * Determines whether $value is a percentage or not
-     *
-     * @param string|float|int $value
-     *
-     * @return bool
-     */
+    
     public static function is_percent($value): bool
     {
         return is_string($value) && false !== mb_strpos($value, "%");
     }
 
-    /**
-     * Parses a data URI scheme
-     * http://en.wikipedia.org/wiki/Data_URI_scheme
-     *
-     * @param string $data_uri The data URI to parse
-     *
-     * @return array|bool The result with charset, mime type and decoded data
-     */
+    
     public static function parse_data_uri($data_uri)
     {
         if (!preg_match('/^data:(?P<mime>[a-z0-9\/+-.]+)(;charset=(?P<charset>[a-z0-9-])+)?(?P<base64>;base64)?\,(?P<data>.*)?/is', $data_uri, $match)) {
@@ -291,22 +206,7 @@ class Helpers
         return $result;
     }
 
-    /**
-     * Encodes a Uniform Resource Identifier (URI) by replacing non-alphanumeric
-     * characters with a percent (%) sign followed by two hex digits, excepting
-     * characters in the URI reserved character set.
-     *
-     * Assumes that the URI is a complete URI, so does not encode reserved
-     * characters that have special meaning in the URI.
-     *
-     * Simulates the encodeURI function available in JavaScript
-     * https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/encodeURI
-     *
-     * Source: http://stackoverflow.com/q/4929584/264628
-     *
-     * @param string $uri The URI to encode
-     * @return string The original URL with special characters encoded
-     */
+    
     public static function encodeURI($uri) {
         $unescaped = [
             '%2D'=>'-','%5F'=>'_','%2E'=>'.','%21'=>'!', '%7E'=>'~',
@@ -322,15 +222,7 @@ class Helpers
         return strtr(rawurlencode(rawurldecode($uri)), array_merge($reserved, $unescaped, $score));
     }
 
-    /**
-     * Decoder for RLE8 compression in windows bitmaps
-     * http://msdn.microsoft.com/library/default.asp?url=/library/en-us/gdi/bitmaps_6x0u.asp
-     *
-     * @param string $str Data to decode
-     * @param int $width Image width
-     *
-     * @return string
-     */
+    
     public static function rle8_decode($str, $width)
     {
         $lineWidth = $width + (3 - ($width - 1) % 4);
@@ -375,15 +267,7 @@ class Helpers
         return $out;
     }
 
-    /**
-     * Decoder for RLE4 compression in windows bitmaps
-     * see http://msdn.microsoft.com/library/default.asp?url=/library/en-us/gdi/bitmaps_6x0u.asp
-     *
-     * @param string $str Data to decode
-     * @param int $width Image width
-     *
-     * @return string
-     */
+    
     public static function rle4_decode($str, $width)
     {
         $w = floor($width / 2) + ($width % 2);
@@ -449,13 +333,7 @@ class Helpers
         return $out;
     }
 
-    /**
-     * parse a full url or pathname and return an array(protocol, host, path,
-     * file + query + fragment)
-     *
-     * @param string $url
-     * @return array
-     */
+    
     public static function explode_url($url)
     {
         $protocol = "";
@@ -470,7 +348,7 @@ class Helpers
         }
 
         if (isset($arr["scheme"]) && $arr["scheme"] !== "file" && $arr["scheme"] !== "phar" && strlen($arr["scheme"]) > 1) {
-            $protocol = $arr["scheme"] . "://";
+            $protocol = $arr["scheme"] . ":
 
             if (isset($arr["user"])) {
                 $host .= $arr["user"];
@@ -491,7 +369,7 @@ class Helpers
             }
 
             if (isset($arr["path"]) && $arr["path"] !== "") {
-                // Do we have a trailing slash?
+                
                 if ($arr["path"][mb_strlen($arr["path"]) - 1] === "/") {
                     $path = $arr["path"];
                     $file = "";
@@ -512,17 +390,17 @@ class Helpers
         } else {
 
             $protocol = "";
-            $host = ""; // localhost, really
+            $host = ""; 
 
-            $i = mb_stripos($url, "://");
+            $i = mb_stripos($url, ":
             if ($i !== false) {
                 $protocol = mb_strtolower(mb_substr($url, 0, $i + 3));
                 $url = mb_substr($url, $i + 3);
             } else {
-                $protocol = "file://";
+                $protocol = "file:
             }
 
-            if ($protocol === "phar://") {
+            if ($protocol === "phar:
                 $res = substr($url, stripos($url, ".phar")+5);
                 $url = substr($url, 7, stripos($url, ".phar")-2);
             }
@@ -540,12 +418,7 @@ class Helpers
         return $ret;
     }
 
-    /**
-     * Print debug messages
-     *
-     * @param string $type The type of debug messages to print
-     * @param string $msg The message to show
-     */
+    
     public static function dompdf_debug($type, $msg)
     {
         global $_DOMPDF_DEBUG_TYPES, $_dompdf_show_warnings, $_dompdf_debug;
@@ -557,24 +430,10 @@ class Helpers
         }
     }
 
-    /**
-     * Stores warnings in an array for display later
-     * This function allows warnings generated by the DomDocument parser
-     * and CSS loader ({@link Stylesheet}) to be captured and displayed
-     * later.  Without this function, errors are displayed immediately and
-     * PDF streaming is impossible.
-     * @see http://www.php.net/manual/en/function.set-error_handler.php
-     *
-     * @param int $errno
-     * @param string $errstr
-     * @param string $errfile
-     * @param string $errline
-     *
-     * @throws Exception
-     */
+    
     public static function record_warnings($errno, $errstr, $errfile, $errline)
     {
-        // Not a warning or notice
+        
         if (!($errno & (E_WARNING | E_NOTICE | E_USER_NOTICE | E_USER_WARNING | E_STRICT | E_DEPRECATED | E_USER_DEPRECATED))) {
             throw new Exception($errstr . " $errno");
         }
@@ -589,10 +448,7 @@ class Helpers
         $_dompdf_warnings[] = $errstr;
     }
 
-    /**
-     * @param $c
-     * @return bool|string
-     */
+    
     public static function unichr($c)
     {
         if ($c <= 0x7F) {
@@ -610,16 +466,7 @@ class Helpers
         return false;
     }
 
-    /**
-     * Converts a CMYK color to RGB
-     *
-     * @param float|float[] $c
-     * @param float $m
-     * @param float $y
-     * @param float $k
-     *
-     * @return float[]
-     */
+    
     public static function cmyk_to_rgb($c, $m = null, $y = null, $k = null)
     {
         if (is_array($c)) {
@@ -651,14 +498,7 @@ class Helpers
         ];
     }
 
-    /**
-     * getimagesize doesn't give a good size for 32bit BMP image v5
-     *
-     * @param string $filename
-     * @param resource $context
-     * @return array An array of three elements: width and height as
-     *         `float|int`, and image type as `string|null`.
-     */
+    
     public static function dompdf_getimagesize($filename, $context = null)
     {
         static $cache = [];
@@ -669,7 +509,7 @@ class Helpers
 
         [$width, $height, $type] = getimagesize($filename);
 
-        // Custom types
+        
         $types = [
             IMAGETYPE_JPEG => "jpeg",
             IMAGETYPE_GIF  => "gif",
@@ -704,11 +544,7 @@ class Helpers
         return $cache[$filename] = [$width ?? 0, $height ?? 0, $type];
     }
 
-    /**
-     * Credit goes to mgutt
-     * http://www.programmierer-forum.de/function-imagecreatefrombmp-welche-variante-laeuft-t143137.htm
-     * Modified by Fabien Menager to support RGB555 BMP format
-     */
+    
     public static function imagecreatefrombmp($filename, $context = null)
     {
         if (!function_exists("imagecreatetruecolor")) {
@@ -716,7 +552,7 @@ class Helpers
             return false;
         }
 
-        // version 1.00
+        
         if (!($fh = fopen($filename, 'rb'))) {
             trigger_error('imagecreatefrombmp: Can not open ' . $filename, E_USER_WARNING);
             return false;
@@ -724,36 +560,36 @@ class Helpers
 
         $bytes_read = 0;
 
-        // read file header
+        
         $meta = unpack('vtype/Vfilesize/Vreserved/Voffset', fread($fh, 14));
 
-        // check for bitmap
+        
         if ($meta['type'] != 19778) {
             trigger_error('imagecreatefrombmp: ' . $filename . ' is not a bitmap!', E_USER_WARNING);
             return false;
         }
 
-        // read image header
+        
         $meta += unpack('Vheadersize/Vwidth/Vheight/vplanes/vbits/Vcompression/Vimagesize/Vxres/Vyres/Vcolors/Vimportant', fread($fh, 40));
         $bytes_read += 40;
 
-        // read additional bitfield header
+        
         if ($meta['compression'] == 3) {
             $meta += unpack('VrMask/VgMask/VbMask', fread($fh, 12));
             $bytes_read += 12;
         }
 
-        // set bytes and padding
+        
         $meta['bytes'] = $meta['bits'] / 8;
         $meta['decal'] = 4 - (4 * (($meta['width'] * $meta['bytes'] / 4) - floor($meta['width'] * $meta['bytes'] / 4)));
         if ($meta['decal'] == 4) {
             $meta['decal'] = 0;
         }
 
-        // obtain imagesize
+        
         if ($meta['imagesize'] < 1) {
             $meta['imagesize'] = $meta['filesize'] - $meta['offset'];
-            // in rare cases filesize is equal to offset so we need to read physical size
+            
             if ($meta['imagesize'] < 1) {
                 $meta['imagesize'] = @filesize($filename) - $meta['offset'];
                 if ($meta['imagesize'] < 1) {
@@ -763,14 +599,14 @@ class Helpers
             }
         }
 
-        // calculate colors
+        
         $meta['colors'] = !$meta['colors'] ? pow(2, $meta['bits']) : $meta['colors'];
 
-        // read color palette
+        
         $palette = [];
         if ($meta['bits'] < 16) {
             $palette = unpack('l' . $meta['colors'], fread($fh, $meta['colors'] * 4));
-            // in rare cases the color value is signed
+            
             if ($palette[1] < 0) {
                 foreach ($palette as $i => $color) {
                     $palette[$i] = $color + 16777216;
@@ -778,16 +614,16 @@ class Helpers
             }
         }
 
-        // ignore extra bitmap headers
+        
         if ($meta['headersize'] > $bytes_read) {
             fread($fh, $meta['headersize'] - $bytes_read);
         }
 
-        // create gd image
+        
         $im = imagecreatetruecolor($meta['width'], $meta['height']);
         $data = fread($fh, $meta['imagesize']);
 
-        // uncompress data
+        
         switch ($meta['compression']) {
             case 1:
                 $data = Helpers::rle8_decode($data, $meta['width']);
@@ -802,30 +638,30 @@ class Helpers
         $y = $meta['height'] - 1;
         $error = 'imagecreatefrombmp: ' . $filename . ' has not enough data!';
 
-        // loop through the image data beginning with the lower left corner
+        
         while ($y >= 0) {
             $x = 0;
             while ($x < $meta['width']) {
                 switch ($meta['bits']) {
                     case 32:
                     case 24:
-                        if (!($part = substr($data, $p, 3 /*$meta['bytes']*/))) {
+                        if (!($part = substr($data, $p, 3 ))) {
                             trigger_error($error, E_USER_WARNING);
                             return $im;
                         }
                         $color = unpack('V', $part . $vide);
                         break;
                     case 16:
-                        if (!($part = substr($data, $p, 2 /*$meta['bytes']*/))) {
+                        if (!($part = substr($data, $p, 2 ))) {
                             trigger_error($error, E_USER_WARNING);
                             return $im;
                         }
                         $color = unpack('v', $part);
 
                         if (empty($meta['rMask']) || $meta['rMask'] != 0xf800) {
-                            $color[1] = (($color[1] & 0x7c00) >> 7) * 65536 + (($color[1] & 0x03e0) >> 2) * 256 + (($color[1] & 0x001f) << 3); // 555
+                            $color[1] = (($color[1] & 0x7c00) >> 7) * 65536 + (($color[1] & 0x03e0) >> 2) * 256 + (($color[1] & 0x001f) << 3); 
                         } else {
-                            $color[1] = (($color[1] & 0xf800) >> 8) * 65536 + (($color[1] & 0x07e0) >> 3) * 256 + (($color[1] & 0x001f) << 3); // 565
+                            $color[1] = (($color[1] & 0xf800) >> 8) * 65536 + (($color[1] & 0x07e0) >> 3) * 256 + (($color[1] & 0x001f) << 3); 
                         }
                         break;
                     case 8:
@@ -882,25 +718,14 @@ class Helpers
         return $im;
     }
 
-    /**
-     * Gets the content of the file at the specified path using one of
-     * the following methods, in preferential order:
-     *  - file_get_contents: if allow_url_fopen is true or the file is local
-     *  - curl: if allow_url_fopen is false and curl is available
-     *
-     * @param string $uri
-     * @param resource $context
-     * @param int $offset
-     * @param int $maxlen
-     * @return string[]
-     */
+    
     public static function getFileContent($uri, $context = null, $offset = 0, $maxlen = null)
     {
         $content = null;
         $headers = null;
         [$protocol] = Helpers::explode_url($uri);
-        $is_local_path = in_array(strtolower($protocol), ["", "file://", "phar://"], true);
-        $can_use_curl = in_array(strtolower($protocol), ["http://", "https://"], true);
+        $is_local_path = in_array(strtolower($protocol), ["", "file:
+        $can_use_curl = in_array(strtolower($protocol), ["http:
 
         set_error_handler([self::class, 'record_warnings']);
 
@@ -996,10 +821,7 @@ class Helpers
         return [$content, $headers];
     }
 
-    /**
-     * @param string $str
-     * @return string
-     */
+    
     public static function mb_ucwords(string $str): string
     {
         $max_len = mb_strlen($str);
@@ -1013,9 +835,9 @@ class Helpers
             $pos = 0;
             while (($pos = mb_strpos($str, $s, $pos)) !== false) {
                 $pos++;
-                // Nothing to do if the separator is the last char of the string
+                
                 if ($pos !== false && $pos < $max_len) {
-                    // If the char we want to upper is the last char there is nothing to append behind
+                    
                     if ($pos + 1 < $max_len) {
                         $str = mb_substr($str, 0, $pos) . mb_strtoupper(mb_substr($str, $pos, 1)) . mb_substr($str, $pos + 1);
                     } else {
@@ -1028,25 +850,13 @@ class Helpers
         return $str;
     }
 
-    /**
-     * Check whether two lengths should be considered equal, accounting for
-     * inaccuracies in float computation.
-     *
-     * The implementation relies on the fact that we are neither dealing with
-     * very large, nor with very small numbers in layout. Adapted from
-     * https://floating-point-gui.de/errors/comparison/.
-     *
-     * @param float $a
-     * @param float $b
-     *
-     * @return bool
-     */
+    
     public static function lengthEqual(float $a, float $b): bool
     {
-        // The epsilon results in a precision of at least:
-        // * 7 decimal digits at around 1
-        // * 4 decimal digits at around 1000 (around the size of common paper formats)
-        // * 2 decimal digits at around 100,000 (100,000pt ~ 35.28m)
+        
+        
+        
+        
         static $epsilon = 1e-8;
         static $almostZero = 1e-12;
 
@@ -1059,33 +869,25 @@ class Helpers
         return $diff < $epsilon * max(abs($a), abs($b));
     }
 
-    /**
-     * Check `$a < $b`, accounting for inaccuracies in float computation.
-     */
+    
     public static function lengthLess(float $a, float $b): bool
     {
         return $a < $b && !self::lengthEqual($a, $b);
     }
 
-    /**
-     * Check `$a <= $b`, accounting for inaccuracies in float computation.
-     */
+    
     public static function lengthLessOrEqual(float $a, float $b): bool
     {
         return $a <= $b || self::lengthEqual($a, $b);
     }
 
-    /**
-     * Check `$a > $b`, accounting for inaccuracies in float computation.
-     */
+    
     public static function lengthGreater(float $a, float $b): bool
     {
         return $a > $b && !self::lengthEqual($a, $b);
     }
 
-    /**
-     * Check `$a >= $b`, accounting for inaccuracies in float computation.
-     */
+    
     public static function lengthGreaterOrEqual(float $a, float $b): bool
     {
         return $a >= $b || self::lengthEqual($a, $b);

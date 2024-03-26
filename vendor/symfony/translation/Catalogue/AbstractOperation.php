@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation\Catalogue;
 
@@ -16,14 +9,7 @@ use Symfony\Component\Translation\Exception\LogicException;
 use Symfony\Component\Translation\MessageCatalogue;
 use Symfony\Component\Translation\MessageCatalogueInterface;
 
-/**
- * Base catalogues binary operation class.
- *
- * A catalogue binary operation performs operation on
- * source (the left argument) and target (the right argument) catalogues.
- *
- * @author Jean-François Simon <contact@jfsimon.fr>
- */
+
 abstract class AbstractOperation implements OperationInterface
 {
     public const OBSOLETE_BATCH = 'obsolete';
@@ -34,37 +20,13 @@ abstract class AbstractOperation implements OperationInterface
     protected $target;
     protected $result;
 
-    /**
-     * @var array|null The domains affected by this operation
-     */
+    
     private $domains;
 
-    /**
-     * This array stores 'all', 'new' and 'obsolete' messages for all valid domains.
-     *
-     * The data structure of this array is as follows:
-     *
-     *     [
-     *         'domain 1' => [
-     *             'all' => [...],
-     *             'new' => [...],
-     *             'obsolete' => [...]
-     *         ],
-     *         'domain 2' => [
-     *             'all' => [...],
-     *             'new' => [...],
-     *             'obsolete' => [...]
-     *         ],
-     *         ...
-     *     ]
-     *
-     * @var array The array that stores 'all', 'new' and 'obsolete' messages
-     */
+    
     protected $messages;
 
-    /**
-     * @throws LogicException
-     */
+    
     public function __construct(MessageCatalogueInterface $source, MessageCatalogueInterface $target)
     {
         if ($source->getLocale() !== $target->getLocale()) {
@@ -147,12 +109,10 @@ abstract class AbstractOperation implements OperationInterface
         return $this->result;
     }
 
-    /**
-     * @param self::*_BATCH $batch
-     */
+    
     public function moveMessagesToIntlDomainsIfPossible(string $batch = self::ALL_BATCH): void
     {
-        // If MessageFormatter class does not exists, intl domains are not supported.
+        
         if (!class_exists(\MessageFormatter::class)) {
             return;
         }
@@ -178,11 +138,6 @@ abstract class AbstractOperation implements OperationInterface
         }
     }
 
-    /**
-     * Performs operation on source and target catalogues for the given domain and
-     * stores the results.
-     *
-     * @param string $domain The domain which the operation will be performed for
-     */
+    
     abstract protected function processDomain(string $domain);
 }

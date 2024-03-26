@@ -9,17 +9,7 @@ use React\EventLoop\Tick\FutureTickQueue;
 use React\EventLoop\Timer\Timer;
 use SplObjectStorage;
 
-/**
- * An `ext-event` based event loop.
- *
- * This uses the [`event` PECL extension](https://pecl.php.net/package/event),
- * that provides an interface to `libevent` library.
- * `libevent` itself supports a number of system-specific backends (epoll, kqueue).
- *
- * This loop is known to work with PHP 5.4 through PHP 8+.
- *
- * @link https://pecl.php.net/package/event
- */
+
 final class ExtEventLoop implements LoopInterface
 {
     private $eventBase;
@@ -43,9 +33,9 @@ final class ExtEventLoop implements LoopInterface
             throw new BadMethodCallException('Cannot create ExtEventLoop, ext-event extension missing');
         }
 
-        // support arbitrary file descriptors and not just sockets
-        // Windows only has limited file descriptor support, so do not require this (will fail otherwise)
-        // @link http://www.wangafu.net/~nickm/libevent-book/Ref2_eventbase.html#_setting_up_a_complicated_event_base
+        
+        
+        
         $config = new \EventConfig();
         if (\DIRECTORY_SEPARATOR !== '\\') {
             $config->requireFeatures(\EventConfig::FEATURE_FDS);
@@ -62,7 +52,7 @@ final class ExtEventLoop implements LoopInterface
 
     public function __destruct()
     {
-        // explicitly clear all references to Event objects to prevent SEGFAULTs on Windows
+        
         foreach ($this->timerEvents as $timer) {
             $this->timerEvents->detach($timer);
         }
@@ -83,8 +73,8 @@ final class ExtEventLoop implements LoopInterface
         $this->readEvents[$key] = $event;
         $this->readListeners[$key] = $listener;
 
-        // ext-event does not increase refcount on stream resources for PHP 7+
-        // manually keep track of stream resource to prevent premature garbage collection
+        
+        
         if (\PHP_VERSION_ID >= 70000) {
             $this->readRefs[$key] = $stream;
         }
@@ -102,8 +92,8 @@ final class ExtEventLoop implements LoopInterface
         $this->writeEvents[$key] = $event;
         $this->writeListeners[$key] = $listener;
 
-        // ext-event does not increase refcount on stream resources for PHP 7+
-        // manually keep track of stream resource to prevent premature garbage collection
+        
+        
         if (\PHP_VERSION_ID >= 70000) {
             $this->writeRefs[$key] = $stream;
         }
@@ -211,11 +201,7 @@ final class ExtEventLoop implements LoopInterface
         $this->running = false;
     }
 
-    /**
-     * Schedule a timer for execution.
-     *
-     * @param TimerInterface $timer
-     */
+    
     private function scheduleTimer(TimerInterface $timer)
     {
         $flags = Event::TIMEOUT;
@@ -230,13 +216,7 @@ final class ExtEventLoop implements LoopInterface
         $event->add($timer->getInterval());
     }
 
-    /**
-     * Create a callback used as the target of timer events.
-     *
-     * A reference is kept to the callback for the lifetime of the loop
-     * to prevent "Cannot destroy active lambda function" fatal error from
-     * the event extension.
-     */
+    
     private function createTimerCallback()
     {
         $timers = $this->timerEvents;
@@ -249,13 +229,7 @@ final class ExtEventLoop implements LoopInterface
         };
     }
 
-    /**
-     * Create a callback used as the target of stream events.
-     *
-     * A reference is kept to the callback for the lifetime of the loop
-     * to prevent "Cannot destroy active lambda function" fatal error from
-     * the event extension.
-     */
+    
     private function createStreamCallback()
     {
         $read =& $this->readListeners;

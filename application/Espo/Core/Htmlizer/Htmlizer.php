@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Htmlizer;
 
@@ -56,17 +30,13 @@ use stdClass;
 
 use const JSON_PRESERVE_ZERO_FRACTION;
 
-/**
- * Generates an HTML for an entity. Used by Print-to-PDF, system email notifications.
- * Not for direct use. Use `TemplateRenderer`.
- * @internal
- */
+
 class Htmlizer
 {
     private const LINK_LIMIT = 100;
 
     public function __construct(
-        private FileManager $fileManager, /** @phpstan-ignore-line  */
+        private FileManager $fileManager, 
         private DateTime $dateTime,
         private NumberUtil $number,
         private ?Acl $acl = null,
@@ -79,13 +49,7 @@ class Htmlizer
         private ?InjectableFactory $injectableFactory = null
     ) {}
 
-    /**
-     * Generate an HTML for entity by a given template.
-     *
-     * @param ?string $cacheId @deprecated To be skipped.
-     * @param ?array<string, mixed> $additionalData Data will be passed to the template.
-     * @param bool $skipLinks Do not process related records.
-     */
+    
     public function render(
         ?Entity $entity,
         string $template,
@@ -106,9 +70,7 @@ class Htmlizer
             throw new RuntimeException("Template compile error.");
         }
 
-        /**
-         * @var Closure|false $renderer
-         */
+        
         $renderer = LightnCandy::prepare($code);
 
         if ($renderer === false) {
@@ -150,7 +112,7 @@ class Htmlizer
         }
 
         if (!$skipInlineAttachmentHandling && $this->entityManager) {
-            /** @var string $html */
+            
             $html = preg_replace_callback(
                 '/\?entryPoint=attachment\&id=([A-Za-z0-9]*)/',
                 function ($matches) {
@@ -162,14 +124,14 @@ class Htmlizer
 
                     assert($this->entityManager !== null);
 
-                    /** @var Attachment $attachment */
+                    
                     $attachment = $this->entityManager->getEntityById(Attachment::ENTITY_TYPE, $id);
 
                     if (!$attachment) {
                         return '';
                     }
 
-                    /** @var AttachmentRepository $repository */
+                    
                     $repository = $this->entityManager->getRepository(Attachment::ENTITY_TYPE);
 
                     return $repository->getFilePath($attachment);
@@ -198,10 +160,7 @@ class Htmlizer
         return $value;
     }
 
-    /**
-     * @param ?array<string, mixed> $additionalData
-     * @return array<string, mixed>
-     */
+    
     private function getDataFromEntity(
         Entity $entity,
         bool $skipLinks = false,
@@ -254,7 +213,7 @@ class Htmlizer
             if ($value instanceof Collection) {
                 $skipAttributeList[] = $key;
 
-                /** @var iterable<Entity> $collection */
+                
                 $collection = $value;
 
                 $list = [];
@@ -434,9 +393,7 @@ class Htmlizer
         return $data;
     }
 
-    /**
-     * @param array<string, mixed> $data
-     */
+    
     private function loadRelatedCollections(Entity $entity, ?string $template, array &$data): void
     {
         foreach ($entity->getRelationList() as $relation) {
@@ -448,9 +405,7 @@ class Htmlizer
         }
     }
 
-    /**
-     * @return ?Collection<Entity>
-     */
+    
     private function loadRelatedCollection(Entity $entity, string $relation, ?string $template): ?Collection
     {
         assert($this->entityManager !== null);
@@ -502,9 +457,7 @@ class Htmlizer
         return null;
     }
 
-    /**
-     * @return array<string, callable>
-     */
+    
     private function getHelpers(): array
     {
         $helpers = [
@@ -517,11 +470,11 @@ class Htmlizer
                     return '';
                 }
 
-                /** @phpstan-ignore-next-line */
+                
                 return new LightnCandy\SafeString("?entryPoint=attachment&id=" . $id);
             },
             'pagebreak' => function () {
-                /** @phpstan-ignore-next-line */
+                
                 return new LightnCandy\SafeString('<br pagebreak="true">');
             },
             'imageTag' => function () {
@@ -559,7 +512,7 @@ class Htmlizer
 
                 $html = "<img src=\"?entryPoint=attachment&id={$id}\"{$attributesPart}>";
 
-                /** @phpstan-ignore-next-line */
+                
                 return new LightnCandy\SafeString($html);
             },
             'var' => function () {
@@ -628,10 +581,10 @@ class Htmlizer
                 $params = $context['hash'];
                 $params['value'] = $value;
 
-                /** @phpstan-ignore-next-line */
+                
                 $paramsString = urlencode(json_encode($params));
 
-                /** @phpstan-ignore-next-line */
+                
                 return new LightnCandy\SafeString("<barcodeimage data=\"{$paramsString}\"/>");
             },
             'ifEqual' => function () {
@@ -714,7 +667,7 @@ class Htmlizer
                     $html = '<input type="checkbox" name="1" readonly="true" value="1" style="color: '.$css.'">';
                 }
 
-                /** @phpstan-ignore-next-line */
+                
                 return new LightnCandy\SafeString($html);
             },
         ];
@@ -734,7 +687,7 @@ class Htmlizer
 
             $className = $metadata->get(['app', 'templateHelpers', $name]);
 
-            // Not using FQN deliberately.
+            
             $data = new \Espo\Core\Htmlizer\Helper\Data(
                 $name,
                 $argumentList,
@@ -795,9 +748,7 @@ class Htmlizer
         return $this->metadata->get(['entityDefs', $entityType, 'fields', $field, 'type']);
     }
 
-    /**
-     * @return array<int, array{string, string}>
-     */
+    
     private function getRelationOrder(string $entityType, string $relation): array
     {
         if (!$this->entityManager) {

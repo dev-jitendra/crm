@@ -27,7 +27,7 @@ use function str_repeat;
 
 final class Statement implements StatementInterface
 {
-    /** @var string[] */
+    
     private static array $paramTypeMap = [
         ParameterType::ASCII => 's',
         ParameterType::STRING => 's',
@@ -40,19 +40,15 @@ final class Statement implements StatementInterface
 
     private mysqli_stmt $stmt;
 
-    /** @var mixed[] */
+    
     private array $boundValues;
 
     private string $types;
 
-    /**
-     * Contains ref values for bindValue().
-     *
-     * @var mixed[]
-     */
+    
     private array $values = [];
 
-    /** @internal The statement can be only instantiated by its driver connection. */
+    
     public function __construct(mysqli_stmt $stmt)
     {
         $this->stmt = $stmt;
@@ -62,16 +58,12 @@ final class Statement implements StatementInterface
         $this->boundValues = array_fill(1, $paramCount, null);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated Use {@see bindValue()} instead.
-     */
+    
     public function bindParam($param, &$variable, $type = ParameterType::STRING, $length = null): bool
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5563',
+            'https:
             '%s is deprecated. Use bindValue() instead.',
             __METHOD__,
         );
@@ -81,7 +73,7 @@ final class Statement implements StatementInterface
         if (func_num_args() < 3) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5558',
+                'https:
                 'Not passing $type to Statement::bindParam() is deprecated.'
                     . ' Pass the type corresponding to the parameter being bound.',
             );
@@ -97,9 +89,7 @@ final class Statement implements StatementInterface
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function bindValue($param, $value, $type = ParameterType::STRING): bool
     {
         assert(is_int($param));
@@ -107,7 +97,7 @@ final class Statement implements StatementInterface
         if (func_num_args() < 3) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5558',
+                'https:
                 'Not passing $type to Statement::bindValue() is deprecated.'
                     . ' Pass the type corresponding to the parameter being bound.',
             );
@@ -124,15 +114,13 @@ final class Statement implements StatementInterface
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function execute($params = null): ResultInterface
     {
         if ($params !== null) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5556',
+                'https:
                 'Passing $params to Statement::execute() is deprecated. Bind parameters using'
                     . ' Statement::bindParam() or Statement::bindValue() instead.',
             );
@@ -159,11 +147,7 @@ final class Statement implements StatementInterface
         return new Result($this->stmt);
     }
 
-    /**
-     * Binds parameters with known types previously bound to the statement
-     *
-     * @throws Exception
-     */
+    
     private function bindTypedParameters(): void
     {
         $streams = $values = [];
@@ -200,13 +184,7 @@ final class Statement implements StatementInterface
         $this->sendLongData($streams);
     }
 
-    /**
-     * Handle $this->_longData after regular query parameters have been bound
-     *
-     * @param array<int, resource> $streams
-     *
-     * @throws Exception
-     */
+    
     private function sendLongData(array $streams): void
     {
         foreach ($streams as $paramNr => $stream) {
@@ -224,11 +202,7 @@ final class Statement implements StatementInterface
         }
     }
 
-    /**
-     * Binds a array of values to bound parameters.
-     *
-     * @param mixed[] $values
-     */
+    
     private function bindUntypedValues(array $values): bool
     {
         return $this->stmt->bind_param(str_repeat('s', count($values)), ...$values);

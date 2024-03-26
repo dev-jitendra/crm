@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation\Command;
 
@@ -26,9 +19,7 @@ use Symfony\Component\Translation\Provider\TranslationProviderCollection;
 use Symfony\Component\Translation\Reader\TranslationReaderInterface;
 use Symfony\Component\Translation\TranslatorBag;
 
-/**
- * @author Mathieu Santostefano <msantostefano@protonmail.com>
- */
+
 #[AsCommand(name: 'translation:push', description: 'Push translations to a given provider.')]
 final class TranslationPushCommand extends Command
 {
@@ -128,8 +119,8 @@ EOF
             $domains = $provider->getDomains();
         }
 
-        // Reading local translations must be done after retrieving the domains from the provider
-        // in order to manage only translations from configured domains
+        
+        
         $localTranslations = $this->readLocalTranslations($locales, $domains, $this->transPaths);
 
         if (!$domains) {
@@ -151,8 +142,8 @@ EOF
 
             $io->success(sprintf('Missing translations on "%s" has been deleted (for "%s" locale(s), and "%s" domain(s)).', parse_url($provider, \PHP_URL_SCHEME), implode(', ', $locales), implode(', ', $domains)));
 
-            // Read provider translations again, after missing translations deletion,
-            // to avoid push freshly deleted translations.
+            
+            
             $providerTranslations = $provider->read($domains, $locales);
         }
 

@@ -1,27 +1,12 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation\Catalogue;
 
 use Symfony\Component\Translation\MessageCatalogueInterface;
 
-/**
- * Merge operation between two catalogues as follows:
- * all = source ∪ target = {x: x ∈ source ∨ x ∈ target}
- * new = all ∖ source = {x: x ∈ target ∧ x ∉ source}
- * obsolete = source ∖ all = {x: x ∈ source ∧ x ∉ source ∧ x ∉ target} = ∅
- * Basically, the result contains messages from both catalogues.
- *
- * @author Jean-François Simon <contact@jfsimon.fr>
- */
+
 class MergeOperation extends AbstractOperation
 {
     protected function processDomain(string $domain)

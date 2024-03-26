@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpClient;
 
@@ -22,14 +15,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Contracts\HttpClient\ResponseStreamInterface;
 
-/**
- * A portable implementation of the HttpClientInterface contracts based on PHP stream wrappers.
- *
- * PHP stream wrappers are able to fetch response bodies concurrently,
- * but each request is opened synchronously.
- *
- * @author Nicolas Grekas <p@tchwork.com>
- */
+
 final class NativeHttpClient implements HttpClientInterface, LoggerAwareInterface
 {
     use HttpClientTrait;
@@ -37,15 +23,10 @@ final class NativeHttpClient implements HttpClientInterface, LoggerAwareInterfac
 
     private $defaultOptions = self::OPTIONS_DEFAULTS;
 
-    /** @var NativeClientState */
+    
     private $multi;
 
-    /**
-     * @param array $defaultOptions     Default request's options
-     * @param int   $maxHostConnections The maximum number of connections to open
-     *
-     * @see HttpClientInterface::OPTIONS_DEFAULTS for available options
-     */
+    
     public function __construct(array $defaultOptions = [], int $maxHostConnections = 6)
     {
         $this->defaultOptions['buffer'] = $this->defaultOptions['buffer'] ?? \Closure::fromCallable([__CLASS__, 'shouldBuffer']);
@@ -58,11 +39,7 @@ final class NativeHttpClient implements HttpClientInterface, LoggerAwareInterfac
         $this->multi->maxHostConnections = 0 < $maxHostConnections ? $maxHostConnections : \PHP_INT_MAX;
     }
 
-    /**
-     * @see HttpClientInterface::OPTIONS_DEFAULTS for available options
-     *
-     * {@inheritdoc}
-     */
+    
     public function request(string $method, string $url, array $options = []): ResponseInterface
     {
         [$url, $options] = self::prepareRequest($method, $url, $options, $this->defaultOptions);
@@ -86,7 +63,7 @@ final class NativeHttpClient implements HttpClientInterface, LoggerAwareInterfac
         }
 
         if (\extension_loaded('zlib') && !isset($options['normalized_headers']['accept-encoding'])) {
-            // gzip is the most widely available algo, no need to deal with deflate
+            
             $options['headers'][] = 'Accept-Encoding: gzip';
         }
 
@@ -122,7 +99,7 @@ final class NativeHttpClient implements HttpClientInterface, LoggerAwareInterfac
         ];
 
         if ($onProgress = $options['on_progress']) {
-            // Memoize the last progress to ease calling the callback periodically when no network transfer happens
+            
             $lastProgress = [0, 0];
             $maxDuration = 0 < $options['max_duration'] ? $options['max_duration'] : \INF;
             $onProgress = static function (...$progress) use ($onProgress, &$lastProgress, &$info, $maxDuration) {
@@ -135,7 +112,7 @@ final class NativeHttpClient implements HttpClientInterface, LoggerAwareInterfac
                 unset($progressInfo['size_body']);
 
                 if ($progress && -1 === $progress[0]) {
-                    // Response completed
+                    
                     $lastProgress[0] = max($lastProgress);
                 } else {
                     $lastProgress = $progress ?: $lastProgress;
@@ -152,7 +129,7 @@ final class NativeHttpClient implements HttpClientInterface, LoggerAwareInterfac
             };
         }
 
-        // Always register a notification callback to compute live stats about the response
+        
         $notification = static function (int $code, int $severity, ?string $msg, int $msgCode, int $dlNow, int $dlSize) use ($onProgress, &$info) {
             $info['total_time'] = microtime(true) - $info['start_time'];
 
@@ -200,9 +177,9 @@ final class NativeHttpClient implements HttpClientInterface, LoggerAwareInterfac
                 'ignore_errors' => true,
                 'curl_verify_ssl_peer' => $options['verify_peer'],
                 'curl_verify_ssl_host' => $options['verify_host'],
-                'auto_decode' => false, // Disable dechunk filter, it's incompatible with stream_select()
+                'auto_decode' => false, 
                 'timeout' => $options['timeout'],
-                'follow_location' => false, // We follow redirects ourselves - the native logic is too limited
+                'follow_location' => false, 
             ],
             'ssl' => array_filter([
                 'verify_peer' => $options['verify_peer'],
@@ -247,9 +224,7 @@ final class NativeHttpClient implements HttpClientInterface, LoggerAwareInterfac
         return new NativeResponse($this->multi, $context, implode('', $url), $options, $info, $resolver, $onProgress, $this->logger);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function stream($responses, float $timeout = null): ResponseStreamInterface
     {
         if ($responses instanceof NativeResponse) {
@@ -284,9 +259,7 @@ final class NativeHttpClient implements HttpClientInterface, LoggerAwareInterfac
         return $result;
     }
 
-    /**
-     * Extracts the host and the port from the URL.
-     */
+    
     private static function parseHostPort(array $url, array &$info): array
     {
         if ($port = parse_url($url['authority'], \PHP_URL_PORT) ?: '') {
@@ -299,9 +272,7 @@ final class NativeHttpClient implements HttpClientInterface, LoggerAwareInterfac
         return [parse_url($url['authority'], \PHP_URL_HOST), $port];
     }
 
-    /**
-     * Resolves the IP of the host using the local DNS cache if possible.
-     */
+    
     private static function dnsResolve($host, NativeClientState $multi, array &$info, ?\Closure $onProgress): string
     {
         if (null === $ip = $multi->dnsCache[$host] ?? null) {
@@ -322,16 +293,14 @@ final class NativeHttpClient implements HttpClientInterface, LoggerAwareInterfac
         $info['primary_ip'] = $ip;
 
         if ($onProgress) {
-            // Notify DNS resolution
+            
             $onProgress();
         }
 
         return $ip;
     }
 
-    /**
-     * Handles redirects - the native logic is too buggy to be used.
-     */
+    
     private static function createRedirectResolver(array $options, string $host, ?array $proxy, array &$info, ?\Closure $onProgress): \Closure
     {
         $redirectHeaders = [];
@@ -374,7 +343,7 @@ final class NativeHttpClient implements HttpClientInterface, LoggerAwareInterfac
             ++$info['redirect_count'];
             $info['redirect_time'] = microtime(true) - $info['start_time'];
 
-            // Do like curl and browsers: turn POST to GET on 301, 302 and 303
+            
             if (\in_array($info['http_code'], [301, 302, 303], true)) {
                 $options = stream_context_get_options($context)['http'];
 
@@ -392,7 +361,7 @@ final class NativeHttpClient implements HttpClientInterface, LoggerAwareInterfac
             [$host, $port] = self::parseHostPort($url, $info);
 
             if (false !== (parse_url($location, \PHP_URL_HOST) ?? false)) {
-                // Authorization and Cookie headers MUST NOT follow except for the initial host name
+                
                 $requestHeaders = $redirectHeaders['host'] === $host ? $redirectHeaders['with_auth'] : $redirectHeaders['no_auth'];
                 $requestHeaders[] = 'Host: '.$host.$port;
                 $dnsResolve = !self::configureHeadersAndProxy($context, $host, $requestHeaders, $proxy, 'https:' === $url['scheme']);
@@ -418,7 +387,7 @@ final class NativeHttpClient implements HttpClientInterface, LoggerAwareInterfac
             return false;
         }
 
-        // Matching "no_proxy" should follow the behavior of curl
+        
 
         foreach ($proxy['no_proxy'] as $rule) {
             $dotRule = '.'.ltrim($rule, '.');

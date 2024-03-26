@@ -19,11 +19,7 @@ use Doctrine\DBAL\Exception\TableNotFoundException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\DBAL\Query;
 
-/**
- * @internal
- *
- * @link https://docs.microsoft.com/en-us/sql/relational-databases/errors-events/database-engine-events-and-errors
- */
+
 final class ExceptionConverter implements ExceptionConverterInterface
 {
     public function convert(Exception $exception, ?Query $query): DriverException

@@ -29,10 +29,10 @@ final class CacheAdapter implements CacheItemPoolInterface
 {
     private const RESERVED_CHARACTERS = '{}()/\@:';
 
-    /** @var Cache */
+    
     private $cache;
 
-    /** @var array<CacheItem|TypedCacheItem> */
+    
     private $deferredItems = [];
 
     public static function wrap(Cache $cache): CacheItemPoolInterface
@@ -43,7 +43,7 @@ final class CacheAdapter implements CacheItemPoolInterface
 
         if ($cache instanceof SymfonyDoctrineProvider && ! $cache->getNamespace()) {
             $getPool = function () {
-                // phpcs:ignore Squiz.Scope.StaticThisUsage.Found
+                
                 return $this->pool;
             };
 
@@ -58,15 +58,13 @@ final class CacheAdapter implements CacheItemPoolInterface
         $this->cache = $cache;
     }
 
-    /** @internal */
+    
     public function getCache(): Cache
     {
         return $this->cache;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getItem($key): CacheItemInterface
     {
         assert(self::validKey($key));
@@ -92,9 +90,7 @@ final class CacheAdapter implements CacheItemPoolInterface
         return new CacheItem($key, null, false);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function getItems(array $keys = []): array
     {
         if ($this->deferredItems) {
@@ -129,9 +125,7 @@ final class CacheAdapter implements CacheItemPoolInterface
         return $items;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function hasItem($key): bool
     {
         assert(self::validKey($key));
@@ -154,9 +148,7 @@ final class CacheAdapter implements CacheItemPoolInterface
         return $this->cache->deleteAll();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function deleteItem($key): bool
     {
         assert(self::validKey($key));
@@ -165,9 +157,7 @@ final class CacheAdapter implements CacheItemPoolInterface
         return $this->cache->delete($key);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     public function deleteItems(array $keys): bool
     {
         foreach ($keys as $key) {
@@ -248,9 +238,7 @@ final class CacheAdapter implements CacheItemPoolInterface
         $this->commit();
     }
 
-    /**
-     * @param mixed $key
-     */
+    
     private static function validKey($key): bool
     {
         if (! is_string($key)) {
@@ -268,9 +256,7 @@ final class CacheAdapter implements CacheItemPoolInterface
         return true;
     }
 
-    /**
-     * @param mixed[] $keys
-     */
+    
     private static function validKeys(array $keys): bool
     {
         foreach ($keys as $key) {
@@ -280,9 +266,7 @@ final class CacheAdapter implements CacheItemPoolInterface
         return true;
     }
 
-    /**
-     * @param mixed[] $keys
-     */
+    
     private function doDeleteMultiple(array $keys): bool
     {
         if ($this->cache instanceof MultiDeleteCache) {
@@ -297,11 +281,7 @@ final class CacheAdapter implements CacheItemPoolInterface
         return $success;
     }
 
-    /**
-     * @param mixed[] $keys
-     *
-     * @return mixed[]
-     */
+    
     private function doFetchMultiple(array $keys): array
     {
         if ($this->cache instanceof MultiGetCache) {
@@ -321,9 +301,7 @@ final class CacheAdapter implements CacheItemPoolInterface
         return $values;
     }
 
-    /**
-     * @param mixed[] $keysAndValues
-     */
+    
     private function doSaveMultiple(array $keysAndValues, int $lifetime = 0): bool
     {
         if ($this->cache instanceof MultiPutCache) {

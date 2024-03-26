@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\EntityManager;
 
@@ -49,9 +23,7 @@ use Espo\Tools\LinkManager\LinkManager;
 use Exception;
 use RuntimeException;
 
-/**
- * Administration > Entity Manager.
- */
+
 class EntityManager
 {
     private const DEFAULT_PARAM_LOCATION = 'scopes';
@@ -69,12 +41,7 @@ class EntityManager
         private LinkManager $linkManager
     ) {}
 
-    /**
-     * @param array<string, mixed> $params
-     * @throws BadRequest
-     * @throws Error
-     * @throws Conflict
-     */
+    
     public function create(string $name, string $type, array $params = [], ?CreateParams $createParams = null): void
     {
         $createParams ??= new CreateParams();
@@ -90,7 +57,7 @@ class EntityManager
             throw new Error("Type '$type' does not exist.");
         }
 
-        /** @var array<string, mixed> $templateDefs */
+        
         $templateDefs = $this->metadata->get(['app', 'entityTemplates', $type], []);
 
         if (!empty($templateDefs['isNotCreatable']) && !$createParams->forceCreate()) {
@@ -287,9 +254,7 @@ class EntityManager
         $this->dataManager->rebuild();
     }
 
-    /**
-     * @param array<string, string> $data
-     */
+    
     private function replace(
         string $contents,
         string $name,
@@ -336,26 +301,7 @@ class EntityManager
         $this->metadata->set('recordDefs', $name, $data);
     }
 
-    /**
-     * @param array{
-     *     stream?: bool,
-     *     disabled?: bool,
-     *     statusField?: ?string,
-     *     labelSingular?: ?string,
-     *     labelPlural?: ?string,
-     *     sortBy?: ?string,
-     *     sortDirection?: ?string,
-     *     textFilterFields?: ?string[],
-     *     fullTextSearch?: bool,
-     *     countDisabled?: bool,
-     *     kanbanStatusIgnoreList?: ?string[],
-     *     kanbanViewMode?: bool,
-     *     color?: ?string,
-     *     iconClass?: ?string,
-     *     optimisticConcurrencyControl?: bool,
-     * }|array<string, mixed> $params
-     * @throws Error
-     */
+    
     public function update(string $name, array $params): void
     {
         if (!$this->metadata->get('scopes.' . $name)) {
@@ -487,10 +433,7 @@ class EntityManager
         }
     }
 
-    /**
-     * @throws Forbidden
-     * @throws Error
-     */
+    
     public function delete(string $name, ?DeleteParams $deleteParams = null): void
     {
         $deleteParams ??= new DeleteParams();
@@ -503,7 +446,7 @@ class EntityManager
 
         $type = $this->metadata->get(['scopes', $name, 'type']);
         $isNotRemovable = $this->metadata->get(['scopes', $name, 'isNotRemovable']);
-        /** @var array<string, mixed> $templateDefs */
+        
         $templateDefs = $this->metadata->get(['app', 'entityTemplates', $type], []);
 
         if (
@@ -612,10 +555,7 @@ class EntityManager
         return (bool) $this->metadata->get('scopes.' . $name . '.isCustom');
     }
 
-    /**
-     * @param array<string, string> $data
-     * @throws Error
-     */
+    
     public function setFormulaData(string $scope, array $data): void
     {
         $this->metadata->set('formula', $scope, $data);
@@ -626,7 +566,7 @@ class EntityManager
 
     private function processUpdateHook(Params $params, Params $previousParams): void
     {
-        /** @var class-string<UpdateHook>[] $classNameList */
+        
         $classNameList = $this->metadata->get(['app', 'entityManager', 'updateHookClassNameList']) ?? [];
 
         foreach ($classNameList as $className) {
@@ -638,7 +578,7 @@ class EntityManager
 
     private function processDeleteHook(Params $params): void
     {
-        /** @var class-string<DeleteHook>[] $classNameList */
+        
         $classNameList = $this->metadata->get(['app', 'entityManager', 'deleteHookClassNameList']) ?? [];
 
         foreach ($classNameList as $className) {
@@ -650,7 +590,7 @@ class EntityManager
 
     private function processCreateHook(Params $params): void
     {
-        /** @var class-string<CreateHook>[] $classNameList */
+        
         $classNameList = $this->metadata->get(['app', 'entityManager', 'createHookClassNameList']) ?? [];
 
         foreach ($classNameList as $className) {
@@ -660,9 +600,7 @@ class EntityManager
         }
     }
 
-    /**
-     * @throws Error
-     */
+    
     public function resetToDefaults(string $name): void
     {
         if ($this->isCustom($name)) {
@@ -712,9 +650,7 @@ class EntityManager
         $this->dataManager->clearCache();
     }
 
-    /**
-     * @param array<string, mixed> $data
-     */
+    
     private function setAdditionalParamsInMetadata(string $entityType, array $data): void
     {
         $params = $this->getAdditionalParamLocationMap($entityType);
@@ -730,9 +666,7 @@ class EntityManager
         }
     }
 
-    /**
-     * @return array<string, mixed>
-     */
+    
     private function getCurrentParams(string $entityType): array
     {
         $data = [];
@@ -748,9 +682,7 @@ class EntityManager
         return $data;
     }
 
-    /**
-     * @return array<string, string>
-     */
+    
     private function getAdditionalParamLocationMap(string $entityType): array
     {
         $templateType = $this->metadata->get(['scopes', $entityType, 'type']);
@@ -760,12 +692,12 @@ class EntityManager
         $map3 = $this->metadata->get(['app', 'entityManagerParams', $entityType]) ?? [];
 
         if (version_compare(PHP_VERSION, '8.1.0') < 0) {
-            // @todo Remove.
-            /** @var array<string, array<string, mixed>> $params */
+            
+            
             $params = array_merge($map1, $map2, $map3);
         }
         else {
-            /** @var array<string, array<string, mixed>> $params */
+            
             $params = [...$map1, ...$map2, ...$map3];
         }
 

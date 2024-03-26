@@ -1,55 +1,23 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module controllers/record */
+
+
 
 import Controller from 'controller';
 
-/**
- * A record controller.
- * @template {module:model} TModel
- */
+
 class RecordController extends Controller {
 
-    /** @inheritDoc */
+    
     defaultAction = 'list'
 
     constructor(params, injections) {
         super(params, injections);
 
-        /**
-         * @private
-         * @type {Object}
-         */
+        
         this.collectionMap = {};
     }
 
-    /** @inheritDoc */
+    
     checkAccess(action) {
         if (this.getAcl().check(this.name, action)) {
             return true;
@@ -58,19 +26,13 @@ class RecordController extends Controller {
         return false;
     }
 
-    /**
-     * Get a view name/path.
-     *
-     * @protected
-     * @param {'list'|'detail'|'edit'|'create'|'listRelated'|string} type A type.
-     * @returns {string}
-     */
+    
     getViewName(type) {
         return this.getMetadata().get(['clientDefs', this.name, 'views', type]) ||
             'views/' + Espo.Utils.camelCaseToHyphen(type);
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     beforeList() {
         this.handleCheckAccess('read');
     }
@@ -119,12 +81,7 @@ class RecordController extends Controller {
         this.handleCheckAccess('read');
     }
 
-    /**
-     * @protected
-     * @param {Object} options
-     * @param {module:model} model
-     * @param {string|null} [view]
-     */
+    
     createViewView(options, model, view) {
         view = view || this.getViewName('detail');
 
@@ -137,22 +94,11 @@ class RecordController extends Controller {
         });
     }
 
-    /**
-     * @protected
-     * @param {module:model} model
-     * @param {Object} options
-     */
+    
     prepareModelView(model, options) {}
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * @param {{
-     *     model?: module:model,
-     *     id?: string,
-     *     isReturn?: boolean,
-     *     isAfterCreate?: boolean,
-     * }} options
-     */
+    
+    
     actionView(options) {
         const id = options.id;
 
@@ -239,17 +185,13 @@ class RecordController extends Controller {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     beforeCreate() {
         this.handleCheckAccess('create');
     }
 
-    // noinspection JSUnusedLocalSymbols
-    /**
-     * @protected
-     * @param {module:model} model
-     * @param {Object} options
-     */
+    
+    
     prepareModelCreate(model, options) {
         this.listenToOnce(model, 'before:save', () => {
             const key = this.name + 'List';
@@ -322,17 +264,13 @@ class RecordController extends Controller {
         this.create(options);
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     beforeEdit() {
         this.handleCheckAccess('edit');
     }
 
-    // noinspection JSUnusedLocalSymbols
-    /**
-     * @protected
-     * @param {module:model} model
-     * @param {Object} options
-     */
+    
+    
     prepareModelEdit(model, options) {
         this.listenToOnce(model, 'before:save', () => {
             const key = this.name + 'List';
@@ -395,12 +333,12 @@ class RecordController extends Controller {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     beforeMerge() {
         this.handleCheckAccess('edit');
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionMerge(options) {
         const ids = options.ids.split(',');
 
@@ -436,7 +374,7 @@ class RecordController extends Controller {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionRelated(options) {
         const id = options.id;
         const link = options.link;
@@ -475,13 +413,7 @@ class RecordController extends Controller {
             })
     }
 
-    /**
-     * Get a collection for the current controller.
-     *
-     * @protected
-     * @param {boolean} [usePreviouslyFetched=false] Use a previously fetched. @todo Revise.
-     * @return {Promise<module:collection>}
-     */
+    
     getCollection(usePreviouslyFetched) {
         if (!this.name) {
             throw new Error('No collection for unnamed controller');
@@ -502,14 +434,7 @@ class RecordController extends Controller {
         });
     }
 
-    /**
-     * Get a model for the current controller.
-     *
-     * @protected
-     * @param {Function} [callback]
-     * @param {Object} [context]
-     * @return {Promise<module:model>}
-     */
+    
     getModel(callback, context) {
         context = context || this;
 

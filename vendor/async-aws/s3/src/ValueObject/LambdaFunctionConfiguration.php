@@ -5,37 +5,20 @@ namespace AsyncAws\S3\ValueObject;
 use AsyncAws\Core\Exception\InvalidArgument;
 use AsyncAws\S3\Enum\Event;
 
-/**
- * A container for specifying the configuration for AWS Lambda notifications.
- */
+
 final class LambdaFunctionConfiguration
 {
     private $id;
 
-    /**
-     * The Amazon Resource Name (ARN) of the AWS Lambda function that Amazon S3 invokes when the specified event type
-     * occurs.
-     */
+    
     private $lambdaFunctionArn;
 
-    /**
-     * The Amazon S3 bucket event for which to invoke the AWS Lambda function. For more information, see Supported Event
-     * Types in the *Amazon Simple Storage Service Developer Guide*.
-     *
-     * @see https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html
-     */
+    
     private $events;
 
     private $filter;
 
-    /**
-     * @param array{
-     *   Id?: null|string,
-     *   LambdaFunctionArn: string,
-     *   Events: list<Event::*>,
-     *   Filter?: null|NotificationConfigurationFilter|array,
-     * } $input
-     */
+    
     public function __construct(array $input)
     {
         $this->id = $input['Id'] ?? null;
@@ -49,9 +32,7 @@ final class LambdaFunctionConfiguration
         return $input instanceof self ? $input : new self($input);
     }
 
-    /**
-     * @return list<Event::*>
-     */
+    
     public function getEvents(): array
     {
         return $this->events ?? [];
@@ -72,9 +53,7 @@ final class LambdaFunctionConfiguration
         return $this->lambdaFunctionArn;
     }
 
-    /**
-     * @internal
-     */
+    
     public function requestBody(\DomElement $node, \DomDocument $document): void
     {
         if (null !== $v = $this->id) {

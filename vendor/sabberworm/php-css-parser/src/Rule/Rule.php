@@ -12,52 +12,31 @@ use Sabberworm\CSS\Renderable;
 use Sabberworm\CSS\Value\RuleValueList;
 use Sabberworm\CSS\Value\Value;
 
-/**
- * RuleSets contains Rule objects which always have a key and a value.
- * In CSS, Rules are expressed as follows: “key: value[0][0] value[0][1], value[1][0] value[1][1];”
- */
+
 class Rule implements Renderable, Commentable
 {
-    /**
-     * @var string
-     */
+    
     private $sRule;
 
-    /**
-     * @var RuleValueList|null
-     */
+    
     private $mValue;
 
-    /**
-     * @var bool
-     */
+    
     private $bIsImportant;
 
-    /**
-     * @var array<int, int>
-     */
+    
     private $aIeHack;
 
-    /**
-     * @var int
-     */
+    
     protected $iLineNo;
 
-    /**
-     * @var int
-     */
+    
     protected $iColNo;
 
-    /**
-     * @var array<array-key, Comment>
-     */
+    
     protected $aComments;
 
-    /**
-     * @param string $sRule
-     * @param int $iLineNo
-     * @param int $iColNo
-     */
+    
     public function __construct($sRule, $iLineNo = 0, $iColNo = 0)
     {
         $this->sRule = $sRule;
@@ -69,12 +48,7 @@ class Rule implements Renderable, Commentable
         $this->aComments = [];
     }
 
-    /**
-     * @return Rule
-     *
-     * @throws UnexpectedEOFException
-     * @throws UnexpectedTokenException
-     */
+    
     public static function parse(ParserState $oParserState)
     {
         $aComments = $oParserState->consumeWhiteSpace();
@@ -111,11 +85,7 @@ class Rule implements Renderable, Commentable
         return $oRule;
     }
 
-    /**
-     * @param string $sRule
-     *
-     * @return array<int, string>
-     */
+    
     private static function listDelimiterForRule($sRule)
     {
         if (preg_match('/^font($|-)/', $sRule)) {
@@ -124,79 +94,50 @@ class Rule implements Renderable, Commentable
         return [',', ' ', '/'];
     }
 
-    /**
-     * @return int
-     */
+    
     public function getLineNo()
     {
         return $this->iLineNo;
     }
 
-    /**
-     * @return int
-     */
+    
     public function getColNo()
     {
         return $this->iColNo;
     }
 
-    /**
-     * @param int $iLine
-     * @param int $iColumn
-     *
-     * @return void
-     */
+    
     public function setPosition($iLine, $iColumn)
     {
         $this->iColNo = $iColumn;
         $this->iLineNo = $iLine;
     }
 
-    /**
-     * @param string $sRule
-     *
-     * @return void
-     */
+    
     public function setRule($sRule)
     {
         $this->sRule = $sRule;
     }
 
-    /**
-     * @return string
-     */
+    
     public function getRule()
     {
         return $this->sRule;
     }
 
-    /**
-     * @return RuleValueList|null
-     */
+    
     public function getValue()
     {
         return $this->mValue;
     }
 
-    /**
-     * @param RuleValueList|null $mValue
-     *
-     * @return void
-     */
+    
     public function setValue($mValue)
     {
         $this->mValue = $mValue;
     }
 
-    /**
-     * @param array<array-key, array<array-key, RuleValueList>> $aSpaceSeparatedValues
-     *
-     * @return RuleValueList
-     *
-     * @deprecated will be removed in version 9.0
-     *             Old-Style 2-dimensional array given. Retained for (some) backwards-compatibility.
-     *             Use `setValue()` instead and wrap the value inside a RuleValueList if necessary.
-     */
+    
     public function setValues(array $aSpaceSeparatedValues)
     {
         $oSpaceSeparatedList = null;
@@ -230,13 +171,7 @@ class Rule implements Renderable, Commentable
         return $oSpaceSeparatedList;
     }
 
-    /**
-     * @return array<int, array<int, RuleValueList>>
-     *
-     * @deprecated will be removed in version 9.0
-     *             Old-Style 2-dimensional array returned. Retained for (some) backwards-compatibility.
-     *             Use `getValue()` instead and check for the existence of a (nested set of) ValueList object(s).
-     */
+    
     public function getValues()
     {
         if (!$this->mValue instanceof RuleValueList) {
@@ -261,15 +196,7 @@ class Rule implements Renderable, Commentable
         return $aResult;
     }
 
-    /**
-     * Adds a value to the existing value. Value will be appended if a `RuleValueList` exists of the given type.
-     * Otherwise, the existing value will be wrapped by one.
-     *
-     * @param RuleValueList|array<int, RuleValueList> $mValue
-     * @param string $sType
-     *
-     * @return void
-     */
+    
     public function addValue($mValue, $sType = ' ')
     {
         if (!is_array($mValue)) {
@@ -287,67 +214,47 @@ class Rule implements Renderable, Commentable
         }
     }
 
-    /**
-     * @param int $iModifier
-     *
-     * @return void
-     */
+    
     public function addIeHack($iModifier)
     {
         $this->aIeHack[] = $iModifier;
     }
 
-    /**
-     * @param array<int, int> $aModifiers
-     *
-     * @return void
-     */
+    
     public function setIeHack(array $aModifiers)
     {
         $this->aIeHack = $aModifiers;
     }
 
-    /**
-     * @return array<int, int>
-     */
+    
     public function getIeHack()
     {
         return $this->aIeHack;
     }
 
-    /**
-     * @param bool $bIsImportant
-     *
-     * @return void
-     */
+    
     public function setIsImportant($bIsImportant)
     {
         $this->bIsImportant = $bIsImportant;
     }
 
-    /**
-     * @return bool
-     */
+    
     public function getIsImportant()
     {
         return $this->bIsImportant;
     }
 
-    /**
-     * @return string
-     */
+    
     public function __toString()
     {
         return $this->render(new OutputFormat());
     }
 
-    /**
-     * @return string
-     */
+    
     public function render(OutputFormat $oOutputFormat)
     {
         $sResult = "{$this->sRule}:{$oOutputFormat->spaceAfterRuleName()}";
-        if ($this->mValue instanceof Value) { //Can also be a ValueList
+        if ($this->mValue instanceof Value) { 
             $sResult .= $this->mValue->render($oOutputFormat);
         } else {
             $sResult .= $this->mValue;
@@ -362,29 +269,19 @@ class Rule implements Renderable, Commentable
         return $sResult;
     }
 
-    /**
-     * @param array<array-key, Comment> $aComments
-     *
-     * @return void
-     */
+    
     public function addComments(array $aComments)
     {
         $this->aComments = array_merge($this->aComments, $aComments);
     }
 
-    /**
-     * @return array<array-key, Comment>
-     */
+    
     public function getComments()
     {
         return $this->aComments;
     }
 
-    /**
-     * @param array<array-key, Comment> $aComments
-     *
-     * @return void
-     */
+    
     public function setComments(array $aComments)
     {
         $this->aComments = $aComments;

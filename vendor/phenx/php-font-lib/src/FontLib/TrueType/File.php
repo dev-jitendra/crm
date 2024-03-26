@@ -1,10 +1,5 @@
 <?php
-/**
- * @package php-font-lib
- * @link    https://github.com/PhenX/php-font-lib
- * @author  Fabien Ménager <fabien.menager@gmail.com>
- * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
- */
+
 
 namespace FontLib\TrueType;
 
@@ -17,18 +12,12 @@ use FontLib\Table\Type\glyf;
 use FontLib\Table\Type\name;
 use FontLib\Table\Type\nameRecord;
 
-/**
- * TrueType font file.
- *
- * @package php-font-lib
- */
+
 class File extends BinaryStream {
-  /**
-   * @var Header
-   */
+  
   public $header = array();
 
-  private $tableOffset = 0; // Used for TTC
+  private $tableOffset = 0; 
 
   private static $raw = false;
 
@@ -184,8 +173,8 @@ class File extends BinaryStream {
     }
 
     $gids = array(
-      0, // .notdef
-      1, // .null
+      0, 
+      1, 
     );
 
     foreach ($subset as $code) {
@@ -197,14 +186,14 @@ class File extends BinaryStream {
       $gids[$gid] = $gid;
     }
 
-    /** @var glyf $glyf */
+    
     $glyf = $this->getTableObject("glyf");
     $gids = $glyf->getGlyphIDs($gids);
 
     sort($gids);
 
     $this->glyph_subset = $gids;
-    $this->glyph_all    = array_values($glyphIndexArray); // FIXME
+    $this->glyph_all    = array_values($glyphIndexArray); 
   }
 
   function getSubset() {
@@ -224,11 +213,11 @@ class File extends BinaryStream {
     }
 
     $num_tables = count($tags);
-    $n          = 16; // @todo
+    $n          = 16; 
 
     Font::d("Tables : " . implode(", ", $tags));
 
-    /** @var DirectoryEntry[] $entries */
+    
     $entries = array();
     foreach ($tags as $tag) {
       if (!isset($this->directory[$tag])) {
@@ -285,7 +274,7 @@ class File extends BinaryStream {
     $class = "FontLib\\$type\\TableDirectoryEntry";
 
     for ($i = 0; $i < $this->header->data["numTables"]; $i++) {
-      /** @var TableDirectoryEntry $entry */
+      
       $entry = new $class($this);
       $entry->parse();
 
@@ -313,18 +302,14 @@ class File extends BinaryStream {
       $class = "FontLib\\Table\\Table";
     }
 
-    /** @var Table $table */
+    
     $table = new $class($this->directory[$tag]);
     $table->parse();
 
     $this->data[$tag] = $table;
   }
 
-  /**
-   * @param $name
-   *
-   * @return Table
-   */
+  
   public function getTableObject($name) {
     return $this->data[$name];
   }
@@ -361,15 +346,9 @@ class File extends BinaryStream {
     $afm->write($file, $encoding);
   }
 
-  /**
-   * Get a specific name table string value from its ID
-   *
-   * @param int $nameID The name ID
-   *
-   * @return string|null
-   */
+  
   function getNameTableString($nameID) {
-    /** @var nameRecord[] $records */
+    
     $records = $this->getData("name", "records");
 
     if (!isset($records[$nameID])) {
@@ -379,74 +358,42 @@ class File extends BinaryStream {
     return $records[$nameID]->string;
   }
 
-  /**
-   * Get font copyright
-   *
-   * @return string|null
-   */
+  
   function getFontCopyright() {
     return $this->getNameTableString(name::NAME_COPYRIGHT);
   }
 
-  /**
-   * Get font name
-   *
-   * @return string|null
-   */
+  
   function getFontName() {
     return $this->getNameTableString(name::NAME_NAME);
   }
 
-  /**
-   * Get font subfamily
-   *
-   * @return string|null
-   */
+  
   function getFontSubfamily() {
     return $this->getNameTableString(name::NAME_SUBFAMILY);
   }
 
-  /**
-   * Get font subfamily ID
-   *
-   * @return string|null
-   */
+  
   function getFontSubfamilyID() {
     return $this->getNameTableString(name::NAME_SUBFAMILY_ID);
   }
 
-  /**
-   * Get font full name
-   *
-   * @return string|null
-   */
+  
   function getFontFullName() {
     return $this->getNameTableString(name::NAME_FULL_NAME);
   }
 
-  /**
-   * Get font version
-   *
-   * @return string|null
-   */
+  
   function getFontVersion() {
     return $this->getNameTableString(name::NAME_VERSION);
   }
 
-  /**
-   * Get font weight
-   *
-   * @return string|null
-   */
+  
   function getFontWeight() {
     return $this->getTableObject("OS/2")->data["usWeightClass"];
   }
 
-  /**
-   * Get font Postscript name
-   *
-   * @return string|null
-   */
+  
   function getFontPostscriptName() {
     return $this->getNameTableString(name::NAME_POSTSCRIPT_NAME);
   }

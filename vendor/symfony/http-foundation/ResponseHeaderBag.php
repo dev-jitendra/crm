@@ -1,21 +1,10 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpFoundation;
 
-/**
- * ResponseHeaderBag is a container for Response HTTP headers.
- *
- * @author Fabien Potencier <fabien@symfony.com>
- */
+
 class ResponseHeaderBag extends HeaderBag
 {
     public const COOKIES_FLAT = 'flat';
@@ -36,15 +25,13 @@ class ResponseHeaderBag extends HeaderBag
             $this->set('Cache-Control', '');
         }
 
-        /* RFC2616 - 14.18 says all Responses need to have a Date */
+        
         if (!isset($this->headers['date'])) {
             $this->initDate();
         }
     }
 
-    /**
-     * Returns the headers, with original capitalizations.
-     */
+    
     public function allPreserveCase(): array
     {
         $headers = [];
@@ -65,9 +52,7 @@ class ResponseHeaderBag extends HeaderBag
         return $headers;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function replace(array $headers = [])
     {
         $this->headerNames = [];
@@ -83,9 +68,7 @@ class ResponseHeaderBag extends HeaderBag
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function all(string $key = null): array
     {
         $headers = parent::all();
@@ -103,9 +86,7 @@ class ResponseHeaderBag extends HeaderBag
         return $headers;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function set(string $key, string|array|null $values, bool $replace = true)
     {
         $uniqueKey = strtr($key, self::UPPER, self::LOWER);
@@ -126,7 +107,7 @@ class ResponseHeaderBag extends HeaderBag
 
         parent::set($key, $values, $replace);
 
-        // ensure the cache-control header has sensible defaults
+        
         if (\in_array($uniqueKey, ['cache-control', 'etag', 'last-modified', 'expires'], true) && '' !== $computed = $this->computeCacheControlValue()) {
             $this->headers['cache-control'] = [$computed];
             $this->headerNames['cache-control'] = 'Cache-Control';
@@ -134,9 +115,7 @@ class ResponseHeaderBag extends HeaderBag
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function remove(string $key)
     {
         $uniqueKey = strtr($key, self::UPPER, self::LOWER);
@@ -159,17 +138,13 @@ class ResponseHeaderBag extends HeaderBag
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function hasCacheControlDirective(string $key): bool
     {
         return \array_key_exists($key, $this->computedCacheControl);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getCacheControlDirective(string $key): bool|string|null
     {
         return $this->computedCacheControl[$key] ?? null;
@@ -181,9 +156,7 @@ class ResponseHeaderBag extends HeaderBag
         $this->headerNames['set-cookie'] = 'Set-Cookie';
     }
 
-    /**
-     * Removes a cookie from the array, but does not unset it in the browser.
-     */
+    
     public function removeCookie(string $name, ?string $path = '/', string $domain = null)
     {
         if (null === $path) {
@@ -205,13 +178,7 @@ class ResponseHeaderBag extends HeaderBag
         }
     }
 
-    /**
-     * Returns an array with all cookies.
-     *
-     * @return Cookie[]
-     *
-     * @throws \InvalidArgumentException When the $format is invalid
-     */
+    
     public function getCookies(string $format = self::COOKIES_FLAT): array
     {
         if (!\in_array($format, [self::COOKIES_FLAT, self::COOKIES_ARRAY])) {
@@ -234,36 +201,27 @@ class ResponseHeaderBag extends HeaderBag
         return $flattenedCookies;
     }
 
-    /**
-     * Clears a cookie in the browser.
-     */
+    
     public function clearCookie(string $name, ?string $path = '/', string $domain = null, bool $secure = false, bool $httpOnly = true, string $sameSite = null)
     {
         $this->setCookie(new Cookie($name, null, 1, $path, $domain, $secure, $httpOnly, false, $sameSite));
     }
 
-    /**
-     * @see HeaderUtils::makeDisposition()
-     */
+    
     public function makeDisposition(string $disposition, string $filename, string $filenameFallback = '')
     {
         return HeaderUtils::makeDisposition($disposition, $filename, $filenameFallback);
     }
 
-    /**
-     * Returns the calculated value of the cache-control header.
-     *
-     * This considers several other headers and calculates or modifies the
-     * cache-control header to a sensible, conservative value.
-     */
+    
     protected function computeCacheControlValue(): string
     {
         if (!$this->cacheControl) {
             if ($this->has('Last-Modified') || $this->has('Expires')) {
-                return 'private, must-revalidate'; // allows for heuristic expiration (RFC 7234 Section 4.2.2) in the case of "Last-Modified"
+                return 'private, must-revalidate'; 
             }
 
-            // conservative by default
+            
             return 'no-cache, private';
         }
 
@@ -272,7 +230,7 @@ class ResponseHeaderBag extends HeaderBag
             return $header;
         }
 
-        // public if s-maxage is defined, private otherwise
+        
         if (!isset($this->cacheControl['s-maxage'])) {
             return $header.', private';
         }

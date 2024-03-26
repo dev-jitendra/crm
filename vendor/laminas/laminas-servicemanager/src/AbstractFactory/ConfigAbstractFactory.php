@@ -17,11 +17,7 @@ use function json_encode;
 
 final class ConfigAbstractFactory implements AbstractFactoryInterface
 {
-    /**
-     * Factory can create the service if there is a key for it in the config
-     *
-     * {@inheritdoc}
-     */
+    
     public function canCreate(ContainerInterface $container, $requestedName)
     {
         if (! $container->has('config')) {
@@ -36,7 +32,7 @@ final class ConfigAbstractFactory implements AbstractFactoryInterface
         return is_array($dependencies) && array_key_exists($requestedName, $dependencies);
     }
 
-    /** {@inheritDoc} */
+    
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         if (! $container->has('config')) {

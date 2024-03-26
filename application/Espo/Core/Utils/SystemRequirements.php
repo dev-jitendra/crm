@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Utils;
 
@@ -38,7 +12,7 @@ class SystemRequirements
     private const PLATFORM_MYSQL = 'Mysql';
     private const PLATFORM_POSTGRESQL = 'Postgresql';
 
-    /** @var array<string, string> */
+    
     private $pdoExtensionMap = [
         self::PLATFORM_MYSQL => 'pdo_mysql',
         self::PLATFORM_POSTGRESQL => 'pdo_pgsql',
@@ -52,13 +26,7 @@ class SystemRequirements
         private DatabaseParamsFactory $databaseParamsFactory
     ) {}
 
-    /**
-     * @return array{
-     *   php: array<string, array<string, mixed>>,
-     *   database: array<string, array<string, mixed>>,
-     *   permission: array<string, array<string, mixed>>,
-     * }
-     */
+    
     public function getAllRequiredList(bool $requiredOnly = false): array
     {
         return [
@@ -68,14 +36,7 @@ class SystemRequirements
         ];
     }
 
-    /**
-     * @param array<string, mixed> $additionalData
-     * @return array{
-     *   php?: array<string, array<string, mixed>>,
-     *   database?: array<string, array<string, mixed>>,
-     *   permission?: array<string, array{type: string, acceptable: int}>,
-     * }
-     */
+    
     public function getRequiredListByType(
         string $type,
         bool $requiredOnly = false,
@@ -90,11 +51,7 @@ class SystemRequirements
         };
     }
 
-    /**
-     * Get required PHP params.
-     *
-     * @return array<string, array<string, mixed>>
-     */
+    
     public function getPhpRequiredList(bool $requiredOnly): array
     {
         $requiredList = [
@@ -142,12 +99,7 @@ class SystemRequirements
         return $this->pdoExtensionMap[$platform] ?? null;
     }
 
-    /**
-     * Get required DB params.
-     *
-     * @param ?array<string, mixed> $additionalData
-     * @return array<string, array<string, mixed>>
-     */
+    
     private function getDatabaseRequiredList(bool $requiredOnly, ?array $additionalData = null): array
     {
         $databaseParams = $this->databaseParamsFactory
@@ -173,11 +125,7 @@ class SystemRequirements
         return $this->getRequiredList('databaseRequirements', $requiredList, $additionalData);
     }
 
-    /**
-     * Get permission requirements.
-     *
-     * @return array<string, array<string, mixed>>
-     */
+    
     private function getRequiredPermissionList(): array
     {
         return $this->getRequiredList(
@@ -190,12 +138,7 @@ class SystemRequirements
         );
     }
 
-    /**
-     * @param string[] $checkList
-     * @param ?array<string, mixed> $additionalData
-     * @param array<string, mixed> $predefinedData
-     * @return array<string, array<string, mixed>>
-     */
+    
     private function getRequiredList(
         string $type,
         array $checkList,
@@ -230,12 +173,7 @@ class SystemRequirements
         return $list;
     }
 
-    /**
-     * Check PHP requirements.
-     *
-     * @param array<string, mixed>|string $data
-     * @return array<string, array<string, mixed>>
-     */
+    
     private function checkPhpRequirements(string $type, $data): array
     {
         $list = [];
@@ -243,7 +181,7 @@ class SystemRequirements
         switch ($type) {
             case 'requiredPhpVersion':
                 $actualVersion = $this->systemHelper->getPhpVersion();
-                /** @var string $requiredVersion */
+                
                 $requiredVersion = $data;
 
                 $acceptable = true;
@@ -263,7 +201,7 @@ class SystemRequirements
 
             case 'requiredPhpLibs':
             case 'recommendedPhpLibs':
-                /** @var string[] $data */
+                
                 foreach ($data as $name) {
                     $acceptable = $this->systemHelper->hasPhpExtension($name);
 
@@ -277,7 +215,7 @@ class SystemRequirements
                 break;
 
             case 'recommendedPhpParams':
-                /** @var string[] $data */
+                
                 foreach ($data as $name => $value) {
                     $requiredValue = $value;
                     $actualValue = $this->systemHelper->getPhpParam($name) ?: '0';
@@ -298,13 +236,7 @@ class SystemRequirements
         return $list;
     }
 
-    /**
-     * Check DB requirements.
-     *
-     * @param array<string, mixed>|string $data
-     * @param ?array<string, mixed> $additionalData
-     * @return array<string, array<string, mixed>>
-     */
+    
     private function checkDatabaseRequirements(string $type, $data, ?array $additionalData = null): array
     {
         $list = [];
@@ -317,7 +249,7 @@ class SystemRequirements
             case 'requiredMysqlVersion':
             case 'requiredMariadbVersion':
             case 'requiredPostgresqlVersion':
-                /** @var string $data */
+                
 
                 $actualVersion = $databaseHelper->getVersion();
 
@@ -339,7 +271,7 @@ class SystemRequirements
 
             case 'recommendedMysqlParams':
             case 'recommendedMariadbParams':
-                /** @var string[] $data */
+                
                 foreach ($data as $name => $value) {
                     $requiredValue = $value;
 
@@ -402,10 +334,7 @@ class SystemRequirements
         return $list;
     }
 
-    /**
-     * @param array<string, mixed> $data
-     * @return array<string, array<string, mixed>>
-     */
+    
     private function checkPermissionRequirements(string $type, $data): array
     {
         $list = [];

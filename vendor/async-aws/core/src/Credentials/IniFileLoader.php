@@ -8,11 +8,7 @@ use AsyncAws\Core\EnvVar;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
-/**
- * Load and parse AWS iniFile.
- *
- * @author Jérémy Derussé <jeremy@derusse.com>
- */
+
 final class IniFileLoader
 {
     public const KEY_REGION = 'region';
@@ -28,9 +24,7 @@ final class IniFileLoader
     public const KEY_SSO_ACCOUNT_ID = 'sso_account_id';
     public const KEY_SSO_ROLE_NAME = 'sso_role_name';
 
-    /**
-     * @var LoggerInterface
-     */
+    
     private $logger;
 
     public function __construct(?LoggerInterface $logger = null)
@@ -38,11 +32,7 @@ final class IniFileLoader
         $this->logger = $logger ?? new NullLogger();
     }
 
-    /**
-     * @param string[] $filepaths
-     *
-     * @return array<string, array<string, string>>
-     */
+    
     public function loadProfiles(array $filepaths): array
     {
         $profilesData = [];
@@ -78,21 +68,19 @@ final class IniFileLoader
 
     private function getHomeDir(): string
     {
-        // On Linux/Unix-like systems, use the HOME environment variable
+        
         if (null !== $homeDir = EnvVar::get('HOME')) {
             return $homeDir;
         }
 
-        // Get the HOMEDRIVE and HOMEPATH values for Windows hosts
+        
         $homeDrive = EnvVar::get('HOMEDRIVE');
         $homePath = EnvVar::get('HOMEPATH');
 
         return ($homeDrive && $homePath) ? $homeDrive . $homePath : '/';
     }
 
-    /**
-     * @return array<string, string[]>
-     */
+    
     private function parseIniFile(string $filepath): array
     {
         if (false === $data = parse_ini_string(

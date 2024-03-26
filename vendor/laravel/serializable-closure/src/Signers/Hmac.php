@@ -6,30 +6,16 @@ use Laravel\SerializableClosure\Contracts\Signer;
 
 class Hmac implements Signer
 {
-    /**
-     * The secret key.
-     *
-     * @var string
-     */
+    
     protected $secret;
 
-    /**
-     * Creates a new signer instance.
-     *
-     * @param  string  $secret
-     * @return void
-     */
+    
     public function __construct($secret)
     {
         $this->secret = $secret;
     }
 
-    /**
-     * Sign the given serializable.
-     *
-     * @param  string  $serialized
-     * @return array
-     */
+    
     public function sign($serialized)
     {
         return [
@@ -38,12 +24,7 @@ class Hmac implements Signer
         ];
     }
 
-    /**
-     * Verify the given signature.
-     *
-     * @param  array  $signature
-     * @return bool
-     */
+    
     public function verify($signature)
     {
         return hash_equals(base64_encode(

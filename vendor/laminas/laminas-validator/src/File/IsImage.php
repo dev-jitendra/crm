@@ -5,33 +5,25 @@ namespace Laminas\Validator\File;
 use Laminas\Stdlib\ArrayUtils;
 use Traversable;
 
-/**
- * Validator which checks if the file is an image
- */
+
 class IsImage extends MimeType
 {
-    /**
-     * @const string Error constants
-     */
+    
     public const FALSE_TYPE   = 'fileIsImageFalseType';
     public const NOT_DETECTED = 'fileIsImageNotDetected';
     public const NOT_READABLE = 'fileIsImageNotReadable';
 
-    /** @var array Error message templates */
+    
     protected $messageTemplates = [
         self::FALSE_TYPE   => "File is no image, '%type%' detected",
         self::NOT_DETECTED => 'The mimetype could not be detected from the file',
         self::NOT_READABLE => 'File is not readable or does not exist',
     ];
 
-    /**
-     * Sets validator options
-     *
-     * @param array|Traversable|string $options
-     */
+    
     public function __construct($options = [])
     {
-        // http://www.iana.org/assignments/media-types/media-types.xhtml#image
+        
         $default = [
             'application/cdf',
             'application/dicom',

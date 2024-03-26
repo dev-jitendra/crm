@@ -1,32 +1,6 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/fields/person-name */
+
+
 
 import VarcharFieldView from 'views/fields/varchar';
 import Select from 'ui/select';
@@ -37,14 +11,14 @@ class PersonNameFieldView extends VarcharFieldView {
 
     detailTemplate = 'fields/person-name/detail'
     editTemplate = 'fields/person-name/edit'
-    // noinspection JSUnusedGlobalSymbols
+    
     editTemplateLastFirst = 'fields/person-name/edit-last-first'
-    // noinspection JSUnusedGlobalSymbols
+    
     editTemplateLastFirstMiddle = 'fields/person-name/edit-last-first-middle'
-    // noinspection JSUnusedGlobalSymbols
+    
     editTemplateFirstMiddleLast = 'fields/person-name/edit-first-middle-last'
 
-    /** @inheritDoc */
+    
     validations = [
         'required',
         'pattern',
@@ -245,10 +219,7 @@ class PersonNameFieldView extends VarcharFieldView {
         return data;
     }
 
-    /**
-     * @param {{first?: string, last?: string, middle?: string, salutation?: string}}data
-     * @return {?string}
-     */
+    
     formatName(data) {
         let name;
         let format = this.getFormat();

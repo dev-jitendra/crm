@@ -7,7 +7,7 @@ use function substr;
 
 class Code39 extends AbstractAdapter
 {
-    /** @var array */
+    
     protected $check = [
         '0' => 0,
         '1' => 1,
@@ -54,9 +54,7 @@ class Code39 extends AbstractAdapter
         '%' => 42,
     ];
 
-    /**
-     * Constructor for this barcode adapter
-     */
+    
     public function __construct()
     {
         $this->setLength(-1);
@@ -65,12 +63,7 @@ class Code39 extends AbstractAdapter
         $this->useChecksum(false);
     }
 
-    /**
-     * Validates the checksum (Modulo 43)
-     *
-     * @param  string $value The barcode to validate
-     * @return bool
-     */
+    
     protected function code39($value)
     {
         $checksum = substr($value, -1, 1);

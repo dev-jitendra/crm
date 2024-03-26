@@ -1,15 +1,6 @@
 <?php
-/**
-* Smarty Internal Plugin Templatelexer
-*
-* This is the lexer to break the template source into tokens
-* @package Smarty
-* @subpackage Compiler
-* @author Uwe Tews
-*/
-/**
-* Smarty Internal Plugin Templatelexer
-*/
+
+
 class Smarty_Internal_Templatelexer
 {
     public $data;
@@ -24,7 +15,7 @@ class Smarty_Internal_Templatelexer
     public $yyTraceFILE;
     public $yyTracePrompt;
     public $state_name = array (1 => 'TEXT', 2 => 'SMARTY', 3 => 'LITERAL', 4 => 'DOUBLEQUOTEDSTRING', 5 => 'CHILDBODY');
-    public $smarty_token_names = array (		// Text for parser error messages
+    public $smarty_token_names = array (		
     				'IDENTITY'	=> '===',
     				'NONEIDENTITY'	=> '!==',
     				'EQUALS'	=> '==',
@@ -79,7 +70,7 @@ class Smarty_Internal_Templatelexer
 
     function __construct($data,$compiler)
     {
-//        $this->data = preg_replace("/(\r\n|\r|\n)/", "\n", $data);
+
         $this->data = $data;
         $this->counter = 0;
         $this->line = 1;
@@ -96,7 +87,7 @@ class Smarty_Internal_Templatelexer
 
     public function PrintTrace()
     {
-        $this->yyTraceFILE = fopen('php://output', 'w');
+        $this->yyTraceFILE = fopen('php:
         $this->yyTracePrompt = '<br>';
     }
 
@@ -165,46 +156,46 @@ class Smarty_Internal_Templatelexer
               19 => 0,
             );
         if ($this->counter >= ($this->mbstring_overload ? mb_strlen($this->data,'latin1'): strlen($this->data))) {
-            return false; // end of input
+            return false; 
         }
         $yy_global_pattern = "/\G(\\{\\})|\G(".$this->ldel."\\s*\\*([\S\s]*?)\\*\\s*".$this->rdel.")|\G(".$this->ldel."\\s*strip\\s*".$this->rdel.")|\G(".$this->ldel."\\s*\/strip\\s*".$this->rdel.")|\G(".$this->ldel."\\s*literal\\s*".$this->rdel.")|\G(".$this->ldel."\\s*(if|elseif|else if|while)\\s+)|\G(".$this->ldel."\\s*for\\s+)|\G(".$this->ldel."\\s*foreach(?![^\s]))|\G(".$this->ldel."\\s*setfilter\\s+)|\G(".$this->ldel."\\s*\/)|\G(".$this->ldel."\\s*)|\G(<\\?(?:php\\w+|=|[a-zA-Z]+)?)|\G(\\?>)|\G(\\s*".$this->rdel.")|\G(<%)|\G(%>)|\G([\S\s])/iS";
 
         do {
             if ($this->mbstring_overload ? preg_match($yy_global_pattern, mb_substr($this->data, $this->counter,2000000000,'latin1'), $yymatches) : preg_match($yy_global_pattern,$this->data, $yymatches, null, $this->counter)) {
                 $yysubmatches = $yymatches;
-                $yymatches = array_filter($yymatches, 'strlen'); // remove empty sub-patterns
+                $yymatches = array_filter($yymatches, 'strlen'); 
                 if (!count($yymatches)) {
                     throw new Exception('Error: lexing failed because a rule matched' .
                         ' an empty string.  Input "' . substr($this->data,
                         $this->counter, 5) . '... state TEXT');
                 }
-                next($yymatches); // skip global match
-                $this->token = key($yymatches); // token number
+                next($yymatches); 
+                $this->token = key($yymatches); 
                 if ($tokenMap[$this->token]) {
-                    // extract sub-patterns for passing to lex function
+                    
                     $yysubmatches = array_slice($yysubmatches, $this->token + 1,
                         $tokenMap[$this->token]);
                 } else {
                     $yysubmatches = array();
                 }
-                $this->value = current($yymatches); // token value
+                $this->value = current($yymatches); 
                 $r = $this->{'yy_r1_' . $this->token}($yysubmatches);
                 if ($r === null) {
                     $this->counter += ($this->mbstring_overload ? mb_strlen($this->value,'latin1'): strlen($this->value));
                     $this->line += substr_count($this->value, "\n");
-                    // accept this token
+                    
                     return true;
                 } elseif ($r === true) {
-                    // we have changed state
-                    // process this token in the new state
+                    
+                    
                     return $this->yylex();
                 } elseif ($r === false) {
                     $this->counter += ($this->mbstring_overload ? mb_strlen($this->value,'latin1'): strlen($this->value));
                     $this->line += substr_count($this->value, "\n");
                     if ($this->counter >= ($this->mbstring_overload ? mb_strlen($this->data,'latin1'): strlen($this->data))) {
-                        return false; // end of input
+                        return false; 
                     }
-                    // skip this token
+                    
                     continue;
                 }            } else {
                 throw new Exception('Unexpected input at line' . $this->line .
@@ -213,7 +204,7 @@ class Smarty_Internal_Templatelexer
             break;
         } while (true);
 
-    } // end function
+    } 
 
 
     const TEXT = 1;
@@ -312,7 +303,7 @@ class Smarty_Internal_Templatelexer
     }
     function yy_r1_13($yy_subpatterns)
     {
-  if ($this->smarty->auto_literal && ($this->mbstring_overload ? (mb_strpos(" \n\t\r",mb_substr($this->value,$this->ldel_length,1,'latin1'),0,'latin1') !== false) : ($this->getStrpos($this->value, $this->ldel_length, 1) /*espocrm: fix a warning for PHP 7*/ !== false))) {
+  if ($this->smarty->auto_literal && ($this->mbstring_overload ? (mb_strpos(" \n\t\r",mb_substr($this->value,$this->ldel_length,1,'latin1'),0,'latin1') !== false) : ($this->getStrpos($this->value, $this->ldel_length, 1)  !== false))) {
     $this->token = Smarty_Internal_Templateparser::TP_TEXT;
   } else {
      $this->token = Smarty_Internal_Templateparser::TP_LDEL;
@@ -444,46 +435,46 @@ class Smarty_Internal_Templatelexer
               76 => 0,
             );
         if ($this->counter >= ($this->mbstring_overload ? mb_strlen($this->data,'latin1'): strlen($this->data))) {
-            return false; // end of input
+            return false; 
         }
         $yy_global_pattern = "/\G(\")|\G('[^'\\\\]*(?:\\\\.[^'\\\\]*)*')|\G([$]smarty\\.block\\.(child|parent))|\G(\\$)|\G(\\s*".$this->rdel.")|\G(\\s+is\\s+in\\s+)|\G(\\s+as\\s+)|\G(\\s+to\\s+)|\G(\\s+step\\s+)|\G(\\s+instanceof\\s+)|\G(\\s*===\\s*)|\G(\\s*!==\\s*)|\G(\\s*==\\s*|\\s+eq\\s+)|\G(\\s*!=\\s*|\\s*<>\\s*|\\s+(ne|neq)\\s+)|\G(\\s*>=\\s*|\\s+(ge|gte)\\s+)|\G(\\s*<=\\s*|\\s+(le|lte)\\s+)|\G(\\s*>\\s*|\\s+gt\\s+)|\G(\\s*<\\s*|\\s+lt\\s+)|\G(\\s+mod\\s+)|\G(!\\s*|not\\s+)|\G(\\s*&&\\s*|\\s*and\\s+)|\G(\\s*\\|\\|\\s*|\\s*or\\s+)|\G(\\s*xor\\s+)|\G(\\s+is\\s+odd\\s+by\\s+)|\G(\\s+is\\s+not\\s+odd\\s+by\\s+)|\G(\\s+is\\s+odd)|\G(\\s+is\\s+not\\s+odd)|\G(\\s+is\\s+even\\s+by\\s+)|\G(\\s+is\\s+not\\s+even\\s+by\\s+)|\G(\\s+is\\s+even)|\G(\\s+is\\s+not\\s+even)|\G(\\s+is\\s+div\\s+by\\s+)|\G(\\s+is\\s+not\\s+div\\s+by\\s+)|\G(\\((int(eger)?|bool(ean)?|float|double|real|string|binary|array|object)\\)\\s*)|\G(\\s*\\(\\s*)|\G(\\s*\\))|\G(\\[\\s*)|\G(\\s*\\])|\G(\\s*->\\s*)|\G(\\s*=>\\s*)|\G(\\s*=\\s*)|\G(\\+\\+|--)|\G(\\s*(\\+|-)\\s*)|\G(\\s*(\\*|\/|%)\\s*)|\G(@)|\G(#)|\G(\\s+[0-9]*[a-zA-Z_][a-zA-Z0-9_\-:]*\\s*=\\s*)|\G([0-9]*[a-zA-Z_]\\w*)|\G(\\d+)|\G(`)|\G(\\|)|\G(\\.)|\G(\\s*,\\s*)|\G(\\s*;)|\G(::)|\G(\\s*:\\s*)|\G(\\s*&\\s*)|\G(\\s*\\?\\s*)|\G(0[xX][0-9a-fA-F]+)|\G(\\s+)|\G(".$this->ldel."\\s*(if|elseif|else if|while)\\s+)|\G(".$this->ldel."\\s*for\\s+)|\G(".$this->ldel."\\s*foreach(?![^\s]))|\G(".$this->ldel."\\s*\/)|\G(".$this->ldel."\\s*)|\G([\S\s])/iS";
 
         do {
             if ($this->mbstring_overload ? preg_match($yy_global_pattern, mb_substr($this->data, $this->counter,2000000000,'latin1'), $yymatches) : preg_match($yy_global_pattern,$this->data, $yymatches, null, $this->counter)) {
                 $yysubmatches = $yymatches;
-                $yymatches = array_filter($yymatches, 'strlen'); // remove empty sub-patterns
+                $yymatches = array_filter($yymatches, 'strlen'); 
                 if (!count($yymatches)) {
                     throw new Exception('Error: lexing failed because a rule matched' .
                         ' an empty string.  Input "' . substr($this->data,
                         $this->counter, 5) . '... state SMARTY');
                 }
-                next($yymatches); // skip global match
-                $this->token = key($yymatches); // token number
+                next($yymatches); 
+                $this->token = key($yymatches); 
                 if ($tokenMap[$this->token]) {
-                    // extract sub-patterns for passing to lex function
+                    
                     $yysubmatches = array_slice($yysubmatches, $this->token + 1,
                         $tokenMap[$this->token]);
                 } else {
                     $yysubmatches = array();
                 }
-                $this->value = current($yymatches); // token value
+                $this->value = current($yymatches); 
                 $r = $this->{'yy_r2_' . $this->token}($yysubmatches);
                 if ($r === null) {
                     $this->counter += ($this->mbstring_overload ? mb_strlen($this->value,'latin1'): strlen($this->value));
                     $this->line += substr_count($this->value, "\n");
-                    // accept this token
+                    
                     return true;
                 } elseif ($r === true) {
-                    // we have changed state
-                    // process this token in the new state
+                    
+                    
                     return $this->yylex();
                 } elseif ($r === false) {
                     $this->counter += ($this->mbstring_overload ? mb_strlen($this->value,'latin1'): strlen($this->value));
                     $this->line += substr_count($this->value, "\n");
                     if ($this->counter >= ($this->mbstring_overload ? mb_strlen($this->data,'latin1'): strlen($this->data))) {
-                        return false; // end of input
+                        return false; 
                     }
-                    // skip this token
+                    
                     continue;
                 }            } else {
                 throw new Exception('Unexpected input at line' . $this->line .
@@ -492,7 +483,7 @@ class Smarty_Internal_Templatelexer
             break;
         } while (true);
 
-    } // end function
+    } 
 
 
     const SMARTY = 2;
@@ -732,7 +723,7 @@ class Smarty_Internal_Templatelexer
     function yy_r2_56($yy_subpatterns)
     {
 
-  // resolve conflicts with shorttag and right_delimiter starting with '='
+  
   if (substr($this->data, $this->counter + strlen($this->value) - 1, $this->rdel_length) == $this->smarty->right_delimiter) {
      preg_match("/\s+/",$this->value,$match);
      $this->value = $match[0];
@@ -882,46 +873,46 @@ class Smarty_Internal_Templatelexer
               7 => 0,
             );
         if ($this->counter >= ($this->mbstring_overload ? mb_strlen($this->data,'latin1'): strlen($this->data))) {
-            return false; // end of input
+            return false; 
         }
         $yy_global_pattern = "/\G(".$this->ldel."\\s*literal\\s*".$this->rdel.")|\G(".$this->ldel."\\s*\/literal\\s*".$this->rdel.")|\G(<\\?(?:php\\w+|=|[a-zA-Z]+)?)|\G(\\?>)|\G(<%)|\G(%>)|\G([\S\s])/iS";
 
         do {
             if ($this->mbstring_overload ? preg_match($yy_global_pattern, mb_substr($this->data, $this->counter,2000000000,'latin1'), $yymatches) : preg_match($yy_global_pattern,$this->data, $yymatches, null, $this->counter)) {
                 $yysubmatches = $yymatches;
-                $yymatches = array_filter($yymatches, 'strlen'); // remove empty sub-patterns
+                $yymatches = array_filter($yymatches, 'strlen'); 
                 if (!count($yymatches)) {
                     throw new Exception('Error: lexing failed because a rule matched' .
                         ' an empty string.  Input "' . substr($this->data,
                         $this->counter, 5) . '... state LITERAL');
                 }
-                next($yymatches); // skip global match
-                $this->token = key($yymatches); // token number
+                next($yymatches); 
+                $this->token = key($yymatches); 
                 if ($tokenMap[$this->token]) {
-                    // extract sub-patterns for passing to lex function
+                    
                     $yysubmatches = array_slice($yysubmatches, $this->token + 1,
                         $tokenMap[$this->token]);
                 } else {
                     $yysubmatches = array();
                 }
-                $this->value = current($yymatches); // token value
+                $this->value = current($yymatches); 
                 $r = $this->{'yy_r3_' . $this->token}($yysubmatches);
                 if ($r === null) {
                     $this->counter += ($this->mbstring_overload ? mb_strlen($this->value,'latin1'): strlen($this->value));
                     $this->line += substr_count($this->value, "\n");
-                    // accept this token
+                    
                     return true;
                 } elseif ($r === true) {
-                    // we have changed state
-                    // process this token in the new state
+                    
+                    
                     return $this->yylex();
                 } elseif ($r === false) {
                     $this->counter += ($this->mbstring_overload ? mb_strlen($this->value,'latin1'): strlen($this->value));
                     $this->line += substr_count($this->value, "\n");
                     if ($this->counter >= ($this->mbstring_overload ? mb_strlen($this->data,'latin1'): strlen($this->data))) {
-                        return false; // end of input
+                        return false; 
                     }
-                    // skip this token
+                    
                     continue;
                 }            } else {
                 throw new Exception('Unexpected input at line' . $this->line .
@@ -930,7 +921,7 @@ class Smarty_Internal_Templatelexer
             break;
         } while (true);
 
-    } // end function
+    } 
 
 
     const LITERAL = 3;
@@ -1018,46 +1009,46 @@ class Smarty_Internal_Templatelexer
               15 => 0,
             );
         if ($this->counter >= ($this->mbstring_overload ? mb_strlen($this->data,'latin1'): strlen($this->data))) {
-            return false; // end of input
+            return false; 
         }
         $yy_global_pattern = "/\G(".$this->ldel."\\s*(if|elseif|else if|while)\\s+)|\G(".$this->ldel."\\s*for\\s+)|\G(".$this->ldel."\\s*foreach(?![^\s]))|\G(".$this->ldel."\\s*\/)|\G(".$this->ldel."\\s*)|\G(\")|\G(`\\$)|\G(\\$[0-9]*[a-zA-Z_]\\w*)|\G(\\$)|\G(([^\"\\\\]*?)((?:\\\\.[^\"\\\\]*?)*?)(?=(".$this->ldel."|\\$|`\\$|\")))|\G([\S\s])/iS";
 
         do {
             if ($this->mbstring_overload ? preg_match($yy_global_pattern, mb_substr($this->data, $this->counter,2000000000,'latin1'), $yymatches) : preg_match($yy_global_pattern,$this->data, $yymatches, null, $this->counter)) {
                 $yysubmatches = $yymatches;
-                $yymatches = array_filter($yymatches, 'strlen'); // remove empty sub-patterns
+                $yymatches = array_filter($yymatches, 'strlen'); 
                 if (!count($yymatches)) {
                     throw new Exception('Error: lexing failed because a rule matched' .
                         ' an empty string.  Input "' . substr($this->data,
                         $this->counter, 5) . '... state DOUBLEQUOTEDSTRING');
                 }
-                next($yymatches); // skip global match
-                $this->token = key($yymatches); // token number
+                next($yymatches); 
+                $this->token = key($yymatches); 
                 if ($tokenMap[$this->token]) {
-                    // extract sub-patterns for passing to lex function
+                    
                     $yysubmatches = array_slice($yysubmatches, $this->token + 1,
                         $tokenMap[$this->token]);
                 } else {
                     $yysubmatches = array();
                 }
-                $this->value = current($yymatches); // token value
+                $this->value = current($yymatches); 
                 $r = $this->{'yy_r4_' . $this->token}($yysubmatches);
                 if ($r === null) {
                     $this->counter += ($this->mbstring_overload ? mb_strlen($this->value,'latin1'): strlen($this->value));
                     $this->line += substr_count($this->value, "\n");
-                    // accept this token
+                    
                     return true;
                 } elseif ($r === true) {
-                    // we have changed state
-                    // process this token in the new state
+                    
+                    
                     return $this->yylex();
                 } elseif ($r === false) {
                     $this->counter += ($this->mbstring_overload ? mb_strlen($this->value,'latin1'): strlen($this->value));
                     $this->line += substr_count($this->value, "\n");
                     if ($this->counter >= ($this->mbstring_overload ? mb_strlen($this->data,'latin1'): strlen($this->data))) {
-                        return false; // end of input
+                        return false; 
                     }
-                    // skip this token
+                    
                     continue;
                 }            } else {
                 throw new Exception('Unexpected input at line' . $this->line .
@@ -1066,7 +1057,7 @@ class Smarty_Internal_Templatelexer
             break;
         } while (true);
 
-    } // end function
+    } 
 
 
     const DOUBLEQUOTEDSTRING = 4;
@@ -1117,7 +1108,7 @@ class Smarty_Internal_Templatelexer
     function yy_r4_6($yy_subpatterns)
     {
 
-  if ($this->smarty->auto_literal && ($this->mbstring_overload ? (mb_strpos(" \n\t\r",mb_substr($this->value,$this->ldel_length,1,'latin1'),0,'latin1') !== false) : ($this->getStrpos($this->value, $this->ldel_length, 1) /*espocrm: fix a warning for PHP 7*/ !== false))) {
+  if ($this->smarty->auto_literal && ($this->mbstring_overload ? (mb_strpos(" \n\t\r",mb_substr($this->value,$this->ldel_length,1,'latin1'),0,'latin1') !== false) : ($this->getStrpos($this->value, $this->ldel_length, 1)  !== false))) {
     $this->token = Smarty_Internal_Templateparser::TP_TEXT;
   } else {
      $this->token = Smarty_Internal_Templateparser::TP_LDEL;
@@ -1180,46 +1171,46 @@ class Smarty_Internal_Templatelexer
               4 => 0,
             );
         if ($this->counter >= ($this->mbstring_overload ? mb_strlen($this->data,'latin1'): strlen($this->data))) {
-            return false; // end of input
+            return false; 
         }
         $yy_global_pattern = "/\G(".$this->ldel."\\s*strip\\s*".$this->rdel.")|\G(".$this->ldel."\\s*\/strip\\s*".$this->rdel.")|\G(".$this->ldel."\\s*block)|\G([\S\s])/iS";
 
         do {
             if ($this->mbstring_overload ? preg_match($yy_global_pattern, mb_substr($this->data, $this->counter,2000000000,'latin1'), $yymatches) : preg_match($yy_global_pattern,$this->data, $yymatches, null, $this->counter)) {
                 $yysubmatches = $yymatches;
-                $yymatches = array_filter($yymatches, 'strlen'); // remove empty sub-patterns
+                $yymatches = array_filter($yymatches, 'strlen'); 
                 if (!count($yymatches)) {
                     throw new Exception('Error: lexing failed because a rule matched' .
                         ' an empty string.  Input "' . substr($this->data,
                         $this->counter, 5) . '... state CHILDBODY');
                 }
-                next($yymatches); // skip global match
-                $this->token = key($yymatches); // token number
+                next($yymatches); 
+                $this->token = key($yymatches); 
                 if ($tokenMap[$this->token]) {
-                    // extract sub-patterns for passing to lex function
+                    
                     $yysubmatches = array_slice($yysubmatches, $this->token + 1,
                         $tokenMap[$this->token]);
                 } else {
                     $yysubmatches = array();
                 }
-                $this->value = current($yymatches); // token value
+                $this->value = current($yymatches); 
                 $r = $this->{'yy_r5_' . $this->token}($yysubmatches);
                 if ($r === null) {
                     $this->counter += ($this->mbstring_overload ? mb_strlen($this->value,'latin1'): strlen($this->value));
                     $this->line += substr_count($this->value, "\n");
-                    // accept this token
+                    
                     return true;
                 } elseif ($r === true) {
-                    // we have changed state
-                    // process this token in the new state
+                    
+                    
                     return $this->yylex();
                 } elseif ($r === false) {
                     $this->counter += ($this->mbstring_overload ? mb_strlen($this->value,'latin1'): strlen($this->value));
                     $this->line += substr_count($this->value, "\n");
                     if ($this->counter >= ($this->mbstring_overload ? mb_strlen($this->data,'latin1'): strlen($this->data))) {
-                        return false; // end of input
+                        return false; 
                     }
-                    // skip this token
+                    
                     continue;
                 }            } else {
                 throw new Exception('Unexpected input at line' . $this->line .
@@ -1228,7 +1219,7 @@ class Smarty_Internal_Templatelexer
             break;
         } while (true);
 
-    } // end function
+    } 
 
 
     const CHILDBODY = 5;
@@ -1290,46 +1281,46 @@ class Smarty_Internal_Templatelexer
               5 => 0,
             );
         if ($this->counter >= ($this->mbstring_overload ? mb_strlen($this->data,'latin1'): strlen($this->data))) {
-            return false; // end of input
+            return false; 
         }
         $yy_global_pattern = "/\G(".$this->ldel."\\s*block)|\G(".$this->ldel."\\s*\/block)|\G(".$this->ldel."\\s*[$]smarty\\.block\\.(child|parent))|\G([\S\s])/iS";
 
         do {
             if ($this->mbstring_overload ? preg_match($yy_global_pattern, mb_substr($this->data, $this->counter,2000000000,'latin1'), $yymatches) : preg_match($yy_global_pattern,$this->data, $yymatches, null, $this->counter)) {
                 $yysubmatches = $yymatches;
-                $yymatches = array_filter($yymatches, 'strlen'); // remove empty sub-patterns
+                $yymatches = array_filter($yymatches, 'strlen'); 
                 if (!count($yymatches)) {
                     throw new Exception('Error: lexing failed because a rule matched' .
                         ' an empty string.  Input "' . substr($this->data,
                         $this->counter, 5) . '... state CHILDBLOCK');
                 }
-                next($yymatches); // skip global match
-                $this->token = key($yymatches); // token number
+                next($yymatches); 
+                $this->token = key($yymatches); 
                 if ($tokenMap[$this->token]) {
-                    // extract sub-patterns for passing to lex function
+                    
                     $yysubmatches = array_slice($yysubmatches, $this->token + 1,
                         $tokenMap[$this->token]);
                 } else {
                     $yysubmatches = array();
                 }
-                $this->value = current($yymatches); // token value
+                $this->value = current($yymatches); 
                 $r = $this->{'yy_r6_' . $this->token}($yysubmatches);
                 if ($r === null) {
                     $this->counter += ($this->mbstring_overload ? mb_strlen($this->value,'latin1'): strlen($this->value));
                     $this->line += substr_count($this->value, "\n");
-                    // accept this token
+                    
                     return true;
                 } elseif ($r === true) {
-                    // we have changed state
-                    // process this token in the new state
+                    
+                    
                     return $this->yylex();
                 } elseif ($r === false) {
                     $this->counter += ($this->mbstring_overload ? mb_strlen($this->value,'latin1'): strlen($this->value));
                     $this->line += substr_count($this->value, "\n");
                     if ($this->counter >= ($this->mbstring_overload ? mb_strlen($this->data,'latin1'): strlen($this->data))) {
-                        return false; // end of input
+                        return false; 
                     }
-                    // skip this token
+                    
                     continue;
                 }            } else {
                 throw new Exception('Unexpected input at line' . $this->line .
@@ -1338,7 +1329,7 @@ class Smarty_Internal_Templatelexer
             break;
         } while (true);
 
-    } // end function
+    } 
 
 
     const CHILDBLOCK = 6;
@@ -1393,7 +1384,7 @@ class Smarty_Internal_Templatelexer
     }
 
 
-    //espocrm: fix a warning for PHP 7
+    
     protected function getStrpos($value, $ldelLength, $offset = 0)
     {
         $substrRes = substr($value, $ldelLength, $offset);

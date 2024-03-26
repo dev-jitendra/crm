@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Utils;
 
@@ -37,12 +11,10 @@ use stdClass;
 use LogicException;
 use RuntimeException;
 
-/**
- * Application metadata.
- */
+
 class Metadata
 {
-    /** @var ?array<string, mixed> */
+    
     private ?array $data = null;
     private ?stdClass $objData = null;
 
@@ -50,9 +22,9 @@ class Metadata
     private string $objCacheKey = 'objMetadata';
     private string $customPath = 'custom/Espo/Custom/Resources/metadata';
 
-    /** @var array<string, array<string, mixed>>  */
+    
     private $deletedData = [];
-    /** @var array<string, array<string, mixed>> */
+    
     private $changedData = [];
 
     public function __construct(
@@ -64,9 +36,7 @@ class Metadata
         private bool $useCache = false
     ) {}
 
-    /**
-     * Init metadata.
-     */
+    
     public function init(bool $reload = false): void
     {
         if (!$this->useCache) {
@@ -74,7 +44,7 @@ class Metadata
         }
 
         if ($this->dataCache->has($this->cacheKey) && !$reload) {
-            /** @var array<string, mixed> $data */
+            
             $data = $this->dataCache->get($this->cacheKey);
 
             $this->data = $data;
@@ -93,11 +63,7 @@ class Metadata
         }
     }
 
-    /**
-     * Get metadata array.
-     *
-     * @return array<string, mixed>
-     */
+    
     private function getData(): array
     {
         if (empty($this->data) || !is_array($this->data)) {
@@ -109,13 +75,7 @@ class Metadata
         return $this->data;
     }
 
-    /**
-    * Get metadata by key.
-    *
-    * @param string|string[] $key
-    * @param mixed $default
-    * @return mixed
-    */
+    
     public function get($key = null, $default = null)
     {
         return Util::getValueByKey($this->getData(), $key, $default);
@@ -128,7 +88,7 @@ class Metadata
         }
 
         if ($this->dataCache->has($this->objCacheKey) && !$reload) {
-            /** @var stdClass $data */
+            
             $data = $this->dataCache->get($this->objCacheKey);
 
             $this->objData = $data;
@@ -154,13 +114,7 @@ class Metadata
         return $this->objData;
     }
 
-    /**
-    * Get metadata with stdClass items.
-    *
-    * @param string|string[] $key
-    * @param mixed $default
-    * @return mixed
-    */
+    
     public function getObjects($key = null, $default = null)
     {
         $objData = $this->getObjData();
@@ -175,12 +129,7 @@ class Metadata
 
 
 
-    /**
-     * Get metadata definition in custom directory.
-     *
-     * @param mixed $default
-     * @return mixed
-     */
+    
     public function getCustom(string $key1, string $key2, $default = null)
     {
         $filePath = $this->customPath . "/$key1/$key2.json";
@@ -194,12 +143,7 @@ class Metadata
         return Json::decode($fileContent);
     }
 
-    /**
-     * Set and save metadata in custom directory.
-     * The data is not merging with existing data. Use getCustom() to get existing data.
-     *
-     * @param array<string, mixed>|stdClass $data
-     */
+    
     public function saveCustom(string $key1, string $key2, $data): void
     {
         if (is_object($data)) {
@@ -222,35 +166,25 @@ class Metadata
         $this->init(true);
     }
 
-    /**
-     * Set metadata. Will be merged with the current data.
-     *
-     * @param array<string, mixed>|scalar|null $data
-     */
+    
     public function set(string $key1, string $key2, $data): void
     {
         $this->setInternal($key1, $key2, $data);
     }
 
-    /**
-     * Set a first-level param. Allows setting empty arrays.
-     *
-     * @since 8.0.6
-     */
+    
     public function setParam(string $key1, string $key2, string $param, mixed $value): void
     {
         $this->setInternal($key1, $key2, [$param => $value], true);
     }
 
-    /**
-     * @param array<string, mixed>|scalar|null $data
-     */
+    
     private function setInternal(string $key1, string $key2, $data, bool $allowEmptyArray = false): void
     {
         if (!$allowEmptyArray && is_array($data)) {
             foreach ($data as $key => $item) {
                 if (is_array($item) && empty($item)) {
-                    // @todo Revise.
+                    
                     unset($data[$key]);
                 }
             }
@@ -262,9 +196,9 @@ class Metadata
             ],
         ];
 
-        /** @var array<string, array<string, mixed>> $mergedChangedData */
+        
         $mergedChangedData = Util::merge($this->changedData, $newData);
-        /** @var array<string, mixed> $mergedData */
+        
         $mergedData = Util::merge($this->getData(), $newData);
 
         $this->changedData = $mergedChangedData;
@@ -275,11 +209,7 @@ class Metadata
         }
     }
 
-    /**
-     * Unset some fields and other stuff in metadata.
-     *
-     * @param string[]|string $unsets Example: `fields.name`.
-     */
+    
     public function delete(string $key1, string $key2, $unsets = null): void
     {
         if (!is_array($unsets)) {
@@ -288,7 +218,7 @@ class Metadata
 
         switch ($key1) {
             case 'entityDefs':
-                // Unset related additional fields, e.g. a field with an 'address' type.
+                
                 $fieldDefinitionList = $this->get('fields');
 
                 $unsetList = $unsets;
@@ -298,7 +228,7 @@ class Metadata
                         $fieldName = $matches[1];
                         $fieldPath = [$key1, $key2, 'fields', $fieldName];
 
-                        // @todo Revise the need. Additional fields are supposed to exist only in the build?
+                        
                         $additionalFields = $this->builderHelper->getAdditionalFieldList(
                             $fieldName,
                             $this->get($fieldPath, []),
@@ -332,23 +262,21 @@ class Metadata
             ]
         ];
 
-        /** @var array<string, array<string, mixed>> $mergedDeletedData */
+        
         $mergedDeletedData = Util::merge($this->deletedData, $unsetData);
         $this->deletedData = $mergedDeletedData;
 
-        /** @var array<string, array<string, mixed>> $unsetDeletedData */
-        /** @noinspection PhpRedundantOptionalArgumentInspection */
+        
+        
         $unsetDeletedData = Util::unsetInArrayByValue('__APPEND__', $this->deletedData, true);
         $this->deletedData = $unsetDeletedData;
 
-        /** @var array<string, mixed> $data */
+        
         $data = Util::unsetInArray($this->getData(), $metadataUnsetData, true);
         $this->data = $data;
     }
 
-    /**
-     * @param array<string, mixed> $data
-     */
+    
     private function undelete(string $key1, string $key2, $data): void
     {
         if (isset($this->deletedData[$key1][$key2])) {
@@ -362,9 +290,7 @@ class Metadata
         }
     }
 
-    /**
-     * Clear not saved changes.
-     */
+    
     public function clearChanges(): void
     {
         $this->changedData = [];
@@ -373,9 +299,7 @@ class Metadata
         $this->init(true);
     }
 
-    /**
-     * Save changes.
-     */
+    
     public function save(): bool
     {
         $path = $this->customPath;
@@ -425,19 +349,13 @@ class Metadata
         return (bool) $result;
     }
 
-    /**
-     * Get a module list.
-     *
-     * @return string[]
-     */
+    
     public function getModuleList(): array
     {
         return $this->module->getOrderedList();
     }
 
-    /**
-     * Get a module name a scope belongs to.
-     */
+    
     public function getScopeModuleName(string $scopeName): ?string
     {
         return $this->get(['scopes', $scopeName, 'module']);

@@ -1,26 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Josh Soref
- * - Alan Agius
- * - Erhan Gundogan
- * - François B
- * - JD Isaacks
- * - Murat Yüksel
- * - Baran Şengül
- * - Selami (selamialtin)
- * - TeomanBey
- */
+
+
 return [
     'year' => ':count yıl',
     'a_year' => '{1}bir yıl|]1,Inf[:count yıl',
@@ -79,7 +61,7 @@ return [
             case 'DD':
                 return $number;
             default:
-                if ($number === 0) {  // special case for zero
+                if ($number === 0) {  
                     return "$number'ıncı";
                 }
 

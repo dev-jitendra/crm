@@ -1,64 +1,19 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/fields/base */
+
+
 
 import View from 'view';
 import Select from 'ui/select';
 import $ from 'jquery';
 
-/**
- * A base field view. Can be in different modes. Each mode uses a separate template.
- *
- * @todo Document events.
- */
+
 class BaseFieldView extends View {
 
-    /**
-     * @typedef {Object} module:views/fields/base~options
-     * @property {string} name A field name.
-     * @property {module:model} [model] A model.
-     * @property {module:views/fields/base~params | Object.<string, *>} [params] Parameters.
-     * @property {boolean} [inlineEditDisabled] Disable inline edit.
-     * @property {boolean} [readOnly] Read-only.
-     * @property {string} [labelText] A custom label text.
-     * @property {'detail'|'edit'|'list'|'search'} [mode] A mode.
-     */
+    
 
-    /**
-     * @typedef {Object} module:views/fields/base~params
-     * @property {boolean} [inlineEditDisabled] Disable inline edit.
-     * @property {boolean} [readOnly] Read-only.
-     */
+    
 
-    /**
-     * @param {module:views/fields/base~options | Object.<string, *>} options Options.
-     */
+    
     constructor(options) {
         super(options);
 
@@ -66,298 +21,139 @@ class BaseFieldView extends View {
         this.labelText = options.labelText;
     }
 
-    /**
-     * A field type.
-     *
-     * @type {string}
-     */
+    
     type = 'base'
 
-    /**
-     * List mode template.
-     *
-     * @protected
-     * @type {string}
-     */
+    
     listTemplate = 'fields/base/list'
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * List-link mode template.
-     *
-     * @protected
-     * @type {string}
-     */
+    
+    
     listLinkTemplate = 'fields/base/list-link'
 
-    /**
-     * Detail mode template.
-     *
-     * @protected
-     * @type {string}
-     */
+    
     detailTemplate = 'fields/base/detail'
 
-    /**
-     * Edit mode template.
-     *
-     * @protected
-     * @type {string}
-     */
+    
     editTemplate = 'fields/base/edit'
 
-    /**
-     * Search mode template.
-     *
-     * @protected
-     * @type {string}
-     */
+    
     searchTemplate = 'fields/base/search'
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * @protected
-     * @type {string}
-     */
+    
+    
     listTemplateContent
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * @protected
-     * @type {string}
-     */
+    
+    
     detailTemplateContent
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * @protected
-     * @type {string}
-     */
+    
+    
     editTemplateContent
 
-    /**
-     * A validation list. There should be a `validate{Name}` method for each item.
-     *
-     * @type {string[]}
-     */
+    
     validations = ['required']
 
-    /**
-     * @const
-     */
+    
     MODE_LIST = 'list'
 
-    /**
-     * @const
-     */
+    
     MODE_LIST_LINK = 'listLink'
 
-    /**
-     * @const
-     */
+    
     MODE_DETAIL = 'detail'
 
-    /**
-     * @const
-     */
+    
     MODE_EDIT = 'edit'
 
-    /**
-     * @const
-     */
+    
     MODE_SEARCH = 'search'
 
-    /**
-     * A field name.
-     *
-     * @type {string}
-     */
+    
     name
 
-    /**
-     * Definitions.
-     *
-     * @type {Object}
-     */
+    
     defs = null
 
-    /**
-     * Field params.
-     *
-     * @type {Object.<string,*>}
-     */
+    
     params = null
 
-    /**
-     * A mode.
-     *
-     * @type {'list'|'listLink'|'detail'|'edit'|'search'}
-     */
+    
     mode = 'detail'
 
-    /**
-     * Search params.
-     *
-     * @type {Object.<string,*>|null}
-     */
+    
     searchParams = null
 
-    /**
-     * Inline edit disabled.
-     *
-     * @type {boolean}
-     */
+    
     inlineEditDisabled = false
 
-    /**
-     * Field is disabled.
-     *
-     * @type {boolean}
-     */
+    
     disabled = false
 
-    /**
-     * Field is read-only.
-     *
-     * @type {boolean}
-     */
+    
     readOnly = false
 
-    /**
-     * A label text.
-     *
-     * @type {string}
-     * @protected
-     */
+    
     labelText
 
-    /**
-     * @type {string[]|null}
-     */
+    
     attributeList = null
 
-    /**
-     * Attribute values before edit.
-     *
-     * @type {Object.<string, *>|{}}
-     */
+    
     initialAttributes = null
 
-    /**
-     * @const
-     */
+    
     VALIDATION_POPOVER_TIMEOUT = 3000
 
-    /**
-     * @type {(function():boolean)}
-     * @private
-     * @internal
-     */
+    
     validateCallback
 
-    /**
-     * An element selector to point validation popovers to.
-     *
-     * @type {string}
-     * @protected
-     */
+    
     validationElementSelector
 
-    /**
-     * A view-record helper.
-     *
-     * @type {module:view-record-helper}
-     */
+    
     recordHelper
 
-    /**
-     * @type {JQuery|null}
-     * @private
-     * @internal
-     */
+    
     $label = null
 
-    /**
-     * A form element.
-     *
-     * @type {JQuery|null}
-     * @protected
-     */
+    
     $element = null
 
-    /**
-     * Is searchable once a search filter is added (no need to type or selecting anything).
-     * Actual for search mode.
-     *
-     * @public
-     * @type {boolean}
-     */
+    
     initialSearchIsNotIdle = false
 
-    /**
-     * An entity type.
-     *
-     * @private
-     * @type {string|null}
-     */
+    
     entityType = null
 
-    /**
-     * A last validation message;
-     *
-     * @type {?string}
-     */
+    
     lastValidationMessage = null
 
-    /**
-     * Additional data.
-     *
-     * @type {Object.<string, *>}
-     */
+    
     dataObject
 
-    /**
-     * Is the field required.
-     *
-     * @returns {boolean}
-     */
+    
     isRequired() {
         return this.params.required;
     }
 
-    /**
-     * Get a cell element. Available only after the view is  rendered.
-     *
-     * @returns {JQuery}
-     */
+    
     get$cell() {
         return this.$el.parent();
     }
 
-    /**
-     * Get a cell element. Available only after the view is  rendered.
-     *
-     * @deprecated Use `get$cell`.
-     * @returns {JQuery}
-     */
+    
     getCellElement() {
         return this.get$cell();
     }
 
-    /**
-     * Is in inline-edit mode.
-     *
-     * @return {boolean}
-     */
+    
     isInlineEditMode() {
         return !!this._isInlineEditMode;
     }
 
-    /**
-     * Set disabled.
-     *
-     * @param {boolean} [locked] Won't be able to set back.
-     */
+    
     setDisabled(locked) {
         this.disabled = true;
 
@@ -366,9 +162,7 @@ class BaseFieldView extends View {
         }
     }
 
-    /**
-     * Set not-disabled.
-     */
+    
     setNotDisabled() {
         if (this.disabledLocked) {
             return;
@@ -377,9 +171,7 @@ class BaseFieldView extends View {
         this.disabled = false;
     }
 
-    /**
-     * Set required.
-     */
+    
     setRequired() {
         this.params.required = true;
 
@@ -395,9 +187,7 @@ class BaseFieldView extends View {
         }
     }
 
-    /**
-     * Set not required.
-     */
+    
     setNotRequired() {
         this.params.required = false;
         this.get$cell().removeClass('has-error');
@@ -414,12 +204,7 @@ class BaseFieldView extends View {
         }
     }
 
-    /**
-     * Set read-only.
-     *
-     * @param {boolean} [locked] Won't be able to set back.
-     * @return {Promise}
-     */
+    
     setReadOnly(locked) {
         if (this.readOnlyLocked) {
             return Promise.reject();
@@ -443,9 +228,7 @@ class BaseFieldView extends View {
         return Promise.resolve();
     }
 
-    /**
-     * Set not read only.
-     */
+    
     setNotReadOnly() {
         if (this.readOnlyLocked) {
             return;
@@ -454,11 +237,7 @@ class BaseFieldView extends View {
         this.readOnly = false;
     }
 
-    /**
-     * Get a label element. Available only after the view is rendered.
-     *
-     * @return {JQuery}
-     */
+    
     getLabelElement() {
         if (this.$label && this.$label.get(0) && !document.contains(this.$label.get(0))) {
             this.$label = undefined;
@@ -471,9 +250,7 @@ class BaseFieldView extends View {
         return this.$label;
     }
 
-    /**
-     * Hide field and label. Available only after the view is rendered.
-     */
+    
     hide() {
         this.$el.addClass('hidden');
         let $cell = this.get$cell();
@@ -482,9 +259,7 @@ class BaseFieldView extends View {
         $cell.addClass('hidden-cell');
     }
 
-    /**
-     * Show field and label. Available only after the view is rendered.
-     */
+    
     show() {
         this.$el.removeClass('hidden');
 
@@ -494,7 +269,7 @@ class BaseFieldView extends View {
         $cell.removeClass('hidden-cell');
     }
 
-    /** @inheritDoc */
+    
     data() {
         let data = {
             scope: this.model.entityType || this.model.name,
@@ -515,86 +290,49 @@ class BaseFieldView extends View {
         return data;
     }
 
-    /**
-     * Get a value for display. Is available by using a `{value}` placeholder in templates.
-     *
-     * @return {*}
-     */
+    
     getValueForDisplay() {
         return this.model.get(this.name);
     }
 
-    /**
-     * Is in list, detail or list-link mode.
-     *
-     * @returns {boolean}
-     */
+    
     isReadMode() {
         return this.mode === this.MODE_LIST ||
             this.mode === this.MODE_DETAIL ||
             this.mode === this.MODE_LIST_LINK;
     }
 
-    /**
-     * Is in list or list-link mode.
-     *
-     * @returns {boolean}
-     */
+    
     isListMode() {
         return this.mode === this.MODE_LIST || this.mode === this.MODE_LIST_LINK;
     }
 
-    /**
-     * Is in detail mode.
-     *
-     * @returns {boolean}
-     */
+    
     isDetailMode() {
         return this.mode === this.MODE_DETAIL;
     }
 
-    /**
-     * Is in edit mode.
-     *
-     * @returns {boolean}
-     */
+    
     isEditMode() {
         return this.mode === this.MODE_EDIT;
     }
 
-    /**
-     * Is in search mode.
-     *
-     * @returns {boolean}
-     */
+    
     isSearchMode() {
         return this.mode === this.MODE_SEARCH;
     }
 
-    /**
-     * Set detail mode.
-     *
-     * @returns {Promise}
-     */
+    
     setDetailMode() {
         return this.setMode(this.MODE_DETAIL) || Promise.resolve();
     }
 
-    /**
-     * Set edit mode.
-     *
-     * @returns {Promise}
-     */
+    
     setEditMode() {
         return this.setMode(this.MODE_EDIT) || Promise.resolve();
     }
 
-    /**
-     * Set a mode.
-     *
-     * @internal
-     * @returns {Promise}
-     */
+    
     setMode(mode) {
         let modeIsChanged = this.mode !== mode && this.mode;
         let modeBefore = this.mode;
@@ -630,20 +368,10 @@ class BaseFieldView extends View {
         return Promise.resolve();
     }
 
-    /**
-     * Called on mode change and on value change before re-rendering.
-     * To be used for additional initialization that depends on field
-     * values or mode.
-     *
-     * @protected
-     * @returns {Promise|undefined}
-     */
+    
     prepare() {}
 
-    /**
-     * @private
-     * @returns {Promise}
-     */
+    
     _onModeSet() {
         if (this.isListMode()) {
             return this.onListModeSet() || Promise.resolve();
@@ -660,37 +388,22 @@ class BaseFieldView extends View {
         return Promise.resolve();
     }
 
-    /**
-     * Additional initialization for the detail mode.
-     *
-     * @protected
-     * @returns {Promise|undefined}
-     */
+    
     onDetailModeSet() {
         return this.prepare();
     }
 
-    /**
-     * Additional initialization for the edit mode.
-     *
-     * @protected
-     * @returns {Promise|undefined}
-     */
+    
     onEditModeSet() {
         return this.prepare();
     }
 
-    /**
-     * Additional initialization for the list mode.
-     *
-     * @protected
-     * @returns {Promise|undefined}
-     */
+    
     onListModeSet() {
         return this.prepare();
     }
 
-    /** @inheritDoc */
+    
     init() {
         this.validations = Espo.Utils.clone(this.validations);
 
@@ -774,7 +487,7 @@ class BaseFieldView extends View {
             this.searchData = {};
             this.setupSearch();
 
-            this.events['keydown.' + this.cid] = /** JQueryKeyEventObject */e => {
+            this.events['keydown.' + this.cid] = e => {
                 if (Espo.Utils.getKeyFromKeyEvent(e) === 'Control+Enter') {
                     this.trigger('search');
                 }
@@ -847,7 +560,7 @@ class BaseFieldView extends View {
         }
 
         if (!this.isSearchMode()) {
-            this.attributeList = this.getAttributeList(); // for backward compatibility, to be removed
+            this.attributeList = this.getAttributeList(); 
 
             this.listenTo(this.model, 'change', (model, options) => {
                 if (options.ui) {
@@ -919,17 +632,14 @@ class BaseFieldView extends View {
         }
     }
 
-    /** @inheritDoc */
+    
     setupFinal() {
         this.wait(
             this._onModeSet()
         );
     }
 
-    /**
-     * @internal
-     * @private
-     */
+    
     initTooltip() {
         let $a;
 
@@ -970,11 +680,7 @@ class BaseFieldView extends View {
         });
     }
 
-    /**
-     * Show a required-field sign.
-     *
-     * @private
-     */
+    
     showRequiredSign() {
         let $label = this.getLabelElement();
         let $sign = $label.find('span.required-sign');
@@ -989,11 +695,7 @@ class BaseFieldView extends View {
         $sign.show();
     }
 
-    /**
-     * Hide a required-field sign.
-     *
-     * @private
-     */
+    
     hideRequiredSign() {
         let $label = this.getLabelElement();
         let $sign = $label.find('span.required-sign');
@@ -1001,50 +703,27 @@ class BaseFieldView extends View {
         $sign.hide();
     }
 
-    /**
-     * Get search-params data.
-     *
-     * @protected
-     * @return {Object.<string,*>}
-     */
+    
     getSearchParamsData() {
         return this.searchParams.data || {};
     }
 
-    /**
-     * Get search values.
-     *
-     * @protected
-     * @return {Object.<string,*>}
-     */
+    
     getSearchValues() {
         return this.getSearchParamsData().values || {};
     }
 
-    /**
-     * Get a current search type.
-     *
-     * @protected
-     * @return {string}
-     */
+    
     getSearchType() {
         return this.getSearchParamsData().type || this.searchParams.type;
     }
 
-    /**
-     * Get the search type list.
-     *
-     * @protected
-     * @returns {string[]}
-     */
+    
     getSearchTypeList() {
         return this.searchTypeList;
     }
 
-    /**
-     * @private
-     * @internal
-     */
+    
     initInlineEdit() {
         let $cell = this.get$cell();
 
@@ -1092,11 +771,7 @@ class BaseFieldView extends View {
         });
     }
 
-    /**
-     * Initializes a form element reference.
-     *
-     * @protected
-     */
+    
     initElement() {
         this.$element = this.$el.find('[data-name="' + this.name + '"]');
 
@@ -1115,7 +790,7 @@ class BaseFieldView extends View {
         }
     }
 
-    /** @inheritDoc */
+    
     afterRender() {
         if (this.isEditMode() || this.isSearchMode()) {
             this.initElement();
@@ -1142,68 +817,33 @@ class BaseFieldView extends View {
         }
     }
 
-    /**
-     * Called after the view is rendered in list or read mode.
-     *
-     * @protected
-     */
+    
     afterRenderRead() {}
 
-    /**
-     * Called after the view is rendered in list mode.
-     *
-     * @protected
-     */
+    
     afterRenderList() {}
 
-    /**
-     * Called after the view is rendered in detail mode.
-     *
-     * @protected
-     */
+    
     afterRenderDetail() {}
 
-    /**
-     * Called after the view is rendered in edit mode.
-     *
-     * @protected
-     */
+    
     afterRenderEdit() {}
 
-    /**
-     * Called after the view is rendered in search mode.
-     *
-     * @protected
-     */
+    
     afterRenderSearch() {}
 
-    /**
-     * Initialization.
-     */
+    
     setup() {}
 
-    /**
-     * Initialization for search mode.
-     *
-     * @protected
-     */
+    
     setupSearch() {}
 
-    /**
-     * Get list of model attributes that relate to the field.
-     * Changing of any attributes makes the field to re-render.
-     *
-     * @return {string[]}
-     */
+    
     getAttributeList() {
         return this.getFieldManager().getAttributeList(this.fieldType, this.name);
     }
 
-    /**
-     * Invoke inline-edit saving.
-     *
-     * @param {{[bypassClose]: boolean}} [options]
-     */
+    
     inlineEditSave(options) {
         options = options || {}
 
@@ -1213,7 +853,7 @@ class BaseFieldView extends View {
             return;
         }
 
-        // Code below supposed not to be executed.
+        
 
         let data = this.fetch();
 
@@ -1250,7 +890,7 @@ class BaseFieldView extends View {
         Espo.Ui.notify(this.translate('saving', 'messages'));
 
         model
-            .save(/** @type Object */attrs, {patch: true})
+            .save(attrs, {patch: true})
             .then(() => {
                 this.trigger('after:inline-save');
                 this.trigger('after:save');
@@ -1272,9 +912,7 @@ class BaseFieldView extends View {
         }
     }
 
-    /**
-     * @public
-     */
+    
     removeInlineEditLinks() {
         let $cell = this.get$cell();
 
@@ -1283,9 +921,7 @@ class BaseFieldView extends View {
         $cell.find('.inline-edit-link').addClass('hidden');
     }
 
-    /**
-     * @private
-     */
+    
     addInlineEditLinks() {
         let $cell = this.get$cell();
 
@@ -1317,21 +953,12 @@ class BaseFieldView extends View {
         });
     }
 
-    /**
-     * @public
-     * @param {boolean} value
-     * @internal
-     */
+    
     setIsInlineEditMode(value) {
         this._isInlineEditMode = value;
     }
 
-    /**
-     * Exist inline-edit mode.
-     *
-     * @param {boolean} [noReset]
-     * @return {Promise}
-     */
+    
     inlineEditClose(noReset) {
         this.trigger('inline-edit-off', {noReset: noReset});
 
@@ -1356,11 +983,7 @@ class BaseFieldView extends View {
         return promise;
     }
 
-    /**
-     * Switch to inline-edit mode.
-     *
-     * @return {Promise}
-     */
+    
     inlineEdit() {
         this.trigger('edit', this);
 
@@ -1414,9 +1037,7 @@ class BaseFieldView extends View {
         return promise;
     }
 
-    /**
-     * @protected
-     */
+    
     focusOnInlineEdit() {
         let $element = this.$element && this.$element.length ?
             this.$element :
@@ -1429,26 +1050,14 @@ class BaseFieldView extends View {
         $element.first().focus();
     }
 
-    /**
-     * Suspend a validation message.
-     *
-     * @internal
-     * @param {number} [time=200]
-     */
+    
     suspendValidationMessage(time) {
         this.validationMessageSuspended = true;
 
         setTimeout(() => this.validationMessageSuspended = false, time || 200);
     }
 
-    /**
-     * Show a validation message.
-     *
-     * @param {string} message A message.
-     * @param {string|JQuery|Element} [target] A target element or selector.
-     * @param {module:view} [view] A child view that contains the target. The closest view should to passed.
-     *   Should be omitted if there is no child views or the target is not rendered by a child view.
-     */
+    
     showValidationMessage(message, target, view) {
         if (this.validationMessageSuspended) {
             return;
@@ -1526,11 +1135,7 @@ class BaseFieldView extends View {
         this._timeoutMap.set(element, timeout);
     }
 
-    /**
-     * Validate field values.
-     *
-     * @return {boolean} True if not valid.
-     */
+    
     validate() {
         this.lastValidationMessage = null;
 
@@ -1547,20 +1152,12 @@ class BaseFieldView extends View {
         return false;
     }
 
-    /**
-     * Get a label text.
-     *
-     * @returns {string}
-     */
+    
     getLabelText() {
         return this.labelText;
     }
 
-    /**
-     * Validate required.
-     *
-     * @return {boolean}
-     */
+    
     validateRequired() {
         if (this.isRequired()) {
             if (this.model.get(this.name) === '' || this.model.get(this.name) === null) {
@@ -1574,28 +1171,17 @@ class BaseFieldView extends View {
         }
     }
 
-    /**
-     * Defines whether the field should have a required-marker rendered.
-     *
-     * @protected
-     * @return {boolean}
-     */
+    
     hasRequiredMarker() {
         return this.isRequired();
     }
 
-    /**
-     * Fetch field values to the model.
-     */
+    
     fetchToModel() {
         this.model.set(this.fetch(), {silent: true});
     }
 
-    /**
-     * Fetch field values from DOM.
-     *
-     * @return {Object.<string, *>}
-     */
+    
     fetch() {
         if (!this.$element.length) {
             return {};
@@ -1608,11 +1194,7 @@ class BaseFieldView extends View {
         return data;
     }
 
-    /**
-     * Fetch search data from DOM.
-     *
-     * @return {Object.<string, *>|null}
-     */
+    
     fetchSearch() {
         let value = this.$element.val().toString().trim();
 
@@ -1626,11 +1208,7 @@ class BaseFieldView extends View {
         return null;
     }
 
-    /**
-     * Fetch a search type from DOM.
-     *
-     * @return {string}
-     */
+    
     fetchSearchType() {
         return this.$el.find('select.search-type').val();
     }

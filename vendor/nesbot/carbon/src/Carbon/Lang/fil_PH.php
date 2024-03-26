@@ -1,19 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Rene Torres Rene Torres, Pablo Saratxaga rgtorre@rocketmail.com, pablo@mandrakesoft.com
- * - Jaycee Mariano (alohajaycee)
- */
+
+
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [
         'L' => 'MM/DD/YY',

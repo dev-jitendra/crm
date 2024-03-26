@@ -16,36 +16,22 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-/**
- * Provides Credentials from the running EC2 metadata server using the IMDSv1 and IMDSv2.
- *
- * @see https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instancedata-data-retrieval.html
- *
- * @author Jérémy Derussé <jeremy@derusse.com>
- */
+
 final class InstanceProvider implements CredentialProvider
 {
-    private const TOKEN_ENDPOINT = 'http://169.254.169.254/latest/api/token';
-    private const METADATA_ENDPOINT = 'http://169.254.169.254/latest/meta-data/iam/security-credentials';
+    private const TOKEN_ENDPOINT = 'http:
+    private const METADATA_ENDPOINT = 'http:
 
-    /**
-     * @var LoggerInterface
-     */
+    
     private $logger;
 
-    /**
-     * @var HttpClientInterface
-     */
+    
     private $httpClient;
 
-    /**
-     * @var float
-     */
+    
     private $timeout;
 
-    /**
-     * @var int
-     */
+    
     private $tokenTtl;
 
     public function __construct(?HttpClientInterface $httpClient = null, ?LoggerInterface $logger = null, float $timeout = 1.0, int $tokenTtl = 21600)
@@ -66,14 +52,14 @@ final class InstanceProvider implements CredentialProvider
         }
 
         try {
-            // Fetch current Profile
+            
             $response = $this->httpClient->request('GET', self::METADATA_ENDPOINT, [
                 'timeout' => $this->timeout,
                 'headers' => $headers,
             ]);
             $profile = $response->getContent();
 
-            // Fetch credentials from profile
+            
             $response = $this->httpClient->request('GET', self::METADATA_ENDPOINT . '/' . $profile, [
                 'timeout' => $this->timeout,
                 'headers' => $headers,
@@ -107,11 +93,7 @@ final class InstanceProvider implements CredentialProvider
         );
     }
 
-    /**
-     * Copy of Symfony\Component\HttpClient\Response::toArray without assertion on Content-Type header.
-     *
-     * @return array<string, mixed>
-     */
+    
     private function toArray(ResponseInterface $response): array
     {
         if ('' === $content = $response->getContent(true)) {
@@ -121,17 +103,17 @@ final class InstanceProvider implements CredentialProvider
         try {
             $content = json_decode($content, true, 512, \JSON_BIGINT_AS_STRING | (\PHP_VERSION_ID >= 70300 ? \JSON_THROW_ON_ERROR : 0));
         } catch (\JsonException $e) {
-            /** @psalm-suppress all */
+            
             throw new JsonException(sprintf('%s for "%s".', $e->getMessage(), $response->getInfo('url')), $e->getCode());
         }
 
         if (\PHP_VERSION_ID < 70300 && \JSON_ERROR_NONE !== json_last_error()) {
-            /** @psalm-suppress InvalidArgument */
+            
             throw new JsonException(sprintf('%s for "%s".', json_last_error_msg(), $response->getInfo('url')), json_last_error());
         }
 
         if (!\is_array($content)) {
-            /** @psalm-suppress InvalidArgument */
+            
             throw new JsonException(sprintf('JSON content was expected to decode to an array, %s returned for "%s".', \gettype($content), $response->getInfo('url')));
         }
 

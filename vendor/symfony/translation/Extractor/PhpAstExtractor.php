@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation\Extractor;
 
@@ -19,19 +12,13 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Translation\Extractor\Visitor\AbstractVisitor;
 use Symfony\Component\Translation\MessageCatalogue;
 
-/**
- * PhpAstExtractor extracts translation messages from a PHP AST.
- *
- * @author Mathieu Santostefano <msantostefano@protonmail.com>
- */
+
 final class PhpAstExtractor extends AbstractFileExtractor implements ExtractorInterface
 {
     private Parser $parser;
 
     public function __construct(
-        /**
-         * @param iterable<AbstractVisitor&NodeVisitor> $visitors
-         */
+        
         private readonly iterable $visitors,
         private string $prefix = '',
     ) {
@@ -46,7 +33,7 @@ final class PhpAstExtractor extends AbstractFileExtractor implements ExtractorIn
     {
         foreach ($this->extractFiles($resource) as $file) {
             $traverser = new NodeTraverser();
-            /** @var AbstractVisitor&NodeVisitor $visitor */
+            
             foreach ($this->visitors as $visitor) {
                 $visitor->initialize($catalogue, $file, $this->prefix);
                 $traverser->addVisitor($visitor);

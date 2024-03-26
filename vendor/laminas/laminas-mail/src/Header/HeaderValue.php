@@ -8,28 +8,19 @@ use function strlen;
 
 final class HeaderValue
 {
-    /**
-     * No public constructor.
-     */
+    
     private function __construct()
     {
     }
 
-    /**
-     * Filter the header value according to RFC 2822
-     *
-     * @see    http://www.rfc-base.org/txt/rfc-2822.txt (section 2.2)
-     *
-     * @param  string $value
-     * @return string
-     */
+    
     public static function filter($value)
     {
         $result = '';
         $total  = strlen($value);
 
-        // Filter for CR and LF characters, leaving CRLF + WSP sequences for
-        // Long Header Fields (section 2.2.3 of RFC 2822)
+        
+        
         for ($i = 0; $i < $total; $i += 1) {
             $ord = ord($value[$i]);
             if ($ord === 10 || $ord > 127) {
@@ -59,21 +50,14 @@ final class HeaderValue
         return $result;
     }
 
-    /**
-     * Determine if the header value contains any invalid characters.
-     *
-     * @see    http://www.rfc-base.org/txt/rfc-2822.txt (section 2.2)
-     *
-     * @param string $value
-     * @return bool
-     */
+    
     public static function isValid($value)
     {
         $total = strlen($value);
         for ($i = 0; $i < $total; $i += 1) {
             $ord = ord($value[$i]);
 
-            // bare LF means we aren't valid
+            
             if ($ord === 10 || $ord > 127) {
                 return false;
             }
@@ -90,7 +74,7 @@ final class HeaderValue
                     return false;
                 }
 
-                // skip over the LF following this
+                
                 $i += 2;
             }
         }
@@ -98,15 +82,7 @@ final class HeaderValue
         return true;
     }
 
-    /**
-     * Assert that the header value is valid.
-     *
-     * Raises an exception if invalid.
-     *
-     * @param string $value
-     * @throws Exception\RuntimeException
-     * @return void
-     */
+    
     public static function assertValid($value)
     {
         if (! self::isValid($value)) {

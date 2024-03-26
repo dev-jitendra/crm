@@ -3,13 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use Picqer\Barcode\BarcodeGenerator;
 
-/*
- * Test all supported barcodes types, with as much different but supported input strings.
- * Verified files can be built with generate-verified-files.php file.
- * Only run that file if you added new types or new strings to test.
- *
- * We use SVG because that output is vector and should be the same on every host system.
- */
+
 
 class VerifiedBarcodeTest extends TestCase
 {

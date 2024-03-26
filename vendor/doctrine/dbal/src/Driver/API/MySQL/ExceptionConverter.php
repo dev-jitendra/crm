@@ -22,13 +22,10 @@ use Doctrine\DBAL\Exception\TableNotFoundException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\DBAL\Query;
 
-/** @internal */
+
 final class ExceptionConverter implements ExceptionConverterInterface
 {
-    /**
-     * @link https://dev.mysql.com/doc/mysql-errors/8.0/en/client-error-reference.html
-     * @link https://dev.mysql.com/doc/mysql-errors/8.0/en/server-error-reference.html
-     */
+    
     public function convert(Exception $exception, ?Query $query): DriverException
     {
         switch ($exception->getCode()) {

@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\ORM\Repository\Deprecation;
 
@@ -38,45 +12,28 @@ use Espo\ORM\Query\Select;
 use Espo\ORM\Repository\RDBSelectBuilder;
 use Espo\ORM\SthCollection;
 
-/**
- * @internal
- * @template TEntity of Entity
- */
+
 trait RDBRepositoryDeprecationTrait
 {
-    /**
-     * @deprecated Use `group` method.
-     * @todo Remove in v9.0.
-     * @param Expression|Expression[]|string|string[] $groupBy
-     * @return RDBSelectBuilder<TEntity>
-     */
+    
     public function groupBy($groupBy): RDBSelectBuilder
     {
         return $this->group($groupBy);
     }
 
-    /**
-     * @deprecated As of v7.0. Use the Query Builder instead. Otherwise, code will be not portable.
-     * @todo Remove in v9.0.
-     */
+    
     protected function getPDO(): \PDO
     {
         return $this->entityManager->getPDO();
     }
 
-    /**
-     * @deprecated Use `$this->entityManager`.
-     * @todo Remove in v9.0.
-     */
+    
     protected function getEntityManager(): EntityManager
     {
         return $this->entityManager;
     }
 
-    /**
-     * @deprecated Use QueryBuilder instead.
-     * @todo Rewrite usages.
-     */
+    
     public function deleteFromDb(string $id, bool $onlyDeleted = false): void
     {
         $mapper = $this->getMapper();
@@ -88,12 +45,7 @@ trait RDBRepositoryDeprecationTrait
         $mapper->deleteFromDb($this->entityType, $id, $onlyDeleted);
     }
 
-    /**
-     * Get an entity. If ID is NULL, a new entity is returned.
-     *
-     * @deprecated Use `getById` and `getNew`.
-     * @todo Remove in v9.0.
-     */
+    
     public function get(?string $id = null): ?Entity
     {
         if (is_null($id)) {
@@ -103,12 +55,7 @@ trait RDBRepositoryDeprecationTrait
         return $this->getById($id);
     }
 
-    /**
-     * @deprecated As of v6.0. Use `getRelation(...)->find()`.
-     * @todo Remove in v9.0.
-     * @param ?array<string, mixed> $params
-     * @return Collection<TEntity>|TEntity|null
-     */
+    
     public function findRelated(Entity $entity, string $relationName, ?array $params = null)
     {
         $params = $params ?? [];
@@ -122,7 +69,7 @@ trait RDBRepositoryDeprecationTrait
         }
 
         $type = $entity->getRelationType($relationName);
-        /** @phpstan-ignore-next-line */
+        
         $entityType = $entity->getRelationParam($relationName, 'entity');
 
         $additionalColumns = $params['additionalColumns'] ?? [];
@@ -146,7 +93,7 @@ trait RDBRepositoryDeprecationTrait
             $select = $this->applyRelationAdditionalColumns($entity, $relationName, $additionalColumns, $select);
         }
 
-        // @todo Get rid of 'additionalColumnsConditions' usage. Use 'whereClause' instead.
+        
         if ($type === Entity::MANY_MANY && count($additionalColumnsConditions)) {
             if ($select === null) {
                 throw new \RuntimeException();
@@ -160,22 +107,18 @@ trait RDBRepositoryDeprecationTrait
             );
         }
 
-        /** @var Collection<TEntity>|TEntity|null $result */
+        
         $result = $this->getMapper()->selectRelated($entity, $relationName, $select);
 
         if ($result instanceof SthCollection) {
-            /** @var SthCollection<TEntity> */
+            
             return $this->entityManager->getCollectionFactory()->createFromSthCollection($result);
         }
 
         return $result;
     }
 
-    /**
-     * @deprecated As of v6.0. Use `getRelation(...)->count()`.
-     * @todo Remove in v9.0.
-     * @param ?array<string, mixed> $params
-     */
+    
     public function countRelated(Entity $entity, string $relationName, ?array $params = null): int
     {
         $params = $params ?? [];
@@ -189,7 +132,7 @@ trait RDBRepositoryDeprecationTrait
         }
 
         $type = $entity->getRelationType($relationName);
-        /** @phpstan-ignore-next-line */
+        
         $entityType = $entity->getRelationParam($relationName, 'entity');
 
         $additionalColumnsConditions = $params['additionalColumnsConditions'] ?? [];
@@ -219,9 +162,7 @@ trait RDBRepositoryDeprecationTrait
         return (int) $this->getMapper()->countRelated($entity, $relationName, $select);
     }
 
-    /**
-     * @param string[] $columns
-     */
+    
     private function applyRelationAdditionalColumns(
         Entity $entity,
         string $relationName,
@@ -233,7 +174,7 @@ trait RDBRepositoryDeprecationTrait
             return $select;
         }
 
-        /** @phpstan-ignore-next-line */
+        
         $middleName = lcfirst($entity->getRelationParam($relationName, 'relationName'));
 
         $selectItemList = $select->getSelect();
@@ -257,9 +198,7 @@ trait RDBRepositoryDeprecationTrait
             ->build();
     }
 
-    /**
-     * @param array<string, mixed> $conditions
-     */
+    
     private function applyRelationAdditionalColumnsConditions(
         Entity $entity,
         string $relationName,
@@ -271,7 +210,7 @@ trait RDBRepositoryDeprecationTrait
             return $select;
         }
 
-        /** @phpstan-ignore-next-line */
+        
         $middleName = lcfirst($entity->getRelationParam($relationName, 'relationName'));
 
         $builder = $this->entityManager
@@ -288,11 +227,7 @@ trait RDBRepositoryDeprecationTrait
 
         return $builder->build();
     }
-    /**
-     * @deprecated As of v6.0. Use `getRelation(...)->isRelated(...)`.
-     * @todo Remove in v9.0.
-     * @param TEntity|string $foreign
-     */
+    
     public function isRelated(Entity $entity, string $relationName, $foreign): bool
     {
         if (!$entity->hasId()) {
@@ -303,7 +238,7 @@ trait RDBRepositoryDeprecationTrait
             throw new \RuntimeException("Not supported entity type.");
         }
 
-        /** @var mixed $foreign */
+        
 
         if ($foreign instanceof Entity) {
             if (!$foreign->hasId()) {
@@ -329,7 +264,7 @@ trait RDBRepositoryDeprecationTrait
             }
         }
 
-        /** @phpstan-var TEntity $entity */
+        
 
         $relation = $this->getRelation($entity, $relationName);
 
@@ -343,11 +278,7 @@ trait RDBRepositoryDeprecationTrait
             ],
         ]);
     }
-    /**
-     * @deprecated As of v6.0. Use `getRelation(...)->relate(...)`.
-     * @todo Remove in v9.0.
-     * @phpstan-ignore-next-line
-     */
+    
     public function relate(Entity $entity, string $relationName, $foreign, $columnData = null, array $options = [])
     {
         if (!$entity->hasId()) {
@@ -407,11 +338,7 @@ trait RDBRepositoryDeprecationTrait
         return $result;
     }
 
-    /**
-     * @deprecated As of v6.0. Use `getRelation(...)->unrelate(...)`.
-     * @todo Remove in v9.0.
-     * @phpstan-ignore-next-line
-     */
+    
     public function unrelate(Entity $entity, string $relationName, $foreign, array $options = [])
     {
         if (!$entity->hasId()) {
@@ -463,21 +390,13 @@ trait RDBRepositoryDeprecationTrait
         return $result;
     }
 
-    /**
-     * @deprecated As of v6.0. Use `getRelation(...)->getColumn(...)`.
-     * @todo Remove in v9.0.
-     * @phpstan-ignore-next-line
-     */
+    
     public function getRelationColumn(Entity $entity, string $relationName, string $foreignId, string $column)
     {
         return $this->getMapper()->getRelationColumn($entity, $relationName, $foreignId, $column);
     }
 
-    /**
-     * @deprecated As of v6.0. Use `getRelation(...)->updateColumns(...)`.
-     * @todo Remove in v9.0.
-     * @phpstan-ignore-next-line
-     */
+    
     public function updateRelation(Entity $entity, string $relationName, $foreign, $columnData)
     {
         if (!$entity->hasId()) {
@@ -507,11 +426,7 @@ trait RDBRepositoryDeprecationTrait
         return true;
     }
 
-    /**
-     * @deprecated As of v6.0. Use `getRelation(...)->massRelate(...)`.
-     * @todo Remove in v9.0.
-     * @phpstan-ignore-next-line
-     */
+    
     public function massRelate(Entity $entity, string $relationName, array $params = [], array $options = [])
     {
         if (!$entity->hasId()) {

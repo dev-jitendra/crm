@@ -10,58 +10,34 @@ use AsyncAws\S3\ValueObject\CopyObjectResult;
 
 class CopyObjectOutput extends Result
 {
-    /**
-     * Container for all response elements.
-     */
+    
     private $copyObjectResult;
 
-    /**
-     * If the object expiration is configured, the response includes this header.
-     */
+    
     private $expiration;
 
-    /**
-     * Version of the copied object in the destination bucket.
-     */
+    
     private $copySourceVersionId;
 
-    /**
-     * Version ID of the newly created copy.
-     */
+    
     private $versionId;
 
-    /**
-     * The server-side encryption algorithm used when storing this object in Amazon S3 (for example, AES256, aws:kms).
-     */
+    
     private $serverSideEncryption;
 
-    /**
-     * If server-side encryption with a customer-provided encryption key was requested, the response will include this
-     * header confirming the encryption algorithm used.
-     */
+    
     private $sseCustomerAlgorithm;
 
-    /**
-     * If server-side encryption with a customer-provided encryption key was requested, the response will include this
-     * header to provide round-trip message integrity verification of the customer-provided encryption key.
-     */
+    
     private $sseCustomerKeyMd5;
 
-    /**
-     * If present, specifies the ID of the AWS Key Management Service (AWS KMS) symmetric customer managed customer master
-     * key (CMK) that was used for the object.
-     */
+    
     private $sseKmsKeyId;
 
-    /**
-     * If present, specifies the AWS KMS Encryption Context to use for object encryption. The value of this header is a
-     * base64-encoded UTF-8 string holding JSON with the encryption context key-value pairs.
-     */
+    
     private $sseKmsEncryptionContext;
 
-    /**
-     * Indicates whether the copied object uses an S3 Bucket Key for server-side encryption with AWS KMS (SSE-KMS).
-     */
+    
     private $bucketKeyEnabled;
 
     private $requestCharged;
@@ -94,9 +70,7 @@ class CopyObjectOutput extends Result
         return $this->expiration;
     }
 
-    /**
-     * @return RequestCharged::*|null
-     */
+    
     public function getRequestCharged(): ?string
     {
         $this->initialize();
@@ -104,9 +78,7 @@ class CopyObjectOutput extends Result
         return $this->requestCharged;
     }
 
-    /**
-     * @return ServerSideEncryption::*|null
-     */
+    
     public function getServerSideEncryption(): ?string
     {
         $this->initialize();

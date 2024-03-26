@@ -15,11 +15,7 @@ use OpenSpout\Writer\Common\Entity\Worksheet;
 use OpenSpout\Writer\Common\Manager\Style\AbstractStyleManager as CommonStyleManager;
 use OpenSpout\Writer\ODS\Helper\BorderHelper;
 
-/**
- * @internal
- *
- * @property StyleRegistry $styleRegistry
- */
+
 final class StyleManager extends CommonStyleManager
 {
     private readonly AbstractOptions $options;
@@ -30,16 +26,12 @@ final class StyleManager extends CommonStyleManager
         $this->options = $options;
     }
 
-    /**
-     * Returns the content of the "styles.xml" file, given a list of styles.
-     *
-     * @param int $numWorksheets Number of worksheets created
-     */
+    
     public function getStylesXMLFileContent(int $numWorksheets): string
     {
         $content = <<<'EOD'
             <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-            <office:document-styles office:version="1.2" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:msoxl="http://schemas.microsoft.com/office/excel/formula" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <office:document-styles office:version="1.2" xmlns:dc="http:
             EOD;
 
         $content .= $this->getFontFaceSectionContent();
@@ -54,9 +46,7 @@ final class StyleManager extends CommonStyleManager
         return $content;
     }
 
-    /**
-     * Returns the contents of the "<office:font-face-decls>" section, inside "content.xml" file.
-     */
+    
     public function getContentXmlFontFaceSectionContent(): string
     {
         $content = '<office:font-face-decls>';
@@ -68,11 +58,7 @@ final class StyleManager extends CommonStyleManager
         return $content;
     }
 
-    /**
-     * Returns the contents of the "<office:automatic-styles>" section, inside "content.xml" file.
-     *
-     * @param Worksheet[] $worksheets
-     */
+    
     public function getContentXmlAutomaticStylesSectionContent(array $worksheets): string
     {
         $content = '<office:automatic-styles>';
@@ -105,7 +91,7 @@ final class StyleManager extends CommonStyleManager
                 EOD;
         }
 
-        // Sort column widths since ODS cares about order
+        
         $columnWidths = $this->options->getColumnWidths();
         usort($columnWidths, static function (ColumnWidth $a, ColumnWidth $b): int {
             return $a->start <=> $b->start;
@@ -149,16 +135,14 @@ final class StyleManager extends CommonStyleManager
                 EOD;
         }
         \assert(isset($columnWidth));
-        // Note: This assumes the column widths are contiguous and default width is
-        // only applied to columns after the last custom column with a custom width
+        
+        
         $content .= '<table:table-column table:default-cell-style-name="ce1" table:style-name="default-column-style" table:number-columns-repeated="'.($maxNumColumns - $columnWidth->end).'"/>';
 
         return $content;
     }
 
-    /**
-     * Returns the content of the "<office:styles>" section, inside "styles.xml" file.
-     */
+    
     private function getStylesSectionContent(): string
     {
         $defaultStyle = $this->getDefaultStyle();
@@ -178,11 +162,7 @@ final class StyleManager extends CommonStyleManager
             EOD;
     }
 
-    /**
-     * Returns the content of the "<office:master-styles>" section, inside "styles.xml" file.
-     *
-     * @param int $numWorksheets Number of worksheets created
-     */
+    
     private function getMasterStylesSectionContent(int $numWorksheets): string
     {
         $content = '<office:master-styles>';
@@ -203,9 +183,7 @@ final class StyleManager extends CommonStyleManager
         return $content;
     }
 
-    /**
-     * Returns the content of the "<office:font-face-decls>" section, inside "styles.xml" file.
-     */
+    
     private function getFontFaceSectionContent(): string
     {
         $content = '<office:font-face-decls>';
@@ -217,11 +195,7 @@ final class StyleManager extends CommonStyleManager
         return $content;
     }
 
-    /**
-     * Returns the content of the "<office:automatic-styles>" section, inside "styles.xml" file.
-     *
-     * @param int $numWorksheets Number of worksheets created
-     */
+    
     private function getAutomaticStylesSectionContent(int $numWorksheets): string
     {
         $content = '<office:automatic-styles>';
@@ -241,12 +215,10 @@ final class StyleManager extends CommonStyleManager
         return $content;
     }
 
-    /**
-     * Returns the contents of the "<style:style>" section, inside "<office:automatic-styles>" section.
-     */
+    
     private function getStyleSectionContent(Style $style): string
     {
-        $styleIndex = $style->getId() + 1; // 1-based
+        $styleIndex = $style->getId() + 1; 
 
         $content = '<style:style style:data-style-name="N0" style:family="table-cell" style:name="ce'.$styleIndex.'" style:parent-style-name="Default">';
 
@@ -259,9 +231,7 @@ final class StyleManager extends CommonStyleManager
         return $content;
     }
 
-    /**
-     * Returns the contents of the "<style:text-properties>" section, inside "<style:style>" section.
-     */
+    
     private function getTextPropertiesSectionContent(Style $style): string
     {
         if (!$style->shouldApplyFont()) {
@@ -273,9 +243,7 @@ final class StyleManager extends CommonStyleManager
             .'/>';
     }
 
-    /**
-     * Returns the contents of the fonts definition section, inside "<style:text-properties>" section.
-     */
+    
     private function getFontSectionContent(Style $style): string
     {
         $defaultStyle = $this->getDefaultStyle();
@@ -312,9 +280,7 @@ final class StyleManager extends CommonStyleManager
         return $content;
     }
 
-    /**
-     * Returns the contents of the "<style:paragraph-properties>" section, inside "<style:style>" section.
-     */
+    
     private function getParagraphPropertiesSectionContent(Style $style): string
     {
         if (!$style->shouldApplyCellAlignment() && !$style->shouldApplyCellVerticalAlignment()) {
@@ -327,9 +293,7 @@ final class StyleManager extends CommonStyleManager
             .'/>';
     }
 
-    /**
-     * Returns the contents of the cell alignment definition for the "<style:paragraph-properties>" section.
-     */
+    
     private function getCellAlignmentSectionContent(Style $style): string
     {
         if (!$style->hasSetCellAlignment()) {
@@ -342,9 +306,7 @@ final class StyleManager extends CommonStyleManager
         );
     }
 
-    /**
-     * Returns the contents of the cell vertical alignment definition for the "<style:paragraph-properties>" section.
-     */
+    
     private function getCellVerticalAlignmentSectionContent(Style $style): string
     {
         if (!$style->hasSetCellVerticalAlignment()) {
@@ -357,11 +319,7 @@ final class StyleManager extends CommonStyleManager
         );
     }
 
-    /**
-     * Even though "left" and "right" alignments are part of the spec, and interpreted
-     * respectively as "start" and "end", using the recommended values increase compatibility
-     * with software that will read the created ODS file.
-     */
+    
     private function transformCellAlignment(string $cellAlignment): string
     {
         return match ($cellAlignment) {
@@ -371,10 +329,7 @@ final class StyleManager extends CommonStyleManager
         };
     }
 
-    /**
-     * Spec uses 'middle' rather than 'center'
-     * http://docs.oasis-open.org/office/v1.2/os/OpenDocument-v1.2-os-part1.html#__RefHeading__1420236_253892949.
-     */
+    
     private function transformCellVerticalAlignment(string $cellVerticalAlignment): string
     {
         return (CellVerticalAlignment::CENTER === $cellVerticalAlignment)
@@ -382,9 +337,7 @@ final class StyleManager extends CommonStyleManager
             : $cellVerticalAlignment;
     }
 
-    /**
-     * Returns the contents of the "<style:table-cell-properties>" section, inside "<style:style>" section.
-     */
+    
     private function getTableCellPropertiesSectionContent(Style $style): string
     {
         $content = '<style:table-cell-properties ';
@@ -406,17 +359,13 @@ final class StyleManager extends CommonStyleManager
         return $content;
     }
 
-    /**
-     * Returns the contents of the wrap text definition for the "<style:table-cell-properties>" section.
-     */
+    
     private function getWrapTextXMLContent(bool $shouldWrapText): string
     {
         return ' fo:wrap-option="'.($shouldWrapText ? '' : 'no-').'wrap" style:vertical-align="automatic" ';
     }
 
-    /**
-     * Returns the contents of the borders definition for the "<style:table-cell-properties>" section.
-     */
+    
     private function getBorderXMLContent(Border $border): string
     {
         $borders = array_map(static function (BorderPart $borderPart) {
@@ -426,9 +375,7 @@ final class StyleManager extends CommonStyleManager
         return sprintf(' %s ', implode(' ', $borders));
     }
 
-    /**
-     * Returns the contents of the background color definition for the "<style:table-cell-properties>" section.
-     */
+    
     private function getBackgroundColorXMLContent(string $bgColor): string
     {
         return sprintf(' fo:background-color="#%s" ', $bgColor);

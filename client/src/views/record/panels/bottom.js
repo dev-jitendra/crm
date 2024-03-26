@@ -1,92 +1,36 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/record/panels/bottom */
+
+
 
 import View from 'view';
 
-/**
- * @typedef {Object} module:views/record/panels/bottom~defs
- * @property [buttonList]
- * @property [actionList]
- * @property [tabNumber] For internal purposes.
- */
 
-/**
- * A bottom panel.
- */
+
+
 class BottomPanelView extends View {
 
     template = 'record/panels/side'
 
-    /**
-     * A field list.
-     *
-     * @protected
-     * @type {module:views/record/panels/side~field[]}
-     */
+    
     fieldList
 
-    /**
-     * @protected
-     * @type {Array<module:views/record/panels-container~action|false>}
-     */
+    
     actionList
 
-    /**
-     * @protected
-     * @type {module:views/record/panels-container~button[]}
-     */
+    
     buttonList
 
-    /**
-     * @protected
-     * @type {module:views/record/panels/bottom~defs|Object.<string, *>}
-     */
+    
     defs
 
-    /**
-     * A mode.
-     *
-     * @protected
-     * @type {'list'|'detail'|'edit'}
-     */
+    
     mode = 'detail'
 
-    /**
-     * Disable.
-     *
-     * @protected
-     */
+    
     disabled = false
 
     events = {
-        /** @this BottomPanelView */
+        
         'click .action': function (e) {
             Espo.Utils.handleAction(this, e.originalEvent, e.currentTarget, {
                 actionItems: [...this.buttonList, ...this.actionList],
@@ -170,32 +114,20 @@ class BottomPanelView extends View {
         this.createFields();
     }
 
-    /**
-     * Set up fields.
-     *
-     * @protected
-     */
+    
     setupFields() {}
 
-    /**
-     * @return {module:views/record/panels-container~button[]}
-     */
+    
     getButtonList() {
         return this.buttonList || [];
     }
 
-    /**
-     * @return {module:views/record/panels-container~action[]}
-     */
+    
     getActionList() {
         return this.actionList || [];
     }
 
-    /**
-     * Get field views.
-     *
-     * @return {Object.<string,module:views/fields/base>}
-     */
+    
     getFieldViews() {
         const fields = {};
 
@@ -208,19 +140,12 @@ class BottomPanelView extends View {
         return fields;
     }
 
-    /**
-     * @deprecated Use `getFieldViews`.
-     * @todo Remove in v10.0.
-     */
+    
     getFields() {
         return this.getFieldViews();
     }
 
-    /**
-     * Get a field list.
-     *
-     * @return {module:views/record/panels/side~field[]}
-     */
+    
     getFieldList() {
         return this.fieldList.map(item => {
             if (typeof item !== 'object') {
@@ -233,9 +158,7 @@ class BottomPanelView extends View {
         });
     }
 
-    /**
-     * @private
-     */
+    
     createFields() {
         this.getFieldList().forEach(item => {
             let view = null;
@@ -262,17 +185,7 @@ class BottomPanelView extends View {
         });
     }
 
-    /**
-     * Create a field view.
-     *
-     * @protected
-     * @param {string} field A field name.
-     * @param {string|null} [viewName] A view name/path.
-     * @param {Object<string,*>} [params] Field params.
-     * @param {'detail'|'edit'|'list'|null} [mode='edit'] A mode.
-     * @param {boolean} [readOnly] Read-only.
-     * @param {Object<string,*>} [options] View options.
-     */
+    
     createField(field, viewName, params, mode, readOnly, options) {
         const type = this.model.getFieldType(field) || 'base';
 
@@ -352,12 +265,8 @@ class BottomPanelView extends View {
         this.createView(viewKey, viewName, o);
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * Is tab-hidden.
-     *
-     * @return {boolean}
-     */
+    
+    
     isTabHidden() {
         if (this.defs.tabNumber === -1 || typeof this.defs.tabNumber === 'undefined') {
             return false;
@@ -369,7 +278,7 @@ class BottomPanelView extends View {
             return this.defs.tabNumber > 0;
         }
 
-        // noinspection JSUnresolvedReference
+        
         if (parentView && parentView.hasTabs) {
             return parentView.currentTab !== defs.tabNumber;
         }

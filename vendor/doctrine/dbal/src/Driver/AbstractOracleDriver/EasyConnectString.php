@@ -8,11 +8,7 @@ use function implode;
 use function is_array;
 use function sprintf;
 
-/**
- * Represents an Oracle Easy Connect string
- *
- * @link https://docs.oracle.com/database/121/NETAG/naming.htm
- */
+
 final class EasyConnectString
 {
     private string $string;
@@ -27,21 +23,13 @@ final class EasyConnectString
         return $this->string;
     }
 
-    /**
-     * Creates the object from an array representation
-     *
-     * @param mixed[] $params
-     */
+    
     public static function fromArray(array $params): self
     {
         return new self(self::renderParams($params));
     }
 
-    /**
-     * Creates the object from the given DBAL connection parameters.
-     *
-     * @param mixed[] $params
-     */
+    
     public static function fromConnectionParameters(array $params): self
     {
         if (isset($params['connectstring'])) {
@@ -86,7 +74,7 @@ final class EasyConnectString
         ]);
     }
 
-    /** @param mixed[] $params */
+    
     private static function renderParams(array $params): string
     {
         $chunks = [];
@@ -104,7 +92,7 @@ final class EasyConnectString
         return implode('', $chunks);
     }
 
-    /** @param mixed $value */
+    
     private static function renderValue($value): string
     {
         if (is_array($value)) {

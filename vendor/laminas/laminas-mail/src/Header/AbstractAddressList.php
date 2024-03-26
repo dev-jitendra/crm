@@ -40,9 +40,7 @@ use const IDNA_ERROR_PUNYCODE;
 use const IDNA_ERROR_TRAILING_HYPHEN;
 use const INTL_IDNA_VARIANT_UTS46;
 
-/**
- * Base class for headers composing address lists (to, from, cc, bcc, reply-to)
- */
+
 abstract class AbstractAddressList implements HeaderInterface
 {
     private const IDNA_ERROR_MAP = [
@@ -61,29 +59,22 @@ abstract class AbstractAddressList implements HeaderInterface
         IDNA_ERROR_CONTEXTJ               => 'one or more characters fail CONTEXTJ rule',
     ];
 
-    /** @var AddressList */
+    
     protected $addressList;
 
-    /** @var string Normalized field name */
+    
     protected $fieldName;
 
-    /**
-     * Header encoding
-     *
-     * @var string
-     */
+    
     protected $encoding = 'ASCII';
 
-    /** @var string lower case field name */
+    
     protected static $type;
 
-    /** @var string[] lower case aliases for the field name */
+    
     protected static $typeAliases = [];
 
-    /**
-     * @param string $headerLine
-     * @return static
-     */
+    
     public static function fromString($headerLine)
     {
         [$fieldName, $fieldValue] = GenericHeader::splitHeaderLine($headerLine);
@@ -94,7 +85,7 @@ abstract class AbstractAddressList implements HeaderInterface
             ));
         }
 
-        // split value on ","
+        
         $fieldValue = str_replace(Headers::FOLDING, ' ', $fieldValue);
         $fieldValue = preg_replace('/[^:]+:([^;]*);/', '$1,', $fieldValue);
         $values     = ListParser::parse($fieldValue);
@@ -109,8 +100,8 @@ abstract class AbstractAddressList implements HeaderInterface
                 $value        = self::stripComments($value);
                 $value        = preg_replace(
                     [
-                        '#(?<!\\\)"(.*)(?<!\\\)"#', // quoted-text
-                        '#\\\([\x01-\x09\x0b\x0c\x0e-\x7f])#', // quoted-pair
+                        '#(?<!\\\)"(.*)(?<!\\\)"#', 
+                        '#\\\([\x01-\x09\x0b\x0c\x0e-\x7f])#', 
                     ],
                     [
                         '\\1',
@@ -129,7 +120,7 @@ abstract class AbstractAddressList implements HeaderInterface
             $header->setEncoding('UTF-8');
         }
 
-        /** @var AddressList $addressList */
+        
         $addressList = $header->getAddressList();
         foreach ($addresses as $address) {
             $addressList->add($address);
@@ -138,22 +129,16 @@ abstract class AbstractAddressList implements HeaderInterface
         return $header;
     }
 
-    /**
-     * @return string
-     */
+    
     public function getFieldName()
     {
         return $this->fieldName;
     }
 
-    /**
-     * Safely convert UTF-8 encoded domain name to ASCII
-     *
-     * @param string $domainName the UTF-8 encoded email
-     */
+    
     protected function idnToAscii($domainName): string
     {
-        /** @psalm-var string|false $ascii */
+        
         $ascii = idn_to_ascii($domainName, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46, $conversionInfo);
         if (is_string($ascii)) {
             return $ascii;
@@ -161,7 +146,7 @@ abstract class AbstractAddressList implements HeaderInterface
 
         $messages = [];
         assert(is_array($conversionInfo));
-        /* @psalm-var array{errors: numeric-string} $conversionInfo */
+        
         $errors = (int) $conversionInfo['errors'];
 
         foreach (self::IDNA_ERROR_MAP as $flag => $message) {
@@ -176,9 +161,7 @@ abstract class AbstractAddressList implements HeaderInterface
         ));
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function getFieldValue($format = HeaderInterface::FORMAT_RAW)
     {
         $emails   = [];
@@ -188,9 +171,9 @@ abstract class AbstractAddressList implements HeaderInterface
             $email = $address->getEmail();
             $name  = $address->getName();
 
-            // quote $name if value requires so
+            
             if (! empty($name) && (str_contains($name, ',') || str_contains($name, ';'))) {
-                // FIXME: what if name contains double quote?
+                
                 $name = sprintf('"%s"', $name);
             }
 
@@ -216,7 +199,7 @@ abstract class AbstractAddressList implements HeaderInterface
             }
         }
 
-        // Ensure the values are valid before sending them.
+        
         if ($format !== HeaderInterface::FORMAT_RAW) {
             foreach ($emails as $email) {
                 HeaderValue::assertValid($email);
@@ -226,37 +209,26 @@ abstract class AbstractAddressList implements HeaderInterface
         return implode(',' . Headers::FOLDING, $emails);
     }
 
-    /**
-     * @param string $encoding
-     * @return self
-     */
+    
     public function setEncoding($encoding)
     {
         $this->encoding = $encoding;
         return $this;
     }
 
-    /**
-     * @return string
-     */
+    
     public function getEncoding()
     {
         return $this->encoding;
     }
 
-    /**
-     * Set address list for this header
-     */
+    
     public function setAddressList(AddressList $addressList)
     {
         $this->addressList = $addressList;
     }
 
-    /**
-     * Get address list managed by this header
-     *
-     * @return AddressList
-     */
+    
     public function getAddressList()
     {
         if (null === $this->addressList) {
@@ -265,9 +237,7 @@ abstract class AbstractAddressList implements HeaderInterface
         return $this->addressList;
     }
 
-    /**
-     * @return string
-     */
+    
     public function toString()
     {
         $name  = $this->getFieldName();
@@ -275,14 +245,7 @@ abstract class AbstractAddressList implements HeaderInterface
         return empty($value) ? '' : sprintf('%s: %s', $name, $value);
     }
 
-    /**
-     * Retrieve comments from value, if any.
-     *
-     * Supposed to be private, protected as a workaround for PHP bug 68194
-     *
-     * @param string $value
-     * @return string
-     */
+    
     protected static function getComments($value)
     {
         $matches = [];
@@ -299,14 +262,7 @@ abstract class AbstractAddressList implements HeaderInterface
         return isset($matches['comment']) ? implode(', ', $matches['comment']) : '';
     }
 
-    /**
-     * Strip all comments from value, if any.
-     *
-     * Supposed to be private, protected as a workaround for PHP bug 68194
-     *
-     * @param string $value
-     * @return string
-     */
+    
     protected static function stripComments($value)
     {
         return preg_replace(

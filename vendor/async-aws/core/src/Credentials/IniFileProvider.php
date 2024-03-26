@@ -12,30 +12,18 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-/**
- * Provides Credentials from standard AWS ini file.
- *
- * @see https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html
- *
- * @author Jérémy Derussé <jeremy@derusse.com>
- */
+
 final class IniFileProvider implements CredentialProvider
 {
     use DateFromResult;
 
-    /**
-     * @var IniFileLoader
-     */
+    
     private $iniFileLoader;
 
-    /**
-     * @var LoggerInterface
-     */
+    
     private $logger;
 
-    /**
-     * @var HttpClientInterface|null
-     */
+    
     private $httpClient;
 
     public function __construct(?LoggerInterface $logger = null, ?IniFileLoader $iniFileLoader = null, ?HttpClientInterface $httpClient = null)
@@ -55,16 +43,13 @@ final class IniFileProvider implements CredentialProvider
             return null;
         }
 
-        /** @var string $profile */
+        
         $profile = $configuration->get(Configuration::OPTION_PROFILE);
 
         return $this->getCredentialsFromProfile($profilesData, $profile);
     }
 
-    /**
-     * @param array<string, array<string, string>> $profilesData
-     * @param array<string, bool>                  $circularCollector
-     */
+    
     private function getCredentialsFromProfile(array $profilesData, string $profile, array $circularCollector = []): ?Credentials
     {
         if (isset($circularCollector[$profile])) {
@@ -108,11 +93,7 @@ final class IniFileProvider implements CredentialProvider
         return null;
     }
 
-    /**
-     * @param array<string, array<string, string>> $profilesData
-     * @param array<string, string>                $profileData
-     * @param array<string, bool>                  $circularCollector
-     */
+    
     private function getCredentialsFromRole(array $profilesData, array $profileData, string $profile, array $circularCollector = []): ?Credentials
     {
         $roleArn = (string) ($profileData[IniFileLoader::KEY_ROLE_ARN] ?? '');
@@ -158,9 +139,7 @@ final class IniFileProvider implements CredentialProvider
         );
     }
 
-    /**
-     * @param array<string, string> $profileData
-     */
+    
     private function getCredentialsFromLegacySso(array $profileData, string $profile): ?Credentials
     {
         if (!isset(
@@ -183,7 +162,7 @@ final class IniFileProvider implements CredentialProvider
 
         $ssoClient = new SsoClient(
             ['region' => $profileData[IniFileLoader::KEY_SSO_REGION]],
-            new NullProvider(), // no credentials required as we provide an access token via the role credentials request
+            new NullProvider(), 
             $this->httpClient
         );
         $result = $ssoClient->getRoleCredentials([

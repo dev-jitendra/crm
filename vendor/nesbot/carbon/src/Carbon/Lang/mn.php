@@ -1,33 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Philippe Vaucher
- * - Tsutomu Kuroda
- * - tjku
- * - Max Melentiev
- * - Zolzaya Erdenebaatar
- * - Tom Hughes
- * - Akira Matsuda
- * - Christopher Dell
- * - Michael Kessler
- * - Enrique Vidal
- * - Simone Carletti
- * - Aaron Patterson
- * - Nicolás Hock Isaza
- * - Ochirkhuyag
- * - Batmandakh
- * - lucifer-crybaby
- */
+
+
 return [
     'year' => ':count жил',
     'y' => ':count жил',

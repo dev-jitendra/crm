@@ -2,20 +2,12 @@
 
 namespace libphonenumber;
 
-/**
- * Class PhoneMetadata
- * @package libphonenumber
- * @internal Used internally, and can change at any time
- */
+
 class PhoneMetadata
 {
-    /**
-     * @var string
-     */
+    
     protected $id;
-    /**
-     * @var int
-     */
+    
     protected $countryCode;
     protected $leadingDigits;
     protected $internationalPrefix;
@@ -27,9 +19,7 @@ class PhoneMetadata
     protected $mainCountryForCode = false;
     protected $mobileNumberPortableRegion = false;
     protected $generalDesc;
-    /**
-     * @var PhoneNumberDesc
-     */
+    
     protected $mobile;
     protected $premiumRate;
     protected $fixedLine;
@@ -43,43 +33,26 @@ class PhoneMetadata
     protected $uan;
     protected $emergency;
     protected $voicemail;
-    /**
-     * @var PhoneNumberDesc
-     */
+    
     protected $short_code;
-    /**
-     * @var PhoneNumberDesc
-     */
+    
     protected $standard_rate;
-    /**
-     * @var PhoneNumberDesc
-     */
+    
     protected $carrierSpecific;
-    /**
-     * @var PhoneNumberDesc
-     */
+    
     protected $smsServices;
-    /**
-     * @var PhoneNumberDesc
-     */
+    
     protected $noInternationalDialling;
-    /**
-     *
-     * @var NumberFormat[]
-     */
+    
     protected $intlNumberFormat = array();
 
-    /**
-     * @return boolean
-     */
+    
     public function hasId()
     {
         return $this->id !== null;
     }
 
-    /**
-     * @return boolean
-     */
+    
     public function hasCountryCode()
     {
         return $this->countryCode !== null;
@@ -132,10 +105,7 @@ class PhoneMetadata
         return \count($this->numberFormat);
     }
 
-    /**
-     * @param int $index
-     * @return NumberFormat
-     */
+    
     public function getNumberFormat($index)
     {
         return $this->numberFormat[$index];
@@ -294,9 +264,7 @@ class PhoneMetadata
         return $this->generalDesc !== null;
     }
 
-    /**
-     * @return PhoneNumberDesc
-     */
+    
     public function getGeneralDesc()
     {
         return $this->generalDesc;
@@ -313,9 +281,7 @@ class PhoneMetadata
         return $this->fixedLine !== null;
     }
 
-    /**
-     * @return PhoneNumberDesc
-     */
+    
     public function getFixedLine()
     {
         return $this->fixedLine;
@@ -332,9 +298,7 @@ class PhoneMetadata
         return $this->mobile !== null;
     }
 
-    /**
-     * @return PhoneNumberDesc
-     */
+    
     public function getMobile()
     {
         return $this->mobile;
@@ -351,9 +315,7 @@ class PhoneMetadata
         return $this->tollFree !== null;
     }
 
-    /**
-     * @return PhoneNumberDesc
-     */
+    
     public function getTollFree()
     {
         return $this->tollFree;
@@ -370,9 +332,7 @@ class PhoneMetadata
         return $this->premiumRate !== null;
     }
 
-    /**
-     * @return PhoneNumberDesc
-     */
+    
     public function getPremiumRate()
     {
         return $this->premiumRate;
@@ -389,9 +349,7 @@ class PhoneMetadata
         return $this->sharedCost !== null;
     }
 
-    /**
-     * @return PhoneNumberDesc
-     */
+    
     public function getSharedCost()
     {
         return $this->sharedCost;
@@ -408,9 +366,7 @@ class PhoneMetadata
         return $this->personalNumber !== null;
     }
 
-    /**
-     * @return PhoneNumberDesc
-     */
+    
     public function getPersonalNumber()
     {
         return $this->personalNumber;
@@ -427,9 +383,7 @@ class PhoneMetadata
         return $this->voip !== null;
     }
 
-    /**
-     * @return PhoneNumberDesc
-     */
+    
     public function getVoip()
     {
         return $this->voip;
@@ -446,9 +400,7 @@ class PhoneMetadata
         return $this->pager !== null;
     }
 
-    /**
-     * @return PhoneNumberDesc
-     */
+    
     public function getPager()
     {
         return $this->pager;
@@ -465,9 +417,7 @@ class PhoneMetadata
         return $this->uan !== null;
     }
 
-    /**
-     * @return PhoneNumberDesc
-     */
+    
     public function getUan()
     {
         return $this->uan;
@@ -484,9 +434,7 @@ class PhoneMetadata
         return $this->emergency !== null;
     }
 
-    /**
-     * @return PhoneNumberDesc
-     */
+    
     public function getEmergency()
     {
         return $this->emergency;
@@ -503,9 +451,7 @@ class PhoneMetadata
         return $this->voicemail !== null;
     }
 
-    /**
-     * @return PhoneNumberDesc
-     */
+    
     public function getVoicemail()
     {
         return $this->voicemail;
@@ -597,36 +543,26 @@ class PhoneMetadata
         return $this;
     }
 
-    /**
-     * @return string
-     */
+    
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * @param string $value
-     * @return PhoneMetadata
-     */
+    
     public function setId($value)
     {
         $this->id = $value;
         return $this;
     }
 
-    /**
-     * @return int
-     */
+    
     public function getCountryCode()
     {
         return $this->countryCode;
     }
 
-    /**
-     * @param int $value
-     * @return PhoneMetadata
-     */
+    
     public function setCountryCode($value)
     {
         $this->countryCode = $value;
@@ -765,9 +701,7 @@ class PhoneMetadata
         return $this;
     }
 
-    /**
-     * @return NumberFormat[]
-     */
+    
     public function numberFormats()
     {
         return $this->numberFormat;
@@ -778,9 +712,7 @@ class PhoneMetadata
         return $this->intlNumberFormat;
     }
 
-    /**
-     * @return bool
-     */
+    
     public function hasLeadingDigits()
     {
         return $this->leadingDigits !== null;
@@ -814,10 +746,7 @@ class PhoneMetadata
         return $this;
     }
 
-    /**
-     * @param array $input
-     * @return PhoneMetadata
-     */
+    
     public function fromArray(array $input)
     {
         if (isset($input['generalDesc'])) {

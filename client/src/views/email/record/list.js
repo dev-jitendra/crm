@@ -1,32 +1,6 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/email/record/list */
+
+
 
 import ListRecordView from 'views/record/list';
 import MassActionHelper from 'helpers/mass-action';
@@ -80,7 +54,7 @@ class EmailListRecordView extends ListRecordView {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     massActionMarkAsRead() {
         const ids = [];
 
@@ -99,7 +73,7 @@ class EmailListRecordView extends ListRecordView {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     massActionMarkAsNotRead() {
         const ids = [];
 
@@ -154,7 +128,7 @@ class EmailListRecordView extends ListRecordView {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     massActionMoveToTrash() {
         const ids = [];
 
@@ -179,7 +153,7 @@ class EmailListRecordView extends ListRecordView {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     massActionRetrieveFromTrash() {
         const ids = [];
 
@@ -244,7 +218,7 @@ class EmailListRecordView extends ListRecordView {
             });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     massActionMoveToFolder() {
         this.createView('dialog', 'views/email-folder/modals/select-folder', {
             headerText: this.translate('Move to Folder', 'labels', 'Email'),
@@ -287,7 +261,7 @@ class EmailListRecordView extends ListRecordView {
         }
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionMarkAllAsRead() {
         Espo.Ajax.postRequest('Email/inbox/read', {all: true});
 
@@ -312,7 +286,7 @@ class EmailListRecordView extends ListRecordView {
             });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionRetrieveFromTrash(data) {
         const id = data.id;
 
@@ -326,10 +300,7 @@ class EmailListRecordView extends ListRecordView {
             });
     }
 
-    /**
-     * @param {string} id
-     * @return {Promise}
-     */
+    
     retrieveFromTrash(id) {
         return Espo.Ajax.deleteRequest('Email/inbox/inTrash', {id: id});
     }
@@ -356,10 +327,8 @@ class EmailListRecordView extends ListRecordView {
             });
     }
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * @todo Use one API request.
-     */
+    
+    
     actionRetrieveFromTrashMoveToFolder(data) {
         const id = data.id;
         const folderId = data.folderId;
@@ -377,11 +346,7 @@ class EmailListRecordView extends ListRecordView {
             });
     }
 
-    /**
-     * @param {string} id
-     * @param {string} folderId
-     * @return {Promise}
-     */
+    
     moveToFolder(id, folderId) {
         return Espo.Ajax.postRequest(`Email/inbox/folders/${folderId}`, {id: id});
     }
@@ -423,7 +388,7 @@ class EmailListRecordView extends ListRecordView {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionSend(data) {
         const id = data.id;
 
@@ -456,7 +421,7 @@ class EmailListRecordView extends ListRecordView {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     toggleMassMarkAsImportant() {
         const allImportant = !this.checkedList
             .map(id => this.collection.get(id))

@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Select\Order;
 
@@ -48,10 +22,7 @@ class Applier
         private OrdererFactory $ordererFactory
     ) {}
 
-    /**
-     * @throws Forbidden
-     * @throws Error
-     */
+    
     public function apply(QueryBuilder $queryBuilder, OrderParams $params): void
     {
         if ($params->forceDefault()) {
@@ -62,7 +33,7 @@ class Applier
 
         $orderBy = $params->getOrderBy();
 
-        if (/*$params->forbidComplexExpressions() && */$orderBy) {
+        if ($orderBy) {
             if (
                 !is_string($orderBy) ||
                 str_contains($orderBy, '.') ||
@@ -83,10 +54,7 @@ class Applier
         $this->applyOrder($queryBuilder, $orderBy, $params->getOrder());
     }
 
-    /**
-     * @param SearchParams::ORDER_ASC|SearchParams::ORDER_DESC|null $order
-     * @throws Error
-     */
+    
     private function applyDefaultOrder(QueryBuilder $queryBuilder, ?string $order): void
     {
         $orderBy = $this->metadataProvider->getDefaultOrderBy($this->entityType);
@@ -111,15 +79,12 @@ class Applier
             }
         }
 
-        /** @var SearchParams::ORDER_ASC|SearchParams::ORDER_DESC|null $order */
+        
 
         $this->applyOrder($queryBuilder, $orderBy, $order);
     }
 
-    /**
-     * @param SearchParams::ORDER_ASC|SearchParams::ORDER_DESC|null $order
-     * @throws Error
-     */
+    
     private function applyOrder(QueryBuilder $queryBuilder, string $orderBy, ?string $order): void
     {
         if (!$orderBy) {
@@ -169,8 +134,7 @@ class Applier
             $resultOrderBy .= 'Type';
         }
         else if (
-            /*!str_contains($orderBy, '.') &&
-            !str_contains($orderBy, ':') &&*/
+            
             !$this->metadataProvider->hasAttribute($this->entityType, $orderBy)
         ) {
             throw new Error("Order by non-existing field '{$orderBy}'.");
@@ -200,9 +164,7 @@ class Applier
         $queryBuilder->order($resultOrderBy);
     }
 
-    /**
-     * @return array<array{string, string}>
-     */
+    
     private function orderListToArray(OrderList $orderList): array
     {
         $list = [];

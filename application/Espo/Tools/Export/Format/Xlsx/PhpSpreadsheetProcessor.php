@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\Export\Format\Xlsx;
 
@@ -69,30 +43,30 @@ class PhpSpreadsheetProcessor implements ProcessorInterface
     private const PARAM_RECORD_LINKS = 'recordLinks';
     private const PARAM_TITLE = 'title';
 
-    /** @var array<string, CellValuePreparator> */
+    
     private array $preparatorsCache = [];
 
-    /** @var array<string, mixed> */
+    
     private array $titleStyle = [
         'font' => [
             'bold' => true,
             'size' => 12,
         ]
     ];
-    /** @var array<string, mixed> */
+    
     private array $dateStyle = [
         'font'  => [
             'size' => 12,
         ]
     ];
-    /** @var array<string, mixed> */
+    
     private array $headerStyle = [
         'font' => [
             'bold' => true,
             'size' => 12,
         ]
     ];
-    /** @var array<string, mixed> */
+    
     private array $linkStyle = [
         'font' => [
             'color' => ['rgb' => '345b7c'],
@@ -111,10 +85,7 @@ class PhpSpreadsheetProcessor implements ProcessorInterface
         private CellValuePreparatorFactory $cellValuePreparatorFactory
     ) {}
 
-    /**
-     * @throws SpreadsheetException
-     * @throws WriterException
-     */
+    
     public function process(Params $params, Collection $collection): StreamInterface
     {
         $entityType = $params->getEntityType();
@@ -281,7 +252,7 @@ class PhpSpreadsheetProcessor implements ProcessorInterface
 
         $objWriter = IOFactory::createWriter($phpExcel, 'Xlsx');
 
-        $resource = fopen('php://temp', 'r+');
+        $resource = fopen('php:
 
         if ($resource === false) {
             throw new RuntimeException("Could not open temp.");
@@ -315,10 +286,7 @@ class PhpSpreadsheetProcessor implements ProcessorInterface
         return $label;
     }
 
-    /**
-     * @param string[] $fieldList
-     * @return string[]
-     */
+    
     private function getColumnsRange(array $fieldList): array
     {
         $azRange = range('A', 'Z');
@@ -337,12 +305,7 @@ class PhpSpreadsheetProcessor implements ProcessorInterface
         return $azRange;
     }
 
-    /**
-     * @param string[] $fieldList
-     * @param string[] $azRange
-     * @param array<string, string> $typesCache
-     * @throws SpreadsheetException
-     */
+    
     private function processRow(
         Entity $entity,
         Worksheet $sheet,
@@ -368,10 +331,7 @@ class PhpSpreadsheetProcessor implements ProcessorInterface
         }
     }
 
-    /**
-     * @param array<string, string> $typesCache
-     * @throws SpreadsheetException
-     */
+    
     private function processCell(
         Entity $entity,
         Worksheet $sheet,
@@ -451,9 +411,7 @@ class PhpSpreadsheetProcessor implements ProcessorInterface
         );
     }
 
-    /**
-     * @throws SpreadsheetException
-     */
+    
     private function applyImage(
         Entity $entity,
         string $coordinate,
@@ -468,7 +426,7 @@ class PhpSpreadsheetProcessor implements ProcessorInterface
             return;
         }
 
-        /** @var ?Attachment $attachment */
+        
         $attachment = $this->entityManager->getEntityById(Attachment::ENTITY_TYPE, $attachmentId);
 
         if (!$attachment) {
@@ -490,9 +448,7 @@ class PhpSpreadsheetProcessor implements ProcessorInterface
         $sheet->getRowDimension($rowNumber)->setRowHeight(100);
     }
 
-    /**
-     * @throws SpreadsheetException
-     */
+    
     private function applyLinks(
         string $type,
         Entity $entity,

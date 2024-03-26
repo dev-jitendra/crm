@@ -9,13 +9,7 @@ use Psr\Http\Message\UriInterface;
 
 final class Utils
 {
-    /**
-     * Remove the items given by the keys, case insensitively from the data.
-     *
-     * @param iterable<string> $keys
-     *
-     * @return array
-     */
+    
     public static function caselessRemove($keys, array $data)
     {
         $result = [];
@@ -33,17 +27,7 @@ final class Utils
         return $result;
     }
 
-    /**
-     * Copy the contents of a stream into another stream until the given number
-     * of bytes have been read.
-     *
-     * @param StreamInterface $source Stream to read from
-     * @param StreamInterface $dest   Stream to write to
-     * @param int             $maxLen Maximum number of bytes to read. Pass -1
-     *                                to read the entire stream.
-     *
-     * @throws \RuntimeException on error.
-     */
+    
     public static function copyToStream(StreamInterface $source, StreamInterface $dest, $maxLen = -1)
     {
         $bufferSize = 8192;
@@ -68,18 +52,7 @@ final class Utils
         }
     }
 
-    /**
-     * Copy the contents of a stream into a string until the given number of
-     * bytes have been read.
-     *
-     * @param StreamInterface $stream Stream to read
-     * @param int             $maxLen Maximum number of bytes to read. Pass -1
-     *                                to read the entire stream.
-     *
-     * @return string
-     *
-     * @throws \RuntimeException on error.
-     */
+    
     public static function copyToString(StreamInterface $stream, $maxLen = -1)
     {
         $buffer = '';
@@ -87,7 +60,7 @@ final class Utils
         if ($maxLen === -1) {
             while (!$stream->eof()) {
                 $buf = $stream->read(1048576);
-                // Using a loose equality here to match on '' and false.
+                
                 if ($buf == null) {
                     break;
                 }
@@ -99,7 +72,7 @@ final class Utils
         $len = 0;
         while (!$stream->eof() && $len < $maxLen) {
             $buf = $stream->read($maxLen - $len);
-            // Using a loose equality here to match on '' and false.
+            
             if ($buf == null) {
                 break;
             }
@@ -110,20 +83,7 @@ final class Utils
         return $buffer;
     }
 
-    /**
-     * Calculate a hash of a stream.
-     *
-     * This method reads the entire stream to calculate a rolling hash, based
-     * on PHP's `hash_init` functions.
-     *
-     * @param StreamInterface $stream    Stream to calculate the hash for
-     * @param string          $algo      Hash algorithm (e.g. md5, crc32, etc)
-     * @param bool            $rawOutput Whether or not to use raw output
-     *
-     * @return string Returns the hash of the stream
-     *
-     * @throws \RuntimeException on error.
-     */
+    
     public static function hash(StreamInterface $stream, $algo, $rawOutput = false)
     {
         $pos = $stream->tell();
@@ -143,26 +103,7 @@ final class Utils
         return $out;
     }
 
-    /**
-     * Clone and modify a request with the given changes.
-     *
-     * This method is useful for reducing the number of clones needed to mutate
-     * a message.
-     *
-     * The changes can be one of:
-     * - method: (string) Changes the HTTP method.
-     * - set_headers: (array) Sets the given headers.
-     * - remove_headers: (array) Remove the given headers.
-     * - body: (mixed) Sets the given body.
-     * - uri: (UriInterface) Set the URI.
-     * - query: (string) Set the query string value of the URI.
-     * - version: (string) Set the protocol version.
-     *
-     * @param RequestInterface $request Request to clone and modify.
-     * @param array            $changes Changes to apply.
-     *
-     * @return RequestInterface
-     */
+    
     public static function modifyRequest(RequestInterface $request, array $changes)
     {
         if (!$changes) {
@@ -174,7 +115,7 @@ final class Utils
         if (!isset($changes['uri'])) {
             $uri = $request->getUri();
         } else {
-            // Remove the host header if one is on the URI
+            
             if ($host = $changes['uri']->getHost()) {
                 $changes['set_headers']['Host'] = $host;
 
@@ -236,26 +177,19 @@ final class Utils
         );
     }
 
-    /**
-     * Read a line from the stream up to the maximum allowed buffer length.
-     *
-     * @param StreamInterface $stream    Stream to read from
-     * @param int|null        $maxLength Maximum buffer length
-     *
-     * @return string
-     */
+    
     public static function readLine(StreamInterface $stream, $maxLength = null)
     {
         $buffer = '';
         $size = 0;
 
         while (!$stream->eof()) {
-            // Using a loose equality here to match on '' and false.
+            
             if (null == ($byte = $stream->read(1))) {
                 return $buffer;
             }
             $buffer .= $byte;
-            // Break when a new line is found or the max length - 1 is reached
+            
             if ($byte === "\n" || ++$size === $maxLength - 1) {
                 break;
             }
@@ -264,46 +198,11 @@ final class Utils
         return $buffer;
     }
 
-    /**
-     * Create a new stream based on the input type.
-     *
-     * Options is an associative array that can contain the following keys:
-     * - metadata: Array of custom metadata.
-     * - size: Size of the stream.
-     *
-     * This method accepts the following `$resource` types:
-     * - `Psr\Http\Message\StreamInterface`: Returns the value as-is.
-     * - `string`: Creates a stream object that uses the given string as the contents.
-     * - `resource`: Creates a stream object that wraps the given PHP stream resource.
-     * - `Iterator`: If the provided value implements `Iterator`, then a read-only
-     *   stream object will be created that wraps the given iterable. Each time the
-     *   stream is read from, data from the iterator will fill a buffer and will be
-     *   continuously called until the buffer is equal to the requested read size.
-     *   Subsequent read calls will first read from the buffer and then call `next`
-     *   on the underlying iterator until it is exhausted.
-     * - `object` with `__toString()`: If the object has the `__toString()` method,
-     *   the object will be cast to a string and then a stream will be returned that
-     *   uses the string value.
-     * - `NULL`: When `null` is passed, an empty stream object is returned.
-     * - `callable` When a callable is passed, a read-only stream object will be
-     *   created that invokes the given callable. The callable is invoked with the
-     *   number of suggested bytes to read. The callable can return any number of
-     *   bytes, but MUST return `false` when there is no more data to return. The
-     *   stream object that wraps the callable will invoke the callable until the
-     *   number of requested bytes are available. Any additional bytes will be
-     *   buffered and used in subsequent reads.
-     *
-     * @param resource|string|int|float|bool|StreamInterface|callable|\Iterator|null $resource Entity body data
-     * @param array                                                                  $options  Additional options
-     *
-     * @return StreamInterface
-     *
-     * @throws \InvalidArgumentException if the $resource arg is not valid.
-     */
+    
     public static function streamFor($resource = '', array $options = [])
     {
         if (is_scalar($resource)) {
-            $stream = self::tryFopen('php://temp', 'r+');
+            $stream = self::tryFopen('php:
             if ($resource !== '') {
                 fwrite($stream, $resource);
                 fseek($stream, 0);
@@ -313,13 +212,10 @@ final class Utils
 
         switch (gettype($resource)) {
             case 'resource':
-                /*
-                 * The 'php://input' is a special stream with quirks and inconsistencies.
-                 * We avoid using that stream by reading it into php://temp
-                 */
+                
                 $metaData = \stream_get_meta_data($resource);
-                if (isset($metaData['uri']) && $metaData['uri'] === 'php://input') {
-                    $stream = self::tryFopen('php://temp', 'w+');
+                if (isset($metaData['uri']) && $metaData['uri'] === 'php:
+                    $stream = self::tryFopen('php:
                     fwrite($stream, stream_get_contents($resource));
                     fseek($stream, 0);
                     $resource = $stream;
@@ -342,7 +238,7 @@ final class Utils
                 }
                 break;
             case 'NULL':
-                return new Stream(self::tryFopen('php://temp', 'r+'), $options);
+                return new Stream(self::tryFopen('php:
         }
 
         if (is_callable($resource)) {
@@ -352,19 +248,7 @@ final class Utils
         throw new \InvalidArgumentException('Invalid resource type: ' . gettype($resource));
     }
 
-    /**
-     * Safely opens a PHP stream resource using a filename.
-     *
-     * When fopen fails, PHP normally raises a warning. This function adds an
-     * error handler that checks for errors and throws an exception instead.
-     *
-     * @param string $filename File to open
-     * @param string $mode     Mode used to open the file
-     *
-     * @return resource
-     *
-     * @throws \RuntimeException if the file cannot be opened
-     */
+    
     public static function tryFopen($filename, $mode)
     {
         $ex = null;
@@ -393,26 +277,14 @@ final class Utils
         restore_error_handler();
 
         if ($ex) {
-            /** @var $ex \RuntimeException */
+            
             throw $ex;
         }
 
         return $handle;
     }
 
-    /**
-     * Returns a UriInterface for the given value.
-     *
-     * This function accepts a string or UriInterface and returns a
-     * UriInterface for the given value. If the value is already a
-     * UriInterface, it is returned as-is.
-     *
-     * @param string|UriInterface $uri
-     *
-     * @return UriInterface
-     *
-     * @throws \InvalidArgumentException
-     */
+    
     public static function uriFor($uri)
     {
         if ($uri instanceof UriInterface) {

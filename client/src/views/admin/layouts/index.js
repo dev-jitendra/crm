@@ -1,30 +1,4 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 import View from 'view';
 import LayoutDefaultPageView from 'views/admin/layouts/default-page';
@@ -49,13 +23,9 @@ class LayoutIndexView extends View {
         'sidePanelsDetailSmall',
         'sidePanelsEditSmall',
     ]
-    /**
-     * @type {string|null}
-     */
+    
     scope = null
-    /**
-     * @type {string|null}
-     */
+    
     type = null
 
     data() {
@@ -169,9 +139,7 @@ class LayoutIndexView extends View {
             .addClass('disabled');
     }
 
-    /**
-     * @param {MouseEvent} e
-     */
+    
     onLayoutLinkClick(e) {
         e.preventDefault();
 
@@ -201,9 +169,7 @@ class LayoutIndexView extends View {
         this.navigate(this.scope);
     }
 
-    /**
-     * @param {MouseEvent} e
-     */
+    
     onItemHeaderClick(e) {
         e.preventDefault();
 
@@ -228,9 +194,7 @@ class LayoutIndexView extends View {
             $collapse.collapse('show');
     }
 
-    /**
-     * @param {KeyboardEvent} e
-     */
+    
     onKeyDown(e) {
         const key = Espo.Utils.getKeyFromKeyEvent(e);
 
@@ -250,9 +214,7 @@ class LayoutIndexView extends View {
         $("#layouts-menu a.layout-link").removeClass('disabled');
     }
 
-    /**
-     * @return {module:views/admin/layouts/base}
-     */
+    
     getContentView() {
         return this.getView('content')
     }
@@ -320,7 +282,7 @@ class LayoutIndexView extends View {
 
         if (this.em) {
             this.assignView('default', new LayoutDefaultPageView(), '#layout-content')
-                .then(/** LayoutDefaultPageView */view => {
+                .then(view => {
                     view.render();
                 });
 
@@ -481,7 +443,7 @@ class LayoutIndexView extends View {
     actionCreateLayout() {
         const view = new LayoutCreateModalView({scope: this.scope});
 
-        this.assignView('dialog', view).then(/** LayoutCreateModalView */view => {
+        this.assignView('dialog', view).then(view => {
             view.render();
 
             this.listenToOnce(view, 'done', () => {

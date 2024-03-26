@@ -1,24 +1,12 @@
 <?php
 
-/**
- *
- * Function code for the matrix division operation
- *
- * @copyright  Copyright (c) 2013-2018 Mark Baker (https://github.com/MarkBaker/PHPMatrix)
- * @license    https://opensource.org/licenses/MIT    MIT
- */
+
 
 namespace Matrix;
 
 use Matrix\Operators\Division;
 
-/**
- * Divides two or more matrix numbers
- *
- * @param array<int, mixed> $matrixValues The numbers to divide
- * @return Matrix
- * @throws Exception
- */
+
 function divideinto(...$matrixValues): Matrix
 {
     if (count($matrixValues) < 2) {

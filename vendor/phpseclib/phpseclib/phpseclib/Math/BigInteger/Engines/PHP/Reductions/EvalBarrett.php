@@ -1,59 +1,26 @@
 <?php
 
-/**
- * PHP Dynamic Barrett Modular Exponentiation Engine
- *
- * PHP version 5 and 7
- *
- * @author    Jim Wigginton <terrafrost@php.net>
- * @copyright 2017 Jim Wigginton
- * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
- * @link      http://pear.php.net/package/Math_BigInteger
- */
+
 
 namespace phpseclib3\Math\BigInteger\Engines\PHP\Reductions;
 
 use phpseclib3\Math\BigInteger\Engines\PHP;
 use phpseclib3\Math\BigInteger\Engines\PHP\Base;
 
-/**
- * PHP Dynamic Barrett Modular Exponentiation Engine
- *
- * @author  Jim Wigginton <terrafrost@php.net>
- */
+
 abstract class EvalBarrett extends Base
 {
-    /**
-     * Custom Reduction Function
-     *
-     * @see self::generateCustomReduction
-     */
+    
     private static $custom_reduction;
 
-    /**
-     * Barrett Modular Reduction
-     *
-     * This calls a dynamically generated loop unrolled function that's specific to a given modulo.
-     * Array lookups are avoided as are if statements testing for how many bits the host OS supports, etc.
-     *
-     * @param array $n
-     * @param array $m
-     * @param string $class
-     * @return array
-     */
+    
     protected static function reduce(array $n, array $m, $class)
     {
         $inline = self::$custom_reduction;
         return $inline($n);
     }
 
-    /**
-     * Generate Custom Reduction
-     *
-     * @param PHP $m
-     * @param string $class
-     * @return callable
-     */
+    
     protected static function generateCustomReduction(PHP $m, $class)
     {
         $m_length = count($m->value);
@@ -70,7 +37,7 @@ abstract class EvalBarrett extends Base
             ';
             eval('$func = function ($x) { ' . $code . '};');
             self::$custom_reduction = $func;
-            //self::$custom_reduction = \Closure::bind($func, $m, $class);
+            
             return $func;
         }
 
@@ -127,12 +94,7 @@ abstract class EvalBarrett extends Base
         $code .= self::generateInlineMultiply('temp', $m, 'temp2', $class);
         $code .= self::generateInlineTrim('temp2');
 
-        /*
-        if ($class::BASE == 26) {
-            $code.= '$n = array_slice($n, 0, ' . (count($m) + 1) . ');
-                     $temp2 = array_slice($temp2, 0, ' . (count($m) + 1) . ');';
-        }
-        */
+        
 
         $code .= self::generateInlineSubtract2('n', 'temp2', 'temp', $class);
 
@@ -149,17 +111,10 @@ abstract class EvalBarrett extends Base
 
         return $func;
 
-        //self::$custom_reduction = \Closure::bind($func, $m, $class);
+        
     }
 
-    /**
-     * Inline Trim
-     *
-     * Removes leading zeros
-     *
-     * @param string $name
-     * @return string
-     */
+    
     private static function generateInlineTrim($name)
     {
         return '
@@ -171,15 +126,7 @@ abstract class EvalBarrett extends Base
             }';
     }
 
-    /**
-     * Inline Multiply (unknown, known)
-     *
-     * @param string $input
-     * @param array $arr
-     * @param string $output
-     * @param string $class
-     * @return string
-     */
+    
     private static function generateInlineMultiply($input, array $arr, $output, $class)
     {
         if (!count($arr)) {
@@ -240,21 +187,13 @@ abstract class EvalBarrett extends Base
 
         $regular .= '}}';
 
-        //if (count($arr) < 2 * self::KARATSUBA_CUTOFF) {
-        //}
+        
+        
 
         return $regular;
     }
 
-    /**
-     * Inline Addition
-     *
-     * @param string $x
-     * @param string $y
-     * @param string $result
-     * @param string $class
-     * @return string
-     */
+    
     private static function generateInlineAdd($x, $y, $result, $class)
     {
         $code = '
@@ -292,17 +231,7 @@ abstract class EvalBarrett extends Base
             return $code;
     }
 
-    /**
-     * Inline Subtraction 2
-     *
-     * For when $known is more digits than $unknown. This is the harder use case to optimize for.
-     *
-     * @param string $known
-     * @param string $unknown
-     * @param string $result
-     * @param string $class
-     * @return string
-     */
+    
     private static function generateInlineSubtract2($known, $unknown, $result, $class)
     {
         $code = '
@@ -351,17 +280,7 @@ abstract class EvalBarrett extends Base
         return $code;
     }
 
-    /**
-     * Inline Subtraction 1
-     *
-     * For when $unknown is more digits than $known. This is the easier use case to optimize for.
-     *
-     * @param string $unknown
-     * @param array $known
-     * @param string $result
-     * @param string $class
-     * @return string
-     */
+    
     private static function generateInlineSubtract1($unknown, array $known, $result, $class)
     {
         $code = '$' . $result . ' = $' . $unknown . ';';
@@ -415,16 +334,7 @@ abstract class EvalBarrett extends Base
         return $code;
     }
 
-    /**
-     * Inline Comparison
-     *
-     * If $unknown >= $known then loop
-     *
-     * @param array $known
-     * @param string $unknown
-     * @param string $subcode
-     * @return string
-     */
+    
     private static function generateInlineCompare(array $known, $unknown, $subcode)
     {
         $uniqid = uniqid();
@@ -443,7 +353,7 @@ abstract class EvalBarrett extends Base
         }
         $code .= '
                 default:
-                    // do subcode
+                    
             }
 
             subcode_' . $uniqid . ':' . $subcode . '
@@ -454,15 +364,7 @@ abstract class EvalBarrett extends Base
         return $code;
     }
 
-    /**
-     * Convert a float to a string
-     *
-     * If you do echo floatval(pow(2, 52)) you'll get 4.6116860184274E+18. It /can/ be displayed without a loss of
-     * precision but displayed in this way there will be precision loss, hence the need for this method.
-     *
-     * @param int|float $num
-     * @return string
-     */
+    
     private static function float2string($num)
     {
         if (!is_float($num)) {

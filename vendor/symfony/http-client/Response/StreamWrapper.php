@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpClient\Response;
 
@@ -15,26 +8,22 @@ use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-/**
- * Allows turning ResponseInterface instances to PHP streams.
- *
- * @author Nicolas Grekas <p@tchwork.com>
- */
+
 class StreamWrapper
 {
-    /** @var resource|string|null */
+    
     public $context;
 
-    /** @var HttpClientInterface */
+    
     private $client;
 
-    /** @var ResponseInterface */
+    
     private $response;
 
-    /** @var resource|null */
+    
     private $content;
 
-    /** @var resource|null */
+    
     private $handle;
 
     private $blocking = true;
@@ -42,11 +31,7 @@ class StreamWrapper
     private $eof = false;
     private $offset = 0;
 
-    /**
-     * Creates a PHP stream resource from a ResponseInterface.
-     *
-     * @return resource
-     */
+    
     public static function createResource(ResponseInterface $response, HttpClientInterface $client = null)
     {
         if ($response instanceof StreamableInterface) {
@@ -71,7 +56,7 @@ class StreamWrapper
                 'response' => $response,
             ];
 
-            return fopen('symfony://'.$response->getInfo('url'), 'r', false, stream_context_create(['symfony' => $context])) ?: null;
+            return fopen('symfony:
         } finally {
             stream_wrapper_unregister('symfony');
         }
@@ -82,11 +67,7 @@ class StreamWrapper
         return $this->response;
     }
 
-    /**
-     * @param resource|callable|null $handle  The resource handle that should be monitored when
-     *                                        stream_select() is used on the created stream
-     * @param resource|null          $content The seekable resource where the response body is buffered
-     */
+    
     public function bindHandles(&$handle, &$content): void
     {
         $this->handle = &$handle;
@@ -122,11 +103,11 @@ class StreamWrapper
     public function stream_read(int $count)
     {
         if (\is_resource($this->content)) {
-            // Empty the internal activity list
+            
             foreach ($this->client->stream([$this->response], 0) as $chunk) {
                 try {
                     if (!$chunk->isTimeout() && $chunk->isFirst()) {
-                        $this->response->getStatusCode(); // ignore 3/4/5xx
+                        $this->response->getStatusCode(); 
                     }
                 } catch (ExceptionInterface $e) {
                     trigger_error($e->getMessage(), \E_USER_WARNING);
@@ -167,7 +148,7 @@ class StreamWrapper
                 $this->eof = $chunk->isLast();
 
                 if ($chunk->isFirst()) {
-                    $this->response->getStatusCode(); // ignore 3/4/5xx
+                    $this->response->getStatusCode(); 
                 }
 
                 if ('' !== $data = $chunk->getContent()) {
@@ -230,10 +211,10 @@ class StreamWrapper
             foreach ($this->client->stream([$this->response]) as $chunk) {
                 try {
                     if ($chunk->isFirst()) {
-                        $this->response->getStatusCode(); // ignore 3/4/5xx
+                        $this->response->getStatusCode(); 
                     }
 
-                    // Chunks are buffered in $this->content already
+                    
                     $size += \strlen($chunk->getContent());
 
                     if (\SEEK_END !== $whence && $offset <= $size) {

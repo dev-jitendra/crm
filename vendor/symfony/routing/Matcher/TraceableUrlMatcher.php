@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Routing\Matcher;
 
@@ -16,11 +9,7 @@ use Symfony\Component\Routing\Exception\ExceptionInterface;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-/**
- * TraceableUrlMatcher helps debug path info matching by tracing the match.
- *
- * @author Fabien Potencier <fabien@symfony.com>
- */
+
 class TraceableUrlMatcher extends UrlMatcher
 {
     public const ROUTE_DOES_NOT_MATCH = 0;
@@ -52,7 +41,7 @@ class TraceableUrlMatcher extends UrlMatcher
 
     protected function matchCollection(string $pathinfo, RouteCollection $routes): array
     {
-        // HEAD and GET are equivalent as per RFC
+        
         if ('HEAD' === $method = $this->context->getMethod()) {
             $method = 'GET';
         }
@@ -64,7 +53,7 @@ class TraceableUrlMatcher extends UrlMatcher
             $staticPrefix = rtrim($compiledRoute->getStaticPrefix(), '/');
             $requiredMethods = $route->getMethods();
 
-            // check the static prefix of the URL first. Only use the more expensive preg_match when it matches
+            
             if ('' !== $staticPrefix && !str_starts_with($trimmedPathinfo, $staticPrefix)) {
                 $this->addTrace(sprintf('Path "%s" does not match', $route->getPath()), self::ROUTE_DOES_NOT_MATCH, $name, $route);
                 continue;
@@ -76,7 +65,7 @@ class TraceableUrlMatcher extends UrlMatcher
             $regex = substr_replace($regex, '/?$', $pos - $hasTrailingSlash, 1 + $hasTrailingSlash);
 
             if (!preg_match($regex, $pathinfo, $matches)) {
-                // does it match without any requirements?
+                
                 $r = new Route($route->getPath(), $route->getDefaults(), [], $route->getOptions());
                 $cr = $r->compile();
                 if (!preg_match($cr->getRegex(), $pathinfo)) {

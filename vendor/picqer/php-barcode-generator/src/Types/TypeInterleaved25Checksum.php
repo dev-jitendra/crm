@@ -6,11 +6,7 @@ use Picqer\Barcode\Barcode;
 use Picqer\Barcode\BarcodeBar;
 use Picqer\Barcode\Exceptions\InvalidCharacterException;
 
-/*
- * Interleaved 2 of 5 barcodes.
- * Compact numeric code, widely used in industry, air cargo
- * Contains digits (0 to 9) and encodes the data in the width of both bars and spaces.
- */
+
 
 class TypeInterleaved25Checksum implements TypeInterface
 {
@@ -30,15 +26,15 @@ class TypeInterleaved25Checksum implements TypeInterface
         $chr['A'] = '11';
         $chr['Z'] = '21';
 
-        // add checksum
+        
         $code .= $this->getChecksum($code);
 
         if ((strlen($code) % 2) != 0) {
-            // add leading zero if code-length is odd
+            
             $code = '0' . $code;
         }
 
-        // add start and stop codes
+        
         $code = 'AA' . strtolower($code) . 'ZA';
 
         $barcode = new Barcode($code);
@@ -49,7 +45,7 @@ class TypeInterleaved25Checksum implements TypeInterface
                 throw new InvalidCharacterException();
             }
 
-            // create a bar-space sequence
+            
             $seq = '';
             $chrlen = strlen($chr[$char_bar]);
             for ($s = 0; $s < $chrlen; $s++) {
@@ -58,9 +54,9 @@ class TypeInterleaved25Checksum implements TypeInterface
 
             for ($j = 0; $j < strlen($seq); ++$j) {
                 if (($j % 2) == 0) {
-                    $t = true; // bar
+                    $t = true; 
                 } else {
-                    $t = false; // space
+                    $t = false; 
                 }
                 $w = $seq[$j];
                 $barcode->addBar(new BarcodeBar($w, 1, $t));

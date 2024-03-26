@@ -9,14 +9,10 @@ use Throwable;
 
 final class UnableToDeleteDirectory extends RuntimeException implements FilesystemOperationFailed
 {
-    /**
-     * @var string
-     */
+    
     private $location = '';
 
-    /**
-     * @var string
-     */
+    
     private $reason;
 
     public static function atLocation(

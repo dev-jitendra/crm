@@ -6,9 +6,7 @@ use function strlen;
 
 class Upce extends AbstractAdapter
 {
-    /**
-     * Constructor for this barcode adapter
-     */
+    
     public function __construct()
     {
         $this->setLength([6, 7, 8]);
@@ -16,12 +14,7 @@ class Upce extends AbstractAdapter
         $this->setChecksum('gtin');
     }
 
-    /**
-     * Overrides parent checkLength
-     *
-     * @param string $value Value
-     * @return bool
-     */
+    
     public function hasValidLength($value)
     {
         if (strlen($value) !== 8) {

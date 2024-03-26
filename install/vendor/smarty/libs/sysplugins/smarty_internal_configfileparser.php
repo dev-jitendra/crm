@@ -1,13 +1,5 @@
 <?php
-/**
-* Smarty Internal Plugin Configfileparser
-*
-* This is the config file parser.
-* It is generated from the internal.configfileparser.y file
-* @package Smarty
-* @subpackage Compiler
-* @author Uwe Tews
-*/
+
 
 class TPC_yyToken implements ArrayAccess
 {
@@ -76,11 +68,9 @@ class TPC_yyToken implements ArrayAccess
 
 class TPC_yyStackEntry
 {
-    public $stateno;       /* The state-number */
-    public $major;         /* The major token value.  This is the code
-                     ** number for the token at this stack level */
-    public $minor; /* The user-supplied minor token value.  This
-                     ** is the value of the token  */
+    public $stateno;       
+    public $major;         
+    public $minor; 
 };
 
 
@@ -89,14 +79,14 @@ class Smarty_Internal_Configfileparser#line 80 "smarty_internal_configfileparser
 {
 #line 14 "smarty_internal_configfileparser.y"
 
-    // states whether the parse was successful or not
+    
     public $successful = true;
     public $retvalue = 0;
     private $lex;
     private $internalError = false;
 
     function __construct($lex, $compiler) {
-        // set instance object
+        
         self::instance($this); 
         $this->lex = $lex;
         $this->smarty = $compiler->smarty; 
@@ -122,7 +112,7 @@ class Smarty_Internal_Configfileparser#line 80 "smarty_internal_configfileparser
     private static $escapes_single = Array('\\' => '\\',
                                           '\'' => '\'');
     private static function parse_single_quoted_string($qstr) {
-        $escaped_string = substr($qstr, 1, strlen($qstr)-2); //remove outer quotes
+        $escaped_string = substr($qstr, 1, strlen($qstr)-2); 
 
         $ss = preg_split('/(\\\\.)/', $escaped_string, -1, PREG_SPLIT_DELIM_CAPTURE);
 
@@ -204,72 +194,72 @@ class Smarty_Internal_Configfileparser#line 80 "smarty_internal_configfileparser
 
     const YY_SZ_ACTTAB = 38;
 static public $yy_action = array(
- /*     0 */    29,   30,   34,   33,   24,   13,   19,   25,   35,   21,
- /*    10 */    59,    8,    3,    1,   20,   12,   14,   31,   20,   12,
- /*    20 */    15,   17,   23,   18,   27,   26,    4,    5,    6,   32,
- /*    30 */     2,   11,   28,   22,   16,    9,    7,   10,
+     29,   30,   34,   33,   24,   13,   19,   25,   35,   21,
+     59,    8,    3,    1,   20,   12,   14,   31,   20,   12,
+     15,   17,   23,   18,   27,   26,    4,    5,    6,   32,
+      2,   11,   28,   22,   16,    9,    7,   10,
     );
     static public $yy_lookahead = array(
- /*     0 */     7,    8,    9,   10,   11,   12,    5,   27,   15,   16,
- /*    10 */    20,   21,   23,   23,   17,   18,   13,   14,   17,   18,
- /*    20 */    15,    2,   17,    4,   25,   26,    6,    3,    3,   14,
- /*    30 */    23,    1,   24,   17,    2,   25,   22,   25,
+      7,    8,    9,   10,   11,   12,    5,   27,   15,   16,
+     20,   21,   23,   23,   17,   18,   13,   14,   17,   18,
+     15,    2,   17,    4,   25,   26,    6,    3,    3,   14,
+     23,    1,   24,   17,    2,   25,   22,   25,
 );
     const YY_SHIFT_USE_DFLT = -8;
     const YY_SHIFT_MAX = 19;
     static public $yy_shift_ofst = array(
- /*     0 */    -8,    1,    1,    1,   -7,   -3,   -3,   30,   -8,   -8,
- /*    10 */    -8,   19,    5,    3,   15,   16,   24,   25,   32,   20,
+     -8,    1,    1,    1,   -7,   -3,   -3,   30,   -8,   -8,
+     -8,   19,    5,    3,   15,   16,   24,   25,   32,   20,
 );
     const YY_REDUCE_USE_DFLT = -21;
     const YY_REDUCE_MAX = 10;
     static public $yy_reduce_ofst = array(
- /*     0 */   -10,   -1,   -1,   -1,  -20,   10,   12,    8,   14,    7,
- /*    10 */   -11,
+    -10,   -1,   -1,   -1,  -20,   10,   12,    8,   14,    7,
+    -11,
 );
     static public $yyExpectedTokens = array(
-        /* 0 */ array(),
-        /* 1 */ array(5, 17, 18, ),
-        /* 2 */ array(5, 17, 18, ),
-        /* 3 */ array(5, 17, 18, ),
-        /* 4 */ array(7, 8, 9, 10, 11, 12, 15, 16, ),
-        /* 5 */ array(17, 18, ),
-        /* 6 */ array(17, 18, ),
-        /* 7 */ array(1, ),
-        /* 8 */ array(),
-        /* 9 */ array(),
-        /* 10 */ array(),
-        /* 11 */ array(2, 4, ),
-        /* 12 */ array(15, 17, ),
-        /* 13 */ array(13, 14, ),
-        /* 14 */ array(14, ),
-        /* 15 */ array(17, ),
-        /* 16 */ array(3, ),
-        /* 17 */ array(3, ),
-        /* 18 */ array(2, ),
-        /* 19 */ array(6, ),
-        /* 20 */ array(),
-        /* 21 */ array(),
-        /* 22 */ array(),
-        /* 23 */ array(),
-        /* 24 */ array(),
-        /* 25 */ array(),
-        /* 26 */ array(),
-        /* 27 */ array(),
-        /* 28 */ array(),
-        /* 29 */ array(),
-        /* 30 */ array(),
-        /* 31 */ array(),
-        /* 32 */ array(),
-        /* 33 */ array(),
-        /* 34 */ array(),
-        /* 35 */ array(),
+         array(),
+         array(5, 17, 18, ),
+         array(5, 17, 18, ),
+         array(5, 17, 18, ),
+         array(7, 8, 9, 10, 11, 12, 15, 16, ),
+         array(17, 18, ),
+         array(17, 18, ),
+         array(1, ),
+         array(),
+         array(),
+         array(),
+         array(2, 4, ),
+         array(15, 17, ),
+         array(13, 14, ),
+         array(14, ),
+         array(17, ),
+         array(3, ),
+         array(3, ),
+         array(2, ),
+         array(6, ),
+         array(),
+         array(),
+         array(),
+         array(),
+         array(),
+         array(),
+         array(),
+         array(),
+         array(),
+         array(),
+         array(),
+         array(),
+         array(),
+         array(),
+         array(),
+         array(),
 );
     static public $yy_default = array(
- /*     0 */    44,   37,   41,   40,   58,   58,   58,   36,   39,   44,
- /*    10 */    44,   58,   58,   58,   58,   58,   58,   58,   58,   58,
- /*    20 */    55,   54,   57,   56,   50,   45,   43,   42,   38,   46,
- /*    30 */    47,   52,   51,   49,   48,   53,
+     44,   37,   41,   40,   58,   58,   58,   36,   39,   44,
+     44,   58,   58,   58,   58,   58,   58,   58,   58,   58,
+     55,   54,   57,   56,   50,   45,   43,   42,   38,   46,
+     47,   52,   51,   49,   48,   53,
 );
     const YYNOCODE = 29;
     const YYSTACKDEPTH = 100;
@@ -293,15 +283,15 @@ static public $yy_action = array(
 
     public function PrintTrace()
     {
-        $this->yyTraceFILE = fopen('php://output', 'w');
+        $this->yyTraceFILE = fopen('php:
         $this->yyTracePrompt = '<br>';
     }
 
     public $yyTraceFILE;
     public $yyTracePrompt;
-    public $yyidx;                    /* Index of top element in stack */
-    public $yyerrcnt;                 /* Shifts left before out of the error */
-    public $yystack = array();  /* The parser's stack */
+    public $yyidx;                    
+    public $yyerrcnt;                 
+    public $yystack = array();  
 
     public $yyTokenName = array(
   '$',             'OPENB',         'SECTION',       'CLOSEB',      
@@ -314,28 +304,28 @@ static public $yy_action = array(
     );
 
     public static $yyRuleName = array(
- /*   0 */ "start ::= global_vars sections",
- /*   1 */ "global_vars ::= var_list",
- /*   2 */ "sections ::= sections section",
- /*   3 */ "sections ::=",
- /*   4 */ "section ::= OPENB SECTION CLOSEB newline var_list",
- /*   5 */ "section ::= OPENB DOT SECTION CLOSEB newline var_list",
- /*   6 */ "var_list ::= var_list newline",
- /*   7 */ "var_list ::= var_list var",
- /*   8 */ "var_list ::=",
- /*   9 */ "var ::= ID EQUAL value",
- /*  10 */ "value ::= FLOAT",
- /*  11 */ "value ::= INT",
- /*  12 */ "value ::= BOOL",
- /*  13 */ "value ::= SINGLE_QUOTED_STRING",
- /*  14 */ "value ::= DOUBLE_QUOTED_STRING",
- /*  15 */ "value ::= TRIPPLE_QUOTES TRIPPLE_TEXT TRIPPLE_QUOTES_END",
- /*  16 */ "value ::= TRIPPLE_QUOTES TRIPPLE_QUOTES_END",
- /*  17 */ "value ::= NAKED_STRING",
- /*  18 */ "value ::= OTHER",
- /*  19 */ "newline ::= NEWLINE",
- /*  20 */ "newline ::= COMMENTSTART NEWLINE",
- /*  21 */ "newline ::= COMMENTSTART NAKED_STRING NEWLINE",
+  "start ::= global_vars sections",
+  "global_vars ::= var_list",
+  "sections ::= sections section",
+  "sections ::=",
+  "section ::= OPENB SECTION CLOSEB newline var_list",
+  "section ::= OPENB DOT SECTION CLOSEB newline var_list",
+  "var_list ::= var_list newline",
+  "var_list ::= var_list var",
+  "var_list ::=",
+  "var ::= ID EQUAL value",
+  "value ::= FLOAT",
+  "value ::= INT",
+  "value ::= BOOL",
+  "value ::= SINGLE_QUOTED_STRING",
+  "value ::= DOUBLE_QUOTED_STRING",
+  "value ::= TRIPPLE_QUOTES TRIPPLE_TEXT TRIPPLE_QUOTES_END",
+  "value ::= TRIPPLE_QUOTES TRIPPLE_QUOTES_END",
+  "value ::= NAKED_STRING",
+  "value ::= OTHER",
+  "newline ::= NEWLINE",
+  "newline ::= COMMENTSTART NEWLINE",
+  "newline ::= COMMENTSTART NAKED_STRING NEWLINE",
     );
 
     public function tokenName($tokenType)
@@ -353,7 +343,7 @@ static public $yy_action = array(
     public static function yy_destructor($yymajor, $yypminor)
     {
         switch ($yymajor) {
-            default:  break;   /* If no destructor action specified: do nothing */
+            default:  break;   
         }
     }
 
@@ -397,14 +387,14 @@ static public $yy_action = array(
         do {
             $yyact = $this->yy_find_shift_action($token);
             if ($yyact >= self::YYNSTATE && $yyact < self::YYNSTATE + self::YYNRULE) {
-                // reduce action
+                
                 $done = 0;
                 do {
                     if ($done++ == 100) {
                         $this->yyidx = $yyidx;
                         $this->yystack = $stack;
-                        // too much recursion prevents proper detection
-                        // so give up
+                        
+                        
                         return array_unique($expected);
                     }
                     $yyruleno = $yyact - self::YYNSTATE;
@@ -423,7 +413,7 @@ static public $yy_action = array(
                         }
                     }
                     if ($nextstate < self::YYNSTATE) {
-                        // we need to shift a non-terminal
+                        
                         $this->yyidx++;
                         $x = new TPC_yyStackEntry;
                         $x->stateno = $nextstate;
@@ -433,14 +423,14 @@ static public $yy_action = array(
                     } elseif ($nextstate == self::YYNSTATE + self::YYNRULE + 1) {
                         $this->yyidx = $yyidx;
                         $this->yystack = $stack;
-                        // the last token was just ignored, we can't accept
-                        // by ignoring input, this is in essence ignoring a
-                        // syntax error!
+                        
+                        
+                        
                         return array_unique($expected);
                     } elseif ($nextstate === self::YY_NO_ACTION) {
                         $this->yyidx = $yyidx;
                         $this->yystack = $stack;
-                        // input accepted, but not shifted (I guess)
+                        
                         return $expected;
                     } else {
                         $yyact = $nextstate;
@@ -458,7 +448,7 @@ static public $yy_action = array(
     public function yy_is_expected_token($token)
     {
         if ($token === 0) {
-            return true; // 0 is not part of this
+            return true; 
         }
         $state = $this->yystack[$this->yyidx]->stateno;
         if (in_array($token, self::$yyExpectedTokens[$state], true)) {
@@ -469,14 +459,14 @@ static public $yy_action = array(
         do {
             $yyact = $this->yy_find_shift_action($token);
             if ($yyact >= self::YYNSTATE && $yyact < self::YYNSTATE + self::YYNRULE) {
-                // reduce action
+                
                 $done = 0;
                 do {
                     if ($done++ == 100) {
                         $this->yyidx = $yyidx;
                         $this->yystack = $stack;
-                        // too much recursion prevents proper detection
-                        // so give up
+                        
+                        
                         return true;
                     }
                     $yyruleno = $yyact - self::YYNSTATE;
@@ -492,7 +482,7 @@ static public $yy_action = array(
                         return true;
                     }
                     if ($nextstate < self::YYNSTATE) {
-                        // we need to shift a non-terminal
+                        
                         $this->yyidx++;
                         $x = new TPC_yyStackEntry;
                         $x->stateno = $nextstate;
@@ -503,17 +493,17 @@ static public $yy_action = array(
                         $this->yyidx = $yyidx;
                         $this->yystack = $stack;
                         if (!$token) {
-                            // end of input: this is valid
+                            
                             return true;
                         }
-                        // the last token was just ignored, we can't accept
-                        // by ignoring input, this is in essence ignoring a
-                        // syntax error!
+                        
+                        
+                        
                         return false;
                     } elseif ($nextstate === self::YY_NO_ACTION) {
                         $this->yyidx = $yyidx;
                         $this->yystack = $stack;
-                        // input accepted, but not shifted (I guess)
+                        
                         return true;
                     } else {
                         $yyact = $nextstate;
@@ -532,9 +522,9 @@ static public $yy_action = array(
     {
         $stateno = $this->yystack[$this->yyidx]->stateno;
 
-        /* if ($this->yyidx < 0) return self::YY_NO_ACTION;  */
+        
         if (!isset(self::$yy_shift_ofst[$stateno])) {
-            // no shift actions
+            
             return self::$yy_default[$stateno];
         }
         $i = self::$yy_shift_ofst[$stateno];
@@ -566,7 +556,7 @@ static public $yy_action = array(
 
     public function yy_find_reduce_action($stateno, $iLookAhead)
     {
-        /* $stateno = $this->yystack[$this->yyidx]->stateno; */
+        
 
         if (!isset(self::$yy_reduce_ofst[$stateno])) {
             return self::$yy_default[$stateno];
@@ -771,7 +761,7 @@ static public $yy_action = array(
 
         $this->_retvalue = $yy_lefthand_side = null;
         if (array_key_exists($yyruleno, self::$yyReduceMap)) {
-            // call the action
+            
             $this->_retvalue = null;
             $this->{'yy_r' . self::$yyReduceMap[$yyruleno]}();
             $yy_lefthand_side = $this->_retvalue;
@@ -780,7 +770,7 @@ static public $yy_action = array(
         $yysize = self::$yyRuleInfo[$yyruleno]['rhs'];
         $this->yyidx -= $yysize;
         for ($i = $yysize; $i; $i--) {
-            // pop all of the right-hand side parameters
+            
             array_pop($this->yystack);
         }
         $yyact = $this->yy_find_reduce_action($this->yystack[$this->yyidx]->stateno, $yygoto);
@@ -831,13 +821,13 @@ static public $yy_action = array(
     $this->successful = !$this->internalError;
     $this->internalError = false;
     $this->retvalue = $this->_retvalue;
-    //echo $this->retvalue."\n\n";
+    
 #line 833 "smarty_internal_configfileparser.php"
     }
 
     public function doParse($yymajor, $yytokenvalue)
     {
-        $yyerrorhit = 0;   /* True if yymajor has invoked an error */
+        $yyerrorhit = 0;   
 
         if ($this->yyidx === null || $this->yyidx < 0) {
             $this->yyidx = 0;
@@ -859,7 +849,7 @@ static public $yy_action = array(
             $yyact = $this->yy_find_shift_action($yymajor);
             if ($yymajor < self::YYERRORSYMBOL &&
                   !$this->yy_is_expected_token($yymajor)) {
-                // force a syntax error
+                
                 $yyact = self::YY_ERROR_ACTION;
             }
             if ($yyact < self::YYNSTATE) {

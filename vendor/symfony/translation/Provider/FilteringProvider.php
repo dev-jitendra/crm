@@ -1,24 +1,13 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation\Provider;
 
 use Symfony\Component\Translation\TranslatorBag;
 use Symfony\Component\Translation\TranslatorBagInterface;
 
-/**
- * Filters domains and locales between the Translator config values and those specific to each provider.
- *
- * @author Mathieu Santostefano <msantostefano@protonmail.com>
- */
+
 class FilteringProvider implements ProviderInterface
 {
     private ProviderInterface $provider;

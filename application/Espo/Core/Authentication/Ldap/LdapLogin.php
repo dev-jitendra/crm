@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Authentication\Ldap;
 
@@ -79,9 +53,7 @@ class LdapLogin implements Login
         $this->utils = new LDAPUtils($config);
     }
 
-    /**
-     * @var array<string, string>
-     */
+    
     private $ldapFieldMap = [
         'userName' => 'userNameAttribute',
         'firstName' => 'userFirstNameAttribute',
@@ -91,17 +63,13 @@ class LdapLogin implements Login
         'phoneNumber' => 'userPhoneNumberAttribute',
     ];
 
-    /**
-     * @var array<string, string>
-     */
+    
     private $userFieldMap = [
         'teamsIds' => 'userTeamsIds',
         'defaultTeamId' => 'userDefaultTeamId',
     ];
 
-    /**
-     * @var array<string, string>
-     */
+    
     private $portalUserFieldMap = [
         'portalsIds' => 'portalUserPortalsIds',
         'portalRolesIds' => 'portalUserRolesIds',
@@ -140,7 +108,7 @@ class LdapLogin implements Login
 
         $ldapClient = $this->getLdapClient();
 
-        /* Login LDAP system user (ldapUsername, ldapPassword) */
+        
         try {
             $ldapClient->bind();
         }
@@ -151,7 +119,7 @@ class LdapLogin implements Login
                 'LDAP: Could not connect to LDAP server [' . $options['host'] . '], details: ' . $e->getMessage()
             );
 
-            /** @var string $username */
+            
 
             $adminUser = $this->adminLogin($username, $password);
 
@@ -165,7 +133,7 @@ class LdapLogin implements Login
         $userDn = null;
 
         if (!isset($adminUser)) {
-            /** @var string $username */
+            
 
             try {
                 $userDn = $this->findLdapUserDnByUsername($username);
@@ -225,7 +193,7 @@ class LdapLogin implements Login
                 return Result::fail(FailReason::USER_NOT_FOUND);
             }
 
-            /** @var string $userDn */
+            
 
             $userData = $ldapClient->getEntry($userDn);
 
@@ -252,13 +220,11 @@ class LdapLogin implements Login
             }
         }
 
-        /** @var Client */
+        
         return $this->client;
     }
 
-    /**
-     * Login by authorization token.
-     */
+    
     private function loginByToken(?string $username, AuthToken $authToken, Request $request): ?User
     {
         if ($username === null) {
@@ -267,7 +233,7 @@ class LdapLogin implements Login
 
         $userId = $authToken->getUserId();
 
-        /** @var ?User $user */
+        
         $user = $this->entityManager->getEntityById(User::ENTITY_TYPE, $userId);
 
         if (!$user) {
@@ -284,7 +250,7 @@ class LdapLogin implements Login
             return null;
         }
 
-        /** @var ?User */
+        
         return $this->entityManager
             ->getRDBRepository(User::ENTITY_TYPE)
             ->where([
@@ -307,11 +273,7 @@ class LdapLogin implements Login
             ->findOne();
     }
 
-    /**
-     * Create Espo user with data gets from LDAP server.
-     *
-     * @param array<string, mixed> $userData
-     */
+    
     private function createUser(array $userData, bool $isPortal = false): ?User
     {
         $this->log->info('Creating new user...');
@@ -350,7 +312,7 @@ class LdapLogin implements Login
         $user->set($data);
 
         $this->entityManager->saveEntity($user, [
-            // Prevent `user` service being loaded by hooks.
+            
             SaveOption::SKIP_HOOKS => true,
             SaveOption::KEEP_NEW => true,
         ]);
@@ -372,11 +334,7 @@ class LdapLogin implements Login
         return $this->entityManager->getEntityById(User::ENTITY_TYPE, $user->getId());
     }
 
-    /**
-     * Find LDAP user DN by his username.
-     *
-     * @throws \Laminas\Ldap\Exception\LdapException
-     */
+    
     private function findLdapUserDnByUsername(string $username): ?string
     {
         $ldapClient = $this->getLdapClient();
@@ -394,7 +352,7 @@ class LdapLogin implements Login
             '(' . $options['userNameAttribute'] . '=' . $username . ')' .
             $loginFilterString . ')';
 
-        /** @var array<int, array{dn: string}> $result */
+        
         $result = $ldapClient->search($searchString, null, Client::SEARCH_SCOPE_SUB);
 
         $this->log->debug('LDAP: user search string: "' . $searchString . '"');
@@ -406,9 +364,7 @@ class LdapLogin implements Login
         return null;
     }
 
-    /**
-     * Check and convert filter item into LDAP format.
-     */
+    
     private function convertToFilterFormat(string $filter): string
     {
         $filter = trim($filter);
@@ -424,11 +380,7 @@ class LdapLogin implements Login
         return $filter;
     }
 
-    /**
-     * Load fields for a user.
-     *
-     * @return array<string, mixed>
-     */
+    
     private function loadFields(string $type): array
     {
         $options = $this->utils->getOptions();
@@ -438,7 +390,7 @@ class LdapLogin implements Login
         $fields = [];
 
         foreach ($this->$typeMap as $fieldName => $fieldValue) {
-            /** @var string $fieldName */
+            
             if (isset($options[$fieldValue])) {
                 $fields[$fieldName] = $options[$fieldValue];
             }

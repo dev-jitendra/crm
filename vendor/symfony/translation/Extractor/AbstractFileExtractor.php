@@ -1,23 +1,12 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation\Extractor;
 
 use Symfony\Component\Translation\Exception\InvalidArgumentException;
 
-/**
- * Base class used by classes that extract translation messages from files.
- *
- * @author Marcos D. Sánchez <marcosdsanchez@gmail.com>
- */
+
 abstract class AbstractFileExtractor
 {
     protected function extractFiles(string|iterable $resource): iterable
@@ -43,9 +32,7 @@ abstract class AbstractFileExtractor
         return new \SplFileInfo($file);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
+    
     protected function isFile(string $file): bool
     {
         if (!is_file($file)) {
@@ -55,13 +42,9 @@ abstract class AbstractFileExtractor
         return true;
     }
 
-    /**
-     * @return bool
-     */
+    
     abstract protected function canBeExtracted(string $file);
 
-    /**
-     * @return iterable
-     */
+    
     abstract protected function extractFromDirectory(string|array $resource);
 }

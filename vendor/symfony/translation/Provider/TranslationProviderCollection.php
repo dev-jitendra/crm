@@ -1,31 +1,18 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation\Provider;
 
 use Symfony\Component\Translation\Exception\InvalidArgumentException;
 
-/**
- * @author Mathieu Santostefano <msantostefano@protonmail.com>
- */
+
 final class TranslationProviderCollection
 {
-    /**
-     * @var array<string, ProviderInterface>
-     */
+    
     private $providers;
 
-    /**
-     * @param array<string, ProviderInterface> $providers
-     */
+    
     public function __construct(iterable $providers)
     {
         $this->providers = \is_array($providers) ? $providers : iterator_to_array($providers);

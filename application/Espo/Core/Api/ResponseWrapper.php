@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Api;
 
@@ -34,14 +8,12 @@ use Psr\Http\Message\StreamInterface;
 
 use Espo\Core\Api\Response as ApiResponse;
 
-/**
- * Adapter for PSR-7 response interface.
- */
+
 class ResponseWrapper implements ApiResponse
 {
     public function __construct(private Psr7Response $psr7Response)
     {
-        // Slim adds Authorization header. It's not needed.
+        
         $this->psr7Response = $this->psr7Response->withoutHeader('Authorization');
     }
 
@@ -90,9 +62,7 @@ class ResponseWrapper implements ApiResponse
         return $this->psr7Response->hasHeader($name);
     }
 
-    /**
-     * @return string[]
-     */
+    
     public function getHeaderAsArray(string $name): array
     {
         if (!$this->psr7Response->hasHeader($name)) {
@@ -102,9 +72,7 @@ class ResponseWrapper implements ApiResponse
         return $this->psr7Response->getHeader($name);
     }
 
-    /**
-     * @return string[]
-     */
+    
     public function getHeaderNames(): array
     {
         return array_keys($this->psr7Response->getHeaders());

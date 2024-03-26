@@ -23,32 +23,19 @@ use Sabberworm\CSS\Value\CSSString;
 use Sabberworm\CSS\Value\URL;
 use Sabberworm\CSS\Value\Value;
 
-/**
- * A `CSSList` is the most generic container available. Its contents include `RuleSet` as well as other `CSSList`
- * objects.
- *
- * Also, it may contain `Import` and `Charset` objects stemming from at-rules.
- */
+
 abstract class CSSList implements Renderable, Commentable
 {
-    /**
-     * @var array<array-key, Comment>
-     */
+    
     protected $aComments;
 
-    /**
-     * @var array<int, RuleSet|CSSList|Import|Charset>
-     */
+    
     protected $aContents;
 
-    /**
-     * @var int
-     */
+    
     protected $iLineNo;
 
-    /**
-     * @param int $iLineNo
-     */
+    
     public function __construct($iLineNo = 0)
     {
         $this->aComments = [];
@@ -56,12 +43,7 @@ abstract class CSSList implements Renderable, Commentable
         $this->iLineNo = $iLineNo;
     }
 
-    /**
-     * @return void
-     *
-     * @throws UnexpectedTokenException
-     * @throws SourceException
-     */
+    
     public static function parseList(ParserState $oParserState, CSSList $oList)
     {
         $bIsRoot = $oList instanceof Document;
@@ -82,7 +64,7 @@ abstract class CSSList implements Renderable, Commentable
                 $oListItem = self::parseListItem($oParserState, $oList);
             }
             if ($oListItem === null) {
-                // List parsing finished
+                
                 return;
             }
             if ($oListItem) {
@@ -96,13 +78,7 @@ abstract class CSSList implements Renderable, Commentable
         }
     }
 
-    /**
-     * @return AtRuleBlockList|KeyFrame|Charset|CSSNamespace|Import|AtRuleSet|DeclarationBlock|null|false
-     *
-     * @throws SourceException
-     * @throws UnexpectedEOFException
-     * @throws UnexpectedTokenException
-     */
+    
     private static function parseListItem(ParserState $oParserState, CSSList $oList)
     {
         $bIsRoot = $oList instanceof Document;
@@ -147,15 +123,7 @@ abstract class CSSList implements Renderable, Commentable
         }
     }
 
-    /**
-     * @param ParserState $oParserState
-     *
-     * @return AtRuleBlockList|KeyFrame|Charset|CSSNamespace|Import|AtRuleSet|null
-     *
-     * @throws SourceException
-     * @throws UnexpectedTokenException
-     * @throws UnexpectedEOFException
-     */
+    
     private static function parseAtRule(ParserState $oParserState)
     {
         $oParserState->consume('@');
@@ -206,7 +174,7 @@ abstract class CSSList implements Renderable, Commentable
             }
             return new CSSNamespace($mUrl, $sPrefix, $iIdentifierLineNum);
         } else {
-            // Unknown other at rule (font-face or such)
+            
             $sArgs = trim($oParserState->consumeUntil('{', false, true));
             if (substr_count($sArgs, "(") != substr_count($sArgs, ")")) {
                 if ($oParserState->getSettings()->bLenientParsing) {
@@ -236,76 +204,38 @@ abstract class CSSList implements Renderable, Commentable
         }
     }
 
-    /**
-     * Tests an identifier for a given value. Since identifiers are all keywords, they can be vendor-prefixed.
-     * We need to check for these versions too.
-     *
-     * @param string $sIdentifier
-     * @param string $sMatch
-     *
-     * @return bool
-     */
+    
     private static function identifierIs($sIdentifier, $sMatch)
     {
         return (strcasecmp($sIdentifier, $sMatch) === 0)
             ?: preg_match("/^(-\\w+-)?$sMatch$/i", $sIdentifier) === 1;
     }
 
-    /**
-     * @return int
-     */
+    
     public function getLineNo()
     {
         return $this->iLineNo;
     }
 
-    /**
-     * Prepends an item to the list of contents.
-     *
-     * @param RuleSet|CSSList|Import|Charset $oItem
-     *
-     * @return void
-     */
+    
     public function prepend($oItem)
     {
         array_unshift($this->aContents, $oItem);
     }
 
-    /**
-     * Appends an item to tje list of contents.
-     *
-     * @param RuleSet|CSSList|Import|Charset $oItem
-     *
-     * @return void
-     */
+    
     public function append($oItem)
     {
         $this->aContents[] = $oItem;
     }
 
-    /**
-     * Splices the list of contents.
-     *
-     * @param int $iOffset
-     * @param int $iLength
-     * @param array<int, RuleSet|CSSList|Import|Charset> $mReplacement
-     *
-     * @return void
-     */
+    
     public function splice($iOffset, $iLength = null, $mReplacement = null)
     {
         array_splice($this->aContents, $iOffset, $iLength, $mReplacement);
     }
 
-    /**
-     * Removes an item from the CSS list.
-     *
-     * @param RuleSet|Import|Charset|CSSList $oItemToRemove
-     *        May be a RuleSet (most likely a DeclarationBlock), a Import,
-     *        a Charset or another CSSList (most likely a MediaQuery)
-     *
-     * @return bool whether the item was removed
-     */
+    
     public function remove($oItemToRemove)
     {
         $iKey = array_search($oItemToRemove, $this->aContents, true);
@@ -316,15 +246,7 @@ abstract class CSSList implements Renderable, Commentable
         return false;
     }
 
-    /**
-     * Replaces an item from the CSS list.
-     *
-     * @param RuleSet|Import|Charset|CSSList $oOldItem
-     *        May be a `RuleSet` (most likely a `DeclarationBlock`), an `Import`, a `Charset`
-     *        or another `CSSList` (most likely a `MediaQuery`)
-     *
-     * @return bool
-     */
+    
     public function replace($oOldItem, $mNewItem)
     {
         $iKey = array_search($oOldItem, $this->aContents, true);
@@ -339,9 +261,7 @@ abstract class CSSList implements Renderable, Commentable
         return false;
     }
 
-    /**
-     * @param array<int, RuleSet|Import|Charset|CSSList> $aContents
-     */
+    
     public function setContents(array $aContents)
     {
         $this->aContents = [];
@@ -350,14 +270,7 @@ abstract class CSSList implements Renderable, Commentable
         }
     }
 
-    /**
-     * Removes a declaration block from the CSS list if it matches all given selectors.
-     *
-     * @param DeclarationBlock|array<array-key, Selector>|string $mSelector the selectors to match
-     * @param bool $bRemoveAll whether to stop at the first declaration block found or remove all blocks
-     *
-     * @return void
-     */
+    
     public function removeDeclarationBlockBySelector($mSelector, $bRemoveAll = false)
     {
         if ($mSelector instanceof DeclarationBlock) {
@@ -391,17 +304,13 @@ abstract class CSSList implements Renderable, Commentable
         }
     }
 
-    /**
-     * @return string
-     */
+    
     public function __toString()
     {
         return $this->render(new OutputFormat());
     }
 
-    /**
-     * @return string
-     */
+    
     public function render(OutputFormat $oOutputFormat)
     {
         $sResult = '';
@@ -427,51 +336,35 @@ abstract class CSSList implements Renderable, Commentable
         }
 
         if (!$bIsFirst) {
-            // Had some output
+            
             $sResult .= $oOutputFormat->spaceAfterBlocks();
         }
 
         return $sResult;
     }
 
-    /**
-     * Return true if the list can not be further outdented. Only important when rendering.
-     *
-     * @return bool
-     */
+    
     abstract public function isRootList();
 
-    /**
-     * @return array<int, RuleSet|Import|Charset|CSSList>
-     */
+    
     public function getContents()
     {
         return $this->aContents;
     }
 
-    /**
-     * @param array<array-key, Comment> $aComments
-     *
-     * @return void
-     */
+    
     public function addComments(array $aComments)
     {
         $this->aComments = array_merge($this->aComments, $aComments);
     }
 
-    /**
-     * @return array<array-key, Comment>
-     */
+    
     public function getComments()
     {
         return $this->aComments;
     }
 
-    /**
-     * @param array<array-key, Comment> $aComments
-     *
-     * @return void
-     */
+    
     public function setComments(array $aComments)
     {
         $this->aComments = $aComments;

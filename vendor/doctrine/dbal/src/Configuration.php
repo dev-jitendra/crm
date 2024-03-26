@@ -12,47 +12,25 @@ use Psr\Cache\CacheItemPoolInterface;
 
 use function func_num_args;
 
-/**
- * Configuration container for the Doctrine DBAL.
- */
+
 class Configuration
 {
-    /** @var Middleware[] */
+    
     private array $middlewares = [];
 
-    /**
-     * The SQL logger in use. If null, SQL logging is disabled.
-     *
-     * @var SQLLogger|null
-     */
+    
     protected $sqlLogger;
 
-    /**
-     * The cache driver implementation that is used for query result caching.
-     */
+    
     private ?CacheItemPoolInterface $resultCache = null;
 
-    /**
-     * The cache driver implementation that is used for query result caching.
-     *
-     * @deprecated Use {@see $resultCache} instead.
-     *
-     * @var Cache|null
-     */
+    
     protected $resultCacheImpl;
 
-    /**
-     * The callable to use to filter schema assets.
-     *
-     * @var callable|null
-     */
+    
     protected $schemaAssetsFilter;
 
-    /**
-     * The default auto-commit mode for connections.
-     *
-     * @var bool
-     */
+    
     protected $autoCommit = true;
 
     public function __construct()
@@ -62,16 +40,12 @@ class Configuration
         };
     }
 
-    /**
-     * Sets the SQL logger to use. Defaults to NULL which means SQL logging is disabled.
-     *
-     * @deprecated Use {@see setMiddlewares()} and {@see \Doctrine\DBAL\Logging\Middleware} instead.
-     */
+    
     public function setSQLLogger(?SQLLogger $logger = null): void
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/4967',
+            'https:
             '%s is deprecated, use setMiddlewares() and Logging\\Middleware instead.',
             __METHOD__,
         );
@@ -79,16 +53,12 @@ class Configuration
         $this->sqlLogger = $logger;
     }
 
-    /**
-     * Gets the SQL logger that is used.
-     *
-     * @deprecated
-     */
+    
     public function getSQLLogger(): ?SQLLogger
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/4967',
+            'https:
             '%s is deprecated.',
             __METHOD__,
         );
@@ -96,24 +66,18 @@ class Configuration
         return $this->sqlLogger;
     }
 
-    /**
-     * Gets the cache driver implementation that is used for query result caching.
-     */
+    
     public function getResultCache(): ?CacheItemPoolInterface
     {
         return $this->resultCache;
     }
 
-    /**
-     * Gets the cache driver implementation that is used for query result caching.
-     *
-     * @deprecated Use {@see getResultCache()} instead.
-     */
+    
     public function getResultCacheImpl(): ?Cache
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/4620',
+            'https:
             '%s is deprecated, call getResultCache() instead.',
             __METHOD__,
         );
@@ -121,25 +85,19 @@ class Configuration
         return $this->resultCacheImpl;
     }
 
-    /**
-     * Sets the cache driver implementation that is used for query result caching.
-     */
+    
     public function setResultCache(CacheItemPoolInterface $cache): void
     {
         $this->resultCacheImpl = DoctrineProvider::wrap($cache);
         $this->resultCache     = $cache;
     }
 
-    /**
-     * Sets the cache driver implementation that is used for query result caching.
-     *
-     * @deprecated Use {@see setResultCache()} instead.
-     */
+    
     public function setResultCacheImpl(Cache $cacheImpl): void
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/4620',
+            'https:
             '%s is deprecated, call setResultCache() instead.',
             __METHOD__,
         );
@@ -148,22 +106,20 @@ class Configuration
         $this->resultCache     = CacheAdapter::wrap($cacheImpl);
     }
 
-    /**
-     * Sets the callable to use to filter schema assets.
-     */
+    
     public function setSchemaAssetsFilter(?callable $callable = null): void
     {
         if (func_num_args() < 1) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5483',
+                'https:
                 'Not passing an argument to %s is deprecated.',
                 __METHOD__,
             );
         } elseif ($callable === null) {
             Deprecation::trigger(
                 'doctrine/dbal',
-                'https://github.com/doctrine/dbal/pull/5483',
+                'https:
                 'Using NULL as a schema asset filter is deprecated.'
                     . ' Use a callable that always returns true instead.',
             );
@@ -172,47 +128,25 @@ class Configuration
         $this->schemaAssetsFilter = $callable;
     }
 
-    /**
-     * Returns the callable to use to filter schema assets.
-     */
+    
     public function getSchemaAssetsFilter(): ?callable
     {
         return $this->schemaAssetsFilter;
     }
 
-    /**
-     * Sets the default auto-commit mode for connections.
-     *
-     * If a connection is in auto-commit mode, then all its SQL statements will be executed and committed as individual
-     * transactions. Otherwise, its SQL statements are grouped into transactions that are terminated by a call to either
-     * the method commit or the method rollback. By default, new connections are in auto-commit mode.
-     *
-     * @see   getAutoCommit
-     *
-     * @param bool $autoCommit True to enable auto-commit mode; false to disable it
-     */
+    
     public function setAutoCommit(bool $autoCommit): void
     {
         $this->autoCommit = $autoCommit;
     }
 
-    /**
-     * Returns the default auto-commit mode for connections.
-     *
-     * @see    setAutoCommit
-     *
-     * @return bool True if auto-commit mode is enabled by default for connections, false otherwise.
-     */
+    
     public function getAutoCommit(): bool
     {
         return $this->autoCommit;
     }
 
-    /**
-     * @param Middleware[] $middlewares
-     *
-     * @return $this
-     */
+    
     public function setMiddlewares(array $middlewares): self
     {
         $this->middlewares = $middlewares;
@@ -220,7 +154,7 @@ class Configuration
         return $this;
     }
 
-    /** @return Middleware[] */
+    
     public function getMiddlewares(): array
     {
         return $this->middlewares;

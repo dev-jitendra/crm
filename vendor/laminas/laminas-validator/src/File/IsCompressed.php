@@ -5,33 +5,25 @@ namespace Laminas\Validator\File;
 use Laminas\Stdlib\ArrayUtils;
 use Traversable;
 
-/**
- * Validator which checks if the file already exists in the directory
- */
+
 class IsCompressed extends MimeType
 {
-    /**
-     * @const string Error constants
-     */
+    
     public const FALSE_TYPE   = 'fileIsCompressedFalseType';
     public const NOT_DETECTED = 'fileIsCompressedNotDetected';
     public const NOT_READABLE = 'fileIsCompressedNotReadable';
 
-    /** @var array Error message templates */
+    
     protected $messageTemplates = [
         self::FALSE_TYPE   => "File is not compressed, '%type%' detected",
         self::NOT_DETECTED => 'The mimetype could not be detected from the file',
         self::NOT_READABLE => 'File is not readable or does not exist',
     ];
 
-    /**
-     * Sets validator options
-     *
-     * @param string|array|Traversable $options
-     */
+    
     public function __construct($options = [])
     {
-        // http://hul.harvard.edu/ois/systems/wax/wax-public-help/mimetypes.htm
+        
         $default = [
             'application/arj',
             'application/gnutar',

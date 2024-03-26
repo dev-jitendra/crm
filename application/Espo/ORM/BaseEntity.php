@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\ORM;
 
@@ -41,7 +15,7 @@ use const JSON_THROW_ON_ERROR;
 
 class BaseEntity implements Entity
 {
-    /** @var string */
+    
     protected $entityType;
 
     private bool $isNotNew = false;
@@ -52,31 +26,21 @@ class BaseEntity implements Entity
     protected ?EntityManager $entityManager;
     private ?ValueAccessor $valueAccessor = null;
 
-    /** @var array<string, bool> */
+    
     private array $writtenMap = [];
-    /** @var array<string, array<string, mixed>> */
+    
     private array $attributes = [];
-    /** @var array<string, array<string, mixed>> */
+    
     private array $relations = [];
-    /** @var array<string, mixed> */
+    
     private array $fetchedValuesContainer = [];
-    /** @var array<string, mixed> */
+    
     private array $valuesContainer = [];
 
-    /**
-     * @deprecated As of v7.0. Use `getId`. To be changed to protected.
-     * @todo Change to protected in v9.0.
-     * @var ?string
-     */
+    
     public $id = null;
 
-    /**
-     * @param array{
-     *   attributes?: array<string, array<string, mixed>>,
-     *   relations?: array<string, array<string, mixed>>,
-     *   fields?: array<string, array<string, mixed>>
-     * } $defs
-     */
+    
     public function __construct(
         string $entityType,
         array $defs,
@@ -86,7 +50,7 @@ class BaseEntity implements Entity
         $this->entityType = $entityType;
         $this->entityManager = $entityManager;
 
-        $this->attributes = $defs['attributes'] /*?? $defs['fields']*/ ?? $this->attributes;
+        $this->attributes = $defs['attributes']  ?? $this->attributes;
         $this->relations = $defs['relations'] ?? $this->relations;
 
         if ($valueAccessorFactory) {
@@ -94,12 +58,10 @@ class BaseEntity implements Entity
         }
     }
 
-    /**
-     * Get an entity ID.
-     */
+    
     public function getId(): string
     {
-        /** @var ?string $id */
+        
         $id = $this->get('id');
 
         if ($id === null) {
@@ -118,41 +80,25 @@ class BaseEntity implements Entity
         return $this->id !== null;
     }
 
-    /**
-     * Clear an attribute value.
-     */
+    
     public function clear(string $attribute): void
     {
         unset($this->valuesContainer[$attribute]);
     }
 
-    /**
-     * Reset all attributes (empty an entity).
-     */
+    
     public function reset(): void
     {
         $this->valuesContainer = [];
     }
 
-    /**
-     * Set an attribute value or multiple attribute values.
-     *
-     * Two usage options:
-     * * `set(string $attribute, mixed $value)`
-     * * `set(array|object $valueMap)`
-     *
-     * @param string|stdClass|array<string, mixed> $attribute
-     * @param mixed $value
-     */
+    
     public function set($attribute, $value = null): void
     {
         $p1 = $attribute;
         $p2 = $value;
 
-        /**
-         * @var mixed $p1
-         * @var mixed $p2
-         */
+        
 
         if (is_array($p1) || is_object($p1)) {
             if (is_object($p1)) {
@@ -164,7 +110,7 @@ class BaseEntity implements Entity
             }
 
             if ($p2) {
-                // @todo Remove second parameter support in v9.0.
+                
                 trigger_error(
                     'Second parameter is deprecated in Entity::set(array, onlyAccessible).',
                     E_USER_DEPRECATED
@@ -206,23 +152,13 @@ class BaseEntity implements Entity
         throw new InvalidArgumentException();
     }
 
-    /**
-     * Set multiple attributes.
-     *
-     * @param array<string, mixed>|stdClass $valueMap Values.
-     * @since v8.1.0.
-     */
+    
     public function setMultiple(array|stdClass $valueMap): void
     {
         $this->set($valueMap);
     }
 
-    /**
-     * Get an attribute value.
-     *
-     * @param array<string, mixed> $params @deprecated  @todo Remove in v9.0.
-     * @retrun mixed
-     */
+    
     public function get(string $attribute, $params = [])
     {
         if ($attribute === 'id') {
@@ -239,7 +175,7 @@ class BaseEntity implements Entity
             return $this->getFromContainer($attribute);
         }
 
-        // @todo Remove support in v9.0.
+        
         if (!empty($params)) {
             trigger_error(
                 'Second parameter will be removed from the method Entity::get.',
@@ -247,7 +183,7 @@ class BaseEntity implements Entity
             );
         }
 
-        // @todo Remove support in v9.0.
+        
         if ($this->hasRelation($attribute) && $this->id && $this->entityManager) {
             trigger_error(
                 "Accessing related records with Entity::get is deprecated. " .
@@ -255,7 +191,7 @@ class BaseEntity implements Entity
                 E_USER_DEPRECATED
             );
 
-            /** @phpstan-ignore-next-line */
+            
             return $this->entityManager
                 ->getRepository($this->getEntityType())
                 ->findRelated($this, $attribute, $params);
@@ -264,29 +200,19 @@ class BaseEntity implements Entity
         return null;
     }
 
-    /**
-     * Set a value in the container.
-     *
-     * @param mixed $value
-     */
+    
     protected function setInContainer(string $attribute, $value): void
     {
         $this->valuesContainer[$attribute] = $value;
     }
 
-    /**
-     * whether an attribute is set in the container.
-     */
+    
     protected function hasInContainer(string $attribute): bool
     {
         return array_key_exists($attribute, $this->valuesContainer);
     }
 
-    /**
-     * Get a value from the container.
-     *
-     * @return mixed
-     */
+    
     protected function getFromContainer(string $attribute)
     {
         if (!$this->hasInContainer($attribute)) {
@@ -312,19 +238,13 @@ class BaseEntity implements Entity
         return $value;
     }
 
-    /**
-     * whether an attribute is set in the fetched-container.
-     */
+    
     protected function hasInFetchedContainer(string $attribute): bool
     {
         return array_key_exists($attribute, $this->fetchedValuesContainer);
     }
 
-    /**
-     * Get a value from the fetched-container.
-     *
-     * @return mixed
-     */
+    
     protected function getFromFetchedContainer(string $attribute)
     {
         if (!$this->hasInFetchedContainer($attribute)) {
@@ -350,9 +270,7 @@ class BaseEntity implements Entity
         return $value;
     }
 
-    /**
-     * Whether an attribute value is set.
-     */
+    
     public function has(string $attribute): bool
     {
         if ($attribute == 'id') {
@@ -372,9 +290,7 @@ class BaseEntity implements Entity
         return false;
     }
 
-    /**
-     * Whether a value object for a field can be gotten.
-     */
+    
     public function isValueObjectGettable(string $field): bool
     {
         if (!$this->valueAccessor) {
@@ -384,9 +300,7 @@ class BaseEntity implements Entity
         return $this->valueAccessor->isGettable($field);
     }
 
-    /**
-     * Get a value object for a field. NULL can be returned.
-     */
+    
     public function getValueObject(string $field): ?object
     {
         if (!$this->valueAccessor) {
@@ -396,11 +310,7 @@ class BaseEntity implements Entity
         return $this->valueAccessor->get($field);
     }
 
-    /**
-     * Set a value object for a field. NULL can be set.
-     *
-     * @throws RuntimeException
-     */
+    
     public function setValueObject(string $field, ?object $value): void
     {
         if (!$this->valueAccessor) {
@@ -465,10 +375,7 @@ class BaseEntity implements Entity
         return $value;
     }
 
-    /**
-     * @param mixed $value
-     * @return mixed[]|null
-     */
+    
     private function prepareArrayAttributeValue($value): ?array
     {
         if (is_string($value)) {
@@ -488,9 +395,7 @@ class BaseEntity implements Entity
         return $this->cloneArray($value);
     }
 
-    /**
-     * @param mixed $value
-     */
+    
     private function prepareObjectAttributeValue($value): ?stdClass
     {
         if (is_string($value)) {
@@ -530,7 +435,7 @@ class BaseEntity implements Entity
 
         $entityDefs = $defs->getEntity($this->entityType);
 
-        // This should not be removed for compatibility reasons.
+        
         if (!$entityDefs->hasAttribute($attribute)) {
             return null;
         }
@@ -569,94 +474,67 @@ class BaseEntity implements Entity
         return $foreignEntityDefs->getAttribute($foreign)->getType();
     }
 
-    /**
-     * Whether an entity is new.
-     */
+    
     public function isNew(): bool
     {
         return !$this->isNotNew;
     }
 
-    /**
-     * Set as not new. Meaning the entity is fetched or already saved.
-     */
+    
     public function setAsNotNew(): void
     {
         $this->isNotNew = true;
     }
 
-    /**
-     * Whether an entity has been saved. An entity can be already saved but not yet set as not-new.
-     * To prevent inserting second time if save is called in an after-save hook.
-     */
+    
     public function isSaved(): bool
     {
         return $this->isSaved;
     }
 
-    /**
-     * Set as saved.
-     */
+    
     public function setAsSaved(): void
     {
         $this->isSaved = true;
     }
 
-    /**
-     * Get an entity type.
-     */
+    
     public final function getEntityType(): string
     {
         return $this->entityType;
     }
 
-    /**
-     * @deprecated As of v6.0. Use `hasAttribute`.
-     * @param string $name
-     * @return bool
-     */
+    
     public function hasField($name)
     {
         return $this->hasAttribute($name);
     }
 
-    /**
-     * Whether an entity type has an attribute defined.
-     */
+    
     public function hasAttribute(string $attribute): bool
     {
         return isset($this->attributes[$attribute]);
     }
 
-    /**
-     * Whether an entity type has a relation defined.
-     */
+    
     public function hasRelation(string $relation): bool
     {
         return isset($this->relations[$relation]);
     }
 
-    /**
-     * Get attribute list defined for an entity type.
-     */
+    
     public function getAttributeList(): array
     {
         return array_keys($this->attributes);
     }
 
-    /**
-     * Get relation list defined for an entity type.
-     */
+    
     public function getRelationList(): array
     {
         return array_keys($this->relations);
     }
 
-    /**
-     * @deprecated As of v6.0. Use `getValueMap`.
-     * @todo Remove in v9.0.
-     * @return array<string, mixed>
-     */
+    
     public function toArray()
     {
         $arr = [];
@@ -678,9 +556,7 @@ class BaseEntity implements Entity
         return $arr;
     }
 
-    /**
-     * Get values.
-     */
+    
     public function getValueMap(): stdClass
     {
         $array = $this->toArray();
@@ -688,9 +564,7 @@ class BaseEntity implements Entity
         return (object) $array;
     }
 
-    /**
-     * Get an attribute type.
-     */
+    
     public function getAttributeType(string $attribute): ?string
     {
         if (!isset($this->attributes[$attribute])) {
@@ -700,9 +574,7 @@ class BaseEntity implements Entity
         return $this->attributes[$attribute]['type'] ?? null;
     }
 
-    /**
-     * Get a relation type.
-     */
+    
     public function getRelationType(string $relation): ?string
     {
         if (!isset($this->relations[$relation])) {
@@ -712,11 +584,7 @@ class BaseEntity implements Entity
         return $this->relations[$relation]['type'] ?? null;
     }
 
-    /**
-     * Get an attribute parameter.
-     *
-     * @return mixed
-     */
+    
     public function getAttributeParam(string $attribute, string $name)
     {
         if (!isset($this->attributes[$attribute])) {
@@ -726,11 +594,7 @@ class BaseEntity implements Entity
         return $this->attributes[$attribute][$name] ?? null;
     }
 
-    /**
-     * Get a relation parameter.
-     *
-     * @return mixed
-     */
+    
     public function getRelationParam(string $relation, string $name)
     {
         if (!isset($this->relations[$relation])) {
@@ -740,27 +604,19 @@ class BaseEntity implements Entity
         return $this->relations[$relation][$name] ?? null;
     }
 
-    /**
-     * Whether is fetched from DB.
-     */
+    
     public function isFetched(): bool
     {
         return $this->isFetched;
     }
 
-    /**
-     * @deprecated As of v6.0. Use `isAttributeChanged`.
-     * @param string $name
-     * @return bool
-     */
+    
     public function isFieldChanged($name)
     {
         return $this->has($name) && ($this->get($name) != $this->getFetched($name));
     }
 
-    /**
-     * Whether an attribute was changed (since syncing with DB).
-     */
+    
     public function isAttributeChanged(string $name): bool
     {
         if (!$this->has($name)) {
@@ -771,7 +627,7 @@ class BaseEntity implements Entity
             return true;
         }
 
-        /** @var string $type */
+        
         $type = $this->getAttributeType($name);
 
         return !self::areValuesEqual(
@@ -782,18 +638,13 @@ class BaseEntity implements Entity
         );
     }
 
-    /**
-     * Whether an attribute was written (since syncing with DB) regardless being changed.
-     */
+    
     public function isAttributeWritten(string $name): bool
     {
         return $this->writtenMap[$name] ?? false;
     }
 
-    /**
-     * @param mixed $v1
-     * @param mixed $v2
-     */
+    
     protected static function areValuesEqual(string $type, $v1, $v2, bool $isUnordered = false): bool
     {
         if ($type === self::JSON_ARRAY) {
@@ -862,9 +713,7 @@ class BaseEntity implements Entity
         return $v1 === $v2;
     }
 
-    /**
-     * Set a fetched value for a specific attribute.
-     */
+    
     public function setFetched(string $attribute, $value): void
     {
         $preparedValue = $this->prepareAttributeValue($attribute, $value);
@@ -872,11 +721,7 @@ class BaseEntity implements Entity
         $this->fetchedValuesContainer[$attribute] = $preparedValue;
     }
 
-    /**
-     * Get a fetched value of a specific attribute.
-     *
-     * @return mixed
-     */
+    
     public function getFetched(string $attribute)
     {
         if ($attribute === 'id') {
@@ -890,9 +735,7 @@ class BaseEntity implements Entity
         return null;
     }
 
-    /**
-     * Whether a fetched value is set for a specific attribute.
-     */
+    
     public function hasFetched(string $attribute): bool
     {
         if ($attribute === 'id') {
@@ -902,18 +745,13 @@ class BaseEntity implements Entity
         return $this->hasInFetchedContainer($attribute);
     }
 
-    /**
-     * Clear all set fetched values.
-     */
+    
     public function resetFetchedValues(): void
     {
         $this->fetchedValuesContainer = [];
     }
 
-    /**
-     * Copy all current values to fetched values. All current attribute values will beset as those
-     * that are fetched from DB.
-     */
+    
     public function updateFetchedValues(): void
     {
         $this->fetchedValuesContainer = $this->valuesContainer;
@@ -925,10 +763,7 @@ class BaseEntity implements Entity
         $this->writtenMap = [];
     }
 
-    /**
-     * Set an entity as fetched. All current attribute values will be set as those that are fetched
-     * from DB.
-     */
+    
     public function setAsFetched(): void
     {
         $this->isFetched = true;
@@ -938,9 +773,7 @@ class BaseEntity implements Entity
         $this->updateFetchedValues();
     }
 
-    /**
-     * Whether an entity is being saved.
-     */
+    
     public function isBeingSaved(): bool
     {
         return $this->isBeingSaved;
@@ -956,9 +789,7 @@ class BaseEntity implements Entity
         $this->isBeingSaved = false;
     }
 
-    /**
-     * Set defined default values.
-     */
+    
     public function populateDefaults(): void
     {
         foreach ($this->attributes as $attribute => $defs) {
@@ -970,12 +801,7 @@ class BaseEntity implements Entity
         }
     }
 
-    /**
-     * Clone an array value.
-     *
-     * @param mixed[]|null $value
-     * @return mixed[]
-     */
+    
     protected function cloneArray(?array $value): ?array
     {
         if ($value === null) {
@@ -998,7 +824,7 @@ class BaseEntity implements Entity
 
         $copy = [];
 
-        /** @var array<int, stdClass|mixed[]|scalar|null> $value */
+        
 
         foreach ($value as $i => $item) {
             if (is_object($item)) {
@@ -1019,9 +845,7 @@ class BaseEntity implements Entity
         return $copy;
     }
 
-    /**
-     * Clone an object value.
-     */
+    
     protected function cloneObject(?stdClass $value): ?stdClass
     {
         if ($value === null) {
@@ -1031,7 +855,7 @@ class BaseEntity implements Entity
         $copy = (object) [];
 
         foreach (get_object_vars($value) as $k => $item) {
-            /** @var stdClass|mixed[]|scalar|null $item */
+            
 
             $key = $k;
 
@@ -1057,11 +881,7 @@ class BaseEntity implements Entity
         return $copy;
     }
 
-    /**
-     * @deprecated As of v7.0. Use `set` method instead.
-     * @todo Make protected in v9.0.
-     * @param array<string, mixed> $data
-     */
+    
     public function populateFromArray(array $data, bool $onlyAccessible = true, bool $reset = false): void
     {
         if ($reset) {
@@ -1089,13 +909,7 @@ class BaseEntity implements Entity
         }
     }
 
-    /**
-     * @deprecated As of v7.0. Use `setInContainer` method.
-     * @todo Remove in v9.0.
-     *
-     * @param string $attribute
-     * @param mixed $value
-     */
+    
     protected function setValue($attribute, $value): void
     {
         $this->setInContainer($attribute, $value);

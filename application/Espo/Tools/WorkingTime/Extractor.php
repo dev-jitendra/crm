@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Tools\WorkingTime;
 
@@ -38,9 +12,7 @@ use Espo\Core\Field\Date;
 
 class Extractor
 {
-    /**
-     * @return array{DateTime,DateTime}[]
-     */
+    
     public function extract(Calendar $calendar, DateTime $from, DateTime $to): array
     {
         $pointer = $from->withTimezone($calendar->getTimezone());
@@ -73,10 +45,7 @@ class Extractor
         return $this->trim($list, $from, $to, $calendar);
     }
 
-    /**
-     * @param array{DateTime,DateTime}[] $list
-     * @return array{DateTime,DateTime}[]
-     */
+    
     private function trim(array $list, DateTime $from, DateTime $to, Calendar $calendar): array
     {
         $wasUnset = false;
@@ -134,9 +103,7 @@ class Extractor
         return $list;
     }
 
-    /**
-     * @return array{DateTime,DateTime}[]
-     */
+    
     public function extractAllDay(Calendar $calendar, DateTime $from, DateTime $to): array
     {
         $pointer = $from
@@ -177,9 +144,7 @@ class Extractor
         return $list;
     }
 
-    /**
-     * @return array{DateTime,DateTime}[]
-     */
+    
     public function extractInversion(Calendar $calendar, DateTime $from, DateTime $to): array
     {
         $list = $this->extract($calendar, $from, $to);
@@ -222,9 +187,7 @@ class Extractor
         return $listInverted;
     }
 
-    /**
-     * @return array{DateTime,DateTime}[]
-     */
+    
     public function extractAllDayInversion(Calendar $calendar, DateTime $from, DateTime $to): array
     {
         $list = $this->extractAllDay($calendar, $from, $to);
@@ -260,11 +223,7 @@ class Extractor
         return $listInverted;
     }
 
-    /**
-     * @param WorkingDate[] $workingDates
-     * @param WorkingDate[] $nonWorkingDates
-     * @param WorkingWeekday[] $workingWeekdays
-     */
+    
     private function isWorkingDay(
         DateTime $pointer,
         array $workingDates,
@@ -291,12 +250,7 @@ class Extractor
         return false;
     }
 
-    /**
-     * @param WorkingDate[] $workingDates
-     * @param WorkingDate[] $nonWorkingDates
-     * @param WorkingWeekday[] $workingWeekdays
-     * @return array{DateTime,DateTime}[]
-     */
+    
     private function extractIteration(
         DateTime $pointer,
         array $workingDates,
@@ -323,10 +277,7 @@ class Extractor
         return [];
     }
 
-    /**
-     * @param DateTime $pointer
-     * @param WorkingDate[] $dateList
-     */
+    
     private function findInDateList(DateTime $pointer, array $dateList): ?WorkingDate
     {
         $day = $pointer->getDay();
@@ -348,10 +299,7 @@ class Extractor
         return null;
     }
 
-    /**
-     * @param DateTime $pointer
-     * @param WorkingWeekday[] $dayList
-     */
+    
     private function findInWeekdayList(DateTime $pointer, array $dayList): ?WorkingWeekday
     {
         $dow = $pointer->getDayOfWeek();
@@ -365,9 +313,7 @@ class Extractor
         return null;
     }
 
-    /**
-     * @return array{DateTime,DateTime}[]
-     */
+    
     private function extractFromDay(DateTime $dateTime, HavingRanges $day): array
     {
         $pointer = $dateTime->toDateTime();

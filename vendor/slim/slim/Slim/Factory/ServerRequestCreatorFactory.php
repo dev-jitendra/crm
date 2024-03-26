@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -30,9 +26,7 @@ class ServerRequestCreatorFactory
         return static::determineServerRequestCreator();
     }
 
-    /**
-     * @throws RuntimeException
-     */
+    
     public static function determineServerRequestCreator(): ServerRequestCreatorInterface
     {
         if (static::$serverRequestCreator) {
@@ -41,7 +35,7 @@ class ServerRequestCreatorFactory
 
         $psr17FactoryProvider = static::$psr17FactoryProvider ?? new Psr17FactoryProvider();
 
-        /** @var Psr17Factory $psr17Factory */
+        
         foreach ($psr17FactoryProvider->getFactories() as $psr17Factory) {
             if ($psr17Factory::isServerRequestCreatorAvailable()) {
                 $serverRequestCreator = $psr17Factory::getServerRequestCreator();
@@ -53,7 +47,7 @@ class ServerRequestCreatorFactory
             "Could not detect any ServerRequest creator implementations. " .
             "Please install a supported implementation in order to use `App::run()` " .
             "without having to pass in a `ServerRequest` object. " .
-            "See https://github.com/slimphp/Slim/blob/4.x/README.md for a list of supported implementations."
+            "See https:
         );
     }
 

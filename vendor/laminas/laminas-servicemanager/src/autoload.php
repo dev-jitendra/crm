@@ -1,4 +1,4 @@
-<?php // phpcs:disable WebimpressCodingStandard.PHP.CorrectClassNameCase.Invalid
+<?php 
 
 
 declare(strict_types=1);

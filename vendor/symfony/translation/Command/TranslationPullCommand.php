@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation\Command;
 
@@ -26,9 +19,7 @@ use Symfony\Component\Translation\Provider\TranslationProviderCollection;
 use Symfony\Component\Translation\Reader\TranslationReaderInterface;
 use Symfony\Component\Translation\Writer\TranslationWriterInterface;
 
-/**
- * @author Mathieu Santostefano <msantostefano@protonmail.com>
- */
+
 #[AsCommand(name: 'translation:pull', description: 'Pull translations from a given provider.')]
 final class TranslationPullCommand extends Command
 {
@@ -134,7 +125,7 @@ EOF
 
         switch ($format) {
             case 'xlf20': $xliffVersion = '2.0';
-                // no break
+                
             case 'xlf12': $format = 'xlf';
         }
 
@@ -166,7 +157,7 @@ EOF
 
         $localTranslations = $this->readLocalTranslations($locales, $domains, $this->transPaths);
 
-        // Append pulled translations to local ones.
+        
         $localTranslations->addBag($providerTranslations->diff($localTranslations));
 
         foreach ($localTranslations->getCatalogues() as $catalogue) {

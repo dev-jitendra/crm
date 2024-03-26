@@ -10,11 +10,7 @@ use PDOException;
 
 final class Driver extends AbstractMySQLDriver
 {
-    /**
-     * {@inheritdoc}
-     *
-     * @return Connection
-     */
+    
     public function connect(array $params)
     {
         $driverOptions = $params['driverOptions'] ?? [];
@@ -37,11 +33,7 @@ final class Driver extends AbstractMySQLDriver
         return new Connection($pdo);
     }
 
-    /**
-     * Constructs the MySQL PDO DSN.
-     *
-     * @param mixed[] $params
-     */
+    
     private function constructPdoDsn(array $params): string
     {
         $dsn = 'mysql:';

@@ -1,38 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Roy
- * - Stephan
- * - François B
- * - Tim Fish
- * - Kevin Huang
- * - Jacob Middag
- * - JD Isaacks
- * - Roy
- * - Stephan
- * - François B
- * - Tim Fish
- * - Jacob Middag
- * - JD Isaacks
- * - Propaganistas
- * - MegaXLR
- * - adriaanzon
- * - MonkeyPhysics
- * - JeroenG
- * - RikSomers
- * - proclame
- * - Rik de Groot (hwdegroot)
- */
+
+
 return [
     'year' => ':count jaar|:count jaar',
     'a_year' => 'een jaar|:count jaar',
@@ -70,7 +40,7 @@ return [
     'diff_before_yesterday' => 'eergisteren',
     'period_recurrences' => ':count keer',
     'period_interval' => function (string $interval = '') {
-        /** @var string $output */
+        
         $output = preg_replace('/^(een|één|1)\s+/u', '', $interval);
 
         if (preg_match('/^(een|één|1)( jaar|j| uur|u)/u', $interval)) {

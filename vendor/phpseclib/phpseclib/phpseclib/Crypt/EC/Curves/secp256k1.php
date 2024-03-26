@@ -1,25 +1,14 @@
 <?php
 
-/**
- * secp256k1
- *
- * This is the curve used in Bitcoin
- *
- * PHP version 5 and 7
- *
- * @author    Jim Wigginton <terrafrost@php.net>
- * @copyright 2017 Jim Wigginton
- * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
- * @link      http://pear.php.net/package/Math_BigInteger
- */
+
 
 namespace phpseclib3\Crypt\EC\Curves;
 
-//use phpseclib3\Crypt\EC\BaseCurves\Prime;
+
 use phpseclib3\Crypt\EC\BaseCurves\KoblitzPrime;
 use phpseclib3\Math\BigInteger;
 
-//class secp256k1 extends Prime
+
 class secp256k1 extends KoblitzPrime
 {
     public function __construct()

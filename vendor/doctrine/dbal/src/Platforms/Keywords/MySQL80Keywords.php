@@ -6,32 +6,22 @@ use Doctrine\Deprecations\Deprecation;
 
 use function array_merge;
 
-/**
- * MySQL 8.0 reserved keywords list.
- */
+
 class MySQL80Keywords extends MySQL57Keywords
 {
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated
-     */
+    
     public function getName()
     {
         Deprecation::triggerIfCalledFromOutside(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pull/5433',
+            'https:
             'MySQL80Keywords::getName() is deprecated.',
         );
 
         return 'MySQL80';
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @link https://dev.mysql.com/doc/refman/8.0/en/keywords.html
-     */
+    
     protected function getKeywords()
     {
         $keywords = parent::getKeywords();

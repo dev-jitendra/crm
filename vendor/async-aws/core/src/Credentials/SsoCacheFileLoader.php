@@ -8,17 +8,13 @@ use AsyncAws\Core\EnvVar;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
-/**
- * Load and parse AWS SSO cache file.
- */
+
 final class SsoCacheFileLoader
 {
     public const KEY_ACCESS_TOKEN = 'accessToken';
     public const KEY_EXPIRES_AT = 'expiresAt';
 
-    /**
-     * @var LoggerInterface
-     */
+    
     private $logger;
 
     public function __construct(?LoggerInterface $logger = null)
@@ -26,9 +22,7 @@ final class SsoCacheFileLoader
         $this->logger = $logger ?? new NullLogger();
     }
 
-    /**
-     * @return array<string, string>
-     */
+    
     public function loadSsoCacheFile(string $ssoStartUrl): array
     {
         $filepath = sprintf('%s/.aws/sso/cache/%s.json', $this->getHomeDir(), sha1($ssoStartUrl));
@@ -65,12 +59,12 @@ final class SsoCacheFileLoader
 
     private function getHomeDir(): string
     {
-        // On Linux/Unix-like systems, use the HOME environment variable
+        
         if (null !== $homeDir = EnvVar::get('HOME')) {
             return $homeDir;
         }
 
-        // Get the HOMEDRIVE and HOMEPATH values for Windows hosts
+        
         $homeDrive = EnvVar::get('HOMEDRIVE');
         $homePath = EnvVar::get('HOMEPATH');
 

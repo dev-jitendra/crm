@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Modules\Crm\Services;
 
@@ -47,26 +21,20 @@ use Espo\Core\Utils\Metadata;
 use PDO;
 use Espo\Core\Di;
 
-/**
- * @extends Record<\Espo\Modules\Crm\Entities\TargetList>
- */
+
 class TargetList extends Record implements
 
     Di\HookManagerAware
 {
     use Di\HookManagerSetter;
 
-    /**
-     * @var string[]
-     */
+    
     protected $targetLinkList = [];
     protected $noEditAccessRequiredLinkList = [];
     protected $duplicatingLinkList = [];
     protected $linkMandatorySelectAttributeList = [];
 
-    /**
-     * @var array<string, string>
-     */
+    
     protected $entityTypeLinkMap = [];
 
     public function setMetadata(Metadata $metadata): void
@@ -79,7 +47,7 @@ class TargetList extends Record implements
         $this->noEditAccessRequiredLinkList = $this->targetLinkList;
 
         foreach ($this->targetLinkList as $link) {
-            /** @var string $link */
+            
             $this->linkMandatorySelectAttributeList[$link] = ['targetListIsOptedOut'];
 
             $entityType = $this->entityManager
@@ -113,13 +81,7 @@ class TargetList extends Record implements
         }
     }
 
-    /**
-     * @param string[] $includingActionList
-     * @param string[] $excludingActionList
-     * @throws BadRequest
-     * @throws NotFound
-     * @throws Forbidden
-     */
+    
     protected function populateFromCampaignLog(
         TargetListEntity $entity,
         string $sourceCampaignId,
@@ -211,14 +173,10 @@ class TargetList extends Record implements
         }
     }
 
-    /**
-     * @throws Forbidden
-     * @throws Error
-     * @throws NotFound
-     */
+    
     public function unlinkAll(string $id, string $link): void
     {
-        /** @var ?TargetListEntity $entity */
+        
         $entity = $this->getRepository()->getById($id);
 
         if (!$entity) {
@@ -261,7 +219,7 @@ class TargetList extends Record implements
 
     protected function getOptedOutSelectQueryForLink(string $targetListId, string $link): Select
     {
-        /** @var TargetListEntity $seed */
+        
         $seed = $this->getRepository()->getNew();
 
         $entityType = $seed->getRelationParam($link, 'entity');
@@ -307,10 +265,7 @@ class TargetList extends Record implements
             ->build();
     }
 
-    /**
-     * @return RecordCollection<Entity>
-     * @throws Error
-     */
+    
     protected function findLinkedOptedOut(string $id, SearchParams $searchParams): RecordCollection
     {
         $offset = $searchParams->getOffset() ?? 0;
@@ -365,14 +320,11 @@ class TargetList extends Record implements
             $collection[] = $itemEntity;
         }
 
-        /** @var RecordCollection<Entity> */
+        
         return new RecordCollection($collection, $totalCount);
     }
 
-    /**
-     * @throws NotFound
-     * @throws Error
-     */
+    
     public function optOut(string $id, string $targetType, string $targetId): void
     {
         $targetList = $this->entityManager->getEntity('TargetList', $id);
@@ -409,10 +361,7 @@ class TargetList extends Record implements
         $this->hookManager->process('TargetList', 'afterOptOut', $targetList, [], $hookData);
     }
 
-    /**
-     * @throws NotFound
-     * @throws Error
-     */
+    
     public function cancelOptOut(string $id, string $targetType, string $targetId): void
     {
         $targetList = $this->entityManager->getEntity('TargetList', $id);
@@ -449,9 +398,7 @@ class TargetList extends Record implements
         $this->hookManager->process('TargetList', 'afterCancelOptOut', $targetList, [], $hookData);
     }
 
-    /**
-     * @todo Don't use additionalColumnsConditions.
-     */
+    
     protected function duplicateLinks(Entity $entity, Entity $duplicatingEntity): void
     {
         $repository = $this->getRepository();

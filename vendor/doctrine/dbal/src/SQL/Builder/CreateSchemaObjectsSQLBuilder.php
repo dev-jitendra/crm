@@ -19,11 +19,7 @@ final class CreateSchemaObjectsSQLBuilder
         $this->platform = $platform;
     }
 
-    /**
-     * @return list<string>
-     *
-     * @throws Exception
-     */
+    
     public function buildSQL(Schema $schema): array
     {
         return array_merge(
@@ -33,13 +29,7 @@ final class CreateSchemaObjectsSQLBuilder
         );
     }
 
-    /**
-     * @param list<string> $namespaces
-     *
-     * @return list<string>
-     *
-     * @throws Exception
-     */
+    
     private function buildNamespaceStatements(array $namespaces): array
     {
         $statements = [];
@@ -53,25 +43,13 @@ final class CreateSchemaObjectsSQLBuilder
         return $statements;
     }
 
-    /**
-     * @param list<Table> $tables
-     *
-     * @return list<string>
-     *
-     * @throws Exception
-     */
+    
     private function buildTableStatements(array $tables): array
     {
         return $this->platform->getCreateTablesSQL($tables);
     }
 
-    /**
-     * @param list<Sequence> $sequences
-     *
-     * @return list<string>
-     *
-     * @throws Exception
-     */
+    
     private function buildSequenceStatements(array $sequences): array
     {
         $statements = [];

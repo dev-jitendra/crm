@@ -6,33 +6,21 @@ namespace AsyncAws\Core\Credentials;
 
 use AsyncAws\Core\Configuration;
 
-/**
- * Immutable store for Credentials parameters.
- *
- * @author Jérémy Derussé <jeremy@derusse.com>
- */
+
 final class Credentials implements CredentialProvider
 {
     private const EXPIRATION_DRIFT = 30;
 
-    /**
-     * @var string
-     */
+    
     private $accessKeyId;
 
-    /**
-     * @var string
-     */
+    
     private $secretKey;
 
-    /**
-     * @var string|null
-     */
+    
     private $sessionToken;
 
-    /**
-     * @var \DateTimeImmutable|null
-     */
+    
     private $expireDate;
 
     public function __construct(

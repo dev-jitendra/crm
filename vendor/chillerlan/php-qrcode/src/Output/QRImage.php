@@ -1,16 +1,5 @@
 <?php
-/**
- * Class QRImage
- *
- * @filesource   QRImage.php
- * @created      05.12.2015
- * @package      chillerlan\QRCode\Output
- * @author       Smiley <smiley@chillerlan.net>
- * @copyright    2015 Smiley
- * @license      MIT
- *
- * @noinspection PhpComposerExtensionStubsInspection
- */
+
 
 namespace chillerlan\QRCode\Output;
 
@@ -23,18 +12,10 @@ use function array_values, base64_encode, call_user_func, count, extension_loade
 	imagecreatetruecolor, imagedestroy, imagefilledrectangle, imagegif, imagejpeg, imagepng, in_array,
 	is_array, ob_end_clean, ob_get_contents, ob_start, range, sprintf;
 
-/**
- * Converts the matrix into GD images, raw or base64 output (requires ext-gd)
- *
- * @see http://php.net/manual/book.image.php
- */
+
 class QRImage extends QROutputAbstract{
 
-	/**
-	 * GD image types that support transparency
-	 *
-	 * @var string[]
-	 */
+	
 	protected const TRANSPARENCY_TYPES = [
 		QRCode::OUTPUT_IMAGE_PNG,
 		QRCode::OUTPUT_IMAGE_GIF,
@@ -42,33 +23,20 @@ class QRImage extends QROutputAbstract{
 
 	protected string $defaultMode = QRCode::OUTPUT_IMAGE_PNG;
 
-	/**
-	 * The GD image resource
-	 *
-	 * @see imagecreatetruecolor()
-	 * @var resource|\GdImage
-	 *
-	 * @phan-suppress PhanUndeclaredTypeProperty
-	 */
+	
 	protected $image;
 
-	/**
-	 * @inheritDoc
-	 *
-	 * @throws \chillerlan\QRCode\QRCodeException
-	 */
+	
 	public function __construct(SettingsContainerInterface $options, QRMatrix $matrix){
 
 		if(!extension_loaded('gd')){
-			throw new QRCodeException('ext-gd not loaded'); // @codeCoverageIgnore
+			throw new QRCodeException('ext-gd not loaded'); 
 		}
 
 		parent::__construct($options, $matrix);
 	}
 
-	/**
-	 * @inheritDoc
-	 */
+	
 	protected function setModuleValues():void{
 
 		foreach($this::DEFAULT_MODULE_VALUES as $M_TYPE => $defaultValue){
@@ -87,22 +55,16 @@ class QRImage extends QROutputAbstract{
 
 	}
 
-	/**
-	 * @inheritDoc
-	 *
-	 * @return string|resource|\GdImage
-	 *
-	 * @phan-suppress PhanUndeclaredTypeReturnType, PhanTypeMismatchReturn
-	 */
+	
 	public function dump(string $file = null){
 		$file ??= $this->options->cachefile;
 
 		$this->image = imagecreatetruecolor($this->length, $this->length);
 
-		// avoid: Indirect modification of overloaded property $imageTransparencyBG has no effect
-		// https://stackoverflow.com/a/10455217
+		
+		
 		$tbg        = $this->options->imageTransparencyBG;
-		/** @phan-suppress-next-line PhanParamTooFewInternalUnpack */
+		
 		$background = imagecolorallocate($this->image, ...$tbg);
 
 		if((bool)$this->options->imageTransparent && in_array($this->options->outputType, $this::TRANSPARENCY_TYPES, true)){
@@ -134,9 +96,7 @@ class QRImage extends QROutputAbstract{
 		return $imageData;
 	}
 
-	/**
-	 * Creates a single QR pixel with the given settings
-	 */
+	
 	protected function setPixel(int $x, int $y, array $rgb):void{
 		imagefilledrectangle(
 			$this->image,
@@ -144,28 +104,24 @@ class QRImage extends QROutputAbstract{
 			$y * $this->scale,
 			($x + 1) * $this->scale,
 			($y + 1) * $this->scale,
-			/** @phan-suppress-next-line PhanParamTooFewInternalUnpack */
+			
 			imagecolorallocate($this->image, ...$rgb)
 		);
 	}
 
-	/**
-	 * Creates the final image by calling the desired GD output function
-	 *
-	 * @throws \chillerlan\QRCode\Output\QRCodeOutputException
-	 */
+	
 	protected function dumpImage():string{
 		ob_start();
 
 		try{
 			call_user_func([$this, $this->outputMode ?? $this->defaultMode]);
 		}
-		// not going to cover edge cases
-		// @codeCoverageIgnoreStart
+		
+		
 		catch(Exception $e){
 			throw new QRCodeOutputException($e->getMessage());
 		}
-		// @codeCoverageIgnoreEnd
+		
 
 		$imageData = ob_get_contents();
 		imagedestroy($this->image);
@@ -175,11 +131,7 @@ class QRImage extends QROutputAbstract{
 		return $imageData;
 	}
 
-	/**
-	 * PNG output
-	 *
-	 * @return void
-	 */
+	
 	protected function png():void{
 		imagepng(
 			$this->image,
@@ -190,20 +142,12 @@ class QRImage extends QROutputAbstract{
 		);
 	}
 
-	/**
-	 * Jiff - like... JitHub!
-	 *
-	 * @return void
-	 */
+	
 	protected function gif():void{
 		imagegif($this->image);
 	}
 
-	/**
-	 * JPG output
-	 *
-	 * @return void
-	 */
+	
 	protected function jpg():void{
 		imagejpeg(
 			$this->image,

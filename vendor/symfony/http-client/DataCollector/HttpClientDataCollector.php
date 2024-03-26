@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpClient\DataCollector;
 
@@ -18,14 +11,10 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 use Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface;
 use Symfony\Component\VarDumper\Caster\ImgStub;
 
-/**
- * @author Jérémy Romey <jeremy@free-agent.fr>
- */
+
 final class HttpClientDataCollector extends DataCollector implements LateDataCollectorInterface
 {
-    /**
-     * @var TraceableHttpClient[]
-     */
+    
     private $clients = [];
 
     public function registerClient(string $name, TraceableHttpClient $client)
@@ -33,9 +22,7 @@ final class HttpClientDataCollector extends DataCollector implements LateDataCol
         $this->clients[$name] = $client;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function collect(Request $request, Response $response, \Throwable $exception = null)
     {
         $this->reset();
@@ -75,9 +62,7 @@ final class HttpClientDataCollector extends DataCollector implements LateDataCol
         return $this->data['error_count'] ?? 0;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getName(): string
     {
         return 'http_client';
@@ -160,7 +145,7 @@ final class HttpClientDataCollector extends DataCollector implements LateDataCol
 
             $debugInfo = array_diff_key($info, $baseInfo);
             $info = ['info' => $debugInfo] + array_diff_key($info, $debugInfo) + $content;
-            unset($traces[$i]['info']); // break PHP reference used by TraceableHttpClient
+            unset($traces[$i]['info']); 
             $traces[$i]['info'] = $this->cloneVar($info);
             $traces[$i]['options'] = $this->cloneVar($trace['options']);
         }

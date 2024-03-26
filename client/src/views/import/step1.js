@@ -1,34 +1,8 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 import View from 'view';
 import Model from 'model';
-// noinspection NpmUsedModulesInstalled
+
 import intlTelInputGlobals from 'intl-tel-input-globals';
 
 class Step1ImportView extends View {
@@ -36,7 +10,7 @@ class Step1ImportView extends View {
     template = 'import/step-1'
 
     events = {
-        /** @this Step1ImportView */
+        
         'change #import-file': function (e) {
             const files = e.currentTarget.files;
 
@@ -44,11 +18,11 @@ class Step1ImportView extends View {
                 this.loadFile(files[0]);
             }
         },
-        /** @this Step1ImportView */
+        
         'click button[data-action="next"]': function () {
             this.next();
         },
-        /** @this Step1ImportView */
+        
         'click button[data-action="saveAsDefault"]': function () {
             this.saveAsDefault();
         },
@@ -56,7 +30,7 @@ class Step1ImportView extends View {
 
     getEntityList() {
         const list = [];
-        /** @type {Object.<string, Record>} */
+        
         const scopes = this.getMetadata().get('scopes');
 
         for (const scopeName in scopes) {
@@ -429,11 +403,9 @@ class Step1ImportView extends View {
         this.controlFieldVisibility();
     }
 
-    /**
-     * @return {import('./index').default}
-     */
+    
     getParentIndexView() {
-        // noinspection JSValidateTypes
+        
         return this.getParentView();
     }
 
@@ -445,9 +417,7 @@ class Step1ImportView extends View {
         this.$el.find('[data-action="saveAsDefault"]').addClass('hidden');
     }
 
-    /**
-     * @return {module:views/fields/base}
-     */
+    
     getFieldView(field) {
         return this.getView(field + 'Field');
     }
@@ -482,9 +452,7 @@ class Step1ImportView extends View {
         });
     }
 
-    /**
-     * @param {File} file
-     */
+    
     loadFile(file) {
         const blob = file.slice(0, 1024 * 512);
 
@@ -515,9 +483,7 @@ class Step1ImportView extends View {
         reader.readAsText(file);
     }
 
-    /**
-     * @param {string} name
-     */
+    
     setFileName(name) {
         this.$el.find('.import-file-name').text(name);
         this.$el.find('.import-file-info').text('');
@@ -572,14 +538,14 @@ class Step1ImportView extends View {
 
         const objPattern = new RegExp(
             (
-                // Delimiters.
+                
                 "(\\" + strDelimiter + "|\\r?\\n|\\r|^)" +
 
-                // Quoted fields.
+                
                 "(?:"+strQualifier+"([^"+strQualifier+"]*(?:"+strQualifier+""+strQualifier+
                     "[^"+strQualifier+"]*)*)"+strQualifier+"|" +
 
-                // Standard fields.
+                
                 "([^"+strQualifier+"\\" + strDelimiter + "\\r\\n]*))"
             ),
             "gi"

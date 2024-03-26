@@ -1,39 +1,11 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/fields/wysiwyg */
+
+
 
 import TextFieldView from 'views/fields/text';
 import {init as initSummernoteCustom} from 'helpers/misc/summernote-custom';
 
-/**
- * A wysiwyg field.
- */
+
 class WysiwygFieldView extends TextFieldView {
 
     type = 'wysiwyg'
@@ -56,15 +28,15 @@ class WysiwygFieldView extends TextFieldView {
     noStylesheet = false
 
     events = {
-        /** @this WysiwygFieldView */
+        
         'click .note-editable': function () {
             this.fixPopovers();
         },
-        /** @this WysiwygFieldView */
+        
         'focus .note-editable': function () {
             this.$noteEditor.addClass('in-focus');
         },
-        /** @this WysiwygFieldView */
+        
         'blur .note-editable': function () {
             this.$noteEditor.removeClass('in-focus');
         },
@@ -167,7 +139,7 @@ class WysiwygFieldView extends TextFieldView {
         data.useIframe = this.useIframe;
         data.isPlain = this.isPlain();
 
-        // noinspection JSValidateTypes
+        
         return data;
     }
 
@@ -305,7 +277,7 @@ class WysiwygFieldView extends TextFieldView {
 
         const $iframe = this.$el.find('iframe');
 
-        /** @type {HTMLIFrameElement} */
+        
         const iframeElement = this.iframe = $iframe.get(0);
 
         if (!iframeElement) {
@@ -361,7 +333,7 @@ class WysiwygFieldView extends TextFieldView {
 
         const $document = $(documentElement);
 
-        // Make dropdowns closed.
+        
         $document.on('click', () => {
             const event = new MouseEvent('click', {
                 bubbles: true,
@@ -370,7 +342,7 @@ class WysiwygFieldView extends TextFieldView {
             $iframe[0].dispatchEvent(event);
         });
 
-        // Make notifications & global-search popup closed.
+        
         $document.on('mouseup', () => {
             const event = new MouseEvent('mouseup', {
                 bubbles: true,
@@ -379,9 +351,9 @@ class WysiwygFieldView extends TextFieldView {
             $iframe[0].dispatchEvent(event);
         });
 
-        // Make shortcuts working.
+        
         $document.on('keydown', e => {
-            const originalEvent = /** @type {KeyboardEvent} */ e.originalEvent;
+            const originalEvent =  e.originalEvent;
 
             const event = new KeyboardEvent('keydown', {
                 bubbles: true,
@@ -556,7 +528,7 @@ class WysiwygFieldView extends TextFieldView {
         let lastChangeKeydown = new Date();
         const changeKeydownInterval = this.changeInterval * 1000;
 
-        // noinspection JSUnusedGlobalSymbols
+        
         const options = {
             espoView: this,
             lang: this.getConfig().get('language'),
@@ -764,7 +736,7 @@ class WysiwygFieldView extends TextFieldView {
         const toolbarWidth = this.$toolbar.parent().width();
         let edgeTop, edgeTopAbsolute;
 
-        // noinspection JSIncompatibleTypesComparison
+        
         if ($target.get(0) === window.document) {
             const $buttonContainer = $target.find('.detail-button-container:not(.hidden)');
             const offset = $buttonContainer.offset();

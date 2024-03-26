@@ -9,14 +9,10 @@ use Throwable;
 
 final class UnableToCopyFile extends RuntimeException implements FilesystemOperationFailed
 {
-    /**
-     * @var string
-     */
+    
     private $source;
 
-    /**
-     * @var string
-     */
+    
     private $destination;
 
     public function source(): string

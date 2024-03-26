@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Routing\Matcher;
 
@@ -21,39 +14,27 @@ use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-/**
- * UrlMatcher matches URL based on a set of routes.
- *
- * @author Fabien Potencier <fabien@symfony.com>
- */
+
 class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
 {
     public const REQUIREMENT_MATCH = 0;
     public const REQUIREMENT_MISMATCH = 1;
     public const ROUTE_MATCH = 2;
 
-    /** @var RequestContext */
+    
     protected $context;
 
-    /**
-     * Collects HTTP methods that would be allowed for the request.
-     */
+    
     protected $allow = [];
 
-    /**
-     * Collects URI schemes that would be allowed for the request.
-     *
-     * @internal
-     */
+    
     protected array $allowSchemes = [];
 
     protected $routes;
     protected $request;
     protected $expressionLanguage;
 
-    /**
-     * @var ExpressionFunctionProviderInterface[]
-     */
+    
     protected $expressionLanguageProviders = [];
 
     public function __construct(RouteCollection $routes, RequestContext $context)
@@ -62,25 +43,19 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
         $this->context = $context;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function setContext(RequestContext $context)
     {
         $this->context = $context;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getContext(): RequestContext
     {
         return $this->context;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function match(string $pathinfo): array
     {
         $this->allow = $this->allowSchemes = [];
@@ -96,9 +71,7 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
         throw 0 < \count($this->allow) ? new MethodNotAllowedException(array_unique($this->allow)) : new ResourceNotFoundException(sprintf('No routes found for "%s".', $pathinfo));
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function matchRequest(Request $request): array
     {
         $this->request = $request;
@@ -115,18 +88,10 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
         $this->expressionLanguageProviders[] = $provider;
     }
 
-    /**
-     * Tries to match a URL with a set of routes.
-     *
-     * @param string $pathinfo The path info to be parsed
-     *
-     * @throws NoConfigurationException  If no routing configuration could be found
-     * @throws ResourceNotFoundException If the resource could not be found
-     * @throws MethodNotAllowedException If the resource was found but the request method is not allowed
-     */
+    
     protected function matchCollection(string $pathinfo, RouteCollection $routes): array
     {
-        // HEAD and GET are equivalent as per RFC
+        
         if ('HEAD' === $method = $this->context->getMethod()) {
             $method = 'GET';
         }
@@ -138,7 +103,7 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
             $staticPrefix = rtrim($compiledRoute->getStaticPrefix(), '/');
             $requiredMethods = $route->getMethods();
 
-            // check the static prefix of the URL first. Only use the more expensive preg_match when it matches
+            
             if ('' !== $staticPrefix && !str_starts_with($trimmedPathinfo, $staticPrefix)) {
                 continue;
             }
@@ -196,13 +161,7 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
         return [];
     }
 
-    /**
-     * Returns an array of values to use as request attributes.
-     *
-     * As this method requires the Route object, it is not available
-     * in matchers that do not have access to the matched Route instance
-     * (like the PHP and Apache matcher dumpers).
-     */
+    
     protected function getAttributes(Route $route, string $name, array $attributes): array
     {
         $defaults = $route->getDefaults();
@@ -215,14 +174,10 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
         return $this->mergeDefaults($attributes, $defaults);
     }
 
-    /**
-     * Handles specific route requirements.
-     *
-     * @return array The first element represents the status, the second contains additional information
-     */
+    
     protected function handleRouteRequirements(string $pathinfo, string $name, Route $route): array
     {
-        // expression condition
+        
         if ($route->getCondition() && !$this->getExpressionLanguage()->evaluate($route->getCondition(), ['context' => $this->context, 'request' => $this->request ?: $this->createRequest($pathinfo)])) {
             return [self::REQUIREMENT_MISMATCH, null];
         }
@@ -230,9 +185,7 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
         return [self::REQUIREMENT_MATCH, null];
     }
 
-    /**
-     * Get merged default parameters.
-     */
+    
     protected function mergeDefaults(array $params, array $defaults): array
     {
         foreach ($params as $key => $value) {
@@ -256,16 +209,14 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
         return $this->expressionLanguage;
     }
 
-    /**
-     * @internal
-     */
+    
     protected function createRequest(string $pathinfo): ?Request
     {
         if (!class_exists(Request::class)) {
             return null;
         }
 
-        return Request::create($this->context->getScheme().'://'.$this->context->getHost().$this->context->getBaseUrl().$pathinfo, $this->context->getMethod(), $this->context->getParameters(), [], [], [
+        return Request::create($this->context->getScheme().':
             'SCRIPT_FILENAME' => $this->context->getBaseUrl(),
             'SCRIPT_NAME' => $this->context->getBaseUrl(),
         ]);

@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Duplicate;
 
@@ -45,7 +19,7 @@ class Finder
 {
     private const LIMIT = 10;
 
-    /** @var array<string, ?WhereBuilder<Entity>> */
+    
     private array $whereBuilderMap = [];
 
     public function __construct(
@@ -54,9 +28,7 @@ class Finder
         private WhereBuilderFactory $whereBuilderFactory
     ) {}
 
-    /**
-     * Check whether an entity has a duplicate.
-     */
+    
     public function check(Entity $entity): bool
     {
         $where = $this->getWhere($entity);
@@ -68,11 +40,7 @@ class Finder
         return $this->checkByWhere($entity, $where);
     }
 
-    /**
-     * Find entity duplicates.
-     *
-     * @return ?Collection<Entity>
-     */
+    
     public function find(Entity $entity): ?Collection
     {
         $where = $this->getWhere($entity);
@@ -84,9 +52,7 @@ class Finder
         return $this->findByWhere($entity, $where);
     }
 
-    /**
-     * The method is public for backward compatibility.
-     */
+    
     public function checkByWhere(Entity $entity, WhereItem $where): bool
     {
         $entityType = $entity->getEntityType();
@@ -110,11 +76,7 @@ class Finder
         return (bool) $duplicate;
     }
 
-    /**
-     * The method is public for backward compatibility.
-     *
-     * @return ?Collection<Entity>
-     */
+    
     public function findByWhere(Entity $entity, WhereItem $where): ?Collection
     {
         $entityType = $entity->getEntityType();
@@ -168,9 +130,7 @@ class Finder
         return $builder?->build($entity);
     }
 
-    /**
-     * @return ?WhereBuilder<Entity>
-     */
+    
     private function loadWhereBuilder(string $entityType): ?WhereBuilder
     {
         if (!$this->whereBuilderFactory->has($entityType)) {

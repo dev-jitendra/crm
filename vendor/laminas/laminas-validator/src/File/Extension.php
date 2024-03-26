@@ -21,46 +21,34 @@ use function strtolower;
 use function substr;
 use function trim;
 
-/**
- * Validator for the file extension of a file
- */
+
 class Extension extends AbstractValidator
 {
     use FileInformationTrait;
 
-    /**
-     * @const string Error constants
-     */
+    
     public const FALSE_EXTENSION = 'fileExtensionFalse';
     public const NOT_FOUND       = 'fileExtensionNotFound';
 
-    /** @var array<string, string> Error message templates */
+    
     protected $messageTemplates = [
         self::FALSE_EXTENSION => 'File has an incorrect extension',
         self::NOT_FOUND       => 'File is not readable or does not exist',
     ];
 
-    /**
-     * Options for this validator
-     *
-     * @var array
-     */
+    
     protected $options = [
-        'case'                 => false, // Validate case sensitive
-        'extension'            => '', // List of extensions
-        'allowNonExistentFile' => false, // Allow validation even if file does not exist
+        'case'                 => false, 
+        'extension'            => '', 
+        'allowNonExistentFile' => false, 
     ];
 
-    /** @var array Error message template variables */
+    
     protected $messageVariables = [
         'extension' => ['options' => 'extension'],
     ];
 
-    /**
-     * Sets validator options
-     *
-     * @param  string|array|Traversable $options
-     */
+    
     public function __construct($options = null)
     {
         if ($options instanceof Traversable) {
@@ -92,33 +80,20 @@ class Extension extends AbstractValidator
         parent::__construct($options);
     }
 
-    /**
-     * Returns the case option
-     *
-     * @return bool
-     */
+    
     public function getCase()
     {
         return $this->options['case'];
     }
 
-    /**
-     * Sets the case to use
-     *
-     * @param  bool $case
-     * @return $this Provides a fluent interface
-     */
+    
     public function setCase($case)
     {
         $this->options['case'] = (bool) $case;
         return $this;
     }
 
-    /**
-     * Returns the set file extension
-     *
-     * @return array
-     */
+    
     public function getExtension()
     {
         if (
@@ -131,12 +106,7 @@ class Extension extends AbstractValidator
         return explode(',', $this->options['extension']);
     }
 
-    /**
-     * Sets the file extensions
-     *
-     * @param  string|array $extension The extensions to validate
-     * @return $this Provides a fluent interface
-     */
+    
     public function setExtension($extension)
     {
         $this->options['extension'] = null;
@@ -144,12 +114,7 @@ class Extension extends AbstractValidator
         return $this;
     }
 
-    /**
-     * Adds the file extensions
-     *
-     * @param  string|array $extension The extensions to add for validation
-     * @return $this Provides a fluent interface
-     */
+    
     public function addExtension($extension)
     {
         $extensions = $this->getExtension();
@@ -167,7 +132,7 @@ class Extension extends AbstractValidator
 
         $extensions = array_unique($extensions);
 
-        // Sanity check to ensure no empty values
+        
         foreach ($extensions as $key => $ext) {
             if (empty($ext)) {
                 unset($extensions[$key]);
@@ -178,41 +143,25 @@ class Extension extends AbstractValidator
         return $this;
     }
 
-    /**
-     * Returns whether or not to allow validation of non-existent files.
-     *
-     * @return bool
-     */
+    
     public function getAllowNonExistentFile()
     {
         return $this->options['allowNonExistentFile'];
     }
 
-    /**
-     * Sets the flag indicating whether or not to allow validation of non-existent files.
-     *
-     * @param  bool $flag Whether or not to allow validation of non-existent files.
-     * @return $this Provides a fluent interface
-     */
+    
     public function setAllowNonExistentFile($flag)
     {
         $this->options['allowNonExistentFile'] = (bool) $flag;
         return $this;
     }
 
-    /**
-     * Returns true if and only if the file extension of $value is included in the
-     * set extension list
-     *
-     * @param  string|array $value Real file to check for extension
-     * @param  array        $file  File data from \Laminas\File\Transfer\Transfer (optional)
-     * @return bool
-     */
+    
     public function isValid($value, $file = null)
     {
         $fileInfo = $this->getFileInfo($value, $file);
 
-        // Is file readable ?
+        
         if (
             ! $this->getAllowNonExistentFile()
             && (empty($fileInfo['file']) || false === is_readable($fileInfo['file']))

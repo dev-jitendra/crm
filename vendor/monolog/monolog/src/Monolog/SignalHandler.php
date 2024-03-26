@@ -1,13 +1,6 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Monolog package.
- *
- * (c) Jordi Boggiano <j.boggiano@seld.be>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Monolog;
 
@@ -15,20 +8,16 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use ReflectionExtension;
 
-/**
- * Monolog POSIX signal handler
- *
- * @author Robert Gust-Bardon <robert@gust-bardon.org>
- */
+
 class SignalHandler
 {
     private LoggerInterface $logger;
 
-    /** @var array<int, callable|string|int> SIG_DFL, SIG_IGN or previous callable */
+    
     private array $previousSignalHandler = [];
-    /** @var array<int, \Psr\Log\LogLevel::*> */
+    
     private array $signalLevelMap = [];
-    /** @var array<int, bool> */
+    
     private array $signalRestartSyscalls = [];
 
     public function __construct(LoggerInterface $logger)
@@ -36,12 +25,7 @@ class SignalHandler
         $this->logger = $logger;
     }
 
-    /**
-     * @param  int|string|Level $level Level or level name
-     * @return $this
-     *
-     * @phpstan-param value-of<Level::VALUES>|value-of<Level::NAMES>|Level|LogLevel::* $level
-     */
+    
     public function registerSignalHandler(int $signo, int|string|Level $level = LogLevel::CRITICAL, bool $callPrevious = true, bool $restartSyscalls = true, ?bool $async = true): self
     {
         if (!extension_loaded('pcntl') || !function_exists('pcntl_signal')) {
@@ -68,12 +52,10 @@ class SignalHandler
         return $this;
     }
 
-    /**
-     * @param mixed $siginfo
-     */
+    
     public function handleSignal(int $signo, $siginfo = null): void
     {
-        /** @var array<int, string> $signals */
+        
         static $signals = [];
 
         if (\count($signals) === 0 && extension_loaded('pcntl')) {

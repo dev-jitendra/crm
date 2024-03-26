@@ -6,15 +6,13 @@ use FastRoute\Dispatcher;
 
 abstract class RegexBasedAbstract implements Dispatcher
 {
-    /** @var mixed[][] */
+    
     protected $staticRouteMap = [];
 
-    /** @var mixed[] */
+    
     protected $variableRouteData = [];
 
-    /**
-     * @return mixed[]
-     */
+    
     abstract protected function dispatchVariableRoute($routeData, $uri);
 
     public function dispatch($httpMethod, $uri)
@@ -32,7 +30,7 @@ abstract class RegexBasedAbstract implements Dispatcher
             }
         }
 
-        // For HEAD requests, attempt fallback to GET
+        
         if ($httpMethod === 'HEAD') {
             if (isset($this->staticRouteMap['GET'][$uri])) {
                 $handler = $this->staticRouteMap['GET'][$uri];
@@ -46,7 +44,7 @@ abstract class RegexBasedAbstract implements Dispatcher
             }
         }
 
-        // If nothing else matches, try fallback routes
+        
         if (isset($this->staticRouteMap['*'][$uri])) {
             $handler = $this->staticRouteMap['*'][$uri];
             return [self::FOUND, $handler, []];
@@ -58,7 +56,7 @@ abstract class RegexBasedAbstract implements Dispatcher
             }
         }
 
-        // Find allowed methods for this URI by matching against all other HTTP methods as well
+        
         $allowedMethods = [];
 
         foreach ($this->staticRouteMap as $method => $uriMap) {
@@ -78,7 +76,7 @@ abstract class RegexBasedAbstract implements Dispatcher
             }
         }
 
-        // If there are no allowed methods the route simply does not exist
+        
         if ($allowedMethods) {
             return [self::METHOD_NOT_ALLOWED, $allowedMethods];
         }

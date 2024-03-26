@@ -1,40 +1,12 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/modals/related-records */
+
+
 
 import ModalView from 'views/modal';
 import SearchManager from 'search-manager';
 import $ from 'jquery';
 
-/**
- * A related-list modal.
- */
+
 class RelatedListModalView extends ModalView {
 
     template = 'modals/related-list'
@@ -48,32 +20,32 @@ class RelatedListModalView extends ModalView {
     mandatorySelectAttributeList = null
     layoutName = 'listSmall'
 
-    /** @inheritDoc */
+    
     shortcutKeys = {
-        /** @this RelatedListModalView */
+        
         'Control+Space': function (e) {
             this.handleShortcutKeyCtrlSpace(e);
         },
-        /** @this RelatedListModalView */
+        
         'Control+Slash': function (e) {
             this.handleShortcutKeyCtrlSlash(e);
         },
-        /** @this RelatedListModalView */
+        
         'Control+Comma': function (e) {
             this.handleShortcutKeyCtrlComma(e);
         },
-        /** @this RelatedListModalView */
+        
         'Control+Period': function (e) {
             this.handleShortcutKeyCtrlPeriod(e);
         },
     }
 
     events = {
-        /** @this RelatedListModalView */
+        
         'click button[data-action="createRelated"]': function () {
             this.actionCreateRelated();
         },
-        /** @this RelatedListModalView */
+        
         'click .action': function (e) {
             const isHandled = Espo.Utils.handleAction(this, e.originalEvent, e.currentTarget);
 
@@ -134,9 +106,9 @@ class RelatedListModalView extends ModalView {
                 this.collection.fetch();
             });
 
-            // Sync changing models.
+            
             this.listenTo(this.panelCollection, 'change', (m, o) => {
-                // Prevent change after save.
+                
                 if (o.xhr || !m.id) {
                     return;
                 }
@@ -309,7 +281,7 @@ class RelatedListModalView extends ModalView {
             this.setupList();
         });
 
-        // If the list not yet loaded.
+        
         this.once('close', () => {
             if (
                 this.collection.lastSyncPromise &&
@@ -326,10 +298,7 @@ class RelatedListModalView extends ModalView {
         this.searchManager.setPrimary(filter);
     }
 
-    /**
-     * @protected
-     * @return {module:views/record/search}
-     */
+    
     getSearchView() {
         return this.getView('search');
     }
@@ -398,7 +367,7 @@ class RelatedListModalView extends ModalView {
             this.getMetadata().get(['clientDefs', this.scope, 'recordViews', 'list']) ||
             'views/record/list';
 
-        // noinspection JSUnresolvedReference
+        
         const rowActionList = this.defs.rowActionList;
 
         const promise = this.createView('list', viewName, {
@@ -448,13 +417,8 @@ class RelatedListModalView extends ModalView {
                     this.collection.fetch()
                         .then(() => Espo.Ui.notify(false));
                 });
-                // Timeout to make notify work.
-                /*setTimeout(() => {
-                    Espo.Ui.notify(' ... ');
-
-                    this.collection.fetch()
-                        .then(() => Espo.Ui.notify(false));
-                }, 1);*/
+                
+                
             };
 
             if (this.options.forceSelectAllAttributes || this.forceSelectAllAttributes) {
@@ -488,7 +452,7 @@ class RelatedListModalView extends ModalView {
         this.wait(promise);
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionUnlinkRelated(data) {
         const id = data.id;
 
@@ -510,7 +474,7 @@ class RelatedListModalView extends ModalView {
     }
 
     actionCreateRelated() {
-        // noinspection JSUnresolvedReference
+        
         const actionName = this.defs.createAction || 'createRelated';
         const methodName = 'action' + Espo.Utils.upperCaseFirst(actionName);
 
@@ -534,9 +498,9 @@ class RelatedListModalView extends ModalView {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionSelectRelated() {
-        // noinspection JSUnresolvedReference
+        
         const actionName = this.defs.selectAction || 'selectRelated';
         const methodName = 'action' + Espo.Utils.upperCaseFirst(actionName);
 
@@ -562,7 +526,7 @@ class RelatedListModalView extends ModalView {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionRemoveRelated(data) {
         const id = data.id;
 
@@ -587,10 +551,7 @@ class RelatedListModalView extends ModalView {
         });
     }
 
-    /**
-     * @protected
-     * @param {JQueryKeyEventObject} e
-     */
+    
     handleShortcutKeyCtrlSlash(e) {
         if (!this.searchPanel) {
             return;
@@ -608,10 +569,7 @@ class RelatedListModalView extends ModalView {
         $search.focus();
     }
 
-    /**
-     * @protected
-     * @param {JQueryKeyEventObject} e
-     */
+    
     handleShortcutKeyCtrlSpace(e) {
         if (this.createDisabled) {
             return;
@@ -627,9 +585,7 @@ class RelatedListModalView extends ModalView {
         this.actionCreateRelated();
     }
 
-    /**
-     * @protected
-     */
+    
     handleShortcutKeyCtrlComma() {
         if (!this.getSearchView()) {
             return;
@@ -638,9 +594,7 @@ class RelatedListModalView extends ModalView {
         this.getSearchView().selectPreviousPreset();
     }
 
-    /**
-     * @protected
-     */
+    
     handleShortcutKeyCtrlPeriod() {
         if (!this.getSearchView()) {
             return;

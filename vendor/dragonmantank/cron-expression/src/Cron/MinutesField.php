@@ -6,24 +6,16 @@ namespace Cron;
 
 use DateTimeInterface;
 
-/**
- * Minutes field.  Allows: * , / -.
- */
+
 class MinutesField extends AbstractField
 {
-    /**
-     * {@inheritdoc}
-     */
+    
     protected $rangeStart = 0;
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected $rangeEnd = 59;
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function isSatisfiedBy(DateTimeInterface $date, $value):bool
     {
         if ($value == '?') {
@@ -33,13 +25,7 @@ class MinutesField extends AbstractField
         return $this->isSatisfied((int)$date->format('i'), $value);
     }
 
-    /**
-     * {@inheritdoc}
-     * {@inheritDoc}
-     *
-     * @param \DateTime|\DateTimeImmutable &$date
-     * @param string|null                  $parts
-     */
+    
     public function increment(DateTimeInterface &$date, $invert = false, $parts = null): FieldInterface
     {
         if (is_null($parts)) {

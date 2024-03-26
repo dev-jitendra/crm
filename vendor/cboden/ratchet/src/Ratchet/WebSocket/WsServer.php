@@ -16,55 +16,32 @@ use Ratchet\RFC6455\Handshake\RequestVerifier;
 use React\EventLoop\LoopInterface;
 use GuzzleHttp\Psr7\Message;
 
-/**
- * The adapter to handle WebSocket requests/responses
- * This is a mediator between the Server and your application to handle real-time messaging through a web browser
- * @link http://ca.php.net/manual/en/ref.http.php
- * @link http://dev.w3.org/html5/websockets/
- */
+
 class WsServer implements HttpServerInterface {
     use CloseResponseTrait;
 
-    /**
-     * Decorated component
-     * @var \Ratchet\ComponentInterface
-     */
+    
     private $delegate;
 
-    /**
-     * @var \SplObjectStorage
-     */
+    
     protected $connections;
 
-    /**
-     * @var \Ratchet\RFC6455\Messaging\CloseFrameChecker
-     */
+    
     private $closeFrameChecker;
 
-    /**
-     * @var \Ratchet\RFC6455\Handshake\ServerNegotiator
-     */
+    
     private $handshakeNegotiator;
 
-    /**
-     * @var \Closure
-     */
+    
     private $ueFlowFactory;
 
-    /**
-     * @var \Closure
-     */
+    
     private $pongReceiver;
 
-    /**
-     * @var \Closure
-     */
+    
     private $msgCb;
 
-    /**
-     * @param \Ratchet\WebSocket\MessageComponentInterface|\Ratchet\MessageComponentInterface $component Your application to run with WebSockets
-     * @note If you want to enable sub-protocols have your component implement WsServerInterface as well
-     */
+    
     public function __construct(ComponentInterface $component) {
         if ($component instanceof MessageComponentInterface) {
             $this->msgCb = function(ConnectionInterface $conn, MessageInterface $msg) {
@@ -101,9 +78,7 @@ class WsServer implements HttpServerInterface {
         };
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function onOpen(ConnectionInterface $conn, RequestInterface $request = null) {
         if (null === $request) {
             throw new \UnexpectedValueException('$request can not be null');
@@ -142,9 +117,7 @@ class WsServer implements HttpServerInterface {
         return $this->delegate->onOpen($wsConn);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function onMessage(ConnectionInterface $from, $msg) {
         if ($from->WebSocket->closing) {
             return;
@@ -153,9 +126,7 @@ class WsServer implements HttpServerInterface {
         $this->connections[$from]->buffer->onData($msg);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function onClose(ConnectionInterface $conn) {
         if ($this->connections->contains($conn)) {
             $context = $this->connections[$conn];
@@ -165,9 +136,7 @@ class WsServer implements HttpServerInterface {
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function onError(ConnectionInterface $conn, \Exception $e) {
         if ($this->connections->contains($conn)) {
             $this->delegate->onError($this->connections[$conn]->connection, $e);

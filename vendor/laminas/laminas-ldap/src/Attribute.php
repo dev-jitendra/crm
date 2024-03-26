@@ -27,9 +27,7 @@ use function strtolower;
 use function substr;
 use function uniqid;
 
-/**
- * Laminas\Ldap\Attribute is a collection of LDAP attribute related functions.
- */
+
 class Attribute
 {
     public const PASSWORD_HASH_MD5   = 'md5';
@@ -38,15 +36,7 @@ class Attribute
     public const PASSWORD_HASH_SSHA  = 'ssha';
     public const PASSWORD_UNICODEPWD = 'unicodePwd';
 
-    /**
-     * Sets a LDAP attribute.
-     *
-     * @param  array                     $data
-     * @param  string                    $attribName
-     * @param string|array|Traversable $value
-     * @param  bool                   $append
-     * @return void
-     */
+    
     public static function setAttribute(array &$data, $attribName, $value, $append = false)
     {
         $attribName = strtolower($attribName);
@@ -75,14 +65,7 @@ class Attribute
         }
     }
 
-    /**
-     * Gets a LDAP attribute.
-     *
-     * @param  array   $data
-     * @param  string  $attribName
-     * @param  int $index
-     * @return array|mixed
-     */
+    
     public static function getAttribute(array $data, $attribName, $index = null)
     {
         $attribName = strtolower($attribName);
@@ -108,14 +91,7 @@ class Attribute
         return null;
     }
 
-    /**
-     * Checks if the given value(s) exist in the attribute
-     *
-     * @param array       $data
-     * @param string      $attribName
-     * @param mixed|array $value
-     * @return bool
-     */
+    
     public static function attributeHasValue(array &$data, $attribName, $value)
     {
         $attribName = strtolower($attribName);
@@ -137,13 +113,7 @@ class Attribute
         return true;
     }
 
-    /**
-     * Removes duplicate values from a LDAP attribute
-     *
-     * @param array  $data
-     * @param string $attribName
-     * @return void
-     */
+    
     public static function removeDuplicatesFromAttribute(array &$data, $attribName)
     {
         $attribName = strtolower($attribName);
@@ -153,14 +123,7 @@ class Attribute
         $data[$attribName] = array_values(array_unique($data[$attribName]));
     }
 
-    /**
-     * Remove given values from a LDAP attribute
-     *
-     * @param array       $data
-     * @param string      $attribName
-     * @param mixed|array $value
-     * @return void
-     */
+    
     public static function removeFromAttribute(array &$data, $attribName, $value)
     {
         $attribName = strtolower($attribName);
@@ -191,19 +154,13 @@ class Attribute
         $data[$attribName] = $resultArray;
     }
 
-    /**
-     * @param  mixed $value
-     * @return string|null
-     */
+    
     private static function valueToLdap($value)
     {
         return Converter\Converter::toLdap($value);
     }
 
-    /**
-     * @param  string $value
-     * @return mixed
-     */
+    
     private static function valueFromLdap($value)
     {
         try {
@@ -218,14 +175,7 @@ class Attribute
         }
     }
 
-    /**
-     * Sets a LDAP password.
-     *
-     * @param array  $data
-     * @param string $password
-     * @param string $hashType   Optional by default MD5
-     * @param string $attribName Optional
-     */
+    
     public static function setPassword(
         array &$data,
         $password,
@@ -244,20 +194,12 @@ class Attribute
         static::setAttribute($data, $attribName, $hash, false);
     }
 
-    /**
-     * Creates a LDAP password.
-     *
-     * @param  string $password
-     * @param  string $hashType
-     * @return string
-     */
+    
     public static function createPassword($password, $hashType = self::PASSWORD_HASH_MD5)
     {
         switch ($hashType) {
             case self::PASSWORD_UNICODEPWD:
-                /* see:
-                 * http://msdn.microsoft.com/en-us/library/cc223248(PROT.10).aspx
-                 */
+                
                 $password = '"' . $password . '"';
                 if (function_exists('mb_convert_encoding')) {
                     $password = mb_convert_encoding($password, 'UTF-16LE', 'UTF-8');
@@ -295,15 +237,7 @@ class Attribute
         return $method . base64_encode($rawHash);
     }
 
-    /**
-     * Sets a LDAP date/time attribute.
-     *
-     * @param  array                      $data
-     * @param  string                     $attribName
-     * @param int|array|Traversable $value
-     * @param  bool                    $utc
-     * @param  bool                    $append
-     */
+    
     public static function setDateTimeAttribute(
         array &$data,
         $attribName,
@@ -328,11 +262,7 @@ class Attribute
         static::setAttribute($data, $attribName, $convertedValues, $append);
     }
 
-    /**
-     * @param  int $value
-     * @param  bool $utc
-     * @return string|null
-     */
+    
     private static function valueToLdapDateTime($value, $utc)
     {
         if (! is_int($value)) {
@@ -342,14 +272,7 @@ class Attribute
         return Converter\Converter::toLdapDateTime($value, $utc);
     }
 
-    /**
-     * Gets a LDAP date/time attribute.
-     *
-     * @param  array   $data
-     * @param  string  $attribName
-     * @param  int $index
-     * @return array|int
-     */
+    
     public static function getDateTimeAttribute(array $data, $attribName, $index = null)
     {
         $values = static::getAttribute($data, $attribName, $index);
@@ -370,10 +293,7 @@ class Attribute
         return $values;
     }
 
-    /**
-     * @param  string|DateTime $value
-     * @return int|null
-     */
+    
     private static function valueFromLdapDateTime($value)
     {
         if ($value instanceof DateTime) {

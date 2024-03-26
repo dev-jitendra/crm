@@ -1,14 +1,5 @@
 <?php
-/**
- * Class QRMarkup
- *
- * @filesource   QRMarkup.php
- * @created      17.12.2016
- * @package      chillerlan\QRCode\Output
- * @author       Smiley <smiley@chillerlan.net>
- * @copyright    2016 Smiley
- * @license      MIT
- */
+
 
 namespace chillerlan\QRCode\Output;
 
@@ -16,22 +7,16 @@ use chillerlan\QRCode\QRCode;
 
 use function is_string, sprintf, strip_tags, trim;
 
-/**
- * Converts the matrix into markup types: HTML, SVG, ...
- */
+
 class QRMarkup extends QROutputAbstract{
 
 	protected string $defaultMode = QRCode::OUTPUT_MARKUP_SVG;
 
-	/**
-	 * @see \sprintf()
-	 */
-	protected string $svgHeader = '<svg xmlns="http://www.w3.org/2000/svg" class="qr-svg %1$s" '.
+	
+	protected string $svgHeader = '<svg xmlns="http:
 	                              'style="width: 100%%; height: auto;" viewBox="0 0 %2$d %2$d">';
 
-	/**
-	 * @inheritDoc
-	 */
+	
 	protected function setModuleValues():void{
 
 		foreach($this::DEFAULT_MODULE_VALUES as $M_TYPE => $defaultValue){
@@ -50,9 +35,7 @@ class QRMarkup extends QROutputAbstract{
 
 	}
 
-	/**
-	 * HTML output
-	 */
+	
 	protected function html(string $file = null):string{
 
 		$html = empty($this->options->cssClass)
@@ -82,11 +65,7 @@ class QRMarkup extends QROutputAbstract{
 		return $html;
 	}
 
-	/**
-	 * SVG output
-	 *
-	 * @see https://github.com/codemasher/php-qrcode/pull/5
-	 */
+	
 	protected function svg(string $file = null):string{
 		$matrix = $this->matrix->matrix();
 
@@ -99,7 +78,7 @@ class QRMarkup extends QROutputAbstract{
 			$path = '';
 
 			foreach($matrix as $y => $row){
-				//we'll combine active blocks within a single row as a lightweight compression technique
+				
 				$start = null;
 				$count = 0;
 
@@ -119,11 +98,11 @@ class QRMarkup extends QROutputAbstract{
 
 					if($count > 0){
 						$len   = $count;
-						$start ??= 0; // avoid type coercion in sprintf() - phan happy
+						$start ??= 0; 
 
 						$path .= sprintf('M%s %s h%s v1 h-%sZ ', $start, $y, $len, $len);
 
-						// reset count
+						
 						$count = 0;
 						$start = null;
 					}
@@ -141,12 +120,12 @@ class QRMarkup extends QROutputAbstract{
 
 		}
 
-		// close svg
+		
 		$svg .= '</svg>'.$this->options->eol;
 
-		// if saving to file, append the correct headers
+		
 		if($file !== null){
-			return '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">'.
+			return '<!DOCTYPE svg PUBLIC "-
 			       $this->options->eol.$svg;
 		}
 

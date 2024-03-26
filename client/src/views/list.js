@@ -1,180 +1,90 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module module:views/list */
+
+
 
 import MainView from 'views/main';
 import SearchManager from 'search-manager';
 
-/**
- * A list view.
- */
+
 class ListView extends MainView {
 
-    /** @inheritDoc */
+    
     template = 'list'
 
-    /** @inheritDoc */
+    
     name = 'List'
 
-    /** @inheritDoc */
+    
     optionsToPass = []
 
-    /**
-     * A header view name.
-     *
-     * @type {string}
-     * @protected
-     */
+    
     headerView = 'views/header'
 
-    /**
-     * A search view name.
-     *
-     * @type {string}
-     * @protected
-     */
+    
     searchView = 'views/record/search'
 
-    /**
-     * A record/list view name.
-     *
-     * @type {string}
-     * @protected
-     */
+    
     recordView = 'views/record/list'
 
-    /**
-     * A record/kanban view name.
-     *
-     * @type {string}
-     * @protected
-     */
+    
     recordKanbanView = 'views/record/kanban'
 
-    /**
-     * Has a search panel.
-     *
-     * @type {boolean}
-     * @protected
-     */
+    
     searchPanel = true
 
-    /**
-     * @type {module:search-manager}
-     * @protected
-     */
+    
     searchManager = null
 
-    /**
-     * Has a create button.
-     *
-     * @type {boolean}
-     * @protected
-     */
+    
     createButton = true
 
-    /**
-     * To use a modal dialog when creating a record.
-     *
-     * @type {boolean}
-     * @protected
-     */
+    
     quickCreate = false
 
-    /**
-     * After create a view will be stored, so it can be re-used after.
-     * Useful to avoid re-rendering when come back the list view.
-     *
-     * @type {boolean}
-     */
+    
     storeViewAfterCreate = false
 
-    /**
-     * After update a view will be stored, so it can be re-used after.
-     * Useful to avoid re-rendering when come back the list view.
-     *
-     * @type {boolean}
-     */
+    
     storeViewAfterUpdate = true
 
-    /**
-     * Use a current URL as a root URL when open a record. To be able to return to the same URL.
-     */
+    
     keepCurrentRootUrl = false
 
-    /**
-     * A view mode. 'list', 'kanban'.
-     *
-     * @type {string}
-     */
+    
     viewMode = ''
 
-    /**
-     * An available view mode list.
-     *
-     * @type {string[]|null}
-     */
+    
     viewModeList = null
 
-    /**
-     * A default view mode.
-     *
-     * @type {string}
-     */
+    
     defaultViewMode = 'list'
 
-    /** @const */
+    
     MODE_LIST = 'list'
-    /** @const */
+    
     MODE_KANBAN = 'kanban'
 
-    /** @inheritDoc */
+    
     shortcutKeys = {
-        /** @this ListView */
+        
         'Control+Space': function (e) {
             this.handleShortcutKeyCtrlSpace(e);
         },
-        /** @this ListView */
+        
         'Control+Slash': function (e) {
             this.handleShortcutKeyCtrlSlash(e);
         },
-        /** @this ListView */
+        
         'Control+Comma': function (e) {
             this.handleShortcutKeyCtrlComma(e);
         },
-        /** @this ListView */
+        
         'Control+Period': function (e) {
             this.handleShortcutKeyCtrlPeriod(e);
         },
     }
 
-    /** @inheritDoc */
+    
     setup() {
         this.collection.maxSize = this.getConfig().get('recordsPerPage') || this.collection.maxSize;
 
@@ -238,9 +148,7 @@ class ListView extends MainView {
         );
     }
 
-    /**
-     * Set up modes.
-     */
+    
     setupModes() {
         this.defaultViewMode = this.options.defaultViewMode ||
             this.getMetadata().get(['clientDefs', this.scope, 'listDefaultViewMode']) ||
@@ -282,13 +190,11 @@ class ListView extends MainView {
                 viewMode = this.defaultViewMode;
             }
 
-            this.viewMode = /** @type {string} */viewMode;
+            this.viewMode = viewMode;
         }
     }
 
-    /**
-     * Set up a header.
-     */
+    
     setupHeader() {
         this.createView('header', this.headerView, {
             collection: this.collection,
@@ -298,9 +204,7 @@ class ListView extends MainView {
         });
     }
 
-    /**
-     * Set up a create button.
-     */
+    
     setupCreateButton() {
         if (this.quickCreate) {
             this.menu.buttons.unshift({
@@ -328,21 +232,12 @@ class ListView extends MainView {
         });
     }
 
-    /**
-     * Set up a search panel.
-     *
-     * @protected
-     */
+    
     setupSearchPanel() {
         this.createSearchView();
     }
 
-    /**
-     * Create a search view.
-     *
-     * @return {Promise<module:view>}
-     * @protected
-     */
+    
     createSearchView() {
         return this.createView('search', this.searchView, {
             collection: this.collection,
@@ -361,11 +256,7 @@ class ListView extends MainView {
         });
     }
 
-    /**
-     * Switch a view mode.
-     *
-     * @param {string} mode
-     */
+    
     switchViewMode(mode) {
         this.clearView('list');
         this.collection.isFetched = false;
@@ -375,12 +266,7 @@ class ListView extends MainView {
         this.loadList();
     }
 
-    /**
-     * Set a view mode.
-     *
-     * @param {string} mode A mode.
-     * @param {boolean} [toStore=false] To preserve a mode being set.
-     */
+    
     setViewMode(mode, toStore) {
         this.viewMode = mode;
 
@@ -410,34 +296,24 @@ class ListView extends MainView {
         }
     }
 
-    /**
-     * Called when the kanban mode is set.
-     */
+    
     setViewModeKanban() {
         this.collection.url = 'Kanban/' + this.scope;
         this.collection.maxSize = this.getConfig().get('recordsPerPageKanban');
         this.collection.resetOrderToDefault();
     }
 
-    /**
-     * Reset sorting in a storage.
-     */
+    
     resetSorting() {
         this.getStorage().clear('listSorting', this.collection.entityType);
     }
 
-    /**
-     * Get default search data.
-     *
-     * @returns {Object}
-     */
+    
     getSearchDefaultData() {
         return this.getMetadata().get('clientDefs.' + this.scope + '.defaultFilterData');
     }
 
-    /**
-     * Set up a search manager.
-     */
+    
     setupSearchManager() {
         const collection = this.collection;
 
@@ -457,9 +333,7 @@ class ListView extends MainView {
         this.searchManager = searchManager;
     }
 
-    /**
-     * Set up sorting.
-     */
+    
     setupSorting() {
         if (!this.searchPanel) {
             return;
@@ -468,9 +342,7 @@ class ListView extends MainView {
         this.applyStoredSorting();
     }
 
-    /**
-     * Apply stored sorting.
-     */
+    
     applyStoredSorting() {
         const sortingParams = this.getStorage().get('listSorting', this.collection.entityType) || {};
 
@@ -483,27 +355,17 @@ class ListView extends MainView {
         }
     }
 
-    /**
-     * @protected
-     * @return {module:views/record/search}
-     */
+    
     getSearchView() {
         return this.getView('search');
     }
 
-    /**
-     * @protected
-     * @return {module:view}
-     */
+    
     getRecordView() {
         return this.getView('list');
     }
 
-    /**
-     * Get a record view name.
-     *
-     * @returns {string}
-     */
+    
     getRecordViewName() {
         let viewName = this.getMetadata().get(['clientDefs', this.scope, 'recordViews', this.viewMode]);
 
@@ -530,7 +392,7 @@ class ListView extends MainView {
         return viewName;
     }
 
-    /** @inheritDoc */
+    
     cancelRender() {
         if (this.hasView('list')) {
             this.getRecordView();
@@ -543,9 +405,7 @@ class ListView extends MainView {
         super.cancelRender();
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     afterRender() {
         Espo.Ui.notify(false);
 
@@ -553,13 +413,11 @@ class ListView extends MainView {
             this.loadList();
         }
 
-        // noinspection JSUnresolvedReference
+        
         this.$el.get(0).focus({preventScroll: true});
     }
 
-    /**
-     * Load a record list view.
-     */
+    
     loadList() {
         if ('isFetched' in this.collection && this.collection.isFetched) {
             this.createListRecordView(false);
@@ -572,19 +430,10 @@ class ListView extends MainView {
         this.createListRecordView(true);
     }
 
-    /**
-     * Prepare record view options. Options can be modified in an extended method.
-     *
-     * @param {Object} options Options
-     */
+    
     prepareRecordViewOptions(options) {}
 
-    /**
-     * Create a record list view.
-     *
-     * @param {boolean} [fetch=false] To fetch after creation.
-     * @return {Promise<module:views/record/list>}
-     */
+    
     createListRecordView(fetch) {
         const o = {
             collection: this.collection,
@@ -613,7 +462,7 @@ class ListView extends MainView {
             this.getConfig().get('listPagination') ||
             this.getMetadata().get(['clientDefs', this.scope, 'listPagination'])
         ) {
-            // @todo Remove in v8.1.
+            
             console.warn(`'listPagination' parameter is deprecated and will be removed in the future.`);
 
             o.pagination = true;
@@ -671,9 +520,7 @@ class ListView extends MainView {
         });
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     getHeader() {
         const $root = $('<span>')
             .text(this.getLanguage().translate(this.scope, 'scopeNamesPlural'));
@@ -698,40 +545,18 @@ class ListView extends MainView {
         return this.buildHeaderHtml([$root]);
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     updatePageTitle() {
         this.setPageTitle(this.getLanguage().translate(this.scope, 'scopeNamesPlural'));
     }
 
-    /**
-     * Create attributes for an entity being created.
-     *
-     * @return {Object}
-     */
+    
     getCreateAttributes() {}
 
-    /**
-     * Prepare return dispatch parameters to pass to a view when creating a record.
-     * To pass some data to restore when returning to the list view.
-     *
-     * Example:
-     * ```
-     * params.options.categoryId = this.currentCategoryId;
-     * params.options.categoryName = this.currentCategoryName;
-     * ```
-     *
-     * @param {Object} params Parameters to be modified.
-     */
+    
     prepareCreateReturnDispatchParams(params) {}
 
-    /**
-     * Action `quickCreate`.
-     *
-     * @param {Object.<string,*>} [data]
-     * @returns {Promise<module:views/modals/edit>}
-     */
+    
     actionQuickCreate(data) {
         data = data || {};
 
@@ -779,11 +604,7 @@ class ListView extends MainView {
         });
     }
 
-    /**
-     * Action 'create'.
-     *
-     * @param {Object.<string,*>} [data]
-     */
+    
     actionCreate(data) {
         data = data || {};
 
@@ -820,27 +641,18 @@ class ListView extends MainView {
         router.dispatch(this.scope, 'create', options);
     }
 
-    /**
-     * Whether the view is actual to be reused.
-     *
-     * @returns {boolean}
-     */
+    
     isActualForReuse() {
         return 'isFetched' in this.collection && this.collection.isFetched;
     }
 
-    /**
-     * @protected
-     * @param {JQueryKeyEventObject} e
-     */
+    
     handleShortcutKeyCtrlSpace(e) {
         if (!this.createButton) {
             return;
         }
 
-        /*if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') {
-            return;
-        }*/
+        
 
         if (!this.getAcl().checkScope(this.scope, 'create')) {
             return;
@@ -858,10 +670,7 @@ class ListView extends MainView {
         this.actionCreate({focusForCreate: true});
     }
 
-    /**
-     * @protected
-     * @param {JQueryKeyEventObject} e
-     */
+    
     handleShortcutKeyCtrlSlash(e) {
         if (!this.searchPanel) {
             return;
@@ -879,11 +688,8 @@ class ListView extends MainView {
         $search.focus();
     }
 
-    // noinspection JSUnusedLocalSymbols
-    /**
-     * @protected
-     * @param {JQueryKeyEventObject} e
-     */
+    
+    
     handleShortcutKeyCtrlComma(e) {
         if (!this.getSearchView()) {
             return;
@@ -892,11 +698,8 @@ class ListView extends MainView {
         this.getSearchView().selectPreviousPreset();
     }
 
-    // noinspection JSUnusedLocalSymbols
-    /**
-     * @protected
-     * @param {JQueryKeyEventObject} e
-     */
+    
+    
     handleShortcutKeyCtrlPeriod(e) {
         if (!this.getSearchView()) {
             return;

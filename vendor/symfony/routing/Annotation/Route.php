@@ -1,26 +1,10 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Routing\Annotation;
 
-/**
- * Annotation class for @Route().
- *
- * @Annotation
- * @NamedArgumentConstructor
- * @Target({"CLASS", "METHOD"})
- *
- * @author Fabien Potencier <fabien@symfony.com>
- * @author Alexander M. Turek <me@derrabus.de>
- */
+
 #[\Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
 class Route
 {
@@ -29,11 +13,7 @@ class Route
     private array $methods;
     private array $schemes;
 
-    /**
-     * @param string[]        $requirements
-     * @param string[]|string $methods
-     * @param string[]|string $schemes
-     */
+    
     public function __construct(
         string|array $path = null,
         private ?string $name = null,

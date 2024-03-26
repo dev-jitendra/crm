@@ -14,46 +14,29 @@ use function sprintf;
 use function strtolower;
 use function trim;
 
-/**
- * Sender header class methods.
- *
- * @see https://tools.ietf.org/html/rfc2822 RFC 2822
- * @see https://tools.ietf.org/html/rfc2047 RFC 2047
- */
+
 class Sender implements HeaderInterface
 {
-    /** @var AddressInterface */
+    
     protected $address;
 
-    /**
-     * Header encoding
-     *
-     * @var null|string
-     */
+    
     protected $encoding;
 
-    /**
-     * @param string $headerLine
-     * @return static
-     */
+    
     public static function fromString($headerLine)
     {
         [$name, $value] = GenericHeader::splitHeaderLine($headerLine);
         $value          = HeaderWrap::mimeDecodeValue($value);
 
-        // check to ensure proper header type for this factory
+        
         if (strtolower($name) !== 'sender') {
             throw new Exception\InvalidArgumentException('Invalid header name for Sender string');
         }
 
         $header = new static();
 
-        /**
-         * matches the header value so that the email must be enclosed by < > when a name is present
-         * 'name' and 'email' capture groups correspond respectively to 'display-name' and 'addr-spec' in the ABNF
-         *
-         * @see https://tools.ietf.org/html/rfc5322#section-3.4
-         */
+        
         $hasMatches = preg_match(
             '/^(?:(?P<name>.+)\s)?(?(name)<|<?)(?P<email>[^\s]+?)(?(name)>|>?)$/',
             $value,
@@ -75,17 +58,13 @@ class Sender implements HeaderInterface
         return $header;
     }
 
-    /**
-     * @return string
-     */
+    
     public function getFieldName()
     {
         return 'Sender';
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function getFieldValue($format = HeaderInterface::FORMAT_RAW)
     {
         if (! $this->address instanceof Mail\Address\AddressInterface) {
@@ -108,19 +87,14 @@ class Sender implements HeaderInterface
         return $email;
     }
 
-    /**
-     * @param string $encoding
-     * @return self
-     */
+    
     public function setEncoding($encoding)
     {
         $this->encoding = $encoding;
         return $this;
     }
 
-    /**
-     * @return string
-     */
+    
     public function getEncoding()
     {
         if (! $this->encoding) {
@@ -132,22 +106,13 @@ class Sender implements HeaderInterface
         return $this->encoding;
     }
 
-    /**
-     * @return string
-     */
+    
     public function toString()
     {
         return 'Sender: ' . $this->getFieldValue(HeaderInterface::FORMAT_ENCODED);
     }
 
-    /**
-     * Set the address used in this header
-     *
-     * @param string|AddressInterface $emailOrAddress
-     * @param  null|string $name
-     * @throws Exception\InvalidArgumentException
-     * @return Sender
-     */
+    
     public function setAddress($emailOrAddress, $name = null)
     {
         if (is_string($emailOrAddress)) {
@@ -163,11 +128,7 @@ class Sender implements HeaderInterface
         return $this;
     }
 
-    /**
-     * Retrieve the internal address from this header
-     *
-     * @return AddressInterface|null
-     */
+    
     public function getAddress()
     {
         return $this->address;

@@ -8,9 +8,7 @@ use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 
 
-/**
- * @covers Ratchet\Http\Router
- */
+
 class RouterTest extends \PHPUnit_Framework_TestCase {
     protected $_router;
     protected $_matcher;
@@ -33,7 +31,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase {
             ->will($this->returnValue($this->getMock('Symfony\Component\Routing\RequestContext')));
         $this->_router  = new Router($this->_matcher);
 
-        $this->_uri->expects($this->any())->method('getPath')->will($this->returnValue('ws://doesnt.matter/'));
+        $this->_uri->expects($this->any())->method('getPath')->will($this->returnValue('ws:
         $this->_uri->expects($this->any())->method('withQuery')->with($this->callback(function($val) {
             $this->setResult($val);
 
@@ -105,9 +103,9 @@ class RouterTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testRouterGeneratesRouteParameters() {
-        /** @var $controller WsServerInterface */
+        
         $controller = $this->getMockBuilder('\Ratchet\WebSocket\WsServer')->disableOriginalConstructor()->getMock();
-        /** @var $matcher UrlMatcherInterface */
+        
         $this->_matcher->expects($this->any())->method('match')->will(
             $this->returnValue(['_controller' => $controller, 'foo' => 'bar', 'baz' => 'qux'])
         );
@@ -128,7 +126,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase {
 
         $conn    = $this->getMock('Ratchet\Mock\Connection');
         $request = $this->getMock('Psr\Http\Message\RequestInterface');
-        $uri = new \GuzzleHttp\Psr7\Uri('ws://doesnt.matter/endpoint?hello=world&foo=nope');
+        $uri = new \GuzzleHttp\Psr7\Uri('ws:
 
         $request->expects($this->any())->method('getUri')->will($this->returnCallback(function() use (&$uri) {
             return $uri;
@@ -154,7 +152,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase {
 Upgrade: websocket                                   
 Connection: upgrade                                  
 Host: localhost                                 
-Origin: http://localhost                        
+Origin: http:
 Sec-WebSocket-Version: 13\r\n\r\n";
 
         $app = new HttpServer(new Router(new UrlMatcher(new RouteCollection, new RequestContext)));

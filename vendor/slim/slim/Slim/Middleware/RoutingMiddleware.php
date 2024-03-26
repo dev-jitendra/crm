@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim/blob/4.x/LICENSE.md (MIT License)
- */
+
 
 declare(strict_types=1);
 
@@ -34,26 +30,14 @@ class RoutingMiddleware implements MiddlewareInterface
         $this->routeParser = $routeParser;
     }
 
-    /**
-     * @throws HttpNotFoundException
-     * @throws HttpMethodNotAllowedException
-     * @throws RuntimeException
-     */
+    
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $request = $this->performRouting($request);
         return $handler->handle($request);
     }
 
-    /**
-     * Perform routing
-     *
-     * @param  ServerRequestInterface $request PSR7 Server Request
-     *
-     * @throws HttpNotFoundException
-     * @throws HttpMethodNotAllowedException
-     * @throws RuntimeException
-     */
+    
     public function performRouting(ServerRequestInterface $request): ServerRequestInterface
     {
         $request = $request->withAttribute(RouteContext::ROUTE_PARSER, $this->routeParser);
@@ -85,9 +69,7 @@ class RoutingMiddleware implements MiddlewareInterface
         }
     }
 
-    /**
-     * Resolves the route from the given request
-     */
+    
     protected function resolveRoutingResultsFromRequest(ServerRequestInterface $request): RoutingResults
     {
         return $this->routeResolver->computeRoutingResults(

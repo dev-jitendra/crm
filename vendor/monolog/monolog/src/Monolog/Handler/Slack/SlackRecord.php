@@ -1,13 +1,6 @@
 <?php declare(strict_types=1);
 
-/*
- * This file is part of the Monolog package.
- *
- * (c) Jordi Boggiano <j.boggiano@seld.be>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Monolog\Handler\Slack;
 
@@ -17,14 +10,7 @@ use Monolog\Formatter\NormalizerFormatter;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\LogRecord;
 
-/**
- * Slack record utility helping to log to Slack webhooks or API.
- *
- * @author Greg Kedzierski <greg@gregkedzierski.com>
- * @author Haralan Dobrev <hkdobrev@gmail.com>
- * @see    https://api.slack.com/incoming-webhooks
- * @see    https://api.slack.com/docs/message-attachments
- */
+
 class SlackRecord
 {
     public const COLOR_DANGER = 'danger';
@@ -35,49 +21,32 @@ class SlackRecord
 
     public const COLOR_DEFAULT = '#e3e4e6';
 
-    /**
-     * Slack channel (encoded ID or name)
-     */
+    
     private string|null $channel;
 
-    /**
-     * Name of a bot
-     */
+    
     private string|null $username;
 
-    /**
-     * User icon e.g. 'ghost', 'http://example.com/user.png'
-     */
+    
     private string|null $userIcon;
 
-    /**
-     * Whether the message should be added to Slack as attachment (plain text otherwise)
-     */
+    
     private bool $useAttachment;
 
-    /**
-     * Whether the the context/extra messages added to Slack as attachments are in a short style
-     */
+    
     private bool $useShortAttachment;
 
-    /**
-     * Whether the attachment should include context and extra data
-     */
+    
     private bool $includeContextAndExtra;
 
-    /**
-     * Dot separated list of fields to exclude from slack message. E.g. ['context.field1', 'extra.field2']
-     * @var string[]
-     */
+    
     private array $excludeFields;
 
     private FormatterInterface|null $formatter;
 
     private NormalizerFormatter $normalizerFormatter;
 
-    /**
-     * @param string[] $excludeFields
-     */
+    
     public function __construct(
         ?string $channel = null,
         ?string $username = null,
@@ -103,12 +72,7 @@ class SlackRecord
         }
     }
 
-    /**
-     * Returns required data in format that Slack
-     * is expecting.
-     *
-     * @phpstan-return mixed[]
-     */
+    
     public function getSlackData(LogRecord $record): array
     {
         $dataArray = [];
@@ -160,7 +124,7 @@ class SlackRecord
                             $recordData[$key]
                         );
                     } else {
-                        // Add all extra fields as individual fields in attachment
+                        
                         $attachment['fields'] = array_merge(
                             $attachment['fields'],
                             $this->generateAttachmentFields($recordData[$key])
@@ -185,10 +149,7 @@ class SlackRecord
         return $dataArray;
     }
 
-    /**
-     * Returns a Slack message attachment color associated with
-     * provided level.
-     */
+    
     public function getAttachmentColor(Level $level): string
     {
         return match ($level) {
@@ -199,14 +160,10 @@ class SlackRecord
         };
     }
 
-    /**
-     * Stringifies an array of key/value pairs to be used in attachment fields
-     *
-     * @param mixed[] $fields
-     */
+    
     public function stringify(array $fields): string
     {
-        /** @var array<mixed> $normalized */
+        
         $normalized = $this->normalizerFormatter->normalizeValue($fields);
 
         $hasSecondDimension = \count(array_filter($normalized, 'is_array')) > 0;
@@ -217,12 +174,7 @@ class SlackRecord
             : Utils::jsonEncode($normalized, Utils::DEFAULT_JSON_FLAGS);
     }
 
-    /**
-     * Channel used by the bot when posting
-     *
-     * @param ?string $channel
-     * @return $this
-     */
+    
     public function setChannel(?string $channel = null): self
     {
         $this->channel = $channel;
@@ -230,12 +182,7 @@ class SlackRecord
         return $this;
     }
 
-    /**
-     * Username used by the bot when posting
-     *
-     * @param ?string $username
-     * @return $this
-     */
+    
     public function setUsername(?string $username = null): self
     {
         $this->username = $username;
@@ -243,9 +190,7 @@ class SlackRecord
         return $this;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function useAttachment(bool $useAttachment = true): self
     {
         $this->useAttachment = $useAttachment;
@@ -253,9 +198,7 @@ class SlackRecord
         return $this;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setUserIcon(?string $userIcon = null): self
     {
         $this->userIcon = $userIcon;
@@ -267,9 +210,7 @@ class SlackRecord
         return $this;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function useShortAttachment(bool $useShortAttachment = false): self
     {
         $this->useShortAttachment = $useShortAttachment;
@@ -277,9 +218,7 @@ class SlackRecord
         return $this;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function includeContextAndExtra(bool $includeContextAndExtra = false): self
     {
         $this->includeContextAndExtra = $includeContextAndExtra;
@@ -291,10 +230,7 @@ class SlackRecord
         return $this;
     }
 
-    /**
-     * @param string[] $excludeFields
-     * @return $this
-     */
+    
     public function excludeFields(array $excludeFields = []): self
     {
         $this->excludeFields = $excludeFields;
@@ -302,9 +238,7 @@ class SlackRecord
         return $this;
     }
 
-    /**
-     * @return $this
-     */
+    
     public function setFormatter(?FormatterInterface $formatter = null): self
     {
         $this->formatter = $formatter;
@@ -312,13 +246,7 @@ class SlackRecord
         return $this;
     }
 
-    /**
-     * Generates attachment field
-     *
-     * @param string|mixed[] $value
-     *
-     * @return array{title: string, value: string, short: false}
-     */
+    
     private function generateAttachmentField(string $title, $value): array
     {
         $value = is_array($value)
@@ -332,16 +260,10 @@ class SlackRecord
         ];
     }
 
-    /**
-     * Generates a collection of attachment fields from array
-     *
-     * @param mixed[] $data
-     *
-     * @return array<array{title: string, value: string, short: false}>
-     */
+    
     private function generateAttachmentFields(array $data): array
     {
-        /** @var array<mixed> $normalized */
+        
         $normalized = $this->normalizerFormatter->normalizeValue($data);
 
         $fields = [];
@@ -352,11 +274,7 @@ class SlackRecord
         return $fields;
     }
 
-    /**
-     * Get a copy of record with fields excluded according to $this->excludeFields
-     *
-     * @return mixed[]
-     */
+    
     private function removeExcludedFields(LogRecord $record): array
     {
         $recordData = $record->toArray();

@@ -1,23 +1,12 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation\Dumper;
 
 use Symfony\Component\Translation\MessageCatalogue;
 
-/**
- * PoFileDumper generates a gettext formatted string representation of a message catalogue.
- *
- * @author Stealth35
- */
+
 class PoFileDumper extends FileDumper
 {
     public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = []): string
@@ -67,7 +56,7 @@ class PoFileDumper extends FileDumper
 
     private function getStandardRules(string $id)
     {
-        // Partly copied from TranslatorTrait::trans.
+        
         $parts = [];
         if (preg_match('/^\|++$/', $id)) {
             $parts = explode('|', $id);
@@ -98,7 +87,7 @@ EOF;
             $part = trim(str_replace('||', '|', $part));
 
             if (preg_match($intervalRegexp, $part)) {
-                // Explicit rule is not a standard rule.
+                
                 return [];
             } else {
                 $standardRules[] = $part;

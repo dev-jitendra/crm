@@ -1,67 +1,18 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module views/fields/varchar */
+
+
 
 import BaseFieldView from 'views/fields/base';
 import RegExpPattern from 'helpers/reg-exp-pattern';
 
-/**
- * A varchar field.
- */
+
 class VarcharFieldView extends BaseFieldView {
 
-    /**
-     * @typedef {Object} module:views/fields/varchar~options
-     * @property {
-     *     module:views/fields/varchar~params &
-     *     module:views/fields/base~params &
-     *     Object.<string, *>
-     * } [params] Parameters.
-     */
+    
 
-    /**
-     * @typedef {Object} module:views/fields/varchar~params
-     * @property {number} [maxLength] A max length.
-     * @property {string[]} [options] Select options.
-     * @property {boolean} [required] Required.
-     * @property {string} [optionsPath] An options metadata path.
-     * @property {boolean} [noSpellCheck] Disable spell check.
-     * @property {string} [pattern] A validation pattern. If starts with `$`, then a predefined pattern is used.
-     * @property {boolean} [copyToClipboard] To display a Copy-to-clipboard button.
-     */
+    
 
-    /**
-     * @param {
-     *     module:views/fields/varchar~options &
-     *     module:views/fields/base~options
-     * } options Options.
-     */
+    
     constructor(options) {
         super(options);
     }
@@ -85,26 +36,16 @@ class VarcharFieldView extends BaseFieldView {
         'isNotEmpty',
     ]
 
-    /** @inheritDoc */
+    
     validations = [
         'required',
         'pattern',
     ]
 
-    /**
-     * Use an autocomplete requesting data from the backend.
-     *
-     * @protected
-     * @type {boolean}
-     */
+    
     useAutocompleteUrl = false
 
-    /**
-     * No spell-check.
-     *
-     * @protected
-     * @type {boolean}
-     */
+    
     noSpellCheck = false
 
     setup() {
@@ -128,16 +69,10 @@ class VarcharFieldView extends BaseFieldView {
         }
     }
 
-    /**
-     * Set up options.
-     */
+    
     setupOptions() {}
 
-    /**
-     * Set options.
-     *
-     * @param {string[]} optionList Options.
-     */
+    
     setOptionList(optionList) {
         if (!this.originalOptionList) {
             this.originalOptionList = this.params.options || [];
@@ -152,9 +87,7 @@ class VarcharFieldView extends BaseFieldView {
         }
     }
 
-    /**
-     * Reset options.
-     */
+    
     resetOptionList() {
         if (this.originalOptionList) {
             this.params.options = Espo.Utils.clone(this.originalOptionList);
@@ -167,9 +100,7 @@ class VarcharFieldView extends BaseFieldView {
         }
     }
 
-    /**
-     * @protected
-     */
+    
     copyToClipboard() {
         const value = this.model.get(this.name);
 
@@ -178,13 +109,8 @@ class VarcharFieldView extends BaseFieldView {
         });
     }
 
-    // noinspection JSUnusedLocalSymbols
-    /**
-     * Compose an autocomplete URL.
-     *
-     * @param {string} q A query.
-     * @return {string}
-     */
+    
+    
     getAutocompleteUrl(q) {
         return '';
     }
@@ -278,7 +204,7 @@ class VarcharFieldView extends BaseFieldView {
                 this.useAutocompleteUrl
             )
         ) {
-            // noinspection JSUnusedGlobalSymbols
+            
             const autocompleteOptions = {
                 minChars: 0,
                 lookup: this.params.options,
@@ -323,7 +249,7 @@ class VarcharFieldView extends BaseFieldView {
             this.$element.autocomplete(autocompleteOptions);
             this.$element.attr('autocomplete', 'espo-' + this.name);
 
-            // Prevent showing suggestions after select.
+            
             this.$element.off('focus.autocomplete');
 
             this.$element.on('focus', () => {
@@ -349,22 +275,17 @@ class VarcharFieldView extends BaseFieldView {
         }
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     validatePattern() {
         const pattern = this.params.pattern;
 
         return this.fieldValidatePattern(this.name, pattern);
     }
 
-    /**
-     * Used by other field views.
-     *
-     * @param {string} name
-     * @param {string} [pattern]
-     */
+    
     fieldValidatePattern(name, pattern) {
         pattern = pattern || this.model.getFieldParam(name, 'pattern');
-        /** @var {string|null} value */
+        
         const value = this.model.get(name);
 
         if (!pattern) {
@@ -385,7 +306,7 @@ class VarcharFieldView extends BaseFieldView {
         return true;
     }
 
-    /** @inheritDoc */
+    
     fetch() {
         const data = {};
 
@@ -396,7 +317,7 @@ class VarcharFieldView extends BaseFieldView {
         return data;
     }
 
-    /** @inheritDoc */
+    
     fetchSearch() {
         const type = this.fetchSearchType() || 'startsWith';
 

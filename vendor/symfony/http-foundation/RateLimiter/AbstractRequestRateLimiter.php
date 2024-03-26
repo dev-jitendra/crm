@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpFoundation\RateLimiter;
 
@@ -16,12 +9,7 @@ use Symfony\Component\RateLimiter\LimiterInterface;
 use Symfony\Component\RateLimiter\Policy\NoLimiter;
 use Symfony\Component\RateLimiter\RateLimit;
 
-/**
- * An implementation of RequestRateLimiterInterface that
- * fits most use-cases.
- *
- * @author Wouter de Jong <wouter@wouterj.nl>
- */
+
 abstract class AbstractRequestRateLimiter implements RequestRateLimiterInterface
 {
     public function consume(Request $request): RateLimit
@@ -48,9 +36,7 @@ abstract class AbstractRequestRateLimiter implements RequestRateLimiterInterface
         }
     }
 
-    /**
-     * @return LimiterInterface[] a set of limiters using keys extracted from the request
-     */
+    
     abstract protected function getLimiters(Request $request): array;
 
     private static function getMinimalRateLimit(RateLimit $first, RateLimit $second): RateLimit

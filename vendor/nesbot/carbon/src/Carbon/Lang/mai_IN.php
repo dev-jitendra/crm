@@ -1,18 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Maithili Computing Research Center, Pune, India    rajeshkajha@yahoo.com,akhilesh.k@samusng.com
- */
+
+
 return array_replace_recursive(require __DIR__.'/en.php', [
     'formats' => [
         'L' => 'D/M/YY',
@@ -25,17 +15,17 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'day_of_first_week_of_year' => 1,
     'meridiem' => ['पूर्वाह्न', 'अपराह्न'],
 
-    'year' => ':count ऋतु', // less reliable
-    'y' => ':count ऋतु', // less reliable
-    'a_year' => ':count ऋतु', // less reliable
+    'year' => ':count ऋतु', 
+    'y' => ':count ऋतु', 
+    'a_year' => ':count ऋतु', 
 
     'month' => ':count महिना',
     'm' => ':count महिना',
     'a_month' => ':count महिना',
 
-    'week' => ':count श्रेणी:क्यालेन्डर', // less reliable
-    'w' => ':count श्रेणी:क्यालेन्डर', // less reliable
-    'a_week' => ':count श्रेणी:क्यालेन्डर', // less reliable
+    'week' => ':count श्रेणी:क्यालेन्डर', 
+    'w' => ':count श्रेणी:क्यालेन्डर', 
+    'a_week' => ':count श्रेणी:क्यालेन्डर', 
 
     'day' => ':count दिन',
     'd' => ':count दिन',
@@ -45,7 +35,7 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'h' => ':count घण्टा',
     'a_hour' => ':count घण्टा',
 
-    'minute' => ':count समय', // less reliable
-    'min' => ':count समय', // less reliable
-    'a_minute' => ':count समय', // less reliable
+    'minute' => ':count समय', 
+    'min' => ':count समय', 
+    'a_minute' => ':count समय', 
 ]);

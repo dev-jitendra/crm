@@ -17,9 +17,9 @@ class Promise implements ExtendedPromiseInterface, CancellablePromiseInterface
     {
         $this->canceller = $canceller;
 
-        // Explicitly overwrite arguments with null values before invoking
-        // resolver function. This ensure that these arguments do not show up
-        // in the stack trace in PHP 7+ only.
+        
+        
+        
         $cb = $resolver;
         $resolver = $canceller = null;
         $this->call($cb);
@@ -35,11 +35,11 @@ class Promise implements ExtendedPromiseInterface, CancellablePromiseInterface
             return new static($this->resolver($onFulfilled, $onRejected, $onProgress));
         }
 
-        // This promise has a canceller, so we create a new child promise which
-        // has a canceller that invokes the parent canceller if all other
-        // followers are also cancelled. We keep a reference to this promise
-        // instance for the static canceller function and clear this to avoid
-        // keeping a cyclic reference between parent and follower.
+        
+        
+        
+        
+        
         $parent = $this;
         ++$parent->requiredCancelRequests;
 
@@ -191,16 +191,16 @@ class Promise implements ExtendedPromiseInterface, CancellablePromiseInterface
 
     private function call(callable $cb)
     {
-        // Explicitly overwrite argument with null value. This ensure that this
-        // argument does not show up in the stack trace in PHP 7+ only.
+        
+        
         $callback = $cb;
         $cb = null;
 
-        // Use reflection to inspect number of arguments expected by this callback.
-        // We did some careful benchmarking here: Using reflection to avoid unneeded
-        // function arguments is actually faster than blindly passing them.
-        // Also, this helps avoiding unnecessary function arguments in the call stack
-        // if the callback creates an Exception (creating garbage cycles).
+        
+        
+        
+        
+        
         if (\is_array($callback)) {
             $ref = new \ReflectionMethod($callback[0], $callback[1]);
         } elseif (\is_object($callback) && !$callback instanceof \Closure) {
@@ -214,14 +214,14 @@ class Promise implements ExtendedPromiseInterface, CancellablePromiseInterface
             if ($args === 0) {
                 $callback();
             } else {
-                // Keep references to this promise instance for the static resolve/reject functions.
-                // By using static callbacks that are not bound to this instance
-                // and passing the target promise instance by reference, we can
-                // still execute its resolving logic and still clear this
-                // reference when settling the promise. This helps avoiding
-                // garbage cycles if any callback creates an Exception.
-                // These assumptions are covered by the test suite, so if you ever feel like
-                // refactoring this, go ahead, any alternative suggestions are welcome!
+                
+                
+                
+                
+                
+                
+                
+                
                 $target =& $this;
                 $progressHandlers =& $this->progressHandlers;
 

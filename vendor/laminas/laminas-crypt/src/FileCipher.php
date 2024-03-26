@@ -18,54 +18,27 @@ use function sprintf;
 use function str_repeat;
 use function unlink;
 
-/**
- * Encrypt/decrypt a file using a symmetric cipher in CBC mode
- * then authenticate using HMAC
- */
+
 class FileCipher
 {
-    public const BUFFER_SIZE = 1048576; // 16 * 65536 bytes = 1 Mb
+    public const BUFFER_SIZE = 1048576; 
 
-    /**
-     * Hash algorithm for Pbkdf2
-     *
-     * @var string
-     */
+    
     protected $pbkdf2Hash = 'sha256';
 
-    /**
-     * Hash algorithm for HMAC
-     *
-     * @var string
-     */
+    
     protected $hash = 'sha256';
 
-    /**
-     * Number of iterations for Pbkdf2
-     *
-     * @var int
-     */
+    
     protected $keyIteration = 10000;
 
-    /**
-     * Key
-     *
-     * @var string
-     */
+    
     protected $key;
 
-    /**
-     * Cipher
-     *
-     * @var SymmetricInterface
-     */
+    
     protected $cipher;
 
-    /**
-     * Constructor
-     *
-     * @param SymmetricInterface $cipher
-     */
+    
     public function __construct(?Symmetric\SymmetricInterface $cipher = null)
     {
         if (null === $cipher) {
@@ -74,52 +47,31 @@ class FileCipher
         $this->cipher = $cipher;
     }
 
-    /**
-     * Set the cipher object
-     *
-     * @param SymmetricInterface $cipher
-     */
+    
     public function setCipher(Symmetric\SymmetricInterface $cipher)
     {
         $this->cipher = $cipher;
     }
 
-    /**
-     * Get the cipher object
-     *
-     * @return SymmetricInterface
-     */
+    
     public function getCipher()
     {
         return $this->cipher;
     }
 
-    /**
-     * Set the number of iterations for Pbkdf2
-     *
-     * @param  int  $num
-     */
+    
     public function setKeyIteration($num)
     {
         $this->keyIteration = (int) $num;
     }
 
-    /**
-     * Get the number of iterations for Pbkdf2
-     *
-     * @return int
-     */
+    
     public function getKeyIteration()
     {
         return $this->keyIteration;
     }
 
-    /**
-     * Set the encryption/decryption key
-     *
-     * @param  string                             $key
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public function setKey($key)
     {
         if (empty($key)) {
@@ -128,52 +80,31 @@ class FileCipher
         $this->key = (string) $key;
     }
 
-    /**
-     * Get the key
-     *
-     * @return string|null
-     */
+    
     public function getKey()
     {
         return $this->key;
     }
 
-    /**
-     * Set algorithm of the symmetric cipher
-     *
-     * @param  string                             $algo
-     */
+    
     public function setCipherAlgorithm($algo)
     {
         $this->cipher->setAlgorithm($algo);
     }
 
-    /**
-     * Get the cipher algorithm
-     *
-     * @return string|bool
-     */
+    
     public function getCipherAlgorithm()
     {
         return $this->cipher->getAlgorithm();
     }
 
-    /**
-     * Get the supported algorithms of the symmetric cipher
-     *
-     * @return array
-     */
+    
     public function getCipherSupportedAlgorithms()
     {
         return $this->cipher->getSupportedAlgorithms();
     }
 
-    /**
-     * Set the hash algorithm for HMAC authentication
-     *
-     * @param  string                             $hash
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public function setHashAlgorithm($hash)
     {
         if (! Hash::isSupported($hash)) {
@@ -184,22 +115,13 @@ class FileCipher
         $this->hash = (string) $hash;
     }
 
-    /**
-     * Get the hash algorithm for HMAC authentication
-     *
-     * @return string
-     */
+    
     public function getHashAlgorithm()
     {
         return $this->hash;
     }
 
-    /**
-     * Set the hash algorithm for the Pbkdf2
-     *
-     * @param  string                             $hash
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public function setPbkdf2HashAlgorithm($hash)
     {
         if (! Hash::isSupported($hash)) {
@@ -210,24 +132,13 @@ class FileCipher
         $this->pbkdf2Hash = (string) $hash;
     }
 
-    /**
-     * Get the Pbkdf2 hash algorithm
-     *
-     * @return string
-     */
+    
     public function getPbkdf2HashAlgorithm()
     {
         return $this->pbkdf2Hash;
     }
 
-    /**
-     * Encrypt then authenticate a file using HMAC
-     *
-     * @param  string                             $fileIn
-     * @param  string                             $fileOut
-     * @return bool
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public function encrypt($fileIn, $fileOut)
     {
         $this->checkFileInOut($fileIn, $fileOut);
@@ -262,13 +173,13 @@ class FileCipher
 
         while ($data = fread($read, self::BUFFER_SIZE)) {
             $size += mb_strlen($data, '8bit');
-            // Padding if last block
+            
             if ($size === $tot) {
                 $this->cipher->setPadding($padding);
             }
             $result = $this->cipher->encrypt($data);
             if ($size <= self::BUFFER_SIZE) {
-                // Write a placeholder for the HMAC and write the IV
+                
                 fwrite($write, str_repeat(0, Hmac::getOutputSize($hashAlgo)));
             } else {
                 $result = mb_substr($result, $saltSize, null, '8bit');
@@ -284,7 +195,7 @@ class FileCipher
             }
         }
         $result = true;
-        // write the HMAC at the beginning of the file
+        
         fseek($write, 0);
         if (fwrite($write, $hmac) !== mb_strlen($hmac, '8bit')) {
             $result = false;
@@ -295,14 +206,7 @@ class FileCipher
         return $result;
     }
 
-    /**
-     * Decrypt a file
-     *
-     * @param  string                             $fileIn
-     * @param  string                             $fileOut
-     * @return bool
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public function decrypt($fileIn, $fileOut)
     {
         $this->checkFileInOut($fileIn, $fileOut);
@@ -337,7 +241,7 @@ class FileCipher
 
         while ($data = fread($read, self::BUFFER_SIZE)) {
             $size += mb_strlen($data, '8bit');
-            // Unpadding if last block
+            
             if ($size + $blockSize >= $tot) {
                 $this->cipher->setPadding($padding);
                 $data .= fread($read, $blockSize);
@@ -356,7 +260,7 @@ class FileCipher
         fclose($write);
         fclose($read);
 
-        // check for data integrity
+        
         if (! Utils::compareStrings($hmac, $hmacRead)) {
             unlink($fileOut);
             return false;
@@ -365,13 +269,7 @@ class FileCipher
         return true;
     }
 
-    /**
-     * Check that input file exists and output file don't
-     *
-     * @param  string $fileIn
-     * @param  string $fileOut
-     * @throws Exception\InvalidArgumentException
-     */
+    
     protected function checkFileInOut($fileIn, $fileOut)
     {
         if (! file_exists($fileIn)) {

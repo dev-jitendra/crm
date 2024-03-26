@@ -1,21 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Philippe Vaucher
- * - Tsutomu Kuroda
- * - dan-nl
- * - Simon Lelorrain (slelorrain)
- */
+
+
 
 use Carbon\CarbonInterface;
 
@@ -61,7 +48,7 @@ return [
         'nextWeek' => 'dddd [um] LT',
         'lastDay' => '[Gëschter um] LT',
         'lastWeek' => function (CarbonInterface $date) {
-            // Different date string for 'Dënschdeg' (Tuesday) and 'Donneschdeg' (Thursday) due to phonological rule
+            
             switch ($date->dayOfWeek) {
                 case 2:
                 case 4:

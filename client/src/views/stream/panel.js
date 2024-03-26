@@ -1,33 +1,7 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 import RelationshipPanelView from 'views/record/panels/relationship';
-// noinspection ES6UnusedImports
+
 import Textcomplete from 'jquery-textcomplete';
 
 class PanelStreamView extends RelationshipPanelView {
@@ -41,15 +15,15 @@ class PanelStreamView extends RelationshipPanelView {
     filterList = ['all', 'posts', 'updates']
 
     additionalEvents = {
-        /** @this PanelStreamView */
+        
         'focus textarea[data-name="post"]': function () {
             this.enablePostingMode(true);
         },
-        /** @this PanelStreamView */
+        
         'click button.post': function () {
             this.post();
         },
-        /** @this PanelStreamView */
+        
         'click .action[data-action="switchInternalMode"]': function (e) {
             this.isInternalNoteMode = !this.isInternalNoteMode;
 
@@ -62,7 +36,7 @@ class PanelStreamView extends RelationshipPanelView {
             }
 
         },
-        /** @this PanelStreamView */
+        
         'keydown textarea[data-name="post"]': function (e) {
             if (Espo.Utils.getKeyFromKeyEvent(e) === 'Control+Enter') {
                 e.stopPropagation();
@@ -71,21 +45,15 @@ class PanelStreamView extends RelationshipPanelView {
                 this.post();
             }
 
-            // Don't hide to be able to focus on the upload button.
-            /*if (e.code === 'Tab') {
-                let $text = $(e.currentTarget);
-
-                if ($text.val() === '') {
-                    this.disablePostingMode();
-                }
-            }*/
+            
+            
         },
-        /** @this PanelStreamView */
+        
         'input textarea[data-name="post"]': function () {
             this.controlPreviewButton();
             this.controlPostButtonAvailability(this.$textarea.val());
         },
-        /** @this PanelStreamView */
+        
         'click .action[data-action="preview"]': function () {
             this.preview();
         },
@@ -665,7 +633,7 @@ class PanelStreamView extends RelationshipPanelView {
         });
     }
 
-    // noinspection JSUnusedGlobalSymbols
+    
     actionViewPostList() {
         var url = this.model.entityType + '/' + this.model.id + '/posts';
 

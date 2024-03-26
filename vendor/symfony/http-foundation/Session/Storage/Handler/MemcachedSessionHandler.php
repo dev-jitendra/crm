@@ -1,47 +1,21 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\HttpFoundation\Session\Storage\Handler;
 
-/**
- * Memcached based session storage handler based on the Memcached class
- * provided by the PHP memcached extension.
- *
- * @see https://php.net/memcached
- *
- * @author Drak <drak@zikula.org>
- */
+
 class MemcachedSessionHandler extends AbstractSessionHandler
 {
     private $memcached;
 
-    /**
-     * Time to live in seconds.
-     */
+    
     private ?int $ttl;
 
-    /**
-     * Key prefix for shared environments.
-     */
+    
     private string $prefix;
 
-    /**
-     * Constructor.
-     *
-     * List of available options:
-     *  * prefix: The prefix to use for the memcached keys in order to avoid collision
-     *  * ttl: The time to live in seconds.
-     *
-     * @throws \InvalidArgumentException When unsupported options are passed
-     */
+    
     public function __construct(\Memcached $memcached, array $options = [])
     {
         $this->memcached = $memcached;
@@ -59,9 +33,7 @@ class MemcachedSessionHandler extends AbstractSessionHandler
         return $this->memcached->quit();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function doRead(string $sessionId): string
     {
         return $this->memcached->get($this->prefix.$sessionId) ?: '';
@@ -74,9 +46,7 @@ class MemcachedSessionHandler extends AbstractSessionHandler
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function doWrite(string $sessionId, string $data): bool
     {
         return $this->memcached->set($this->prefix.$sessionId, $data, $this->getCompatibleTtl());
@@ -86,8 +56,8 @@ class MemcachedSessionHandler extends AbstractSessionHandler
     {
         $ttl = (int) ($this->ttl ?? \ini_get('session.gc_maxlifetime'));
 
-        // If the relative TTL that is used exceeds 30 days, memcached will treat the value as Unix time.
-        // We have to convert it to an absolute Unix time at this point, to make sure the TTL is correct.
+        
+        
         if ($ttl > 60 * 60 * 24 * 30) {
             $ttl += time();
         }
@@ -95,9 +65,7 @@ class MemcachedSessionHandler extends AbstractSessionHandler
         return $ttl;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     protected function doDestroy(string $sessionId): bool
     {
         $result = $this->memcached->delete($this->prefix.$sessionId);
@@ -107,13 +75,11 @@ class MemcachedSessionHandler extends AbstractSessionHandler
 
     public function gc(int $maxlifetime): int|false
     {
-        // not required here because memcached will auto expire the records anyhow.
+        
         return 0;
     }
 
-    /**
-     * Return a Memcached instance.
-     */
+    
     protected function getMemcached(): \Memcached
     {
         return $this->memcached;

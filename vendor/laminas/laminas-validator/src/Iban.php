@@ -15,9 +15,7 @@ use function strlen;
 use function strtoupper;
 use function substr;
 
-/**
- * Validates IBAN Numbers (International Bank Account Numbers)
- */
+
 class Iban extends AbstractValidator
 {
     public const NOTSUPPORTED     = 'ibanNotSupported';
@@ -25,11 +23,7 @@ class Iban extends AbstractValidator
     public const FALSEFORMAT      = 'ibanFalseFormat';
     public const CHECKFAILED      = 'ibanCheckFailed';
 
-    /**
-     * Validation failure message template definitions
-     *
-     * @var array<string, string>
-     */
+    
     protected $messageTemplates = [
         self::NOTSUPPORTED     => 'Unknown country within the IBAN',
         self::SEPANOTSUPPORTED => 'Countries outside the Single Euro Payments Area (SEPA) are not supported',
@@ -37,25 +31,13 @@ class Iban extends AbstractValidator
         self::CHECKFAILED      => 'The input has failed the IBAN check',
     ];
 
-    /**
-     * Optional country code by ISO 3166-1
-     *
-     * @var string|null
-     */
+    
     protected $countryCode;
 
-    /**
-     * Optionally allow IBAN codes from non-SEPA countries. Defaults to true
-     *
-     * @var bool
-     */
+    
     protected $allowNonSepa = true;
 
-    /**
-     * The SEPA country codes
-     *
-     * @var string[] ISO 3166-1 codes
-     */
+    
     protected static $sepaCountries = [
         'AT',
         'BE',
@@ -96,11 +78,7 @@ class Iban extends AbstractValidator
         'HR',
     ];
 
-    /**
-     * IBAN regexes by country code
-     *
-     * @var array
-     */
+    
     protected static $ibanRegex = [
         'AD' => 'AD[0-9]{2}[0-9]{4}[0-9]{4}[A-Z0-9]{12}',
         'AE' => 'AE[0-9]{2}[0-9]{3}[0-9]{16}',
@@ -170,11 +148,7 @@ class Iban extends AbstractValidator
         'VG' => 'VG[0-9]{2}[A-Z]{4}[0-9]{16}',
     ];
 
-    /**
-     * Sets validator options
-     *
-     * @param  array|Traversable $options OPTIONAL
-     */
+    
     public function __construct($options = [])
     {
         if ($options instanceof Traversable) {
@@ -192,23 +166,13 @@ class Iban extends AbstractValidator
         parent::__construct($options);
     }
 
-    /**
-     * Returns the optional country code by ISO 3166-1
-     *
-     * @return string|null
-     */
+    
     public function getCountryCode()
     {
         return $this->countryCode;
     }
 
-    /**
-     * Sets an optional country code by ISO 3166-1
-     *
-     * @param  string|null $countryCode
-     * @return $this provides a fluent interface
-     * @throws Exception\InvalidArgumentException
-     */
+    
     public function setCountryCode($countryCode = null)
     {
         if ($countryCode !== null) {
@@ -225,34 +189,20 @@ class Iban extends AbstractValidator
         return $this;
     }
 
-    /**
-     * Returns the optional allow non-sepa countries setting
-     *
-     * @return bool
-     */
+    
     public function allowNonSepa()
     {
         return $this->allowNonSepa;
     }
 
-    /**
-     * Sets the optional allow non-sepa countries setting
-     *
-     * @param  bool $allowNonSepa
-     * @return $this provides a fluent interface
-     */
+    
     public function setAllowNonSepa($allowNonSepa)
     {
         $this->allowNonSepa = (bool) $allowNonSepa;
         return $this;
     }
 
-    /**
-     * Returns true if $value is a valid IBAN
-     *
-     * @param  string $value
-     * @return bool
-     */
+    
     public function isValid($value)
     {
         if (! is_string($value)) {

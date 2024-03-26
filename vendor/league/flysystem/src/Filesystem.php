@@ -6,19 +6,13 @@ namespace League\Flysystem;
 
 class Filesystem implements FilesystemOperator
 {
-    /**
-     * @var FilesystemAdapter
-     */
+    
     private $adapter;
 
-    /**
-     * @var Config
-     */
+    
     private $config;
 
-    /**
-     * @var PathNormalizer
-     */
+    
     private $pathNormalizer;
 
     public function __construct(
@@ -47,7 +41,7 @@ class Filesystem implements FilesystemOperator
 
     public function writeStream(string $location, $contents, array $config = []): void
     {
-        /* @var resource $contents */
+        
         $this->assertIsResource($contents);
         $this->rewindStream($contents);
         $this->adapter->writeStream(
@@ -135,9 +129,7 @@ class Filesystem implements FilesystemOperator
         return $this->adapter->visibility($this->pathNormalizer->normalizePath($path))->visibility();
     }
 
-    /**
-     * @param mixed $contents
-     */
+    
     private function assertIsResource($contents): void
     {
         if (is_resource($contents) === false) {
@@ -151,9 +143,7 @@ class Filesystem implements FilesystemOperator
         }
     }
 
-    /**
-     * @param resource $resource
-     */
+    
     private function rewindStream($resource): void
     {
         if (ftell($resource) !== 0 && stream_get_meta_data($resource)['seekable']) {

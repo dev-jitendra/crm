@@ -8,13 +8,7 @@ use Matrix\Exception;
 
 class Division extends Multiplication
 {
-    /**
-     * Execute the division
-     *
-     * @param mixed $value The matrix or numeric value to divide the current base value by
-     * @throws Exception If the provided argument is not appropriate for the operation
-     * @return $this The operation object, allowing multiple divisions to be chained
-     **/
+    
     public function execute($value): Operator
     {
         if (is_array($value)) {

@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Utils;
 
@@ -36,60 +10,45 @@ use RuntimeException;
 
 use const E_USER_DEPRECATED;
 
-/**
- * Access to the application config parameters.
- */
+
 class Config
 {
     private string $configPath = 'data/config.php';
     private string $internalConfigPath = 'data/config-internal.php';
     private string $systemConfigPath = 'application/Espo/Resources/defaults/systemConfig.php';
     private string $cacheTimestamp = 'cacheTimestamp';
-    /** @var string[] */
+    
     protected $associativeArrayAttributeList = [
         'currencyRates',
         'database',
         'logger',
         'defaultPermissions',
     ];
-    /** @var ?array<string, mixed> */
+    
     private $data = null;
-    /** @var array<string, mixed> */
+    
     private $changedData = [];
-    /** @var string[] */
+    
     private $removeData = [];
-    /** @var string[] */
+    
     private $internalParamList = [];
 
     public function __construct(private ConfigFileManager $fileManager)
     {}
 
-    /**
-     * A path to the config file.
-     *
-     * @todo Move to ConfigData.
-     */
+    
     public function getConfigPath(): string
     {
         return $this->configPath;
     }
 
-    /**
-     * A path to the internal config file.
-     *
-     * @todo Move to ConfigData.
-     */
+    
     public function getInternalConfigPath(): string
     {
         return $this->internalConfigPath;
     }
 
-    /**
-     * Get a parameter value.
-     *
-     * @param mixed $default
-     * @return mixed
-     */
+    
     public function get(string $name, $default = null)
     {
         $keys = explode('.', $name);
@@ -121,9 +80,7 @@ class Config
         return $lastBranch;
     }
 
-    /**
-     * Whether a parameter is set.
-     */
+    
     public function has(string $name): bool
     {
         $keys = explode('.', $name);
@@ -155,23 +112,13 @@ class Config
         return true;
     }
 
-    /**
-     * Re-load data.
-     *
-     * @todo Get rid of this method. Use ConfigData as a dependency.
-     * `$configData->update();`
-     */
+    
     public function update(): void
     {
         $this->load();
     }
 
-    /**
-     * @deprecated As of v7.0. Use ConfigWriter instead.
-     *
-     * @param string|array<string, mixed>|stdClass $name
-     * @param mixed $value
-     */
+    
     public function set($name, $value = null, bool $dontMarkDirty = false): void
     {
         if (is_object($name)) {
@@ -195,9 +142,7 @@ class Config
         }
     }
 
-    /**
-     * @deprecated As of v7.0. Use ConfigWriter instead.
-     */
+    
     public function remove(string $name): bool
     {
         assert($this->data !== null);
@@ -213,10 +158,7 @@ class Config
         return false;
     }
 
-    /**
-     * @deprecated As of v7.0. Use ConfigWriter instead.
-     * @return bool
-     */
+    
     public function save()
     {
         trigger_error(
@@ -277,9 +219,7 @@ class Config
         return isset($this->data) && !empty($this->data);
     }
 
-    /**
-     * @return array<string, mixed>
-     */
+    
     private function getData(): array
     {
         if (!$this->isLoaded()) {
@@ -301,7 +241,7 @@ class Config
         $internalData = $this->fileManager->isFile($this->internalConfigPath) ?
             $this->fileManager->getPhpContents($this->internalConfigPath) : [];
 
-        /** @var array<string, mixed> $mergedData */
+        
         $mergedData = Util::merge(
             Util::merge($systemData, $data),
             $internalData
@@ -314,9 +254,7 @@ class Config
         $this->fileManager->setConfig($this);
     }
 
-    /**
-     * Get all parameters excluding those that are set in the internal config.
-     */
+    
     public function getAllNonInternalData(): stdClass
     {
         $data = (object) $this->getData();
@@ -328,9 +266,7 @@ class Config
         return $data;
     }
 
-    /**
-     * Whether a parameter is set in the internal config.
-     */
+    
     public function isInternal(string $name): bool
     {
         if (!$this->isLoaded()) {
@@ -340,11 +276,7 @@ class Config
         return in_array($name, $this->internalParamList);
     }
 
-    /**
-     * @deprecated As of 7.0. Use ConfigWriter instead.
-     * @param array<string, mixed> $data
-     * @return void
-     */
+    
     public function setData($data)
     {
         if (is_object($data)) {
@@ -354,10 +286,7 @@ class Config
         $this->set($data);
     }
 
-    /**
-     * @deprecated As of 7.0. Use ConfigWriter instead.
-     * @return ?array<string, int>
-     */
+    
     public function updateCacheTimestamp(bool $returnOnlyValue = false)
     {
         $timestamp = [
@@ -373,10 +302,7 @@ class Config
         return null;
     }
 
-    /**
-     * @todo Move to another class `Espo\Core\Utils\Config\ApplicationConfigProvider`.
-     * @deprecated
-     */
+    
     public function getSiteUrl(): string
     {
         return rtrim($this->get('siteUrl'), '/');

@@ -4,14 +4,10 @@ declare(strict_types=1);
 
 namespace Doctrine\DBAL\Driver;
 
-/** @internal */
+
 final class FetchUtils
 {
-    /**
-     * @return mixed|false
-     *
-     * @throws Exception
-     */
+    
     public static function fetchOne(Result $result)
     {
         $row = $result->fetchNumeric();
@@ -23,11 +19,7 @@ final class FetchUtils
         return $row[0];
     }
 
-    /**
-     * @return list<list<mixed>>
-     *
-     * @throws Exception
-     */
+    
     public static function fetchAllNumeric(Result $result): array
     {
         $rows = [];
@@ -39,11 +31,7 @@ final class FetchUtils
         return $rows;
     }
 
-    /**
-     * @return list<array<string,mixed>>
-     *
-     * @throws Exception
-     */
+    
     public static function fetchAllAssociative(Result $result): array
     {
         $rows = [];
@@ -55,11 +43,7 @@ final class FetchUtils
         return $rows;
     }
 
-    /**
-     * @return list<mixed>
-     *
-     * @throws Exception
-     */
+    
     public static function fetchFirstColumn(Result $result): array
     {
         $rows = [];

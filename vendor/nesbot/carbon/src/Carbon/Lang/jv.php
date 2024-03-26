@@ -1,20 +1,8 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
-/*
- * Authors:
- * - Josh Soref
- * - tgfjt
- * - JD Isaacks
- */
+
+
 return [
     'year' => '{1}setaun|]1,Inf[:count taun',
     'month' => '{1}sewulan|]1,Inf[:count wulan',

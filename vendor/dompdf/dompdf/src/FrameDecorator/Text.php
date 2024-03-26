@@ -1,33 +1,18 @@
 <?php
-/**
- * @package dompdf
- * @link    https://github.com/dompdf/dompdf
- * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
- */
+
 namespace Dompdf\FrameDecorator;
 
 use Dompdf\Dompdf;
 use Dompdf\Frame;
 use Dompdf\Exception;
 
-/**
- * Decorates Frame objects for text layout
- *
- * @package dompdf
- */
+
 class Text extends AbstractFrameDecorator
 {
-    /**
-     * @var float
-     */
+    
     protected $text_spacing;
 
-    /**
-     * Text constructor.
-     * @param Frame $frame
-     * @param Dompdf $dompdf
-     * @throws Exception
-     */
+    
     function __construct(Frame $frame, Dompdf $dompdf)
     {
         if (!$frame->is_text_node()) {
@@ -44,57 +29,41 @@ class Text extends AbstractFrameDecorator
         $this->text_spacing = 0.0;
     }
 
-    // Accessor methods
+    
 
-    /**
-     * @return float
-     */
+    
     public function get_text_spacing(): float
     {
         return $this->text_spacing;
     }
 
-    /**
-     * @return string
-     */
+    
     function get_text()
     {
-        // FIXME: this should be in a child class (and is incorrect)
-//    if ( $this->_frame->get_style()->content !== "normal" ) {
-//      $this->_frame->get_node()->data = $this->_frame->get_style()->content;
-//      $this->_frame->get_style()->content = "normal";
-//    }
+        
 
-//      Helpers::pre_r("---");
-//      $style = $this->_frame->get_style();
-//      var_dump($text = $this->_frame->get_node()->data);
-//      var_dump($asc = utf8_decode($text));
-//      for ($i = 0; $i < strlen($asc); $i++)
-//        Helpers::pre_r("$i: " . $asc[$i] . " - " . ord($asc[$i]));
-//      Helpers::pre_r("width: " . $this->_dompdf->getFontMetrics()->getTextWidth($text, $style->font_family, $style->font_size));
+
+
+
+
+
+
+
+
+
+
+
 
         return $this->_frame->get_node()->data;
     }
 
-    //........................................................................
+    
 
-    /**
-     * Vertical padding, border, and margin do not apply when determining the
-     * height for inline frames.
-     *
-     * http://www.w3.org/TR/CSS21/visudet.html#inline-non-replaced
-     *
-     * The vertical padding, border and margin of an inline, non-replaced box
-     * start at the top and bottom of the content area, not the
-     * 'line-height'. But only the 'line-height' is used to calculate the
-     * height of the line box.
-     *
-     * @return float
-     */
+    
     public function get_margin_height(): float
     {
-        // This function is also called in add_frame_to_line() and is used to
-        // determine the line height
+        
+        
         $style = $this->get_style();
         $font = $style->font_family;
         $size = $style->font_size;
@@ -111,20 +80,14 @@ class Text extends AbstractFrameDecorator
         return $pb;
     }
 
-    /**
-     * @param float $spacing
-     */
+    
     public function set_text_spacing(float $spacing): void
     {
         $this->text_spacing = $spacing;
         $this->recalculate_width();
     }
 
-    /**
-     * Recalculate the text width
-     *
-     * @return float
-     */
+    
     public function recalculate_width(): float
     {
         $fontMetrics = $this->_dompdf->getFontMetrics();
@@ -140,15 +103,9 @@ class Text extends AbstractFrameDecorator
         return $text_width;
     }
 
-    // Text manipulation methods
+    
 
-    /**
-     * Split the text in this frame at the offset specified.  The remaining
-     * text is added as a sibling frame following this one and is returned.
-     *
-     * @param int $offset
-     * @return Frame|null
-     */
+    
     function split_text($offset)
     {
         if ($offset == 0) {
@@ -172,18 +129,13 @@ class Text extends AbstractFrameDecorator
         return $deco;
     }
 
-    /**
-     * @param int $offset
-     * @param int $count
-     */
+    
     function delete_text($offset, $count)
     {
         $this->_frame->get_node()->deleteData($offset, $count);
     }
 
-    /**
-     * @param string $text
-     */
+    
     function set_text($text)
     {
         $this->_frame->get_node()->data = $text;

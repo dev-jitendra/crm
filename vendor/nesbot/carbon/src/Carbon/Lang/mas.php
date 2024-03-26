@@ -1,13 +1,6 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 return array_replace_recursive(require __DIR__.'/en.php', [
     'meridiem' => ['Ɛnkakɛnyá', 'Ɛndámâ'],
@@ -25,21 +18,21 @@ return array_replace_recursive(require __DIR__.'/en.php', [
         'LLLL' => 'dddd, D MMMM YYYY HH:mm',
     ],
 
-    'year' => ':count olameyu', // less reliable
-    'y' => ':count olameyu', // less reliable
-    'a_year' => ':count olameyu', // less reliable
+    'year' => ':count olameyu', 
+    'y' => ':count olameyu', 
+    'a_year' => ':count olameyu', 
 
-    'week' => ':count engolongeare orwiki', // less reliable
-    'w' => ':count engolongeare orwiki', // less reliable
-    'a_week' => ':count engolongeare orwiki', // less reliable
+    'week' => ':count engolongeare orwiki', 
+    'w' => ':count engolongeare orwiki', 
+    'a_week' => ':count engolongeare orwiki', 
 
-    'hour' => ':count esahabu', // less reliable
-    'h' => ':count esahabu', // less reliable
-    'a_hour' => ':count esahabu', // less reliable
+    'hour' => ':count esahabu', 
+    'h' => ':count esahabu', 
+    'a_hour' => ':count esahabu', 
 
-    'second' => ':count are', // less reliable
-    's' => ':count are', // less reliable
-    'a_second' => ':count are', // less reliable
+    'second' => ':count are', 
+    's' => ':count are', 
+    'a_second' => ':count are', 
 
     'month' => ':count olapa',
     'm' => ':count olapa',

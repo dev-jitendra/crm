@@ -7,28 +7,19 @@ use Psr\Http\Client\ClientExceptionInterface;
 
 class Web
 {
-    /**
-     * WEBSERVICE.
-     *
-     * Returns data from a web service on the Internet or Intranet.
-     *
-     * Excel Function:
-     *        Webservice(url)
-     *
-     * @return string the output resulting from a call to the webservice
-     */
+    
     public static function WEBSERVICE(string $url)
     {
         $url = trim($url);
         if (strlen($url) > 2048) {
-            return Functions::VALUE(); // Invalid URL length
+            return Functions::VALUE(); 
         }
 
-        if (!preg_match('/^http[s]?:\/\//', $url)) {
-            return Functions::VALUE(); // Invalid protocol
+        if (!preg_match('/^http[s]?:\/\
+            return Functions::VALUE(); 
         }
 
-        // Get results from the the webservice
+        
         $client = Settings::getHttpClient();
         $requestFactory = Settings::getRequestFactory();
         $request = $requestFactory->createRequest('GET', $url);
@@ -36,16 +27,16 @@ class Web
         try {
             $response = $client->sendRequest($request);
         } catch (ClientExceptionInterface $e) {
-            return Functions::VALUE(); // cURL error
+            return Functions::VALUE(); 
         }
 
         if ($response->getStatusCode() != 200) {
-            return Functions::VALUE(); // cURL error
+            return Functions::VALUE(); 
         }
 
         $output = $response->getBody()->getContents();
         if (strlen($output) > 32767) {
-            return Functions::VALUE(); // Output not a string or too long
+            return Functions::VALUE(); 
         }
 
         return $output;

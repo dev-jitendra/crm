@@ -1,5 +1,5 @@
 <?php
-// phpcs:disable Generic.Arrays.DisallowLongArraySyntax
+
 
 require_once '../vendor/autoload.php';
 
@@ -7,16 +7,16 @@ use ICal\ICal;
 
 try {
     $ical = new ICal('ICal.ics', array(
-        'defaultSpan'                 => 2,     // Default value
+        'defaultSpan'                 => 2,     
         'defaultTimeZone'             => 'UTC',
-        'defaultWeekStart'            => 'MO',  // Default value
-        'disableCharacterReplacement' => false, // Default value
-        'filterDaysAfter'             => null,  // Default value
-        'filterDaysBefore'            => null,  // Default value
-        'skipRecurrence'              => false, // Default value
+        'defaultWeekStart'            => 'MO',  
+        'disableCharacterReplacement' => false, 
+        'filterDaysAfter'             => null,  
+        'filterDaysBefore'            => null,  
+        'skipRecurrence'              => false, 
     ));
-    // $ical->initFile('ICal.ics');
-    // $ical->initUrl('https://raw.githubusercontent.com/u01jmg3/ics-parser/master/examples/ICal.ics', $username = null, $password = null, $userAgent = null);
+    
+    
 } catch (\Exception $e) {
     die($e);
 }
@@ -26,7 +26,7 @@ try {
 <head>
     <meta charset="utf-8">
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https:
     <title>PHP ICS Parser example</title>
     <style>body { background-color: #eee } .caption { overflow-x: auto }</style>
 </head>

@@ -2,27 +2,16 @@
 
 namespace AsyncAws\S3\ValueObject;
 
-/**
- * Contains the elements that set the ACL permissions for an object per grantee.
- */
+
 final class AccessControlPolicy
 {
-    /**
-     * A list of grants.
-     */
+    
     private $grants;
 
-    /**
-     * Container for the bucket owner's display name and ID.
-     */
+    
     private $owner;
 
-    /**
-     * @param array{
-     *   Grants?: null|Grant[],
-     *   Owner?: null|Owner|array,
-     * } $input
-     */
+    
     public function __construct(array $input)
     {
         $this->grants = isset($input['Grants']) ? array_map([Grant::class, 'create'], $input['Grants']) : null;
@@ -34,9 +23,7 @@ final class AccessControlPolicy
         return $input instanceof self ? $input : new self($input);
     }
 
-    /**
-     * @return Grant[]
-     */
+    
     public function getGrants(): array
     {
         return $this->grants ?? [];
@@ -47,9 +34,7 @@ final class AccessControlPolicy
         return $this->owner;
     }
 
-    /**
-     * @internal
-     */
+    
     public function requestBody(\DomElement $node, \DomDocument $document): void
     {
         if (null !== $v = $this->grants) {

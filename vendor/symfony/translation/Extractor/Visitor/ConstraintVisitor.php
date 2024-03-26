@@ -1,24 +1,13 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 namespace Symfony\Component\Translation\Extractor\Visitor;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitor;
 
-/**
- * @author Mathieu Santostefano <msantostefano@protonmail.com>
- *
- * Code mostly comes from https://github.com/php-translation/extractor/blob/master/src/Visitor/Php/Symfony/Constraint.php
- */
+
 final class ConstraintVisitor extends AbstractVisitor implements NodeVisitor
 {
     private const CONSTRAINT_VALIDATION_MESSAGE_PATTERN = '/[a-zA-Z]*message/i';
@@ -68,14 +57,14 @@ final class ConstraintVisitor extends AbstractVisitor implements NodeVisitor
             $messages = $this->getStringArguments($node, self::CONSTRAINT_VALIDATION_MESSAGE_PATTERN, true);
         } else {
             if (!$arg->value instanceof Node\Expr\Array_) {
-                // There is no way to guess which argument is a message to be translated.
+                
                 return null;
             }
 
             $messages = [];
             $options = $arg->value;
 
-            /** @var Node\Expr\ArrayItem $item */
+            
             foreach ($options->items as $item) {
                 if (!$item->key instanceof Node\Scalar\String_) {
                     continue;

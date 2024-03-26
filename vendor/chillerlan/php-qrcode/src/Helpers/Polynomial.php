@@ -1,14 +1,5 @@
 <?php
-/**
- * Class Polynomial
- *
- * @filesource   Polynomial.php
- * @created      25.11.2015
- * @package      chillerlan\QRCode\Helpers
- * @author       Smiley <smiley@chillerlan.net>
- * @copyright    2015 Smiley
- * @license      MIT
- */
+
 
 namespace chillerlan\QRCode\Helpers;
 
@@ -16,16 +7,10 @@ use chillerlan\QRCode\QRCodeException;
 
 use function array_fill, count, sprintf;
 
-/**
- * Polynomial long division helpers
- *
- * @see http://www.thonky.com/qr-code-tutorial/error-correction-coding
- */
+
 final class Polynomial{
 
-	/**
-	 * @see http://www.thonky.com/qr-code-tutorial/log-antilog-table
-	 */
+	
 	protected const table = [
 		[  1,   0], [  2,   0], [  4,   1], [  8,  25], [ 16,   2], [ 32,  50], [ 64,  26], [128, 198],
 		[ 29,   3], [ 58, 223], [116,  51], [232, 238], [205,  27], [135, 104], [ 19, 199], [ 38,  75],
@@ -61,31 +46,20 @@ final class Polynomial{
 		[ 27, 116], [ 54, 214], [108, 244], [216, 234], [173, 168], [ 71,  80], [142,  88], [  1, 175],
 	];
 
-	/**
-	 * @var int[]
-	 */
+	
 	protected array $num = [];
 
-	/**
-	 * Polynomial constructor.
-	 */
+	
 	public function __construct(array $num = null, int $shift = null){
 		$this->setNum($num ?? [1], $shift);
 	}
 
-	/**
-	 *
-	 */
+	
 	public function getNum():array{
 		return $this->num;
 	}
 
-	/**
-	 * @param int[]    $num
-	 * @param int|null $shift
-	 *
-	 * @return \chillerlan\QRCode\Helpers\Polynomial
-	 */
+	
 	public function setNum(array $num, int $shift = null):Polynomial{
 		$offset = 0;
 		$numCount = count($num);
@@ -103,11 +77,7 @@ final class Polynomial{
 		return $this;
 	}
 
-	/**
-	 * @param int[] $e
-	 *
-	 * @return \chillerlan\QRCode\Helpers\Polynomial
-	 */
+	
 	public function multiply(array $e):Polynomial{
 		$n = array_fill(0, count($this->num) + count($e) - 1, 0);
 
@@ -125,11 +95,7 @@ final class Polynomial{
 		return $this;
 	}
 
-	/**
-	 * @param int[] $e
-	 *
-	 * @return \chillerlan\QRCode\Helpers\Polynomial
-	 */
+	
 	public function mod(array $e):Polynomial{
 		$n = $this->num;
 
@@ -148,9 +114,7 @@ final class Polynomial{
 		return $this;
 	}
 
-	/**
-	 * @throws \chillerlan\QRCode\QRCodeException
-	 */
+	
 	public function glog(int $n):int{
 
 		if($n < 1){
@@ -160,9 +124,7 @@ final class Polynomial{
 		return Polynomial::table[$n][1];
 	}
 
-	/**
-	 *
-	 */
+	
 	public function gexp(int $n):int{
 
 		if($n < 0){

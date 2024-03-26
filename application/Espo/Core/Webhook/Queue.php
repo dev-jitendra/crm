@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Webhook;
 
@@ -46,10 +20,7 @@ use Exception;
 use DateTime;
 use stdClass;
 
-/**
- * Groups occurred events into portions and sends them. A portion contains
- * multiple events of the same webhook.
- */
+
 class Queue
 {
     private const EVENT_PORTION_SIZE = 20;
@@ -224,9 +195,7 @@ class Queue
         $this->send($webhook, $dataList, $actualItemList);
     }
 
-    /**
-     * @param string[] $forbiddenAttributeList
-     */
+    
     private function prepareItemData(WebhookQueueItem $item, ?User $user, array $forbiddenAttributeList): ?stdClass
     {
         $targetType = $item->get('targetType');
@@ -264,10 +233,7 @@ class Queue
         return $data;
     }
 
-    /**
-     * @param mixed[] $dataList
-     * @param WebhookQueueItem[] $itemList
-     */
+    
     private function send(Webhook $webhook, array $dataList, array $itemList): void
     {
         try {
@@ -307,9 +273,7 @@ class Queue
         $this->log->debug("Webhook Queue: Webhook '" . $webhook->getId()  . "' sent, response code: {$code}.");
     }
 
-    /**
-     * @param WebhookQueueItem[] $itemList
-     */
+    
     protected function failQueueItemList(array $itemList, bool $force = false): void
     {
         foreach ($itemList as $item) {
@@ -317,9 +281,7 @@ class Queue
         }
     }
 
-    /**
-     * @param WebhookQueueItem[] $itemList
-     */
+    
     protected function succeedQueueItemList(array $itemList): void
     {
         foreach ($itemList as $item) {

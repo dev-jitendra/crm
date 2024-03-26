@@ -2,19 +2,19 @@
 
 # required: PHP 5.3+ and zlib extension
 
-// ini option check
+
 if (ini_get('phar.readonly')) {
     echo "php.ini: set the 'phar.readonly' option to 0 to enable phar creation\n";
     exit(1);
 }
 
-// output name
+
 $pharName = 'Matrix.phar';
 
-// target folder
+
 $sourceDir = __DIR__ . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR;
 
-// default meta information
+
 $metaData = array(
     'Author'      => 'Mark Baker <mark@lange.demon.co.uk>',
     'Description' => 'PHP Class for working with Matrix numbers',
@@ -24,7 +24,7 @@ $metaData = array(
     'Date'        => date('Y-m-d')
 );
 
-// cleanup
+
 if (file_exists($pharName)) {
     echo "Removed: {$pharName}\n";
     unlink($pharName);
@@ -32,14 +32,14 @@ if (file_exists($pharName)) {
 
 echo "Building phar file...\n";
 
-// the phar object
+
 $phar = new Phar($pharName, null, 'Matrix');
 $phar->buildFromDirectory($sourceDir);
 $phar->setStub(
 <<<'EOT'
 <?php
     spl_autoload_register(function ($className) {
-        include 'phar://' . $className . '.php';
+        include 'phar:
     });
 
     try {
@@ -49,7 +49,7 @@ $phar->setStub(
         exit(1);
     }
 
-    include 'phar://functions/sqrt.php';
+    include 'phar:
 
     __HALT_COMPILER();
 EOT

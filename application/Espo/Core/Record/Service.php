@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Record;
 
@@ -77,13 +51,7 @@ use RuntimeException;
 
 use const E_USER_DEPRECATED;
 
-/**
- * The layer between a controller and ORM repository. For CRUD and other operations with records.
- * Access control is processed here.
- *
- * @template TEntity of Entity
- * @implements Crud<TEntity>
- */
+
 class Service implements Crud,
 
     Di\ConfigAware,
@@ -114,79 +82,72 @@ class Service implements Crud,
     use Di\AssignmentCheckerManagerSetter;
     use Di\RecordHookManagerSetter;
 
-    /** @var bool */
+    
     protected $getEntityBeforeUpdate = false;
-    /** @var string */
+    
     protected $entityType;
-    /** @var ?StreamService */
+    
     private $streamService = null;
-    /**
-     * @var string[]
-     * @todo Maybe remove it?
-     */
+    
     protected $notFilteringAttributeList = [];
-    /** @var string[] */
+    
     protected $forbiddenAttributeList = [];
-    /** @var string[] */
+    
     protected $internalAttributeList = [];
-    /** @var string[] */
+    
     protected $onlyAdminAttributeList = [];
-    /** @var string[] */
+    
     protected $readOnlyAttributeList = [];
-    /** @var string[] */
+    
     protected $nonAdminReadOnlyAttributeList = [];
-    /** @var string[] */
+    
     protected $forbiddenLinkList = [];
-    /** @var string[] */
+    
     protected $internalLinkList = [];
-    /** @var string[] */
+    
     protected $readOnlyLinkList = [];
-    /** @var string[] */
+    
     protected $nonAdminReadOnlyLinkList = [];
-    /** @var string[] */
+    
     protected $onlyAdminLinkList = [];
-    /** @var array<string, string[]> */
+    
     protected $linkMandatorySelectAttributeList = [];
-    /** @var string[] */
+    
     protected $noEditAccessRequiredLinkList = [];
-    /** @var bool */
+    
     protected $noEditAccessRequiredForLink = false;
-    /** @var bool */
+    
     protected $checkForDuplicatesInUpdate = false;
-    /** @var bool */
+    
     protected $actionHistoryDisabled = false;
-    /** @var string[] */
+    
     protected $duplicatingLinkList = [];
-    /** @var bool */
+    
     protected $listCountQueryDisabled = false;
-    /** @var ?int */
+    
     protected $maxSelectTextAttributeLength = null;
-    /** @var bool */
+    
     protected $maxSelectTextAttributeLengthDisabled = false;
-    /** @var ?string[] */
+    
     protected $selectAttributeList = null;
-    /** @var string[] */
+    
     protected $mandatorySelectAttributeList = [];
-    /** @var bool */
+    
     protected $forceSelectAllAttributes = false;
-    /** @var string[] */
+    
     protected $duplicateIgnoreAttributeList = [];
-    /**
-     * @var string[]
-     * @deprecated As of v8.0. Use `suppressValidationList` metadata parameter.
-     * @todo Remove in v9.0.
-     */
+    
     protected $validateSkipFieldList = [];
 
-    /** @var Acl */
+    
     protected $acl = null;
-    /** @var User */
+    
     protected $user = null;
-    /** @var EntityManager */
+    
     protected $entityManager;
-    /** @var SelectBuilderFactory */
+    
     protected $selectBuilderFactory;
-    /** @var RecordHookManager */
+    
     protected $recordHookManager;
     private ?ListLoadProcessor $listLoadProcessor = null;
     private ?DuplicateFinder $duplicateFinder = null;
@@ -200,19 +161,13 @@ class Service implements Crud,
         $this->entityType = $entityType;
     }
 
-    /**
-     * @return RDBRepository<TEntity>
-     */
+    
     protected function getRepository(): RDBRepository
     {
         return $this->entityManager->getRDBRepository($this->entityType);
     }
 
-    /**
-     * Add an action-history record.
-     *
-     * @param Action::* $action
-     */
+    
     public function processActionHistoryRecord(string $action, Entity $entity): void
     {
         if ($this->actionHistoryDisabled) {
@@ -235,14 +190,7 @@ class Service implements Crud,
         return $this->actionLogger;
     }
 
-    /**
-     * Read a record by ID. Access control check is performed.
-     *
-     * @param non-empty-string $id
-     * @return TEntity
-     * @throws NotFoundSilent If not found.
-     * @throws Forbidden If no read access.
-     */
+    
     public function read(string $id, ReadParams $params): Entity
     {
         if ($id === '') {
@@ -265,12 +213,7 @@ class Service implements Crud,
         return $entity;
     }
 
-    /**
-     * Get an entity by ID. Access control check is performed.
-     *
-     * @throws Forbidden If no read access.
-     * @return ?TEntity
-     */
+    
     public function getEntity(string $id): ?Entity
     {
         try {
@@ -286,7 +229,7 @@ class Service implements Crud,
                     $this->createSelectApplierClassNameListProvider()->get($this->entityType)
                 );
 
-            // @todo Apply access control filter. If a parameter enabled? Check compatibility.
+            
 
             $query = $builder->build();
         }
@@ -341,10 +284,7 @@ class Service implements Crud,
         return $this->listLoadProcessor;
     }
 
-    /**
-     * @param TEntity $entity
-     * @return void
-     */
+    
     public function loadAdditionalFields(Entity $entity)
     {
         $loadProcessor = $this->createReadLoadProcessor();
@@ -352,11 +292,7 @@ class Service implements Crud,
         $loadProcessor->process($entity);
     }
 
-    /**
-     * @param Entity $entity
-     * @todo Make private.
-     * @note Not to be extended.
-     */
+    
     protected function loadListAdditionalFields(Entity $entity, ?SearchParams $searchParams = null): void
     {
         $params = new FieldLoaderParams();
@@ -370,15 +306,7 @@ class Service implements Crud,
         $loadProcessor->process($entity, $params);
     }
 
-    /**
-     * Warning: Do not extend.
-     *
-     * @todo Fix signature.
-     * @param TEntity $entity
-     * @param stdClass $data
-     * @return void
-     * @throws BadRequest
-     */
+    
     public function processValidation(Entity $entity, $data)
     {
         $params = FieldValidationParams
@@ -395,10 +323,7 @@ class Service implements Crud,
         $this->fieldValidationManager->process($entity, $data, $params);
     }
 
-    /**
-     * @param TEntity $entity
-     * @throws Forbidden
-     */
+    
     protected function processAssignmentCheck(Entity $entity): void
     {
         if (!$this->checkAssignment($entity)) {
@@ -406,11 +331,7 @@ class Service implements Crud,
         }
     }
 
-    /**
-     * Check whether assignment can be applied for an entity.
-     *
-     * @param TEntity $entity
-     */
+    
     public function checkAssignment(Entity $entity): bool
     {
         return $this->assignmentCheckerManager->check($this->user, $entity);
@@ -438,12 +359,7 @@ class Service implements Crud,
         return $this->linkCheck;
     }
 
-    /**
-     * Sanitize input data.
-     *
-     * @param stdClass $data Input data.
-     * @since 8.1.0
-     */
+    
     public function sanitizeInput(stdClass $data): void
     {
         $manager = $this->injectableFactory->create(SanitizeManager::class);
@@ -451,11 +367,7 @@ class Service implements Crud,
         $manager->process($this->entityType, $data);
     }
 
-    /**
-     * @param string $attribute
-     * @param mixed $value
-     * @return mixed
-     */
+    
     protected function filterInputAttribute($attribute, $value)
     {
         if (in_array($attribute, $this->notFilteringAttributeList)) {
@@ -471,10 +383,7 @@ class Service implements Crud,
         return $value;
     }
 
-    /**
-     * @param stdClass $data
-     * @return void
-     */
+    
     protected function filterInput($data)
     {
         foreach($this->readOnlyAttributeList as $attribute) {
@@ -563,32 +472,17 @@ class Service implements Crud,
         }
     }
 
-    /**
-     * @deprecated As of v7.0. Use filterCreateInput or filterUpdateInput. Or better don't extend the class.
-     * Use entityAcl, app > acl, roles to restrict write access for specific fields.
-     * @todo Remove in v9.0.
-     * @param stdClass $data
-     * @return void
-     */
+    
     protected function handleCreateInput($data)
     {
     }
 
-    /**
-     * @deprecated As of v7.0. Use filterCreateInput or filterUpdateInput. Or better don't extend the class.
-     * Use entityAcl, app > acl, roles to restrict write access for specific fields.
-     * @todo Remove in v9.0.
-     * @param stdClass $data
-     * @return void
-     */
+    
     protected function handleInput($data)
     {
     }
 
-    /**
-     * @param TEntity $entity
-     * @throws Conflict
-     */
+    
     protected function processConcurrencyControl(Entity $entity, stdClass $data, int $versionNumber): void
     {
         if ($entity->get('versionNumber') === null) {
@@ -627,10 +521,7 @@ class Service implements Crud,
         throw ConflictSilent::createWithBody('modified', Json::encode($responseData));
     }
 
-    /**
-     * @param TEntity $entity
-     * @throws Conflict
-     */
+    
     protected function processDuplicateCheck(Entity $entity): void
     {
         $duplicates = $this->findDuplicates($entity);
@@ -646,10 +537,7 @@ class Service implements Crud,
         throw ConflictSilent::createWithBody('duplicate', Json::encode($duplicates->getValueMapList()));
     }
 
-    /**
-     * @param TEntity $entity
-     * @todo Move the logic to a class. Make customizable (recordDefs)?
-     */
+    
     public function populateDefaults(Entity $entity, stdClass $data): void
     {
         if (!$this->user->isPortal()) {
@@ -708,14 +596,7 @@ class Service implements Crud,
         }
     }
 
-    /**
-     * Create a record.
-     *
-     * @return TEntity
-     * @throws BadRequest
-     * @throws Forbidden If no create access.
-     * @throws Conflict
-     */
+    
     public function create(stdClass $data, CreateParams $params): Entity
     {
         if (!$this->acl->check($this->entityType, AclTable::ACTION_CREATE)) {
@@ -759,15 +640,7 @@ class Service implements Crud,
         return $entity;
     }
 
-    /**
-     * Update a record.
-     *
-     * @return TEntity
-     * @throws NotFound If record not found.
-     * @throws Forbidden If no access.
-     * @throws Conflict
-     * @throws BadRequest
-     */
+    
     public function update(string $id, stdClass $data, UpdateParams $params): Entity
     {
         if (!$this->acl->check($this->entityType, AclTable::ACTION_EDIT)) {
@@ -833,13 +706,7 @@ class Service implements Crud,
         return $entity;
     }
 
-    /**
-     * Delete a record.
-     *
-     * @throws Forbidden
-     * @throws BadRequest
-     * @throws NotFound
-     */
+    
     public function delete(string $id, DeleteParams $params): void
     {
         if (!$this->acl->check($this->entityType, AclTable::ACTION_DELETE)) {
@@ -867,14 +734,7 @@ class Service implements Crud,
         $this->processActionHistoryRecord(Action::DELETE, $entity);
     }
 
-    /**
-     * Find records.
-     *
-     * @return RecordCollection<TEntity>
-     * @throws Forbidden
-     * @throws BadRequest
-     * @throws Error
-     */
+    
     public function find(SearchParams $searchParams, ?FindParams $params = null): RecordCollection
     {
         if (!$this->acl->check($this->entityType, AclTable::ACTION_READ)) {
@@ -935,9 +795,7 @@ class Service implements Crud,
         return $this->injectableFactory->create(ApplierClassNameListProvider::class);
     }
 
-    /**
-     * @return TEntity|null
-     */
+    
     private function getEntityEvenDeleted(string $id): ?Entity
     {
         $query = $this->entityManager
@@ -955,12 +813,7 @@ class Service implements Crud,
             ->findOne();
     }
 
-    /**
-     * Restore a deleted record.
-     *
-     * @throws NotFound If not found.
-     * @throws Forbidden If no access.
-     */
+    
     public function restoreDeleted(string $id): void
     {
         if (!$this->user->isAdmin()) {
@@ -994,16 +847,7 @@ class Service implements Crud,
             self::MAX_SELECT_TEXT_ATTRIBUTE_LENGTH;
     }
 
-    /**
-     * Find linked records.
-     *
-     * @param non-empty-string $link
-     * @return RecordCollection<Entity>
-     * @throws NotFound If a record not found.
-     * @throws Forbidden If no access.
-     * @throws BadRequest
-     * @throws Error
-     */
+    
     public function findLinked(string $id, string $link, SearchParams $searchParams): RecordCollection
     {
         if ($link === '') {
@@ -1106,12 +950,7 @@ class Service implements Crud,
         return RecordCollection::create($collection, $total);
     }
 
-    /**
-     * @param string $link
-     * @return ?RecordCollection<Entity>
-     * @throws Forbidden
-     * @throws NotFound
-     */
+    
     private function processFindLinkedMethod(string $id, string $link, SearchParams $searchParams): ?RecordCollection
     {
         if ($link === 'followers') {
@@ -1127,13 +966,7 @@ class Service implements Crud,
         return null;
     }
 
-    /**
-     * Link records.
-     *
-     * @throws BadRequest
-     * @throws Forbidden
-     * @throws NotFound
-     */
+    
     public function link(string $id, string $link, string $foreignId): void
     {
         if (!$this->acl->check($this->entityType)) {
@@ -1183,13 +1016,7 @@ class Service implements Crud,
             ->relate($foreignEntity);
     }
 
-    /**
-     * Unlink records.
-     *
-     * @throws BadRequest
-     * @throws Forbidden
-     * @throws NotFound
-      */
+    
     public function unlink(string $id, string $link, string $foreignId): void
     {
         if (!$this->acl->check($this->entityType)) {
@@ -1239,10 +1066,7 @@ class Service implements Crud,
             ->unrelate($foreignEntity);
     }
 
-    /**
-     * @throws Forbidden
-     * @throws NotFound
-     */
+    
     private function processLinkMethod(string $id, string $link, string $foreignId): bool
     {
         if ($link === 'followers') {
@@ -1266,10 +1090,7 @@ class Service implements Crud,
         return false;
     }
 
-    /**
-     * @throws Forbidden
-     * @throws NotFound
-     */
+    
     private function processUnlinkMethod(string $id, string $link, string $foreignId): bool
     {
         if ($link === 'followers') {
@@ -1292,11 +1113,7 @@ class Service implements Crud,
         return false;
     }
 
-    /**
-     * @throws Forbidden
-     * @throws NotFound
-     * @throws ForbiddenSilent
-     */
+    
     protected function linkFollowers(string $id, string $foreignId): void
     {
         if (!$this->acl->check($this->entityType, AclTable::ACTION_EDIT)) {
@@ -1313,7 +1130,7 @@ class Service implements Crud,
             throw new NotFound();
         }
 
-        /** @var ?User $user */
+        
         $user = $this->entityManager->getEntityById(User::ENTITY_TYPE, $foreignId);
 
         if (!$user) {
@@ -1362,11 +1179,7 @@ class Service implements Crud,
         }
     }
 
-    /**
-     * @throws Forbidden
-     * @throws NotFound
-     * @throws ForbiddenSilent
-     */
+    
     protected function unlinkFollowers(string $id, string $foreignId): void
     {
         if (!$this->acl->check($this->entityType, AclTable::ACTION_EDIT)) {
@@ -1383,7 +1196,7 @@ class Service implements Crud,
             throw new NotFound();
         }
 
-        /** @var ?User $user */
+        
         $user = $this->entityManager->getEntityById(User::ENTITY_TYPE, $foreignId);
 
         if (!$user) {
@@ -1417,12 +1230,7 @@ class Service implements Crud,
         $this->getStreamService()->unfollowEntity($entity, $foreignId);
     }
 
-    /**
-     * @throws BadRequest
-     * @throws Forbidden
-     * @throws NotFound
-     * @throws Error
-     */
+    
     public function massLink(string $id, string $link, SearchParams $searchParams): bool
     {
         if (!$this->acl->check($this->entityType, AclTable::ACTION_EDIT)) {
@@ -1441,7 +1249,7 @@ class Service implements Crud,
             throw new NotFound();
         }
 
-        // Not used link-check deliberately. Only edit access.
+        
         if (!$this->acl->check($entity, AclTable::ACTION_EDIT)) {
             throw new Forbidden();
         }
@@ -1512,9 +1320,7 @@ class Service implements Crud,
         return false;
     }
 
-    /**
-     * @throws Forbidden
-     */
+    
     protected function processForbiddenLinkReadCheck(string $link): void
     {
         $forbiddenLinkList = $this->acl
@@ -1537,9 +1343,7 @@ class Service implements Crud,
         }
     }
 
-    /**
-     * @throws Forbidden
-     */
+    
     protected function processForbiddenLinkEditCheck(string $link): void
     {
         $type = $this->entityManager
@@ -1583,15 +1387,7 @@ class Service implements Crud,
         }
     }
 
-    /**
-     * Follow a record.
-     *
-     * @param string $id A record ID.
-     * @param string|null $userId A user ID. If not specified then a current user will be used.
-     *
-     * @throws NotFoundSilent
-     * @throws Forbidden
-     */
+    
     public function follow(string $id, ?string $userId = null): void
     {
         if (!$this->acl->check($this->entityType, AclTable::ACTION_STREAM)) {
@@ -1615,14 +1411,7 @@ class Service implements Crud,
         $this->getStreamService()->followEntity($entity, $userId);
     }
 
-    /**
-     * Unfollow a record.
-     *
-     * @param string $id A record ID.
-     * @param string|null $userId A user ID. If not specified then a current user will be used.
-     *
-     * @throws NotFoundSilent
-     */
+    
     public function unfollow(string $id, ?string $userId = null): void
     {
         $entity = $this->getRepository()->getById($id);
@@ -1647,16 +1436,12 @@ class Service implements Crud,
         return $this->duplicateFinder;
     }
 
-    /**
-     * Check whether an entity has a duplicate.
-     *
-     * @param TEntity $entity
-     */
+    
     public function checkIsDuplicate(Entity $entity): bool
     {
         $finder = $this->getDuplicateFinder();
 
-        // For backward compatibility.
+        
         if (method_exists($this, 'getDuplicateWhereClause')) {
             $whereClause = $this->getDuplicateWhereClause($entity, (object) []);
 
@@ -1670,16 +1455,12 @@ class Service implements Crud,
         return $finder->check($entity);
     }
 
-    /**
-     * Find duplicates for an entity.
-     *
-     * @return ?Collection<TEntity>
-     */
+    
     public function findDuplicates(Entity $entity): ?Collection
     {
         $finder = $this->getDuplicateFinder();
 
-        // For backward compatibility.
+        
         if (method_exists($this, 'getDuplicateWhereClause')) {
             $whereClause = $this->getDuplicateWhereClause($entity, (object) []);
 
@@ -1687,20 +1468,15 @@ class Service implements Crud,
                 return null;
             }
 
-            /** @var ?Collection<TEntity> */
+            
             return $finder->findByWhere($entity, WhereClause::fromRaw($whereClause));
         }
 
-        /** @var ?Collection<TEntity> */
+        
         return $finder->find($entity);
     }
 
-    /**
-     * Prepare an entity for output. Clears not allowed attributes.
-     *
-     * @param TEntity $entity
-     * @return void
-     */
+    
     public function prepareEntityForOutput(Entity $entity)
     {
         foreach ($this->internalAttributeList as $attribute) {
@@ -1724,11 +1500,7 @@ class Service implements Crud,
         }
     }
 
-    /**
-     * @return RecordCollection<User>
-     * @throws NotFound
-     * @throws Forbidden
-     */
+    
     protected function findLinkedFollowers(string $id, SearchParams $params): RecordCollection
     {
         $entity = $this->getRepository()->getById($id);
@@ -1749,12 +1521,7 @@ class Service implements Crud,
         return $this->injectableFactory->create(EntityDuplicator::class);
     }
 
-    /**
-     * @throws BadRequest
-     * @throws Forbidden
-     * @throws ForbiddenSilent
-     * @throws NotFound
-     */
+    
     public function getDuplicateAttributes(string $id): stdClass
     {
         if (!$id) {
@@ -1790,9 +1557,7 @@ class Service implements Crud,
         return $attributes;
     }
 
-    /**
-     * @param TEntity $entity
-     */
+    
     protected function afterCreateProcessDuplicating(Entity $entity, CreateParams $params): void
     {
         $duplicatingEntityId = $params->getDuplicateSourceId();
@@ -1801,7 +1566,7 @@ class Service implements Crud,
             return;
         }
 
-        /** @var ?TEntity $duplicatingEntity */
+        
         $duplicatingEntity = $this->entityManager->getEntityById($entity->getEntityType(), $duplicatingEntityId);
 
         if (!$duplicatingEntity) {
@@ -1815,10 +1580,7 @@ class Service implements Crud,
         $this->duplicateLinks($entity, $duplicatingEntity);
     }
 
-    /**
-     * @param TEntity $entity
-     * @param TEntity $duplicatingEntity
-     */
+    
     protected function duplicateLinks(Entity $entity, Entity $duplicatingEntity): void
     {
         $repository = $this->getRepository();
@@ -1896,9 +1658,7 @@ class Service implements Crud,
         return $searchParams->withSelect($select);
     }
 
-    /**
-     * @param TEntity $entity
-     */
+    
     private function processApiBeforeCreateApiScript(Entity $entity, CreateParams $params): void
     {
         $processor = $this->injectableFactory->create(FormulaProcessor::class);
@@ -1906,9 +1666,7 @@ class Service implements Crud,
         $processor->processBeforeCreate($entity, $params);
     }
 
-    /**
-     * @param TEntity $entity
-     */
+    
     private function processApiBeforeUpdateApiScript(Entity $entity, UpdateParams $params): void
     {
         $processor = $this->injectableFactory->create(FormulaProcessor::class);
@@ -1916,49 +1674,27 @@ class Service implements Crud,
         $processor->processBeforeUpdate($entity, $params);
     }
 
-    /**
-     * @param TEntity $entity
-     * @param stdClass $data
-     * @return void
-     */
+    
     protected function beforeCreateEntity(Entity $entity, $data)
     {}
 
-    /**
-     * @param TEntity $entity
-     * @param stdClass $data
-     * @return void
-     */
+    
     protected function afterCreateEntity(Entity $entity, $data)
     {}
 
-    /**
-     * @param TEntity $entity
-     * @param stdClass $data
-     * @return void
-     */
+    
     protected function beforeUpdateEntity(Entity $entity, $data)
     {}
 
-    /**
-     * @param TEntity $entity
-     * @param stdClass $data
-     * @return void
-     */
+    
     protected function afterUpdateEntity(Entity $entity, $data)
     {}
 
-    /**
-     * @param TEntity $entity
-     * @return void
-     */
+    
     protected function beforeDeleteEntity(Entity $entity)
     {}
 
-    /**
-     * @param TEntity $entity
-     * @return void
-     */
+    
     protected function afterDeleteEntity(Entity $entity)
     {}
 }

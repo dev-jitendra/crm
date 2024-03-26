@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Mail\Parsers;
 
@@ -47,12 +21,10 @@ use ZBateson\MailMimeParser\Message as ParserMessage;
 
 use stdClass;
 
-/**
- * An adapter for MailMimeParser library.
- */
+
 class MailMimeParser implements Parser
 {
-    /** @var array<string, string> */
+    
     private array $extMimeTypeMap = [
         'jpg' => 'image/jpg',
         'jpeg' => 'image/jpeg',
@@ -68,7 +40,7 @@ class MailMimeParser implements Parser
 
     private const DISPOSITION_INLINE = 'inline';
 
-    /** @var array<string, ParserMessage> */
+    
     private array $messageHash = [];
 
     public function __construct(private EntityManager $entityManager)
@@ -93,9 +65,7 @@ class MailMimeParser implements Parser
     }
 
 
-    /**
-     * @return ParserMessage
-     */
+    
     private function getMessage(Message $message)
     {
         $key = spl_object_hash($message);
@@ -153,7 +123,7 @@ class MailMimeParser implements Parser
                 continue;
             }
 
-            /** @var AddressHeader $header */
+            
 
             $list = $header->getAddresses();
 
@@ -174,7 +144,7 @@ class MailMimeParser implements Parser
     {
         $header = $this->getMessage($message)->getHeader($type);
 
-        /** @var ?AddressHeader $header */
+        
 
         if ($header && method_exists($header, 'getAddresses')) {
             foreach ($header->getAddresses() as $item) {
@@ -188,16 +158,14 @@ class MailMimeParser implements Parser
         return null;
     }
 
-    /**
-     * @return string[]
-     */
+    
     public function getAddressList(Message $message, string $type): array
     {
         $addressList = [];
 
         $header = $this->getMessage($message)->getHeader($type);
 
-        /** @var ?AddressHeader $header */
+        
 
         if ($header && method_exists($header, 'getAddresses')) {
             $list = $header->getAddresses();
@@ -210,9 +178,7 @@ class MailMimeParser implements Parser
         return $addressList;
     }
 
-    /**
-     * @return Part[]
-     */
+    
     public function getPartList(Message $message): array
     {
         $wrappeeList = $this->getMessage($message)->getChildParts();
@@ -226,9 +192,7 @@ class MailMimeParser implements Parser
         return $partList;
     }
 
-    /**
-     * @return Attachment[]
-     */
+    
     public function getInlineAttachmentList(Message $message, Email $email): array
     {
         $inlineAttachmentList = [];
@@ -296,14 +260,14 @@ class MailMimeParser implements Parser
                 continue;
             }
 
-            /** @var Attachment $attachment */
+            
             $attachment = $this->entityManager->getNewEntity(Attachment::ENTITY_TYPE);
 
             $contentType = $this->detectAttachmentContentType($attachmentPart);
 
             $disposition = $attachmentPart->getHeaderValue('Content-Disposition');
 
-            /** @var ?string $filename */
+            
             $filename = $attachmentPart->getHeaderParameter('Content-Disposition', 'filename', null);
 
             if ($filename === null) {
@@ -319,7 +283,7 @@ class MailMimeParser implements Parser
 
             $content = '';
 
-            /** @var StreamInterface|null $binaryContentStream */
+            
             $binaryContentStream = $attachmentPart->getBinaryContentStream();
 
             if ($binaryContentStream) {
@@ -355,7 +319,7 @@ class MailMimeParser implements Parser
                 continue;
             }
 
-            // Inline disposition.
+            
 
             if ($contentId) {
                 $inlineAttachmentMap[$contentId] = $attachment;
@@ -365,7 +329,7 @@ class MailMimeParser implements Parser
                 continue;
             }
 
-            // No ID found, fallback to attachment.
+            
             $attachment
                 ->setRole(Attachment::ROLE_ATTACHMENT)
                 ->setTargetField(self::FIELD_ATTACHMENTS);
@@ -389,7 +353,7 @@ class MailMimeParser implements Parser
                     continue;
                 }
 
-                // Fallback to attachment.
+                
                 if ($attachment->getRole() === Attachment::ROLE_INLINE_ATTACHMENT) {
                     $attachment
                         ->setRole(Attachment::ROLE_ATTACHMENT)
@@ -404,7 +368,7 @@ class MailMimeParser implements Parser
             $email->setBody($body);
         }
 
-        /** @var ?MessagePart $textCalendarPart */
+        
         $textCalendarPart =
             $this->getMessage($message)->getAllPartsByMimeType('text/calendar')[0] ??
             $this->getMessage($message)->getAllPartsByMimeType('application/ics')[0] ??
@@ -436,7 +400,7 @@ class MailMimeParser implements Parser
 
     private function getAttachmentFilenameExtension(MimePart $part): ?string
     {
-        /** @var ?string $filename */
+        
         $filename = $part->getHeaderParameter('Content-Disposition', 'filename', null);
 
         if ($filename === null) {

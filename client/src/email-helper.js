@@ -1,87 +1,41 @@
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
 
-/** @module email-helper */
 
-/**
- * An email helper.
- */
+
+
+
 class EmailHelper {
 
-    /**
-     * @param {module:language} language A language.
-     * @param {module:models/user} user A user.
-     * @param {module:date-time} dateTime A date-time util.
-     * @param {module:acl-manager} acl An ACL manager.
-     */
+    
     constructor(language, user, dateTime, acl) {
-        /** @private */
+        
         this.language = language;
-        /** @private */
+        
         this.user = user;
-        /** @private */
+        
         this.dateTime = dateTime;
-        /** @private */
+        
         this.acl = acl;
 
-        /** @private */
+        
         this.erasedPlaceholder = 'ERASED:';
     }
 
-    /**
-     * @returns {module:language}
-     */
+    
     getLanguage() {
         return this.language;
     }
 
-    /**
-     * @returns {module:models/user}
-     */
+    
     getUser() {
         return this.user;
     }
 
-    /**
-     * @returns {module:date-time}
-     */
+    
     getDateTime() {
         return this.dateTime;
     }
 
-    /**
-     * Get reply email attributes.
-     *
-     * @param {module:model} model An email model.
-     * @param {Object|null} [data=null] Action data. Unused.
-     * @param {boolean} [cc=false] To include CC (reply-all).
-     * @returns {Object.<string, *>}
-     */
+    
     getReplyAttributes(model, data, cc) {
         const attributes = {
             status: 'Draft',
@@ -251,12 +205,7 @@ class EmailHelper {
         return attributes;
     }
 
-    /**
-     * Get forward email attributes.
-     *
-     * @param {module:model} model An email model.
-     * @returns {Object}
-     */
+    
     getForwardAttributes(model) {
         const attributes = {
             status: 'Draft',
@@ -283,12 +232,7 @@ class EmailHelper {
         return attributes;
     }
 
-    /**
-     * Add body attributes for a forward email.
-     *
-     * @param {module:model} model An email model.
-     * @param {Object} attributes
-     */
+    
     addForwardBodyAttributes(model, attributes) {
         let prepending = '';
 
@@ -387,12 +331,7 @@ class EmailHelper {
         }
     }
 
-    /**
-     * Parse a name from a string address.
-     *
-     * @param {string} value A string address. E.g. `Test Name <address@domain>`.
-     * @returns {string|null}
-     */
+    
     parseNameFromStringAddress(value) {
         if (~value.indexOf('<')) {
             let name = value.replace(/<(.*)>/, '').trim();
@@ -407,12 +346,7 @@ class EmailHelper {
         return null;
     }
 
-    /**
-     * Parse an address from a string address.
-     *
-     * @param {string} value A string address. E.g. `Test Name <address@domain>`.
-     * @returns {string|null}
-     */
+    
     parseAddressFromStringAddress(value) {
         const r = value.match(/<(.*)>/);
         let address;
@@ -427,12 +361,7 @@ class EmailHelper {
         return address;
     }
 
-    /**
-     * Add body attributes for a reply email.
-     *
-     * @param {module:model} model An email model.
-     * @param {Object.<string, *>} attributes
-     */
+    
     addReplyBodyAttributes(model, attributes) {
         const format = this.getDateTime().getReadableShortDateTimeFormat();
 
@@ -486,13 +415,7 @@ class EmailHelper {
         }
     }
 
-    /**
-     * Compose a mailto link.
-     *
-     * @param {Object} attributes Attributes.
-     * @param {string} [bcc] BCC.
-     * @returns {string} A mailto link.
-     */
+    
     composeMailToLink(attributes, bcc) {
         let link = 'mailto:';
 
@@ -552,12 +475,7 @@ class EmailHelper {
         return link;
     }
 
-    /**
-     * Convert an HTML to a plain text.
-     *
-     * @param {string} text A text.
-     * @returns {string}
-     */
+    
     htmlToPlain(text) {
         text = text || '';
 

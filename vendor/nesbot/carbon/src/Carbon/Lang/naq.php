@@ -1,13 +1,6 @@
 <?php
 
-/**
- * This file is part of the Carbon package.
- *
- * (c) Brian Nesbitt <brian@nesbot.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 
 return array_replace_recursive(require __DIR__.'/en.php', [
     'meridiem' => ['ǁgoagas', 'ǃuias'],
@@ -30,23 +23,23 @@ return array_replace_recursive(require __DIR__.'/en.php', [
     'y' => ':count kurigu',
     'a_year' => ':count kurigu',
 
-    'month' => ':count ǁaub', // less reliable
-    'm' => ':count ǁaub', // less reliable
-    'a_month' => ':count ǁaub', // less reliable
+    'month' => ':count ǁaub', 
+    'm' => ':count ǁaub', 
+    'a_month' => ':count ǁaub', 
 
-    'week' => ':count hû', // less reliable
-    'w' => ':count hû', // less reliable
-    'a_week' => ':count hû', // less reliable
+    'week' => ':count hû', 
+    'w' => ':count hû', 
+    'a_week' => ':count hû', 
 
-    'day' => ':count ǀhobas', // less reliable
-    'd' => ':count ǀhobas', // less reliable
-    'a_day' => ':count ǀhobas', // less reliable
+    'day' => ':count ǀhobas', 
+    'd' => ':count ǀhobas', 
+    'a_day' => ':count ǀhobas', 
 
-    'hour' => ':count ǂgaes', // less reliable
-    'h' => ':count ǂgaes', // less reliable
-    'a_hour' => ':count ǂgaes', // less reliable
+    'hour' => ':count ǂgaes', 
+    'h' => ':count ǂgaes', 
+    'a_hour' => ':count ǂgaes', 
 
-    'minute' => ':count minutga', // less reliable
-    'min' => ':count minutga', // less reliable
-    'a_minute' => ':count minutga', // less reliable
+    'minute' => ':count minutga', 
+    'min' => ':count minutga', 
+    'a_minute' => ':count minutga', 
 ]);

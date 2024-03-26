@@ -1,31 +1,5 @@
 <?php
-/************************************************************************
- * This file is part of EspoCRM.
- *
- * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2024 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
- * Website: https://www.espocrm.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- * The interactive user interfaces in modified source and object code versions
- * of this program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU Affero General Public License version 3.
- *
- * In accordance with Section 7(b) of the GNU Affero General Public License version 3,
- * these Appropriate Legal Notices must retain the display of the "EspoCRM" word.
- ************************************************************************/
+
 
 namespace Espo\Core\Upgrades\Actions\Base;
 
@@ -34,13 +8,7 @@ use Espo\Core\Utils\Util;
 
 class Install extends \Espo\Core\Upgrades\Actions\Base
 {
-    /**
-     * Main installation process.
-     *
-     * @param array<string, mixed> $data
-     * @return void
-     * @throws Error
-     */
+    
     public function run($data)
     {
         $processId = $data['id'];
@@ -80,11 +48,7 @@ class Install extends \Espo\Core\Upgrades\Actions\Base
         $this->getLog()->debug('Installation process ['.$processId.']: end run.');
     }
 
-    /**
-     * @param array<string, mixed> $data
-     * @return void
-     * @throws Error
-     */
+    
     protected function initPackage(array $data)
     {
         $processId = $data['id'];
@@ -99,7 +63,7 @@ class Install extends \Espo\Core\Upgrades\Actions\Base
             $this->setParentProcessId($data['parentProcessId']);
         }
 
-        /** check if an archive is unzipped, if no then unzip */
+        
         $packagePath = $this->getPackagePath();
         if (!file_exists($packagePath)) {
             $this->unzipArchive();
@@ -107,11 +71,7 @@ class Install extends \Espo\Core\Upgrades\Actions\Base
         }
     }
 
-    /**
-     * @param array<string, mixed> $data
-     * @return void
-     * @throws Error
-     */
+    
     public function stepInit(array $data)
     {
         $this->initPackage($data);
@@ -131,11 +91,7 @@ class Install extends \Espo\Core\Upgrades\Actions\Base
         $this->getLog()->info('Installation process ['. $this->getProcessId() .']: End "init" step.');
     }
 
-    /**
-     * @param array<string, mixed> $data
-     * @return void
-     * @throws Error
-     */
+    
     public function stepCopyBefore(array $data)
     {
         $this->initPackage($data);
@@ -149,11 +105,7 @@ class Install extends \Espo\Core\Upgrades\Actions\Base
         $this->getLog()->info('Installation process ['. $this->getProcessId() .']: End "copyBefore" step.');
     }
 
-    /**
-     * @param array<string, mixed> $data
-     * @return void
-     * @throws Error
-     */
+    
     public function stepBeforeInstallScript(array $data)
     {
         $this->initPackage($data);
@@ -167,23 +119,19 @@ class Install extends \Espo\Core\Upgrades\Actions\Base
         $this->getLog()->info('Installation process ['. $this->getProcessId() .']: End "beforeInstallScript" step.');
     }
 
-    /**
-     * @param array<string, mixed> $data
-     * @return void
-     * @throws Error
-     */
+    
     public function stepCopy(array $data)
     {
         $this->initPackage($data);
 
         $this->getLog()->info('Installation process ['. $this->getProcessId() .']: Start "copy" step.');
 
-        /* remove files defined in a manifest */
+        
         if (!$this->deleteFiles('delete', true)) {
             $this->throwErrorAndRemovePackage('Cannot delete files.');
         }
 
-        /* copy files from directory "Files" to EspoCRM files */
+        
         if (!$this->copyFiles()) {
             $this->throwErrorAndRemovePackage('Cannot copy files.');
         }
@@ -199,11 +147,7 @@ class Install extends \Espo\Core\Upgrades\Actions\Base
         $this->getLog()->info('Installation process ['. $this->getProcessId() .']: End "copy" step.');
     }
 
-    /**
-     * @param array<string, mixed> $data
-     * @return void
-     * @throws Error
-     */
+    
     public function stepRebuild(array $data)
     {
         $this->initPackage($data);
@@ -219,18 +163,14 @@ class Install extends \Espo\Core\Upgrades\Actions\Base
         $this->getLog()->info('Installation process ['. $this->getProcessId() .']: End "rebuild" step.');
     }
 
-    /**
-     * @param array<string, mixed> $data
-     * @return void
-     * @throws Error
-     */
+    
     public function stepCopyAfter(array $data)
     {
         $this->initPackage($data);
 
         $this->getLog()->info('Installation process ['. $this->getProcessId() .']: Start "copyAfter" step.');
 
-        //afterInstallFiles
+        
         if (!$this->copyFiles('after')) {
             $this->throwErrorAndRemovePackage('Cannot copy afterInstall files.');
         }
@@ -238,18 +178,14 @@ class Install extends \Espo\Core\Upgrades\Actions\Base
         $this->getLog()->info('Installation process ['. $this->getProcessId() .']: End "copyAfter" step.');
     }
 
-    /**
-     * @param array<string, mixed> $data
-     * @return void
-     * @throws Error
-     */
+    
     public function stepAfterInstallScript(array $data)
     {
         $this->initPackage($data);
 
         $this->getLog()->info('Installation process ['. $this->getProcessId() .']: Start "afterInstallScript" step.');
 
-        /* run after install script */
+        
         if (!isset($data['skipAfterScript']) || !$data['skipAfterScript']) {
             $this->runScript('after');
         }
@@ -257,11 +193,7 @@ class Install extends \Espo\Core\Upgrades\Actions\Base
         $this->getLog()->info('Installation process ['. $this->getProcessId() .']: End "afterInstallScript" step.');
     }
 
-    /**
-     * @param array<string, mixed> $data
-     * @return void
-     * @throws Error
-     */
+    
     public function stepFinalize(array $data)
     {
         $this->initPackage($data);
@@ -272,7 +204,7 @@ class Install extends \Espo\Core\Upgrades\Actions\Base
         $this->afterRunAction();
         $this->finalize();
 
-        /* delete unzipped files */
+        
         $this->deletePackageFiles();
 
         if ($this->getManifestParam('skipBackup')) {
@@ -285,11 +217,7 @@ class Install extends \Espo\Core\Upgrades\Actions\Base
         $this->getLog()->info('Installation process ['. $this->getProcessId() .']: End "finalize" step.');
     }
 
-    /**
-     * @param array<string, mixed> $data
-     * @return void
-     * @throws Error
-     */
+    
     public function stepRevert(array $data)
     {
         $this->initPackage($data);
@@ -301,10 +229,7 @@ class Install extends \Espo\Core\Upgrades\Actions\Base
         $this->getLog()->info('Installation process ['. $this->getProcessId() .']: End "revert" step.');
     }
 
-    /**
-     * @return bool
-     * @throws Error
-     */
+    
     protected function restoreFiles()
     {
         $this->getLog()->info('Installer: Restore previous files.');
@@ -333,13 +258,7 @@ class Install extends \Espo\Core\Upgrades\Actions\Base
         return (bool) $res;
     }
 
-    /**
-     * @param string $errorMessage
-     * @param bool $deletePackage
-     * @param bool $systemRebuild
-     * @return void
-     * @throws Error
-     */
+    
     public function throwErrorAndRemovePackage($errorMessage = '', $deletePackage = true, $systemRebuild = true)
     {
         $this->restoreFiles();
